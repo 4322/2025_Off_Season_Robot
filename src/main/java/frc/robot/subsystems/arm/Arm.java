@@ -5,6 +5,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Arm extends SubsystemBase {
   private boolean armIdle;
   
+  private Tunnel() {
+    switch (Constants.currentMode) {
+      case REAL:
+        if (Constants.tunnelEnabled) {
+          io = new TunnelIOTalonFX();
+        }
+        break;
+      case SIM:
+        break;
+      case REPLAY:
+        break;
+    }
+
+    if (io == null) {
+      io = new TunnelIO() {};
+    }
+  }
 
   public enum ArmState {
     STARTING_CONFIG,
@@ -13,6 +30,7 @@ public class Arm extends SubsystemBase {
     JIGGLE
   }
   ArmState currentState = ArmState.STARTING_CONFIG;
+
 
   @Override
   public void periodic() {

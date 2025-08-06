@@ -24,33 +24,33 @@ public class Superstructure extends SubsystemBase {
     public void handleState() {
         switch (currentState) {
             case START:
-                arm.setHome();
+               
                 // TODO
                 break;
             case IDLE:
-                arm.idle();
+               
                 // TODO
                 break;
             case EJECT:
-                arm.eject();
+               
                 // TODO
                 break;
             case ALGAE_IDLE:
-                arm.algaeHold()
+
 
                 // TODO
                 break;
             case ALGAE_PRESCORE:
-                arm.scoreAlgae()
+
                 // TODO
                 break;
             case ALGAE_SCORE:
-                arm.algaeReef(Level requestedAlgaeLevel)
+   
 
                 // TODO
                 break;
             case INTAKE_ALGAE_FLOOR:
-                arm.algaeGround()
+
 
                 // TODO
                 break;
@@ -61,27 +61,25 @@ public class Superstructure extends SubsystemBase {
                 // TODO
                 break;
             case CORAL_HELD:
-             arm.idle()
+
 
                 // TODO
                 break;
             case PRESCORE_CORAL:
-                arm.prescoreCoral(Level requestedCoralLevel)
+ 
                 // TODO
                 break;
             case SCORE_CORAL:
-             arm.scoreCoral(Level requestedCoralLevel)
+            
 
                 // TODO
                 break;
             case SAFE_SCORE_ALGAE_RETRACT:
-                arm.safeBargeRetract()
-                arm.atSetpoint()
+
 
                 // TODO
                 break;
             case PRECLIMB:
-            arm.climbing()
 
                 // TODO
                 break;
