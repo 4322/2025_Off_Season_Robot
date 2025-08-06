@@ -88,10 +88,17 @@ public class IntakeSuperstructure extends SubsystemBase {
                 }
             break;
             case REJECT:
-
+                if (!isCoralDetectedIndexer() && !isCoralDetectedPickupArea()) {
+                    state = IntakeSuperstates.FEED;
+                }
+                if (requestRetractIdle) {
+                    state = IntakeSuperstates.RETRACT_IDLE;
+                }
             break;
             case INTAKE_EJECT:
-
+                if (requestRetractIdle) {
+                    state = IntakeSuperstates.RETRACT_IDLE;
+                }
             break;
         }
     }
