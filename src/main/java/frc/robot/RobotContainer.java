@@ -28,13 +28,14 @@ public class RobotContainer {
 
   private final DemoDrive drive = new DemoDrive(); // Demo drive subsystem, sim only
 
-  //TODO add Advantagekit stuff for all of these
+  // TODO add Advantagekit stuff for all of these
   public static EndEffector endEffector = new EndEffector();
   public static Indexer indexer = new Indexer();
   public static Rollers rollers = new Rollers();
   public static Deployer deployer = new Deployer();
 
-  public static IntakeSuperstructure intakeSuperstructure = new IntakeSuperstructure(deployer, rollers, indexer);
+  public static IntakeSuperstructure intakeSuperstructure =
+      new IntakeSuperstructure(deployer, rollers, indexer);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
