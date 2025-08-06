@@ -34,7 +34,7 @@ public class RobotContainer {
   public static Rollers rollers = new Rollers();
   public static Deployer deployer = new Deployer();
 
-  public static IntakeSuperstructure intakeSuperstructure = new IntakeSuperstructure(deployer, rollers, indexer);
+  public static IntakeSuperstructure intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer, superstructure);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

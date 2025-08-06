@@ -1,11 +1,15 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.rollers.Rollers;
+import frc.robot.subsystems.Superstructure;
 
 
 public class IntakeSuperstructure extends SubsystemBase {
@@ -30,6 +34,9 @@ public class IntakeSuperstructure extends SubsystemBase {
     private Deployer deployer;
     private Rollers rollers;
     private Indexer indexer;
+    private EndEffector endEffector;
+
+    private Superstructure superstructure;
 
     public static enum IntakeSuperstates {
         START,
@@ -39,21 +46,34 @@ public class IntakeSuperstructure extends SubsystemBase {
         INTAKE_EJECT
     }
 
-    public IntakeSuperstructure(Deployer deployer, Rollers rollers, Indexer indexer) {
+    public IntakeSuperstructure(EndEffector endEffector, Deployer deployer, Rollers rollers, Indexer indexer, Superstructure superstructure) {
+        this.endEffector = endEffector;
         this.deployer = deployer;
         this.rollers = rollers;
         this.indexer = indexer;
+        this.superstructure = superstructure;
     }
 
     @Override
     public void periodic() {
+        Logger.recordOutput("IntakeSuperstructure/State", state.toString());
         switch(state) {
             case START:
-                if (requestRetractIdle) {
+                if (superstructure.isHomeButtonPressed()) {
+                    deployer.setHome();
                     state = IntakeSuperstates.RETRACT_IDLE;
                 }
             break;
             case RETRACT_IDLE:
+                deployer.retract();
+                
+                if (isCoralDetectedIndexer() || isCoralDetectedPickupArea() || isCoralHeld()) {
+                    rollers.rejectSlow();
+                    indexer.rejectSlow();
+                } else {
+                    rollers.feedSlow();
+                    indexer.feedSlow();
+                }
                 if (requestIntakeEject) {
                     state = IntakeSuperstates.INTAKE_EJECT;
                 }
@@ -65,6 +85,10 @@ public class IntakeSuperstructure extends SubsystemBase {
                 }
             break;
             case FEED:
+                rollers.feed();
+                indexer.feed();
+                deployer.deploy();
+                
                  if (rollers.isCoralDetected() && retractLockedOutState == RetractLockedOutStates.FALSE) {
                     retractLockedOutState = RetractLockedOutStates.INDEXER;
                     retractTimeOutIndexerTimer.reset();
@@ -84,7 +108,7 @@ public class IntakeSuperstructure extends SubsystemBase {
                 if (requestRetractIdle && retractLockedOutState == RetractLockedOutStates.FALSE) {
                     state = IntakeSuperstates.RETRACT_IDLE;
                 }
-                if (isCoralDetectedIndexer() || isCoralDetectedPickupArea()) {
+                if (isCoralDetectedIndexer() || isCoralDetectedPickupArea() || isCoralHeld()) {
                     state = IntakeSuperstates.REJECT;
                 }
                 if (requestIntakeEject) {
@@ -92,7 +116,11 @@ public class IntakeSuperstructure extends SubsystemBase {
                 }
             break;
             case REJECT:
-                if (!isCoralDetectedIndexer() && !isCoralDetectedPickupArea()) {
+                deployer.deploy();
+                rollers.reject();
+                indexer.reject();
+
+                if (!isCoralDetectedIndexer() && !isCoralDetectedPickupArea() && !isCoralHeld()) {
                     state = IntakeSuperstates.FEED;
                 }
                 if (requestRetractIdle) {
@@ -100,6 +128,9 @@ public class IntakeSuperstructure extends SubsystemBase {
                 }
             break;
             case INTAKE_EJECT:
+                deployer.ejectPosition();
+                rollers.eject();
+                indexer.eject();
                 if (requestRetractIdle) {
                     state = IntakeSuperstates.RETRACT_IDLE;
                 }
@@ -111,6 +142,10 @@ public class IntakeSuperstructure extends SubsystemBase {
         requestFeed = false;
         requestReject = false;
         requestIntakeEject = false;
+    }
+
+    public IntakeSuperstates getState() {
+        return state;
     }
 
     public void requestRetractIdle() {
@@ -139,6 +174,10 @@ public class IntakeSuperstructure extends SubsystemBase {
 
     public boolean isCoralDetectedIndexer() {
         return indexer.isCoralDetectedIndexer();
+    }
+
+    public boolean isCoralHeld() {
+        return endEffector.isCoralHeld()
     }
 }
 
