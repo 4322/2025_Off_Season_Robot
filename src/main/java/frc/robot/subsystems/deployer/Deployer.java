@@ -1,25 +1,17 @@
 package frc.robot.subsystems.deployer;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 
 public class Deployer extends SubsystemBase {
-    
-    public Deployer() {
 
-    }
+  public Deployer() {}
 
-    @Override
-    public void periodic() {
+  @Override
+  public void periodic() {}
 
-    }
+  public void deploy() {}
 
-    public void deploy() {
-
-    }
-
-    public void retract() {
-
-    }
+  public void retract() {}
 
     public void ejectPosition() {
         
@@ -29,9 +21,5 @@ public class Deployer extends SubsystemBase {
 
     }
 
-    public void setNeutralMode(NeutralMode mode) {
-
-    }
-
-    
+  public void setNeutralMode(IdleMode mode) {}
 }
