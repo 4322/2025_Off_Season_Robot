@@ -74,7 +74,11 @@ public class IntakeSuperstructure extends SubsystemBase {
                     retractTimeOutIndexerTimer.stop();
                     retractTimeOutPickupAreaTimer.reset();
                     retractTimeOutPickupAreaTimer.start();
-                } else if ((isCoralDetectedPickupArea() || retractTimeOutPickupAreaTimer.hasElapsed(Constants.IntakeSuperstructure.RETRACT_TIMEOUT_SECONDS)) && retractLockedOutState == RetractLockedOutStates.PICKUP) {
+                } else if ((!isCoralDetectedIndexer() && !isCoralDetectedPickupArea()) && retractTimeOutIndexerTimer.hasElapsed(Constants.IntakeSuperstructure.INDEXER_RETRACT_TIMEOUT_SECONDS)) {
+                    retractTimeOutIndexerTimer.stop();
+                    retractLockedOutState = RetractLockedOutStates.FALSE;
+                } else if ((isCoralDetectedPickupArea() || retractTimeOutPickupAreaTimer.hasElapsed(Constants.IntakeSuperstructure.PICKUP_AREA_RETRACT_TIMEOUT_SECONDS)) && retractLockedOutState == RetractLockedOutStates.PICKUP) {
+                    retractTimeOutPickupAreaTimer.stop();
                     retractLockedOutState = RetractLockedOutStates.FALSE;
                 }
                 if (requestRetractIdle && retractLockedOutState == RetractLockedOutStates.FALSE) {
