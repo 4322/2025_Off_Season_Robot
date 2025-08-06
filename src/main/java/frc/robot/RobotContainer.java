@@ -6,7 +6,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.IntakeSuperstructure;
+import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.drive.DemoDrive;
+import frc.robot.subsystems.endEffector.EndEffector;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
@@ -22,6 +27,14 @@ public class RobotContainer {
   private final Vision vision;
 
   private final DemoDrive drive = new DemoDrive(); // Demo drive subsystem, sim only
+
+  //TODO add Advantagekit stuff for all of these
+  public static EndEffector endEffector = new EndEffector();
+  public static Indexer indexer = new Indexer();
+  public static Rollers rollers = new Rollers();
+  public static Deployer deployer = new Deployer();
+
+  public static IntakeSuperstructure intakeSuperstructure = new IntakeSuperstructure(deployer, rollers, indexer);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
