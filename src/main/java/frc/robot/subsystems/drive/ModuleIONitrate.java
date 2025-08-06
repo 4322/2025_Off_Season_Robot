@@ -48,10 +48,13 @@ public class ModuleIONitrate implements ModuleIO {
     driveMotor.setSettings(driveConfig, 0, 1);
 
     NitrateSettings turnConfig = new NitrateSettings();
-    turnConfig.getAtomicBondSettings().setAtomicBondMode(AtomicBondMode.kSwerveModule);
+    turnConfig.getAtomicBondSettings()
+        .setAtomicBondMode(AtomicBondMode.kSwerveModule)
+        .setAtomicSwerveConstants(turnMotor, turnEncoder, null, 0, 0);
     turnConfig.getOutputSettings().setIdleMode(IdleMode.kBrake).setInvert(InvertMode.kInverted);
-    turnConfig.setFeedbackSensorSettings(
-        new FeedbackSensorSettings().setFeedbackSensor(new FeedbackSensor.CanandmagAbsolute(0, 0)));
+    turnConfig
+        .getFeedbackSensorSettings()
+        .setFeedbackSensor(new FeedbackSensor.CanandmagAbsolute(0, 0));
     turnConfig
         .getElectricalLimitSettings()
         .setBusCurrentLimit(0)
