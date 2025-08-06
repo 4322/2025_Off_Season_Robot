@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
   private boolean armIdle;
-  private ArmState currentState = ArmState.STARTING_CONFIG;
+  
 
   public enum ArmState {
     STARTING_CONFIG,
@@ -12,6 +12,7 @@ public class Arm extends SubsystemBase {
     REQUEST_SETPOINT,
     JIGGLE
   }
+  ArmState currentState = ArmState.STARTING_CONFIG;
 
   @Override
   public void periodic() {
