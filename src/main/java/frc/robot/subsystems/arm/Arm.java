@@ -1,15 +1,19 @@
 package frc.robot.subsystems.arm;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
+  private TunnelIO io;
+  private TunnelIOInputsAutoLogged inputs = new TunnelIOInputsAutoLogged();
+
   private boolean armIdle;
-  
-  private Tunnel() {
+
+  private Arm() {
     switch (Constants.currentMode) {
       case REAL:
-        if (Constants.tunnelEnabled) {
-          io = new TunnelIOTalonFX();
+        if (Constants.armEnabled) {
+          io = new ArmIOTalonFX();
         }
         break;
       case SIM:
@@ -19,7 +23,7 @@ public class Arm extends SubsystemBase {
     }
 
     if (io == null) {
-      io = new TunnelIO() {};
+      io = new ArmIO() {};
     }
   }
 
@@ -29,8 +33,8 @@ public class Arm extends SubsystemBase {
     REQUEST_SETPOINT,
     JIGGLE
   }
-  ArmState currentState = ArmState.STARTING_CONFIG;
 
+  ArmState currentState = ArmState.STARTING_CONFIG;
 
   @Override
   public void periodic() {
