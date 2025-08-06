@@ -177,6 +177,6 @@ public class IntakeSuperstructure extends SubsystemBase {
     }
 
     public boolean isCoralHeld() {
-        return endEffector.isCoralHeld()
+        return endEffector.hasCoral();
     }
 }

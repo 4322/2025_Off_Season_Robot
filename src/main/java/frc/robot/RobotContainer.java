@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.IntakeSuperstructure;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.drive.DemoDrive;
 import frc.robot.subsystems.endEffector.EndEffector;
@@ -33,6 +34,7 @@ public class RobotContainer {
   public static Indexer indexer = new Indexer();
   public static Rollers rollers = new Rollers();
   public static Deployer deployer = new Deployer();
+  public static Superstructure superstructure = new Superstructure();
 
   public static IntakeSuperstructure intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer, superstructure);
 

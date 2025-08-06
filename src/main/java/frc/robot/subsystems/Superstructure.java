@@ -82,4 +82,8 @@ public class Superstructure extends SubsystemBase {
         break;
     }
   }
+
+  public boolean isHomeButtonPressed() {
+    return true; // TODO add actual button logic
+  }
 }
