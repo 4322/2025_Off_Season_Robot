@@ -75,8 +75,8 @@ public class Superstructure extends SubsystemBase {
                 // TODO
                 break;
             case SAFE_SCORE_ALGAE_RETRACT:
-            arm.safeBargeRetract()
-arm.atSetpoint()
+                arm.safeBargeRetract()
+                arm.atSetpoint()
 
                 // TODO
                 break;
