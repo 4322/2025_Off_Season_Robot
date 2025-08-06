@@ -4,8 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
-  private TunnelIO io;
-  private TunnelIOInputsAutoLogged inputs = new TunnelIOInputsAutoLogged();
+  private ArmIO io;
 
   private boolean armIdle;
 
