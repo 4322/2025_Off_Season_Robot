@@ -15,9 +15,9 @@ public class Rollers extends SubsystemBase {
 
   public void feed() {}
 
-  public void reject() {}
-
   public void feedSlow() {}
+
+  public void reject() {}
 
   public void rejectSlow() {}
 
