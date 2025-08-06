@@ -1,5 +1,7 @@
 package frc.robot.subsystems.deployer;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Deployer extends SubsystemBase {
@@ -29,7 +31,7 @@ public class Deployer extends SubsystemBase {
 
     }
 
-    public void setNeutralMode(NeutralMode mode) {
+    public void setNeutralMode(IdleMode mode) {
 
     }
 
