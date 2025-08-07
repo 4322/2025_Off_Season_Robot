@@ -1,6 +1,13 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
+import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.endEffector.EndEffector;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.rollers.Rollers;
+import org.littletonrobotics.junction.Logger;
 
 public class IntakeSuperstructure extends SubsystemBase {
 
@@ -9,7 +16,24 @@ public class IntakeSuperstructure extends SubsystemBase {
   private boolean requestReject;
   private boolean requestIntakeEject;
 
+  private enum RetractLockedOutStates {
+    FALSE,
+    INDEXER,
+    PICKUP,
+  }
+
+  private Timer retractTimeOutIndexerTimer = new Timer();
+  private Timer retractTimeOutPickupAreaTimer = new Timer();
+  private RetractLockedOutStates retractLockedOutState = RetractLockedOutStates.FALSE;
+
   private IntakeSuperstates state = IntakeSuperstates.START;
+
+  private Deployer deployer;
+  private Rollers rollers;
+  private Indexer indexer;
+  private EndEffector endEffector;
+
+  private Superstructure superstructure;
 
   public static enum IntakeSuperstates {
     START,
@@ -19,37 +43,149 @@ public class IntakeSuperstructure extends SubsystemBase {
     INTAKE_EJECT
   }
 
-  public IntakeSuperstructure() {}
+  public IntakeSuperstructure(
+      EndEffector endEffector,
+      Deployer deployer,
+      Rollers rollers,
+      Indexer indexer,
+      Superstructure superstructure) {
+    this.endEffector = endEffector;
+    this.deployer = deployer;
+    this.rollers = rollers;
+    this.indexer = indexer;
+    this.superstructure = superstructure;
+  }
 
   @Override
   public void periodic() {
+    Logger.recordOutput("IntakeSuperstructure/State", state.toString());
     switch (state) {
       case START:
+        if (superstructure.isHomeButtonPressed()) {
+          deployer.setHome();
+          state = IntakeSuperstates.RETRACT_IDLE;
+        }
         break;
       case RETRACT_IDLE:
+        deployer.retract();
+
+        if (isCoralDetectedIndexer() || isCoralDetectedPickupArea() || isCoralHeld()) {
+          rollers.rejectSlow();
+          indexer.rejectSlow();
+        } else {
+          rollers.feedSlow();
+          indexer.feedSlow();
+        }
+        if (requestIntakeEject) {
+          state = IntakeSuperstates.INTAKE_EJECT;
+        }
+        if (requestFeed) {
+          state = IntakeSuperstates.FEED;
+        }
+        if (requestReject) {
+          state = IntakeSuperstates.REJECT;
+        }
         break;
       case FEED:
+        rollers.feed();
+        indexer.feed();
+        deployer.deploy();
+
+        if (rollers.isCoralDetected() && retractLockedOutState == RetractLockedOutStates.FALSE) {
+          retractLockedOutState = RetractLockedOutStates.INDEXER;
+          retractTimeOutIndexerTimer.reset();
+          retractTimeOutIndexerTimer.start();
+        } else if (isCoralDetectedIndexer()
+            && retractLockedOutState == RetractLockedOutStates.INDEXER) {
+          retractLockedOutState = RetractLockedOutStates.PICKUP;
+          retractTimeOutIndexerTimer.stop();
+          retractTimeOutPickupAreaTimer.reset();
+          retractTimeOutPickupAreaTimer.start();
+        } else if ((!isCoralDetectedIndexer() && !isCoralDetectedPickupArea())
+            && retractTimeOutIndexerTimer.hasElapsed(
+                Constants.IntakeSuperstructure.INDEXER_RETRACT_TIMEOUT_SECONDS)) {
+          retractTimeOutIndexerTimer.stop();
+          retractLockedOutState = RetractLockedOutStates.FALSE;
+        } else if ((isCoralDetectedPickupArea()
+                || retractTimeOutPickupAreaTimer.hasElapsed(
+                    Constants.IntakeSuperstructure.PICKUP_AREA_RETRACT_TIMEOUT_SECONDS))
+            && retractLockedOutState == RetractLockedOutStates.PICKUP) {
+          retractTimeOutPickupAreaTimer.stop();
+          retractLockedOutState = RetractLockedOutStates.FALSE;
+        }
+        if (requestRetractIdle && retractLockedOutState == RetractLockedOutStates.FALSE) {
+          state = IntakeSuperstates.RETRACT_IDLE;
+        }
+        if (isCoralDetectedIndexer() || isCoralDetectedPickupArea() || isCoralHeld()) {
+          state = IntakeSuperstates.REJECT;
+        }
+        if (requestIntakeEject) {
+          state = IntakeSuperstates.INTAKE_EJECT;
+        }
         break;
       case REJECT:
+        deployer.deploy();
+        rollers.reject();
+        indexer.reject();
+
+        if (!isCoralDetectedIndexer() && !isCoralDetectedPickupArea() && !isCoralHeld()) {
+          state = IntakeSuperstates.FEED;
+        }
+        if (requestRetractIdle) {
+          state = IntakeSuperstates.RETRACT_IDLE;
+        }
         break;
       case INTAKE_EJECT:
+        deployer.ejectPosition();
+        rollers.eject();
+        indexer.eject();
+        if (requestRetractIdle) {
+          state = IntakeSuperstates.RETRACT_IDLE;
+        }
         break;
     }
   }
 
-  public void requestRetractIdle() {}
+  private void unsetAllRequests() {
+    requestRetractIdle = false;
+    requestFeed = false;
+    requestReject = false;
+    requestIntakeEject = false;
+  }
+
+  public IntakeSuperstates getState() {
+    return state;
+  }
+
+  public void requestRetractIdle() {
+    unsetAllRequests();
+    requestRetractIdle = true;
+  }
 
   public void requestIntake() {
     // Transitions to Feeding or Rejecting based on if coral in robot
+    unsetAllRequests();
+    if (isCoralDetectedPickupArea()) {
+      requestReject = true;
+    } else {
+      requestFeed = true;
+    }
   }
 
-  public void requestEject() {}
+  public void requestEject() {
+    unsetAllRequests();
+    requestReject = true;
+  }
 
   public boolean isCoralDetectedPickupArea() {
-    return true; // TODO indexer.isCoralDetectedPickupArea()
+    return indexer.isCoralDetectedPickupArea();
   }
 
   public boolean isCoralDetectedIndexer() {
-    return true; // TODO indexer.isCoralDetectedIndexer()
+    return indexer.isCoralDetectedIndexer();
+  }
+
+  public boolean isCoralHeld() {
+    return endEffector.hasCoral();
   }
 }

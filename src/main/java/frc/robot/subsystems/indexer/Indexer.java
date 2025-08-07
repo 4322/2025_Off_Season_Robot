@@ -12,11 +12,13 @@ public class Indexer extends SubsystemBase {
 
   public void feedSlow() {}
 
-  public void ejectSlow() {}
-
   public void eject() {}
 
+  public void ejectSlow() {}
+
   public void reject() {}
+
+  public void rejectSlow() {}
 
   public boolean isCoralDetectedIndexer() {
     return true; // TODO return status of indexer sensor

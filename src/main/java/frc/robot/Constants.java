@@ -8,8 +8,11 @@ import edu.wpi.first.wpilibj.RobotBase;
  * (log replay from a file).
  */
 public final class Constants {
+  public static final boolean armEnabled = true;
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+
+  public static final boolean visionEnabled = true;
 
   public static class Drive {
     public static final int gyroID = 0; // TODO

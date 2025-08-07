@@ -6,7 +6,13 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.IntakeSuperstructure;
+import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.drive.DemoDrive;
+import frc.robot.subsystems.endEffector.EndEffector;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
@@ -19,20 +25,31 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private final Vision vision;
+  private static Vision vision;
+  private static DemoDrive drive = new DemoDrive(); // Demo drive subsystem, sim only
 
-  private final DemoDrive drive = new DemoDrive(); // Demo drive subsystem, sim only
+  // TODO add Advantagekit stuff for all of these
+  public static EndEffector endEffector = new EndEffector();
+  public static Indexer indexer = new Indexer();
+  public static Rollers rollers = new Rollers();
+  public static Deployer deployer = new Deployer();
+  public static Superstructure superstructure = new Superstructure();
+
+  public static IntakeSuperstructure intakeSuperstructure =
+      new IntakeSuperstructure(endEffector, deployer, rollers, indexer, superstructure);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOPhotonVision(camera0Name, robotToCamera0),
-                new VisionIOPhotonVision(camera1Name, robotToCamera1));
+        if (Constants.visionEnabled) {
+          vision =
+              new Vision(
+                  drive::addVisionMeasurement,
+                  new VisionIOPhotonVision(camera0Name, robotToCamera0),
+                  new VisionIOPhotonVision(camera1Name, robotToCamera1));
+        }
         break;
 
       case SIM:
@@ -45,10 +62,12 @@ public class RobotContainer {
         break;
 
       default:
-        // Replayed robot, disable IO implementations
-        // (Use same number of dummy implementations as the real robot)
-        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
+    }
+
+    // Used during replay mode or when certain subsystems are disabled
+    if (vision == null) {
+      vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
     }
 
     // Configure the button bindings

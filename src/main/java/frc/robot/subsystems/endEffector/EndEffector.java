@@ -18,8 +18,6 @@ public class EndEffector extends SubsystemBase {
 
   public void intakeCoral() {}
 
-  public void relaeseCoral() {}
-
   public void releaseAlgae() {}
 
   public boolean hasAlgae() {
