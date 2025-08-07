@@ -25,9 +25,8 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private final Vision vision;
-
-  private final DemoDrive drive = new DemoDrive(); // Demo drive subsystem, sim only
+  private static Vision vision;
+  private static DemoDrive drive = new DemoDrive(); // Demo drive subsystem, sim only
 
   // TODO add Advantagekit stuff for all of these
   public static EndEffector endEffector = new EndEffector();
@@ -44,11 +43,13 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOPhotonVision(camera0Name, robotToCamera0),
-                new VisionIOPhotonVision(camera1Name, robotToCamera1));
+        if (Constants.visionEnabled) {
+          vision =
+              new Vision(
+                  drive::addVisionMeasurement,
+                  new VisionIOPhotonVision(camera0Name, robotToCamera0),
+                  new VisionIOPhotonVision(camera1Name, robotToCamera1));
+        }
         break;
 
       case SIM:
@@ -61,10 +62,12 @@ public class RobotContainer {
         break;
 
       default:
-        // Replayed robot, disable IO implementations
-        // (Use same number of dummy implementations as the real robot)
-        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
+    }
+
+    // Used during replay mode or when certain subsystems are disabled
+    if (vision == null) {
+      vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
     }
 
     // Configure the button bindings
