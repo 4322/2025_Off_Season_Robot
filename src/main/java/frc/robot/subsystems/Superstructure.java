@@ -26,8 +26,6 @@ public class Superstructure extends SubsystemBase {
   public void handleState() {
     switch (currentState) {
       case START:
-
-        // TODO
         break;
       case IDLE:
 
@@ -83,5 +81,9 @@ public class Superstructure extends SubsystemBase {
         // TODO
         break;
     }
+  }
+
+  public boolean isHomeButtonPressed() {
+    return true; // TODO add actual button logic
   }
 }
