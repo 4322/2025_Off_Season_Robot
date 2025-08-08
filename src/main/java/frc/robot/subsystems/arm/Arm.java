@@ -1,57 +1,11 @@
 package frc.robot.subsystems.arm;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
 
   private boolean armIdle;
-
-  private Arm() {
-    switch (Constants.currentMode) {
-      case REAL:
-        if (Constants.armEnabled) {
-          io = new ArmIOTalonFX();
-        }
-        break;
-      case SIM:
-        break;
-      case REPLAY:
-        break;
-    }
-
-    if (io == null) {
-      io = new ArmIO() {};
-    }
-  }
-
-  public enum ArmState {
-    STARTING_CONFIG,
-    HOMING,
-    REQUEST_SETPOINT,
-    JIGGLE
-  }
-
-  ArmState currentState = ArmState.STARTING_CONFIG;
-
-  @Override
-  public void periodic() {
-    switch (currentState) {
-      case STARTING_CONFIG:
-        // Handle starting config logic
-        break;
-      case HOMING:
-        // Handle homing logic
-        break;
-      case REQUEST_SETPOINT:
-        // Handle request setpoint logic
-        break;
-      case JIGGLE:
-        // Handle jiggle logic
-        break;
-    }
-  }
 
   /* idle()
   algaeHold()
@@ -86,19 +40,19 @@ public class Arm extends SubsystemBase {
     unsetAllRequests();
   }
 
-  public void algaeReef(ArmState requestedLevel) {
+  public void algaeReef(/*requestedLevel*/ ) {
     unsetAllRequests();
   }
 
-  public void scoreAlgae(ArmState scoringSide) {
+  public void scoreAlgae(/*ArmState scoringSide*/ ) {
     unsetAllRequests();
   }
 
-  public void prescoreCoral(ArmState requestedLevel) {
+  public void prescoreCoral(/*ArmState requestedLevel*/ ) {
     unsetAllRequests();
   }
 
-  public void scoreCoral(ArmState requestedLevel) {
+  public void scoreCoral(/*ArmState requestedLevel*/ ) {
     unsetAllRequests();
   }
 
@@ -115,7 +69,7 @@ public class Arm extends SubsystemBase {
     unsetAllRequests();
   }
 
-  public void setNeutralMode(ArmState mode) {
+  public void setNeutralMode(/*ArmState mode*/ ) {
     unsetAllRequests();
   }
 
