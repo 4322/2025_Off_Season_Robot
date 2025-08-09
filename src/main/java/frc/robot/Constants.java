@@ -14,6 +14,7 @@ public final class Constants {
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
   public static final boolean visionEnabled = true;
+  public static final boolean driveEnabled = true;
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -34,6 +35,36 @@ public final class Constants {
     public static final double AlgaePrescorePosition = 0.15; // TODO: Set to actual position
     public static final double SafeRetract = 0.240 - Units.inchesToMeters(2); // TODO
     public static final double safeFlipPosition = 0.217; // TODO
+  }
+
+  public static class Drive {
+    public static final double autoRotatekP = 5;
+    public static final double autoRotatekD = 0;
+
+    public static final double angularErrorToleranceRad = Units.degreesToRadians(7);
+    public static final double angularErrorToleranceRadPerSec = Units.degreesToRadians(20.0);
+    public static final double driveDeadband = 0.1;
+    public static final double rotDeadband = 0.1;
+
+    public static final double pseudoAutoRotatekP = 6;
+    public static final double pseudoAutoRotatekI = 0;
+    public static final double pseudoAutoRotatekD = 0.0;
+    public static final double pseudoAutoRotateRadTolerance = Units.degreesToRadians(1.5);
+    public static final double inhibitPseudoAutoRotateRadPerSec = Units.degreesToRadians(4);
+    public static final double pseudoAutoRotateMinMetersPerSec =
+        0.6; // disable below this speed for fine adjustments
+  }
+
+  public static class PathPlanner {
+    public static final double translationkP = 0;
+    public static final double translationkD = 0;
+
+    public static final double rotkP = 0.0;
+    public static final double rotkD = 0.0;
+
+    public static final double robotMassKg = 74.088; // TODO: Weigh robot
+    public static final double robotMOI = 6.883; // TODO: Use CAD
+    public static final double wheelCOF = 1.2;
   }
 
   public static class Arm {
