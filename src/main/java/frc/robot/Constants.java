@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -25,14 +26,90 @@ public final class Constants {
     REPLAY
   }
 
+  public static class Scoring {
+    public static final double L1ScoringAngleDegCoral = 0.0;
+    public static final double L2ScoringAngleDegCoral = 17.5; // TODO: Set to actual angle
+    public static final double L3ScoringAngleDegCoral = 39.2; // TODO: Set to actual angle
+    public static final double L4ScoringAngleDegCoral = 37.2; // TODO: Set to actual angle
+    public static final double AlgaePrescorePosition = 0.15; // TODO: Set to actual position
+    public static final double SafeRetract = 0.240 - Units.inchesToMeters(2); // TODO
+    public static final double safeFlipPosition = 0.217; // TODO
+  }
+
   public static class Arm {
-    public static final double kIdlePositionDeg = 0.0; // TODO: Set to actual idle position
+    public static final double IdlePositionDeg = 0.0; // TODO: Set to actual idle position
     public static final double kAlgaeHoldPositionDeg = 45.0; // TODO
     public static final double CoralHoldPositionDeg = 90.0; // TODO
-    public static final double AlgaeGroundPositionDeg = 30.0;
-    public static final double AlgaeReefPositionDeg = 60.0;
-    public static final double ScoreAlgaePositionDeg = 75.0;
-    public static final double PrescoreCoralPositionDeg = 80.0;
-    public static final double ScoreCoralPositionDeg = 100.0;
+    public static final double AlgaeGroundPositionDeg = 30.0; // TODO
+    public static final double AlgaeReefPositionDeg = 60.0; // TODO
+    public static final double ScoreAlgaePositionDeg = 75.0; // TODO
+
+    public static final double setpointToleranceMeters = 0.01;
+
+    public static final double supplyCurrentLimit = 40; // TODO
+    public static final double statorCurrentLimit = 100; // TODO
+
+    /*public static final int leftMotorID = 3; // follower motor
+      public static final int rightMotorID = 2; // leader motor
+
+      public static final double gearRatio = 4.0;
+      public static final double sprocketDiameter = Units.inchesToMeters(1.751); // pitch diameter
+
+      public static final double setpointToleranceMeters = 0.01;
+
+
+      public static final double peakForwardVoltage = 11.5;
+      public static final double peakReverseVoltage = -11.5;
+
+      public static final InvertedValue rightMotorInversion = InvertedValue.Clockwise_Positive;
+
+      // L1 height gains
+      public static final double kS0 = 0;
+      public static final double kP0 = 2.0;
+      public static final double kD0 = 0.05;
+
+      // L2 height gains
+      public static final double kS1 = 0.4;
+      public static final double kP1 = 2.0;
+      public static final double kD1 = 0;
+
+      // L3 height gains
+      public static final double kS2 = 0;
+      public static final double kP2 = 2.0;
+      public static final double kD2 = 0.05;
+      public static final double kG2 = 0.40;
+
+      public static final double mechanismMaxAccel = 22; // Used for motion magic
+      public static final double mechanismMaxCruiseVel = 3.2; // Used for motion magic
+      public static final double motionMagicJerk = 0;
+
+      public static final double homingVoltage = -1.0;
+      public static final double homingVelocityThreshold = 0.01;
+      public static final double homingThresholdSec = 0.25;
+
+      public static final double jiggleHeight = 0.05;
+    }
+
+    public static class EndEffector {
+      public static final int feederMotorID = 4;
+      public static final int frontBeamBreakID = 8;
+      public static final int backBeamBreakID = 9;
+
+      public static final double supplyCurrentLimit = 40;
+      public static final double statorCurrentLimit = 100;
+      public static final InvertedValue motorInversion = InvertedValue.Clockwise_Positive;
+
+      public static final double proximityDetectionThreshold = 0.075;
+
+      public static final double feedVoltage = 4;
+      public static final double secondFeedVoltage = 1.25;
+      public static final double thirdFeedVoltage = -1.0;
+
+      public static final double shootL1Voltage = 3;
+      public static final double shootL23Voltage = 4;
+      public static final double spitVoltage = -4;
+
+      public static final double shootWaitTimerSec = 0.1;
+      public static final double pullBackOverrideTimerSec = 1.0; */
   }
 }

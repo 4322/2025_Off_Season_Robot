@@ -10,7 +10,6 @@ import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
-import frc.robot.subsystems.arm.ArmIOReal;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.drive.DemoDrive;
 import frc.robot.subsystems.endEffector.EndEffector;
@@ -29,7 +28,7 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
  */
 public class RobotContainer {
   public static XboxController driver = new XboxController(0);
-  
+
   private static Vision vision;
   private static DemoDrive drive = new DemoDrive(); // Demo drive subsystem, sim only
   private static Arm arm; // IO for the arm subsystem, null if not enabled
@@ -51,7 +50,7 @@ public class RobotContainer {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         if (Constants.armEnabled) {
-          arm = new Arm(new ArmIOReal());
+          arm = new Arm(); // Create the arm subsystem if enabled
         }
         if (Constants.visionEnabled) {
           vision =
