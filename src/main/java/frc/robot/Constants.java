@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -13,6 +14,7 @@ public final class Constants {
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
   public static final boolean visionEnabled = true;
+  public static final boolean driveEnabled = true;
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -23,6 +25,24 @@ public final class Constants {
 
     /** Replaying from a log file. */
     REPLAY
+  }
+
+  public static class Drive {
+    public static final double autoRotatekP = 5;
+    public static final double autoRotatekD = 0;
+
+    public static final double angularErrorToleranceRad = Units.degreesToRadians(7);
+    public static final double angularErrorToleranceRadPerSec = Units.degreesToRadians(20.0);
+    public static final double driveDeadband = 0.1;
+    public static final double rotDeadband = 0.1;
+
+    public static final double pseudoAutoRotatekP = 6;
+    public static final double pseudoAutoRotatekI = 0;
+    public static final double pseudoAutoRotatekD = 0.0;
+    public static final double pseudoAutoRotateRadTolerance = Units.degreesToRadians(1.5);
+    public static final double inhibitPseudoAutoRotateRadPerSec = Units.degreesToRadians(4);
+    public static final double pseudoAutoRotateMinMetersPerSec =
+        0.6; // disable below this speed for fine adjustments
   }
 
   public static class PathPlanner {
