@@ -21,6 +21,13 @@ public class Superstructure extends SubsystemBase {
     CLIMB
   }
 
+  public static enum Level {
+    L1,
+    L2,
+    L3,
+    L4
+  }
+
   SuperstructureState currentState = SuperstructureState.START;
 
   public void handleState() {
