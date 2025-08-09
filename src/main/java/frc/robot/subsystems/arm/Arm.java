@@ -1,5 +1,7 @@
 package frc.robot.subsystems.arm;
 
+import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
@@ -51,8 +53,7 @@ public class Arm extends SubsystemBase {
   Safety safety = Safety.SAFE;
 
   public void idle() {
-    // Set the arm to idle state
-    // This could mean stopping the motors or setting a default position
+    Nitrate.class.cast(io).setVoltage(0.0);
 
   }
 
