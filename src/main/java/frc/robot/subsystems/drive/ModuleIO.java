@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ModuleIO {
@@ -28,7 +29,7 @@ public interface ModuleIO {
 
   public default void setDriveOpenLoop(double outputVoltage) {}
 
-  public default void setDriveVelocity(double velocityRadPerSec) {}
+  public default void setDriveVelocity(double driveWheelVelocityRadPerSec) {}
 
-  public default void setTurnPosition(double positionRad) {}
+  public default void setTurnPosition(Rotation2d turnWheelPosition) {}
 }

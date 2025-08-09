@@ -15,8 +15,10 @@ import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDVelocityRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 
 public class ModuleIONitrate implements ModuleIO {
   private final Nitrate driveMotor;
@@ -30,67 +32,53 @@ public class ModuleIONitrate implements ModuleIO {
   private final PIDPositionRequest turnPIDPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
 
-  // TODO: Create Swerve Module Constant Factory for Motor + sensor configuration
-  public ModuleIONitrate() {
-    driveMotor = new Nitrate(0, MotorType.kCu60);
-    turnMotor = new Nitrate(0, MotorType.kCu60);
-    turnEncoder = new Canandmag(0);
+  public ModuleIONitrate(SwerveModuleConstants constants, GyroIO gyro) {
+    driveMotor = new Nitrate(constants.driveMotorId, MotorType.kCu60);
+    turnMotor = new Nitrate(constants.turnMotorId, MotorType.kCu60);
+    turnEncoder = new Canandmag(constants.turnEncoderId);
 
     NitrateSettings driveConfig = new NitrateSettings();
     driveConfig
         .getAtomicBondSettings()
         .setAtomicBondMode(AtomicBondMode.kSwerveModule)
-        .setAtomicSwerveConstants(turnMotor, turnEncoder, null, 0, 0);
-    driveConfig.getOutputSettings().setIdleMode(IdleMode.kBrake).setInvert(InvertMode.kNotInverted);
-    driveConfig
-        .getElectricalLimitSettings()
-        .setBusCurrentLimit(0)
-        .setBusCurrentLimitTime(0)
-        .setStatorCurrentLimit(0);
-    driveConfig
-        .getPIDSettings(PIDConfigSlot.kSlot0)
-        .setPID(0, 0, 0)
-        .setStaticFeedforward(0)
-        .setVelocityFeedforward(0);
+        .setAtomicSwerveConstants(turnMotor, turnEncoder, gyro.getGyro(), constants.driveMotorGearRatio, constants.turnCouplingRatio);
+    driveConfig.getOutputSettings().setIdleMode(IdleMode.kBrake).setInvert(constants.driveMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
+    driveConfig.setElectricalLimitSettings(constants.driveElectricalLimitSettings);
+    driveConfig.getFeedbackSensorSettings().setSensorToMechanismRatio(constants.driveMotorGearRatio);
+    driveConfig.setPIDSettings(constants.driveMotorGains, PIDConfigSlot.kSlot0);
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
 
     NitrateSettings turnConfig = new NitrateSettings();
-    turnConfig
-        .getAtomicBondSettings()
-        .setAtomicBondMode(AtomicBondMode.kSwerveModule);
-    turnConfig.getOutputSettings().setIdleMode(IdleMode.kBrake).setInvert(InvertMode.kInverted);
+    turnConfig.getAtomicBondSettings().setAtomicBondMode(AtomicBondMode.kSwerveModule);
+    turnConfig.getOutputSettings().setIdleMode(IdleMode.kBrake).setInvert(constants.turnMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
     turnConfig
         .getFeedbackSensorSettings()
-        .setFeedbackSensor(new FeedbackSensor.CanandmagAbsolute(0, 0));
+        .setFeedbackSensor(new FeedbackSensor.CanandmagAbsolute(constants.turnEncoderId, constants.turnMotorGearRatio));
     turnConfig
-        .getElectricalLimitSettings()
-        .setBusCurrentLimit(0)
-        .setBusCurrentLimitTime(0)
-        .setStatorCurrentLimit(0);
+        .setElectricalLimitSettings(constants.turnElectricalLimitSettings);
     turnConfig
+        .setPIDSettings(constants.turnMotorGains, PIDConfigSlot.kSlot0)
         .getPIDSettings(PIDConfigSlot.kSlot0)
-        .setPID(0, 0, 0)
-        .setStaticFeedforward(0)
-        .setVelocityFeedforward(0)
         .setMotionProfileMode(MotionProfileMode.kTrapezoidal)
-        .setMotionProfileAccelLimit(0)
-        .setMotionProfileDeaccelLimit(0)
-        .setMotionProfileVelocityLimit(0)
         .setMinwrapConfig(new MinwrapConfig.Enabled());
     NitrateSettings turnConfigStatus = turnMotor.setSettings(turnConfig, 0.02, 5);
 
     CanandmagSettings settings = new CanandmagSettings();
-    settings.setInvertDirection(false);
+    settings.setInvertDirection(constants.turnEncoderInverted);
     CanandmagSettings turnEncoderConfigStatus = turnEncoder.setSettings(settings, 0.02, 5);
 
     if (!driveConfigStatus.isEmpty()) {
       DriverStation.reportError(
-          "Nitrate " + driveMotor.getAddress().getDeviceId() + " (Swerve drive motor) failed to configure",
+          "Nitrate "
+              + driveMotor.getAddress().getDeviceId()
+              + " (Swerve drive motor) failed to configure",
           false);
     }
     if (!turnConfigStatus.isEmpty()) {
       DriverStation.reportError(
-          "Nitrate " + turnMotor.getAddress().getDeviceId() + " (Swerve turn motor) failed to configure",
+          "Nitrate "
+              + turnMotor.getAddress().getDeviceId()
+              + " (Swerve turn motor) failed to configure",
           false);
     }
     if (!turnEncoderConfigStatus.isEmpty()) {
@@ -131,14 +119,15 @@ public class ModuleIONitrate implements ModuleIO {
   }
 
   @Override
-  public void setDriveVelocity(double velocityRadPerSec) {
+  public void setDriveVelocity(double driveWheelVelocityRadPerSec) {
     driveMotor.setRequest(
         drivePIDVelocityRequest.setPosition(
-            Units.radiansToRotations(velocityRadPerSec))); // TODO: Wait for API to get fixed
+            Units.radiansToRotations(
+                driveWheelVelocityRadPerSec))); // TODO: Wait for API to get fixed
   }
 
   @Override
-  public void setTurnPosition(double positionRad) {
-    turnMotor.setRequest(turnPIDPositionRequest.setPosition(Units.radiansToRotations(positionRad)));
+  public void setTurnPosition(Rotation2d turnWheelPosition) {
+    turnMotor.setRequest(turnPIDPositionRequest.setPosition(turnWheelPosition.getRotations()));
   }
 }
