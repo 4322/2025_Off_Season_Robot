@@ -6,12 +6,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
-import frc.robot.subsystems.arm.ArmIOReal;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.drive.DemoDrive;
 import frc.robot.subsystems.endEffector.EndEffector;
@@ -59,7 +58,7 @@ public class RobotContainer {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         if (Constants.armEnabled) {
-          arm = new Arm(new ArmIOReal());
+          arm = new Arm(); // Create the arm subsystem if enabled
         }
         if (Constants.visionEnabled) {
           vision =
