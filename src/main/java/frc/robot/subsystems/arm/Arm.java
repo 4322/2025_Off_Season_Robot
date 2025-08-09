@@ -7,8 +7,7 @@ public class Arm extends SubsystemBase {
 
   private static final double SAFE_ARM_ANGLE = 45.0;
   private static final double MIN_SAFE_ARM_ANGLE = 20.0;
-  double currentPosition = arm.getPositionDeg();
-  double requestedPosition = requestedPositionDeg.get();
+  private static final double MAX_SAFE_ARM_ANGLE = 20.0;
 
   /* double currentPosition = arm.getPositionDeg();
   double requestedPosition = requestedPositionDeg.get();
