@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmIO;
+import frc.robot.subsystems.arm.ArmIOReal;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.drive.DemoDrive;
 import frc.robot.subsystems.endEffector.EndEffector;
@@ -26,6 +28,8 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  public static XboxController driver = new XboxController(0);
+  
   private static Vision vision;
   private static DemoDrive drive = new DemoDrive(); // Demo drive subsystem, sim only
   private static Arm arm; // IO for the arm subsystem, null if not enabled
@@ -76,7 +80,7 @@ public class RobotContainer {
       vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
     }
     if (arm == null) {
-      arm = new Arm();
+      arm = new Arm(new ArmIO() {});
     }
 
     // Configure the button bindings
