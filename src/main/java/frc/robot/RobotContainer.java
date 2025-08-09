@@ -29,7 +29,7 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
  */
 public class RobotContainer {
   public static XboxController driver = new XboxController(0);
-  
+
   private static Vision vision;
   private static DemoDrive drive = new DemoDrive(); // Demo drive subsystem, sim only
   private static Arm arm; // IO for the arm subsystem, null if not enabled
