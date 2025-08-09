@@ -17,13 +17,14 @@ public interface EndEffectorIO {
     public double endEffectorSensorColorGreen = 0.0;
     public double endEffectorSensorColorBlue = 0.0;
 
-    public enum colorDetected {
+    public enum gamePiece {
       NONE,
-      GREEN,
-      WHITE
+      ALGAE,
+      CORAL,
+      UNKNOWN
     }
 
-    public colorDetected sensorColorDetected = colorDetected.NONE;
+    public gamePiece sensorPieceDetected = gamePiece.NONE;
 
     public boolean currentDetectionPickupTriggered = false;
     public boolean currentDetectionReleaseTriggered = false;

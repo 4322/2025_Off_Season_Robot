@@ -15,7 +15,7 @@ public final class Constants {
   public static final boolean indexerEnabled = true;
   public static final boolean rollersEnabled = true;
   public static final boolean endEffectorEnabled = true;
-  
+
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
@@ -140,11 +140,21 @@ public final class Constants {
     public static final double MOTOR_BUS_CURRENT_LIMIT_TIME = 0;
     public static final double MOTOR_STATOR_CURRENT_LIMIT = 0;
 
-    public static final double SENSOR_GREEN_THRESHOLD = 0;
-    public static final double SENSOR_BLUE_THRESHOLD = 0;
-    public static final double SENSOR_RED_THRESHOLD = 0;
     public static final double SENSOR_CORAL_PROXIMITY_THRESHOLD = 0;
     public static final double SENSOR_ALGAE_PROXIMITY_THRESHOLD = 0;
+
+
+    // TODO tune these
+    // For algae
+    public static final double SENSOR_GREEN_DETECT_GREEN_LOWER= 120;
+    public static final double SENSOR_GREEN_DETECT_GREEN_UPPER = 140;
+    public static final double SENSOR_GREEN_DETECT_BLUE_LOWER = 120;
+    public static final double SENSOR_GREEN_DETECT_BLUE_UPPER = 140;
+    public static final double SENSOR_GREEN_DETECT_RED = 38; // Max value
+    // For coral; All are minimum values
+    public static final double SENSOR_WHITE_DETECT_GREEN = 180;
+    public static final double SENSOR_WHITE_DETECT_BLUE = 180;
+    public static final double SENSOR_WHITE_DETECT_RED = 180;
   }
 
   public static class Deployer {

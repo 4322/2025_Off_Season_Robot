@@ -9,7 +9,7 @@ import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 import com.reduxrobotics.sensors.canandcolor.CanandcolorSettings;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.endEffector.EndEffectorIO.EndEffectorIOInputs.colorDetected;
+import frc.robot.subsystems.endEffector.EndEffectorIO.EndEffectorIOInputs.gamePiece;
 
 public class EndEffectorIONitrate implements EndEffectorIO {
   private Nitrate endEffectorMotor;
@@ -79,17 +79,23 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.endEffectorSensorColorBlue = endEffectorSensor.getBlue();
     inputs.endEffectorSensorColorGreen = endEffectorSensor.getGreen();
     inputs.endEffectorSensorColorRed = endEffectorSensor.getRed();
-    
-    if (endEffectorSensor.getGreen() > Constants.EndEffector.SENSOR_GREEN_THRESHOLD
-        && endEffectorSensor.getBlue() < Constants.EndEffector.SENSOR_BLUE_THRESHOLD
-        && endEffectorSensor.getRed() < Constants.EndEffector.SENSOR_RED_THRESHOLD) {
-      inputs.sensorColorDetected = colorDetected.GREEN;
-    } else if (endEffectorSensor.getGreen() < Constants.EndEffector.SENSOR_GREEN_THRESHOLD
-        && endEffectorSensor.getBlue() < Constants.EndEffector.SENSOR_BLUE_THRESHOLD
-        && endEffectorSensor.getRed() < Constants.EndEffector.SENSOR_RED_THRESHOLD) {
-      inputs.sensorColorDetected = colorDetected.WHITE;
+
+    if (endEffectorSensor.getProximity() < Constants.EndEffector.SENSOR_ALGAE_PROXIMITY_THRESHOLD) {
+      if (endEffectorSensor.getGreen() > Constants.EndEffector.SENSOR_GREEN_DETECT_GREEN_LOWER
+          && endEffectorSensor.getGreen() < Constants.EndEffector.SENSOR_GREEN_DETECT_GREEN_UPPER
+          && endEffectorSensor.getBlue() > Constants.EndEffector.SENSOR_GREEN_DETECT_BLUE_LOWER
+          && endEffectorSensor.getBlue() < Constants.EndEffector.SENSOR_GREEN_DETECT_BLUE_UPPER
+          && endEffectorSensor.getRed() < Constants.EndEffector.SENSOR_GREEN_DETECT_RED) {
+        inputs.sensorPieceDetected = gamePiece.ALGAE;
+      } else if (endEffectorSensor.getGreen() > Constants.EndEffector.SENSOR_WHITE_DETECT_GREEN
+          && endEffectorSensor.getBlue() > Constants.EndEffector.SENSOR_WHITE_DETECT_BLUE
+          && endEffectorSensor.getRed() > Constants.EndEffector.SENSOR_WHITE_DETECT_RED) {
+        inputs.sensorPieceDetected = gamePiece.CORAL;
+      } else {
+        inputs.sensorPieceDetected = gamePiece.UNKNOWN;
+      }
     } else {
-      inputs.sensorColorDetected = colorDetected.NONE;
+      inputs.sensorPieceDetected = gamePiece.NONE;
     }
     inputs.currentDetectionPickupTriggered = isCurrentDetectionPickupTriggered();
   }
