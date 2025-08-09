@@ -108,8 +108,8 @@ public class ModuleIONitrate implements ModuleIO {
     inputs.turnTempCelsius = turnMotor.getMotorTemperatureFrame().getData();
 
     inputs.turnEncoderConnected = turnEncoder.isConnected();
-    inputs.turnAbsolutePositionRad = Units.rotationsToRadians(turnEncoder.getAbsPosition());
-    inputs.turnPositionRad = Units.rotationsToRadians(turnEncoder.getPosition());
+    inputs.turnAbsolutePosition = Rotation2d.fromRotations(turnEncoder.getAbsPosition());
+    inputs.turnPosition = Rotation2d.fromRotations(turnEncoder.getPosition());
   }
 
   @Override
