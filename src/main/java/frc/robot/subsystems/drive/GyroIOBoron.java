@@ -8,7 +8,7 @@ public class GyroIOBoron implements GyroIO {
   private final Canandgyro gyro;
 
   public GyroIOBoron() {
-    gyro = new Canandgyro(DrivetrainConstants.gyroID);
+    gyro = new Canandgyro(DrivetrainConstants.gyroId);
   }
 
   @Override

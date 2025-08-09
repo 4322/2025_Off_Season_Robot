@@ -8,7 +8,7 @@ import frc.robot.util.SwerveUtil.SwerveModuleConstantsFactory;
 
 public class DrivetrainConstants {
   // Shared drivetrain constants
-  public static final int gyroID = 0; // TODO
+  public static final int gyroId = 0; // TODO
   public static final double maxSpeedAt12Volts = 4.0; // TODO
 
   private static final double driveGearRatio = 7.363636363636365; // TODO
