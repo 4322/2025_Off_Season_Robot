@@ -23,7 +23,9 @@ import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 public class ModuleIONitrate implements ModuleIO {
   private final Nitrate driveMotor;
   private final Nitrate turnMotor;
+  private final Nitrate armMotor;
   private final Canandmag turnEncoder;
+  
 
   private final OpenLoopVelocityRequest driveOpenLoopVelocityRequest =
       new OpenLoopVelocityRequest(0);

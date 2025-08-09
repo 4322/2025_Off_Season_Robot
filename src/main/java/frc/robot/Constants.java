@@ -33,8 +33,7 @@ public final class Constants {
     public static final double L3ScoringAngleDegCoral = 39.2; // TODO: Set to actual angle
     public static final double L4ScoringAngleDegCoral = 37.2; // TODO: Set to actual angle
     public static final double AlgaePrescorePosition = 0.15; // TODO: Set to actual position
-    public static final double SafeRetract = 0.240 - Units.inchesToMeters(2); // TODO
-    public static final double safeFlipPosition = 0.217; // TODO
+
   }
 
   public static class Drive {

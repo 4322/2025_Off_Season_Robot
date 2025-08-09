@@ -38,22 +38,17 @@ public class Arm extends SubsystemBase {
 
   public Arm() {
     // TODO Auto-generated constructor stub
-    nitrate.setPosition(80);
+
   }
 
   public enum Safety {
-    SAFE,
-    LOWERING,
-    WAIT_FOR_ELEVATOR,
-    MOVING_WITH_ELEVATOR,
-    IDLE
+    APPROACHING_SETPOINT,
+    SAFE_ANGLE,
   }
 
-  Safety safety = Safety.SAFE;
+  Safety safety = Safety.SAFE_ANGLE;
 
-  public void idle() {
-    nitrate.setPosition(0.0);
-  }
+  public void idle() {}
 
   public void algaeHold() {}
 
