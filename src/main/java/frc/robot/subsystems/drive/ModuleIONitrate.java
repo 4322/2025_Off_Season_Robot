@@ -52,7 +52,7 @@ public class ModuleIONitrate implements ModuleIO {
         .setPID(0, 0, 0)
         .setStaticFeedforward(0)
         .setVelocityFeedforward(0);
-    NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0, 1);
+    NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
 
     NitrateSettings turnConfig = new NitrateSettings();
     turnConfig
@@ -77,11 +77,11 @@ public class ModuleIONitrate implements ModuleIO {
         .setMotionProfileDeaccelLimit(0)
         .setMotionProfileVelocityLimit(0)
         .setMinwrapConfig(new MinwrapConfig.Enabled());
-    NitrateSettings turnConfigStatus = turnMotor.setSettings(turnConfig, 0, 1);
+    NitrateSettings turnConfigStatus = turnMotor.setSettings(turnConfig, 0.02, 5);
 
     CanandmagSettings settings = new CanandmagSettings();
     settings.setInvertDirection(false);
-    CanandmagSettings turnEncoderConfigStatus = turnEncoder.setSettings(settings, 0, 1);
+    CanandmagSettings turnEncoderConfigStatus = turnEncoder.setSettings(settings, 0.02, 5);
 
     if (!driveConfigStatus.isEmpty()) {
       DriverStation.reportError(
