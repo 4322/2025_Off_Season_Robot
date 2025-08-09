@@ -5,6 +5,7 @@ public class Constants {
   // TODO all of these are placeholder values
   public static class EndEffector {
     public static final int endEffectorMotorID = 0;
+    public static final int endEffectorSensorID = 0;
 
     public static final double ALGAE_HOLD_VOLTS = 3.0;
     public static final double CORAL_HOLD_VOLTS = 3.0;
@@ -14,6 +15,14 @@ public class Constants {
     
     public static final double ALGAE_RELEASE_VOLTS = 3.0;
     public static final double CORAL_RELEASE_VOLTS = 3.0;
+
+    public static final double MOTOR_BUS_CURRENT_LIMIT = 0;
+    public static final double MOTOR_BUS_CURRENT_LIMIT_TIME = 0;
+    public static final double MOTOR_STATOR_CURRENT_LIMIT = 0;
+    
+    public static final double SENSOR_GREEN_THRESHOLD = 0;
+    public static final double SENSOR_BLUE_THRESHOLD = 0;
+    public static final double SENSOR_RED_THRESHOLD = 0;
   }
 
   public static class Deployer {
