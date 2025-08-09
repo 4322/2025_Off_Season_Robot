@@ -1,8 +1,7 @@
 package frc.robot.subsystems.drive;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import com.reduxrobotics.sensors.canandgyro.Canandgyro;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface GyroIO {
   @AutoLog
@@ -14,5 +13,7 @@ public interface GyroIO {
 
   public default void updateInputs(GyroIOInputs inputs) {}
 
-  public default Canandgyro getGyro() {return new Canandgyro(0);}
+  public default Canandgyro getGyro() {
+    return new Canandgyro(0);
+  }
 }

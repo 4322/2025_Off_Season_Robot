@@ -17,7 +17,7 @@ public class GyroIOBoron implements GyroIO {
     inputs.yawAngleRad = Units.rotationsToRadians(gyro.getYaw());
     inputs.yawVelocityRadPerSec = Units.rotationsToRadians(gyro.getAngularVelocityYaw());
   }
-  
+
   @Override
   public Canandgyro getGyro() {
     return gyro;

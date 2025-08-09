@@ -41,21 +41,35 @@ public class ModuleIONitrate implements ModuleIO {
     driveConfig
         .getAtomicBondSettings()
         .setAtomicBondMode(AtomicBondMode.kSwerveModule)
-        .setAtomicSwerveConstants(turnMotor, turnEncoder, gyro.getGyro(), constants.driveMotorGearRatio, constants.turnCouplingRatio);
-    driveConfig.getOutputSettings().setIdleMode(IdleMode.kBrake).setInvert(constants.driveMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
+        .setAtomicSwerveConstants(
+            turnMotor,
+            turnEncoder,
+            gyro.getGyro(),
+            constants.driveMotorGearRatio,
+            constants.turnCouplingRatio);
+    driveConfig
+        .getOutputSettings()
+        .setIdleMode(IdleMode.kBrake)
+        .setInvert(constants.driveMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
     driveConfig.setElectricalLimitSettings(constants.driveElectricalLimitSettings);
-    driveConfig.getFeedbackSensorSettings().setSensorToMechanismRatio(constants.driveMotorGearRatio);
+    driveConfig
+        .getFeedbackSensorSettings()
+        .setSensorToMechanismRatio(constants.driveMotorGearRatio);
     driveConfig.setPIDSettings(constants.driveMotorGains, PIDConfigSlot.kSlot0);
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
 
     NitrateSettings turnConfig = new NitrateSettings();
     turnConfig.getAtomicBondSettings().setAtomicBondMode(AtomicBondMode.kSwerveModule);
-    turnConfig.getOutputSettings().setIdleMode(IdleMode.kBrake).setInvert(constants.turnMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
+    turnConfig
+        .getOutputSettings()
+        .setIdleMode(IdleMode.kBrake)
+        .setInvert(constants.turnMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
     turnConfig
         .getFeedbackSensorSettings()
-        .setFeedbackSensor(new FeedbackSensor.CanandmagAbsolute(constants.turnEncoderId, constants.turnMotorGearRatio));
-    turnConfig
-        .setElectricalLimitSettings(constants.turnElectricalLimitSettings);
+        .setFeedbackSensor(
+            new FeedbackSensor.CanandmagAbsolute(
+                constants.turnEncoderId, constants.turnMotorGearRatio));
+    turnConfig.setElectricalLimitSettings(constants.turnElectricalLimitSettings);
     turnConfig
         .setPIDSettings(constants.turnMotorGains, PIDConfigSlot.kSlot0)
         .getPIDSettings(PIDConfigSlot.kSlot0)
