@@ -41,4 +41,12 @@ public interface EndEffectorIO {
   public default boolean isCurrentDetectionReleaseTriggered() {
     return false;
   }
+
+  public default boolean isCoralProximityDetected() {
+    return false;
+  }
+
+  public default boolean isAlgaeProximityDetected() {
+    return false;
+  }
 }

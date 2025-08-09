@@ -111,4 +111,23 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   public boolean isCurrentDetectionReleaseTriggered() {
     return false; // TODO figure out how current detection works
   }
+
+  @Override
+  public boolean isCoralProximityDetected() {
+    if (endEffectorSensor.getProximity() < Constants.EndEffector.SENSOR_CORAL_PROXIMITY_THRESHOLD) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @Override
+  public boolean isAlgaeProximityDetected() {
+    // This is assuming the coral will be closer to the sensor than the algae is when held
+    if (endEffectorSensor.getProximity() < Constants.EndEffector.SENSOR_ALGAE_PROXIMITY_THRESHOLD && endEffectorSensor.getProximity() > Constants.EndEffector.SENSOR_CORAL_PROXIMITY_THRESHOLD) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

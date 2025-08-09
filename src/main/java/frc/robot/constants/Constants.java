@@ -25,6 +25,8 @@ public class Constants {
     public static final double SENSOR_GREEN_THRESHOLD = 0;
     public static final double SENSOR_BLUE_THRESHOLD = 0;
     public static final double SENSOR_RED_THRESHOLD = 0;
+    public static final double SENSOR_CORAL_PROXIMITY_THRESHOLD = 0;
+    public static final double SENSOR_ALGAE_PROXIMITY_THRESHOLD = 0;
   }
 
   public static class Deployer {

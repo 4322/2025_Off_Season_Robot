@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 
 public class EndEffector extends SubsystemBase {
   private EndEffectorIO io;
@@ -49,6 +50,17 @@ public class EndEffector extends SubsystemBase {
           state = EndEffectorStates.INTAKE_ALGAE;
         } else if (requestIntakeCoral) {
           state = EndEffectorStates.INTAKE_CORAL;
+        }
+      break;
+      case INTAKE_ALGAE:
+        io.setEndEffectorMotorVoltage(Constants.EndEffector.ALGAE_INTAKE_VOLTS);
+        if (io.isAlgaeProximityDetected() || io.isCurrentDetectionPickupTriggered()) {
+          state = EndEffectorStates.HOLD_ALGAE;
+          algaeHeld = true;
+        }
+        if (requestIdle) {
+          state = EndEffectorStates.IDLE;
+          algaeHeld = false;
         }
       break;
 
