@@ -19,30 +19,27 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   private CanandcolorSettings endEffectorSensorConfig = new CanandcolorSettings();
 
   public EndEffectorIONitrate() {
-    endEffectorMotor =
-        new Nitrate(
-            Constants.EndEffector.endEffectorMotorID,
-            MotorType.kGenericBrushless); // TODO guess at motor type?
+    endEffectorMotor = new Nitrate(Constants.EndEffector.endEffectorMotorID, MotorType.kCu60);
     endEffectorSensor = new Canandcolor(Constants.EndEffector.endEffectorSensorID);
 
     configMotor();
     NitrateSettings endEffectorMotorConfigStatus =
-        endEffectorMotor.setSettings(endEffectorMotorConfig, 100, 1);
+        endEffectorMotor.setSettings(endEffectorMotorConfig, 0.02, 5);
     if (!endEffectorMotorConfigStatus.allSettingsReceived()) {
       DriverStation.reportError(
           "Nitrate "
-              + endEffectorMotor.getAddress()
+              + endEffectorMotor.getAddress().getDeviceId()
               + " error (End Effector Motor); Did not receive settings",
           null);
     }
 
     configSensor();
     CanandcolorSettings endEffectorSensorConfigStatus =
-        endEffectorSensor.setSettings(endEffectorSensorConfig, 100, 1);
+        endEffectorSensor.setSettings(endEffectorSensorConfig, 0.02, 5);
     if (!endEffectorSensorConfigStatus.allSettingsReceived()) {
       DriverStation.reportError(
           "Canandcolor "
-              + endEffectorSensor.getAddress()
+              + endEffectorSensor.getAddress().getDeviceId()
               + " error (End Effector Sensor); Did not receive settings",
           null);
     }
@@ -58,15 +55,21 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     endEffectorMotorElectricalLimitSettings.setStatorCurrentLimit(
         Constants.EndEffector.MOTOR_STATOR_CURRENT_LIMIT);
     endEffectorMotorConfig.setElectricalLimitSettings(endEffectorMotorElectricalLimitSettings);
+
+    // Set output settings brake mode
+    // Set invert flag w/ constants
+    // Feedback sensor setting for position control
   }
 
   private void configSensor() {
     // TODO add other settings for sensor
-
+    // 
   }
 
   @Override
   public void updateInputs(EndEffectorIOInputs inputs) {
+    // Voltage 
+    // Whatever is in swerve
     inputs.endEffectorMotorSpeedRotationsPerSec = endEffectorMotor.getVelocity();
     inputs.endEffectorMotorStatorCurrentAmps = endEffectorMotor.getStatorCurrent();
     inputs.endEffectorMotorTempCelcius = endEffectorMotor.getMotorTemperatureFrame().getData();
@@ -114,20 +117,14 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
   @Override
   public boolean isCoralProximityDetected() {
-    if (endEffectorSensor.getProximity() < Constants.EndEffector.SENSOR_CORAL_PROXIMITY_THRESHOLD) {
-      return true;
-    } else {
-      return false;
-    }
+    return endEffectorSensor.getProximity() < Constants.EndEffector.SENSOR_CORAL_PROXIMITY_THRESHOLD;
   }
 
   @Override
   public boolean isAlgaeProximityDetected() {
     // This is assuming the coral will be closer to the sensor than the algae is when held
-    if (endEffectorSensor.getProximity() < Constants.EndEffector.SENSOR_ALGAE_PROXIMITY_THRESHOLD && endEffectorSensor.getProximity() > Constants.EndEffector.SENSOR_CORAL_PROXIMITY_THRESHOLD) {
-      return true;
-    } else {
-      return false;
-    }
+    return endEffectorSensor.getProximity() < Constants.EndEffector.SENSOR_ALGAE_PROXIMITY_THRESHOLD
+        && endEffectorSensor.getProximity()
+            > Constants.EndEffector.SENSOR_CORAL_PROXIMITY_THRESHOLD;
   }
 }

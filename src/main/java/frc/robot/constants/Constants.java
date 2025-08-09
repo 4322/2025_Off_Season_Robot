@@ -1,6 +1,12 @@
 package frc.robot.constants;
 
 public class Constants {
+  public static final boolean armEnabled = true;
+  public static final boolean elevatorEnabled = true;
+  public static final boolean deployerEnabled = true;
+  public static final boolean indexerEnabled = true;
+  public static final boolean rollersEnabled = true;
+  public static final boolean endEffectorEnabled = true;
 
   // TODO all of these are placeholder values
   public static class EndEffector {

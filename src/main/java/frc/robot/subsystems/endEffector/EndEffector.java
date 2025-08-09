@@ -1,10 +1,9 @@
 package frc.robot.subsystems.endEffector;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import org.littletonrobotics.junction.Logger;
 
 public class EndEffector extends SubsystemBase {
   private EndEffectorIO io;
@@ -51,7 +50,7 @@ public class EndEffector extends SubsystemBase {
         } else if (requestIntakeCoral) {
           state = EndEffectorStates.INTAKE_CORAL;
         }
-      break;
+        break;
       case INTAKE_ALGAE:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.ALGAE_INTAKE_VOLTS);
         if (io.isAlgaeProximityDetected() || io.isCurrentDetectionPickupTriggered()) {
@@ -62,7 +61,7 @@ public class EndEffector extends SubsystemBase {
           state = EndEffectorStates.IDLE;
           algaeHeld = false;
         }
-      break;
+        break;
       case INTAKE_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.CORAL_INTAKE_VOLTS);
         if (io.isCoralProximityDetected() || io.isCurrentDetectionPickupTriggered()) {
@@ -73,33 +72,34 @@ public class EndEffector extends SubsystemBase {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
         }
-      break;
+        break;
       case HOLD_ALGAE:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.ALGAE_HOLD_VOLTS);
         if (requestReleaseAlgae) {
           state = EndEffectorStates.RELEASE_ALGAE;
         }
-      break;
+        break;
       case HOLD_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.CORAL_HOLD_VOLTS);
         if (requestReleaseCoral) {
           state = EndEffectorStates.RELEASE_CORAL;
         }
-      break;
+        break;
       case RELEASE_ALGAE:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.ALGAE_RELEASE_VOLTS);
         if (io.isCurrentDetectionReleaseTriggered() || !io.isAlgaeProximityDetected()) {
           state = EndEffectorStates.IDLE;
           algaeHeld = false;
         }
-      break;
+        break;
       case RELEASE_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.CORAL_RELEASE_VOLTS);
-        if (io.isCurrentDetectionReleaseTriggered() || (!io.isCoralProximityDetected() && !io.isAlgaeProximityDetected())) {
+        if (io.isCurrentDetectionReleaseTriggered()
+            || (!io.isCoralProximityDetected() && !io.isAlgaeProximityDetected())) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
         }
-      break;
+        break;
     }
   }
 
