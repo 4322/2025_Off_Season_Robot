@@ -12,7 +12,7 @@ public class Arm extends SubsystemBase {
   public void idle() {
     // Set the arm to idle state
     // This could mean stopping the motors or setting a default position
-    
+
   }
 
   public void algaeHold() {}
@@ -45,5 +45,4 @@ public class Arm extends SubsystemBase {
   public void eject() {}
 
   public void getAngleDegrees() {}
-
 }

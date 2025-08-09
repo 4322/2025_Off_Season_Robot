@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmIO;
+import frc.robot.subsystems.arm.ArmIOReal;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.drive.DemoDrive;
 import frc.robot.subsystems.endEffector.EndEffector;
@@ -47,7 +49,7 @@ public class RobotContainer {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         if (Constants.armEnabled) {
-          arm = new Arm();
+          arm = new Arm(new ArmIOReal());
         }
         if (Constants.visionEnabled) {
           vision =
@@ -76,7 +78,7 @@ public class RobotContainer {
       vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
     }
     if (arm == null) {
-      arm = new Arm();
+      arm = new Arm(new ArmIO() {});
     }
 
     // Configure the button bindings
