@@ -35,7 +35,7 @@ public class Drive extends SubsystemBase {
               DrivetrainConstants.frontLeft.driveWheelRadius,
               DrivetrainConstants.maxSpeedAt12Volts,
               Constants.PathPlanner.wheelCOF,
-              DCMotor.getKrakenX60Foc(1)
+              DCMotor.getKrakenX60(1)
                   .withReduction(DrivetrainConstants.frontLeft.driveMotorGearRatio),
               DrivetrainConstants.frontLeft
                   .driveElectricalLimitSettings
