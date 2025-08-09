@@ -51,17 +51,6 @@ public class Arm extends SubsystemBase {
 
   Safety safety = Safety.SAFE;
 
-  @Override
-  periodic() {
-    switch (safety) {
-      case SAFE:
-        break;
-      default:
-        // Handle other safety modes if needed
-        break;
-    }
-  }
-
   public void idle() {
     // Set the arm to idle state
     // This could mean stopping the motors or setting a default position
