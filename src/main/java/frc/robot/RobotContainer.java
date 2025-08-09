@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmIO;
+import frc.robot.subsystems.arm.ArmIOReal;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.drive.DemoDrive;
 import frc.robot.subsystems.endEffector.EndEffector;
@@ -27,6 +30,8 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 public class RobotContainer {
   private static Vision vision;
   private static DemoDrive drive = new DemoDrive(); // Demo drive subsystem, sim only
+  private static Arm arm; // IO for the arm subsystem, null if not enabled
+  // Declare Arm variable
 
   // TODO add Advantagekit stuff for all of these
   public static EndEffector endEffector = new EndEffector();
@@ -43,6 +48,9 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
+        if (Constants.armEnabled) {
+          arm = new Arm(new ArmIOReal());
+        }
         if (Constants.visionEnabled) {
           vision =
               new Vision(
@@ -68,6 +76,9 @@ public class RobotContainer {
     // Used during replay mode or when certain subsystems are disabled
     if (vision == null) {
       vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+    }
+    if (arm == null) {
+      arm = new Arm(new ArmIO() {});
     }
 
     // Configure the button bindings
