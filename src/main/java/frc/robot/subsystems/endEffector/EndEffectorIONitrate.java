@@ -76,6 +76,10 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.endEffectorMotorBusCurrentAmps = endEffectorMotor.getBusCurrent();
 
     inputs.endEffectorSensorProximity = endEffectorSensor.getProximity();
+    inputs.endEffectorSensorColorBlue = endEffectorSensor.getBlue();
+    inputs.endEffectorSensorColorGreen = endEffectorSensor.getGreen();
+    inputs.endEffectorSensorColorRed = endEffectorSensor.getRed();
+    
     if (endEffectorSensor.getGreen() > Constants.EndEffector.SENSOR_GREEN_THRESHOLD
         && endEffectorSensor.getBlue() < Constants.EndEffector.SENSOR_BLUE_THRESHOLD
         && endEffectorSensor.getRed() < Constants.EndEffector.SENSOR_RED_THRESHOLD) {

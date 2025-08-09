@@ -13,6 +13,9 @@ public interface EndEffectorIO {
     public double endEffectorMotorSpeedRotationsPerSec = 0.0;
 
     public double endEffectorSensorProximity = 0.0;
+    public double endEffectorSensorColorRed = 0.0;
+    public double endEffectorSensorColorGreen = 0.0;
+    public double endEffectorSensorColorBlue = 0.0;
 
     public enum colorDetected {
       NONE,
