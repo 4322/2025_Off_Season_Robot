@@ -47,7 +47,7 @@ public class RobotContainer {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         if (Constants.armEnabled) {
-          arm = new Arm();
+          arm = new Arm(); // Create the arm subsystem if enabled
         }
         if (Constants.visionEnabled) {
           vision =
