@@ -9,13 +9,13 @@ import frc.robot.util.SwerveUtil.SwerveModuleConstantsFactory;
 public class DrivetrainConstants {
   // Shared drivetrain constants
   public static final int gyroID = 0;
+  public static final double maxSpeedAt12Volts = 4.0;
 
   private static final double driveGearRatio = 7.363636363636365;
   private static final double turnGearRatio = 15.42857142857143;
   private static final double turnCoupleRatio = 3.8181818181818183;
 
   private static final double wheelRadius = Units.inchesToMeters(2.0);
-  public static final double maxSpeedAt12Volts = 4.0;
 
   private static final boolean turnMotorInverted = true;
   private static final boolean turnEncoderInverted = false;

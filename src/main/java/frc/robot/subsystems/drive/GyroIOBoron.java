@@ -2,13 +2,13 @@ package frc.robot.subsystems.drive;
 
 import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants;
+import frc.robot.constants.DrivetrainConstants;
 
 public class GyroIOBoron implements GyroIO {
   private final Canandgyro gyro;
 
   public GyroIOBoron() {
-    gyro = new Canandgyro(Constants.Drive.gyroID);
+    gyro = new Canandgyro(DrivetrainConstants.gyroID);
   }
 
   @Override

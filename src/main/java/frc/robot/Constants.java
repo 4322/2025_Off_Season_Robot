@@ -14,10 +14,6 @@ public final class Constants {
 
   public static final boolean visionEnabled = true;
 
-  public static class Drive {
-    public static final int gyroID = 0; // TODO
-  }
-
   public static enum Mode {
     /** Running on a real robot. */
     REAL,
@@ -27,6 +23,18 @@ public final class Constants {
 
     /** Replaying from a log file. */
     REPLAY
+  }
+
+  public static class PathPlanner {
+    public static final double translationkP = 0;
+    public static final double translationkD = 0;
+
+    public static final double rotkP = 0.0;
+    public static final double rotkD = 0.0;
+
+    public static final double robotMassKg = 74.088; // TODO: Weigh robot
+    public static final double robotMOI = 6.883; // TODO: Use CAD
+    public static final double wheelCOF = 1.2;
   }
 
   public static class Arm {
