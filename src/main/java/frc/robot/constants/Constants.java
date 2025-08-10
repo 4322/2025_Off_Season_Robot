@@ -9,6 +9,10 @@ import edu.wpi.first.wpilibj.RobotBase;
  * (log replay from a file).
  */
 public final class Constants {
+  // Don't start constants with L1, L2, etc
+  // Constants in camelCase
+
+
   public static final boolean armEnabled = true;
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
@@ -145,7 +149,8 @@ public final class Constants {
   }
 
   public static class IntakeSuperstructure {
-    public static final double INDEXER_RETRACT_TIMEOUT_SECONDS = 3; // TODO placeholder values
-    public static final double PICKUP_AREA_RETRACT_TIMEOUT_SECONDS = 3;
+    
+    public static final double indexerRetractTimeoutSeconds = 3; // TODO placeholder values
+    public static final double pickupAreaRetractTimeoutSeconds = 3; 
   }
 }
