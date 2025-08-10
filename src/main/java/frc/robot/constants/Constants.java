@@ -122,67 +122,68 @@ public final class Constants {
 
   // TODO all of these are placeholder values
   public static class EndEffector {
-    public static final int endEffectorMotorID = 0;
-    public static final int endEffectorSensorID = 0;
+    public static final int endEffectorMotorId = 0;
+        public static final int endEffectorSensorId = 0;
 
-    public static final double ALGAE_HOLD_VOLTS = 3.0;
-    public static final double CORAL_HOLD_VOLTS = 3.0;
+        public static final double algaeHoldVolts = 3.0;
+        public static final double coralHoldVolts = 3.0;
 
-    public static final double ALGAE_INTAKE_VOLTS = 3.0;
-    public static final double CORAL_INTAKE_VOLTS = 3.0;
+        public static final double algaeIntakeVolts = 3.0;
+        public static final double coralIntakeVolts = 3.0;
 
-    public static final double ALGAE_RELEASE_VOLTS = 3.0;
-    public static final double CORAL_RELEASE_VOLTS = 3.0;
+        public static final double algaeReleaseVolts = 3.0;
+        public static final double coralReleaseVolts = 3.0;
 
-    public static final double CURRENT_DETECTION_THRESHOLD = 0.0;
+        public static final double currentDetectionThreshold = 0.0;
 
-    public static final double MOTOR_BUS_CURRENT_LIMIT = 0;
-    public static final double MOTOR_BUS_CURRENT_LIMIT_TIME = 0;
-    public static final double MOTOR_STATOR_CURRENT_LIMIT = 0;
+        public static final double motorBusCurrentLimit = 0;
+        public static final double motorBusCurrentLimitTime = 0;
+        public static final double motorStatorCurrentLimit = 0;
 
-    public static final double SENSOR_CORAL_PROXIMITY_THRESHOLD = 0;
-    public static final double SENSOR_ALGAE_PROXIMITY_THRESHOLD = 0;
+        public static final double sensorCoralProximityThreshold = 0;
+        public static final double sensorAlgaeProximityThreshold = 0;
 
 
     // TODO tune these
     // For algae
-    public static final double SENSOR_GREEN_DETECT_GREEN_LOWER= 120;
-    public static final double SENSOR_GREEN_DETECT_GREEN_UPPER = 140;
-    public static final double SENSOR_GREEN_DETECT_BLUE_LOWER = 120;
-    public static final double SENSOR_GREEN_DETECT_BLUE_UPPER = 140;
-    public static final double SENSOR_GREEN_DETECT_RED = 38; // Max value
-    // For coral; All are minimum values
-    public static final double SENSOR_WHITE_DETECT_GREEN = 180;
-    public static final double SENSOR_WHITE_DETECT_BLUE = 180;
-    public static final double SENSOR_WHITE_DETECT_RED = 180;
+    public static final double sensorGreenDetectGreenLower = 120;
+        public static final double sensorGreenDetectGreenUpper = 140;
+        public static final double sensorGreenDetectBlueLower = 120;
+        public static final double sensorGreenDetectBlueUpper = 140;
+        public static final double sensorGreenDetectRed = 38; // Max value
+
+        // For coral; All are minimum values
+        public static final double sensorWhiteDetectGreen = 180;
+        public static final double sensorWhiteDetectBlue = 180;
+        public static final double sensorWhiteDetectRed = 180;
   }
 
   public static class Deployer {
-    public static final int deployerMotorID = 1;
-    public static final double DEPLOY_VOLTAGE = 3.0;
+    public static final int deployerMotorId = 1;
+        public static final double deployVoltage = 3.0;
   }
 
   public static class Indexer {
-    public static final int indexerMotorID = 2;
-    public static final double FEED_VOLTAGE = 3.0;
-    public static final double FEED_SLOW_VOLTAGE = 3.0;
-    public static final double EJECT_VOLTAGE = 3.0;
-    public static final double REJECT_VOLTAGE = 3.0;
-    public static final double REJECT_SLOW_VOLTAGE = 3.0;
+    public static final int indexerMotorId = 2;
+    public static final double feedVoltage = 3.0;
+    public static final double feedSlowVoltage = 3.0;
+    public static final double ejectVoltage = 3.0;
+    public static final double rejectVoltage = 3.0;
+    public static final double rejectSlowVoltage = 3.0;
   }
 
   public static class Rollers {
     public static final int rollersMotorID = 3;
 
-    public static final double FEED_VOLTAGE = 3.0;
-    public static final double FEED_SLOW_VOLTAGE = 3.0;
-    public static final double EJECT_VOLTAGE = 3.0;
-    public static final double REJECT_VOLTAGE = 3.0;
-    public static final double REJECT_SLOW_VOLTAGE = 3.0;
+    public static final double feedVoltage = 3.0;
+    public static final double feedSlowVoltage = 3.0;
+    public static final double ejectVoltage = 3.0;
+    public static final double rejectVoltage = 3.0;
+    public static final double rejectSlowVoltage = 3.0;
   }
 
   public static class IntakeSuperstructure {
-    public static final double INDEXER_RETRACT_TIMEOUT_SECONDS = 3.0;
-    public static final double PICKUP_AREA_RETRACT_TIMEOUT_SECONDS = 3.0;
+    public static final double indexerRetractTimeoutSeconds = 3.0;
+    public static final double pickupAreaRetractTimeoutSeconds = 3.0;
   }
 }
