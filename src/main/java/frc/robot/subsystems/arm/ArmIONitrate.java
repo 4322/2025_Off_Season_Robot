@@ -14,18 +14,18 @@ import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDVelocityRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.arm.ArmIO.ArmIOInputs;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
+
 public class ArmIONitrate implements ArmIO {
 
   private final Nitrate armMotor;
   private final Canandmag armEncoder;
-  
+
   private final PIDVelocityRequest armPIDVelocityRequest =
       new PIDVelocityRequest(PIDConfigSlot.kSlot0, 0);
   private final PIDPositionRequest armPIDPositionRequest =
@@ -39,7 +39,8 @@ public class ArmIONitrate implements ArmIO {
     armConfig
         .getAtomicBondSettings()
         .setAtomicBondMode(AtomicBondMode.kSwerveModule)
-        .setAtomicSwerveConstants(armMotor,
+        .setAtomicSwerveConstants(
+            armMotor,
             armEncoder,
             gyro.getGyro(),
             constants.driveMotorGearRatio,
@@ -49,9 +50,7 @@ public class ArmIONitrate implements ArmIO {
         .setIdleMode(IdleMode.kBrake)
         .setInvert(constants.driveMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
     armConfig.setElectricalLimitSettings(constants.driveElectricalLimitSettings);
-    armConfig
-        .getFeedbackSensorSettings()
-        .setSensorToMechanismRatio(constants.driveMotorGearRatio);
+    armConfig.getFeedbackSensorSettings().setSensorToMechanismRatio(constants.driveMotorGearRatio);
     armConfig.setPIDSettings(constants.driveMotorGains, PIDConfigSlot.kSlot0);
     NitrateSettings driveConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);
 
@@ -79,13 +78,15 @@ public class ArmIONitrate implements ArmIO {
     CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
 
     if (!armConfigStatus.isEmpty()) {
-      DriverStation.reportError("Nitrate "
+      DriverStation.reportError(
+          "Nitrate "
               + armMotor.getAddress().getDeviceId()
               + " (Swerve turn motor) failed to configure",
           false);
     }
     if (!armEncoderConfigStatus.isEmpty()) {
-      DriverStation.reportError("Canandmag "
+      DriverStation.reportError(
+          "Canandmag "
               + armEncoder.getAddress().getDeviceId()
               + " (Swerve turn encoder) failed to configure",
           false);
@@ -106,12 +107,9 @@ public class ArmIONitrate implements ArmIO {
     armInputs.armPosition = Rotation2d.fromRotations(armEncoder.getPosition());
   }
 
-  
-  
-
- 
   public void setArmVelocity(double armWheelVelocityRadPerSec) {
-    armMotor.setRequest(armPIDVelocityRequest.setPosition(
+    armMotor.setRequest(
+        armPIDVelocityRequest.setPosition(
             Units.radiansToRotations(
                 armWheelVelocityRadPerSec))); // TODO: Wait for API to get fixed
   }
@@ -120,6 +118,3 @@ public class ArmIONitrate implements ArmIO {
     armMotor.setRequest(armPIDPositionRequest.setPosition(armWheelPosition.getRotations()));
   }
 }
-
-
-

@@ -15,7 +15,6 @@ import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDVelocityRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -25,7 +24,6 @@ public class ModuleIONitrate implements ModuleIO {
   private final Nitrate driveMotor;
   private final Nitrate turnMotor;
   private final Canandmag turnEncoder;
-  
 
   private final OpenLoopVelocityRequest driveOpenLoopVelocityRequest =
       new OpenLoopVelocityRequest(0);
