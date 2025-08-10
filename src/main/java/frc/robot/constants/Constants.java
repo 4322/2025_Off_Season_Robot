@@ -58,22 +58,20 @@ public final class Constants {
   }
 
   public static class Scoring {
-    public static final double L1ScoringAngleDegCoral = 0.0;
-    public static final double L2ScoringAngleDegCoral = 17.5; // TODO: Set to actual angle
-    public static final double L3ScoringAngleDegCoral = 39.2; // TODO: Set to actual angle
-    public static final double L4ScoringAngleDegCoral = 37.2; // TODO: Set to actual angle
-    public static final double AlgaePrescorePosition = 0.15; // TODO: Set to actual position
-    public static final double SafeRetract = 0.240 - Units.inchesToMeters(2); // TODO
-    public static final double safeFlipPosition = 0.217; // TODO
+    public static final double scoringL1AngleDegCoral = 0.0;
+    public static final double scoringL2AngleDegCoral = 17.5; // TODO: Set to actual angle
+    public static final double scoringL3AngleDegCoral = 39.2; // TODO: Set to actual angle
+    public static final double scoringL4AngleDegCoral = 37.2; // TODO: Set to actual angle
+    public static final double algaePrescorePosition = 0.15; // TODO: Set to actual position
   }
 
   public static class Arm {
-    public static final double IdlePositionDeg = 0.0; // TODO: Set to actual idle position
-    public static final double kAlgaeHoldPositionDeg = 45.0; // TODO
-    public static final double CoralHoldPositionDeg = 90.0; // TODO
-    public static final double AlgaeGroundPositionDeg = 30.0; // TODO
-    public static final double AlgaeReefPositionDeg = 60.0; // TODO
-    public static final double ScoreAlgaePositionDeg = 75.0; // TODO
+    public static final double idlePositionDeg = 0.0; // TODO: Set to actual idle position
+    public static final double algaeHoldPositionDeg = 45.0; // TODO
+    public static final double coralHoldPositionDeg = 90.0; // TODO
+    public static final double algaeGroundPositionDeg = 30.0; // TODO
+    public static final double algaeReefPositionDeg = 60.0; // TODO
+    public static final double scoreAlgaePositionDeg = 75.0; // TODO
 
     public static final double setpointToleranceMeters = 0.01;
 
