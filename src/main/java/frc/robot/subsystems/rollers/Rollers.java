@@ -1,27 +1,66 @@
 package frc.robot.subsystems.rollers;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
+import org.littletonrobotics.junction.Logger;
 
 public class Rollers extends SubsystemBase {
+  private RollersIO io;
+  private RollersIOInputsAutoLogged inputs = new RollersIOInputsAutoLogged();
 
   private boolean coralDetected;
 
-  public Rollers() {}
+  private enum RollersStatus {
+    START,
+    FEED,
+    FEED_SLOW,
+    REJECT,
+    REJECT_SLOW,
+    EJECT
+  }
+
+  private RollersStatus currentAction = RollersStatus.START;
+
+  public Rollers(RollersIO io) {
+    this.io = io;
+    this.coralDetected = false;
+  }
 
   @Override
   public void periodic() {
+    io.updateInputs(inputs);
+    Logger.processInputs("Rollers", inputs);
+    Logger.recordOutput("Rollers/currentAction", currentAction.toString());
+    Logger.recordOutput("Rollers/coralDetected", coralDetected);
+
     // Checks current in here, sets coralDetected depending on threshold
+    // With io.getMotorStatorCurrent() and io.getRollersMotorVelocityRotationsPerSec()
   }
 
-  public void feed() {}
+  public void feed() {
+    currentAction = RollersStatus.FEED;
+    io.setRollersMotorVoltage(Constants.Rollers.motorVoltageFeed);
+  }
 
-  public void feedSlow() {}
+  public void feedSlow() {
+    currentAction = RollersStatus.FEED_SLOW;
+    io.setRollersMotorVoltage(Constants.Rollers.motorVoltageFeedSlow);
+  }
 
-  public void reject() {}
+  public void reject() {
+    currentAction = RollersStatus.REJECT;
+    io.setRollersMotorVoltage(Constants.Rollers.motorVoltageReject);
+  }
 
-  public void rejectSlow() {}
+  public void rejectSlow() {
+    currentAction = RollersStatus.REJECT_SLOW;
+    io.setRollersMotorVoltage(Constants.Rollers.motorVoltageRejectSlow);
+  }
 
-  public void eject() {}
+  public void eject() {
+    currentAction = RollersStatus.EJECT;
+    io.setRollersMotorVoltage(Constants.Rollers.motorVoltageEject);
+  }
 
   public boolean isCoralDetected() {
     return coralDetected;
