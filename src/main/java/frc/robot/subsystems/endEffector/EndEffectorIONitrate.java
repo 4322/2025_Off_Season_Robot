@@ -3,6 +3,7 @@ package frc.robot.subsystems.endEffector;
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
@@ -56,8 +57,11 @@ public class EndEffectorIONitrate implements EndEffectorIO {
         Constants.EndEffector.motorStatorCurrentLimit);
     endEffectorMotorConfig.setElectricalLimitSettings(endEffectorMotorElectricalLimitSettings);
 
-    // Set output settings brake mode
-    // Set invert flag w/ constants
+    OutputSettings endEffectorMotorOutputSettings = new OutputSettings();
+    endEffectorMotorOutputSettings.setIdleMode(Constants.EndEffector.motorIdleMode);
+    endEffectorMotorOutputSettings.setInvert(Constants.EndEffector.motorInvert);
+    endEffectorMotorConfig.setOutputSettings(endEffectorMotorOutputSettings);
+    
     // Feedback sensor setting for position control
   }
 
@@ -74,6 +78,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.endEffectorMotorStatorCurrentAmps = endEffectorMotor.getStatorCurrent();
     inputs.endEffectorMotorTempCelcius = endEffectorMotor.getMotorTemperatureFrame().getData();
     inputs.endEffectorMotorBusCurrentAmps = endEffectorMotor.getBusCurrent();
+    inputs.endEffectorMotorVoltage = endEffectorMotor.(); /// TODO fix this
 
     inputs.endEffectorSensorProximity = endEffectorSensor.getProximity();
     inputs.endEffectorSensorColorBlue = endEffectorSensor.getBlue();

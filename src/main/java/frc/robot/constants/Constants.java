@@ -1,5 +1,8 @@
 package frc.robot.constants;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -156,6 +159,8 @@ public final class Constants {
         public static final double sensorWhiteDetectGreen = 180;
         public static final double sensorWhiteDetectBlue = 180;
         public static final double sensorWhiteDetectRed = 180;
+        public static final IdleMode motorIdleMode = IdleMode.kBrake; 
+        public static final InvertMode motorInvert = InvertMode.kNotInverted; // InvertMode.kInverted or InvertMode.kNotInverted
   }
 
   public static class Deployer {

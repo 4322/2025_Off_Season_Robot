@@ -11,6 +11,7 @@ public interface EndEffectorIO {
     public double endEffectorMotorBusCurrentAmps = 0.0;
     public double endEffectorMotorTempCelcius = 0.0;
     public double endEffectorMotorSpeedRotationsPerSec = 0.0;
+    public double endEffectorMotorVoltage = 0.0;
 
     public double endEffectorSensorProximity = 0.0;
     public double endEffectorSensorColorRed = 0.0;
