@@ -21,6 +21,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.DrivetrainConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -65,8 +66,8 @@ public class Drive extends SubsystemBase {
     AutoBuilder.configure(
         this::getPose,
         this::resetPose,
-        this::getChassisSpeeds,
-        this::runVelocity,
+        this::getRobotRelativeSpeeds,
+        (speeds) -> runVelocity(speeds, false),
         new PPHolonomicDriveController(
             new PIDConstants(
                 Constants.PathPlanner.translationkP, 0.0, Constants.PathPlanner.translationkD),
@@ -90,7 +91,15 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  public void runVelocity(ChassisSpeeds speeds) {
+  public void runVelocity(ChassisSpeeds speeds, boolean fieldRelative) {
+    if (fieldRelative) {
+      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+          speeds,
+          Robot.alliance == Alliance.Red
+              ? getRotation().plus(Rotation2d.kPi)
+              : getRotation());
+    }
+
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -106,7 +115,14 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", setpointStates);
   }
 
-  public void runOpenLoop(ChassisSpeeds speeds) {
+  public void runOpenLoop(ChassisSpeeds speeds, boolean fieldRelative) {
+    if (fieldRelative) {
+      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+          speeds,
+          Robot.alliance == Alliance.Red
+              ? getRotation().plus(Rotation2d.kPi)
+              : getRotation());
+    }
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -140,8 +156,12 @@ public class Drive extends SubsystemBase {
   }
 
   @AutoLogOutput(key = "Drive/SwerveChassisSpeeds/Measured")
-  private ChassisSpeeds getChassisSpeeds() {
+  private ChassisSpeeds getRobotRelativeSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
+  }
+
+  public ChassisSpeeds getFieldRelativeSpeeds() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotRelativeSpeeds(), getRotation());
   }
 
   @AutoLogOutput(key = "Odometry/Robot")

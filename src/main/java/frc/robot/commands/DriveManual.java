@@ -52,6 +52,6 @@ public class DriveManual extends Command {
       dy *= -DrivetrainConstants.maxSpeedAt12Volts;
     }
     double rot = omega * omega * omega * 12.0;
-    drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot));
+    drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
   }
 }
