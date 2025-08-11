@@ -1,7 +1,6 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
@@ -54,7 +53,6 @@ public class Arm extends SubsystemBase {
 
   public void idle() {
     Nitrate.class.cast(io).setVoltage(0.0);
-
   }
 
   public void algaeHold() {}

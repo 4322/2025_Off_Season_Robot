@@ -39,8 +39,6 @@ public interface EndEffectorIO {
 
   public default void stopEndEffectorMotor(IdleMode idleMode) {}
 
-  public default void enableBrakeMode(boolean enable) {}
-
   public default boolean isCurrentDetectionPickupTriggered() {
     return false;
   }

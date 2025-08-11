@@ -2,25 +2,33 @@ package frc.robot.subsystems.deployer;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 public interface DeployerIO {
 
   @AutoLog
   public static class DeployerIOInputs {
-    public double feederAppliedVoltage = 0.0;
-    public double feederSupplyCurrentAmps = 0.0;
-    public double feederStatorCurrentAmps = 0.0;
-    public double feederTempCelcius = 0.0;
-    public double feederSpeedRotationsPerSec = 0.0;
 
-    public boolean holdingSensorTriggered = false;
-    // TODO add something for color?
+    public boolean deployerMotorConnected = false;
+    public double deployerMotorStatorCurrentAmps = 0.0;
+    public double deployerMotorBusCurrentAmps = 0.0;
+    public double deployerMotorTempCelcius = 0.0;
+    public double deployerMotorSpeedRotationsPerSec = 0.0;
+    public double deployerMotorAppliedVolts = 0.0;
+    public double deployerMotorPositionRotations = 0.0;
+
+    public boolean deployerMotorEncoderConnected = false;
+    public double deployerMotorEncoderSpeedRotationsPerSec = 0.0;
+    public double deployerMotorEncoderPositionRotations = 0.0;
+    public double deployerMotorEncoderAbsolutePosition = 0.0;
+    public double deployerMotorEncoderTempCelcius = 0.0;
   }
 
   public default void updateInputs(DeployerIOInputs inputs) {}
 
-  public default void setFeederVoltage(double voltage) {}
+  public default void setDeployerMotorPosition(double rotations) {}
 
-  public default void stopFeeder() {}
+  public default void stopDeployerMotor(IdleMode idleMode) {}
 
-  public default void enableBrakeMode(boolean enable) {}
+  public default void deployerMotorEncoderSetHome() {}
 }

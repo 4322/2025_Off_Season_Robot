@@ -1,8 +1,8 @@
 package frc.robot.constants;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -121,51 +121,71 @@ public final class Constants {
       public static final double shootWaitTimerSec = 0.1;
       public static final double pullBackOverrideTimerSec = 1.0; */
   }
-  
 
   // TODO all of these are placeholder values
   public static class EndEffector {
     public static final int endEffectorMotorId = 0;
-        public static final int endEffectorSensorId = 0;
+    public static final int endEffectorSensorId = 0;
 
-        public static final double algaeHoldVolts = 3.0;
-        public static final double coralHoldVolts = 3.0;
+    public static final double algaeHoldVolts = 3.0;
+    public static final double coralHoldVolts = 3.0;
 
-        public static final double algaeIntakeVolts = 3.0;
-        public static final double coralIntakeVolts = 3.0;
+    public static final double algaeIntakeVolts = 3.0;
+    public static final double coralIntakeVolts = 3.0;
 
-        public static final double algaeReleaseVolts = 3.0;
-        public static final double coralReleaseVolts = 3.0;
+    public static final double algaeReleaseVolts = 3.0;
+    public static final double coralReleaseVolts = 3.0;
 
-        public static final double currentDetectionThreshold = 0.0;
+    public static final double currentDetectionThreshold = 0.0;
 
-        public static final double motorBusCurrentLimit = 0;
-        public static final double motorBusCurrentLimitTime = 0;
-        public static final double motorStatorCurrentLimit = 0;
+    public static final double motorBusCurrentLimit = 0;
+    public static final double motorBusCurrentLimitTime = 0;
+    public static final double motorStatorCurrentLimit = 0;
 
-        public static final double sensorCoralProximityThreshold = 0;
-        public static final double sensorAlgaeProximityThreshold = 0;
-
+    public static final double sensorCoralProximityThreshold = 0;
+    public static final double sensorAlgaeProximityThreshold = 0;
 
     // TODO tune these
     // For algae
     public static final double sensorGreenDetectGreenLower = 120;
-        public static final double sensorGreenDetectGreenUpper = 140;
-        public static final double sensorGreenDetectBlueLower = 120;
-        public static final double sensorGreenDetectBlueUpper = 140;
-        public static final double sensorGreenDetectRed = 38; // Max value
+    public static final double sensorGreenDetectGreenUpper = 140;
+    public static final double sensorGreenDetectBlueLower = 120;
+    public static final double sensorGreenDetectBlueUpper = 140;
+    public static final double sensorGreenDetectRed = 38; // Max value
 
-        // For coral; All are minimum values
-        public static final double sensorWhiteDetectGreen = 180;
-        public static final double sensorWhiteDetectBlue = 180;
-        public static final double sensorWhiteDetectRed = 180;
-        public static final IdleMode motorIdleMode = IdleMode.kBrake; 
-        public static final InvertMode motorInvert = InvertMode.kNotInverted; // InvertMode.kInverted or InvertMode.kNotInverted
+    // For coral; All are minimum values
+    public static final double sensorWhiteDetectGreen = 180;
+    public static final double sensorWhiteDetectBlue = 180;
+    public static final double sensorWhiteDetectRed = 180;
+    public static final IdleMode motorIdleMode = IdleMode.kBrake;
+    public static final InvertMode motorInvert =
+        InvertMode.kNotInverted; // InvertMode.kInverted or InvertMode.kNotInverted
   }
 
   public static class Deployer {
     public static final int deployerMotorId = 1;
-        public static final double deployVoltage = 3.0;
+    public static final double deployVoltage = 3.0;
+
+    public static final double motorStatorCurrentLimit = 0;
+    public static final double motorBusCurrentLimitTime = 0;
+    public static final double motorBusCurrentLimit = 0;
+    public static final IdleMode motorIdleMode = IdleMode.kBrake;
+    public static final InvertMode motorInvertMode = null;
+    public static final HardLimitConfig motorForwardHardLimit = null;
+    public static final HardLimitConfig motorReverseHardLimit = null;
+    public static final double motorDeploykP = 0;
+    public static final double motorDeploykI = 0;
+    public static final double motorDeploykD = 0;
+    public static final double motorDeployGravitationalFeedforward = 0;
+    public static final double motorRetractkP = 0;
+    public static final double motorRetractkI = 0;
+    public static final double motorRetractkD = 0;
+    public static final int deployerMotorEncoderId = 0;
+    public static final boolean motorEncoderInverted = false; // TODO maybe change this?
+    public static final double motorGearRatio = 0;
+    public static final double ejectPositionRotations = 0;
+    public static final double retractPositionRotations = 0;
+    public static final double deployPositionRotations = 0;
   }
 
   public static class Indexer {
@@ -175,6 +195,15 @@ public final class Constants {
     public static final double ejectVoltage = 3.0;
     public static final double rejectVoltage = 3.0;
     public static final double rejectSlowVoltage = 3.0;
+    public static final double motorBusCurrentLimit = 0;
+    public static final double motorBusCurrentLimitTime = 0;
+    public static final double motorStatorCurrentLimit = 0;
+    public static final IdleMode motorIdleMode = IdleMode.kCoast;
+    public static final InvertMode motorInvert = null;
+    public static final double indexerSensorMax = 0;
+    public static final double pickupAreaSensorMax = 0;
+    public static final int indexerSensorId = 0;
+    public static final int pickupAreaSensorId = 0;
   }
 
   public static class Rollers {

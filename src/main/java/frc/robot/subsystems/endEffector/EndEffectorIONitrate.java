@@ -61,13 +61,11 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     endEffectorMotorOutputSettings.setIdleMode(Constants.EndEffector.motorIdleMode);
     endEffectorMotorOutputSettings.setInvert(Constants.EndEffector.motorInvert);
     endEffectorMotorConfig.setOutputSettings(endEffectorMotorOutputSettings);
-    
-    // Feedback sensor setting for position control
   }
 
   private void configSensor() {
     // TODO add other settings for sensor
-    // 
+    //
   }
 
   @Override
@@ -75,9 +73,9 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.endEffectorMotorConnected = endEffectorMotor.isConnected();
     inputs.endEffectorMotorSpeedRotationsPerSec = endEffectorMotor.getVelocity();
     inputs.endEffectorMotorStatorCurrentAmps = endEffectorMotor.getStatorCurrent();
-    inputs.endEffectorMotorTempCelcius = endEffectorMotor.getMotorTemperatureFrame().getData();
+    inputs.endEffectorMotorTempCelcius = endEffectorMotor.getMotorTemperatureFrame().getValue();
     inputs.endEffectorMotorBusCurrentAmps = endEffectorMotor.getBusCurrent();
-    inputs.endEffectorMotorAppliedVolts = endEffectorMotor.getBusVoltageFrame().getData();
+    inputs.endEffectorMotorAppliedVolts = endEffectorMotor.getBusVoltageFrame().getValue();
 
     inputs.endEffectorSensorConnected = endEffectorSensor.isConnected();
     inputs.endEffectorSensorProximity = endEffectorSensor.getProximity();
@@ -86,8 +84,9 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.endEffectorSensorColorRed = endEffectorSensor.getRed();
 
     if (inputs.endEffectorSensorProximity < Constants.EndEffector.sensorAlgaeProximityThreshold) {
-      
-      // Green detected is within range; Blue detected is within range; Red detected is below threshold
+
+      // Green detected is within range; Blue detected is within range; Red detected is below
+      // threshold
       if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorGreenDetectGreenLower
           && inputs.endEffectorSensorColorGreen < Constants.EndEffector.sensorGreenDetectGreenUpper
           && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorGreenDetectBlueLower
@@ -95,7 +94,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
           && inputs.endEffectorSensorColorRed < Constants.EndEffector.sensorGreenDetectRed) {
         inputs.sensorPieceDetected = gamePiece.ALGAE;
 
-      // All colors detected are above threshold
+        // All colors detected are above threshold
       } else if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorWhiteDetectGreen
           && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorWhiteDetectBlue
           && inputs.endEffectorSensorColorRed > Constants.EndEffector.sensorWhiteDetectRed) {
@@ -143,7 +142,6 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   public boolean isAlgaeProximityDetected() {
     // This is assuming the coral will be closer to the sensor than the algae is when held
     return endEffectorSensor.getProximity() < Constants.EndEffector.sensorAlgaeProximityThreshold
-        && endEffectorSensor.getProximity()
-            > Constants.EndEffector.sensorCoralProximityThreshold;
+        && endEffectorSensor.getProximity() > Constants.EndEffector.sensorCoralProximityThreshold;
   }
 }
