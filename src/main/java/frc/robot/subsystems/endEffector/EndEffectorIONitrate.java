@@ -72,26 +72,30 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
   @Override
   public void updateInputs(EndEffectorIOInputs inputs) {
-    // Voltage 
-    // Whatever is in swerve
+    inputs.endEffectorMotorConnected = endEffectorMotor.isConnected();
     inputs.endEffectorMotorSpeedRotationsPerSec = endEffectorMotor.getVelocity();
     inputs.endEffectorMotorStatorCurrentAmps = endEffectorMotor.getStatorCurrent();
     inputs.endEffectorMotorTempCelcius = endEffectorMotor.getMotorTemperatureFrame().getData();
     inputs.endEffectorMotorBusCurrentAmps = endEffectorMotor.getBusCurrent();
-    inputs.endEffectorMotorVoltage = endEffectorMotor.(); /// TODO fix this
+    inputs.endEffectorMotorAppliedVolts = endEffectorMotor.getBusVoltageFrame().getData();
 
+    inputs.endEffectorSensorConnected = endEffectorSensor.isConnected();
     inputs.endEffectorSensorProximity = endEffectorSensor.getProximity();
     inputs.endEffectorSensorColorBlue = endEffectorSensor.getBlue();
     inputs.endEffectorSensorColorGreen = endEffectorSensor.getGreen();
     inputs.endEffectorSensorColorRed = endEffectorSensor.getRed();
 
     if (inputs.endEffectorSensorProximity < Constants.EndEffector.sensorAlgaeProximityThreshold) {
+      
+      // Green detected is within range; Blue detected is within range; Red detected is below threshold
       if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorGreenDetectGreenLower
           && inputs.endEffectorSensorColorGreen < Constants.EndEffector.sensorGreenDetectGreenUpper
           && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorGreenDetectBlueLower
           && inputs.endEffectorSensorColorBlue < Constants.EndEffector.sensorGreenDetectBlueUpper
           && inputs.endEffectorSensorColorRed < Constants.EndEffector.sensorGreenDetectRed) {
         inputs.sensorPieceDetected = gamePiece.ALGAE;
+
+      // All colors detected are above threshold
       } else if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorWhiteDetectGreen
           && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorWhiteDetectBlue
           && inputs.endEffectorSensorColorRed > Constants.EndEffector.sensorWhiteDetectRed) {
