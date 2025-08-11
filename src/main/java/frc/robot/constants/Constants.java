@@ -68,6 +68,9 @@ public final class Constants {
   }
 
   public static class Arm {
+    public static final int armMotorId = 1; // TODO: Set to actual idle position
+    public static int armEncoderId = 3 ;// TODO: Set to actual encoder ID   
+    public static final double armMotorGains = 0.0; // TODO: Set to actual encoder offset
     public static final double IdlePositionDeg = 0.0; // TODO: Set to actual idle position
     public static final double kAlgaeHoldPositionDeg = 45.0; // TODO
     public static final double CoralHoldPositionDeg = 90.0; // TODO
@@ -142,6 +145,7 @@ public final class Constants {
 
       public static final double shootWaitTimerSec = 0.1;
       public static final double pullBackOverrideTimerSec = 1.0; */
+       
   }
 
   public static class IntakeSuperstructure {

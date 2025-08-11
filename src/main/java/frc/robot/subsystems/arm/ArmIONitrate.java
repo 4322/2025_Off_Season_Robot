@@ -14,12 +14,16 @@ import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDVelocityRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
+
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.numbers.N11;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.arm.ArmIO.ArmIOInputs;
 import frc.robot.subsystems.drive.GyroIO;
-import frc.robot.util.SwerveUtil.SwerveModuleConstants;
+import frc.robot.constants.Constants;
+import frc.robot.subsystems.arm.ArmIO;
+
 
 public class ArmIONitrate implements ArmIO {
 
@@ -31,64 +35,31 @@ public class ArmIONitrate implements ArmIO {
   private final PIDPositionRequest armPIDPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
 
-  public ArmIONitrate(SwerveModuleConstants constants, GyroIO gyro) {
-    armMotor = new Nitrate(constants.turnMotorId, MotorType.kCu60);
-    armEncoder = new Canandmag(constants.turnEncoderId);
+  public ArmIONitrate() {
+    armMotor = new Nitrate(Constants.Arm.armMotorId, MotorType.kCu60);
+    armEncoder = new Canandmag(Constants.Arm.armEncoderId);
 
     NitrateSettings armConfig = new NitrateSettings();
     armConfig
-        .getAtomicBondSettings()
-        .setAtomicBondMode(AtomicBondMode.kSwerveModule)
-        .setAtomicSwerveConstants(
-            armMotor,
-            armEncoder,
-            gyro.getGyro(),
-            constants.driveMotorGearRatio,
-            constants.turnCouplingRatio);
-    armConfig
-        .getOutputSettings()
-        .setIdleMode(IdleMode.kBrake)
-        .setInvert(constants.driveMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
-    armConfig.setElectricalLimitSettings(constants.driveElectricalLimitSettings);
-    armConfig.getFeedbackSensorSettings().setSensorToMechanismRatio(constants.driveMotorGearRatio);
-    armConfig.setPIDSettings(constants.driveMotorGains, PIDConfigSlot.kSlot0);
-    NitrateSettings driveConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);
-
-    NitrateSettings turnConfig = new NitrateSettings();
-    turnConfig.getAtomicBondSettings().setAtomicBondMode(AtomicBondMode.kSwerveModule);
-    turnConfig
-        .getOutputSettings()
-        .setIdleMode(IdleMode.kBrake)
-        .setInvert(constants.turnMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
-    turnConfig
         .getFeedbackSensorSettings()
-        .setFeedbackSensor(
-            new FeedbackSensor.CanandmagRelative(
-                constants.turnEncoderId, constants.turnMotorGearRatio));
-    turnConfig.setElectricalLimitSettings(constants.turnElectricalLimitSettings);
-    turnConfig
-        .setPIDSettings(constants.turnMotorGains, PIDConfigSlot.kSlot0)
+        .setFeedbackSensor(new FeedbackSensor.CanandmagRelative(
+                Constants.Arm.armEncoderId, Constants.Arm.armMotorGearRatio));
+    armConfig.setElectricalLimitSettings(Constants.Arm.armElectricalLimitSettings);
+    armConfig
+        .setPIDSettings(Constants.Arm.armMotorGains, PIDConfigSlot.kSlot0)
         .getPIDSettings(PIDConfigSlot.kSlot0)
         .setMotionProfileMode(MotionProfileMode.kTrapezoidal)
         .setMinwrapConfig(new MinwrapConfig.Enabled());
-    NitrateSettings armConfigStatus = armMotor.setSettings(turnConfig, 0.02, 5);
 
     CanandmagSettings settings = new CanandmagSettings();
-    settings.setInvertDirection(constants.turnEncoderInverted);
+    settings.setInvertDirection(Constants.Arm.armEncoderInverted);
     CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
 
-    if (!armConfigStatus.isEmpty()) {
-      DriverStation.reportError(
-          "Nitrate "
-              + armMotor.getAddress().getDeviceId()
-              + " (Swerve turn motor) failed to configure",
-          false);
-    }
     if (!armEncoderConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandmag "
               + armEncoder.getAddress().getDeviceId()
-              + " (Swerve turn encoder) failed to configure",
+              + " (Arm encoder) failed to configure",
           false);
     }
   }
