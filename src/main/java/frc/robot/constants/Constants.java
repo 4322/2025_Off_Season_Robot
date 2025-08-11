@@ -1,5 +1,7 @@
 package frc.robot.constants;
 
+import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -69,20 +71,20 @@ public final class Constants {
 
   public static class Arm {
     public static final int armMotorId = 1; // TODO: Set to actual idle position
-    public static int armEncoderId = 3 ;// TODO: Set to actual encoder ID   
-    public static final double armMotorGains = 0.0; // TODO: Set to actual encoder offset
+    public static int armEncoderId = 3; // TODO: Set to actual encoder ID
     public static final double IdlePositionDeg = 0.0; // TODO: Set to actual idle position
     public static final double kAlgaeHoldPositionDeg = 45.0; // TODO
     public static final double CoralHoldPositionDeg = 90.0; // TODO
     public static final double AlgaeGroundPositionDeg = 30.0; // TODO
     public static final double AlgaeReefPositionDeg = 60.0; // TODO
     public static final double ScoreAlgaePositionDeg = 75.0; // TODO
-
+    public static final PIDSettings armMotorGains = new PIDSettings();
     public static final double setpointToleranceMeters = 0.01;
-
+    public static final double armMotorGearRatio = 4.0; // TODO: Set to actual gear ratio
     public static final double supplyCurrentLimit = 40; // TODO
     public static final double statorCurrentLimit = 100; // TODO
-
+    public static final ElectricalLimitSettings armElectricalLimitSettings =
+        new ElectricalLimitSettings();
     /*public static final int leftMotorID = 3; // follower motor
       public static final int rightMotorID = 2; // leader motor
 
@@ -145,7 +147,7 @@ public final class Constants {
 
       public static final double shootWaitTimerSec = 0.1;
       public static final double pullBackOverrideTimerSec = 1.0; */
-       
+
   }
 
   public static class IntakeSuperstructure {
