@@ -1,8 +1,7 @@
 package frc.robot.subsystems.indexer;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface IndexerIO {
 

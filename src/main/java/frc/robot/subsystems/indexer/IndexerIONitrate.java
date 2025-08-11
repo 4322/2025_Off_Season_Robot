@@ -12,72 +12,71 @@ import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 
 public class IndexerIONitrate implements IndexerIO {
-    private Nitrate indexerMotor;
-    private Canandcolor indexerSensor;
-    private Canandcolor pickupAreaSensor;
+  private Nitrate indexerMotor;
+  private Canandcolor indexerSensor;
+  private Canandcolor pickupAreaSensor;
 
-    private NitrateSettings indexerMotorConfig = new NitrateSettings();
-    private CanandcolorSettings indexerSensorConfig = new CanandcolorSettings();
-    private CanandcolorSettings pickupAreaSensorConfig = new CanandcolorSettings();
+  private NitrateSettings indexerMotorConfig = new NitrateSettings();
+  private CanandcolorSettings indexerSensorConfig = new CanandcolorSettings();
+  private CanandcolorSettings pickupAreaSensorConfig = new CanandcolorSettings();
 
-    public IndexerIONitrate() {
-        indexerMotor = new Nitrate(Constants.Indexer.indexerMotorId, MotorType.kCu60);
-        indexerSensor = new Canandcolor(Constants.Indexer.indexerSensorId);
-        pickupAreaSensor = new Canandcolor(Constants.Indexer.pickupAreaSensorId);
+  public IndexerIONitrate() {
+    indexerMotor = new Nitrate(Constants.Indexer.indexerMotorId, MotorType.kCu60);
+    indexerSensor = new Canandcolor(Constants.Indexer.indexerSensorId);
+    pickupAreaSensor = new Canandcolor(Constants.Indexer.pickupAreaSensorId);
 
-        configMotor();
-        NitrateSettings indexerMotorConfigStatus =
-            indexerMotor.setSettings(indexerMotorConfig, 0.02, 5);
-        if (!indexerMotorConfigStatus.allSettingsReceived()) {
-            DriverStation.reportError(
-                "Nitrate "
-                    + indexerMotor.getAddress().getDeviceId()
-                    + " error (Indexer Motor); Did not receive settings",
-                null);
-        }
-
-        configSensor();
-        CanandcolorSettings indexerSensorConfigStatus =
-            indexerSensor.setSettings(indexerSensorConfig, 0.02, 5);
-        if (!indexerSensorConfigStatus.allSettingsReceived()) {
-            DriverStation.reportError(
-                "Canandcolor "
-                    + indexerSensor.getAddress().getDeviceId()
-                    + " error (Indexer Sensor); Did not receive settings",
-                null);
-        }
-
-        CanandcolorSettings pickupAreaSensorConfigStatus =
-            pickupAreaSensor.setSettings(pickupAreaSensorConfig, 0.02, 5);
-        if (!pickupAreaSensorConfigStatus.allSettingsReceived()) {
-            DriverStation.reportError(
-                "Canandcolor "
-                    + pickupAreaSensor.getAddress().getDeviceId()
-                    + " error (Pickup Area Sensor); Did not receive settings",
-                null);
-        }
+    configMotor();
+    NitrateSettings indexerMotorConfigStatus =
+        indexerMotor.setSettings(indexerMotorConfig, 0.02, 5);
+    if (!indexerMotorConfigStatus.allSettingsReceived()) {
+      DriverStation.reportError(
+          "Nitrate "
+              + indexerMotor.getAddress().getDeviceId()
+              + " error (Indexer Motor); Did not receive settings",
+          null);
     }
 
-    private void configMotor() {
-        // TODO add other settings for motor
-        ElectricalLimitSettings indexerMotorElectricalLimitSettings = new ElectricalLimitSettings();
-        indexerMotorElectricalLimitSettings.setBusCurrentLimit(
-            Constants.Indexer.motorBusCurrentLimit);
-        indexerMotorElectricalLimitSettings.setBusCurrentLimitTime(
-            Constants.Indexer.motorBusCurrentLimitTime);
-        indexerMotorElectricalLimitSettings.setStatorCurrentLimit(
-            Constants.Indexer.motorStatorCurrentLimit);
-        indexerMotorConfig.setElectricalLimitSettings(indexerMotorElectricalLimitSettings);
-
-        OutputSettings indexerMotorOutputSettings = new OutputSettings();
-        indexerMotorOutputSettings.setIdleMode(Constants.Indexer.motorIdleMode);
-        indexerMotorOutputSettings.setInvert(Constants.Indexer.motorInvert);
-        indexerMotorConfig.setOutputSettings(indexerMotorOutputSettings);
+    configSensor();
+    CanandcolorSettings indexerSensorConfigStatus =
+        indexerSensor.setSettings(indexerSensorConfig, 0.02, 5);
+    if (!indexerSensorConfigStatus.allSettingsReceived()) {
+      DriverStation.reportError(
+          "Canandcolor "
+              + indexerSensor.getAddress().getDeviceId()
+              + " error (Indexer Sensor); Did not receive settings",
+          null);
     }
 
-    private void configSensor() {
-        // TODO add other settings for sensors
+    CanandcolorSettings pickupAreaSensorConfigStatus =
+        pickupAreaSensor.setSettings(pickupAreaSensorConfig, 0.02, 5);
+    if (!pickupAreaSensorConfigStatus.allSettingsReceived()) {
+      DriverStation.reportError(
+          "Canandcolor "
+              + pickupAreaSensor.getAddress().getDeviceId()
+              + " error (Pickup Area Sensor); Did not receive settings",
+          null);
     }
+  }
+
+  private void configMotor() {
+    // TODO add other settings for motor
+    ElectricalLimitSettings indexerMotorElectricalLimitSettings = new ElectricalLimitSettings();
+    indexerMotorElectricalLimitSettings.setBusCurrentLimit(Constants.Indexer.motorBusCurrentLimit);
+    indexerMotorElectricalLimitSettings.setBusCurrentLimitTime(
+        Constants.Indexer.motorBusCurrentLimitTime);
+    indexerMotorElectricalLimitSettings.setStatorCurrentLimit(
+        Constants.Indexer.motorStatorCurrentLimit);
+    indexerMotorConfig.setElectricalLimitSettings(indexerMotorElectricalLimitSettings);
+
+    OutputSettings indexerMotorOutputSettings = new OutputSettings();
+    indexerMotorOutputSettings.setIdleMode(Constants.Indexer.motorIdleMode);
+    indexerMotorOutputSettings.setInvert(Constants.Indexer.motorInvert);
+    indexerMotorConfig.setOutputSettings(indexerMotorOutputSettings);
+  }
+
+  private void configSensor() {
+    // TODO add other settings for sensors
+  }
 
   @Override
   public void updateInputs(IndexerIOInputs inputs) {
@@ -116,5 +115,4 @@ public class IndexerIONitrate implements IndexerIO {
   public boolean isPickupAreaSensorTriggered() {
     return pickupAreaSensor.getProximity() < Constants.Indexer.pickupAreaSensorMax;
   }
-    
 }

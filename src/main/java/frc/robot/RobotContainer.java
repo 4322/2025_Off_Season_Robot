@@ -12,11 +12,15 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.deployer.DeployerIO;
+import frc.robot.subsystems.deployer.DeployerIONitrate;
 import frc.robot.subsystems.drive.DemoDrive;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIONitrate;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIO;
+import frc.robot.subsystems.indexer.IndexerIONitrate;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
@@ -37,15 +41,17 @@ public class RobotContainer {
   private static Arm arm; // IO for the arm subsystem, null if not enabled
   // Declare Arm variable
 
-  // TODO add Advantagekit stuff for all of these
-
   public static EndEffectorIO endEffectorIO =
       Constants.endEffectorEnabled ? new EndEffectorIONitrate() : new EndEffectorIO() {};
+  public static IndexerIO indexerIO =
+      Constants.indexerEnabled ? new IndexerIONitrate() : new IndexerIO() {};
+  public static DeployerIO deployerIO =
+      Constants.deployerEnabled ? new DeployerIONitrate() : new DeployerIO() {};
 
   public static EndEffector endEffector = new EndEffector(endEffectorIO);
-  public static Indexer indexer = new Indexer();
+  public static Indexer indexer = new Indexer(indexerIO);
   public static Rollers rollers = new Rollers();
-  public static Deployer deployer = new Deployer();
+  public static Deployer deployer = new Deployer(deployerIO);
   public static Superstructure superstructure = new Superstructure();
 
   public static IntakeSuperstructure intakeSuperstructure =

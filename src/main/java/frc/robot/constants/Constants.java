@@ -204,6 +204,12 @@ public final class Constants {
     public static final double pickupAreaSensorMax = 0;
     public static final int indexerSensorId = 0;
     public static final int pickupAreaSensorId = 0;
+    public static final double motorVoltageFeed = 0;
+    public static final double motorVoltageRejectSlow = 0;
+    public static final double motorVoltageFeedSlow = 0;
+    public static final double motorVoltageEject = 0;
+    public static final double motorVoltageEjectSlow = 0;
+    public static final double motorVoltageReject = 0;
   }
 
   public static class Rollers {

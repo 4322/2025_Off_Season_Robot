@@ -1,10 +1,9 @@
 package frc.robot.subsystems.deployer;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import org.littletonrobotics.junction.Logger;
 
 public class Deployer extends SubsystemBase {
   private DeployerIO io;
@@ -16,7 +15,7 @@ public class Deployer extends SubsystemBase {
     RETRACT,
     EJECT
   }
-  
+
   private DeployerStatus currentAction = DeployerStatus.START;
 
   public Deployer(DeployerIO io) {
