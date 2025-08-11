@@ -12,6 +12,10 @@ import edu.wpi.first.wpilibj.RobotBase;
  * (log replay from a file).
  */
 public final class Constants {
+  // Don't start constants with L1, L2, etc
+  // Constants in camelCase
+
+
   public static final boolean armEnabled = true;
   public static final boolean elevatorEnabled = true;
   public static final boolean deployerEnabled = true;
@@ -23,6 +27,7 @@ public final class Constants {
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
   public static final boolean visionEnabled = true;
+  public static final boolean driveEnabled = true;
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -35,23 +40,51 @@ public final class Constants {
     REPLAY
   }
 
+  public static class Drive {
+    public static final double autoRotatekP = 5;
+    public static final double autoRotatekD = 0;
+
+    public static final double angularErrorToleranceRad = Units.degreesToRadians(7);
+    public static final double angularErrorToleranceRadPerSec = Units.degreesToRadians(20.0);
+    public static final double driveDeadband = 0.1;
+    public static final double rotDeadband = 0.1;
+
+    public static final double pseudoAutoRotatekP = 6;
+    public static final double pseudoAutoRotatekI = 0;
+    public static final double pseudoAutoRotatekD = 0.0;
+    public static final double pseudoAutoRotateRadTolerance = Units.degreesToRadians(1.5);
+    public static final double inhibitPseudoAutoRotateRadPerSec = Units.degreesToRadians(4);
+    public static final double pseudoAutoRotateMinMetersPerSec =
+        0.6; // disable below this speed for fine adjustments
+  }
+
+  public static class PathPlanner {
+    public static final double translationkP = 0;
+    public static final double translationkD = 0;
+
+    public static final double rotkP = 0.0;
+    public static final double rotkD = 0.0;
+
+    public static final double robotMassKg = 74.088; // TODO: Weigh robot
+    public static final double robotMOI = 6.883; // TODO: Use CAD
+    public static final double wheelCOF = 1.2;
+  }
+
   public static class Scoring {
-    public static final double L1ScoringAngleDegCoral = 0.0;
-    public static final double L2ScoringAngleDegCoral = 17.5; // TODO: Set to actual angle
-    public static final double L3ScoringAngleDegCoral = 39.2; // TODO: Set to actual angle
-    public static final double L4ScoringAngleDegCoral = 37.2; // TODO: Set to actual angle
-    public static final double AlgaePrescorePosition = 0.15; // TODO: Set to actual position
-    public static final double SafeRetract = 0.240 - Units.inchesToMeters(2); // TODO
-    public static final double safeFlipPosition = 0.217; // TODO
+    public static final double scoringL1AngleDegCoral = 0.0;
+    public static final double scoringL2AngleDegCoral = 17.5; // TODO: Set to actual angle
+    public static final double scoringL3AngleDegCoral = 39.2; // TODO: Set to actual angle
+    public static final double scoringL4AngleDegCoral = 37.2; // TODO: Set to actual angle
+    public static final double algaePrescorePosition = 0.15; // TODO: Set to actual position
   }
 
   public static class Arm {
-    public static final double IdlePositionDeg = 0.0; // TODO: Set to actual idle position
-    public static final double kAlgaeHoldPositionDeg = 45.0; // TODO
-    public static final double CoralHoldPositionDeg = 90.0; // TODO
-    public static final double AlgaeGroundPositionDeg = 30.0; // TODO
-    public static final double AlgaeReefPositionDeg = 60.0; // TODO
-    public static final double ScoreAlgaePositionDeg = 75.0; // TODO
+    public static final double idlePositionDeg = 0.0; // TODO: Set to actual idle position
+    public static final double algaeHoldPositionDeg = 45.0; // TODO
+    public static final double coralHoldPositionDeg = 90.0; // TODO
+    public static final double algaeGroundPositionDeg = 30.0; // TODO
+    public static final double algaeReefPositionDeg = 60.0; // TODO
+    public static final double scoreAlgaePositionDeg = 75.0; // TODO
 
     public static final double setpointToleranceMeters = 0.01;
 

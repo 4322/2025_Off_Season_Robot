@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.DriveManual;
+import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
@@ -14,7 +16,11 @@ import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.deployer.DeployerIO;
 import frc.robot.subsystems.deployer.DeployerIONitrate;
-import frc.robot.subsystems.drive.DemoDrive;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.GyroIO;
+import frc.robot.subsystems.drive.GyroIOBoron;
+import frc.robot.subsystems.drive.ModuleIO;
+import frc.robot.subsystems.drive.ModuleIONitrate;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIONitrate;
@@ -39,7 +45,7 @@ public class RobotContainer {
   public static XboxController driver = new XboxController(0);
 
   private static Vision vision;
-  private static DemoDrive drive = new DemoDrive(); // Demo drive subsystem, sim only
+  private static Drive drive;
   private static Arm arm; // IO for the arm subsystem, null if not enabled
   // Declare Arm variable
 
@@ -70,6 +76,16 @@ public class RobotContainer {
         if (Constants.armEnabled) {
           arm = new Arm(); // Create the arm subsystem if enabled
         }
+        if (Constants.driveEnabled) {
+          GyroIOBoron gyro = new GyroIOBoron();
+          drive =
+              new Drive(
+                  gyro,
+                  new ModuleIONitrate(DrivetrainConstants.frontLeft, gyro),
+                  new ModuleIONitrate(DrivetrainConstants.frontRight, gyro),
+                  new ModuleIONitrate(DrivetrainConstants.backLeft, gyro),
+                  new ModuleIONitrate(DrivetrainConstants.backRight, gyro));
+        }
         if (Constants.visionEnabled) {
           vision =
               new Vision(
@@ -99,6 +115,15 @@ public class RobotContainer {
     if (arm == null) {
       arm = new Arm(new ArmIO() {});
     }
+    if (drive == null) {
+      drive =
+          new Drive(
+              new GyroIO() {},
+              new ModuleIO() {},
+              new ModuleIO() {},
+              new ModuleIO() {},
+              new ModuleIO() {});
+    }
 
     // Configure the button bindings
     configureButtonBindings();
@@ -110,7 +135,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    drive.setDefaultCommand(new DriveManual(drive));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

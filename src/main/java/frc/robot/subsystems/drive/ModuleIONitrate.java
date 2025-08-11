@@ -1,0 +1,147 @@
+package frc.robot.subsystems.drive;
+
+import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
+import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
+import com.reduxrobotics.motorcontrol.nitrate.types.AtomicBondMode;
+import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
+import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
+import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
+import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
+import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
+import com.reduxrobotics.motorcontrol.requests.OpenLoopVelocityRequest;
+import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
+import com.reduxrobotics.motorcontrol.requests.PIDVelocityRequest;
+import com.reduxrobotics.sensors.canandmag.Canandmag;
+import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.util.SwerveUtil.SwerveModuleConstants;
+
+public class ModuleIONitrate implements ModuleIO {
+  private final Nitrate driveMotor;
+  private final Nitrate turnMotor;
+  private final Canandmag turnEncoder;
+
+  private final OpenLoopVelocityRequest driveOpenLoopVelocityRequest =
+      new OpenLoopVelocityRequest(0);
+  private final PIDVelocityRequest drivePIDVelocityRequest =
+      new PIDVelocityRequest(PIDConfigSlot.kSlot0, 0);
+  private final PIDPositionRequest turnPIDPositionRequest =
+      new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
+
+  public ModuleIONitrate(SwerveModuleConstants constants, GyroIO gyro) {
+    driveMotor = new Nitrate(constants.driveMotorId, MotorType.kCu60);
+    turnMotor = new Nitrate(constants.turnMotorId, MotorType.kCu60);
+    turnEncoder = new Canandmag(constants.turnEncoderId);
+
+    NitrateSettings driveConfig = new NitrateSettings();
+    driveConfig
+        .getAtomicBondSettings()
+        .setAtomicBondMode(AtomicBondMode.kSwerveModule)
+        .setAtomicSwerveConstants(
+            turnMotor,
+            turnEncoder,
+            gyro.getGyro(),
+            constants.driveMotorGearRatio,
+            constants.turnCouplingRatio);
+    driveConfig
+        .getOutputSettings()
+        .setIdleMode(IdleMode.kBrake)
+        .setInvert(constants.driveMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
+    driveConfig.setElectricalLimitSettings(constants.driveElectricalLimitSettings);
+    driveConfig
+        .getFeedbackSensorSettings()
+        .setSensorToMechanismRatio(constants.driveMotorGearRatio);
+    driveConfig.setPIDSettings(constants.driveMotorGains, PIDConfigSlot.kSlot0);
+    NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
+
+    NitrateSettings turnConfig = new NitrateSettings();
+    turnConfig.getAtomicBondSettings().setAtomicBondMode(AtomicBondMode.kSwerveModule);
+    turnConfig
+        .getOutputSettings()
+        .setIdleMode(IdleMode.kBrake)
+        .setInvert(constants.turnMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
+    turnConfig
+        .getFeedbackSensorSettings()
+        .setFeedbackSensor(
+            new FeedbackSensor.CanandmagAbsolute(
+                constants.turnEncoderId, constants.turnMotorGearRatio));
+    turnConfig.setElectricalLimitSettings(constants.turnElectricalLimitSettings);
+    turnConfig
+        .setPIDSettings(constants.turnMotorGains, PIDConfigSlot.kSlot0)
+        .getPIDSettings(PIDConfigSlot.kSlot0)
+        .setMotionProfileMode(MotionProfileMode.kTrapezoidal)
+        .setMinwrapConfig(new MinwrapConfig.Enabled());
+    NitrateSettings turnConfigStatus = turnMotor.setSettings(turnConfig, 0.02, 5);
+
+    CanandmagSettings settings = new CanandmagSettings();
+    settings.setInvertDirection(constants.turnEncoderInverted);
+    CanandmagSettings turnEncoderConfigStatus = turnEncoder.setSettings(settings, 0.02, 5);
+
+    if (!driveConfigStatus.isEmpty()) {
+      DriverStation.reportError(
+          "Nitrate "
+              + driveMotor.getAddress().getDeviceId()
+              + " (Swerve drive motor) failed to configure",
+          false);
+    }
+    if (!turnConfigStatus.isEmpty()) {
+      DriverStation.reportError(
+          "Nitrate "
+              + turnMotor.getAddress().getDeviceId()
+              + " (Swerve turn motor) failed to configure",
+          false);
+    }
+    if (!turnEncoderConfigStatus.isEmpty()) {
+      DriverStation.reportError(
+          "Canandmag "
+              + turnEncoder.getAddress().getDeviceId()
+              + " (Swerve turn encoder) failed to configure",
+          false);
+    }
+  }
+
+  @Override
+  public void updateInputs(ModuleIOInputs inputs) {
+    inputs.driveConnected = driveMotor.isConnected();
+    inputs.drivePositionRad = Units.rotationsToRadians(driveMotor.getPosition());
+    inputs.driveVelocityRadPerSec = Units.rotationsToRadians(driveMotor.getVelocity());
+    inputs.driveAppliedVolts = driveMotor.getBusVoltageFrame().getData();
+    inputs.driveSupplyCurrentAmps = driveMotor.getBusCurrent();
+    inputs.driveStatorCurrentAmps = driveMotor.getStatorCurrent();
+    inputs.driveTempCelsius = driveMotor.getMotorTemperatureFrame().getData();
+
+    inputs.turnConnected = turnMotor.isConnected();
+    inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnMotor.getVelocity());
+    inputs.turnAppliedVolts = driveMotor.getBusVoltageFrame().getData();
+    inputs.turnSupplyCurrentAmps = turnMotor.getBusCurrent();
+    inputs.turnStatorCurrentAmps = turnMotor.getStatorCurrent();
+    inputs.turnTempCelsius = turnMotor.getMotorTemperatureFrame().getData();
+
+    inputs.turnEncoderConnected = turnEncoder.isConnected();
+    inputs.turnAbsolutePosition = Rotation2d.fromRotations(turnEncoder.getAbsPosition());
+    inputs.turnPosition = Rotation2d.fromRotations(turnEncoder.getPosition());
+  }
+
+  @Override
+  public void setDriveOpenLoop(double velocityRadPerSec) {
+    driveMotor.setRequest(
+        driveOpenLoopVelocityRequest.setVelocity(Units.radiansToRotations(velocityRadPerSec)));
+  }
+
+  @Override
+  public void setDriveVelocity(double driveWheelVelocityRadPerSec) {
+    driveMotor.setRequest(
+        drivePIDVelocityRequest.setPosition(
+            Units.radiansToRotations(
+                driveWheelVelocityRadPerSec))); // TODO: Wait for API to get fixed
+  }
+
+  @Override
+  public void setTurnPosition(Rotation2d turnWheelPosition) {
+    turnMotor.setRequest(turnPIDPositionRequest.setPosition(turnWheelPosition.getRotations()));
+  }
+}
