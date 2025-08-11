@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
@@ -80,19 +81,21 @@ public final class Constants {
   }
 
   public static class Arm {
-    public static final double IdlePositionDeg = 0.0; // TODO: Set to actual idle position
-    public static final double kAlgaeHoldPositionDeg = 45.0; // TODO
-    public static final double CoralHoldPositionDeg = 90.0; // TODO
-    public static final double AlgaeGroundPositionDeg = 30.0; // TODO
-    public static final double AlgaeReefPositionDeg = 60.0; // TODO
-    public static final double ScoreAlgaePositionDeg = 75.0; // TODO
+    public static  final int armMotorId = 0; // TODO: Set to actual motor ID
+    public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
+    public static final double idlePositionDeg = 0.0; // TODO: Set to actual idle position
+    public static final double algaeHoldPositionDeg = 45.0; // TODO
+    public static final double coralHoldPositionDeg = 90.0; // TODO
+    public static final double algaeGroundPositionDeg = 30.0; // TODO
+    public static final double algaeReefPositionDeg = 60.0; // TODO
+    public static final double scoreAlgaePositionDeg = 75.0; // TODO
 
     public static final double setpointToleranceMeters = 0.01;
     public static final double armMotorGearRatio = 4.0; // TODO: Set to actual gear ratio
     public static final double supplyCurrentLimit = 40; // TODO
     public static final double statorCurrentLimit = 100; // TODO
-    public static final ElectricalLimitSettings armElectricalLimitSettings =
-        new ElectricalLimitSettings();
+    public static final ElectricalLimitSettings armElectricalLimitSettings = new ElectricalLimitSettings();
+    public static final PIDSettings armMotorGains = new PIDSettings();
     /*public static final int leftMotorID = 3; // follower motor
       public static final int rightMotorID = 2; // leader motor
 
