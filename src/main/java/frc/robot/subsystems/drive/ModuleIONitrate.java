@@ -32,7 +32,7 @@ public class ModuleIONitrate implements ModuleIO {
   private final PIDPositionRequest turnPIDPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
 
-  public ModuleIONitrate(SwerveModuleConstants constants, GyroIO gyro) {
+  public ModuleIONitrate(SwerveModuleConstants constants, GyroIOBoron gyro) {
     driveMotor = new Nitrate(constants.driveMotorId, MotorType.kCu60);
     turnMotor = new Nitrate(constants.turnMotorId, MotorType.kCu60);
     turnEncoder = new Canandmag(constants.turnEncoderId);
