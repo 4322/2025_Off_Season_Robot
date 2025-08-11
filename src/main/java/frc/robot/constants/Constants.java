@@ -192,6 +192,7 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // InvertMode.kInverted or InvertMode.kNotInverted
+    public static final double ejectVolts = 0;
   }
 
   public static class Deployer {
