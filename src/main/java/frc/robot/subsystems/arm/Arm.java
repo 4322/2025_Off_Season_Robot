@@ -1,6 +1,4 @@
 package frc.robot.subsystems.arm;
-
-import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
@@ -39,21 +37,17 @@ public class Arm extends SubsystemBase {
 
   public Arm() {
     // TODO Auto-generated constructor stub
+
   }
 
   public enum Safety {
-    SAFE,
-    LOWERING,
-    WAIT_FOR_ELEVATOR,
-    MOVING_WITH_ELEVATOR,
-    IDLE
+    APPROACHING_SETPOINT,
+    SAFE_ANGLE,
   }
 
-  Safety safety = Safety.SAFE;
+  Safety safety = Safety.SAFE_ANGLE;
 
-  public void idle() {
-    Nitrate.class.cast(io).setVoltage(0.0);
-  }
+  public void idle() {}
 
   public void algaeHold() {}
 
