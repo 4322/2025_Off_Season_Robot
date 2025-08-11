@@ -22,6 +22,8 @@ import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIONitrate;
 import frc.robot.subsystems.rollers.Rollers;
+import frc.robot.subsystems.rollers.RollersIO;
+import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
@@ -45,12 +47,14 @@ public class RobotContainer {
       Constants.endEffectorEnabled ? new EndEffectorIONitrate() : new EndEffectorIO() {};
   public static IndexerIO indexerIO =
       Constants.indexerEnabled ? new IndexerIONitrate() : new IndexerIO() {};
+  public static RollersIO rollersIO =
+      Constants.rollersEnabled ? new RollersIONitrate() : new RollersIO() {};
   public static DeployerIO deployerIO =
       Constants.deployerEnabled ? new DeployerIONitrate() : new DeployerIO() {};
 
   public static EndEffector endEffector = new EndEffector(endEffectorIO);
   public static Indexer indexer = new Indexer(indexerIO);
-  public static Rollers rollers = new Rollers();
+  public static Rollers rollers = new Rollers(rollersIO);
   public static Deployer deployer = new Deployer(deployerIO);
   public static Superstructure superstructure = new Superstructure();
 

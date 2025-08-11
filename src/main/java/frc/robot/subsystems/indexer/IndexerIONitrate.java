@@ -98,7 +98,7 @@ public class IndexerIONitrate implements IndexerIO {
 
   @Override
   public void setIndexerMotorVoltage(double voltage) {
-    // Set the voltage for the indexer motor.
+    indexerMotor.setVoltage(voltage);
   }
 
   @Override

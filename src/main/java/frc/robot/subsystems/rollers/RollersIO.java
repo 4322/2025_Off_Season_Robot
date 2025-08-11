@@ -1,21 +1,30 @@
 package frc.robot.subsystems.rollers;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface RollersIO {
-
   @AutoLog
   public static class RollersIOInputs {
-    public double feederAppliedVoltage = 0.0;
-    public double feederSupplyCurrentAmps = 0.0;
-    public double feederStatorCurrentAmps = 0.0;
-    public double feederTempCelcius = 0.0;
-    public double feederSpeedRotationsPerSec = 0.0;
+    public boolean rollersMotorConnected = false;
+    public double rollersMotorAppliedVoltage = 0.0;
+    public double rollersMotorBusCurrentAmps = 0.0;
+    public double rollersMotorStatorCurrentAmps = 0.0;
+    public double rollersMotorTempCelcius = 0.0;
+    public double rollersMotorSpeedRotationsPerSec = 0.0;
   }
 
   public default void updateInputs(RollersIOInputs inputs) {}
 
-  public default void setFeederVoltage(double voltage) {}
+  public default void setRollersMotorVoltage(double voltage) {}
 
-  public default void stopFeeder() {}
+  public default void stopRollersMotor(IdleMode mode) {}
+
+  public default double getRollersMotorStatorCurrent() {
+    return 0.0;
+  }
+
+  public default double getRollersMotorVelocityRotationsPerSec() {
+    return 0.0;
+  }
 }

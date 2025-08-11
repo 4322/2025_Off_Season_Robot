@@ -215,11 +215,27 @@ public final class Constants {
   public static class Rollers {
     public static final int rollersMotorID = 3;
 
-    public static final double feedVoltage = 3.0;
-    public static final double feedSlowVoltage = 3.0;
-    public static final double ejectVoltage = 3.0;
-    public static final double rejectVoltage = 3.0;
-    public static final double rejectSlowVoltage = 3.0;
+    public static final int rollersMotorId = 0;
+
+    public static final double motorBusCurrentLimitTime = 0;
+
+    public static final double motorStatorCurrentLimit = 0;
+
+    public static final double motorBusCurrentLimit = 0;
+
+    public static final IdleMode motorIdleMode = IdleMode.kCoast;
+
+    public static final InvertMode motorInvert = null;
+
+    public static final double motorVoltageFeed = 0;
+
+    public static final double motorVoltageFeedSlow = 0;
+
+    public static final double motorVoltageReject = 0;
+
+    public static final double motorVoltageRejectSlow = 0;
+
+    public static final double motorVoltageEject = 0;
   }
 
   public static class IntakeSuperstructure {
