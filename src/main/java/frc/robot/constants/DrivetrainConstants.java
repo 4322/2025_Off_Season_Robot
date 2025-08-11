@@ -53,7 +53,7 @@ public class DrivetrainConstants {
   private static final double frontLeftYPos = 0; // TODO
 
   // Front Right
-  private static final int frontRightDriveMotorId = 0; // TODO 
+  private static final int frontRightDriveMotorId = 0; // TODO
   private static final int frontRightTurnMotorId = 0; // TODO
   private static final int frontRightTurnEncoderId = 0; // TODO
 

@@ -15,7 +15,6 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-
   public static final boolean armEnabled = true;
   public static final boolean elevatorEnabled = true;
   public static final boolean deployerEnabled = true;
