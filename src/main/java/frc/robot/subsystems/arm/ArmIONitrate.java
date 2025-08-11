@@ -2,10 +2,7 @@ package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
-import com.reduxrobotics.motorcontrol.nitrate.types.AtomicBondMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
@@ -16,14 +13,10 @@ import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.numbers.N11;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.subsystems.arm.ArmIO.ArmIOInputs;
-import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.arm.ArmIO;
-
+import frc.robot.subsystems.arm.ArmIO.ArmIOInputs;
 
 public class ArmIONitrate implements ArmIO {
 
@@ -33,7 +26,7 @@ public class ArmIONitrate implements ArmIO {
   private final PIDVelocityRequest armPIDVelocityRequest =
       new PIDVelocityRequest(PIDConfigSlot.kSlot0, 0);
   private final PIDPositionRequest armPIDPositionRequest =
-      new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
+      new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
   public ArmIONitrate() {
     armMotor = new Nitrate(Constants.Arm.armMotorId, MotorType.kCu60);
@@ -42,17 +35,16 @@ public class ArmIONitrate implements ArmIO {
     NitrateSettings armConfig = new NitrateSettings();
     armConfig
         .getFeedbackSensorSettings()
-        .setFeedbackSensor(new FeedbackSensor.CanandmagRelative(
+        .setFeedbackSensor(
+            new FeedbackSensor.CanandmagRelative(
                 Constants.Arm.armEncoderId, Constants.Arm.armMotorGearRatio));
-    armConfig.setElectricalLimitSettings(Constants.Arm.armElectricalLimitSettings);
     armConfig
-        .setPIDSettings(Constants.Arm.armMotorGains, PIDConfigSlot.kSlot0)
-        .getPIDSettings(PIDConfigSlot.kSlot0)
+        .setPIDSettings(Constants.Arm.armMotorGains, PIDConfigSlot.kSlot1)
+        .getPIDSettings(PIDConfigSlot.kSlot1)
         .setMotionProfileMode(MotionProfileMode.kTrapezoidal)
         .setMinwrapConfig(new MinwrapConfig.Enabled());
 
     CanandmagSettings settings = new CanandmagSettings();
-    settings.setInvertDirection(Constants.Arm.armEncoderInverted);
     CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
 
     if (!armEncoderConfigStatus.isEmpty()) {
