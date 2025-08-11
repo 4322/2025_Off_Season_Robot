@@ -1,30 +1,71 @@
 package frc.robot.subsystems.indexer;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
+import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
-  public Indexer() {}
+  private IndexerIO io;
+  private IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
+
+  private enum IndexerStatus {
+    START,
+    FEED,
+    FEED_SLOW,
+    EJECT,
+    EJECT_SLOW,
+    REJECT,
+    REJECT_SLOW
+  }
+
+  private IndexerStatus currentAction = IndexerStatus.START;
+
+  public Indexer(IndexerIO io) {
+    this.io = io;
+  }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    io.updateInputs(inputs);
+    Logger.processInputs("Indexer", inputs);
+    Logger.recordOutput("Indexer/currentAction", currentAction.toString());
+  }
 
-  public void feed() {}
+  public void feed() {
+    currentAction = IndexerStatus.FEED;
+    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageFeed);
+  }
 
-  public void feedSlow() {}
+  public void feedSlow() {
+    currentAction = IndexerStatus.FEED_SLOW;
+    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageFeedSlow);
+  }
 
-  public void eject() {}
+  public void eject() {
+    currentAction = IndexerStatus.EJECT;
+    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageEject);
+  }
 
-  public void ejectSlow() {}
+  public void ejectSlow() {
+    currentAction = IndexerStatus.EJECT_SLOW;
+    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageEjectSlow);
+  }
 
-  public void reject() {}
+  public void reject() {
+    currentAction = IndexerStatus.REJECT;
+    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageReject);
+  }
 
-  public void rejectSlow() {}
+  public void rejectSlow() {
+    currentAction = IndexerStatus.REJECT_SLOW;
+    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageRejectSlow);
+  }
 
   public boolean isCoralDetectedIndexer() {
-    return true; // TODO return status of indexer sensor
+    return io.isIndexerSensorTriggered();
   }
 
   public boolean isCoralDetectedPickupArea() {
-    return true; // TODO return status of pickup sensor
+    return io.isPickupAreaSensorTriggered();
   }
 }
