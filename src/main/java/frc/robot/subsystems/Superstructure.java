@@ -29,7 +29,9 @@ public class Superstructure extends SubsystemBase {
   private boolean requestClimb = false;
 
   private Level coralLevel = Level.L1;
-  private Level algaeLevel = Level.L1;;
+  private Level algaeLevel = Level.L1;
+  
+
   public enum Superstates {
     START,
     IDLE,
@@ -96,11 +98,10 @@ public class Superstructure extends SubsystemBase {
           elevator.setHome();
           state = Superstates.IDLE;
         }
-        
 
         break;
       case IDLE:
-       if(arm.atSetpoint() && elevator.atSetpoint()) {
+        if (arm.atSetpoint() && elevator.atSetpoint()) {
           endEffector.idle();
           arm.idle();
           elevator.idle();
@@ -108,22 +109,23 @@ public class Superstructure extends SubsystemBase {
 
         if (requestEject) {
           state = Superstates.EJECT;
-        } else if (true) {
-          state = Superstates.END_EFFECTOR_CORAL_PICKUP;
+        } else if (indexer.isCoralDetectedPickupArea()) 
+        {state = Superstates.END_EFFECTOR_CORAL_PICKUP;
         } else if (requestIntakeAlgaeFloor && !endEffector.hasAlgae()) {
           state = Superstates.INTAKE_ALGAE_FLOOR;
         } else if (requestDescoreAlgae) {
           state = Superstates.DESCORE_ALGAE;
-        } else if (requestPreClimb  ) {
-          //TODO: Add logic for if there is only 30 seconds left in the match
+        } else if (requestPreClimb) {
+          // TODO: Add logic for if there is only 30 seconds left in the match
           state = Superstates.PRECLIMB;
         }
 
         // TODO
         break;
       case EJECT:
-        if (arm.atSetpoint()) {
+        if (arm.atSetpoint() && elevator.atSetpoint()) {
           endEffector.eject();
+          elevator.eject();
           arm.eject();
         }
 
@@ -133,6 +135,9 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.ALGAE_IDLE;
         } else if (!requestEject && endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
+        }
+        else if(requestIdle) {
+          state = Superstates.IDLE;
         }
         // TODO
         break;
@@ -147,7 +152,6 @@ public class Superstructure extends SubsystemBase {
           arm.algaeHold();
           endEffector.algaeHold();
         }
-
         if (requestAlgaePrescore) {
           state = Superstates.ALGAE_PRESCORE;
         }
@@ -167,8 +171,8 @@ public class Superstructure extends SubsystemBase {
       case ALGAE_SCORE:
         endEffector.releaseAlgae();
 
-        if (!endEffector.hasAlgae()) {
-          state = Superstates.IDLE;
+        if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
+          state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
         } else if (requestSafeScoreAlgaeRetract) {
           state = Superstates.ALGAE_IDLE;
         } else if (endEffector.hasAlgae()) {
@@ -185,21 +189,19 @@ public class Superstructure extends SubsystemBase {
         } else if (!requestIntakeAlgaeFloor) {
           state = Superstates.IDLE;
         }
+        else if (requestIdle) {
+          state = Superstates.IDLE;
+        }
 
         // TODO
         break;
       case DESCORE_ALGAE:
-      if (algaeLevel == Level.L2) {
-        arm.algaeReef(Level.L2);
-        elevator.algaeReef(Level.L2);
-      } else if (algaeLevel == Level.L3) {
-        arm.algaeReef(Level.L3);
-        elevator.algaeReef(Level.L3);
-      }
+          arm.algaeReef(algaeLevel);
+          elevator.algaeReef(algaeLevel);
         endEffector.intakeAlgae();
         // TODO
         break;
-      case END_EFFECTOR_CORAL_PICKUP: // TODO When have elevator
+      case END_EFFECTOR_CORAL_PICKUP: 
         endEffector.intakeCoral();
 
         if (endEffector.hasCoral()) {
@@ -222,20 +224,10 @@ public class Superstructure extends SubsystemBase {
         }
         // TODO
         break;
-      case PRESCORE_CORAL: // TODO When have elevator
-        if (coralLevel == Level.L1) {
-          arm.prescoreCoral(Level.L1);
-          elevator.prescoreCoral(Level.L1);
-        } else if (coralLevel == Level.L2) {
-          arm.prescoreCoral(Level.L2);
-          elevator.prescoreCoral(Level.L2);
-        } else if (coralLevel == Level.L3) {
-          arm.prescoreCoral(Level.L3);
-          elevator.prescoreCoral(Level.L3);
-        } else if (coralLevel == Level.L4) {
-          arm.prescoreCoral(Level.L4);
-          elevator.prescoreCoral(Level.L4);
-        }
+      case PRESCORE_CORAL: 
+          arm.prescoreCoral(coralLevel);
+          elevator.prescoreCoral(coralLevel);
+       
 
         if (arm.atSetpoint()) {
           state = Superstates.SCORE_CORAL;
@@ -247,33 +239,32 @@ public class Superstructure extends SubsystemBase {
         // TODO
         break;
       case SCORE_CORAL: // TODO When have elevator
-      if (coralLevel == Level.L1) {
-        arm.scoreCoral(Level.L1);
-        elevator.scoreCoral(Level.L1);
-      } else if (coralLevel == Level.L2) {
-        arm.scoreCoral(Level.L2);
-        elevator.scoreCoral(Level.L2);
-      } else if (coralLevel == Level.L3) {
-        arm.scoreCoral(Level.L3);
-        elevator.scoreCoral(Level.L3);
-      } else if (coralLevel == Level.L4) {
-        arm.scoreCoral(Level.L4);
-        elevator.scoreCoral(Level.L4);
-      }
-      endEffector.releaseCoral();
+
+        arm.scoreCoral(coralLevel);
+        elevator.scoreCoral(coralLevel);
+        
+        endEffector.releaseCoral();
         if (!requestScoreCoral) {
           state = Superstates.IDLE;
         }
-        if (!endEffector.hasCoral()){
+        if (!endEffector.hasCoral()) {
           state = Superstates.IDLE;
-        }
-        else if (endEffector.hasCoral()) {
+        } else if (endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
         }
-          // TODO
-          break;
+        // TODO
+        break;
       case SAFE_SCORE_ALGAE_RETRACT:
-
+          endEffector.idle();
+          arm.safeBargeRetract();
+          elevator.safeBargeRetract();
+          
+          if (arm.atSetpoint() && elevator.atSetpoint() && !endEffector.hasAlgae()) {
+            state = Superstates.IDLE;
+          }
+          if(endEffector.hasAlgae()) {
+            state = Superstates.ALGAE_IDLE;
+          } 
         // TODO
         break;
       case PRECLIMB:
