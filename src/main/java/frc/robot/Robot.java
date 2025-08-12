@@ -1,7 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.constants.Constants;
+import java.util.Optional;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -18,6 +23,9 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
+
+  public static Alliance alliance = DriverStation.Alliance.Blue;
+  private Timer allianceUpdateTimer = new Timer();
 
   public Robot() {
     // Record metadata
@@ -66,6 +74,7 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+    allianceUpdateTimer.start();
   }
 
   /** This function is called periodically during all modes. */
@@ -84,6 +93,14 @@ public class Robot extends LoggedRobot {
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
+
+    if (allianceUpdateTimer.hasElapsed(1)) {
+      Optional<Alliance> allianceOptional = DriverStation.getAlliance();
+      if (allianceOptional.isPresent()) {
+        alliance = allianceOptional.get();
+      }
+      allianceUpdateTimer.restart();
+    }
   }
 
   /** This function is called once when the robot is disabled. */

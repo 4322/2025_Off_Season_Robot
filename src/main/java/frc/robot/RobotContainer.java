@@ -6,13 +6,30 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.DriveManual;
+import frc.robot.constants.Constants;
+import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.deployer.Deployer;
-import frc.robot.subsystems.drive.DemoDrive;
+import frc.robot.subsystems.deployer.DeployerIO;
+import frc.robot.subsystems.deployer.DeployerIONitrate;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.GyroIO;
+import frc.robot.subsystems.drive.GyroIOBoron;
+import frc.robot.subsystems.drive.ModuleIO;
+import frc.robot.subsystems.drive.ModuleIONitrate;
 import frc.robot.subsystems.endEffector.EndEffector;
+import frc.robot.subsystems.endEffector.EndEffectorIO;
+import frc.robot.subsystems.endEffector.EndEffectorIONitrate;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIO;
+import frc.robot.subsystems.indexer.IndexerIONitrate;
 import frc.robot.subsystems.rollers.Rollers;
+import frc.robot.subsystems.rollers.RollersIO;
+import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
@@ -25,30 +42,71 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private final Vision vision;
+  public static XboxController driver = new XboxController(0);
 
-  private final DemoDrive drive = new DemoDrive(); // Demo drive subsystem, sim only
+  private static Vision vision;
+  private static Drive drive;
+  private static Arm arm; // IO for the arm subsystem, null if not enabled
+  // Declare Arm variable
 
-  // TODO add Advantagekit stuff for all of these
-  public static EndEffector endEffector = new EndEffector();
-  public static Indexer indexer = new Indexer();
-  public static Rollers rollers = new Rollers();
-  public static Deployer deployer = new Deployer();
-  public static Superstructure superstructure = new Superstructure();
+  private static EndEffector endEffector;
+  private static Indexer indexer;
+  private static Rollers rollers;
+  private static Deployer deployer;
+  private static IntakeSuperstructure intakeSuperstructure;
+  public static Superstructure superstructure;
+  
+  
 
-  public static IntakeSuperstructure intakeSuperstructure =
-      new IntakeSuperstructure(endEffector, deployer, rollers, indexer, superstructure);
+  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
     switch (Constants.currentMode) {
       case REAL:
+        
         // Real robot, instantiate hardware IO implementations
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOPhotonVision(camera0Name, robotToCamera0),
-                new VisionIOPhotonVision(camera1Name, robotToCamera1));
+        if (Constants.armEnabled) {
+          arm = new Arm(); // Create the arm subsystem if enabled
+        }
+        if (Constants.driveEnabled) {
+          GyroIOBoron gyro = new GyroIOBoron();
+          drive =
+              new Drive(
+                  gyro,
+                  new ModuleIONitrate(DrivetrainConstants.frontLeft, gyro),
+                  new ModuleIONitrate(DrivetrainConstants.frontRight, gyro),
+                  new ModuleIONitrate(DrivetrainConstants.backLeft, gyro),
+                  new ModuleIONitrate(DrivetrainConstants.backRight, gyro));
+        }
+        if (Constants.visionEnabled) {
+          vision =
+              new Vision(
+                  drive::addVisionMeasurement,
+                  new VisionIOPhotonVision(camera0Name, robotToCamera0),
+                  new VisionIOPhotonVision(camera1Name, robotToCamera1));
+        }
+        if (Constants.endEffectorEnabled) {
+          endEffector = new EndEffector(new EndEffectorIONitrate());
+        }
+        if (Constants.indexerEnabled) {
+          indexer = new Indexer(new IndexerIONitrate());
+        }
+        if (Constants.rollersEnabled) {
+          rollers = new Rollers(new RollersIONitrate());
+        }
+        if (Constants.deployerEnabled) {
+          deployer = new Deployer(new DeployerIONitrate());
+        }
+        intakeSuperstructure = new IntakeSuperstructure(
+            endEffector, deployer, rollers, indexer);
+            superstructure =
+            new Superstructure(
+                endEffector,
+                arm,
+                drive,
+                vision, intakeSuperstructure);
         break;
 
       case SIM:
@@ -61,14 +119,32 @@ public class RobotContainer {
         break;
 
       default:
-        // Replayed robot, disable IO implementations
-        // (Use same number of dummy implementations as the real robot)
-        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
+    }
+
+    // Used during replay mode or when certain subsystems are disabled
+    if (vision == null) {
+      vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+    }
+    if (arm == null) {
+      arm = new Arm(new ArmIO() {});
+    }
+    if (drive == null) {
+      drive =
+          new Drive(
+              new GyroIO() {},
+              new ModuleIO() {},
+              new ModuleIO() {},
+              new ModuleIO() {},
+              new ModuleIO() {});
     }
 
     // Configure the button bindings
     configureButtonBindings();
+  }
+
+  public static IntakeSuperstructure getIntakeSuperstructure() {
+    return intakeSuperstructure;
   }
 
   /**
@@ -77,7 +153,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    drive.setDefaultCommand(new DriveManual(drive));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
