@@ -51,13 +51,21 @@ public class Arm extends SubsystemBase {
     }
   }
 
-  public void idle() {}
+  public void idle() {
+    setpoint = 0;
+  }
 
-  public void algaeHold() {}
+  public void algaeHold() {
+    setpoint = 20; // TODO: angle for algae hold
+  }
 
-  public void coralHold() {}
+  public void coralHold() {
+    setpoint = 20; // TODO:
+  }
 
-  public void algaeGround() {}
+  public void algaeGround() {
+    setpoint = 20; // TODO:
+  }
 
   public void algaeReef(Level algaeLevel) {
     switch (algaeLevel) {
@@ -133,15 +141,21 @@ public class Arm extends SubsystemBase {
 
   public void safeBargeRetract() {}
 
-  public void setHome() {}
+  public void setHome() {
+    setpoint = 0; // TODO:
+  }
 
   public void setNeutralMode(IdleMode idlemode) {
     io.stopArmMotor(idlemode);
   }
 
-  public void climbing() {}
+  public void climbing() {
+    setpoint = 20; // TODO:
+  }
 
-  public void eject() {}
+  public void eject() {
+    setpoint = 20; // TODO:
+  }
 
   public double getAngleDegrees() {
     return armInputs.armPositionRad;
