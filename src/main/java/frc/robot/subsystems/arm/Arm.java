@@ -1,8 +1,8 @@
 package frc.robot.subsystems.arm;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Superstructure.Level;
-
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
@@ -10,7 +10,7 @@ public class Arm extends SubsystemBase {
   private static final double MIN_SAFE_ARM_ANGLE = 20.0;
   private static final double MAX_SAFE_ARM_ANGLE = 20.0;
   public int setpoint = 0; // Degrees, 0 is horizontal to front of robot
- 
+
   public enum Safety {
     WAIT_FOR_ELEVATOR,
     MOVING_WITH_ELEVATOR,
@@ -20,11 +20,12 @@ public class Arm extends SubsystemBase {
     this.io = ArmIO;
   }
 
-    @Override
-    public void periodic() {
-      io.setPosition(Rotation2d.fromDegrees(setpoint));
-     // RobotContainer.superstructure.getElevatorHeight(); // Update elevator height for safety checks
-    }
+  @Override
+  public void periodic() {
+    io.setPosition(Rotation2d.fromDegrees(setpoint));
+    // RobotContainer.superstructure.getElevatorHeight(); // Update elevator height for safety
+    // checks
+  }
 
   public void idle() {}
 
@@ -34,10 +35,10 @@ public class Arm extends SubsystemBase {
 
   public void algaeGround() {}
 
-  public void algaeReef(Level level ) {
-    switch(level) {
+  public void algaeReef(Level level) {
+    switch (level) {
       case L1:
-        setpoint = 30; //TODO: angle for L1
+        setpoint = 30; // TODO: angle for L1
         break;
       case L2:
         setpoint = 60; // TODO: angle for L2
@@ -48,15 +49,13 @@ public class Arm extends SubsystemBase {
       case L4:
         setpoint = 120; // TODO: angle for L4
         break;
-      default:
-        setpoint = 0; // Default to horizontal if no level is specified
     }
   }
 
   public void scoreAlgae(/*ArmState scoringSide*/ ) {}
 
-  public void prescoreCoral(Level level ) {
-    switch(level) {
+  public void prescoreCoral(Level level) {
+    switch (level) {
       case L1:
         setpoint = 30; // Example angle for L1
         break;
@@ -69,13 +68,11 @@ public class Arm extends SubsystemBase {
       case L4:
         setpoint = 120; // Example angle for L4
         break;
-      default:
-        setpoint = 0; // Default to horizontal if no level is specified
     }
   }
 
   public void scoreCoral(Level level) {
-    switch(level) {
+    switch (level) {
       case L1:
         setpoint = 30; // Example angle for L1
         break;
@@ -88,8 +85,6 @@ public class Arm extends SubsystemBase {
       case L4:
         setpoint = 120; // Example angle for L4
         break;
-      default:
-        setpoint = 0; // Default to horizontal if no level is specified
     }
   }
 
@@ -100,9 +95,7 @@ public class Arm extends SubsystemBase {
 
   public void safeBargeRetract() {}
 
-  public void setHome() {
-
-  }
+  public void setHome() {}
 
   public void setNeutralMode(/*ArmState mode*/ ) {}
 

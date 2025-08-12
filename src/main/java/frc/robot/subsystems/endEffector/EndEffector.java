@@ -114,7 +114,7 @@ public class EndEffector extends SubsystemBase {
           coralHeld = false;
           algaeHeld = false;
         }
-      break;
+        break;
     }
   }
 
@@ -158,6 +158,8 @@ public class EndEffector extends SubsystemBase {
   public void setNeutralMode(IdleMode mode) {
     io.stopEndEffectorMotor(mode);
   }
+
+  public void algaeHold() {} // TODO create logic
 
   private void unsetAllRequests() {
     requestIdle = false;

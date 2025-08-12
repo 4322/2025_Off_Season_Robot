@@ -1,6 +1,9 @@
 package frc.robot;
 
-import static frc.robot.subsystems.vision.VisionConstants.*;
+import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
+import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,8 +16,8 @@ import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
+import frc.robot.subsystems.arm.ArmIONitrate;
 import frc.robot.subsystems.deployer.Deployer;
-import frc.robot.subsystems.deployer.DeployerIO;
 import frc.robot.subsystems.deployer.DeployerIONitrate;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -22,13 +25,10 @@ import frc.robot.subsystems.drive.GyroIOBoron;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIONitrate;
 import frc.robot.subsystems.endEffector.EndEffector;
-import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIONitrate;
 import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIONitrate;
 import frc.robot.subsystems.rollers.Rollers;
-import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
@@ -55,20 +55,16 @@ public class RobotContainer {
   private static Deployer deployer;
   private static IntakeSuperstructure intakeSuperstructure;
   public static Superstructure superstructure;
-  
-  
-
-  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     switch (Constants.currentMode) {
       case REAL:
-        
+
         // Real robot, instantiate hardware IO implementations
         if (Constants.armEnabled) {
-          arm = new Arm(); // Create the arm subsystem if enabled
+          arm = new Arm(new ArmIONitrate()); // Create the arm subsystem if enabled
         }
         if (Constants.driveEnabled) {
           GyroIOBoron gyro = new GyroIOBoron();
@@ -99,14 +95,9 @@ public class RobotContainer {
         if (Constants.deployerEnabled) {
           deployer = new Deployer(new DeployerIONitrate());
         }
-        intakeSuperstructure = new IntakeSuperstructure(
-            endEffector, deployer, rollers, indexer);
-            superstructure =
-            new Superstructure(
-                endEffector,
-                arm,
-                drive,
-                vision, intakeSuperstructure);
+        intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
+        superstructure =
+            new Superstructure(endEffector, arm, indexer, drive, vision, intakeSuperstructure);
         break;
 
       case SIM:
