@@ -49,6 +49,13 @@ public class Drive extends SubsystemBase {
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
+  private ManualDriveMode manualDriveMode = ManualDriveMode.FIELD_RELATIVE;
+  private double targetAutoRotateAngleRad = 0.0;
+
+  public enum ManualDriveMode {
+    FIELD_RELATIVE,
+    AUTO_ROTATE
+  }
 
   public Drive(
       GyroIO gyroIO,
@@ -91,6 +98,9 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  /** Only to be used in commands which directly control drive subsystem such as DriveManual or DriveToPoint.
+   * <p> For commands requiring auto rotate capability or switch back to regular field relative driving, use drive mode request methods instead.
+   */
   public void runVelocity(ChassisSpeeds speeds, boolean fieldRelative) {
     if (fieldRelative) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -115,6 +125,9 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", setpointStates);
   }
 
+  /** Only to be used in commands which directly control drive subsystem such as DriveManual or DriveToPoint.
+   * <p> For commands requiring auto rotate capability or switch back to regular field relative driving, use drive mode request methods instead.
+   */
   public void runOpenLoop(ChassisSpeeds speeds, boolean fieldRelative) {
     if (fieldRelative) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -136,6 +149,23 @@ public class Drive extends SubsystemBase {
     }
 
     Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", setpointStates);
+  }
+
+  public void requestFieldRelativeMode() {
+    manualDriveMode = ManualDriveMode.FIELD_RELATIVE;
+  }
+
+  public void requestAutoRotateMode(double fieldTargetAngleRad) {
+    manualDriveMode = ManualDriveMode.AUTO_ROTATE;
+    targetAutoRotateAngleRad = fieldTargetAngleRad;
+  }
+
+  public ManualDriveMode getManualDriveMode() {
+    return manualDriveMode;
+  }
+
+  public double getTargetAngleRad() {
+    return targetAutoRotateAngleRad;
   }
 
   @AutoLogOutput(key = "Drive/SwerveStates/Measured")

@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,10 +13,16 @@ import frc.robot.util.ClockUtil;
 
 public class DriveManual extends Command {
   private Drive drive;
+  private PIDController autoRotateController =
+      new PIDController(
+          Constants.Drive.autoRotatekP,
+          0,
+          Constants.Drive.autoRotatekD);
 
   public DriveManual(Drive drive) {
     this.drive = drive;
 
+    autoRotateController.enableContinuousInput(-Math.PI, Math.PI);
     addRequirements(drive);
   }
 
@@ -52,6 +59,16 @@ public class DriveManual extends Command {
       dy *= -DrivetrainConstants.maxSpeedAt12Volts;
     }
     double rot = omega * omega * omega * 12.0;
-    drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
+
+    switch (drive.getManualDriveMode()) {
+      case FIELD_RELATIVE:
+        drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
+        break;
+      case AUTO_ROTATE:
+        rot = autoRotateController.calculate(drive.getRotation().getRadians(), drive.getTargetAngleRad());
+        drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
+        break;
+    }
+    
   }
 }
