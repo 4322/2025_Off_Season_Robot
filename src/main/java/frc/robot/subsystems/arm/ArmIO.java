@@ -1,7 +1,10 @@
 package frc.robot.subsystems.arm;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
+
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 
 public interface ArmIO {
   @AutoLog
@@ -28,4 +31,6 @@ public interface ArmIO {
   public default void setDriveVelocity(double driveWheelVelocityRadPerSec) {}
 
   public default void setPosition(Rotation2d turnWheelPosition) {}
+
+   public default void stopArmMotor(IdleMode idleMode) {}
 }

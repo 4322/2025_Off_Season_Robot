@@ -22,8 +22,7 @@ public class ArmIONitrate implements ArmIO {
   private final Nitrate armMotor;
   private final Canandmag armEncoder;
 
-  private final PIDVelocityRequest armPIDVelocityRequest =
-      new PIDVelocityRequest(PIDConfigSlot.kSlot0, 0);
+ 
   private final PIDPositionRequest armPIDPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
 

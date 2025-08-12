@@ -1,5 +1,7 @@
 package frc.robot.subsystems.arm;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Superstructure.Level;
@@ -97,7 +99,9 @@ public class Arm extends SubsystemBase {
 
   public void setHome() {}
 
-  public void setNeutralMode(/*ArmState mode*/ ) {}
+  public void setNeutralMode(IdleMode idlemode) {
+    io.stopArmMotor(idlemode);
+  }
 
   public void climbing() {}
 
