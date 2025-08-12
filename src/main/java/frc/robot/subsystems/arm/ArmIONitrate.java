@@ -11,7 +11,6 @@ import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDVelocityRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -69,7 +68,6 @@ public class ArmIONitrate implements ArmIO {
     armInputs.armAbsolutePosition = Rotation2d.fromRotations(armEncoder.getAbsPosition());
     armInputs.armPosition = Rotation2d.fromRotations(armEncoder.getPosition());
   }
-
 
   @Override
   public void setPosition(Rotation2d angle) {

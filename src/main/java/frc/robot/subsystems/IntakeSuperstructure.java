@@ -33,7 +33,6 @@ public class IntakeSuperstructure extends SubsystemBase {
   private Rollers rollers;
   private Indexer indexer;
 
-
   public static enum IntakeSuperstates {
     START,
     RETRACT_IDLE,
@@ -43,10 +42,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   }
 
   public IntakeSuperstructure(
-      EndEffector endEffector,
-      Deployer deployer,
-      Rollers rollers,
-      Indexer indexer) {
+      EndEffector endEffector, Deployer deployer, Rollers rollers, Indexer indexer) {
     this.deployer = deployer;
     this.rollers = rollers;
     this.indexer = indexer;
@@ -65,7 +61,9 @@ public class IntakeSuperstructure extends SubsystemBase {
       case RETRACT_IDLE:
         deployer.retract();
 
-        if (isCoralDetectedIndexer() || isCoralDetectedPickupArea() || RobotContainer.superstructure.isCoralHeld()) {
+        if (isCoralDetectedIndexer()
+            || isCoralDetectedPickupArea()
+            || RobotContainer.superstructure.isCoralHeld()) {
           rollers.rejectSlow();
           indexer.rejectSlow();
         } else {
@@ -112,7 +110,9 @@ public class IntakeSuperstructure extends SubsystemBase {
         if (requestRetractIdle && retractLockedOutState == RetractLockedOutStates.FALSE) {
           state = IntakeSuperstates.RETRACT_IDLE;
         }
-        if (isCoralDetectedIndexer() || isCoralDetectedPickupArea() || RobotContainer.superstructure.isCoralHeld()) {
+        if (isCoralDetectedIndexer()
+            || isCoralDetectedPickupArea()
+            || RobotContainer.superstructure.isCoralHeld()) {
           state = IntakeSuperstates.REJECT;
         }
         if (requestIntakeEject) {
@@ -124,7 +124,9 @@ public class IntakeSuperstructure extends SubsystemBase {
         rollers.reject();
         indexer.reject();
 
-        if (!isCoralDetectedIndexer() && !isCoralDetectedPickupArea() && !RobotContainer.superstructure.isCoralHeld()) {
+        if (!isCoralDetectedIndexer()
+            && !isCoralDetectedPickupArea()
+            && !RobotContainer.superstructure.isCoralHeld()) {
           state = IntakeSuperstates.FEED;
         }
         if (requestRetractIdle) {
@@ -180,5 +182,4 @@ public class IntakeSuperstructure extends SubsystemBase {
   public boolean isCoralDetectedIndexer() {
     return indexer.isCoralDetectedIndexer();
   }
-
 }
