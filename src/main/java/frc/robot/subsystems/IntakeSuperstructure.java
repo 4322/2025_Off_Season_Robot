@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.endEffector.EndEffector;
@@ -31,9 +32,6 @@ public class IntakeSuperstructure extends SubsystemBase {
   private Deployer deployer;
   private Rollers rollers;
   private Indexer indexer;
-  private EndEffector endEffector;
-
-  private Superstructure superstructure;
 
   public static enum IntakeSuperstates {
     START,
@@ -44,16 +42,10 @@ public class IntakeSuperstructure extends SubsystemBase {
   }
 
   public IntakeSuperstructure(
-      EndEffector endEffector,
-      Deployer deployer,
-      Rollers rollers,
-      Indexer indexer,
-      Superstructure superstructure) {
-    this.endEffector = endEffector;
+      EndEffector endEffector, Deployer deployer, Rollers rollers, Indexer indexer) {
     this.deployer = deployer;
     this.rollers = rollers;
     this.indexer = indexer;
-    this.superstructure = superstructure;
   }
 
   @Override
@@ -61,7 +53,7 @@ public class IntakeSuperstructure extends SubsystemBase {
     Logger.recordOutput("IntakeSuperstructure/State", state.toString());
     switch (state) {
       case START:
-        if (superstructure.isHomeButtonPressed()) {
+        if (RobotContainer.superstructure.isHomeButtonPressed()) {
           deployer.setHome();
           state = IntakeSuperstates.RETRACT_IDLE;
         }
@@ -69,7 +61,9 @@ public class IntakeSuperstructure extends SubsystemBase {
       case RETRACT_IDLE:
         deployer.retract();
 
-        if (isCoralDetectedIndexer() || isCoralDetectedPickupArea() || isCoralHeld()) {
+        if (isCoralDetectedIndexer()
+            || isCoralDetectedPickupArea()
+            || RobotContainer.superstructure.isCoralHeld()) {
           rollers.rejectSlow();
           indexer.rejectSlow();
         } else {
@@ -116,7 +110,9 @@ public class IntakeSuperstructure extends SubsystemBase {
         if (requestRetractIdle && retractLockedOutState == RetractLockedOutStates.FALSE) {
           state = IntakeSuperstates.RETRACT_IDLE;
         }
-        if (isCoralDetectedIndexer() || isCoralDetectedPickupArea() || isCoralHeld()) {
+        if (isCoralDetectedIndexer()
+            || isCoralDetectedPickupArea()
+            || RobotContainer.superstructure.isCoralHeld()) {
           state = IntakeSuperstates.REJECT;
         }
         if (requestIntakeEject) {
@@ -128,7 +124,9 @@ public class IntakeSuperstructure extends SubsystemBase {
         rollers.reject();
         indexer.reject();
 
-        if (!isCoralDetectedIndexer() && !isCoralDetectedPickupArea() && !isCoralHeld()) {
+        if (!isCoralDetectedIndexer()
+            && !isCoralDetectedPickupArea()
+            && !RobotContainer.superstructure.isCoralHeld()) {
           state = IntakeSuperstates.FEED;
         }
         if (requestRetractIdle) {
@@ -183,9 +181,5 @@ public class IntakeSuperstructure extends SubsystemBase {
 
   public boolean isCoralDetectedIndexer() {
     return indexer.isCoralDetectedIndexer();
-  }
-
-  public boolean isCoralHeld() {
-    return endEffector.hasCoral();
   }
 }

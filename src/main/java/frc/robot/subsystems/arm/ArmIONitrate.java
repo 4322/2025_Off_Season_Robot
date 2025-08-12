@@ -11,7 +11,6 @@ import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDVelocityRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -26,7 +25,7 @@ public class ArmIONitrate implements ArmIO {
   private final PIDVelocityRequest armPIDVelocityRequest =
       new PIDVelocityRequest(PIDConfigSlot.kSlot0, 0);
   private final PIDPositionRequest armPIDPositionRequest =
-      new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
+      new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
 
   public ArmIONitrate() {
     armMotor = new Nitrate(Constants.Arm.armMotorId, MotorType.kCu60);
@@ -40,7 +39,7 @@ public class ArmIONitrate implements ArmIO {
                 Constants.Arm.armEncoderId, Constants.Arm.armMotorGearRatio));
     armConfig
         .setPIDSettings(Constants.Arm.armMotorGains, PIDConfigSlot.kSlot1)
-        .getPIDSettings(PIDConfigSlot.kSlot1)
+        .getPIDSettings(PIDConfigSlot.kSlot0)
         .setMotionProfileMode(MotionProfileMode.kTrapezoidal)
         .setMinwrapConfig(new MinwrapConfig.Enabled());
 
@@ -70,14 +69,8 @@ public class ArmIONitrate implements ArmIO {
     armInputs.armPosition = Rotation2d.fromRotations(armEncoder.getPosition());
   }
 
-  public void setArmVelocity(double armWheelVelocityRadPerSec) {
-    armMotor.setRequest(
-        armPIDVelocityRequest.setPosition(
-            Units.radiansToRotations(
-                armWheelVelocityRadPerSec))); // TODO: Wait for API to get fixed
-  }
-
-  public void setArmPosition(Rotation2d armWheelPosition) {
-    armMotor.setRequest(armPIDPositionRequest.setPosition(armWheelPosition.getRotations()));
+  @Override
+  public void setPosition(Rotation2d angle) {
+    armMotor.setRequest(armPIDPositionRequest.setPosition(angle.getRotations()));
   }
 }

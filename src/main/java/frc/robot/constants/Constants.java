@@ -5,7 +5,6 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -81,7 +80,7 @@ public final class Constants {
   }
 
   public static class Arm {
-    public static  final int armMotorId = 0; // TODO: Set to actual motor ID
+    public static final int armMotorId = 0; // TODO: Set to actual motor ID
     public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
     public static final double idlePositionDeg = 0.0; // TODO: Set to actual idle position
     public static final double algaeHoldPositionDeg = 45.0; // TODO
@@ -94,7 +93,8 @@ public final class Constants {
     public static final double armMotorGearRatio = 4.0; // TODO: Set to actual gear ratio
     public static final double supplyCurrentLimit = 40; // TODO
     public static final double statorCurrentLimit = 100; // TODO
-    public static final ElectricalLimitSettings armElectricalLimitSettings = new ElectricalLimitSettings();
+    public static final ElectricalLimitSettings armElectricalLimitSettings =
+        new ElectricalLimitSettings();
     public static final PIDSettings armMotorGains = new PIDSettings();
     /*public static final int leftMotorID = 3; // follower motor
       public static final int rightMotorID = 2; // leader motor
@@ -199,6 +199,7 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // InvertMode.kInverted or InvertMode.kNotInverted
+    public static final double ejectVolts = 0;
   }
 
   public static class Deployer {
@@ -281,4 +282,6 @@ public final class Constants {
     public static final double indexerRetractTimeoutSeconds = 3.0;
     public static final double pickupAreaRetractTimeoutSeconds = 3.0;
   }
+
+  public static class Elevator {} // TODO placeholder values
 }

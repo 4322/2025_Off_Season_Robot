@@ -1,6 +1,9 @@
 package frc.robot;
 
-import static frc.robot.subsystems.vision.VisionConstants.*;
+import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
+import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,8 +16,8 @@ import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
+import frc.robot.subsystems.arm.ArmIONitrate;
 import frc.robot.subsystems.deployer.Deployer;
-import frc.robot.subsystems.deployer.DeployerIO;
 import frc.robot.subsystems.deployer.DeployerIONitrate;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -22,13 +25,10 @@ import frc.robot.subsystems.drive.GyroIOBoron;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIONitrate;
 import frc.robot.subsystems.endEffector.EndEffector;
-import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIONitrate;
 import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIONitrate;
 import frc.robot.subsystems.rollers.Rollers;
-import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
@@ -49,32 +49,22 @@ public class RobotContainer {
   private static Arm arm; // IO for the arm subsystem, null if not enabled
   // Declare Arm variable
 
-  public static EndEffectorIO endEffectorIO =
-      Constants.endEffectorEnabled ? new EndEffectorIONitrate() : new EndEffectorIO() {};
-  public static IndexerIO indexerIO =
-      Constants.indexerEnabled ? new IndexerIONitrate() : new IndexerIO() {};
-  public static RollersIO rollersIO =
-      Constants.rollersEnabled ? new RollersIONitrate() : new RollersIO() {};
-  public static DeployerIO deployerIO =
-      Constants.deployerEnabled ? new DeployerIONitrate() : new DeployerIO() {};
-
-  public static EndEffector endEffector = new EndEffector(endEffectorIO);
-  public static Indexer indexer = new Indexer(indexerIO);
-  public static Rollers rollers = new Rollers(rollersIO);
-  public static Deployer deployer = new Deployer(deployerIO);
-  public static Superstructure superstructure = new Superstructure();
-
-  public static IntakeSuperstructure intakeSuperstructure =
-      new IntakeSuperstructure(endEffector, deployer, rollers, indexer, superstructure);
+  private static EndEffector endEffector;
+  private static Indexer indexer;
+  private static Rollers rollers;
+  private static Deployer deployer;
+  private static IntakeSuperstructure intakeSuperstructure;
+  public static Superstructure superstructure;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     switch (Constants.currentMode) {
       case REAL:
+
         // Real robot, instantiate hardware IO implementations
         if (Constants.armEnabled) {
-          arm = new Arm(); // Create the arm subsystem if enabled
+          arm = new Arm(new ArmIONitrate()); // Create the arm subsystem if enabled
         }
         if (Constants.driveEnabled) {
           GyroIOBoron gyro = new GyroIOBoron();
@@ -93,6 +83,21 @@ public class RobotContainer {
                   new VisionIOPhotonVision(camera0Name, robotToCamera0),
                   new VisionIOPhotonVision(camera1Name, robotToCamera1));
         }
+        if (Constants.endEffectorEnabled) {
+          endEffector = new EndEffector(new EndEffectorIONitrate());
+        }
+        if (Constants.indexerEnabled) {
+          indexer = new Indexer(new IndexerIONitrate());
+        }
+        if (Constants.rollersEnabled) {
+          rollers = new Rollers(new RollersIONitrate());
+        }
+        if (Constants.deployerEnabled) {
+          deployer = new Deployer(new DeployerIONitrate());
+        }
+        intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
+        superstructure =
+            new Superstructure(endEffector, arm, indexer, drive, vision, intakeSuperstructure);
         break;
 
       case SIM:
@@ -127,6 +132,10 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
+  }
+
+  public static IntakeSuperstructure getIntakeSuperstructure() {
+    return intakeSuperstructure;
   }
 
   /**
