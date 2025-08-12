@@ -10,6 +10,7 @@ public class Elevator extends SubsystemBase {
   private ElevatorIO io;
   private Timer homingTimer = new Timer();
   ElevatorStates state = ElevatorStates.STARTING_CONFIG;
+  ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
   private enum ElevatorStates {
     STARTING_CONFIG,
@@ -81,7 +82,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getHeightMeters() {
-    return 0.0;
+    return inputs.heightMeters;
   }
 
   public void setHome() {}
