@@ -1,7 +1,9 @@
 package frc.robot.subsystems.elevator;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Superstructure.Level;
 
 public class Elevator extends SubsystemBase {
   private boolean elevatorIdle;
@@ -16,7 +18,12 @@ public class Elevator extends SubsystemBase {
     JIGGLE
   }
 
-  private Elevator() {
+  public Elevator(ElevatorIO ELVIO) {
+    this.io = ELVIO;
+  }
+
+  @Override
+  public void periodic() {
     switch (state) {
       case STARTING_CONFIG:
         // Handle starting config logic
@@ -59,13 +66,13 @@ public class Elevator extends SubsystemBase {
 
   public void algaeGround() {}
 
-  public void algaeReef(/*Level level*/ ) {}
+  public void algaeReef(Level level) {}
 
   public void scoreAlgae() {}
 
-  public void prescoreCoral(/*Level level*/ ) {}
+  public void prescoreCoral(Level level) {}
 
-  public void scoreCoral(/*Level level*/ ) {}
+  public void scoreCoral(Level level) {}
 
   public void pickupCoral() {}
 
@@ -79,7 +86,7 @@ public class Elevator extends SubsystemBase {
 
   public void setHome() {}
 
-  public void setNeutralMode(/*State mode*/ ) {}
+  public void setNeutralMode(IdleMode mode) {}
 
   public void safeBargeRetract() {}
 

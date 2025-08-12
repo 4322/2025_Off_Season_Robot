@@ -24,6 +24,9 @@ import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOBoron;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIONitrate;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIONitrate;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIONitrate;
 import frc.robot.subsystems.indexer.Indexer;
@@ -55,6 +58,7 @@ public class RobotContainer {
   private static Deployer deployer;
   private static IntakeSuperstructure intakeSuperstructure;
   public static Superstructure superstructure;
+  private static Elevator elevator;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -65,6 +69,10 @@ public class RobotContainer {
         // Real robot, instantiate hardware IO implementations
         if (Constants.armEnabled) {
           arm = new Arm(new ArmIONitrate()); // Create the arm subsystem if enabled
+        }
+        if (Constants.elevatorEnabled) {
+          elevator =
+              new Elevator(new ElevatorIONitrate()); // Create the elevator subsystem if enabled
         }
         if (Constants.driveEnabled) {
           GyroIOBoron gyro = new GyroIOBoron();
@@ -128,6 +136,9 @@ public class RobotContainer {
               new ModuleIO() {},
               new ModuleIO() {},
               new ModuleIO() {});
+    }
+    if (elevator == null) {
+      elevator = new Elevator(new ElevatorIO() {});
     }
 
     // Configure the button bindings
