@@ -1,13 +1,13 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Superstructure.Level;
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
+  public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
 
   private static final double MIN_SAFE_ARM_ANGLE = 20.0;
   private static final double MAX_SAFE_ARM_ANGLE = 20.0;
