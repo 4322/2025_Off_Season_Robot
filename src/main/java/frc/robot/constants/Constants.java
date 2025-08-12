@@ -282,4 +282,5 @@ public final class Constants {
     public static final double indexerRetractTimeoutSeconds = 3.0;
     public static final double pickupAreaRetractTimeoutSeconds = 3.0;
   }
+  public static class Elevator{} // TODO placeholder values
 }
