@@ -1,51 +1,29 @@
 package frc.robot.subsystems.arm;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Superstructure.Level;
+
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
 
-  private static final double SAFE_ARM_ANGLE = 45.0;
   private static final double MIN_SAFE_ARM_ANGLE = 20.0;
   private static final double MAX_SAFE_ARM_ANGLE = 20.0;
+  public int setpoint = 0; // Degrees, 0 is horizontal to front of robot
+ 
 
-  /* double currentPosition = arm.getPositionDeg();
-  double requestedPosition = requestedPositionDeg.get();
-
-  // First check if arm can move optimized
-  if (currentPosition < 0) {
-    if (requestedPosition > 0) {
-      if (Math.abs(requestedPosition - currentPosition) > 180) {
-        requestedPosition -= 360;
-      }
-    }
-  } else if (currentPosition > 0) {
-    if (requestedPosition < 0) {
-      if (Math.abs(requestedPosition - currentPosition) > 180) {
-        requestedPosition += 360;
-      }
-    }
-  }
-
-  if (requestedPosition > 270) {
-    requestedPosition -= 360;
-  } else if (requestedPosition < -270) {
-    requestedPosition += 360;
-  } */
   public Arm(ArmIO ArmIO) {
     this.io = ArmIO;
   }
 
-  public Arm() {
-    // TODO Auto-generated constructor stub
-
-  }
-
   public enum Safety {
-    APPROACHING_SETPOINT,
-    SAFE_ANGLE,
+   
   }
 
-  Safety safety = Safety.SAFE_ANGLE;
+    @Override
+    public void periodic() {
+      io.setPosition(Rotation2d.fromDegrees(setpoint));
+    }
 
   public void idle() {}
 
@@ -55,13 +33,64 @@ public class Arm extends SubsystemBase {
 
   public void algaeGround() {}
 
-  public void algaeReef(/*requestedLevel*/ ) {}
+  public void algaeReef(Level level ) {
+    switch(level) {
+      case L1:
+        setpoint = 30; // Example angle for L1
+        break;
+      case L2:
+        setpoint = 60; // Example angle for L2
+        break;
+      case L3:
+        setpoint = 90; // Example angle for L3
+        break;
+      case L4:
+        setpoint = 120; // Example angle for L4
+        break;
+      default:
+        setpoint = 0; // Default to horizontal if no level is specified
+    }
+  }
 
   public void scoreAlgae(/*ArmState scoringSide*/ ) {}
 
-  public void prescoreCoral(/*ArmState requestedLevel*/ ) {}
+  public void prescoreCoral(Level level ) {
+    switch(level) {
+      case L1:
+        setpoint = 30; // Example angle for L1
+        break;
+      case L2:
+        setpoint = 60; // Example angle for L2
+        break;
+      case L3:
+        setpoint = 90; // Example angle for L3
+        break;
+      case L4:
+        setpoint = 120; // Example angle for L4
+        break;
+      default:
+        setpoint = 0; // Default to horizontal if no level is specified
+    }
+  }
 
-  public void scoreCoral(/*ArmState requestedLevel*/ ) {}
+  public void scoreCoral(Level level) {
+    switch(level) {
+      case L1:
+        setpoint = 30; // Example angle for L1
+        break;
+      case L2:
+        setpoint = 60; // Example angle for L2
+        break;
+      case L3:
+        setpoint = 90; // Example angle for L3
+        break;
+      case L4:
+        setpoint = 120; // Example angle for L4
+        break;
+      default:
+        setpoint = 0; // Default to horizontal if no level is specified
+    }
+  }
 
   public boolean atSetpoint() {
     // TODO: Implement logic to check if arm is at setpoint
@@ -70,7 +99,9 @@ public class Arm extends SubsystemBase {
 
   public void safeBargeRetract() {}
 
-  public void setHome() {}
+  public void setHome() {
+
+  }
 
   public void setNeutralMode(/*ArmState mode*/ ) {}
 

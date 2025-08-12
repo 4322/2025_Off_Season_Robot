@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector;
@@ -84,21 +83,35 @@ public class Superstructure extends SubsystemBase {
 
     switch (currentState) {
       case START:
+        arm.setHome();
+
+
         break;
       case IDLE:
         endEffector.idle();
+        arm.idle();
+
+        arm.atSetpoint();
+
+
         // TODO
         break;
       case EJECT:
         endEffector.eject();
-
+        endEffector.hasAlgae();
+        endEffector.hasCoral();
+        arm.eject();
+        arm.atSetpoint();
         // TODO
         break;
       case ALGAE_IDLE:
-
+      arm.algaeHold();
+      endEffector.hasAlgae();
+      
         // TODO
         break;
       case ALGAE_PRESCORE:
+      arm.scoreAlgae();
 
         // TODO
         break;
@@ -109,6 +122,7 @@ public class Superstructure extends SubsystemBase {
         break;
       case INTAKE_ALGAE_FLOOR:
         endEffector.intakeAlgae();
+        arm.algaeGround();
 
         // TODO
         break;
