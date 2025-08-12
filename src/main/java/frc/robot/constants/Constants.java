@@ -88,7 +88,6 @@ public final class Constants {
     public static final double algaeGroundPositionDeg = 30.0; // TODO
     public static final double algaeReefPositionDeg = 60.0; // TODO
     public static final double scoreAlgaePositionDeg = 75.0; // TODO
-
     public static final double setpointToleranceMeters = 0.01;
     public static final double armMotorGearRatio = 4.0; // TODO: Set to actual gear ratio
     public static final double supplyCurrentLimit = 40; // TODO
