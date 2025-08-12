@@ -8,6 +8,7 @@ import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
 
+
 public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged armInputs = new ArmIOInputsAutoLogged();
@@ -75,7 +76,22 @@ public class Arm extends SubsystemBase {
     }
   }
 
-  public void scoreAlgae(/*ArmState scoringSide*/ ) {}
+  public void scoreAlgae(Level algaeLevel ) {
+    switch (algaeLevel) {
+      case L1:
+        setpoint = 30; // TODO: angle for L1
+        break;
+      case L2:
+        setpoint = 60; // TODO: angle for L2
+        break;
+      case L3:
+        setpoint = 90; // TODO: angle for L3
+        break;
+      case L4:
+        setpoint = 120; // TODO: angle for L4
+        break;
+    }
+  }
 
   public void prescoreCoral(Level coralLevel) {
     switch (coralLevel) {
@@ -112,8 +128,7 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean atSetpoint() {
-    // TODO: Implement logic to check if arm is at setpoint
-    return true;
+   return true;
   }
 
   public void safeBargeRetract() {}
