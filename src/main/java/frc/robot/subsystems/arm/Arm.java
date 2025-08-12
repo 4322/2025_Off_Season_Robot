@@ -11,18 +11,19 @@ public class Arm extends SubsystemBase {
   private static final double MAX_SAFE_ARM_ANGLE = 20.0;
   public int setpoint = 0; // Degrees, 0 is horizontal to front of robot
  
+  public enum Safety {
+    WAIT_FOR_ELEVATOR,
+    MOVING_WITH_ELEVATOR,
+  }
 
   public Arm(ArmIO ArmIO) {
     this.io = ArmIO;
   }
 
-  public enum Safety {
-   
-  }
-
     @Override
     public void periodic() {
       io.setPosition(Rotation2d.fromDegrees(setpoint));
+     // RobotContainer.superstructure.getElevatorHeight(); // Update elevator height for safety checks
     }
 
   public void idle() {}
@@ -36,16 +37,16 @@ public class Arm extends SubsystemBase {
   public void algaeReef(Level level ) {
     switch(level) {
       case L1:
-        setpoint = 30; // Example angle for L1
+        setpoint = 30; //TODO: angle for L1
         break;
       case L2:
-        setpoint = 60; // Example angle for L2
+        setpoint = 60; // TODO: angle for L2
         break;
       case L3:
-        setpoint = 90; // Example angle for L3
+        setpoint = 90; // TODO: angle for L3
         break;
       case L4:
-        setpoint = 120; // Example angle for L4
+        setpoint = 120; // TODO: angle for L4
         break;
       default:
         setpoint = 0; // Default to horizontal if no level is specified
