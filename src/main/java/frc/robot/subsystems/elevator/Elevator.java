@@ -59,7 +59,7 @@ public class Elevator extends SubsystemBase {
   climbing()
   eject()
    */
-  public void ElevatorIdle() {}
+  public void idle() {}
 
   public void algaeHold() {}
 

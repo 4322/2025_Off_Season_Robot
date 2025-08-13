@@ -8,7 +8,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
-import com.reduxrobotics.motorcontrol.requests.PIDVelocityRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,8 +21,6 @@ public class ArmIONitrate implements ArmIO {
   private final Nitrate armMotor;
   private final Canandmag armEncoder;
 
-  private final PIDVelocityRequest armPIDVelocityRequest =
-      new PIDVelocityRequest(PIDConfigSlot.kSlot0, 0);
   private final PIDPositionRequest armPIDPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
 

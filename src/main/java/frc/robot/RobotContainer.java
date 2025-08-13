@@ -105,7 +105,8 @@ public class RobotContainer {
         }
         intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
         superstructure =
-            new Superstructure(endEffector, arm, indexer, drive, vision, intakeSuperstructure);
+            new Superstructure(
+                endEffector, arm, indexer, elevator, drive, vision, intakeSuperstructure);
         break;
 
       case SIM:
