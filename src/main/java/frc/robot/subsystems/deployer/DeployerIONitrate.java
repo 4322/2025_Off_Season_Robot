@@ -15,6 +15,7 @@ import frc.robot.constants.Constants;
 
 public class DeployerIONitrate implements DeployerIO {
   private Nitrate deployerMotor;
+  // TODO use internal encoder
   private Canandmag deployerMotorEncoder;
 
   private NitrateSettings deployerMotorConfig = new NitrateSettings();
