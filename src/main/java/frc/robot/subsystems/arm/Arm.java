@@ -41,7 +41,7 @@ public class Arm extends SubsystemBase {
           > Floor Pick up
           Im guessing that there will be 2 if statements and it detects weither it was requested or not
           ___
-          See if it would work with Coral held to Prescore coral
+          See if it would work with Coral held to Prescore coral - Basically IDLE to Prescore coral
           > We will use the idle min height for this
           > move elevator to min setpoint then move arm to setpoint
           > If request move out from idle then move both at same time
@@ -55,6 +55,7 @@ public class Arm extends SubsystemBase {
           > We will use the Floor Pick up min height for this
           > So prescore coral to eject will look like arm move a bit but what if it dosen't wait for the setpoint to be reached
           -Maybe add the safety so it won't eject if arm and elevator are not in the right position
+          Would that reduce our time?
           _____
           > Arm is based on the elevators height
           > Arm shouldn't move if elevator is below the min safe height
@@ -68,6 +69,7 @@ public class Arm extends SubsystemBase {
           In what case should we allow it to move again?
           > Once elevator is at the min safe height then we can move the arm
           > If it is requested to go up from Idle
+          > If it is requested to Floor Pick up
           //TODO: Figure out other cases
           ____
           //TODO: Figure out how to make tolerence to work with the logic aka where or how to put it
@@ -82,6 +84,7 @@ public class Arm extends SubsystemBase {
         */
       case WAIT_FOR_ELEVATOR:
         if (superstructure.getState() == Superstates.IDLE) { //Maybe have a prev state?
+          //Would this break the bot if it is going back to Idle 
           safety = Safety.MOVING_WITH_ELEVATOR;
         }
         else if (Constants.Elevator.minElevatorSafeHeightIdle
