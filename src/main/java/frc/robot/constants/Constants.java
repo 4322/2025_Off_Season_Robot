@@ -98,6 +98,22 @@ public final class Constants {
     public static final double kD = 0;
   }
 
+  public static class Elevator {
+    public static final int leftMotorID = 0; // TODO: Set to actual motor ID
+    public static final int rightMotorID = 0; // TODO: Set to actual encoder ID
+    public static final ElectricalLimitSettings elevatorElectricalLimitSettings =
+        new ElectricalLimitSettings();
+    public static final IdleMode motorIdleMode = IdleMode.kCoast;
+    public static final InvertMode motorInvert = InvertMode.kInverted;
+    public static final double elevatorMotorGearRatio = 1.0; // TODO: Set to actual gear ratio
+    public static final PIDSettings elevatorMotorGains = new PIDSettings();
+    public static final double kP = 0; // TODO: Set to actual value
+    public static final double kI = 0; // TODO: Set to actual value
+    public static final double kD = 0; // TODO: Set to actual value
+    public static final double minElevatorSafeHeight = 45.0;
+    public static final double maxElevatorSafeHeight = 245.0;
+  }
+
   // TODO all of these are placeholder values
   public static class EndEffector {
     public static final int endEffectorMotorId = 0;
@@ -219,9 +235,4 @@ public final class Constants {
     public static final double indexerRetractTimeoutSeconds = 3.0;
     public static final double pickupAreaRetractTimeoutSeconds = 3.0;
   }
-
-  public static class Elevator {
-    public static final double minElevatorSafeHeight = 45.0;
-    public static final double maxElevatorSafeHeight = 245.0;
-  } // TODO placeholder values
 }

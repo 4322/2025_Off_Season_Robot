@@ -156,7 +156,7 @@ public class Superstructure extends SubsystemBase {
         // TODO
         break;
       case ALGAE_PRESCORE:
-        arm.scoreAlgae();
+        // arm.scoreAlgae();
         if (!requestAlgaePrescore) {
           state = Superstates.ALGAE_IDLE;
         } else if (requestAlgaeScore) {
