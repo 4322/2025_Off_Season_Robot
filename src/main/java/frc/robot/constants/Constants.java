@@ -7,6 +7,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -16,7 +17,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
-
+  
+  
   public static final boolean armEnabled = true;
   public static final boolean elevatorEnabled = true;
   public static final boolean deployerEnabled = true;

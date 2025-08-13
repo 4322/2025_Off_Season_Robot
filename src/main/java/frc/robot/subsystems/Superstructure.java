@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
@@ -12,7 +13,7 @@ import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
 
 public class Superstructure extends SubsystemBase {
-
+  public static final Timer startTimer = new Timer();
   private boolean requestIdle = false;
   private boolean requestEject = false;
   private boolean requestAlgaeIdle = false;
@@ -27,6 +28,7 @@ public class Superstructure extends SubsystemBase {
   private boolean requestSafeScoreAlgaeRetract = false;
   private boolean requestPreClimb = false;
   private boolean requestClimb = false;
+ 
 
   private Level coralLevel = Level.L1;
   private Level algaeLevel = Level.L1;
@@ -93,9 +95,10 @@ public class Superstructure extends SubsystemBase {
     switch (state) {
       case START: // TODO
         if (isHomeButtonPressed()) {
+          if (startTimer.hasElapsed(1)){
           arm.setHome();
           elevator.setHome();
-          state = Superstates.IDLE;
+          state = Superstates.IDLE;}
         }
 
         break;

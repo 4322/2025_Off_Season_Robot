@@ -21,9 +21,10 @@ public class Arm extends SubsystemBase {
   public enum Safety {
     WAIT_FOR_ELEVATOR,
     MOVING_WITH_ELEVATOR,
+    ARM_CANT_MOVE, 
   }
 
-  Safety safety = Safety.WAIT_FOR_ELEVATOR;
+  Safety safety = Safety.ARM_CANT_MOVE;
 
   public Arm(ArmIO ArmIO) {
     this.io = ArmIO;
@@ -35,59 +36,16 @@ public class Arm extends SubsystemBase {
     RobotContainer.superstructure.getElevatorHeight();
 
     switch (safety) {
-        /*Notes:
-         - There are 2 min elevator heights
-          > Idle
-          > Floor Pick up
-          Im guessing that there will be 2 if statements and it detects weither it was requested or not
-          ___
-          See if it would work with Coral held to Prescore coral - Basically IDLE to Prescore coral
-          > We will use the idle min height for this
-          > move elevator to min setpoint then move arm to setpoint
-          > If request move out from idle then move both at same time
-          > So if in idle position we should be able to move both at same time no matter the angle
-          _____
-          See if it would work with Idle to intake algae floor
-          > We will use the intake algae floor min height for this
-          > move both up at same time and arm out
-          _____
-          Prescore coral to Eject immediately into algae intake floor
-          > We will use the Floor Pick up min height for this
-          > So prescore coral to eject will look like arm move a bit but what if it dosen't wait for the setpoint to be reached
-          -Maybe add the safety so it won't eject if arm and elevator are not in the right position
-          Would that reduce our time?
-          _____
-          > Arm is based on the elevators height
-          > Arm shouldn't move if elevator is below the min safe height
-          _____
-          In what cases should we wait for the elevator?
-          > If elevator is below the min safe height then we should wait for it to be at the min safe height before moving the arm
-          > If arm reaches the min safe position but elevator is below the safe height
-          > Well if arm is in a safe position but it is commanded to go under the safe positon
-          //TODO
-          _____
-          In what case should we allow it to move again?
-          > Once elevator is at the min safe height then we can move the arm
-          > If it is requested to go up from Idle
-          > If it is requested to Floor Pick up
-          //TODO: Figure out other cases
-          ____
-          //TODO: Figure out how to make tolerence to work with the logic aka where or how to put it
-
-          //TODO: Figure out when to swtitch between the two min heights
-          ____
-
-
-
-
-
-        */
-      case WAIT_FOR_ELEVATOR:
-        if (superstructure.getState() == Superstates.IDLE) { //Maybe have a prev state?
-          //Would this break the bot if it is going back to Idle 
+      case ARM_CANT_MOVE:
+        if (superstructure.getState() == Superstates.IDLE) {
+          safety = Safety.WAIT_FOR_ELEVATOR;
+        } else if (superstructure.getElevatorHeight()
+            >= Constants.Elevator.minElevatorSafeHeightIdle) {
           safety = Safety.MOVING_WITH_ELEVATOR;
         }
-        else if (Constants.Elevator.minElevatorSafeHeightIdle
+        break;
+      case WAIT_FOR_ELEVATOR:
+        if (Constants.Elevator.minElevatorSafeHeightIdle
             <= superstructure.getElevatorHeight()) {
           safety = Safety.MOVING_WITH_ELEVATOR;
         }
