@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,6 +10,8 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.util.ClockUtil;
+import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -29,7 +29,6 @@ public class Superstructure extends SubsystemBase {
   private boolean requestSafeScoreAlgaeRetract = false;
   private boolean requestPreClimb = false;
   private boolean requestClimb = false;
- 
 
   private Level coralLevel = Level.L1;
   private Level algaeLevel = Level.L1;
@@ -96,10 +95,11 @@ public class Superstructure extends SubsystemBase {
     switch (state) {
       case START: // TODO
         if (isHomeButtonPressed()) {
-          if (startTimer.hasElapsed(1)){
-          arm.setHome();
-          elevator.setHome();
-          state = Superstates.IDLE;}
+          if (startTimer.hasElapsed(1)) {
+            arm.setHome();
+            elevator.setHome();
+            state = Superstates.IDLE;
+          }
         }
         if (DriverStation.isEnabled()) {
           state = Superstates.IDLE;
@@ -129,10 +129,10 @@ public class Superstructure extends SubsystemBase {
         // TODO
         break;
       case EJECT:
-        if (arm.atSetpoint() && elevator.atSetpoint()) {
+        elevator.eject();
+        arm.eject();
+        if (ClockUtil.inBound(arm.getAngleDegrees(), 20, 50, true)) /*TODO set acual values*/ {
           endEffector.eject();
-          elevator.eject();
-          arm.eject();
         }
 
         if (!requestEject && !endEffector.hasAlgae() && !endEffector.hasCoral()) {

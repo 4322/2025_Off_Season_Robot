@@ -1,8 +1,10 @@
 package frc.robot.subsystems.arm;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
+
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 
 public interface ArmIO {
   @AutoLog
@@ -18,7 +20,7 @@ public interface ArmIO {
     public double armSupplyCurrentAmps = 0.0;
     public double armStatorCurrentAmps = 0.0;
     public double armTempCelsius = 0.0;
-    public double armPositionRad = 0.0; // In radians, 0 is horizontal to front of robot
+    public double armPositionDegrees = 0.0; // In radians, 0 is horizontal to front of robot
   }
 
   public default void updateInputs(ArmIOInputs armInputs) {}

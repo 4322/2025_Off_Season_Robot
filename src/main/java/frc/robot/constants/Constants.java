@@ -5,9 +5,9 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.Timer;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -17,8 +17,7 @@ import edu.wpi.first.wpilibj.Timer;
 public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
-  
-  
+
   public static final boolean armEnabled = true;
   public static final boolean elevatorEnabled = true;
   public static final boolean deployerEnabled = true;
@@ -87,7 +86,7 @@ public final class Constants {
     public static final double armMotorGearRatio = 4.0; // TODO: Set to actual gear ratio
     public static final double minArmSafeAngle = 45.0;
     public static final double maxArmSafeAngle = 245.0;
-    public static final double setpointToleranceMeters = 0.01;
+    public static final double setpointToleranceDegrees = 0.01;
     public static final double supplyCurrentLimit = 40; // TODO
     public static final double statorCurrentLimit = 100; // TODO
     public static final ElectricalLimitSettings armElectricalLimitSettings =
