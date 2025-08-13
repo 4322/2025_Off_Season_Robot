@@ -170,7 +170,7 @@ public final class Constants {
     public static final double motorRetractkD = 0;
     public static final int deployerMotorEncoderId = 0;
     public static final boolean motorEncoderInverted = false; // TODO maybe change this?
-    public static final double motorGearRatio = 0;
+    public static final double motorGearRatio = 1;
     public static final double ejectPositionRotations = 0;
     public static final double retractPositionRotations = 0;
     public static final double deployPositionRotations = 0;
