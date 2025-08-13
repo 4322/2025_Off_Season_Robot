@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Superstructure.Level;
@@ -99,6 +100,9 @@ public class Superstructure extends SubsystemBase {
           arm.setHome();
           elevator.setHome();
           state = Superstates.IDLE;}
+        }
+        if (DriverStation.isEnabled()) {
+          state = Superstates.IDLE;
         }
 
         break;
