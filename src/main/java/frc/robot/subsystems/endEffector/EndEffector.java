@@ -52,6 +52,8 @@ public class EndEffector extends SubsystemBase {
     Logger.recordOutput("End Effector/State", state.toString());
     Logger.recordOutput("End Effector/coralHeld", coralHeld);
     Logger.recordOutput("End Effector/algaeHeld", algaeHeld);
+    Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
+    Logger.recordOutput("End Effector/isPieceReleaseDetected", isPieceReleaseDetected());
 
     switch (state) {
       case IDLE:

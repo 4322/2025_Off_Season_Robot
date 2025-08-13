@@ -1,5 +1,6 @@
 package frc.robot.subsystems.rollers;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import org.littletonrobotics.junction.Logger;
@@ -8,7 +9,10 @@ public class Rollers extends SubsystemBase {
   private RollersIO io;
   private RollersIOInputsAutoLogged inputs = new RollersIOInputsAutoLogged();
 
-  private boolean coralDetected;
+  private Debouncer currentDetectionDebouncer =
+      new Debouncer(Constants.Rollers.currentDetectionDebounceTimeSeconds);
+  private Debouncer velocityDetectionDebouncer =
+      new Debouncer(Constants.Rollers.velocityDetectionDebounceTimeSeconds);
 
   private enum RollersStatus {
     START,
@@ -23,7 +27,6 @@ public class Rollers extends SubsystemBase {
 
   public Rollers(RollersIO io) {
     this.io = io;
-    this.coralDetected = false;
   }
 
   @Override
@@ -31,7 +34,7 @@ public class Rollers extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Rollers", inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
-    Logger.recordOutput("Rollers/coralDetected", coralDetected);
+    Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected());
 
     // Checks current in here, sets coralDetected depending on threshold
     // With io.getMotorStatorCurrent() and io.getRollersMotorVelocityRotationsPerSec()
@@ -62,7 +65,8 @@ public class Rollers extends SubsystemBase {
     io.setRollersMotorVoltage(Constants.Rollers.motorVoltageEject);
   }
 
-  public boolean isCoralDetected() {
-    return coralDetected;
+  public boolean isCoralPickupDetected() {
+    return currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps > Constants.Rollers.currentDetectionStallCurrentAmps) && 
+           velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec < Constants.Rollers.velocityDetectionStallRotationsPerSec);
   }
 }

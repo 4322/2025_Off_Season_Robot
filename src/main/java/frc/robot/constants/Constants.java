@@ -201,29 +201,27 @@ public final class Constants {
   }
 
   public static class Rollers {
-    public static final int rollersMotorID = 3;
-
     public static final int rollersMotorId = 0;
 
     public static final double motorBusCurrentLimitTime = 0;
-
     public static final double motorStatorCurrentLimit = 0;
-
     public static final double motorBusCurrentLimit = 0;
 
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
-
     public static final InvertMode motorInvert = null;
 
     public static final double motorVoltageFeed = 0;
-
     public static final double motorVoltageFeedSlow = 0;
-
     public static final double motorVoltageReject = 0;
-
     public static final double motorVoltageRejectSlow = 0;
-
     public static final double motorVoltageEject = 0;
+    // TODO tune these
+    public static final double currentDetectionDebounceTimeSeconds = 0.25; // Time for the current to spike and stay there before detection is triggered
+    public static final double velocityDetectionDebounceTimeSeconds = 0.25; // Time for velocity to spike and stay there before detection is triggered
+
+    public static final double currentDetectionStallCurrentAmps = 0;
+
+    public static final double velocityDetectionStallRotationsPerSec = 0;
   }
 
   public static class IntakeSuperstructure {
