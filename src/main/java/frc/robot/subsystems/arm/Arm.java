@@ -68,7 +68,10 @@ public class Arm extends SubsystemBase {
           > If it is requested to go up from Idle
           //TODO: Figure out other cases
           ____
-          //TODO: Figure out how to make tolerence to work with the logic aka were or how to put it
+          //TODO: Figure out how to make tolerence to work with the logic aka where or how to put it
+          ____
+          
+
 
 
 
@@ -129,21 +132,8 @@ public class Arm extends SubsystemBase {
     }
   }
 
-  public void scoreAlgae(Level algaeLevel) {
-    switch (algaeLevel) {
-      case L1:
-        setpoint = 30; // TODO: angle for L1
-        break;
-      case L2:
-        setpoint = 60; // TODO: angle for L2
-        break;
-      case L3:
-        setpoint = 90; // TODO: angle for L3
-        break;
-      case L4:
-        setpoint = 120; // TODO: angle for L4
-        break;
-    }
+  public void scoreAlgae() {
+    setpoint = 120; // TODO:
   }
 
   public void prescoreCoral(Level coralLevel) {
