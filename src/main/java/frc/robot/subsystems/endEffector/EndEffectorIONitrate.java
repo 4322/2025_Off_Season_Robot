@@ -83,29 +83,44 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.endEffectorSensorColorGreen = endEffectorSensor.getGreen();
     inputs.endEffectorSensorColorRed = endEffectorSensor.getRed();
 
-    if (inputs.endEffectorSensorProximity < Constants.EndEffector.sensorAlgaeProximityThreshold) {
+    inputs.isCoralProximityDetected = endEffectorSensor.getProximity() < Constants.EndEffector.sensorCoralProximityThreshold;
+    inputs.isAlgaeProximityDetected = endEffectorSensor.getProximity() < Constants.EndEffector.sensorAlgaeProximityThreshold
+    && endEffectorSensor.getProximity() > Constants.EndEffector.sensorCoralProximityThreshold; // TODO Assuming algae is farther from sensor than coral is
 
-      // Green detected is within range; Blue detected is within range; Red detected is below
-      // threshold
-      if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorGreenDetectGreenLower
-          && inputs.endEffectorSensorColorGreen < Constants.EndEffector.sensorGreenDetectGreenUpper
-          && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorGreenDetectBlueLower
-          && inputs.endEffectorSensorColorBlue < Constants.EndEffector.sensorGreenDetectBlueUpper
-          && inputs.endEffectorSensorColorRed < Constants.EndEffector.sensorGreenDetectRed) {
-        inputs.sensorPieceDetected = gamePiece.ALGAE;
 
-        // All colors detected are above threshold
-      } else if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorWhiteDetectGreen
-          && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorWhiteDetectBlue
-          && inputs.endEffectorSensorColorRed > Constants.EndEffector.sensorWhiteDetectRed) {
-        inputs.sensorPieceDetected = gamePiece.CORAL;
+      // Enable color detection based on Constant setting
+      if (Constants.EndEffector.useSensorColor) {
+        if (inputs.endEffectorSensorProximity < Constants.EndEffector.sensorAlgaeProximityThreshold) {
+        
+        // Green detected is within range; Blue detected is within range; Red detected is below
+        // threshold
+        if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorGreenDetectGreenLower
+            && inputs.endEffectorSensorColorGreen < Constants.EndEffector.sensorGreenDetectGreenUpper
+            && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorGreenDetectBlueLower
+            && inputs.endEffectorSensorColorBlue < Constants.EndEffector.sensorGreenDetectBlueUpper
+            && inputs.endEffectorSensorColorRed < Constants.EndEffector.sensorGreenDetectRed) {
+          inputs.sensorPieceDetected = gamePiece.ALGAE;
+
+          // All colors detected are above threshold
+        } else if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorWhiteDetectGreen
+            && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorWhiteDetectBlue
+            && inputs.endEffectorSensorColorRed > Constants.EndEffector.sensorWhiteDetectRed) {
+          inputs.sensorPieceDetected = gamePiece.CORAL;
+        } else {
+          inputs.sensorPieceDetected = gamePiece.UNKNOWN;
+        }
       } else {
-        inputs.sensorPieceDetected = gamePiece.UNKNOWN;
+        inputs.sensorPieceDetected = gamePiece.NONE;
       }
     } else {
-      inputs.sensorPieceDetected = gamePiece.NONE;
+      if (inputs.endEffectorSensorProximity < Constants.EndEffector.sensorAlgaeProximityThreshold) {
+        inputs.sensorPieceDetected = gamePiece.ALGAE;
+      } else if (inputs.endEffectorSensorProximity < Constants.EndEffector.sensorCoralProximityThreshold) {
+        inputs.sensorPieceDetected = gamePiece.CORAL;
+      } else {
+        inputs.sensorPieceDetected = gamePiece.NONE;
+      }
     }
-    inputs.currentDetectionPickupTriggered = isCurrentDetectionPickupTriggered();
   }
 
   @Override
@@ -119,29 +134,4 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     endEffectorMotor.stop(idleMode);
   }
 
-  @Override // TODO maybe move current detection logic to subsystem periodic?
-  // Returns whether a difference in current is detected after picking up piece (low -> high
-  // current; Velocity high -> low)
-  public boolean isCurrentDetectionPickupTriggered() {
-    return false; // TODO figure out how current detection works
-  }
-
-  @Override
-  // Returns whether a difference in current is detected after releasing a piece (high -> low
-  // current; Velocity low -> high)
-  public boolean isCurrentDetectionReleaseTriggered() {
-    return false; // TODO figure out how current detection works
-  }
-
-  @Override
-  public boolean isCoralProximityDetected() {
-    return endEffectorSensor.getProximity() < Constants.EndEffector.sensorCoralProximityThreshold;
-  }
-
-  @Override
-  public boolean isAlgaeProximityDetected() {
-    // This is assuming the coral will be closer to the sensor than the algae is when held
-    return endEffectorSensor.getProximity() < Constants.EndEffector.sensorAlgaeProximityThreshold
-        && endEffectorSensor.getProximity() > Constants.EndEffector.sensorCoralProximityThreshold;
-  }
 }

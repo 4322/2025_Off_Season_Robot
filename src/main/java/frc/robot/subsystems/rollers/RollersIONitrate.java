@@ -65,13 +65,5 @@ public class RollersIONitrate implements RollersIO {
     rollersMotor.stop(mode);
   }
 
-  @Override
-  public double getRollersMotorStatorCurrent() {
-    return rollersMotor.getStatorCurrent();
-  }
 
-  @Override
-  public double getRollersMotorVelocityRotationsPerSec() {
-    return rollersMotor.getVelocity();
-  }
 }

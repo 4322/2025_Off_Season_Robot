@@ -88,11 +88,11 @@ public class IndexerIONitrate implements IndexerIO {
     inputs.indexerMotorSpeedRotationsPerSec = indexerMotor.getVelocity();
 
     inputs.indexerSensorConnected = indexerSensor.isConnected();
-    inputs.indexerSensorTriggered = isIndexerSensorTriggered();
+    inputs.indexerSensorTriggered = indexerSensor.getProximity() < Constants.Indexer.indexerSensorMax;
     inputs.indexerSensorProximity = indexerSensor.getProximity();
 
     inputs.pickupAreaSensorConnected = pickupAreaSensor.isConnected();
-    inputs.pickupAreaSensorTriggered = isPickupAreaSensorTriggered();
+    inputs.pickupAreaSensorTriggered = pickupAreaSensor.getProximity() < Constants.Indexer.pickupAreaSensorMax;
     inputs.pickupAreaSensorProximity = pickupAreaSensor.getProximity();
   }
 
@@ -106,13 +106,4 @@ public class IndexerIONitrate implements IndexerIO {
     indexerMotor.stop(mode);
   }
 
-  @Override
-  public boolean isIndexerSensorTriggered() {
-    return indexerSensor.getProximity() < Constants.Indexer.indexerSensorMax;
-  }
-
-  @Override
-  public boolean isPickupAreaSensorTriggered() {
-    return pickupAreaSensor.getProximity() < Constants.Indexer.pickupAreaSensorMax;
-  }
 }

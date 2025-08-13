@@ -28,12 +28,4 @@ public interface IndexerIO {
   public default void setIndexerMotorVoltage(double voltage) {}
 
   public default void stopIndexerMotor(IdleMode mode) {}
-
-  public default boolean isIndexerSensorTriggered() {
-    return false;
-  }
-
-  public default boolean isPickupAreaSensorTriggered() {
-    return false;
-  }
 }

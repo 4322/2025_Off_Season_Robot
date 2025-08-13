@@ -55,7 +55,7 @@ public class EndEffector extends SubsystemBase {
         break;
       case INTAKE_ALGAE:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeIntakeVolts);
-        if (io.isAlgaeProximityDetected() || io.isCurrentDetectionPickupTriggered()) {
+        if (inputs.isAlgaeProximityDetected || isCurrentDetectionPickupTriggered()) {
           state = EndEffectorStates.HOLD_ALGAE;
           algaeHeld = true;
         }
@@ -66,7 +66,7 @@ public class EndEffector extends SubsystemBase {
         break;
       case INTAKE_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.coralIntakeVolts);
-        if (io.isCoralProximityDetected() || io.isCurrentDetectionPickupTriggered()) {
+        if (inputs.isCoralProximityDetected || isCurrentDetectionPickupTriggered()) {
           state = EndEffectorStates.HOLD_CORAL;
           coralHeld = true;
         }
@@ -93,23 +93,23 @@ public class EndEffector extends SubsystemBase {
         break;
       case RELEASE_ALGAE:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeReleaseVolts);
-        if (io.isCurrentDetectionReleaseTriggered() || !io.isAlgaeProximityDetected()) {
+        if (isCurrentDetectionReleaseTriggered() || !inputs.isAlgaeProximityDetected) {
           state = EndEffectorStates.IDLE;
           algaeHeld = false;
         }
         break;
       case RELEASE_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.coralReleaseVolts);
-        if (io.isCurrentDetectionReleaseTriggered()
-            || (!io.isCoralProximityDetected() && !io.isAlgaeProximityDetected())) {
+        if (isCurrentDetectionReleaseTriggered()
+            || (!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
         }
         break;
       case EJECT:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
-        if (io.isCurrentDetectionReleaseTriggered()
-            || (!io.isCoralProximityDetected() && !io.isAlgaeProximityDetected())) {
+        if (isCurrentDetectionReleaseTriggered()
+            || (!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
           algaeHeld = false;
@@ -168,5 +168,19 @@ public class EndEffector extends SubsystemBase {
     requestReleaseAlgae = false;
     requestReleaseCoral = false;
     requestEject = false;
+  }
+
+  
+  // Returns whether a difference in current is detected after picking up piece (low -> high
+  // current; Velocity high -> low)
+  public boolean isCurrentDetectionPickupTriggered() {
+    return false; // TODO figure out how current detection works
+  }
+
+  
+  // Returns whether a difference in current is detected after releasing a piece (high -> low
+  // current; Velocity low -> high)
+  public boolean isCurrentDetectionReleaseTriggered() {
+    return false; // TODO figure out how current detection works
   }
 }

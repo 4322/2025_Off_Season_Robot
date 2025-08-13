@@ -20,11 +20,4 @@ public interface RollersIO {
 
   public default void stopRollersMotor(IdleMode mode) {}
 
-  public default double getRollersMotorStatorCurrent() {
-    return 0.0;
-  }
-
-  public default double getRollersMotorVelocityRotationsPerSec() {
-    return 0.0;
-  }
 }

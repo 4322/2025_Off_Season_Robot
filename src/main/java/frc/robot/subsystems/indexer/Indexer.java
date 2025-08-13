@@ -62,10 +62,10 @@ public class Indexer extends SubsystemBase {
   }
 
   public boolean isCoralDetectedIndexer() {
-    return io.isIndexerSensorTriggered();
+    return inputs.indexerSensorTriggered;
   }
 
   public boolean isCoralDetectedPickupArea() {
-    return io.isPickupAreaSensorTriggered();
+    return inputs.pickupAreaSensorTriggered;
   }
 }
