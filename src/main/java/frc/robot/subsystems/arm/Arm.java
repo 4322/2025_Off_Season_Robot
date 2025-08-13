@@ -13,14 +13,14 @@ public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged armInputs = new ArmIOInputsAutoLogged();
 
-  public int setpoint = 0; // Degrees, 0 is horizontal to front of robot
+  public int setpoint; // Degrees, 0 is horizontal to front of robot
 
   public enum Safety {
     WAIT_FOR_ELEVATOR,
     MOVING_WITH_ELEVATOR,
   }
 
-  Safety safety = Safety.MOVING_WITH_ELEVATOR;
+  Safety safety = Safety.WAIT_FOR_ELEVATOR;
 
   public Arm(ArmIO ArmIO) {
     this.io = ArmIO;
@@ -38,15 +38,13 @@ public class Arm extends SubsystemBase {
         }
         break;
       case MOVING_WITH_ELEVATOR:
-        io.setPosition(Rotation2d.fromDegrees(setpoint));
-        if (setpoint >= Constants.Arm.minArmSafeAngle
-            && RobotContainer.superstructure.getElevatorHeight()
-                < Constants.Elevator.minElevatorSafeHeight) {
+        if (setpoint >= Constants.Arm.minArmSafeAngle && RobotContainer.superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeight) {
           safety = Safety.WAIT_FOR_ELEVATOR;
-        } else if ( getAngleDegrees() > Constants.Arm.maxArmSafeAngle
-            && setpoint < Constants.Arm.minArmSafeAngle) {
+        } else if (getAngleDegrees() > Constants.Arm.maxArmSafeAngle && setpoint < Constants.Arm.minArmSafeAngle) {
           safety = Safety.WAIT_FOR_ELEVATOR;
         }
+        else {
+          io.setPosition(Rotation2d.fromDegrees(setpoint));}
         break;
     }
   }
