@@ -1,20 +1,18 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
-
+import frc.robot.util.ClockUtil;
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged armInputs = new ArmIOInputsAutoLogged();
 
   public int setpoint; // Degrees, 0 is horizontal to front of robot
-
   public enum Safety {
     WAIT_FOR_ELEVATOR,
     MOVING_WITH_ELEVATOR,
@@ -33,18 +31,22 @@ public class Arm extends SubsystemBase {
 
     switch (safety) {
       case WAIT_FOR_ELEVATOR:
-        if ((Constants.Arm.minArmSafeAngle < setpoint && setpoint < Constants.Arm.maxArmSafeAngle) && (Constants.Elevator.minElevatorSafeHeight < RobotContainer.superstructure.getElevatorHeight() &&  RobotContainer.superstructure.getElevatorHeight() < Constants.Elevator.maxElevatorSafeHeight) ) {
+        if (Constants.Arm.minArmSafeAngle < setpoint && setpoint < Constants.Arm.maxArmSafeAngle
+            && Constants.Elevator.minElevatorSafeHeight < RobotContainer.superstructure.getElevatorHeight()) {
           safety = Safety.MOVING_WITH_ELEVATOR;
         }
         break;
       case MOVING_WITH_ELEVATOR:
-        if (setpoint >= Constants.Arm.minArmSafeAngle && RobotContainer.superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeight) {
+        if (setpoint >= Constants.Arm.minArmSafeAngle
+            && RobotContainer.superstructure.getElevatorHeight()
+                < Constants.Elevator.minElevatorSafeHeight) {
           safety = Safety.WAIT_FOR_ELEVATOR;
-        } else if (getAngleDegrees() > Constants.Arm.maxArmSafeAngle && setpoint < Constants.Arm.minArmSafeAngle) {
+        } else if (getAngleDegrees() > Constants.Arm.maxArmSafeAngle
+            && setpoint < Constants.Arm.minArmSafeAngle) {
           safety = Safety.WAIT_FOR_ELEVATOR;
+        } else {
+          io.setPosition(Rotation2d.fromDegrees(setpoint));
         }
-        else {
-          io.setPosition(Rotation2d.fromDegrees(setpoint));}
         break;
     }
   }
@@ -82,7 +84,7 @@ public class Arm extends SubsystemBase {
     }
   }
 
-  public void scoreAlgae(Level algaeLevel ) {
+  public void scoreAlgae(Level algaeLevel) {
     switch (algaeLevel) {
       case L1:
         setpoint = 30; // TODO: angle for L1
@@ -134,7 +136,8 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean atSetpoint() {
-   return true;
+    return ClockUtil.atReference(
+      armInputs.armPositionRad, setpoint, Constants.Arm.setpointToleranceMeters, true);
   }
 
   public void safeBargeRetract() {}

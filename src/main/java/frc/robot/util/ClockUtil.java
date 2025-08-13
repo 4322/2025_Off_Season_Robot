@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.RobotController;
 public class ClockUtil {
 
   // Private constructor so that the class cannot be instantiated
-  private ClockUtil() {}
+  private ClockUtil() {
+    
+  }
 
   // Returns the angle to the target
   public static Rotation2d getAngleToTarget(
@@ -42,6 +44,7 @@ public class ClockUtil {
     return u.getX() * v.getX() + u.getY() * v.getY();
   }
 
+  
   // Returns the FPGA timestamp in seconds
   public static double getFPGATimeSeconds() {
     return RobotController.getFPGATime() / 1.0E6;
@@ -101,4 +104,6 @@ public class ClockUtil {
     }
     return new Translation3d(x / poses.length, y / poses.length, z / poses.length);
   }
+
+  
 }

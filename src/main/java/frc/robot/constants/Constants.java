@@ -5,6 +5,7 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -85,7 +86,6 @@ public final class Constants {
     public static final double armMotorGearRatio = 4.0; // TODO: Set to actual gear ratio
     public static final double minArmSafeAngle = 45.0;
     public static final double maxArmSafeAngle = 245.0;
-
     public static final double setpointToleranceMeters = 0.01;
     public static final double supplyCurrentLimit = 40; // TODO
     public static final double statorCurrentLimit = 100; // TODO
@@ -221,7 +221,8 @@ public final class Constants {
   }
 
   public static class Elevator {
-    public static final double minElevatorSafeHeight = 45.0;
+    public static final double minElevatorSafeHeightIdle = 45.0;
+    public static final double minElevatorSafeHeightIntake = 45.0;
     public static final double maxElevatorSafeHeight = 245.0;
   } // TODO placeholder values
 }
