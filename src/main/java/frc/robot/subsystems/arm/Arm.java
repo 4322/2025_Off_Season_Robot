@@ -1,16 +1,20 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
+import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.util.ClockUtil;
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged armInputs = new ArmIOInputsAutoLogged();
+  private Superstructure superstructure;
 
   public int setpoint; // Degrees, 0 is horizontal to front of robot
 
@@ -67,6 +71,8 @@ public class Arm extends SubsystemBase {
           //TODO: Figure out other cases
           ____
           //TODO: Figure out how to make tolerence to work with the logic aka where or how to put it
+
+          //TODO: Figure out when to swtitch between the two min heights
           ____
 
 
@@ -75,19 +81,20 @@ public class Arm extends SubsystemBase {
 
         */
       case WAIT_FOR_ELEVATOR:
-        if (true /*Placeholder:If requested idle */) {}
-        if (Constants.Elevator.minElevatorSafeHeightIdle
-            <= RobotContainer.superstructure.getElevatorHeight()) {
+        if (superstructure.getState() == Superstates.IDLE) { //Maybe have a prev state?
+          safety = Safety.MOVING_WITH_ELEVATOR;
+        }
+        else if (Constants.Elevator.minElevatorSafeHeightIdle
+            <= superstructure.getElevatorHeight()) {
           safety = Safety.MOVING_WITH_ELEVATOR;
         }
         break;
       case MOVING_WITH_ELEVATOR:
         if (setpoint >= Constants.Arm.minArmSafeAngle
-            && RobotContainer.superstructure.getElevatorHeight()
+            && superstructure.getElevatorHeight()
                 < Constants.Elevator.minElevatorSafeHeightIdle) {
           safety = Safety.WAIT_FOR_ELEVATOR;
-        } else if (getAngleDegrees() > Constants.Arm.maxArmSafeAngle
-            && setpoint < Constants.Arm.minArmSafeAngle) {
+        } else if (getAngleDegrees() > Constants.Arm.minArmSafeAngle && setpoint < Constants.Arm.minArmSafeAngle) {
           safety = Safety.WAIT_FOR_ELEVATOR;
         } else {
           io.setPosition(Rotation2d.fromDegrees(setpoint));
