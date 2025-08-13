@@ -1,5 +1,7 @@
 package frc.robot.constants;
 
+import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
@@ -78,80 +80,22 @@ public final class Constants {
   }
 
   public static class Arm {
-    public static final double idlePositionDeg = 0.0; // TODO: Set to actual idle position
-    public static final double algaeHoldPositionDeg = 45.0; // TODO
-    public static final double coralHoldPositionDeg = 90.0; // TODO
-    public static final double algaeGroundPositionDeg = 30.0; // TODO
-    public static final double algaeReefPositionDeg = 60.0; // TODO
-    public static final double scoreAlgaePositionDeg = 75.0; // TODO
+    public static final int armMotorId = 0; // TODO: Set to actual motor ID
+    public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
+    public static final double armMotorGearRatio = 4.0; // TODO: Set to actual gear ratio
+    public static final double minArmSafeAngle = 45.0;
+    public static final double maxArmSafeAngle = 245.0;
 
     public static final double setpointToleranceMeters = 0.01;
-
     public static final double supplyCurrentLimit = 40; // TODO
     public static final double statorCurrentLimit = 100; // TODO
-
-    /*public static final int leftMotorID = 3; // follower motor
-      public static final int rightMotorID = 2; // leader motor
-
-      public static final double gearRatio = 4.0;
-      public static final double sprocketDiameter = Units.inchesToMeters(1.751); // pitch diameter
-
-      public static final double setpointToleranceMeters = 0.01;
-
-
-      public static final double peakForwardVoltage = 11.5;
-      public static final double peakReverseVoltage = -11.5;
-
-      public static final InvertedValue rightMotorInversion = InvertedValue.Clockwise_Positive;
-
-      // L1 height gains
-      public static final double kS0 = 0;
-      public static final double kP0 = 2.0;
-      public static final double kD0 = 0.05;
-
-      // L2 height gains
-      public static final double kS1 = 0.4;
-      public static final double kP1 = 2.0;
-      public static final double kD1 = 0;
-
-      // L3 height gains
-      public static final double kS2 = 0;
-      public static final double kP2 = 2.0;
-      public static final double kD2 = 0.05;
-      public static final double kG2 = 0.40;
-
-      public static final double mechanismMaxAccel = 22; // Used for motion magic
-      public static final double mechanismMaxCruiseVel = 3.2; // Used for motion magic
-      public static final double motionMagicJerk = 0;
-
-      public static final double homingVoltage = -1.0;
-      public static final double homingVelocityThreshold = 0.01;
-      public static final double homingThresholdSec = 0.25;
-
-      public static final double jiggleHeight = 0.05;
-    }
-
-    public static class EndEffector {
-      public static final int feederMotorID = 4;
-      public static final int frontBeamBreakID = 8;
-      public static final int backBeamBreakID = 9;
-
-      public static final double supplyCurrentLimit = 40;
-      public static final double statorCurrentLimit = 100;
-      public static final InvertedValue motorInversion = InvertedValue.Clockwise_Positive;
-
-      public static final double proximityDetectionThreshold = 0.075;
-
-      public static final double feedVoltage = 4;
-      public static final double secondFeedVoltage = 1.25;
-      public static final double thirdFeedVoltage = -1.0;
-
-      public static final double shootL1Voltage = 3;
-      public static final double shootL23Voltage = 4;
-      public static final double spitVoltage = -4;
-
-      public static final double shootWaitTimerSec = 0.1;
-      public static final double pullBackOverrideTimerSec = 1.0; */
+    public static final ElectricalLimitSettings armElectricalLimitSettings =
+        new ElectricalLimitSettings();
+    public static final PIDSettings armMotorGains = new PIDSettings();
+    public static final double kP =
+        0; // TODO: Ask if I need multipule PID values depending on the Level
+    public static final double kI = 0;
+    public static final double kD = 0;
   }
 
   // TODO all of these are placeholder values
@@ -192,6 +136,7 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // InvertMode.kInverted or InvertMode.kNotInverted
+    public static final double ejectVolts = 0;
   }
 
   public static class Deployer {
@@ -274,4 +219,9 @@ public final class Constants {
     public static final double indexerRetractTimeoutSeconds = 3.0;
     public static final double pickupAreaRetractTimeoutSeconds = 3.0;
   }
+
+  public static class Elevator {
+    public static final double minElevatorSafeHeight = 45.0;
+    public static final double maxElevatorSafeHeight = 245.0;
+  } // TODO placeholder values
 }

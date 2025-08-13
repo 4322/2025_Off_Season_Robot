@@ -1,59 +1,57 @@
 package frc.robot.subsystems.arm;
 
-import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.constants.Constants;
+import frc.robot.subsystems.Superstructure.Level;
+
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
+  public ArmIOInputsAutoLogged armInputs = new ArmIOInputsAutoLogged();
 
-  private static final double SAFE_ARM_ANGLE = 45.0;
-  private static final double MIN_SAFE_ARM_ANGLE = 20.0;
-  private static final double MAX_SAFE_ARM_ANGLE = 20.0;
+  public int setpoint = 0; // Degrees, 0 is horizontal to front of robot
 
-  /* double currentPosition = arm.getPositionDeg();
-  double requestedPosition = requestedPositionDeg.get();
-
-  // First check if arm can move optimized
-  if (currentPosition < 0) {
-    if (requestedPosition > 0) {
-      if (Math.abs(requestedPosition - currentPosition) > 180) {
-        requestedPosition -= 360;
-      }
-    }
-  } else if (currentPosition > 0) {
-    if (requestedPosition < 0) {
-      if (Math.abs(requestedPosition - currentPosition) > 180) {
-        requestedPosition += 360;
-      }
-    }
+  public enum Safety {
+    WAIT_FOR_ELEVATOR,
+    MOVING_WITH_ELEVATOR,
   }
 
-  if (requestedPosition > 270) {
-    requestedPosition -= 360;
-  } else if (requestedPosition < -270) {
-    requestedPosition += 360;
-  } */
+  Safety safety = Safety.MOVING_WITH_ELEVATOR;
+
   public Arm(ArmIO ArmIO) {
     this.io = ArmIO;
   }
 
-  public Arm() {
-    // TODO Auto-generated constructor stub
+  @Override
+  public void periodic() {
+
+    RobotContainer.superstructure.getElevatorHeight();
+
+    switch (safety) {
+      case WAIT_FOR_ELEVATOR:
+        if ((Constants.Arm.minArmSafeAngle < setpoint && setpoint < Constants.Arm.maxArmSafeAngle) && (Constants.Elevator.minElevatorSafeHeight < RobotContainer.superstructure.getElevatorHeight() &&  RobotContainer.superstructure.getElevatorHeight() < Constants.Elevator.maxElevatorSafeHeight) ) {
+          safety = Safety.MOVING_WITH_ELEVATOR;
+        }
+        break;
+      case MOVING_WITH_ELEVATOR:
+        io.setPosition(Rotation2d.fromDegrees(setpoint));
+        if (setpoint >= Constants.Arm.minArmSafeAngle
+            && RobotContainer.superstructure.getElevatorHeight()
+                < Constants.Elevator.minElevatorSafeHeight) {
+          safety = Safety.WAIT_FOR_ELEVATOR;
+        } else if ( getAngleDegrees() > Constants.Arm.maxArmSafeAngle
+            && setpoint < Constants.Arm.minArmSafeAngle) {
+          safety = Safety.WAIT_FOR_ELEVATOR;
+        }
+        break;
+    }
   }
 
-  public enum Safety {
-    SAFE,
-    LOWERING,
-    WAIT_FOR_ELEVATOR,
-    MOVING_WITH_ELEVATOR,
-    IDLE
-  }
-
-  Safety safety = Safety.SAFE;
-
-  public void idle() {
-    Nitrate.class.cast(io).setVoltage(0.0);
-  }
+  public void idle() {}
 
   public void algaeHold() {}
 
@@ -61,28 +59,78 @@ public class Arm extends SubsystemBase {
 
   public void algaeGround() {}
 
-  public void algaeReef(/*requestedLevel*/ ) {}
+  public void algaeReef(Level algaeLevel) {
+    switch (algaeLevel) {
+      case L1:
+        setpoint = 30; // TODO: angle for L1
+        break;
+      case L2:
+        setpoint = 60; // TODO: angle for L2
+        break;
+      case L3:
+        setpoint = 90; // TODO: angle for L3
+        break;
+      case L4:
+        setpoint = 120; // TODO: angle for L4
+        break;
+    }
+  }
 
-  public void scoreAlgae(/*ArmState scoringSide*/ ) {}
+  public void scoreAlgae() {
+    
+  }
 
-  public void prescoreCoral(/*ArmState requestedLevel*/ ) {}
+  public void prescoreCoral(Level coralLevel) {
+    switch (coralLevel) {
+      case L1:
+        setpoint = 30; // Example angle for L1
+        break;
+      case L2:
+        setpoint = 60; // Example angle for L2
+        break;
+      case L3:
+        setpoint = 90; // Example angle for L3
+        break;
+      case L4:
+        setpoint = 120; // Example angle for L4
+        break;
+    }
+  }
 
-  public void scoreCoral(/*ArmState requestedLevel*/ ) {}
+  public void scoreCoral(Level coralLevel) {
+    switch (coralLevel) {
+      case L1:
+        setpoint = 30; // Example angle for L1
+        break;
+      case L2:
+        setpoint = 60; // Example angle for L2
+        break;
+      case L3:
+        setpoint = 90; // Example angle for L3
+        break;
+      case L4:
+        setpoint = 120; // Example angle for L4
+        break;
+    }
+  }
 
   public boolean atSetpoint() {
-    // TODO: Implement logic to check if arm is at setpoint
-    return true;
+   return true;
   }
 
   public void safeBargeRetract() {}
 
   public void setHome() {}
 
-  public void setNeutralMode(/*ArmState mode*/ ) {}
+  public void setNeutralMode(IdleMode idlemode) {
+    io.stopArmMotor(idlemode);
+  }
 
   public void climbing() {}
 
   public void eject() {}
 
-  public void getAngleDegrees() {}
+  public double getAngleDegrees() {
+    return armInputs.armPositionRad;
+  }
 }

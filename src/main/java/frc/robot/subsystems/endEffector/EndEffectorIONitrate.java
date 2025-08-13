@@ -119,16 +119,16 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     endEffectorMotor.stop(idleMode);
   }
 
-  @Override
-  // Returns whether a difference in current is detected after picking up piece (high -> low
-  // current)
+  @Override // TODO maybe move current detection logic to subsystem periodic?
+  // Returns whether a difference in current is detected after picking up piece (low -> high
+  // current; Velocity high -> low)
   public boolean isCurrentDetectionPickupTriggered() {
     return false; // TODO figure out how current detection works
   }
 
   @Override
-  // Returns whether a difference in current is detected after releasing a piece (low -> high
-  // current)
+  // Returns whether a difference in current is detected after releasing a piece (high -> low
+  // current; Velocity low -> high)
   public boolean isCurrentDetectionReleaseTriggered() {
     return false; // TODO figure out how current detection works
   }

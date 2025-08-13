@@ -39,16 +39,18 @@ public interface EndEffectorIO {
 
   public default void stopEndEffectorMotor(IdleMode idleMode) {}
 
+  // TODO rename this to something like is coral detected pickup; Move these to End Effector
+  // subsystem
   public default boolean isCurrentDetectionPickupTriggered() {
-    return false;
-  }
+    return true;
+  } // TODO make this have logic added return so it would build
 
   public default boolean isCurrentDetectionReleaseTriggered() {
-    return false;
+    return true;
   }
 
   public default boolean isCoralProximityDetected() {
-    return false;
+    return true;
   }
 
   public default boolean isAlgaeProximityDetected() {

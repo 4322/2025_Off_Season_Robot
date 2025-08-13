@@ -14,6 +14,7 @@ public class EndEffector extends SubsystemBase {
   private boolean requestIntakeCoral;
   private boolean requestReleaseAlgae;
   private boolean requestReleaseCoral;
+  private boolean requestEject;
 
   private boolean coralHeld = false;
   private boolean algaeHeld = false;
@@ -25,7 +26,8 @@ public class EndEffector extends SubsystemBase {
     HOLD_ALGAE,
     HOLD_CORAL,
     RELEASE_ALGAE,
-    RELEASE_CORAL
+    RELEASE_CORAL,
+    EJECT
   }
 
   private EndEffectorStates state = EndEffectorStates.IDLE;
@@ -77,12 +79,16 @@ public class EndEffector extends SubsystemBase {
         io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeHoldVolts);
         if (requestReleaseAlgae) {
           state = EndEffectorStates.RELEASE_ALGAE;
+        } else if (requestEject) {
+          state = EndEffectorStates.EJECT;
         }
         break;
       case HOLD_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.coralHoldVolts);
         if (requestReleaseCoral) {
           state = EndEffectorStates.RELEASE_CORAL;
+        } else if (requestEject) {
+          state = EndEffectorStates.EJECT;
         }
         break;
       case RELEASE_ALGAE:
@@ -98,6 +104,15 @@ public class EndEffector extends SubsystemBase {
             || (!io.isCoralProximityDetected() && !io.isAlgaeProximityDetected())) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
+        }
+        break;
+      case EJECT:
+        io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
+        if (io.isCurrentDetectionReleaseTriggered()
+            || (!io.isCoralProximityDetected() && !io.isAlgaeProximityDetected())) {
+          state = EndEffectorStates.IDLE;
+          coralHeld = false;
+          algaeHeld = false;
         }
         break;
     }
@@ -123,6 +138,15 @@ public class EndEffector extends SubsystemBase {
     requestReleaseAlgae = true;
   }
 
+  public void releaseCoral() {
+    unsetAllRequests();
+    requestReleaseCoral = true;
+  }
+
+  public void eject() {
+    requestEject = true;
+  }
+
   public boolean hasAlgae() {
     return algaeHeld;
   }
@@ -135,11 +159,14 @@ public class EndEffector extends SubsystemBase {
     io.stopEndEffectorMotor(mode);
   }
 
+  public void algaeHold() {} // TODO create logic
+
   private void unsetAllRequests() {
     requestIdle = false;
     requestIntakeAlgae = false;
     requestIntakeCoral = false;
     requestReleaseAlgae = false;
     requestReleaseCoral = false;
+    requestEject = false;
   }
 }
