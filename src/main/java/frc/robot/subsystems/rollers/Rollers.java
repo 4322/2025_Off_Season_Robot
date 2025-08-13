@@ -9,6 +9,8 @@ public class Rollers extends SubsystemBase {
   private RollersIO io;
   private RollersIOInputsAutoLogged inputs = new RollersIOInputsAutoLogged();
 
+  private boolean isCoralPickupDetected = false;
+
   private Debouncer currentDetectionDebouncer =
       new Debouncer(Constants.Rollers.currentDetectionDebounceTimeSeconds);
   private Debouncer velocityDetectionDebouncer =
@@ -31,10 +33,12 @@ public class Rollers extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // TODO make custom solution for this
+    isCoralPickupDetected = currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps > Constants.Rollers.currentDetectionStallCurrentAmps) && 
+           velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec < Constants.Rollers.velocityDetectionStallRotationsPerSec);
     io.updateInputs(inputs);
-    Logger.processInputs("Rollers", inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
-    Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected());
+    Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected);
   }
 
   public void feed() {
@@ -63,7 +67,6 @@ public class Rollers extends SubsystemBase {
   }
 
   public boolean isCoralPickupDetected() {
-    return currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps > Constants.Rollers.currentDetectionStallCurrentAmps) && 
-           velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec < Constants.Rollers.velocityDetectionStallRotationsPerSec);
+    return isCoralPickupDetected;
   }
 }
