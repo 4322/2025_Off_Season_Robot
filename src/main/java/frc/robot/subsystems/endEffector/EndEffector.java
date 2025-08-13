@@ -170,8 +170,6 @@ public class EndEffector extends SubsystemBase {
     io.stopEndEffectorMotor(mode);
   }
 
-  public void algaeHold() {} // TODO create logic
-
   private void unsetAllRequests() {
     requestIdle = false;
     requestIntakeAlgae = false;
