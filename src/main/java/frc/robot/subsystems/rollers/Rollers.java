@@ -35,9 +35,6 @@ public class Rollers extends SubsystemBase {
     Logger.processInputs("Rollers", inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
     Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected());
-
-    // Checks current in here, sets coralDetected depending on threshold
-    // With io.getMotorStatorCurrent() and io.getRollersMotorVelocityRotationsPerSec()
   }
 
   public void feed() {

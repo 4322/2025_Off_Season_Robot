@@ -6,6 +6,7 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
@@ -34,6 +35,7 @@ public class DeployerIONitrate implements DeployerIO {
           null);
     }
 
+    /* TODO uncomment if we use external encoder
     deployerMotorEncoder = new Canandmag(Constants.Deployer.deployerMotorEncoderId);
     configEncoder();
     CanandmagSettings deployerMotorEncoderConfigStatus =
@@ -45,6 +47,7 @@ public class DeployerIONitrate implements DeployerIO {
               + " error (Deployer Motor Encoder); Did not receive settings",
           null);
     }
+    */
   }
 
   private void configMotor() {
@@ -70,6 +73,7 @@ public class DeployerIONitrate implements DeployerIO {
         Constants.Deployer.motorDeploykP,
         Constants.Deployer.motorDeploykI,
         Constants.Deployer.motorDeploykD);
+    deployerMotorPIDSettingsDeploy.setMotionProfileMode(MotionProfileMode.kTrapezoidal);
     deployerMotorPIDSettingsDeploy.setGravitationalFeedforward(
         Constants.Deployer.motorDeployGravitationalFeedforward); // TODO is this kG value?
     deployerMotorConfig.setPIDSettings(deployerMotorPIDSettingsDeploy, PIDConfigSlot.kSlot0);
@@ -79,6 +83,7 @@ public class DeployerIONitrate implements DeployerIO {
         Constants.Deployer.motorRetractkP,
         Constants.Deployer.motorRetractkI,
         Constants.Deployer.motorRetractkD);
+    deployerMotorPIDSettingsRetract.setMotionProfileMode(MotionProfileMode.kTrapezoidal);
     deployerMotorConfig.setPIDSettings(deployerMotorPIDSettingsRetract, PIDConfigSlot.kSlot1);
 
     // TODO Figure out what this stuff is
@@ -91,10 +96,12 @@ public class DeployerIONitrate implements DeployerIO {
 
   }
 
+
+  /* TODO uncomment if we use external encoder
   private void configEncoder() {
-    // TODO figure out what actually needs to be included here
     deployerMotorEncoderConfig.setInvertDirection(Constants.Deployer.motorEncoderInverted);
   }
+  */
 
   @Override
   public void updateInputs(DeployerIOInputs inputs) {
@@ -106,11 +113,13 @@ public class DeployerIONitrate implements DeployerIO {
     inputs.deployerMotorSpeedRotationsPerSec = deployerMotor.getVelocity();
     inputs.deployerMotorAppliedVolts = deployerMotor.getBusVoltageFrame().getValue();
 
+    /* TODO uncomment if we use external encoder
     inputs.deployerMotorEncoderConnected = deployerMotorEncoder.isConnected();
     inputs.deployerMotorEncoderSpeedRotationsPerSec = deployerMotorEncoder.getVelocity();
     inputs.deployerMotorEncoderPositionRotations = deployerMotorEncoder.getPosition();
     inputs.deployerMotorEncoderAbsolutePosition = deployerMotorEncoder.getAbsPosition();
     inputs.deployerMotorEncoderTempCelcius = deployerMotorEncoder.getTemperature();
+    */
   }
 
   @Override
@@ -121,10 +130,10 @@ public class DeployerIONitrate implements DeployerIO {
           PIDConfigSlot.kSlot0,
           rotations * Constants.Deployer.motorGearRatio,
           0.0,
-          false); // TODO motion profiling? Feedforward?
+          true);
     } else {
       deployerMotor.setPIDPosition(
-          PIDConfigSlot.kSlot1, rotations * Constants.Deployer.motorGearRatio, 0.0, false);
+          PIDConfigSlot.kSlot1, rotations * Constants.Deployer.motorGearRatio, 0.0, true);
     }
   }
 
