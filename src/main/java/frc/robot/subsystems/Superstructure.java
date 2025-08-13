@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
@@ -10,6 +8,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
+import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
 
@@ -157,7 +156,7 @@ public class Superstructure extends SubsystemBase {
         // TODO
         break;
       case ALGAE_PRESCORE:
-        arm.scoreAlgae(algaeLevel);
+        arm.scoreAlgae();
         if (!requestAlgaePrescore) {
           state = Superstates.ALGAE_IDLE;
         } else if (requestAlgaeScore) {

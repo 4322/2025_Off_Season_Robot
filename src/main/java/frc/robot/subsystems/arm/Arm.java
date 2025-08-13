@@ -1,13 +1,10 @@
 package frc.robot.subsystems.arm;
 
-import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
 
@@ -16,6 +13,7 @@ public class Arm extends SubsystemBase {
   public ArmIOInputsAutoLogged armInputs = new ArmIOInputsAutoLogged();
 
   public int setpoint; // Degrees, 0 is horizontal to front of robot
+
   public enum Safety {
     WAIT_FOR_ELEVATOR,
     MOVING_WITH_ELEVATOR,
@@ -33,8 +31,8 @@ public class Arm extends SubsystemBase {
     RobotContainer.superstructure.getElevatorHeight();
 
     switch (safety) {
-      /*Notes:
-         - There are 2 min elevator heights 
+        /*Notes:
+         - There are 2 min elevator heights
           > Idle
           > Floor Pick up
           Im guessing that there will be 2 if statements and it detects weither it was requested or not
@@ -70,17 +68,16 @@ public class Arm extends SubsystemBase {
           ____
           //TODO: Figure out how to make tolerence to work with the logic aka where or how to put it
           ____
-          
+
 
 
 
 
         */
       case WAIT_FOR_ELEVATOR:
-      if (true /*Placeholder:If requested idle */){
-
-      }
-      if (Constants.Elevator.minElevatorSafeHeightIdle <= RobotContainer.superstructure.getElevatorHeight()) {
+        if (true /*Placeholder:If requested idle */) {}
+        if (Constants.Elevator.minElevatorSafeHeightIdle
+            <= RobotContainer.superstructure.getElevatorHeight()) {
           safety = Safety.MOVING_WITH_ELEVATOR;
         }
         break;
@@ -132,9 +129,7 @@ public class Arm extends SubsystemBase {
     }
   }
 
-  public void scoreAlgae() {
-    setpoint = 120; // TODO:
-  }
+  public void scoreAlgae() {}
 
   public void prescoreCoral(Level coralLevel) {
     switch (coralLevel) {
@@ -172,7 +167,7 @@ public class Arm extends SubsystemBase {
 
   public boolean atSetpoint() {
     return ClockUtil.atReference(
-      armInputs.armPositionRad, setpoint, Constants.Arm.setpointToleranceMeters, true);
+        armInputs.armPositionRad, setpoint, Constants.Arm.setpointToleranceMeters, true);
   }
 
   public void safeBargeRetract() {}
