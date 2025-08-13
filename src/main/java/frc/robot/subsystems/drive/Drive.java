@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,6 +29,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
+  // Values for Cu60 DCMotor specs come from https://docs.reduxrobotics.com/cu60/specifications
   private static final RobotConfig pathPlannerConfig =
       new RobotConfig(
           Constants.PathPlanner.robotMassKg,
@@ -36,7 +38,8 @@ public class Drive extends SubsystemBase {
               DrivetrainConstants.frontLeft.driveWheelRadius,
               DrivetrainConstants.maxSpeedAt12Volts,
               Constants.PathPlanner.wheelCOF,
-              DCMotor.getKrakenX60(1)
+              new DCMotor(
+                      12.0, 7.3, 440.0, 2.0, Units.rotationsPerMinuteToRadiansPerSecond(6780), 1)
                   .withReduction(DrivetrainConstants.frontLeft.driveMotorGearRatio),
               DrivetrainConstants.frontLeft
                   .driveElectricalLimitSettings
@@ -98,16 +101,19 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  /** Only to be used in commands which directly control drive subsystem such as DriveManual or DriveToPoint.
-   * <p> For commands requiring auto rotate capability or switch back to regular field relative driving, use drive mode request methods instead.
+  /**
+   * Only to be used in commands which directly control drive subsystem such as DriveManual or
+   * DriveToPoint.
+   *
+   * <p>For commands requiring auto rotate capability or switch back to regular field relative
+   * driving, use drive mode request methods instead.
    */
   public void runVelocity(ChassisSpeeds speeds, boolean fieldRelative) {
     if (fieldRelative) {
-      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-          speeds,
-          Robot.alliance == Alliance.Red
-              ? getRotation().plus(Rotation2d.kPi)
-              : getRotation());
+      speeds =
+          ChassisSpeeds.fromFieldRelativeSpeeds(
+              speeds,
+              Robot.alliance == Alliance.Red ? getRotation().plus(Rotation2d.kPi) : getRotation());
     }
 
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
@@ -125,16 +131,19 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", setpointStates);
   }
 
-  /** Only to be used in commands which directly control drive subsystem such as DriveManual or DriveToPoint.
-   * <p> For commands requiring auto rotate capability or switch back to regular field relative driving, use drive mode request methods instead.
+  /**
+   * Only to be used in commands which directly control drive subsystem such as DriveManual or
+   * DriveToPoint.
+   *
+   * <p>For commands requiring auto rotate capability or switch back to regular field relative
+   * driving, use drive mode request methods instead.
    */
   public void runOpenLoop(ChassisSpeeds speeds, boolean fieldRelative) {
     if (fieldRelative) {
-      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-          speeds,
-          Robot.alliance == Alliance.Red
-              ? getRotation().plus(Rotation2d.kPi)
-              : getRotation());
+      speeds =
+          ChassisSpeeds.fromFieldRelativeSpeeds(
+              speeds,
+              Robot.alliance == Alliance.Red ? getRotation().plus(Rotation2d.kPi) : getRotation());
     }
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);

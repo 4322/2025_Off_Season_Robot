@@ -14,10 +14,7 @@ import frc.robot.util.ClockUtil;
 public class DriveManual extends Command {
   private Drive drive;
   private PIDController autoRotateController =
-      new PIDController(
-          Constants.Drive.autoRotatekP,
-          0,
-          Constants.Drive.autoRotatekD);
+      new PIDController(Constants.Drive.autoRotatekP, 0, Constants.Drive.autoRotatekD);
 
   public DriveManual(Drive drive) {
     this.drive = drive;
@@ -65,10 +62,11 @@ public class DriveManual extends Command {
         drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
         break;
       case AUTO_ROTATE:
-        rot = autoRotateController.calculate(drive.getRotation().getRadians(), drive.getTargetAngleRad());
+        rot =
+            autoRotateController.calculate(
+                drive.getRotation().getRadians(), drive.getTargetAngleRad());
         drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
         break;
     }
-    
   }
 }
