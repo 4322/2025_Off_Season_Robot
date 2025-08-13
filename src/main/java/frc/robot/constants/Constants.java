@@ -112,6 +112,8 @@ public final class Constants {
     public static final double algaeReleaseVolts = 3.0;
     public static final double coralReleaseVolts = 3.0;
 
+    public static final double ejectVolts = 0;
+
     public static final double currentDetectionThreshold = 0.0;
 
     public static final double motorBusCurrentLimit = 0;
@@ -121,6 +123,7 @@ public final class Constants {
     public static final double sensorCoralProximityThreshold = 0;
     public static final double sensorAlgaeProximityThreshold = 0;
 
+    public static final boolean useSensorColor = false; // TODO change this when we get color tuned
     // TODO tune these
     // For algae
     public static final double sensorGreenDetectGreenLower = 120;
@@ -136,8 +139,15 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // InvertMode.kInverted or InvertMode.kNotInverted
-    public static final double ejectVolts = 0;
-    public static final boolean useSensorColor = false;
+    
+    // TODO tune these
+    public static final double currentDetectionDebounceTimeSeconds = 0.25; // Time for the current to spike and stay there before detection is triggered
+    public static final double velocityDetectionDebounceTimeSeconds = 0.25; // Time for veleocity to spike and stay there before detection is triggered
+    public static final double currentDetectionStallCurrentAmps = 0;
+    public static final double velocityDetectionStallSpeedRotationsPerSec = 0;
+    
+    public static final double currentDetectionNormalCurrentAmps = 0;
+    public static final double velocityDetectionNormalSpeedRotationsPerSec = 0;
   }
 
   public static class Deployer {

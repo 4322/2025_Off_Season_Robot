@@ -1,6 +1,8 @@
 package frc.robot.subsystems.endEffector;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import org.littletonrobotics.junction.Logger;
@@ -32,6 +34,13 @@ public class EndEffector extends SubsystemBase {
 
   private EndEffectorStates state = EndEffectorStates.IDLE;
 
+  private Debouncer currentDetectionDebouncer =
+      new Debouncer(Constants.EndEffector.currentDetectionDebounceTimeSeconds);
+  private Debouncer velocityDetectionDebouncer =
+      new Debouncer(Constants.EndEffector.velocityDetectionDebounceTimeSeconds);
+  
+
+
   public EndEffector(EndEffectorIO io) {
     this.io = io;
   }
@@ -55,7 +64,7 @@ public class EndEffector extends SubsystemBase {
         break;
       case INTAKE_ALGAE:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeIntakeVolts);
-        if (inputs.isAlgaeProximityDetected || isCurrentDetectionPickupTriggered()) {
+        if (inputs.isAlgaeProximityDetected || isPiecePickupDetected()) {
           state = EndEffectorStates.HOLD_ALGAE;
           algaeHeld = true;
         }
@@ -66,7 +75,7 @@ public class EndEffector extends SubsystemBase {
         break;
       case INTAKE_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.coralIntakeVolts);
-        if (inputs.isCoralProximityDetected || isCurrentDetectionPickupTriggered()) {
+        if (inputs.isCoralProximityDetected || isPiecePickupDetected()) {
           state = EndEffectorStates.HOLD_CORAL;
           coralHeld = true;
         }
@@ -93,14 +102,14 @@ public class EndEffector extends SubsystemBase {
         break;
       case RELEASE_ALGAE:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeReleaseVolts);
-        if (isCurrentDetectionReleaseTriggered() || !inputs.isAlgaeProximityDetected) {
+        if (isPieceReleaseDetected() || !inputs.isAlgaeProximityDetected) {
           state = EndEffectorStates.IDLE;
           algaeHeld = false;
         }
         break;
       case RELEASE_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.coralReleaseVolts);
-        if (isCurrentDetectionReleaseTriggered()
+        if (isPieceReleaseDetected()
             || (!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
@@ -108,7 +117,7 @@ public class EndEffector extends SubsystemBase {
         break;
       case EJECT:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
-        if (isCurrentDetectionReleaseTriggered()
+        if (isPieceReleaseDetected()
             || (!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
@@ -173,14 +182,14 @@ public class EndEffector extends SubsystemBase {
   
   // Returns whether a difference in current is detected after picking up piece (low -> high
   // current; Velocity high -> low)
-  public boolean isCurrentDetectionPickupTriggered() {
-    return false; // TODO figure out how current detection works
+  public boolean isPiecePickupDetected() {
+    return currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps > Constants.EndEffector.currentDetectionStallCurrentAmps) && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec < Constants.EndEffector.velocityDetectionStallSpeedRotationsPerSec);
   }
 
   
   // Returns whether a difference in current is detected after releasing a piece (high -> low
   // current; Velocity low -> high)
-  public boolean isCurrentDetectionReleaseTriggered() {
-    return false; // TODO figure out how current detection works
+  public boolean isPieceReleaseDetected() {
+    return currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps < Constants.EndEffector.currentDetectionNormalCurrentAmps) && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec > Constants.EndEffector.velocityDetectionNormalSpeedRotationsPerSec);
   }
 }
