@@ -78,15 +78,8 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = 20; // TODO:
   }
 
-  public void algaeReef(Level algaeLevel) {
-    switch (algaeLevel) {
-      case L2:
-        requestedSetpoint = 90; // TODO: angle for L2
-        break;
-      case L3:
-        requestedSetpoint = 90; // TODO: angle for L3
-        break;
-    }
+  public void algaeReef() {
+      requestedSetpoint = Constants.Arm.descoringAngleDegAlgae; // TODO: angle for L2
   }
 
   public void scoreAlgae() {}
@@ -136,13 +129,13 @@ public class Arm extends SubsystemBase {
       requestedSetpoint = Constants.Arm.scoringL1AngleDegCoral; // Example angle for L1
         break;
       case L2:
-        requestedSetpoint = 60; // Example angle for L2
+        requestedSetpoint = Constants.Arm.scoringL2AngleDegCoral; // Example angle for L2
         break;
       case L3:
-        requestedSetpoint = 90; // Example angle for L3
+        requestedSetpoint = Constants.Arm.scoringL3AngleDegCoral; // Example angle for L3
         break;
       case L4:
-        requestedSetpoint = 120; // Example angle for L4
+        requestedSetpoint = Constants.Arm.scoringL4AngleDegCoral; // Example angle for L4
         break;
     }
   }
