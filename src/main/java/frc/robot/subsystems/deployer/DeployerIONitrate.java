@@ -128,7 +128,7 @@ public class DeployerIONitrate implements DeployerIO {
   }
 
   @Override
-  public void setDeployerMotorPosition(double rotations) {
+  public void setDeployerMotorPosition(double rotations) { // TODO update this to work like Ellie's code
     // TODO figure out if deploy is greater than or less than current rotations
     if (rotations != previousRequestedPosition) {
       deployerMotorRequestedPositionRotations = rotations;
