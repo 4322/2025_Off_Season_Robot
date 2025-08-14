@@ -18,15 +18,18 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.DrivetrainConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
+  // Values for Cu60 DCMotor specs come from https://docs.reduxrobotics.com/cu60/specifications
   private static final RobotConfig pathPlannerConfig =
       new RobotConfig(
           Constants.PathPlanner.robotMassKg,
@@ -35,7 +38,8 @@ public class Drive extends SubsystemBase {
               DrivetrainConstants.frontLeft.driveWheelRadius,
               DrivetrainConstants.maxSpeedAt12Volts,
               Constants.PathPlanner.wheelCOF,
-              DCMotor.getKrakenX60(1)
+              new DCMotor(
+                      12.0, 7.3, 440.0, 2.0, Units.rotationsPerMinuteToRadiansPerSecond(6780), 1)
                   .withReduction(DrivetrainConstants.frontLeft.driveMotorGearRatio),
               DrivetrainConstants.frontLeft
                   .driveElectricalLimitSettings
@@ -48,6 +52,13 @@ public class Drive extends SubsystemBase {
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
+  private ManualDriveMode manualDriveMode = ManualDriveMode.FIELD_RELATIVE;
+  private double targetAutoRotateAngleRad = 0.0;
+
+  public enum ManualDriveMode {
+    FIELD_RELATIVE,
+    AUTO_ROTATE
+  }
 
   public Drive(
       GyroIO gyroIO,
@@ -65,8 +76,8 @@ public class Drive extends SubsystemBase {
     AutoBuilder.configure(
         this::getPose,
         this::resetPose,
-        this::getChassisSpeeds,
-        this::runVelocity,
+        this::getRobotRelativeSpeeds,
+        (speeds) -> runVelocity(speeds, false),
         new PPHolonomicDriveController(
             new PIDConstants(
                 Constants.PathPlanner.translationkP, 0.0, Constants.PathPlanner.translationkD),
@@ -90,7 +101,21 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  public void runVelocity(ChassisSpeeds speeds) {
+  /**
+   * Only to be used in commands which directly control drive subsystem such as DriveManual or
+   * DriveToPoint.
+   *
+   * <p>For commands requiring auto rotate capability or switch back to regular field relative
+   * driving, use drive mode request methods instead.
+   */
+  public void runVelocity(ChassisSpeeds speeds, boolean fieldRelative) {
+    if (fieldRelative) {
+      speeds =
+          ChassisSpeeds.fromFieldRelativeSpeeds(
+              speeds,
+              Robot.alliance == Alliance.Red ? getRotation().plus(Rotation2d.kPi) : getRotation());
+    }
+
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -106,7 +131,20 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", setpointStates);
   }
 
-  public void runOpenLoop(ChassisSpeeds speeds) {
+  /**
+   * Only to be used in commands which directly control drive subsystem such as DriveManual or
+   * DriveToPoint.
+   *
+   * <p>For commands requiring auto rotate capability or switch back to regular field relative
+   * driving, use drive mode request methods instead.
+   */
+  public void runOpenLoop(ChassisSpeeds speeds, boolean fieldRelative) {
+    if (fieldRelative) {
+      speeds =
+          ChassisSpeeds.fromFieldRelativeSpeeds(
+              speeds,
+              Robot.alliance == Alliance.Red ? getRotation().plus(Rotation2d.kPi) : getRotation());
+    }
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -120,6 +158,23 @@ public class Drive extends SubsystemBase {
     }
 
     Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", setpointStates);
+  }
+
+  public void requestFieldRelativeMode() {
+    manualDriveMode = ManualDriveMode.FIELD_RELATIVE;
+  }
+
+  public void requestAutoRotateMode(double fieldTargetAngleRad) {
+    manualDriveMode = ManualDriveMode.AUTO_ROTATE;
+    targetAutoRotateAngleRad = fieldTargetAngleRad;
+  }
+
+  public ManualDriveMode getManualDriveMode() {
+    return manualDriveMode;
+  }
+
+  public double getTargetAngleRad() {
+    return targetAutoRotateAngleRad;
   }
 
   @AutoLogOutput(key = "Drive/SwerveStates/Measured")
@@ -140,8 +195,12 @@ public class Drive extends SubsystemBase {
   }
 
   @AutoLogOutput(key = "Drive/SwerveChassisSpeeds/Measured")
-  private ChassisSpeeds getChassisSpeeds() {
+  private ChassisSpeeds getRobotRelativeSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
+  }
+
+  public ChassisSpeeds getFieldRelativeSpeeds() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotRelativeSpeeds(), getRotation());
   }
 
   @AutoLogOutput(key = "Odometry/Robot")
