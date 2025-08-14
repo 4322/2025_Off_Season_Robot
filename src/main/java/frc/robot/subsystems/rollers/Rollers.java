@@ -3,6 +3,8 @@ package frc.robot.subsystems.rollers;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.util.DeltaDebouncer;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Rollers extends SubsystemBase {
@@ -11,12 +13,12 @@ public class Rollers extends SubsystemBase {
 
   private boolean isCoralPickupDetected = false;
 
-  private Debouncer currentDetectionDebouncer =
-      new Debouncer(Constants.Rollers.currentDetectionDebounceTimeSeconds);
-  private Debouncer velocityDetectionDebouncer =
-      new Debouncer(Constants.Rollers.velocityDetectionDebounceTimeSeconds);
-
-  private enum RollersStatus {
+  private DeltaDebouncer currentDetectionDebouncer =
+      new DeltaDebouncer(Constants.Rollers.currentDetectionDebounceTimeSeconds,Constants.Rollers.CurrentDetectionDeltaThresholdAmps, DeltaDebouncer.Mode.CUMULATIVE, Constants.Rollers.CurrentDetectionMaxAccumulationSeconds);
+  private DeltaDebouncer velocityDetectionDebouncer =
+      new DeltaDebouncer(Constants.Rollers.velocityDetectionDebounceTimeSeconds, Constants.Rollers.VelocityDetectionDeltaThresholdRotationsPerSecond, DeltaDebouncer.Mode.CUMULATIVE, Constants.Rollers.VelocityDetectionMaxAccumulationSeconds);
+  
+      private enum RollersStatus {
     START,
     FEED,
     FEED_SLOW,
@@ -33,9 +35,9 @@ public class Rollers extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // TODO make custom solution for this
-    isCoralPickupDetected = currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps > Constants.Rollers.currentDetectionStallCurrentAmps) && 
-           velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec < Constants.Rollers.velocityDetectionStallRotationsPerSec);
+    isCoralPickupDetected = currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps) && 
+        velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec);
+    
     io.updateInputs(inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
     Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected);

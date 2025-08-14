@@ -5,6 +5,8 @@ import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.util.DeltaDebouncer;
+
 import org.littletonrobotics.junction.Logger;
 
 public class EndEffector extends SubsystemBase {
@@ -20,6 +22,7 @@ public class EndEffector extends SubsystemBase {
 
   private boolean coralHeld = false;
   private boolean algaeHeld = false;
+  private boolean isCoralPickupDetected = false;
 
   private enum EndEffectorStates {
     IDLE,
@@ -34,10 +37,14 @@ public class EndEffector extends SubsystemBase {
 
   private EndEffectorStates state = EndEffectorStates.IDLE;
 
-  private Debouncer currentDetectionDebouncer =
-      new Debouncer(Constants.EndEffector.currentDetectionDebounceTimeSeconds);
-  private Debouncer velocityDetectionDebouncer =
-      new Debouncer(Constants.EndEffector.velocityDetectionDebounceTimeSeconds);
+  private DeltaDebouncer currentDetectionDebouncer =
+      new DeltaDebouncer(Constants.EndEffector.currentDetectionDebounceTimeSeconds,
+          Constants.EndEffector.CurrentDetectionDeltaThresholdAmps, DeltaDebouncer.Mode.CUMULATIVE,
+          Constants.EndEffector.CurrentDetectionMaxAccumulationSeconds);
+  private DeltaDebouncer velocityDetectionDebouncer =
+      new DeltaDebouncer(Constants.EndEffector.velocityDetectionDebounceTimeSeconds,
+          Constants.EndEffector.VelocityDetectionDeltaThresholdRotationsPerSecond,
+          DeltaDebouncer.Mode.CUMULATIVE, Constants.EndEffector.VelocityDetectionMaxAccumulationSeconds);
   
 
 
@@ -47,6 +54,9 @@ public class EndEffector extends SubsystemBase {
 
   @Override
   public void periodic() {
+    isCoralPickupDetected = currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps)
+        && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec);
+
     io.updateInputs(inputs);
     Logger.processInputs("End Effector", inputs);
     Logger.recordOutput("End Effector/State", state.toString());
@@ -183,13 +193,6 @@ public class EndEffector extends SubsystemBase {
   // Returns whether a difference in current is detected after picking up piece (low -> high
   // current; Velocity high -> low)
   public boolean isPiecePickupDetected() {
-    return currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps > Constants.EndEffector.currentDetectionStallCurrentAmps) && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec < Constants.EndEffector.velocityDetectionStallSpeedRotationsPerSec);
-  }
-
-  
-  // Returns whether a difference in current is detected after releasing a piece (high -> low
-  // current; Velocity low -> high)
-  public boolean isPieceReleaseDetected() {
-    return currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps < Constants.EndEffector.currentDetectionNormalCurrentAmps) && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec > Constants.EndEffector.velocityDetectionNormalSpeedRotationsPerSec);
+    return isPiecePickupDetected;
   }
 }

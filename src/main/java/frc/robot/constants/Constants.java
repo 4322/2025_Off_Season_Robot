@@ -143,11 +143,11 @@ public final class Constants {
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds = 0.25; // Time for the current to spike and stay there before detection is triggered
     public static final double velocityDetectionDebounceTimeSeconds = 0.25; // Time for veleocity to spike and stay there before detection is triggered
-    public static final double currentDetectionStallCurrentAmps = 0;
-    public static final double velocityDetectionStallSpeedRotationsPerSec = 0;
-    
-    public static final double currentDetectionNormalCurrentAmps = 0;
-    public static final double velocityDetectionNormalSpeedRotationsPerSec = 0;
+    public static final double CurrentDetectionDeltaThresholdAmps = 0;
+    public static final double CurrentDetectionMaxAccumulationSeconds = 0;
+    public static final double VelocityDetectionMaxAccumulationSeconds = 0;
+    public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
+  
   }
 
   public static class Deployer {
@@ -216,12 +216,19 @@ public final class Constants {
     public static final double motorVoltageRejectSlow = 0;
     public static final double motorVoltageEject = 0;
     // TODO tune these
-    public static final double currentDetectionDebounceTimeSeconds = 0.25; // Time for the current to spike and stay there before detection is triggered
-    public static final double velocityDetectionDebounceTimeSeconds = 0.25; // Time for velocity to spike and stay there before detection is triggered
+    public static final double currentDetectionDebounceTimeSeconds = 0.25; // Time for the delta of the current to spike and stay there before detection is triggered
+    public static final double velocityDetectionDebounceTimeSeconds = 0.25; // Time for delta of the velocity to spike and stay there before detection is triggered
 
-    public static final double currentDetectionStallCurrentAmps = 0;
+    public static final double CurrentDetectionDeltaThresholdAmps = 0;
 
-    public static final double velocityDetectionStallRotationsPerSec = 0;
+    public static final double velocityDetectionStallDeltaRotationsPerSec = 0;
+
+    public static final double CurrentDetectionMaxAccumulationSeconds = 0;
+
+    public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
+
+    public static final double VelocityDetectionMaxAccumulationSeconds = 0;
+
   }
 
   public static class IntakeSuperstructure {

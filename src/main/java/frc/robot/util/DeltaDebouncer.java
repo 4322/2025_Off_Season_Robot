@@ -21,7 +21,7 @@ public class DeltaDebouncer {
     private Timer debounceTimer = new Timer();
     private Timer accumulationTimer = new Timer();
 
-    DeltaDebouncer(double debounceTimeSeconds, double deltaThreshold, Mode mode, double maxAccumulationSeconds) {
+    public DeltaDebouncer(double debounceTimeSeconds, double deltaThreshold, Mode mode, double maxAccumulationSeconds) {
         this.debounceTimeSeconds = debounceTimeSeconds;
         this.deltaThreshold = deltaThreshold;
         if (mode == Mode.CUMULATIVE) {
