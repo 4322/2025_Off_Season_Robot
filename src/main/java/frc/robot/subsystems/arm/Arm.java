@@ -17,7 +17,7 @@ public class Arm extends SubsystemBase {
   private Superstructure superstructure;
 
   public double requestedSetpoint; // Degrees, 0 is horizontal to front of robot
-  public double adjustedSetpoint =
+  public double prevSetpoint =
       MathUtil.clamp(
           requestedSetpoint, Constants.Arm.minArmSafeAngle, Constants.Arm.maxArmSafeAngle);
 
@@ -40,7 +40,7 @@ public class Arm extends SubsystemBase {
 
     switch (safety) {
       case WAIT_FOR_ELEVATOR:
-        adjustedSetpoint = Constants.Arm.minArmSafeAngle;
+        prevSetpoint = Constants.Arm.minArmSafeAngle;
         if (Constants.Elevator.minElevatorSafeHeight <= superstructure.getElevatorHeight()) {
           safety = Safety.MOVING_WITH_ELEVATOR;
         }
@@ -53,11 +53,11 @@ public class Arm extends SubsystemBase {
             && requestedSetpoint < Constants.Arm.minArmSafeAngle) {
           safety = Safety.WAIT_FOR_ELEVATOR;
         } else {
-          adjustedSetpoint = requestedSetpoint;
+          prevSetpoint = requestedSetpoint;
         }
         break;
     }
-    if (adjustedSetpoint != requestedSetpoint) {
+    if (prevSetpoint != requestedSetpoint) {
       io.setPosition(Rotation2d.fromDegrees(requestedSetpoint));
     }
   }
