@@ -16,13 +16,14 @@ import frc.robot.constants.Constants;
 
 public class DeployerIONitrate implements DeployerIO {
   private Nitrate deployerMotor;
-  // TODO use internal encoder
-  private Canandmag deployerMotorEncoder;
+  //private Canandmag deployerMotorEncoder;
 
   private NitrateSettings deployerMotorConfig = new NitrateSettings();
   private CanandmagSettings deployerMotorEncoderConfig = new CanandmagSettings();
+
   
   private double previousRequestedPosition = -999;
+  private double deployerMotorRequestedPositionRotations = 0.0;
 
   public DeployerIONitrate() {
     deployerMotor = new Nitrate(Constants.Deployer.deployerMotorId, MotorType.kCu60);
@@ -115,6 +116,8 @@ public class DeployerIONitrate implements DeployerIO {
     inputs.deployerMotorSpeedRotationsPerSec = deployerMotor.getVelocity();
     inputs.deployerMotorAppliedVolts = deployerMotor.getBusVoltageFrame().getValue();
 
+    inputs.deployerMotorRequestedPositionRotations = deployerMotorRequestedPositionRotations;
+
     /* TODO uncomment if we use external encoder
     inputs.deployerMotorEncoderConnected = deployerMotorEncoder.isConnected();
     inputs.deployerMotorEncoderSpeedRotationsPerSec = deployerMotorEncoder.getVelocity();
@@ -128,6 +131,7 @@ public class DeployerIONitrate implements DeployerIO {
   public void setDeployerMotorPosition(double rotations) {
     // TODO figure out if deploy is greater than or less than current rotations
     if (rotations != previousRequestedPosition) {
+      deployerMotorRequestedPositionRotations = rotations;
       previousRequestedPosition = rotations;
       if (deployerMotor.getPosition() > rotations) {
         deployerMotor.setPIDPosition(

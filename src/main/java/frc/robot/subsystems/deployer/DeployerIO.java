@@ -16,6 +16,8 @@ public interface DeployerIO {
     public double deployerMotorAppliedVolts = 0.0;
     public double deployerMotorPositionRotations = 0.0;
 
+    public double deployerMotorRequestedPositionRotations = 0.0;
+
     /* TODO uncomment if external encoder is used
     public boolean deployerMotorEncoderConnected = false;
     public double deployerMotorEncoderSpeedRotationsPerSec = 0.0;
