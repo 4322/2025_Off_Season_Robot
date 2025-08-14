@@ -22,7 +22,7 @@ public class EndEffector extends SubsystemBase {
 
   private boolean coralHeld = false;
   private boolean algaeHeld = false;
-  private boolean isCoralPickupDetected = false;
+  private boolean isPiecePickupDetected = false;
 
   private enum EndEffectorStates {
     IDLE,
@@ -54,7 +54,7 @@ public class EndEffector extends SubsystemBase {
 
   @Override
   public void periodic() {
-    isCoralPickupDetected = currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps)
+    isPiecePickupDetected = currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps)
         && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec);
 
     io.updateInputs(inputs);
@@ -63,7 +63,6 @@ public class EndEffector extends SubsystemBase {
     Logger.recordOutput("End Effector/coralHeld", coralHeld);
     Logger.recordOutput("End Effector/algaeHeld", algaeHeld);
     Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
-    Logger.recordOutput("End Effector/isPieceReleaseDetected", isPieceReleaseDetected());
 
     switch (state) {
       case IDLE:
@@ -114,23 +113,21 @@ public class EndEffector extends SubsystemBase {
         break;
       case RELEASE_ALGAE:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeReleaseVolts);
-        if (isPieceReleaseDetected() || !inputs.isAlgaeProximityDetected) {
+        if (!inputs.isAlgaeProximityDetected) {
           state = EndEffectorStates.IDLE;
           algaeHeld = false;
         }
         break;
       case RELEASE_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.coralReleaseVolts);
-        if (isPieceReleaseDetected()
-            || (!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+        if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
         }
         break;
       case EJECT:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
-        if (isPieceReleaseDetected()
-            || (!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+        if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
           algaeHeld = false;
