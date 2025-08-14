@@ -31,9 +31,7 @@ public class DeltaDebouncer {
         }
         this.mode = mode;
         debounceTimer.reset();
-        debounceTimer.start();
         accumulationTimer.reset();
-        accumulationTimer.start();
     }
 
     public boolean calculate(double value) {
