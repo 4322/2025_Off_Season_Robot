@@ -167,4 +167,9 @@ public class EndEffector extends SubsystemBase {
     requestReleaseCoral = false;
     requestEject = false;
   }
+  // TODO: Added to work with super stuctur
+  public void algaeHold() {
+    unsetAllRequests();
+    requestIntakeAlgae = true;
+  }
 }
