@@ -1,22 +1,24 @@
 package frc.robot.subsystems.elevator;
-
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
+import frc.robot.util.ClockUtil;
+import frc.robot.RobotContainer;
+import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
-  private boolean elevatorIdle;
   private ElevatorIO io;
   private Timer homingTimer = new Timer();
-  ElevatorStates state = ElevatorStates.STARTING_CONFIG;
+  ElevatorStates state = ElevatorStates.REQUEST_SETPOINT;
   ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
+  private double requestedHeightMeters = 0.0;
+  private double adjustedHeightMeters;
+  private boolean requestElevator;
 
   private enum ElevatorStates {
-    STARTING_CONFIG,
-    HOMING,
     REQUEST_SETPOINT,
-    JIGGLE
   }
 
   public Elevator(ElevatorIO ELVIO) {
@@ -25,19 +27,20 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
+    io.updateInputs(inputs);
+    Logger.processInputs("Elevator", inputs);
+    Logger.recordOutput("Elevator/heightMeters", inputs.heightMeters);
+    Logger.recordOutput("Elevator/atHeight", atSetpoint());
     switch (state) {
-      case STARTING_CONFIG:
-        // Handle starting config logic
-        break;
-      case HOMING:
-        // Handle homing logic
-        homingTimer.start();
-        break;
       case REQUEST_SETPOINT:
         // Handle request setpoint logic
-        break;
-      case JIGGLE:
-        // Handle jiggle logic
+        if (requestedHeightMeters != adjustedHeightMeters){
+          io.setHeight(requestedHeightMeters); 
+        }
+        else
+        {
+          adjustedHeightMeters = requestedHeightMeters;
+        }
         break;
     }
   }
@@ -59,39 +62,98 @@ public class Elevator extends SubsystemBase {
   climbing()
   eject()
    */
-  public void idle() {}
+  public void idle() {
+    requestedHeightMeters = Constants.Elevator.minElevatorSafeHeight;
+  }
 
-  public void algaeHold() {}
+  public void algaeHold() {
+    //requestElevator = true;
+    requestedHeightMeters = 0;
+  }
 
-  public void coralHold() {}
+  public void coralHold() {
+    //requestElevator = true;
+    requestedHeightMeters = 0;
+  }
 
-  public void algaeGround() {}
+  public void algaeGround() {
+    //requestElevator = true;
+    requestedHeightMeters = 20;
+  }
 
-  public void algaeReef(Level level) {}
+  public void algaeReef(Level level) {
+    //requestElevator = true;
+    if(level == Level.L1) {
+      requestedHeightMeters = 40;
+    } else if(level == Level.L2) {
+      requestedHeightMeters = 60;
+    } else if(level == Level.L3) {
+      requestedHeightMeters = 80;
+    } else if(level == Level.L4) {
+      requestedHeightMeters = 100;
+    }
+  }
 
-  public void scoreAlgae() {}
+  public void scoreAlgae() {
+    //equestElevator = true;
+    requestedHeightMeters = 120;
+  }
 
-  public void prescoreCoral(Level level) {}
+  public void prescoreCoral(Level level) {
+    if(level == Level.L1) {
+      requestedHeightMeters = 40;
+    } else if(level == Level.L2) {
+      requestedHeightMeters = 60;
+    } else if(level == Level.L3) {
+      requestedHeightMeters = 80;
+    } else if(level == Level.L4) {
+      requestedHeightMeters = 100;
+    }
+  }
 
-  public void scoreCoral(Level level) {}
+  public void scoreCoral(Level level) {
+    if(level == Level.L1) {
+      requestedHeightMeters = 40;
+    } else if(level == Level.L2) {
+      requestedHeightMeters = 60;
+    } else if(level == Level.L3) {
+      requestedHeightMeters = 80;
+    } else if(level == Level.L4) {
+      requestedHeightMeters = 100;
+    }
+  }
 
-  public void pickupCoral() {}
+  public void pickupCoral() {
+    //requestElevator = true;
+    requestedHeightMeters = 20; // Adjust this value based on the desired height for coral pickup
+  }
 
   public boolean atSetpoint() {
-    return false;
+    return ClockUtil.atReference(getHeightMeters(), adjustedHeightMeters, Constants.Elevator.elevatorHeightToleranceMeters, true); 
   }
 
   public double getHeightMeters() {
     return inputs.heightMeters;
   }
 
-  public void setHome() {}
+  public void setHome() {
+    //TODO: Implement home logic
+  }
 
-  public void setNeutralMode(IdleMode mode) {}
+  public void setNeutralMode(IdleMode mode) {
+    io.stopElevator(mode);
+  }
 
-  public void safeBargeRetract() {}
+  public void safeBargeRetract() {
+    requestedHeightMeters = Constants.Elevator.minElevatorSafeHeight;
+  }
 
-  public void climbing() {}
+  public void climbing() {
+    requestedHeightMeters = 0;
+    //requestElevator = false; // This might be needed to trigger the elevator to climb
+  }
 
-  public void eject() {}
+  public void eject() {
+    requestedHeightMeters = 0;
+  }
 }

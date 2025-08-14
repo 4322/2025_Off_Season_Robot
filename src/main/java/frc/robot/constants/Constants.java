@@ -112,6 +112,7 @@ public final class Constants {
     public static final double kD = 0; // TODO: Set to actual value
     public static final double minElevatorSafeHeight = 45.0;
     public static final double maxElevatorSafeHeight = 245.0;
+    public static final double elevatorHeightToleranceMeters = 0.01;
   }
 
   // TODO all of these are placeholder values

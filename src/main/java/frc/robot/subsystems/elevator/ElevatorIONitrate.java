@@ -33,6 +33,9 @@ public class ElevatorIONitrate implements ElevatorIO {
         .setMinwrapConfig(new MinwrapConfig.Enabled());
     NitrateSettings leaderConfigStatus = leaderMotor.setSettings(elevatorConfig, 0.02, 5);
     NitrateSettings followerConfigStatus = followerMotor.setSettings(elevatorConfig, 0.02, 5);
+    //get position is an internal encoder, so we need to set it
+    //6 to 1 gear ratio for elevator first stage
+    //9 to 1 gear ratio for elevator second stage
 
     if (!leaderConfigStatus.isEmpty()) {
       DriverStation.reportError(
@@ -49,7 +52,7 @@ public class ElevatorIONitrate implements ElevatorIO {
           false);
     }
   }
-
+  @Override
   public void updateInputs(ElevatorIOInputs elevatorInputs) {
     // Implementation for updating inputs from the Nitrate hardware
   }
