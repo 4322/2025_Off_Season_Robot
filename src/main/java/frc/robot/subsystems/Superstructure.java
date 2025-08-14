@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,7 +13,6 @@ import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.ClockUtil;
-import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -107,17 +108,15 @@ public class Superstructure extends SubsystemBase {
 
         break;
       case IDLE:
-        if (arm.atSetpoint() && elevator.atSetpoint()) {
           endEffector.idle();
-          arm.idle();
           elevator.idle();
-        }
+          arm.idle();
 
         if (requestEject) {
           state = Superstates.EJECT;
-        } else if (indexer.isCoralDetectedPickupArea()) {
+        } else if (indexer.isCoralDetectedPickupArea() && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.END_EFFECTOR_CORAL_PICKUP;
-        } else if (requestIntakeAlgaeFloor && !endEffector.hasAlgae()) {
+        } else if (requestIntakeAlgaeFloor && !endEffector.hasAlgae() && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.INTAKE_ALGAE_FLOOR;
         } else if (requestDescoreAlgae) {
           state = Superstates.DESCORE_ALGAE;
