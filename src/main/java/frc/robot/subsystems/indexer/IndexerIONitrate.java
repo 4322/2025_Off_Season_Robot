@@ -20,6 +20,8 @@ public class IndexerIONitrate implements IndexerIO {
   private CanandcolorSettings indexerSensorConfig = new CanandcolorSettings();
   private CanandcolorSettings pickupAreaSensorConfig = new CanandcolorSettings();
 
+  private double previousRequestedVoltage = -999;
+
   public IndexerIONitrate() {
     indexerMotor = new Nitrate(Constants.Indexer.indexerMotorId, MotorType.kCu60);
     indexerSensor = new Canandcolor(Constants.Indexer.indexerSensorId);
@@ -98,7 +100,10 @@ public class IndexerIONitrate implements IndexerIO {
 
   @Override
   public void setIndexerMotorVoltage(double voltage) {
-    indexerMotor.setVoltage(voltage);
+    if (voltage != previousRequestedVoltage) {
+      indexerMotor.setVoltage(voltage);
+      previousRequestedVoltage = voltage;
+    }
   }
 
   @Override

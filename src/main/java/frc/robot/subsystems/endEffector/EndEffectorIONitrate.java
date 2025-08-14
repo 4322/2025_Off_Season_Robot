@@ -19,6 +19,8 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   private NitrateSettings endEffectorMotorConfig = new NitrateSettings();
   private CanandcolorSettings endEffectorSensorConfig = new CanandcolorSettings();
 
+  private double previousRequestedVoltage = -999;
+
   public EndEffectorIONitrate() {
     endEffectorMotor = new Nitrate(Constants.EndEffector.endEffectorMotorId, MotorType.kCu60);
     endEffectorSensor = new Canandcolor(Constants.EndEffector.endEffectorSensorId);
@@ -125,7 +127,10 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
   @Override
   public void setEndEffectorMotorVoltage(double voltage) {
-    endEffectorMotor.setVoltage(voltage);
+    if (voltage != previousRequestedVoltage) {
+      previousRequestedVoltage = voltage;
+      endEffectorMotor.setVoltage(voltage);
+    }
   }
 
   @Override

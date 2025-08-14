@@ -21,6 +21,8 @@ public class DeployerIONitrate implements DeployerIO {
 
   private NitrateSettings deployerMotorConfig = new NitrateSettings();
   private CanandmagSettings deployerMotorEncoderConfig = new CanandmagSettings();
+  
+  private double previousRequestedPosition = -999;
 
   public DeployerIONitrate() {
     deployerMotor = new Nitrate(Constants.Deployer.deployerMotorId, MotorType.kCu60);
@@ -125,15 +127,15 @@ public class DeployerIONitrate implements DeployerIO {
   @Override
   public void setDeployerMotorPosition(double rotations) {
     // TODO figure out if deploy is greater than or less than current rotations
-    if (deployerMotor.getPosition() > rotations) {
-      deployerMotor.setPIDPosition(
-          PIDConfigSlot.kSlot0,
-          rotations * Constants.Deployer.motorGearRatio,
-          0.0,
-          true);
-    } else {
-      deployerMotor.setPIDPosition(
-          PIDConfigSlot.kSlot1, rotations * Constants.Deployer.motorGearRatio, 0.0, true);
+    if (rotations != previousRequestedPosition) {
+      previousRequestedPosition = rotations;
+      if (deployerMotor.getPosition() > rotations) {
+        deployerMotor.setPIDPosition(
+            PIDConfigSlot.kSlot0, rotations * Constants.Deployer.motorGearRatio, 0.0, true);
+      } else {
+        deployerMotor.setPIDPosition(
+            PIDConfigSlot.kSlot1, rotations * Constants.Deployer.motorGearRatio, 0.0, true);
+      }
     }
   }
 
