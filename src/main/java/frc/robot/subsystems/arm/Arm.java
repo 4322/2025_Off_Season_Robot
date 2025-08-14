@@ -1,6 +1,8 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -15,7 +17,7 @@ public class Arm extends SubsystemBase {
   private Superstructure superstructure;
 
   public double requestedSetpoint; // Degrees, 0 is horizontal to front of robot
-  public double adjustedSetpoint;
+  public double adjustedSetpoint = MathUtil.clamp(requestedSetpoint, Constants.Arm.minArmSafeAngle, Constants.Arm.maxArmSafeAngle);
 
   public enum Safety {
     WAIT_FOR_ELEVATOR,
@@ -36,14 +38,13 @@ public class Arm extends SubsystemBase {
 
     switch (safety) {
       case WAIT_FOR_ELEVATOR:
-        adjustedSetpoint = Constants.Arm.minArmSafeAngle;
-        if (Constants.Elevator.minElevatorSafeHeightIdle <= superstructure.getElevatorHeight()) {
+        if (Constants.Elevator.minElevatorSafeHeight <= superstructure.getElevatorHeight()) {
           safety = Safety.MOVING_WITH_ELEVATOR;
         }
         break;
       case MOVING_WITH_ELEVATOR:
         if (requestedSetpoint < Constants.Arm.minArmSafeAngle
-            && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightIdle) {
+            && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeight) {
           safety = Safety.WAIT_FOR_ELEVATOR;
         } else if (getAngleDegrees() > Constants.Arm.minArmSafeAngle
             && requestedSetpoint < Constants.Arm.minArmSafeAngle) {

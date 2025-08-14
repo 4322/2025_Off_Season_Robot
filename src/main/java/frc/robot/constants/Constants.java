@@ -221,8 +221,6 @@ public final class Constants {
   }
 
   public static class Elevator {
-    public static final double minElevatorSafeHeightIdle = 45.0;
-    public static final double minElevatorSafeHeightIntake = 45.0;
-    public static final double maxElevatorSafeHeight = 245.0;
+    public static final double minElevatorSafeHeight = 45.0;
   } // TODO placeholder values
 }
