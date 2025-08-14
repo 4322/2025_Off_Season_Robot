@@ -1,6 +1,7 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -79,17 +80,11 @@ public class Arm extends SubsystemBase {
 
   public void algaeReef(Level algaeLevel) {
     switch (algaeLevel) {
-      case L1:
-        requestedSetpoint = 30; // TODO: angle for L1
-        break;
       case L2:
-        requestedSetpoint = 60; // TODO: angle for L2
+        requestedSetpoint = 90; // TODO: angle for L2
         break;
       case L3:
         requestedSetpoint = 90; // TODO: angle for L3
-        break;
-      case L4:
-        requestedSetpoint = 120; // TODO: angle for L4
         break;
     }
   }
@@ -97,37 +92,12 @@ public class Arm extends SubsystemBase {
   public void scoreAlgae() {}
 
   public void prescoreCoral(Level coralLevel) {
-    switch (coralLevel) {
-      case L1:
-        requestedSetpoint = 30; // Example angle for L1
-        break;
-      case L2:
-        requestedSetpoint = 60; // Example angle for L2
-        break;
-      case L3:
-        requestedSetpoint = 90; // Example angle for L3
-        break;
-      case L4:
-        requestedSetpoint = 120; // Example angle for L4
-        break;
-    }
+    setcoralheight(coralLevel);
   }
 
   public void scoreCoral(Level coralLevel) {
-    switch (coralLevel) {
-      case L1:
-        requestedSetpoint = 30; // Example angle for L1
-        break;
-      case L2:
-        requestedSetpoint = 60; // Example angle for L2
-        break;
-      case L3:
-        requestedSetpoint = 90; // Example angle for L3
-        break;
-      case L4:
-        requestedSetpoint = 120; // Example angle for L4
-        break;
-    }
+    setcoralheight(coralLevel);
+   
   }
 
   public boolean atSetpoint() {
@@ -158,5 +128,22 @@ public class Arm extends SubsystemBase {
 
   public double getAngleDegrees() {
     return armInputs.armPositionDegrees;
+  }
+
+  private void setcoralheight(Level coralLevel){
+    switch (coralLevel) {
+      case L1:
+      requestedSetpoint = Constants.Arm.scoringL1AngleDegCoral; // Example angle for L1
+        break;
+      case L2:
+        requestedSetpoint = 60; // Example angle for L2
+        break;
+      case L3:
+        requestedSetpoint = 90; // Example angle for L3
+        break;
+      case L4:
+        requestedSetpoint = 120; // Example angle for L4
+        break;
+    }
   }
 }

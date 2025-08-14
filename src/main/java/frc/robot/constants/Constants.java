@@ -5,6 +5,7 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -90,6 +91,12 @@ public final class Constants {
     public static final double statorCurrentLimit = 100; // TODO
     public static final ElectricalLimitSettings armElectricalLimitSettings =
         new ElectricalLimitSettings();
+    public static final double = IdleMode.kBrake; // TODO: Set to actual mode
+    public static final double scoringL1AngleDegCoral = 10;
+    public static final double scoringL2AngleDegCoral = 20;
+    public static final double scoringL3AngleDegCoral = 30;
+    public static final double scoringL4AngleDegCoral = 40;
+    public static final double descoringAngleDegAlgae = 90;
     public static final PIDSettings armMotorGains = new PIDSettings();
     public static final double kP =
         0; // TODO: Ask if I need multipule PID values depending on the Level
