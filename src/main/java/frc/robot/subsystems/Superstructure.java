@@ -151,7 +151,11 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.EJECT;
         } else if (!endEffector.hasAlgae()) {
           state = Superstates.IDLE;
-        } else if (requestAlgaePrescore) {
+        } else {
+          arm.algaeHold();
+          endEffector.algaeHold();
+        }
+        if (requestAlgaePrescore) {
           state = Superstates.ALGAE_PRESCORE;
         }
 
