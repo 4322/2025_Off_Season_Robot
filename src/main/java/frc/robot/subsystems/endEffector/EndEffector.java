@@ -15,6 +15,7 @@ public class EndEffector extends SubsystemBase {
   private boolean requestReleaseAlgae;
   private boolean requestReleaseCoral;
   private boolean requestEject;
+  private boolean requestHoldAlgae;
 
   private boolean coralHeld = false;
   private boolean algaeHeld = false;
@@ -159,8 +160,6 @@ public class EndEffector extends SubsystemBase {
     io.stopEndEffectorMotor(mode);
   }
 
-  public void algaeHold() {} // TODO create logic
-
   private void unsetAllRequests() {
     requestIdle = false;
     requestIntakeAlgae = false;
@@ -168,10 +167,11 @@ public class EndEffector extends SubsystemBase {
     requestReleaseAlgae = false;
     requestReleaseCoral = false;
     requestEject = false;
+    requestHoldAlgae = true;
   }
   // TODO: Added to work with super stuctur
   public void algaeHold() {
     unsetAllRequests();
-    requestIntakeAlgae = true;
+    requestHoldAlgae = true;
   }
 }
