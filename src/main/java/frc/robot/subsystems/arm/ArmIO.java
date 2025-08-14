@@ -1,10 +1,8 @@
 package frc.robot.subsystems.arm;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-
 import edu.wpi.first.math.geometry.Rotation2d;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
   @AutoLog

@@ -17,7 +17,9 @@ public class Arm extends SubsystemBase {
   private Superstructure superstructure;
 
   public double requestedSetpoint; // Degrees, 0 is horizontal to front of robot
-  public double adjustedSetpoint = MathUtil.clamp(requestedSetpoint, Constants.Arm.minArmSafeAngle, Constants.Arm.maxArmSafeAngle);
+  public double adjustedSetpoint =
+      MathUtil.clamp(
+          requestedSetpoint, Constants.Arm.minArmSafeAngle, Constants.Arm.maxArmSafeAngle);
 
   public enum Safety {
     WAIT_FOR_ELEVATOR,
@@ -38,6 +40,7 @@ public class Arm extends SubsystemBase {
 
     switch (safety) {
       case WAIT_FOR_ELEVATOR:
+        adjustedSetpoint = Constants.Arm.minArmSafeAngle;
         if (Constants.Elevator.minElevatorSafeHeight <= superstructure.getElevatorHeight()) {
           safety = Safety.MOVING_WITH_ELEVATOR;
         }
@@ -130,7 +133,10 @@ public class Arm extends SubsystemBase {
 
   public boolean atSetpoint() {
     return ClockUtil.atReference(
-        armInputs.armPositionDegrees, requestedSetpoint, Constants.Arm.setpointToleranceDegrees, true);
+        armInputs.armPositionDegrees,
+        requestedSetpoint,
+        Constants.Arm.setpointToleranceDegrees,
+        true);
   }
 
   public void safeBargeRetract() {}

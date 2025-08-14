@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,7 +13,6 @@ import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.ClockUtil;
-import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -50,6 +51,8 @@ public class Superstructure extends SubsystemBase {
     PRECLIMB,
     CLIMB
   }
+
+
 
   public static enum Level {
     L1,
@@ -141,23 +144,19 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.ALGAE_IDLE;
         } else if (!requestEject && endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
-        } else if (requestIdle) {
-          state = Superstates.IDLE;
-        }
-        // TODO
+        } 
+        
         break;
       case ALGAE_IDLE:
+      arm.algaeHold();
+      endEffector.algaeHold();
         if (requestEject) {
           state = Superstates.EJECT;
         }
-
-        if (!endEffector.hasAlgae()) {
+        else if (!endEffector.hasAlgae()) {
           state = Superstates.IDLE;
-        } else {
-          arm.algaeHold();
-          endEffector.algaeHold();
-        }
-        if (requestAlgaePrescore) {
+        } 
+        else if (requestAlgaePrescore) {
           state = Superstates.ALGAE_PRESCORE;
         }
 
@@ -175,20 +174,18 @@ public class Superstructure extends SubsystemBase {
         break;
       case ALGAE_SCORE:
         endEffector.releaseAlgae();
-
         if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
           state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
         } else if (requestSafeScoreAlgaeRetract) {
           state = Superstates.ALGAE_IDLE;
-        } else if (endEffector.hasAlgae()) {
-          state = Superstates.ALGAE_IDLE;
-        }
+        } 
 
         // TODO
         break;
-      case INTAKE_ALGAE_FLOOR:
-        endEffector.intakeAlgae();
+      case INTAKE_ALGAE_FLOOR: //Needs to move up then arm out then back down
+        elevator.algaeGround();
         arm.algaeGround();
+        endEffector.intakeAlgae();
         if (endEffector.hasAlgae()) {
           state = Superstates.ALGAE_IDLE;
         } else if (!requestIntakeAlgaeFloor) {
