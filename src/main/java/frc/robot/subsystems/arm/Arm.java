@@ -35,7 +35,9 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    Logger.processInputs("Arm", inputs);
+    Logger.recordOutput("Arm/angleDegrees", armInputs.armPositionDegrees);
+    Logger.recordOutput("Arm/atSetpoint", atSetpoint());
     RobotContainer.superstructure.getElevatorHeight();
 
     switch (safety) {
