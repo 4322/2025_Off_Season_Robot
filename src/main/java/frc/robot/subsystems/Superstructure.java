@@ -12,7 +12,6 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.util.ClockUtil;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -120,8 +119,7 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.INTAKE_ALGAE_FLOOR;
         } else if (requestDescoreAlgae) {
           state = Superstates.DESCORE_ALGAE;
-        } else if (requestPreClimb) {
-          // TODO: Add logic for if there is only 30 seconds left in the match
+        } else if (requestPreClimb && DriverStation.getMatchTime() < 30.1) {
           state = Superstates.PRECLIMB;
         }
 
@@ -130,9 +128,7 @@ public class Superstructure extends SubsystemBase {
       case EJECT:
         elevator.eject();
         arm.eject();
-        if (ClockUtil.inBound(arm.getAngleDegrees(), 20, 50, true)) /*TODO set acual values*/ {
-          endEffector.eject();
-        }
+        endEffector.eject();
 
         if (!requestEject && !endEffector.hasAlgae() && !endEffector.hasCoral()) {
           state = Superstates.IDLE;
