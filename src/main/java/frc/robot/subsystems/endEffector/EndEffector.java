@@ -1,9 +1,15 @@
 package frc.robot.subsystems.endEffector;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.util.ClockUtil;
+
 import org.littletonrobotics.junction.Logger;
+
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Superstructure;
 
 public class EndEffector extends SubsystemBase {
   private EndEffectorIO io;
@@ -15,6 +21,7 @@ public class EndEffector extends SubsystemBase {
   private boolean requestReleaseAlgae;
   private boolean requestReleaseCoral;
   private boolean requestEject;
+  private boolean requestHoldAlgae;
 
   private boolean coralHeld = false;
   private boolean algaeHeld = false;
@@ -107,13 +114,14 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case EJECT:
+        if (ClockUtil.inBound(RobotContainer.superstructure.getArmAngle(), 20, 50, true)) /*TODO set acual values*/ {
         io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
         if (io.isCurrentDetectionReleaseTriggered()
             || (!io.isCoralProximityDetected() && !io.isAlgaeProximityDetected())) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
           algaeHeld = false;
-        }
+        } }
         break;
     }
   }
@@ -166,10 +174,11 @@ public class EndEffector extends SubsystemBase {
     requestReleaseAlgae = false;
     requestReleaseCoral = false;
     requestEject = false;
+    requestHoldAlgae = true;
   }
   // TODO: Added to work with super stuctur
   public void algaeHold() {
     unsetAllRequests();
-    requestIntakeAlgae = true;
+    requestHoldAlgae = true;
   }
 }

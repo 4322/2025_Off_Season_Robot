@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,8 +12,6 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.util.ClockUtil;
-import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -107,22 +107,19 @@ public class Superstructure extends SubsystemBase {
 
         break;
       case IDLE:
-        if (arm.atSetpoint() && elevator.atSetpoint()) {
           endEffector.idle();
-          arm.idle();
           elevator.idle();
-        }
+          arm.idle();
 
         if (requestEject) {
           state = Superstates.EJECT;
-        } else if (indexer.isCoralDetectedPickupArea()) {
+        } else if (indexer.isCoralDetectedPickupArea() && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.END_EFFECTOR_CORAL_PICKUP;
-        } else if (requestIntakeAlgaeFloor && !endEffector.hasAlgae()) {
+        } else if (requestIntakeAlgaeFloor && !endEffector.hasAlgae() && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.INTAKE_ALGAE_FLOOR;
         } else if (requestDescoreAlgae) {
           state = Superstates.DESCORE_ALGAE;
-        } else if (requestPreClimb) {
-          // TODO: Add logic for if there is only 30 seconds left in the match
+        } else if (requestPreClimb && DriverStation.getMatchTime() < 30.1) {
           state = Superstates.PRECLIMB;
         }
 
@@ -131,9 +128,7 @@ public class Superstructure extends SubsystemBase {
       case EJECT:
         elevator.eject();
         arm.eject();
-        if (ClockUtil.inBound(arm.getAngleDegrees(), 20, 50, true)) /*TODO set acual values*/ {
-          endEffector.eject();
-        }
+        endEffector.eject();
 
         if (!requestEject && !endEffector.hasAlgae() && !endEffector.hasCoral()) {
           state = Superstates.IDLE;
@@ -151,7 +146,11 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.EJECT;
         } else if (!endEffector.hasAlgae()) {
           state = Superstates.IDLE;
-        } else if (requestAlgaePrescore) {
+        } else {
+          arm.algaeHold();
+          endEffector.algaeHold();
+        }
+        if (requestAlgaePrescore) {
           state = Superstates.ALGAE_PRESCORE;
         }
 
