@@ -90,6 +90,11 @@ public final class Constants {
     public static final double statorCurrentLimit = 100; // TODO
     public static final ElectricalLimitSettings armElectricalLimitSettings =
         new ElectricalLimitSettings();
+    public static final double scoringL1AngleDegCoral = 10;
+    public static final double scoringL2AngleDegCoral = 20;
+    public static final double scoringL3AngleDegCoral = 30;
+    public static final double scoringL4AngleDegCoral = 40;
+    public static final double descoringAngleDegAlgae = 90;
     public static final PIDSettings armMotorGains = new PIDSettings();
     public static final double kP =
         0; // TODO: Ask if I need multipule PID values depending on the Level

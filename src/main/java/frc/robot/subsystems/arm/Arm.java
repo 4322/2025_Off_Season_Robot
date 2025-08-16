@@ -4,19 +4,19 @@ import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
+import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
-  public ArmIOInputsAutoLogged armInputs = new ArmIOInputsAutoLogged();
+  public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private Superstructure superstructure;
 
   public double requestedSetpoint; // Degrees, 0 is horizontal to front of robot
-  public double adjustedSetpoint =
+  public double prevSetpoint =
       MathUtil.clamp(
           requestedSetpoint, Constants.Arm.minArmSafeAngle, Constants.Arm.maxArmSafeAngle);
 
@@ -28,18 +28,22 @@ public class Arm extends SubsystemBase {
 
   Safety safety = Safety.ARM_CANT_MOVE;
 
-  public Arm(ArmIO ArmIO) {
-    this.io = ArmIO;
+  public Arm(ArmIO io) {
+    this.io = io;
   }
 
   @Override
   public void periodic() {
+    io.updateInputs(inputs);
+    Logger.processInputs("Arm", inputs);
+    Logger.recordOutput("Arm/angleDegrees", inputs.armPositionDegrees);
+    Logger.recordOutput("Arm/atSetpoint", atSetpoint());
 
-    RobotContainer.superstructure.getElevatorHeight();
+    superstructure.getElevatorHeight();
 
     switch (safety) {
       case WAIT_FOR_ELEVATOR:
-        adjustedSetpoint = Constants.Arm.minArmSafeAngle;
+        prevSetpoint = Constants.Arm.minArmSafeAngle;
         if (Constants.Elevator.minElevatorSafeHeight <= superstructure.getElevatorHeight()) {
           safety = Safety.MOVING_WITH_ELEVATOR;
         }
@@ -51,13 +55,12 @@ public class Arm extends SubsystemBase {
         } else if (getAngleDegrees() > Constants.Arm.minArmSafeAngle
             && requestedSetpoint < Constants.Arm.minArmSafeAngle) {
           safety = Safety.WAIT_FOR_ELEVATOR;
-        } else {
-          adjustedSetpoint = requestedSetpoint;
         }
         break;
     }
-    if (adjustedSetpoint != requestedSetpoint) {
+    if (prevSetpoint != requestedSetpoint && Safety.MOVING_WITH_ELEVATOR == safety) {
       io.setPosition(Rotation2d.fromDegrees(requestedSetpoint));
+      prevSetpoint = requestedSetpoint;
     }
   }
 
@@ -77,65 +80,23 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = 20; // TODO:
   }
 
-  public void algaeReef(Level algaeLevel) {
-    switch (algaeLevel) {
-      case L1:
-        requestedSetpoint = 30; // TODO: angle for L1
-        break;
-      case L2:
-        requestedSetpoint = 60; // TODO: angle for L2
-        break;
-      case L3:
-        requestedSetpoint = 90; // TODO: angle for L3
-        break;
-      case L4:
-        requestedSetpoint = 120; // TODO: angle for L4
-        break;
-    }
+  public void algaeReef() {
+    requestedSetpoint = Constants.Arm.descoringAngleDegAlgae; // TODO: angle for L2
   }
 
   public void scoreAlgae() {}
 
   public void prescoreCoral(Level coralLevel) {
-    switch (coralLevel) {
-      case L1:
-        requestedSetpoint = 30; // Example angle for L1
-        break;
-      case L2:
-        requestedSetpoint = 60; // Example angle for L2
-        break;
-      case L3:
-        requestedSetpoint = 90; // Example angle for L3
-        break;
-      case L4:
-        requestedSetpoint = 120; // Example angle for L4
-        break;
-    }
+    setcoralheight(coralLevel);
   }
 
   public void scoreCoral(Level coralLevel) {
-    switch (coralLevel) {
-      case L1:
-        requestedSetpoint = 30; // Example angle for L1
-        break;
-      case L2:
-        requestedSetpoint = 60; // Example angle for L2
-        break;
-      case L3:
-        requestedSetpoint = 90; // Example angle for L3
-        break;
-      case L4:
-        requestedSetpoint = 120; // Example angle for L4
-        break;
-    }
+    setcoralheight(coralLevel);
   }
 
   public boolean atSetpoint() {
     return ClockUtil.atReference(
-        armInputs.armPositionDegrees,
-        requestedSetpoint,
-        Constants.Arm.setpointToleranceDegrees,
-        true);
+        inputs.armPositionDegrees, requestedSetpoint, Constants.Arm.setpointToleranceDegrees, true);
   }
 
   public void safeBargeRetract() {}
@@ -157,6 +118,23 @@ public class Arm extends SubsystemBase {
   }
 
   public double getAngleDegrees() {
-    return armInputs.armPositionDegrees;
+    return inputs.armPositionDegrees;
+  }
+
+  private void setcoralheight(Level coralLevel) {
+    switch (coralLevel) {
+      case L1:
+        requestedSetpoint = Constants.Arm.scoringL1AngleDegCoral;
+        break;
+      case L2:
+        requestedSetpoint = Constants.Arm.scoringL2AngleDegCoral;
+        break;
+      case L3:
+        requestedSetpoint = Constants.Arm.scoringL3AngleDegCoral;
+        break;
+      case L4:
+        requestedSetpoint = Constants.Arm.scoringL4AngleDegCoral;
+        break;
+    }
   }
 }

@@ -191,7 +191,7 @@ public class Superstructure extends SubsystemBase {
         // TODO
         break;
       case DESCORE_ALGAE:
-        arm.algaeReef(algaeLevel);
+        arm.algaeReef();
         elevator.algaeReef(algaeLevel);
         endEffector.intakeAlgae();
         // TODO
