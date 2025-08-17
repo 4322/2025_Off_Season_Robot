@@ -11,8 +11,7 @@ public interface ArmIO {
     public double appliedVolts = 0.0;
     public boolean armConnected = false;
     public boolean armEncoderConnected = false;
-    public Rotation2d armAbsolutePosition = new Rotation2d();
-    public Rotation2d armPosition = new Rotation2d();
+    public double armPosition = new Rotation2d();
     public double armVelocityRadPerSec = 0.0;
     public double armAppliedVolts = 0.0;
     public double armSupplyCurrentAmps = 0.0;
@@ -23,11 +22,9 @@ public interface ArmIO {
 
   public default void updateInputs(ArmIOInputs inputs) {}
 
-  public default void setDriveOpenLoop(double outputVoltage) {}
+  public default void setArmOpenLoop(double outputVoltage) {}
 
-  public default void setDriveVelocity(double driveWheelVelocityRadPerSec) {}
-
-  public default void setPosition(Rotation2d turnWheelPosition) {}
+  public default void setPosition(Rotation2d ArmPosition) {}
 
   public default void stopArmMotor(IdleMode idleMode) {}
 }
