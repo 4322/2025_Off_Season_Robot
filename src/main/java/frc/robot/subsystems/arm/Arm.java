@@ -3,6 +3,7 @@ package frc.robot.subsystems.arm;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
@@ -23,10 +24,9 @@ public class Arm extends SubsystemBase {
   public enum Safety {
     WAIT_FOR_ELEVATOR,
     MOVING_WITH_ELEVATOR,
-    ARM_CANT_MOVE,
   }
 
-  Safety safety = Safety.ARM_CANT_MOVE;
+  Safety safety = Safety.MOVING_WITH_ELEVATOR;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -59,7 +59,7 @@ public class Arm extends SubsystemBase {
         break;
     }
     if (prevSetpoint != requestedSetpoint && Safety.MOVING_WITH_ELEVATOR == safety) {
-      io.setPosition(Rotation2d.fromDegrees(requestedSetpoint));
+      io.requestPosition(Rotation2d.fromDegrees(requestedSetpoint));
       prevSetpoint = requestedSetpoint;
     }
   }
@@ -102,12 +102,15 @@ public class Arm extends SubsystemBase {
   public void safeBargeRetract() {}
 
   public void setHome() {
-    requestedSetpoint = 0; // TODO:
+    Encoder armEncoder =
+        new Encoder(
+            0,
+            1,
+            false,
+            Encoder.EncodingType.k2X); // TODO: Figure out how to configurate an encoder
   }
 
-  public void setNeutralMode(IdleMode idlemode) {
-    io.stopArmMotor(idlemode);
-  }
+  public void setNeutralMode(IdleMode idlemode) {}
 
   public void climbing() {
     requestedSetpoint = 20; // TODO:
