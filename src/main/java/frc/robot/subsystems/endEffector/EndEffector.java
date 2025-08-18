@@ -2,7 +2,6 @@ package frc.robot.subsystems.endEffector;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
@@ -25,7 +24,6 @@ public class EndEffector extends SubsystemBase {
   private boolean requestReleaseAlgae;
   private boolean requestReleaseCoral;
   private boolean requestEject;
-  private boolean requestHoldAlgae;
 
   private boolean coralHeld = false;
   private boolean algaeHeld = false;
@@ -222,18 +220,7 @@ public class EndEffector extends SubsystemBase {
     requestEject = false;
     requestHoldAlgae = true;
   }
-  // TODO: Added to work with super stuctur
-  public void algaeHold() {
-    unsetAllRequests();
-    requestHoldAlgae = true;
-  }
-
   
- 
-
-  
-  // Returns whether a difference in current is detected after picking up piece (low -> high
-  // current; Velocity high -> low)
   public boolean isPiecePickupDetected() {
     return isPiecePickupDetected;
   }
