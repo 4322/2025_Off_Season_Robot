@@ -218,7 +218,6 @@ public class EndEffector extends SubsystemBase {
     requestReleaseAlgae = false;
     requestReleaseCoral = false;
     requestEject = false;
-    requestHoldAlgae = true;
   }
   
   public boolean isPiecePickupDetected() {
