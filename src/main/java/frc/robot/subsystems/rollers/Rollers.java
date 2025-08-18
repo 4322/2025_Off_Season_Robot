@@ -13,10 +13,12 @@ public class Rollers extends SubsystemBase {
 
   private boolean isCoralPickupDetected = false;
 
+
+  // Current goes from low -> high and velocity goes from high -> low on piece pickup
   private DeltaDebouncer currentDetectionDebouncer =
-      new DeltaDebouncer(Constants.Rollers.currentDetectionDebounceTimeSeconds,Constants.Rollers.CurrentDetectionDeltaThresholdAmps, DeltaDebouncer.Mode.CUMULATIVE, Constants.Rollers.CurrentDetectionMaxAccumulationSeconds);
+      new DeltaDebouncer(Constants.Rollers.currentDetectionDebounceTimeSeconds,Constants.Rollers.CurrentDetectionDeltaThresholdAmps, DeltaDebouncer.Mode.CUMULATIVE, Constants.Rollers.CurrentDetectionMaxAccumulationSeconds, DeltaDebouncer.ChangeType.INCREASE);
   private DeltaDebouncer velocityDetectionDebouncer =
-      new DeltaDebouncer(Constants.Rollers.velocityDetectionDebounceTimeSeconds, Constants.Rollers.VelocityDetectionDeltaThresholdRotationsPerSecond, DeltaDebouncer.Mode.CUMULATIVE, Constants.Rollers.VelocityDetectionMaxAccumulationSeconds);
+      new DeltaDebouncer(Constants.Rollers.velocityDetectionDebounceTimeSeconds, Constants.Rollers.VelocityDetectionDeltaThresholdRotationsPerSecond, DeltaDebouncer.Mode.CUMULATIVE, Constants.Rollers.VelocityDetectionMaxAccumulationSeconds, DeltaDebouncer.ChangeType.DECREASE);
   
       private enum RollersStatus {
     START,
@@ -35,12 +37,13 @@ public class Rollers extends SubsystemBase {
 
   @Override
   public void periodic() {
-    isCoralPickupDetected = currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps) && 
-        velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec);
     
     io.updateInputs(inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
     Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected);
+    
+    isCoralPickupDetected = currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps) && 
+        velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec);
   }
 
   public void feed() {
