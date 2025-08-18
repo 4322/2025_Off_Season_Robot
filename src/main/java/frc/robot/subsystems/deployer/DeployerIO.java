@@ -18,13 +18,6 @@ public interface DeployerIO {
 
     public double deployerMotorRequestedPositionRotations = 0.0;
 
-    /* TODO uncomment if external encoder is used
-    public boolean deployerMotorEncoderConnected = false;
-    public double deployerMotorEncoderSpeedRotationsPerSec = 0.0;
-    public double deployerMotorEncoderPositionRotations = 0.0;
-    public double deployerMotorEncoderAbsolutePosition = 0.0;
-    public double deployerMotorEncoderTempCelcius = 0.0;
-    */
   }
 
   public default void updateInputs(DeployerIOInputs inputs) {}

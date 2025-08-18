@@ -10,17 +10,14 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
-import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 
 public class DeployerIONitrate implements DeployerIO {
   private Nitrate deployerMotor;
-  //private Canandmag deployerMotorEncoder;
 
   private NitrateSettings deployerMotorConfig = new NitrateSettings();
-  private CanandmagSettings deployerMotorEncoderConfig = new CanandmagSettings();
 
   private final PIDPositionRequest deployerMotorDeployPIDRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
@@ -44,19 +41,6 @@ public class DeployerIONitrate implements DeployerIO {
           null);
     }
 
-    /* TODO uncomment if we use external encoder
-    deployerMotorEncoder = new Canandmag(Constants.Deployer.deployerMotorEncoderId);
-    configEncoder();
-    CanandmagSettings deployerMotorEncoderConfigStatus =
-        deployerMotorEncoder.setSettings(deployerMotorEncoderConfig, 0.02, 5);
-    if (!deployerMotorEncoderConfigStatus.allSettingsReceived()) {
-      DriverStation.reportError(
-          "Canandmag "
-              + deployerMotorEncoder.getAddress().getDeviceId()
-              + " error (Deployer Motor Encoder); Did not receive settings",
-          null);
-    }
-    */
   }
 
   private void configMotor() {
@@ -95,22 +79,7 @@ public class DeployerIONitrate implements DeployerIO {
     deployerMotorPIDSettingsRetract.setMotionProfileMode(MotionProfileMode.kTrapezoidal);
     deployerMotorConfig.setPIDSettings(deployerMotorPIDSettingsRetract, PIDConfigSlot.kSlot1);
 
-    // TODO Figure out what this stuff is
-    /*
-    LimitSettings deployerMotorLimitSettings = new LimitSettings();
-    deployerMotorLimitSettings.setForwardHardLimit(Constants.Deployer.motorForwardHardLimit);
-    deployerMotorLimitSettings.setReverseHardLimit(Constants.Deployer.motorReverseHardLimit);
-    deployerMotorConfig.setLimitSettings(deployerMotorLimitSettings);
-    */
-
   }
-
-
-  /* TODO uncomment if we use external encoder
-  private void configEncoder() {
-    deployerMotorEncoderConfig.setInvertDirection(Constants.Deployer.motorEncoderInverted);
-  }
-  */
 
   @Override
   public void updateInputs(DeployerIOInputs inputs) {
@@ -123,14 +92,6 @@ public class DeployerIONitrate implements DeployerIO {
     inputs.deployerMotorAppliedVolts = deployerMotor.getBusVoltageFrame().getValue();
 
     inputs.deployerMotorRequestedPositionRotations = deployerMotorRequestedPositionRotations;
-
-    /* TODO uncomment if we use external encoder
-    inputs.deployerMotorEncoderConnected = deployerMotorEncoder.isConnected();
-    inputs.deployerMotorEncoderSpeedRotationsPerSec = deployerMotorEncoder.getVelocity();
-    inputs.deployerMotorEncoderPositionRotations = deployerMotorEncoder.getPosition();
-    inputs.deployerMotorEncoderAbsolutePosition = deployerMotorEncoder.getAbsPosition();
-    inputs.deployerMotorEncoderTempCelcius = deployerMotorEncoder.getTemperature();
-    */
   }
 
   @Override
