@@ -9,7 +9,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.constants.Constants;
@@ -38,7 +37,6 @@ public class ArmIONitrate implements ArmIO {
         .setMinwrapConfig(new MinwrapConfig.Enabled());
 
     CanandmagSettings settings = new CanandmagSettings();
-
   }
 
   @Override
