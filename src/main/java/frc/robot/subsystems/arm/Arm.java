@@ -14,6 +14,7 @@ public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private Superstructure superstructure;
+  public double minSafeArmDegree;
 
   public double requestedSetpoint; // Degrees, 0 is horizontal to front of robot
   public double prevSetpoint =
@@ -38,22 +39,27 @@ public class Arm extends SubsystemBase {
     Logger.recordOutput("Arm/angleDegrees", inputs.armPositionDegrees);
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
 
+    if (superstructure.isCoralHeld()) {
+      minSafeArmDegree = Constants.Arm.minArmSafeAngleWithCoral;
+    } else {
+      minSafeArmDegree = Constants.Arm.minArmSafeAngle;
+    }
+
     superstructure.getElevatorHeight();
 
     switch (safety) {
       case WAIT_FOR_ELEVATOR:
-        prevSetpoint = Constants.Arm.minArmSafeAngle;
+        prevSetpoint = minSafeArmDegree;
         if (Constants.Elevator.minElevatorSafeHeightMeters <= superstructure.getElevatorHeight()) {
           safety = Safety.MOVING_WITH_ELEVATOR;
         }
         break;
       case MOVING_WITH_ELEVATOR:
-        if (requestedSetpoint < Constants.Arm.minArmSafeAngle
+        if (requestedSetpoint < minSafeArmDegree
             && superstructure.getElevatorHeight()
                 < Constants.Elevator.minElevatorSafeHeightMeters) {
           safety = Safety.WAIT_FOR_ELEVATOR;
-        } else if (getAngleDegrees() > Constants.Arm.minArmSafeAngle
-            && requestedSetpoint < Constants.Arm.minArmSafeAngle) {
+        } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
           safety = Safety.WAIT_FOR_ELEVATOR;
         }
         break;
@@ -84,7 +90,7 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = Constants.Arm.descoringAngleDegAlgae; // TODO: angle for L2
   }
 
-  public void scoreAlgae() {}
+  public void scoreAlgae(/*Side scoringSide*/ ) {}
 
   public void prescoreCoral(Level coralLevel) {
     setcoralheight(coralLevel);
@@ -102,7 +108,6 @@ public class Arm extends SubsystemBase {
   public void safeBargeRetract() {}
 
   public void setManualInitialization() {
-
     // TODO: Figure out how to configurate an encoder
   }
 

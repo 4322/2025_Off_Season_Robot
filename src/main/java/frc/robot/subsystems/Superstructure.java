@@ -96,7 +96,7 @@ public class Superstructure extends SubsystemBase {
         if (isHomeButtonPressed()) {
           if (startTimer.hasElapsed(1)) {
             arm.setManualInitialization();
-            elevator.setHome();
+            elevator.setManualInitialization();
             state = Superstates.IDLE;
           }
         }
@@ -131,7 +131,7 @@ public class Superstructure extends SubsystemBase {
         break;
       case EJECT:
         elevator.eject();
-        arm.eject();
+
         endEffector.eject();
 
         if (!requestEject && !endEffector.hasAlgae() && !endEffector.hasCoral()) {

@@ -86,6 +86,7 @@ public final class Constants {
     public static final double armMotorGearRatio = 4.0; // TODO: Set to actual gear ratio
 
     public static final double minArmSafeAngle = 45.0;
+    public static final double minArmSafeAngleWithCoral = 50.0;
     public static final double maxArmSafeAngle = 245.0;
 
     public static final double setpointToleranceDegrees = 0.01;
