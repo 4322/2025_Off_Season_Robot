@@ -95,7 +95,7 @@ public class Superstructure extends SubsystemBase {
       case START: // TODO
         if (isHomeButtonPressed()) {
           if (startTimer.hasElapsed(1)) {
-            arm.setHome();
+            arm.setManualInitialization();
             elevator.setHome();
             state = Superstates.IDLE;
           }

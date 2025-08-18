@@ -1,8 +1,12 @@
 package frc.robot.subsystems.arm;
 
+import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.reduxrobotics.sensors.canandmag.Canandmag;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
@@ -15,6 +19,8 @@ public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private Superstructure superstructure;
+  private final Canandmag armEncoder;
+
 
   public double requestedSetpoint; // Degrees, 0 is horizontal to front of robot
   public double prevSetpoint =
@@ -101,13 +107,23 @@ public class Arm extends SubsystemBase {
 
   public void safeBargeRetract() {}
 
-  public void setHome() {
-    Encoder armEncoder =
-        new Encoder(
-            0,
-            1,
-            false,
-            Encoder.EncodingType.k2X); // TODO: Figure out how to configurate an encoder
+  public void setManualInitialization() {
+    NitrateSettings armEncoderConfig = new NitrateSettings();
+    armEncoder = new Canandmag(Constants.Arm.armEncoderId);
+    .armEncoderConfig
+      GetPosition()
+        .setFeedbackSensor(
+            new com.reduxrobotics.sensors.canandmag.CanandmagRelative(
+                Constants.Arm.armEncoderId, Constants.Arm.armMotorGearRatio));
+        .getSettings ;
+    if (!armEncoderConfigStatus.isEmpty()) {
+      DriverStation.reportError(
+          "Canandmag "
+              + armEncoder.getAddress().getDeviceId()
+              + " (Arm encoder) failed to configure",
+          false);
+    }
+     // TODO: Figure out how to configurate an encoder
   }
 
   public void setNeutralMode(IdleMode idlemode) {}
