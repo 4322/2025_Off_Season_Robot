@@ -141,18 +141,21 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // InvertMode.kInverted or InvertMode.kNotInverted
-    
+
     // TODO tune these
-    public static final double currentDetectionDebounceTimeSeconds = 0.25; // Time for the current to spike and stay there before detection is triggered
-    public static final double velocityDetectionDebounceTimeSeconds = 0.25; // Time for veleocity to spike and stay there before detection is triggered
+    public static final double currentDetectionDebounceTimeSeconds =
+        0.25; // Time for the current to spike and stay there before detection is triggered
+    public static final double velocityDetectionDebounceTimeSeconds =
+        0.25; // Time for veleocity to spike and stay there before detection is triggered
     public static final double CurrentDetectionDeltaThresholdAmps = 0;
     public static final double CurrentDetectionMaxAccumulationSeconds = 1;
     public static final double VelocityDetectionMaxAccumulationSeconds = 1;
     public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
 
-    public static final double algaeIntakingDelaySeconds = 0.05; // Time to wait after algae is detected in End Effector before reducing voltage
-    public static final double coralIntakingDelaySeconds = 0.05; // Time to wait after coral is detected in End Effector before reducing voltage
-  
+    public static final double algaeIntakingDelaySeconds =
+        0.05; // Time to wait after algae is detected in End Effector before reducing voltage
+    public static final double coralIntakingDelaySeconds =
+        0.05; // Time to wait after coral is detected in End Effector before reducing voltage
   }
 
   public static class Deployer {
@@ -178,9 +181,9 @@ public final class Constants {
     // 1 motor rotation is 1/49 of deployer rotation
     // Range of motion of deployer is about 0-140 degrees
     public static final double motorGearRatio = 49;
-    public static final double ejectPositionRotations = 30/360;
-    public static final double retractPositionRotations = 10/360;
-    public static final double deployPositionRotations = 140/360;
+    public static final double ejectPositionRotations = 30 / 360;
+    public static final double retractPositionRotations = 10 / 360;
+    public static final double deployPositionRotations = 140 / 360;
   }
 
   public static class Indexer {
@@ -218,15 +221,18 @@ public final class Constants {
     public static final double motorVoltageRejectSlow = -3;
     public static final double motorVoltageEject = -5;
     // TODO tune these
-    public static final double currentDetectionDebounceTimeSeconds = 0.25; // Time for the delta of the current to spike and stay there before detection is triggered
-    public static final double velocityDetectionDebounceTimeSeconds = 0.25; // Time for delta of the velocity to spike and stay there before detection is triggered
+    public static final double currentDetectionDebounceTimeSeconds =
+        0.25; // Time for the delta of the current to spike and stay there before detection is
+    // triggered
+    public static final double velocityDetectionDebounceTimeSeconds =
+        0.25; // Time for delta of the velocity to spike and stay there before detection is
+    // triggered
 
     public static final double CurrentDetectionDeltaThresholdAmps = 0;
     public static final double velocityDetectionStallDeltaRotationsPerSec = 0;
     public static final double CurrentDetectionMaxAccumulationSeconds = 1;
     public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
     public static final double VelocityDetectionMaxAccumulationSeconds = 1;
-
   }
 
   public static class IntakeSuperstructure {

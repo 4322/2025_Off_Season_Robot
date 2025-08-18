@@ -1,18 +1,13 @@
 package frc.robot.subsystems.endEffector;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
-import frc.robot.util.DeltaDebouncer;
-
-import frc.robot.util.ClockUtil;
-
-import org.littletonrobotics.junction.Logger;
-
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Superstructure;
+import frc.robot.constants.Constants;
+import frc.robot.util.ClockUtil;
+import frc.robot.util.DeltaDebouncer;
+import org.littletonrobotics.junction.Logger;
 
 public class EndEffector extends SubsystemBase {
   private EndEffectorIO io;
@@ -39,7 +34,8 @@ public class EndEffector extends SubsystemBase {
     HOLD_CORAL,
     RELEASE_ALGAE,
     RELEASE_CORAL,
-    INTAKING_CORAL, // This and below state used to give delay before reducing intake voltage to allow a piece to fully come in
+    INTAKING_CORAL, // This and below state used to give delay before reducing intake voltage to
+    // allow a piece to fully come in
     INTAKING_ALGAE,
     EJECT
   }
@@ -47,15 +43,19 @@ public class EndEffector extends SubsystemBase {
   private EndEffectorStates state = EndEffectorStates.IDLE;
 
   private DeltaDebouncer currentDetectionDebouncer =
-      new DeltaDebouncer(Constants.EndEffector.currentDetectionDebounceTimeSeconds,
-          Constants.EndEffector.CurrentDetectionDeltaThresholdAmps, DeltaDebouncer.Mode.CUMULATIVE,
-          Constants.EndEffector.CurrentDetectionMaxAccumulationSeconds, DeltaDebouncer.ChangeType.INCREASE);
+      new DeltaDebouncer(
+          Constants.EndEffector.currentDetectionDebounceTimeSeconds,
+          Constants.EndEffector.CurrentDetectionDeltaThresholdAmps,
+          DeltaDebouncer.Mode.CUMULATIVE,
+          Constants.EndEffector.CurrentDetectionMaxAccumulationSeconds,
+          DeltaDebouncer.ChangeType.INCREASE);
   private DeltaDebouncer velocityDetectionDebouncer =
-      new DeltaDebouncer(Constants.EndEffector.velocityDetectionDebounceTimeSeconds,
+      new DeltaDebouncer(
+          Constants.EndEffector.velocityDetectionDebounceTimeSeconds,
           Constants.EndEffector.VelocityDetectionDeltaThresholdRotationsPerSecond,
-          DeltaDebouncer.Mode.CUMULATIVE, Constants.EndEffector.VelocityDetectionMaxAccumulationSeconds, DeltaDebouncer.ChangeType.DECREASE);
-  
-
+          DeltaDebouncer.Mode.CUMULATIVE,
+          Constants.EndEffector.VelocityDetectionMaxAccumulationSeconds,
+          DeltaDebouncer.ChangeType.DECREASE);
 
   public EndEffector(EndEffectorIO io) {
     this.io = io;
@@ -65,7 +65,7 @@ public class EndEffector extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+
     io.updateInputs(inputs);
     Logger.processInputs("End Effector", inputs);
     Logger.recordOutput("End Effector/State", state.toString());
@@ -73,9 +73,10 @@ public class EndEffector extends SubsystemBase {
     Logger.recordOutput("End Effector/algaeHeld", algaeHeld);
     Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
 
-    isPiecePickupDetected = currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps)
-        && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec);
-  
+    isPiecePickupDetected =
+        currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps)
+            && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec);
+
     switch (state) {
       case IDLE:
         io.stopEndEffectorMotor(IdleMode.kCoast);
@@ -159,13 +160,15 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case EJECT:
-        if (ClockUtil.inBound(RobotContainer.superstructure.getArmAngle(), 20, 50, true)) /*TODO set acual values*/ {
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
-        if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
-          state = EndEffectorStates.IDLE;
-          coralHeld = false;
-          algaeHeld = false;
-        } }
+        if (ClockUtil.inBound(
+            RobotContainer.superstructure.getArmAngle(), 20, 50, true)) /*TODO set acual values*/ {
+          io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
+          if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+            state = EndEffectorStates.IDLE;
+            coralHeld = false;
+            algaeHeld = false;
+          }
+        }
         break;
     }
   }
@@ -219,7 +222,7 @@ public class EndEffector extends SubsystemBase {
     requestReleaseCoral = false;
     requestEject = false;
   }
-  
+
   public boolean isPiecePickupDetected() {
     return isPiecePickupDetected;
   }

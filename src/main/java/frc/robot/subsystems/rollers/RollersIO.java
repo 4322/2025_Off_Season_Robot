@@ -19,5 +19,4 @@ public interface RollersIO {
   public default void setRollersMotorVoltage(double voltage) {}
 
   public default void stopRollersMotor(IdleMode mode) {}
-
 }

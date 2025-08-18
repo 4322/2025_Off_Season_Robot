@@ -38,5 +38,4 @@ public interface EndEffectorIO {
   public default void setEndEffectorMotorVoltage(double voltage) {}
 
   public default void stopEndEffectorMotor(IdleMode idleMode) {}
-
 }

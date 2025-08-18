@@ -1,10 +1,8 @@
 package frc.robot.subsystems.rollers;
 
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.util.DeltaDebouncer;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Rollers extends SubsystemBase {
@@ -13,14 +11,23 @@ public class Rollers extends SubsystemBase {
 
   private boolean isCoralPickupDetected = false;
 
-
   // Current goes from low -> high and velocity goes from high -> low on piece pickup
   private DeltaDebouncer currentDetectionDebouncer =
-      new DeltaDebouncer(Constants.Rollers.currentDetectionDebounceTimeSeconds,Constants.Rollers.CurrentDetectionDeltaThresholdAmps, DeltaDebouncer.Mode.CUMULATIVE, Constants.Rollers.CurrentDetectionMaxAccumulationSeconds, DeltaDebouncer.ChangeType.INCREASE);
+      new DeltaDebouncer(
+          Constants.Rollers.currentDetectionDebounceTimeSeconds,
+          Constants.Rollers.CurrentDetectionDeltaThresholdAmps,
+          DeltaDebouncer.Mode.CUMULATIVE,
+          Constants.Rollers.CurrentDetectionMaxAccumulationSeconds,
+          DeltaDebouncer.ChangeType.INCREASE);
   private DeltaDebouncer velocityDetectionDebouncer =
-      new DeltaDebouncer(Constants.Rollers.velocityDetectionDebounceTimeSeconds, Constants.Rollers.VelocityDetectionDeltaThresholdRotationsPerSecond, DeltaDebouncer.Mode.CUMULATIVE, Constants.Rollers.VelocityDetectionMaxAccumulationSeconds, DeltaDebouncer.ChangeType.DECREASE);
-  
-      private enum RollersStatus {
+      new DeltaDebouncer(
+          Constants.Rollers.velocityDetectionDebounceTimeSeconds,
+          Constants.Rollers.VelocityDetectionDeltaThresholdRotationsPerSecond,
+          DeltaDebouncer.Mode.CUMULATIVE,
+          Constants.Rollers.VelocityDetectionMaxAccumulationSeconds,
+          DeltaDebouncer.ChangeType.DECREASE);
+
+  private enum RollersStatus {
     START,
     FEED,
     FEED_SLOW,
@@ -37,13 +44,14 @@ public class Rollers extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+
     io.updateInputs(inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
     Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected);
-    
-    isCoralPickupDetected = currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps) && 
-        velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec);
+
+    isCoralPickupDetected =
+        currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps)
+            && velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec);
   }
 
   public void feed() {

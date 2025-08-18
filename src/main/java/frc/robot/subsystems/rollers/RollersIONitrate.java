@@ -69,6 +69,4 @@ public class RollersIONitrate implements RollersIO {
   public void stopRollersMotor(IdleMode mode) {
     rollersMotor.stop(mode);
   }
-
-
 }

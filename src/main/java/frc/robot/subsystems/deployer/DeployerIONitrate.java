@@ -10,7 +10,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
-import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 
@@ -24,7 +23,6 @@ public class DeployerIONitrate implements DeployerIO {
   private final PIDPositionRequest deployerMotorRetractPIDRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
-  
   private double previousRequestedPosition = -999;
   private double deployerMotorRequestedPositionRotations = 0.0;
 
@@ -40,7 +38,6 @@ public class DeployerIONitrate implements DeployerIO {
               + " error (Deployer Motor); Did not receive settings",
           null);
     }
-
   }
 
   private void configMotor() {
@@ -78,7 +75,6 @@ public class DeployerIONitrate implements DeployerIO {
         Constants.Deployer.motorRetractkD);
     deployerMotorPIDSettingsRetract.setMotionProfileMode(MotionProfileMode.kTrapezoidal);
     deployerMotorConfig.setPIDSettings(deployerMotorPIDSettingsRetract, PIDConfigSlot.kSlot1);
-
   }
 
   @Override
@@ -101,9 +97,13 @@ public class DeployerIONitrate implements DeployerIO {
       deployerMotorRequestedPositionRotations = rotations * Constants.Deployer.motorGearRatio;
       previousRequestedPosition = rotations;
       if (deployerMotor.getPosition() < rotations * Constants.Deployer.motorGearRatio) {
-        deployerMotor.setRequest(deployerMotorDeployPIDRequest.setPosition(rotations * Constants.Deployer.motorGearRatio));
+        deployerMotor.setRequest(
+            deployerMotorDeployPIDRequest.setPosition(
+                rotations * Constants.Deployer.motorGearRatio));
       } else {
-        deployerMotor.setRequest(deployerMotorRetractPIDRequest.setPosition(rotations * Constants.Deployer.motorGearRatio));
+        deployerMotor.setRequest(
+            deployerMotorRetractPIDRequest.setPosition(
+                rotations * Constants.Deployer.motorGearRatio));
       }
     }
   }

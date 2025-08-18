@@ -17,7 +17,6 @@ public interface DeployerIO {
     public double deployerMotorPositionRotations = 0.0;
 
     public double deployerMotorRequestedPositionRotations = 0.0;
-
   }
 
   public default void updateInputs(DeployerIOInputs inputs) {}
