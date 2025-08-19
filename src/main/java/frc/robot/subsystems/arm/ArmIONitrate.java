@@ -10,7 +10,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.arm.ArmIO.ArmIOInputs;
@@ -50,11 +49,21 @@ public class ArmIONitrate implements ArmIO {
     armInputs.armEncoderConnected = armEncoder.isConnected();
   }
 
+  public void setManualInitialization() {
+    armMotor.setPosition(0);
+  }
+
+  public void requestPosition() {
+    armMotor.setRequest(
+        armPIDPositionRequest.setPosition(
+          Constants.Arm.armOffsetEncoderDeg + Units.rotationsToDegrees(armMotor.getPosition())));
+  }
+
+  /* Using as reference
   @Override
   public void requestPosition(Rotation2d angle) {
     armMotor.setRequest(
         armPIDPositionRequest.setPosition(
             angle.getRotations() - angle.minus(Rotation2d.fromDegrees(90)).getRotations()));
-  }
-
+  } */
 }

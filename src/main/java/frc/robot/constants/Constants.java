@@ -5,6 +5,7 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -85,8 +86,9 @@ public final class Constants {
 
     public static final double armMotorGearRatio = 4.0; // TODO: Set to actual gear ratio
 
-    public static final double minArmSafeAngle = 45.0;
-    public static final double minArmSafeAngleWithCoral = 50.0;
+    // The purpose of
+    public static final double minArmSafeDeg = 45.0;
+    public static final double minArmSafeWithCoralDeg = 50.0;
     public static final double maxArmSafeAngle = 245.0;
 
     public static final double setpointToleranceDegrees = 0.01;
@@ -96,13 +98,15 @@ public final class Constants {
     public static final ElectricalLimitSettings armElectricalLimitSettings =
         new ElectricalLimitSettings();
 
-    public static final double scoringL1AngleDegCoral = 10;
-    public static final double scoringL2AngleDegCoral = 20;
-    public static final double scoringL3AngleDegCoral = 30;
-    public static final double scoringL4AngleDegCoral = 40;
+    public static final double scoringL1CoralDeg = 10;
+    public static final double scoringL2CoralDeg = 20;
+    public static final double scoringL3CoralDeg = 30;
+    public static final double scoringL4CoralDeg = 40;
 
-    public static final double descoringAngleDegAlgae = 90;
+    public static final double descoringAlgaeDeg = 90;
     public static final double safeBargeRetractAngleDeg = 45; // TODO: Set to actual angle
+    // To the encoder 0 is horizontal but to us its straight down
+    public static final double armOffsetEncoderDeg = -90;
 
     public static final PIDSettings armMotorGains = new PIDSettings();
     public static final double kP =
@@ -235,9 +239,11 @@ public final class Constants {
 
   public static class Elevator {
     public static final double minElevatorSafeHeightMeters = 45.0;
-    public static final double scoringL1HeightCoral = 10;
-    public static final double scoringL2HeightCoral = 20;
-    public static final double scoringL3HeightgCoral = 30;
-    public static final double scoringL4HeightCoral = 40;
+    public static final double maxElevatorSafeHeightMeters = 100.0; // TODO: Set to actual height
+   
+    public static final double scoringL1CoralMeters = 10;
+    public static final double scoringL2CoralMeters = 20;
+    public static final double scoringL3CoralMeters = 30;
+    public static final double scoringL4CoralMeters = 40;
   } // TODO placeholder values
 }

@@ -1,7 +1,6 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
@@ -9,25 +8,17 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
-import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private Superstructure superstructure;
   public double minSafeArmDegree;
+  public double maxElevatorSafeMeters = Constants.Elevator.scoringL4CoralMeters;
 
-  public double requestedSetpoint; // Degrees, 0 is horizontal to front of robot
-  public double prevSetpoint =
-      MathUtil.clamp(
-          requestedSetpoint, Constants.Arm.minArmSafeAngle, Constants.Arm.maxArmSafeAngle);
-
-  public enum Safety {
-    WAIT_FOR_ELEVATOR,
-    MOVING_WITH_ELEVATOR,
-  }
-
-  Safety safety = Safety.MOVING_WITH_ELEVATOR;
+  public double requestedSetpoint;
+  public double prevSetpoint;
+  public double newSetpoint = 0;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -41,30 +32,26 @@ public class Arm extends SubsystemBase {
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
 
     if (superstructure.isCoralHeld()) {
-      minSafeArmDegree = Constants.Arm.minArmSafeAngleWithCoral;
+      minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
     } else {
-      minSafeArmDegree = Constants.Arm.minArmSafeAngle;
+      minSafeArmDegree = Constants.Arm.minArmSafeDeg;
     }
 
     superstructure.getElevatorHeight();
+    // Safety Logic
 
-    switch (safety) {
-      case WAIT_FOR_ELEVATOR:
-        prevSetpoint = minSafeArmDegree;
-        if (Constants.Elevator.minElevatorSafeHeightMeters <= superstructure.getElevatorHeight()) {
-          safety = Safety.MOVING_WITH_ELEVATOR;
-        }
-        break;
-      case MOVING_WITH_ELEVATOR:
-        if (requestedSetpoint < minSafeArmDegree
-            && superstructure.getElevatorHeight()
-                < Constants.Elevator.minElevatorSafeHeightMeters) {
-          safety = Safety.WAIT_FOR_ELEVATOR;
-        } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
-          safety = Safety.WAIT_FOR_ELEVATOR;
-        }
-        break;
+    if (Constants.Elevator.minElevatorSafeHeightMeters <= superstructure.getElevatorHeight()) {}
+
+    if (requestedSetpoint < minSafeArmDegree
+        && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
+
+    } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
+
+    } else if (maxElevatorSafeHeightMeters
+        > superstructure.getElevatorHeight()) {
+
     }
+    
     if (prevSetpoint != requestedSetpoint && Safety.MOVING_WITH_ELEVATOR == safety) {
       io.requestPosition(Rotation2d.fromDegrees(requestedSetpoint));
       prevSetpoint = requestedSetpoint;
@@ -88,7 +75,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void algaeReef() {
-    requestedSetpoint = Constants.Arm.descoringAngleDegAlgae; // TODO: angle for L2
+    requestedSetpoint = Constants.Arm.descoringAlgaeDeg; // TODO: angle for L2
   }
 
   public void scoreAlgae(/*Side scoringSide*/ ) {}
@@ -108,10 +95,6 @@ public class Arm extends SubsystemBase {
 
   public void safeBargeRetract() {}
 
-  public void setManualInitialization() {
-    // TODO: Figure out how to configurate an encoder
-  }
-
   public void setNeutralMode(IdleMode idlemode) {}
 
   public void climbing() {
@@ -126,7 +109,7 @@ public class Arm extends SubsystemBase {
     return inputs.armPositionDegrees;
   }
 
-  private void setcoralheight(Level coralLevel) {
+  private void setcoralheight(Level coralLscoringL1CoralDeg) {
     switch (coralLevel) {
       case L1:
         requestedSetpoint = Constants.Arm.scoringL1AngleDegCoral;
@@ -142,8 +125,4 @@ public class Arm extends SubsystemBase {
         break;
     }
   }
-  private void getZeroOffset(){
-    
-  }
-
 }
