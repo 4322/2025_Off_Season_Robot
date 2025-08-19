@@ -104,7 +104,7 @@ public final class Constants {
     public static final double scoringL4CoralDeg = 40;
 
     public static final double descoringAlgaeDeg = 90;
-    public static final double safeBargeRetractAngleDeg = 45; // TODO: Set to actual angle
+    public static final double safeBargeRetractAngleDeg = 100; // TODO: Set to actual angle
     // To the encoder 0 is horizontal but to us its straight down
     public static final double armOffsetEncoderDeg = -90;
 
@@ -240,7 +240,7 @@ public final class Constants {
   public static class Elevator {
     public static final double minElevatorSafeHeightMeters = 45.0;
     public static final double maxElevatorSafeHeightMeters = 100.0; // TODO: Set to actual height
-   
+
     public static final double scoringL1CoralMeters = 10;
     public static final double scoringL2CoralMeters = 20;
     public static final double scoringL3CoralMeters = 30;

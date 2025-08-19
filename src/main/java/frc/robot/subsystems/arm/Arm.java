@@ -1,12 +1,16 @@
 package frc.robot.subsystems.arm;
 
+import javax.swing.text.StyleConstants;
+
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
@@ -39,20 +43,28 @@ public class Arm extends SubsystemBase {
 
     superstructure.getElevatorHeight();
     // Safety Logic
+    // newsetpoint = prevsetpoint when it can move with elevator
 
-    if (Constants.Elevator.minElevatorSafeHeightMeters <= superstructure.getElevatorHeight()) {}
+    if (Constants.Elevator.minElevatorSafeHeightMeters <= superstructure.getElevatorHeight()
+        && maxElevatorSafeMeters >= superstructure.getElevatorHeight()) {
+          prevSetpoint = newSetpoint;
+        }
 
     if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
-
+      requestedSetpoint = minSafeArmDegree; //Do we want driver to have to input setpoint again?
+      
     } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
+      requestedSetpoint = minSafeArmDegree; // Don't let it go below the safe angle
+      //Or should we make it so it just won't move?
+    } 
+    else if (maxElevatorSafeMeters > superstructure.getElevatorHeight() && getAngleDegrees() >= Constants.Arm.safeBargeRetractAngleDeg) {
 
-    } else if (maxElevatorSafeHeightMeters
-        > superstructure.getElevatorHeight()) {
-
+      //Make it so you can move it only to get to safe positon
+      
     }
-    
-    if (prevSetpoint != requestedSetpoint && Safety.MOVING_WITH_ELEVATOR == safety) {
+
+    if (prevSetpoint != requestedSetpoint) {
       io.requestPosition(Rotation2d.fromDegrees(requestedSetpoint));
       prevSetpoint = requestedSetpoint;
     }
@@ -109,19 +121,19 @@ public class Arm extends SubsystemBase {
     return inputs.armPositionDegrees;
   }
 
-  private void setcoralheight(Level coralLscoringL1CoralDeg) {
+  private void setcoralheight(Level coralLevel) {
     switch (coralLevel) {
       case L1:
-        requestedSetpoint = Constants.Arm.scoringL1AngleDegCoral;
+        requestedSetpoint = Constants.Arm.scoringL1CoralDeg;
         break;
       case L2:
-        requestedSetpoint = Constants.Arm.scoringL2AngleDegCoral;
+        requestedSetpoint = Constants.Arm.scoringL2CoralDeg;
         break;
       case L3:
-        requestedSetpoint = Constants.Arm.scoringL3AngleDegCoral;
+        requestedSetpoint = Constants.Arm.scoringL3CoralDeg;
         break;
       case L4:
-        requestedSetpoint = Constants.Arm.scoringL4AngleDegCoral;
+        requestedSetpoint = Constants.Arm.scoringL4CoralDeg;
         break;
     }
   }

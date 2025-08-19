@@ -53,14 +53,13 @@ public class ArmIONitrate implements ArmIO {
     armMotor.setPosition(0);
   }
 
+
   public void requestPosition() {
     armMotor.setRequest(
         armPIDPositionRequest.setPosition(
-          Constants.Arm.armOffsetEncoderDeg + Units.rotationsToDegrees(armMotor.getPosition())));
+            Constants.Arm.armOffsetEncoderDeg + Units.rotationsToDegrees(armEncoder.getPosition())));
   }
-
-  /* Using as reference
-  @Override
+  /*@Override
   public void requestPosition(Rotation2d angle) {
     armMotor.setRequest(
         armPIDPositionRequest.setPosition(
