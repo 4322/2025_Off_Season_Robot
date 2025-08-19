@@ -91,8 +91,7 @@ public final class Constants {
     public static final double armMotorGearRatio = 4.0; // TODO: Set to actual gear ratio
     public static final double minArmSafeAngle = 45.0;
     public static final double maxArmSafeAngle = 245.0;
-
-    public static final double setpointToleranceMeters = 0.01;
+    public static final double setpointToleranceDegrees = 0.01;
     public static final double supplyCurrentLimit = 40; // TODO
     public static final double statorCurrentLimit = 100; // TODO
     public static final ElectricalLimitSettings armElectricalLimitSettings =
@@ -251,4 +250,8 @@ public final class Constants {
     public static final double indexerRetractTimeoutSeconds = 3.0;
     public static final double pickupAreaRetractTimeoutSeconds = 3.0;
   }
+
+  public static class Elevator {
+    public static final double minElevatorSafeHeight = 45.0;
+  } // TODO placeholder values
 }

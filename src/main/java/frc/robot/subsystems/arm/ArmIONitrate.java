@@ -54,7 +54,7 @@ public class ArmIONitrate implements ArmIO {
 
   @Override
   public void updateInputs(ArmIOInputs armInputs) {
-    armInputs.armPositionRad = Units.rotationsToRadians(armMotor.getPosition());
+    armInputs.armPositionDegrees = Units.rotationsToRadians(armMotor.getPosition());
     armInputs.armConnected = armMotor.isConnected();
     armInputs.armVelocityRadPerSec = Units.rotationsToRadians(armMotor.getVelocity());
     armInputs.armSupplyCurrentAmps = armMotor.getBusCurrent();
@@ -68,6 +68,8 @@ public class ArmIONitrate implements ArmIO {
 
   @Override
   public void setPosition(Rotation2d angle) {
-    armMotor.setRequest(armPIDPositionRequest.setPosition(angle.getRotations()));
+    armMotor.setRequest(
+        armPIDPositionRequest.setPosition(
+            angle.getRotations() - angle.minus(Rotation2d.fromDegrees(90)).getRotations()));
   }
 }

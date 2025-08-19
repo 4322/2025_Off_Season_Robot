@@ -8,7 +8,7 @@ public class GyroIOBoron implements GyroIO {
   private final Canandgyro gyro;
 
   public GyroIOBoron() {
-    gyro = new Canandgyro(DrivetrainConstants.gyroID);
+    gyro = new Canandgyro(DrivetrainConstants.gyroId);
   }
 
   @Override
@@ -18,7 +18,6 @@ public class GyroIOBoron implements GyroIO {
     inputs.yawVelocityRadPerSec = Units.rotationsToRadians(gyro.getAngularVelocityYaw());
   }
 
-  @Override
   public Canandgyro getGyro() {
     return gyro;
   }
