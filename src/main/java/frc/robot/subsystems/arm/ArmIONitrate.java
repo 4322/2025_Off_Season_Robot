@@ -9,8 +9,10 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
+import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.arm.ArmIO.ArmIOInputs;
 
@@ -37,6 +39,18 @@ public class ArmIONitrate implements ArmIO {
         .getPIDSettings(PIDConfigSlot.kSlot0)
         .setMotionProfileMode(MotionProfileMode.kTrapezoidal)
         .setMinwrapConfig(new MinwrapConfig.Enabled());
+    
+    CanandmagSettings settings = new CanandmagSettings();
+    CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
+
+
+        if (!armEncoderConfigStatus.isEmpty()) {
+      DriverStation.reportError(
+          "Canandmag "
+              + armEncoder.getAddress().getDeviceId()
+              + " (Arm encoder) failed to configure",
+          false);
+    }
   }
 
   @Override
@@ -59,6 +73,7 @@ public class ArmIONitrate implements ArmIO {
         armPIDPositionRequest.setPosition(
             Constants.Arm.armOffsetEncoderDeg + Units.rotationsToDegrees(armEncoder.getPosition())));
   }
+  
   /*@Override
   public void requestPosition(Rotation2d angle) {
     armMotor.setRequest(

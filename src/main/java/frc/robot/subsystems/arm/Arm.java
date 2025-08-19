@@ -49,13 +49,13 @@ public class Arm extends SubsystemBase {
         && maxElevatorSafeMeters >= superstructure.getElevatorHeight()) {
           prevSetpoint = newSetpoint;
         }
-
     if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
       requestedSetpoint = minSafeArmDegree; //Do we want driver to have to input setpoint again?
       
     } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
-      requestedSetpoint = minSafeArmDegree; // Don't let it go below the safe angle
+      requestedSetpoint = minSafeArmDegree; 
+      // Don't let it go below the safe angle
       //Or should we make it so it just won't move?
     } 
     else if (maxElevatorSafeMeters > superstructure.getElevatorHeight() && getAngleDegrees() >= Constants.Arm.safeBargeRetractAngleDeg) {
