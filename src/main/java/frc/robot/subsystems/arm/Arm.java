@@ -14,6 +14,7 @@ public class Arm extends SubsystemBase {
   private Superstructure superstructure;
   public double minSafeArmDegree;
   public double maxElevatorSafeMeters = Constants.Elevator.scoringL4CoralMeters;
+  private Constants.Arm armConstants;
 
   public double requestedSetpoint;
   public double prevSetpoint;
@@ -31,9 +32,9 @@ public class Arm extends SubsystemBase {
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
 
     if (superstructure.isCoralHeld()) {
-      minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
+      minSafeArmDegree = armConstants.minArmSafeWithCoralDeg;
     } else {
-      minSafeArmDegree = Constants.Arm.minArmSafeDeg;
+      minSafeArmDegree = armConstants.minArmSafeDeg;
     }
 
     superstructure.getElevatorHeight();
@@ -53,7 +54,7 @@ public class Arm extends SubsystemBase {
       // Don't let it go below the safe angle
       // Or should we make it so it just won't move?
     } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
-        && getAngleDegrees() >= Constants.Arm.safeBargeRetractAngleDeg) {
+        && getAngleDegrees() >= armConstants.safeBargeRetractAngleDeg) {
 
       // Make it so you can move it only to get to safe positon
 
@@ -66,23 +67,23 @@ public class Arm extends SubsystemBase {
   }
 
   public void idle() {
-    requestedSetpoint = 0;
+    requestedSetpoint = armConstants.armIdleDeg;
   }
 
   public void algaeHold() {
-    requestedSetpoint = 20; // TODO: angle for algae hold
+    requestedSetpoint = armConstants.algaeHoldDeg;
   }
 
   public void coralHold() {
-    requestedSetpoint = 20; // TODO:
+    requestedSetpoint = armConstants.coralHoldDeg;
   }
 
   public void algaeGround() {
-    requestedSetpoint = 20; // TODO:
+    requestedSetpoint = armConstants.algaeGroundDeg;
   }
 
   public void algaeReef() {
-    requestedSetpoint = Constants.Arm.descoringAlgaeDeg; // TODO: angle for L2
+    requestedSetpoint = armConstants.descoringAlgaeDeg;
   }
 
   public void scoreAlgae(/*Side scoringSide*/ ) {}
@@ -97,19 +98,21 @@ public class Arm extends SubsystemBase {
 
   public boolean atSetpoint() {
     return ClockUtil.atReference(
-        inputs.armPositionDegrees, requestedSetpoint, Constants.Arm.setpointToleranceDegrees, true);
+        inputs.armPositionDegrees, requestedSetpoint, armConstants.setpointToleranceDegrees, true);
   }
 
-  public void safeBargeRetract() {}
+  public void safeBargeRetract() {
+    requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
+  }
 
   public void setNeutralMode(IdleMode idlemode) {}
 
   public void climbing() {
-    requestedSetpoint = 20; // TODO:
+    requestedSetpoint = armConstants.climbingDeg; // TODO:
   }
 
   public void eject() {
-    requestedSetpoint = 20; // TODO:
+    requestedSetpoint = armConstants.ejectDeg; // TODO:
   }
 
   public double getAngleDegrees() {
@@ -119,16 +122,16 @@ public class Arm extends SubsystemBase {
   private void setcoralheight(Level coralLevel) {
     switch (coralLevel) {
       case L1:
-        requestedSetpoint = Constants.Arm.scoringL1CoralDeg;
+        requestedSetpoint = armConstants.scoringL1CoralDeg;
         break;
       case L2:
-        requestedSetpoint = Constants.Arm.scoringL2CoralDeg;
+        requestedSetpoint = armConstants.scoringL2CoralDeg;
         break;
       case L3:
-        requestedSetpoint = Constants.Arm.scoringL3CoralDeg;
+        requestedSetpoint = armConstants.scoringL3CoralDeg;
         break;
       case L4:
-        requestedSetpoint = Constants.Arm.scoringL4CoralDeg;
+        requestedSetpoint = armConstants.scoringL4CoralDeg;
         break;
     }
   }
