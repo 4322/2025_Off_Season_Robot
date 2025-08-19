@@ -8,6 +8,8 @@ public interface ElevatorIO {
   @AutoLog
   public static class ElevatorIOInputs {
     public double heightMeters = 0.0;
+    //current setpoint
+    
     public double appliedVoltage = 0.0;
     public double[] supplyCurrentAmps = new double[] {}; // {leader, follower}
     public double[] statorCurrentAmps = new double[] {}; // {leader, follower}
@@ -16,7 +18,7 @@ public interface ElevatorIO {
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
 
-  public default void setHeight(double heightMeters) {}
+  public default void requestHeight(double heightMeters) {}
 
   public default void setVoltage(double voltage) {}
 

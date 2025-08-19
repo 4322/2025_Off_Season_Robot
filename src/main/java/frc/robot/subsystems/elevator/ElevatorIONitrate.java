@@ -2,6 +2,8 @@ package frc.robot.subsystems.elevator;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
+import com.reduxrobotics.motorcontrol.nitrate.NitrateDetails.Stg;
+import com.reduxrobotics.motorcontrol.nitrate.NitrateDetails.Enums.SoftLimitMode;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
@@ -55,5 +57,8 @@ public class ElevatorIONitrate implements ElevatorIO {
   @Override
   public void updateInputs(ElevatorIOInputs elevatorInputs) {
     // Implementation for updating inputs from the Nitrate hardware
+    Stg.constructForwardSoftLimit(SoftLimitMode.kDisabled, 0, 1); //allows to mess with the name :3
+    NitrateSettings x = new NitrateSettings();
+    x.setEphemeral(true);
   }
 }

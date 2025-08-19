@@ -77,6 +77,12 @@ public final class Constants {
     public static final double scoringL3AngleDegCoral = 39.2; // TODO: Set to actual angle
     public static final double scoringL4AngleDegCoral = 37.2; // TODO: Set to actual angle
     public static final double algaePrescorePosition = 0.15; // TODO: Set to actual position
+    public static final double maxElevatorSafeHeightMeters = 70; //need actual values
+    public static final double scoreCoralL1HeightMeters = 0.3; // TODO: Set to actual position
+    public static final double scoreCoralL2HeightMeters = 0.5; // TODO: Set to actual position
+    public static final double scoreCoralL3HeightMeters = 0.7; // TODO: Set to actual position
+    public static final double scoreCoralL4HeightMeters = 0.9; // TODO: Set to actual position
+ 
   }
 
   public static class Arm {
@@ -110,9 +116,18 @@ public final class Constants {
     public static final double kP = 0; // TODO: Set to actual value
     public static final double kI = 0; // TODO: Set to actual value
     public static final double kD = 0; // TODO: Set to actual value
-    public static final double minElevatorSafeHeight = 45.0;
-    public static final double maxElevatorSafeHeight = 245.0;
+    public static final double minElevatorSafeHeightMeters = 45; //need actual values
     public static final double elevatorHeightToleranceMeters = 0.01;
+    public static final double algaeHoldMeters = 0.1; //need actual values
+    public static final double algaeGroundHeightMeters = 5; //need actual values
+    public static final double algaeReefL1HeightMeters = 0.25; // TODO: Set to actual position
+    public static final double algaeReefL2HeightMeters = 0.45; // TODO: Set to actual position
+    public static final double algaeReefL3HeightMeters = 0.65; // TODO: Set to actual position
+    public static final double prescoreCoralL1HeightMeters = 0.85; // TODO: Set to actual position
+    public static final double prescoreCoralL2HeightMeters = 1.05; // TODO: Set to actual position
+    public static final double prescoreCoralL3HeightMeters = 1.25; // TODO: Set to actual position
+    public static final double prescoreCoralL4HeightMeters = 1.45; // TODO: Set to actual position
+    public static final double pickupCoralHeightMeters = 0.5; // TODO: Set to actual position
   }
 
   // TODO all of these are placeholder values

@@ -14,10 +14,11 @@ public class Elevator extends SubsystemBase {
   ElevatorStates state = ElevatorStates.REQUEST_SETPOINT;
   ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   private double requestedHeightMeters = 0.0;
-  private double adjustedHeightMeters;
+  private double adjustedHeightMeters;//NEEDS WORK
   private boolean requestElevator;
 
   private enum ElevatorStates {
+    INITIALIZATIONPROCEDURE,
     REQUEST_SETPOINT,
   }
 
@@ -29,16 +30,13 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
-    Logger.recordOutput("Elevator/heightMeters", inputs.heightMeters);
-    Logger.recordOutput("Elevator/atHeight", atSetpoint());
+    Logger.recordOutput("Elevator/atHeight", atHeight());
     switch (state) {
+      case INITIALIZATIONPROCEDURE:
       case REQUEST_SETPOINT:
-        // Handle request setpoint logic
+        // Work on setpoint logic
         if (requestedHeightMeters != adjustedHeightMeters){
-          io.setHeight(requestedHeightMeters); 
-        }
-        else
-        {
+          io.requestHeight(requestedHeightMeters); 
           adjustedHeightMeters = requestedHeightMeters;
         }
         break;
@@ -62,74 +60,106 @@ public class Elevator extends SubsystemBase {
   climbing()
   eject()
    */
+  private void requestLevel(Level level, double requestedHeight){
+    switch (level){
+      case L1:
+        requestedHeightMeters = requestedHeight;
+        break;
+      case L2:
+        requestedHeightMeters = requestedHeight;
+        break;
+      case L3:
+        requestedHeightMeters = requestedHeight;
+        break;
+      case L4:
+        requestedHeightMeters = requestedHeight;
+        break;
+
+    }
+
+  }
   public void idle() {
-    requestedHeightMeters = Constants.Elevator.minElevatorSafeHeight;
+    requestedHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
   }
 
   public void algaeHold() {
     //requestElevator = true;
-    requestedHeightMeters = 0;
+    requestedHeightMeters = Constants.Elevator.algaeHoldMeters;
   }
 
   public void coralHold() {
     //requestElevator = true;
-    requestedHeightMeters = 0;
+    requestedHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
   }
 
   public void algaeGround() {
     //requestElevator = true;
-    requestedHeightMeters = 20;
+    requestedHeightMeters = Constants.Elevator.algaeGroundHeightMeters;
   }
 
   public void algaeReef(Level level) {
     //requestElevator = true;
-    if(level == Level.L1) {
-      requestedHeightMeters = 40;
-    } else if(level == Level.L2) {
-      requestedHeightMeters = 60;
-    } else if(level == Level.L3) {
-      requestedHeightMeters = 80;
-    } else if(level == Level.L4) {
-      requestedHeightMeters = 100;
+    switch (level) {
+      case L1:
+        requestLevel(level, Constants.Elevator.algaeReefL1HeightMeters);
+        break;
+      case L2:
+        requestLevel(level, Constants.Elevator.algaeReefL2HeightMeters);
+        break;
+      case L3:
+        requestLevel(level, Constants.Elevator.algaeReefL3HeightMeters);
+        break;
+      case L4:
+        break;
     }
   }
 
   public void scoreAlgae() {
     //equestElevator = true;
-    requestedHeightMeters = 120;
+    requestedHeightMeters = Constants.Scoring.maxElevatorSafeHeightMeters;
   }
 
   public void prescoreCoral(Level level) {
-    if(level == Level.L1) {
-      requestedHeightMeters = 40;
-    } else if(level == Level.L2) {
-      requestedHeightMeters = 60;
-    } else if(level == Level.L3) {
-      requestedHeightMeters = 80;
-    } else if(level == Level.L4) {
-      requestedHeightMeters = 100;
+    switch (level) {
+      case L1:
+        requestLevel(level, Constants.Elevator.prescoreCoralL1HeightMeters);
+        break;
+      case L2:
+        requestLevel(level, Constants.Elevator.prescoreCoralL2HeightMeters);
+        break;
+      case L3:
+        requestLevel(level, Constants.Elevator.prescoreCoralL3HeightMeters);
+        break;
+      case L4:
+        requestLevel(level, Constants.Elevator.prescoreCoralL4HeightMeters);
+        break;
     }
   }
 
   public void scoreCoral(Level level) {
-    if(level == Level.L1) {
-      requestedHeightMeters = 40;
-    } else if(level == Level.L2) {
-      requestedHeightMeters = 60;
-    } else if(level == Level.L3) {
-      requestedHeightMeters = 80;
-    } else if(level == Level.L4) {
-      requestedHeightMeters = 100;
+    switch (level) {
+      case L1:
+        requestLevel(level, Constants.Scoring.scoreCoralL1HeightMeters);
+        break;
+      case L2:
+        requestLevel(level, Constants.Scoring.scoreCoralL2HeightMeters);
+        break;
+      case L3:
+        requestLevel(level, Constants.Scoring.scoreCoralL3HeightMeters);
+        break;
+      case L4:
+        requestLevel(level, Constants.Scoring.scoreCoralL4HeightMeters);
+        break;
     }
   }
 
   public void pickupCoral() {
     //requestElevator = true;
-    requestedHeightMeters = 20; // Adjust this value based on the desired height for coral pickup
+    requestedHeightMeters = Constants.Elevator.pickupCoralHeightMeters; // Adjust this value based on the desired height for coral pickup
   }
 
-  public boolean atSetpoint() {
-    return ClockUtil.atReference(getHeightMeters(), adjustedHeightMeters, Constants.Elevator.elevatorHeightToleranceMeters, true); 
+  public boolean atHeight() {
+    return ClockUtil.atReference(getHeightMeters(), requestedHeightMeters, Constants.Elevator.elevatorHeightToleranceMeters, true); 
   }
 
   public double getHeightMeters() {
@@ -145,15 +175,25 @@ public class Elevator extends SubsystemBase {
   }
 
   public void safeBargeRetract() {
-    requestedHeightMeters = Constants.Elevator.minElevatorSafeHeight;
+    requestedHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
   }
 
   public void climbing() {
     requestedHeightMeters = 0;
-    //requestElevator = false; // This might be needed to trigger the elevator to climb
+    //needs work
   }
+  //SETMANUALINTITIALIZATION
+  //RequestAutomaticInitialization
+  //home = intialization
+  //set is now request
+  //Configure hash to constants, so we don't have to change it after fault when we flash the robot
+  //Hash is a mathmatical function you apply to a block of data, and the hashcode is produced by that function.
+  //
 
   public void eject() {
     requestedHeightMeters = 0;
+  }
+  public void peformInitialization(){
+    state = ElevatorStates.INITIALIZATIONPROCEDURE;
   }
 }
