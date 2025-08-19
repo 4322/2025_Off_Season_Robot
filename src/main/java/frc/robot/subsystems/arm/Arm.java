@@ -9,6 +9,7 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
+import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
@@ -141,4 +142,8 @@ public class Arm extends SubsystemBase {
         break;
     }
   }
+  private void getZeroOffset(){
+    
+  }
+
 }
