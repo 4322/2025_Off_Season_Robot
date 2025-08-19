@@ -5,7 +5,6 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 

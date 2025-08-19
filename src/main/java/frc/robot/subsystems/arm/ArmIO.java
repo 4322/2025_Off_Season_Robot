@@ -1,6 +1,5 @@
 package frc.robot.subsystems.arm;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
@@ -16,9 +15,11 @@ public interface ArmIO {
     public double armPositionDegrees = 0.0; // In radians, 0 is horizontal to front of robot
   }
 
+  public default void setManualInitialization() {}
+
   public default void updateInputs(ArmIOInputs inputs) {}
 
   public default void setArmOpenLoop(double outputVoltage) {}
 
-  public default void requestPosition(Rotation2d ArmPosition) {}
+  public default void requestPosition(double requestedSetpoint) {}
 }

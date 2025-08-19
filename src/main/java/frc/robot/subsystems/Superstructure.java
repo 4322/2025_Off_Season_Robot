@@ -210,15 +210,15 @@ public class Superstructure extends SubsystemBase {
 
         break;
       case CORAL_HELD:
+        arm.idle();
+        elevator.idle();
+
         if (requestEject) {
           state = Superstates.EJECT;
         } else if (!endEffector.hasCoral()) {
           state = Superstates.IDLE;
         } else if (requestPrescoreCoral) {
           state = Superstates.PRESCORE_CORAL;
-        }
-        if (endEffector.hasCoral()) {
-          arm.idle();
         }
         // TODO
         break;

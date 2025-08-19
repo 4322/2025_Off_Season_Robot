@@ -1,16 +1,11 @@
 package frc.robot.subsystems.arm;
 
-import javax.swing.text.StyleConstants;
-
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
@@ -47,25 +42,25 @@ public class Arm extends SubsystemBase {
 
     if (Constants.Elevator.minElevatorSafeHeightMeters <= superstructure.getElevatorHeight()
         && maxElevatorSafeMeters >= superstructure.getElevatorHeight()) {
-          prevSetpoint = newSetpoint;
-        }
+      prevSetpoint = newSetpoint;
+    }
     if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
-      requestedSetpoint = minSafeArmDegree; //Do we want driver to have to input setpoint again?
-      
-    } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
-      requestedSetpoint = minSafeArmDegree; 
-      // Don't let it go below the safe angle
-      //Or should we make it so it just won't move?
-    } 
-    else if (maxElevatorSafeMeters > superstructure.getElevatorHeight() && getAngleDegrees() >= Constants.Arm.safeBargeRetractAngleDeg) {
+      requestedSetpoint = minSafeArmDegree; // Do we want driver to have to input setpoint again?
 
-      //Make it so you can move it only to get to safe positon
-      
+    } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
+      requestedSetpoint = minSafeArmDegree;
+      // Don't let it go below the safe angle
+      // Or should we make it so it just won't move?
+    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
+        && getAngleDegrees() >= Constants.Arm.safeBargeRetractAngleDeg) {
+
+      // Make it so you can move it only to get to safe positon
+
     }
 
     if (prevSetpoint != requestedSetpoint) {
-      io.requestPosition(Rotation2d.fromDegrees(requestedSetpoint));
+      io.requestPosition(requestedSetpoint);
       prevSetpoint = requestedSetpoint;
     }
   }

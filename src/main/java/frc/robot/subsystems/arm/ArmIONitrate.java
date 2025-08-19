@@ -35,16 +35,25 @@ public class ArmIONitrate implements ArmIO {
             new FeedbackSensor.CanandmagRelative(
                 Constants.Arm.armEncoderId, Constants.Arm.armMotorGearRatio));
     armConfig
-        .setPIDSettings(Constants.Arm.armMotorGains, PIDConfigSlot.kSlot1)
+        .setPIDSettings(Constants.Arm.armMotorGains, PIDConfigSlot.kSlot0)
         .getPIDSettings(PIDConfigSlot.kSlot0)
         .setMotionProfileMode(MotionProfileMode.kTrapezoidal)
         .setMinwrapConfig(new MinwrapConfig.Enabled());
-    
+
     CanandmagSettings settings = new CanandmagSettings();
     CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
 
+    NitrateSettings armConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);
 
-        if (!armEncoderConfigStatus.isEmpty()) {
+    if (!armConfigStatus.isEmpty()) {
+      DriverStation.reportError(
+          "Nitrate "
+              + armMotor.getAddress().getDeviceId()
+              + " (Arm motor) failed to configure",
+          false);
+    }
+
+    if (!armEncoderConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandmag "
               + armEncoder.getAddress().getDeviceId()
@@ -62,22 +71,17 @@ public class ArmIONitrate implements ArmIO {
     armInputs.armTempCelsius = armMotor.getMotorTemperatureFrame().getData();
     armInputs.armEncoderConnected = armEncoder.isConnected();
   }
+  // You need method in ArmIO as well to do Override Remember to check - Personal Note / Reminder
 
+  @Override
   public void setManualInitialization() {
     armMotor.setPosition(0);
   }
 
-
-  public void requestPosition() {
+  @Override
+  public void requestPosition(double requestSetpoint) {
     armMotor.setRequest(
         armPIDPositionRequest.setPosition(
-            Constants.Arm.armOffsetEncoderDeg + Units.rotationsToDegrees(armEncoder.getPosition())));
+            Constants.Arm.armOffsetEncoderDeg + Units.degreesToRotations(requestSetpoint)));
   }
-  
-  /*@Override
-  public void requestPosition(Rotation2d angle) {
-    armMotor.setRequest(
-        armPIDPositionRequest.setPosition(
-            angle.getRotations() - angle.minus(Rotation2d.fromDegrees(90)).getRotations()));
-  } */
 }
