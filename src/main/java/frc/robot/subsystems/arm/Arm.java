@@ -18,7 +18,7 @@ public class Arm extends SubsystemBase {
 
   public double requestedSetpoint;
   public double prevSetpoint;
-  public double newSetpoint = 0;
+  public double newSetpoint;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -43,21 +43,17 @@ public class Arm extends SubsystemBase {
 
     if (Constants.Elevator.minElevatorSafeHeightMeters <= superstructure.getElevatorHeight()
         && maxElevatorSafeMeters >= superstructure.getElevatorHeight()) {
-      prevSetpoint = newSetpoint;
-    }
+      prevSetpoint = newSetpoint;}
+
     if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
       requestedSetpoint = minSafeArmDegree; // Do we want driver to have to input setpoint again?
 
     } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
       requestedSetpoint = minSafeArmDegree;
-      // Don't let it go below the safe angle
-      // Or should we make it so it just won't move?
-    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
-        && getAngleDegrees() >= armConstants.safeBargeRetractAngleDeg) {
-
-      // Make it so you can move it only to get to safe positon
-
+      
+    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()) {
+          requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
     }
 
     if (prevSetpoint != requestedSetpoint) {
@@ -108,11 +104,11 @@ public class Arm extends SubsystemBase {
   public void setNeutralMode(IdleMode idlemode) {}
 
   public void climbing() {
-    requestedSetpoint = armConstants.climbingDeg; // TODO:
+    requestedSetpoint = armConstants.climbingDeg; 
   }
 
   public void eject() {
-    requestedSetpoint = armConstants.ejectDeg; // TODO:
+    requestedSetpoint = armConstants.ejectDeg;
   }
 
   public double getAngleDegrees() {
