@@ -82,19 +82,40 @@ public final class Constants {
   public static class Arm {
     public static final int armMotorId = 0; // TODO: Set to actual motor ID
     public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
+
     public static final double armMotorGearRatio = 4.0; // TODO: Set to actual gear ratio
-    public static final double minArmSafeAngle = 45.0;
+
+    public static final double armIdleDeg = 0.0;
+    public static final double algaeHoldDeg = 100.0; // TODO: Set to actual angle
+    public static final double coralHoldDeg = 100.0; // TODO: Set to actual angle
+    public static final double algaeGroundDeg = 0.0; // TODO: Set to actual angle
+    public static final double safeBargeRetractDeg = 100.0; // TODO: Set to actual angle
+
+    public static final double ejectDeg = 10.0; // TODO: Set to actual angle
+    public static final double climbingDeg = 10.0;
+
+    // The purpose of
+    public static final double minArmSafeDeg = 45.0;
+    public static final double minArmSafeWithCoralDeg = 50.0;
     public static final double maxArmSafeAngle = 245.0;
+
     public static final double setpointToleranceDegrees = 0.01;
     public static final double supplyCurrentLimit = 40; // TODO
     public static final double statorCurrentLimit = 100; // TODO
+
     public static final ElectricalLimitSettings armElectricalLimitSettings =
         new ElectricalLimitSettings();
-    public static final double scoringL1AngleDegCoral = 10;
-    public static final double scoringL2AngleDegCoral = 20;
-    public static final double scoringL3AngleDegCoral = 30;
-    public static final double scoringL4AngleDegCoral = 40;
-    public static final double descoringAngleDegAlgae = 90;
+
+    public static final double scoringL1CoralDeg = 10;
+    public static final double scoringL2CoralDeg = 20;
+    public static final double scoringL3CoralDeg = 30;
+    public static final double scoringL4CoralDeg = 40;
+
+    public static final double descoringAlgaeDeg = 90;
+    public static final double safeBargeRetractAngleDeg = 100; // TODO: Set to actual angle
+    // To the encoder 0 is horizontal but to us its straight down
+    public static final double armOffsetEncoderDeg = -90;
+
     public static final PIDSettings armMotorGains = new PIDSettings();
     public static final double kP =
         0; // TODO: Ask if I need multipule PID values depending on the Level
@@ -225,6 +246,12 @@ public final class Constants {
   }
 
   public static class Elevator {
-    public static final double minElevatorSafeHeight = 45.0;
+    public static final double minElevatorSafeHeightMeters = 45.0;
+    public static final double maxElevatorSafeHeightMeters = 100.0; // TODO: Set to actual height
+
+    public static final double scoringL1CoralMeters = 10;
+    public static final double scoringL2CoralMeters = 20;
+    public static final double scoringL3CoralMeters = 30;
+    public static final double scoringL4CoralMeters = 40;
   } // TODO placeholder values
 }

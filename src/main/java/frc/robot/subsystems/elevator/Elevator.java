@@ -85,7 +85,7 @@ public class Elevator extends SubsystemBase {
     return inputs.heightMeters;
   }
 
-  public void setHome() {}
+  public void setManualInitialization() {}
 
   public void setNeutralMode(IdleMode mode) {}
 

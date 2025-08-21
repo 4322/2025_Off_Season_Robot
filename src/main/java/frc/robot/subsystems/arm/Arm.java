@@ -1,8 +1,6 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
@@ -14,19 +12,13 @@ public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private Superstructure superstructure;
+  public double minSafeArmDegree;
+  public double maxElevatorSafeMeters = Constants.Elevator.scoringL4CoralMeters;
+  private Constants.Arm armConstants;
 
-  public double requestedSetpoint; // Degrees, 0 is horizontal to front of robot
-  public double prevSetpoint =
-      MathUtil.clamp(
-          requestedSetpoint, Constants.Arm.minArmSafeAngle, Constants.Arm.maxArmSafeAngle);
-
-  public enum Safety {
-    WAIT_FOR_ELEVATOR,
-    MOVING_WITH_ELEVATOR,
-    ARM_CANT_MOVE,
-  }
-
-  Safety safety = Safety.ARM_CANT_MOVE;
+  public double requestedSetpoint;
+  public double prevSetpoint;
+  public double newSetpoint;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -39,52 +31,58 @@ public class Arm extends SubsystemBase {
     Logger.recordOutput("Arm/angleDegrees", inputs.armPositionDegrees);
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
 
-    superstructure.getElevatorHeight();
-
-    switch (safety) {
-      case WAIT_FOR_ELEVATOR:
-        prevSetpoint = Constants.Arm.minArmSafeAngle;
-        if (Constants.Elevator.minElevatorSafeHeight <= superstructure.getElevatorHeight()) {
-          safety = Safety.MOVING_WITH_ELEVATOR;
-        }
-        break;
-      case MOVING_WITH_ELEVATOR:
-        if (requestedSetpoint < Constants.Arm.minArmSafeAngle
-            && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeight) {
-          safety = Safety.WAIT_FOR_ELEVATOR;
-        } else if (getAngleDegrees() > Constants.Arm.minArmSafeAngle
-            && requestedSetpoint < Constants.Arm.minArmSafeAngle) {
-          safety = Safety.WAIT_FOR_ELEVATOR;
-        }
-        break;
+    if (superstructure.isCoralHeld()) {
+      minSafeArmDegree = armConstants.minArmSafeWithCoralDeg;
+    } else {
+      minSafeArmDegree = armConstants.minArmSafeDeg;
     }
-    if (prevSetpoint != requestedSetpoint && Safety.MOVING_WITH_ELEVATOR == safety) {
-      io.setPosition(Rotation2d.fromDegrees(requestedSetpoint));
+
+    superstructure.getElevatorHeight();
+    // Safety Logic
+    // newsetpoint = prevsetpoint when it can move with elevator
+
+    if (Constants.Elevator.minElevatorSafeHeightMeters <= superstructure.getElevatorHeight()
+        && maxElevatorSafeMeters >= superstructure.getElevatorHeight()) {
+      prevSetpoint = newSetpoint;}
+
+    if (requestedSetpoint < minSafeArmDegree
+        && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
+      requestedSetpoint = minSafeArmDegree; // Do we want driver to have to input setpoint again?
+
+    } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
+      requestedSetpoint = minSafeArmDegree;
+      
+    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()) {
+          requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
+    }
+
+    if (prevSetpoint != requestedSetpoint) {
+      io.requestPosition(requestedSetpoint);
       prevSetpoint = requestedSetpoint;
     }
   }
 
   public void idle() {
-    requestedSetpoint = 0;
+    requestedSetpoint = armConstants.armIdleDeg;
   }
 
   public void algaeHold() {
-    requestedSetpoint = 20; // TODO: angle for algae hold
+    requestedSetpoint = armConstants.algaeHoldDeg;
   }
 
   public void coralHold() {
-    requestedSetpoint = 20; // TODO:
+    requestedSetpoint = armConstants.coralHoldDeg;
   }
 
   public void algaeGround() {
-    requestedSetpoint = 20; // TODO:
+    requestedSetpoint = armConstants.algaeGroundDeg;
   }
 
   public void algaeReef() {
-    requestedSetpoint = Constants.Arm.descoringAngleDegAlgae; // TODO: angle for L2
+    requestedSetpoint = armConstants.descoringAlgaeDeg;
   }
 
-  public void scoreAlgae() {}
+  public void scoreAlgae(/*Side scoringSide*/ ) {}
 
   public void prescoreCoral(Level coralLevel) {
     setcoralheight(coralLevel);
@@ -96,25 +94,21 @@ public class Arm extends SubsystemBase {
 
   public boolean atSetpoint() {
     return ClockUtil.atReference(
-        inputs.armPositionDegrees, requestedSetpoint, Constants.Arm.setpointToleranceDegrees, true);
+        inputs.armPositionDegrees, requestedSetpoint, armConstants.setpointToleranceDegrees, true);
   }
 
-  public void safeBargeRetract() {}
-
-  public void setHome() {
-    requestedSetpoint = 0; // TODO:
+  public void safeBargeRetract() {
+    requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
   }
 
-  public void setNeutralMode(IdleMode idlemode) {
-    io.stopArmMotor(idlemode);
-  }
+  public void setNeutralMode(IdleMode idlemode) {}
 
   public void climbing() {
-    requestedSetpoint = 20; // TODO:
+    requestedSetpoint = armConstants.climbingDeg; 
   }
 
   public void eject() {
-    requestedSetpoint = 20; // TODO:
+    requestedSetpoint = armConstants.ejectDeg;
   }
 
   public double getAngleDegrees() {
@@ -124,16 +118,16 @@ public class Arm extends SubsystemBase {
   private void setcoralheight(Level coralLevel) {
     switch (coralLevel) {
       case L1:
-        requestedSetpoint = Constants.Arm.scoringL1AngleDegCoral;
+        requestedSetpoint = armConstants.scoringL1CoralDeg;
         break;
       case L2:
-        requestedSetpoint = Constants.Arm.scoringL2AngleDegCoral;
+        requestedSetpoint = armConstants.scoringL2CoralDeg;
         break;
       case L3:
-        requestedSetpoint = Constants.Arm.scoringL3AngleDegCoral;
+        requestedSetpoint = armConstants.scoringL3CoralDeg;
         break;
       case L4:
-        requestedSetpoint = Constants.Arm.scoringL4AngleDegCoral;
+        requestedSetpoint = armConstants.scoringL4CoralDeg;
         break;
     }
   }

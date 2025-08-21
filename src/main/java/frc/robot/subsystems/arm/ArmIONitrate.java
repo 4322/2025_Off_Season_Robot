@@ -10,7 +10,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -35,13 +34,21 @@ public class ArmIONitrate implements ArmIO {
             new FeedbackSensor.CanandmagRelative(
                 Constants.Arm.armEncoderId, Constants.Arm.armMotorGearRatio));
     armConfig
-        .setPIDSettings(Constants.Arm.armMotorGains, PIDConfigSlot.kSlot1)
+        .setPIDSettings(Constants.Arm.armMotorGains, PIDConfigSlot.kSlot0)
         .getPIDSettings(PIDConfigSlot.kSlot0)
         .setMotionProfileMode(MotionProfileMode.kTrapezoidal)
         .setMinwrapConfig(new MinwrapConfig.Enabled());
 
     CanandmagSettings settings = new CanandmagSettings();
     CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
+
+    NitrateSettings armConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);
+
+    if (!armConfigStatus.isEmpty()) {
+      DriverStation.reportError(
+          "Nitrate " + armMotor.getAddress().getDeviceId() + " (Arm motor) failed to configure",
+          false);
+    }
 
     if (!armEncoderConfigStatus.isEmpty()) {
       DriverStation.reportError(
@@ -54,22 +61,24 @@ public class ArmIONitrate implements ArmIO {
 
   @Override
   public void updateInputs(ArmIOInputs armInputs) {
-    armInputs.armPositionDegrees = Units.rotationsToRadians(armMotor.getPosition());
+    armInputs.armPositionDegrees = Units.rotationsToDegrees(armMotor.getPosition());
     armInputs.armConnected = armMotor.isConnected();
-    armInputs.armVelocityRadPerSec = Units.rotationsToRadians(armMotor.getVelocity());
     armInputs.armSupplyCurrentAmps = armMotor.getBusCurrent();
     armInputs.armStatorCurrentAmps = armMotor.getStatorCurrent();
     armInputs.armTempCelsius = armMotor.getMotorTemperatureFrame().getData();
-
     armInputs.armEncoderConnected = armEncoder.isConnected();
-    armInputs.armAbsolutePosition = Rotation2d.fromRotations(armEncoder.getAbsPosition());
-    armInputs.armPosition = Rotation2d.fromRotations(armEncoder.getPosition());
+  }
+  // You need method in ArmIO as well to do Override Remember to check - Personal Note / Reminder
+
+  @Override
+  public void setManualInitialization() {
+    armMotor.setPosition(0);
   }
 
   @Override
-  public void setPosition(Rotation2d angle) {
+  public void requestPosition(double requestSetpoint) {
     armMotor.setRequest(
         armPIDPositionRequest.setPosition(
-            angle.getRotations() - angle.minus(Rotation2d.fromDegrees(90)).getRotations()));
+            Constants.Arm.armOffsetEncoderDeg + Units.degreesToRotations(requestSetpoint)));
   }
 }
