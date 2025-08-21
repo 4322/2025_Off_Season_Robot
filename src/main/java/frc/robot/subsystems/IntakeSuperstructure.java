@@ -85,7 +85,8 @@ public class IntakeSuperstructure extends SubsystemBase {
         indexer.feed();
         deployer.deploy();
 
-        if (rollers.isCoralDetected() && retractLockedOutState == RetractLockedOutStates.FALSE) {
+        if (rollers.isCoralPickupDetected()
+            && retractLockedOutState == RetractLockedOutStates.FALSE) {
           retractLockedOutState = RetractLockedOutStates.INDEXER;
           retractTimeOutIndexerTimer.reset();
           retractTimeOutIndexerTimer.start();

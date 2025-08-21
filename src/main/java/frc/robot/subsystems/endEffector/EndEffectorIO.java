@@ -20,6 +20,9 @@ public interface EndEffectorIO {
     public double endEffectorSensorColorGreen = 0.0;
     public double endEffectorSensorColorBlue = 0.0;
 
+    public boolean isCoralProximityDetected = false;
+    public boolean isAlgaeProximityDetected = false;
+
     public enum gamePiece {
       NONE,
       ALGAE,
@@ -28,9 +31,6 @@ public interface EndEffectorIO {
     }
 
     public gamePiece sensorPieceDetected = gamePiece.NONE;
-
-    public boolean currentDetectionPickupTriggered = false;
-    public boolean currentDetectionReleaseTriggered = false;
   }
 
   public default void updateInputs(EndEffectorIOInputs inputs) {}
@@ -38,22 +38,4 @@ public interface EndEffectorIO {
   public default void setEndEffectorMotorVoltage(double voltage) {}
 
   public default void stopEndEffectorMotor(IdleMode idleMode) {}
-
-  // TODO rename this to something like is coral detected pickup; Move these to End Effector
-  // subsystem
-  public default boolean isCurrentDetectionPickupTriggered() {
-    return true;
-  } // TODO make this have logic added return so it would build
-
-  public default boolean isCurrentDetectionReleaseTriggered() {
-    return true;
-  }
-
-  public default boolean isCoralProximityDetected() {
-    return true;
-  }
-
-  public default boolean isAlgaeProximityDetected() {
-    return false;
-  }
 }

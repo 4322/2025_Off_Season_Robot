@@ -128,16 +128,16 @@ public final class Constants {
     public static final int endEffectorMotorId = 0;
     public static final int endEffectorSensorId = 0;
 
-    public static final double algaeHoldVolts = 3.0;
-    public static final double coralHoldVolts = 3.0;
+    public static final double algaeHoldVolts = 1.0;
+    public static final double coralHoldVolts = 1.0;
 
     public static final double algaeIntakeVolts = 3.0;
     public static final double coralIntakeVolts = 3.0;
 
-    public static final double algaeReleaseVolts = 3.0;
-    public static final double coralReleaseVolts = 3.0;
+    public static final double algaeReleaseVolts = -3.0;
+    public static final double coralReleaseVolts = -3.0;
 
-    public static final double currentDetectionThreshold = 0.0;
+    public static final double ejectVolts = -3.0;
 
     public static final double motorBusCurrentLimit = 0;
     public static final double motorBusCurrentLimitTime = 0;
@@ -146,6 +146,7 @@ public final class Constants {
     public static final double sensorCoralProximityThreshold = 0;
     public static final double sensorAlgaeProximityThreshold = 0;
 
+    public static final boolean useSensorColor = false; // TODO change this when we get color tuned
     // TODO tune these
     // For algae
     public static final double sensorGreenDetectGreenLower = 120;
@@ -161,7 +162,21 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // InvertMode.kInverted or InvertMode.kNotInverted
-    public static final double ejectVolts = 0;
+
+    // TODO tune these
+    public static final double currentDetectionDebounceTimeSeconds =
+        0.25; // Time for the current to spike and stay there before detection is triggered
+    public static final double velocityDetectionDebounceTimeSeconds =
+        0.25; // Time for veleocity to spike and stay there before detection is triggered
+    public static final double CurrentDetectionDeltaThresholdAmps = 0;
+    public static final double CurrentDetectionMaxAccumulationSeconds = 1;
+    public static final double VelocityDetectionMaxAccumulationSeconds = 1;
+    public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
+
+    public static final double algaeIntakingDelaySeconds =
+        0.05; // Time to wait after algae is detected in End Effector before reducing voltage
+    public static final double coralIntakingDelaySeconds =
+        0.05; // Time to wait after coral is detected in End Effector before reducing voltage
   }
 
   public static class Deployer {
@@ -175,28 +190,25 @@ public final class Constants {
     public static final InvertMode motorInvertMode = null;
     public static final HardLimitConfig motorForwardHardLimit = null;
     public static final HardLimitConfig motorReverseHardLimit = null;
-    public static final double motorDeploykP = 0;
+    public static final double motorDeploykP = 1;
     public static final double motorDeploykI = 0;
     public static final double motorDeploykD = 0;
     public static final double motorDeployGravitationalFeedforward = 0;
-    public static final double motorRetractkP = 0;
+    public static final double motorRetractkP = 1;
     public static final double motorRetractkI = 0;
     public static final double motorRetractkD = 0;
     public static final int deployerMotorEncoderId = 0;
     public static final boolean motorEncoderInverted = false; // TODO maybe change this?
-    public static final double motorGearRatio = 0;
-    public static final double ejectPositionRotations = 0;
-    public static final double retractPositionRotations = 0;
-    public static final double deployPositionRotations = 0;
+    // 1 motor rotation is 1/49 of deployer rotation
+    // Range of motion of deployer is about 0-140 degrees
+    public static final double motorGearRatio = 49;
+    public static final double ejectPositionRotations = 30 / 360;
+    public static final double retractPositionRotations = 10 / 360;
+    public static final double deployPositionRotations = 140 / 360;
   }
 
   public static class Indexer {
     public static final int indexerMotorId = 2;
-    public static final double feedVoltage = 3.0;
-    public static final double feedSlowVoltage = 3.0;
-    public static final double ejectVoltage = 3.0;
-    public static final double rejectVoltage = 3.0;
-    public static final double rejectSlowVoltage = 3.0;
     public static final double motorBusCurrentLimit = 0;
     public static final double motorBusCurrentLimitTime = 0;
     public static final double motorStatorCurrentLimit = 0;
@@ -206,38 +218,42 @@ public final class Constants {
     public static final double pickupAreaSensorMax = 0;
     public static final int indexerSensorId = 0;
     public static final int pickupAreaSensorId = 0;
-    public static final double motorVoltageFeed = 0;
-    public static final double motorVoltageRejectSlow = 0;
-    public static final double motorVoltageFeedSlow = 0;
-    public static final double motorVoltageEject = 0;
-    public static final double motorVoltageEjectSlow = 0;
-    public static final double motorVoltageReject = 0;
+    public static final double motorVoltageFeed = 5;
+    public static final double motorVoltageRejectSlow = -3;
+    public static final double motorVoltageFeedSlow = 3;
+    public static final double motorVoltageEject = -5;
+    public static final double motorVoltageEjectSlow = -3;
+    public static final double motorVoltageReject = -5;
   }
 
   public static class Rollers {
-    public static final int rollersMotorID = 3;
-
     public static final int rollersMotorId = 0;
 
     public static final double motorBusCurrentLimitTime = 0;
-
     public static final double motorStatorCurrentLimit = 0;
-
     public static final double motorBusCurrentLimit = 0;
 
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
-
     public static final InvertMode motorInvert = null;
 
-    public static final double motorVoltageFeed = 0;
+    public static final double motorVoltageFeed = 5;
+    public static final double motorVoltageFeedSlow = 3;
+    public static final double motorVoltageReject = -5;
+    public static final double motorVoltageRejectSlow = -3;
+    public static final double motorVoltageEject = -5;
+    // TODO tune these
+    public static final double currentDetectionDebounceTimeSeconds =
+        0.25; // Time for the delta of the current to spike and stay there before detection is
+    // triggered
+    public static final double velocityDetectionDebounceTimeSeconds =
+        0.25; // Time for delta of the velocity to spike and stay there before detection is
+    // triggered
 
-    public static final double motorVoltageFeedSlow = 0;
-
-    public static final double motorVoltageReject = 0;
-
-    public static final double motorVoltageRejectSlow = 0;
-
-    public static final double motorVoltageEject = 0;
+    public static final double CurrentDetectionDeltaThresholdAmps = 0;
+    public static final double velocityDetectionStallDeltaRotationsPerSec = 0;
+    public static final double CurrentDetectionMaxAccumulationSeconds = 1;
+    public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
+    public static final double VelocityDetectionMaxAccumulationSeconds = 1;
   }
 
   public static class IntakeSuperstructure {
