@@ -2,7 +2,6 @@ package frc.robot.util;
 
 import edu.wpi.first.wpilibj.Timer;
 
-// TODO add more comments; Change high to low etc.
 public class DeltaDebouncer {
   public enum Mode {
     INSTANT, // Only trigger if a single change is greater than the threshold; Checks the current
