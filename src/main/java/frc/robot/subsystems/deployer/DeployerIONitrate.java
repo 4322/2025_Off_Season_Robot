@@ -92,7 +92,6 @@ public class DeployerIONitrate implements DeployerIO {
 
   @Override
   public void setDeployerMotorPosition(double rotations) {
-    // TODO This is assuming deploying is positive direction
     if (rotations != previousRequestedPosition) {
       deployerMotorRequestedPositionRotations = rotations * Constants.Deployer.motorGearRatio;
       previousRequestedPosition = rotations;

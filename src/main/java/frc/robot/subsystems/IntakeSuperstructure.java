@@ -52,6 +52,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   public void periodic() {
     Logger.recordOutput("IntakeSuperstructure/State", state.toString());
     switch (state) {
+      // TODO update this with new homing logic
       case START:
         if (RobotContainer.superstructure.isHomeButtonPressed()) {
           deployer.setHome();

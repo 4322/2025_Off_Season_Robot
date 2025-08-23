@@ -45,6 +45,8 @@ public class Arm extends SubsystemBase {
         && maxElevatorSafeMeters >= superstructure.getElevatorHeight()) {
       prevSetpoint = newSetpoint;
     }
+      prevSetpoint = newSetpoint;
+    }
 
     if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
@@ -52,6 +54,9 @@ public class Arm extends SubsystemBase {
 
     } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
       requestedSetpoint = minSafeArmDegree;
+
+    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()) {
+      requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
 
     } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
         && !superstructure
@@ -65,6 +70,10 @@ public class Arm extends SubsystemBase {
       io.requestPosition(requestedSetpoint);
       prevSetpoint = requestedSetpoint;
     }
+  }
+
+  public void setManualInitialization() {
+    io.setManualInitialization();
   }
 
   public void idle() {
@@ -113,6 +122,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void climbing() {
+    requestedSetpoint = armConstants.climbingDeg;
     requestedSetpoint = armConstants.climbingDeg;
   }
 

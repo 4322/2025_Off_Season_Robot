@@ -203,9 +203,9 @@ public final class Constants {
     // 1 motor rotation is 1/49 of deployer rotation
     // Range of motion of deployer is about 0-140 degrees
     public static final double motorGearRatio = 49;
-    public static final double ejectPositionRotations = 30 / 360;
-    public static final double retractPositionRotations = 10 / 360;
-    public static final double deployPositionRotations = 140 / 360;
+    public static final double ejectPositionRotations = Units.degreesToRotations(30);
+    public static final double retractPositionRotations = Units.degreesToRotations(10);
+    public static final double deployPositionRotations = Units.degreesToRotations(140);
   }
 
   public static class Indexer {
