@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,7 +12,6 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
-import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -66,6 +67,8 @@ public class Superstructure extends SubsystemBase {
   OperationMode mode = OperationMode.Auto;
 
   Superstates state = Superstates.START;
+  Superstates prevState = Superstates.START;
+  Superstates savedState = Superstates.START;
 
   private EndEffector endEffector;
   private Arm arm;
@@ -98,6 +101,11 @@ public class Superstructure extends SubsystemBase {
   @Override
   public void periodic() {
     Logger.recordOutput("Superstructure/currentState", state.toString());
+
+    if (state != savedState) {
+      prevState = savedState;
+      savedState = state;
+    }
 
     switch (state) {
       case START: // TODO
@@ -413,6 +421,10 @@ public class Superstructure extends SubsystemBase {
 
   public Superstates getState() {
     return state;
+  }
+
+  public Superstates getPrevState(){
+    return prevState;
   }
 
   public void getReefStatus() {
