@@ -1,5 +1,6 @@
 package frc.robot.subsystems.arm;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
@@ -22,4 +23,6 @@ public interface ArmIO {
   public default void setArmOpenLoop(double outputVoltage) {}
 
   public default void requestPosition(double requestedSetpoint) {}
+
+  public default void stopArmMotor(IdleMode idlemode) {}
 }

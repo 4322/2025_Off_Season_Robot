@@ -43,7 +43,8 @@ public class Arm extends SubsystemBase {
 
     if (Constants.Elevator.minElevatorSafeHeightMeters <= superstructure.getElevatorHeight()
         && maxElevatorSafeMeters >= superstructure.getElevatorHeight()) {
-      prevSetpoint = newSetpoint;}
+      prevSetpoint = newSetpoint;
+    }
 
     if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
@@ -51,9 +52,13 @@ public class Arm extends SubsystemBase {
 
     } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
       requestedSetpoint = minSafeArmDegree;
-      
-    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()) {
-          requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
+
+    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
+        && !superstructure
+            .isCoralHeld()) // Don't want it to go to the safe retract when scoring as it will be
+    // over max safe height before it scores
+    {
+      requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
     }
 
     if (prevSetpoint != requestedSetpoint) {
@@ -78,11 +83,13 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = armConstants.algaeGroundDeg;
   }
 
-  public void algaeReef() {
+  public void algaeReef() /*Noticed that the angle is the same for both heights*/ {
     requestedSetpoint = armConstants.descoringAlgaeDeg;
   }
 
-  public void scoreAlgae(/*Side scoringSide*/ ) {}
+  public void scoreAlgae(/*Side scoringSide. Why would scoring side matter?*/ ) {
+    requestedSetpoint = armConstants.scoringAlgaeDeg;
+  }
 
   public void prescoreCoral(Level coralLevel) {
     setcoralheight(coralLevel);
@@ -101,10 +108,12 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
   }
 
-  public void setNeutralMode(IdleMode idlemode) {}
+  public void setNeutralMode(IdleMode mode) {
+    io.stopArmMotor(mode);
+  }
 
   public void climbing() {
-    requestedSetpoint = armConstants.climbingDeg; 
+    requestedSetpoint = armConstants.climbingDeg;
   }
 
   public void eject() {
