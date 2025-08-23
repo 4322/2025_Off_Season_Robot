@@ -1,12 +1,16 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
+
 import org.littletonrobotics.junction.Logger;
+
+import frc.robot.subsystems.rollers.RollersIO;
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
@@ -60,6 +64,10 @@ public class Arm extends SubsystemBase {
       io.requestPosition(requestedSetpoint);
       prevSetpoint = requestedSetpoint;
     }
+  }
+  
+  public void setManualInitialization() {
+    io.setManualInitialization();
   }
 
   public void idle() {
@@ -131,4 +139,6 @@ public class Arm extends SubsystemBase {
         break;
     }
   }
+
+  
 }
