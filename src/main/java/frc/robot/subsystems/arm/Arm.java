@@ -45,8 +45,6 @@ public class Arm extends SubsystemBase {
         && maxElevatorSafeMeters >= superstructure.getElevatorHeight()) {
       prevSetpoint = newSetpoint;
     }
-      prevSetpoint = newSetpoint;
-    }
 
     if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
