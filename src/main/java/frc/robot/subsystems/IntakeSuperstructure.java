@@ -52,6 +52,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   public void periodic() {
     Logger.recordOutput("IntakeSuperstructure/State", state.toString());
     switch (state) {
+      // TODO update this with new homing logic
       case START:
         if (RobotContainer.superstructure.isHomeButtonPressed()) {
           deployer.setHome();
@@ -85,7 +86,8 @@ public class IntakeSuperstructure extends SubsystemBase {
         indexer.feed();
         deployer.deploy();
 
-        if (rollers.isCoralDetected() && retractLockedOutState == RetractLockedOutStates.FALSE) {
+        if (rollers.isCoralPickupDetected()
+            && retractLockedOutState == RetractLockedOutStates.FALSE) {
           retractLockedOutState = RetractLockedOutStates.INDEXER;
           retractTimeOutIndexerTimer.reset();
           retractTimeOutIndexerTimer.start();

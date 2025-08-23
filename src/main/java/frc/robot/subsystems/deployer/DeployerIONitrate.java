@@ -6,19 +6,25 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
-import com.reduxrobotics.sensors.canandmag.Canandmag;
-import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
+import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 
 public class DeployerIONitrate implements DeployerIO {
   private Nitrate deployerMotor;
-  private Canandmag deployerMotorEncoder;
 
   private NitrateSettings deployerMotorConfig = new NitrateSettings();
-  private CanandmagSettings deployerMotorEncoderConfig = new CanandmagSettings();
+
+  private final PIDPositionRequest deployerMotorDeployPIDRequest =
+      new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
+  private final PIDPositionRequest deployerMotorRetractPIDRequest =
+      new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
+
+  private double previousRequestedPosition = -999;
+  private double deployerMotorRequestedPositionRotations = 0.0;
 
   public DeployerIONitrate() {
     deployerMotor = new Nitrate(Constants.Deployer.deployerMotorId, MotorType.kCu60);
@@ -30,18 +36,6 @@ public class DeployerIONitrate implements DeployerIO {
           "Nitrate "
               + deployerMotor.getAddress().getDeviceId()
               + " error (Deployer Motor); Did not receive settings",
-          null);
-    }
-
-    deployerMotorEncoder = new Canandmag(Constants.Deployer.deployerMotorEncoderId);
-    configEncoder();
-    CanandmagSettings deployerMotorEncoderConfigStatus =
-        deployerMotorEncoder.setSettings(deployerMotorEncoderConfig, 0.02, 5);
-    if (!deployerMotorEncoderConfigStatus.allSettingsReceived()) {
-      DriverStation.reportError(
-          "Canandmag "
-              + deployerMotorEncoder.getAddress().getDeviceId()
-              + " error (Deployer Motor Encoder); Did not receive settings",
           null);
     }
   }
@@ -69,6 +63,7 @@ public class DeployerIONitrate implements DeployerIO {
         Constants.Deployer.motorDeploykP,
         Constants.Deployer.motorDeploykI,
         Constants.Deployer.motorDeploykD);
+    deployerMotorPIDSettingsDeploy.setMotionProfileMode(MotionProfileMode.kTrapezoidal);
     deployerMotorPIDSettingsDeploy.setGravitationalFeedforward(
         Constants.Deployer.motorDeployGravitationalFeedforward); // TODO is this kG value?
     deployerMotorConfig.setPIDSettings(deployerMotorPIDSettingsDeploy, PIDConfigSlot.kSlot0);
@@ -78,21 +73,8 @@ public class DeployerIONitrate implements DeployerIO {
         Constants.Deployer.motorRetractkP,
         Constants.Deployer.motorRetractkI,
         Constants.Deployer.motorRetractkD);
+    deployerMotorPIDSettingsRetract.setMotionProfileMode(MotionProfileMode.kTrapezoidal);
     deployerMotorConfig.setPIDSettings(deployerMotorPIDSettingsRetract, PIDConfigSlot.kSlot1);
-
-    // TODO Figure out what this stuff is
-    /*
-    LimitSettings deployerMotorLimitSettings = new LimitSettings();
-    deployerMotorLimitSettings.setForwardHardLimit(Constants.Deployer.motorForwardHardLimit);
-    deployerMotorLimitSettings.setReverseHardLimit(Constants.Deployer.motorReverseHardLimit);
-    deployerMotorConfig.setLimitSettings(deployerMotorLimitSettings);
-    */
-
-  }
-
-  private void configEncoder() {
-    // TODO figure out what actually needs to be included here
-    deployerMotorEncoderConfig.setInvertDirection(Constants.Deployer.motorEncoderInverted);
   }
 
   @Override
@@ -105,25 +87,23 @@ public class DeployerIONitrate implements DeployerIO {
     inputs.deployerMotorSpeedRotationsPerSec = deployerMotor.getVelocity();
     inputs.deployerMotorAppliedVolts = deployerMotor.getBusVoltageFrame().getValue();
 
-    inputs.deployerMotorEncoderConnected = deployerMotorEncoder.isConnected();
-    inputs.deployerMotorEncoderSpeedRotationsPerSec = deployerMotorEncoder.getVelocity();
-    inputs.deployerMotorEncoderPositionRotations = deployerMotorEncoder.getPosition();
-    inputs.deployerMotorEncoderAbsolutePosition = deployerMotorEncoder.getAbsPosition();
-    inputs.deployerMotorEncoderTempCelcius = deployerMotorEncoder.getTemperature();
+    inputs.deployerMotorRequestedPositionRotations = deployerMotorRequestedPositionRotations;
   }
 
   @Override
   public void setDeployerMotorPosition(double rotations) {
-    // TODO figure out if deploy is greater than or less than current rotations
-    if (deployerMotor.getPosition() > rotations) {
-      deployerMotor.setPIDPosition(
-          PIDConfigSlot.kSlot0,
-          rotations * Constants.Deployer.motorGearRatio,
-          0.0,
-          false); // TODO motion profiling? Feedforward?
-    } else {
-      deployerMotor.setPIDPosition(
-          PIDConfigSlot.kSlot1, rotations * Constants.Deployer.motorGearRatio, 0.0, false);
+    if (rotations != previousRequestedPosition) {
+      deployerMotorRequestedPositionRotations = rotations * Constants.Deployer.motorGearRatio;
+      previousRequestedPosition = rotations;
+      if (deployerMotor.getPosition() < rotations * Constants.Deployer.motorGearRatio) {
+        deployerMotor.setRequest(
+            deployerMotorDeployPIDRequest.setPosition(
+                rotations * Constants.Deployer.motorGearRatio));
+      } else {
+        deployerMotor.setRequest(
+            deployerMotorRetractPIDRequest.setPosition(
+                rotations * Constants.Deployer.motorGearRatio));
+      }
     }
   }
 

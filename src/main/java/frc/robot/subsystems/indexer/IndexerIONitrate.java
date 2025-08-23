@@ -20,6 +20,8 @@ public class IndexerIONitrate implements IndexerIO {
   private CanandcolorSettings indexerSensorConfig = new CanandcolorSettings();
   private CanandcolorSettings pickupAreaSensorConfig = new CanandcolorSettings();
 
+  private double previousRequestedVoltage = -999;
+
   public IndexerIONitrate() {
     indexerMotor = new Nitrate(Constants.Indexer.indexerMotorId, MotorType.kCu60);
     indexerSensor = new Canandcolor(Constants.Indexer.indexerSensorId);
@@ -88,31 +90,26 @@ public class IndexerIONitrate implements IndexerIO {
     inputs.indexerMotorSpeedRotationsPerSec = indexerMotor.getVelocity();
 
     inputs.indexerSensorConnected = indexerSensor.isConnected();
-    inputs.indexerSensorTriggered = isIndexerSensorTriggered();
+    inputs.indexerSensorTriggered =
+        indexerSensor.getProximity() < Constants.Indexer.indexerSensorMax;
     inputs.indexerSensorProximity = indexerSensor.getProximity();
 
     inputs.pickupAreaSensorConnected = pickupAreaSensor.isConnected();
-    inputs.pickupAreaSensorTriggered = isPickupAreaSensorTriggered();
+    inputs.pickupAreaSensorTriggered =
+        pickupAreaSensor.getProximity() < Constants.Indexer.pickupAreaSensorMax;
     inputs.pickupAreaSensorProximity = pickupAreaSensor.getProximity();
   }
 
   @Override
   public void setIndexerMotorVoltage(double voltage) {
-    indexerMotor.setVoltage(voltage);
+    if (voltage != previousRequestedVoltage) {
+      indexerMotor.setVoltage(voltage);
+      previousRequestedVoltage = voltage;
+    }
   }
 
   @Override
   public void stopIndexerMotor(IdleMode mode) {
     indexerMotor.stop(mode);
-  }
-
-  @Override
-  public boolean isIndexerSensorTriggered() {
-    return indexerSensor.getProximity() < Constants.Indexer.indexerSensorMax;
-  }
-
-  @Override
-  public boolean isPickupAreaSensorTriggered() {
-    return pickupAreaSensor.getProximity() < Constants.Indexer.pickupAreaSensorMax;
   }
 }
