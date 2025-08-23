@@ -10,11 +10,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
-
 import org.littletonrobotics.junction.Logger;
-
-import frc.robot.subsystems.arm.ArmIONitrate;
-
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -213,14 +209,17 @@ public class Superstructure extends SubsystemBase {
         break;
       case END_EFFECTOR_CORAL_PICKUP:
         if (indexer.isCoralDetectedPickupArea()) {
-        elevator.pickupCoral();
-        if (elevator.atSetpoint()) {
-        endEffector.intakeCoral();
-        }}
+          elevator.pickupCoral();
+          if (elevator.atSetpoint()) {
+            endEffector.intakeCoral();
+          }
+        }
 
         if (endEffector.hasCoral() && elevator.atSetpoint()) {
           state = Superstates.CORAL_HELD;
-        } else if (!endEffector.hasCoral() && !indexer.isCoralDetectedPickupArea() && elevator.atSetpoint()) {
+        } else if (!endEffector.hasCoral()
+            && !indexer.isCoralDetectedPickupArea()
+            && elevator.atSetpoint()) {
           state = Superstates.IDLE;
         }
 
@@ -242,12 +241,11 @@ public class Superstructure extends SubsystemBase {
         arm.prescoreCoral(coralLevel);
         elevator.prescoreCoral(coralLevel);
 
-        if (requestScoreCoral && arm.atSetpoint() && elevator.atSetpoint()
-        ) {
+        if (requestScoreCoral && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.SCORE_CORAL;
         } else if (!requestPrescoreCoral) {
           state = Superstates.CORAL_HELD;
-        } 
+        }
         // TODO
         break;
       case SCORE_CORAL: // TODO When have elevator
@@ -311,13 +309,13 @@ public class Superstructure extends SubsystemBase {
     requestIntakeAlgaeFloor = false;
   }
 
-  public void requestOperationMode(OperationMode mode){
+  public void requestOperationMode(OperationMode mode) {
     unsetAllRequests();
     requestswitchOperationMode = true;
   }
 
-  public boolean isAutoOperationMode(){
-    if (mode == OperationMode.Auto){
+  public boolean isAutoOperationMode() {
+    if (mode == OperationMode.Auto) {
       return true;
     } else {
       return false;
@@ -419,14 +417,14 @@ public class Superstructure extends SubsystemBase {
     return state;
   }
 
-  public void getReefStatus(){
-    //TODO when get vision working
-    //return visionPoseEstimation.getReefStatus()
+  public void getReefStatus() {
+    // TODO when get vision working
+    // return visionPoseEstimation.getReefStatus()
   }
 
   public IntakeSuperstructure getIntakeSuperstructure() {
     return intakeSuperstructure;
   }
 
-  //Other Methods are related to Vision Pose Estimation
+  // Other Methods are related to Vision Pose Estimation
 }

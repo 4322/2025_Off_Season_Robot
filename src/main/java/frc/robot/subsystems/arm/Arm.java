@@ -1,16 +1,12 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
-
 import org.littletonrobotics.junction.Logger;
-
-import frc.robot.subsystems.rollers.RollersIO;
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
@@ -47,7 +43,8 @@ public class Arm extends SubsystemBase {
 
     if (Constants.Elevator.minElevatorSafeHeightMeters <= superstructure.getElevatorHeight()
         && maxElevatorSafeMeters >= superstructure.getElevatorHeight()) {
-      prevSetpoint = newSetpoint;}
+      prevSetpoint = newSetpoint;
+    }
 
     if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
@@ -55,9 +52,9 @@ public class Arm extends SubsystemBase {
 
     } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
       requestedSetpoint = minSafeArmDegree;
-      
+
     } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()) {
-          requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
+      requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
     }
 
     if (prevSetpoint != requestedSetpoint) {
@@ -65,7 +62,7 @@ public class Arm extends SubsystemBase {
       prevSetpoint = requestedSetpoint;
     }
   }
-  
+
   public void setManualInitialization() {
     io.setManualInitialization();
   }
@@ -112,7 +109,7 @@ public class Arm extends SubsystemBase {
   public void setNeutralMode(IdleMode idlemode) {}
 
   public void climbing() {
-    requestedSetpoint = armConstants.climbingDeg; 
+    requestedSetpoint = armConstants.climbingDeg;
   }
 
   public void eject() {
@@ -139,6 +136,4 @@ public class Arm extends SubsystemBase {
         break;
     }
   }
-
-  
 }
