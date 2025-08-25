@@ -31,6 +31,7 @@ public final class Constants {
 
   public static final boolean visionEnabled = true;
   public static final boolean driveEnabled = true;
+public static final boolean visionObjectDetectionEnabled = false;
 
   public static enum Mode {
     /** Running on a real robot. */

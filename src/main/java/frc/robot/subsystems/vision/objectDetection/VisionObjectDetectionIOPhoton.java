@@ -19,9 +19,9 @@ import org.photonvision.targeting.TargetCorner;
 public class VisionObjectDetectionIOPhoton extends VisionObjectDetectionIO {
   private final PhotonCamera photonCamera;
 
-  public VisionObjectDetectionIOPhoton(String hostname) {
+  public VisionObjectDetectionIOPhoton() {
     PhotonCamera.setVersionCheckEnabled(false);
-    photonCamera = new PhotonCamera(hostname);
+    photonCamera = new PhotonCamera("VisionObjectDetection");
   }
 
   @Override

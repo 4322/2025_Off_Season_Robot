@@ -5,6 +5,7 @@ import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,6 +38,8 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
+import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOPhoton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -48,6 +51,7 @@ public class RobotContainer {
   public static XboxController driver = new XboxController(0);
 
   private static Vision vision;
+  private static VisionObjectDetection visionObjectDetection;
   private static Drive drive;
   private static Arm arm; // IO for the arm subsystem, null if not enabled
   // Declare Arm variable
@@ -103,6 +107,9 @@ public class RobotContainer {
         if (Constants.deployerEnabled) {
           deployer = new Deployer(new DeployerIONitrate());
         }
+        if (Constants.visionObjectDetectionEnabled) {
+          visionObjectDetection = new VisionObjectDetection(new VisionObjectDetectionIOPhoton(), new Transform3d()/*Transform3d robotCenterToCamera */);
+        }
         intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
         superstructure =
             new Superstructure(
@@ -116,6 +123,10 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+        /*
+        visionObjectDetection =
+            new VisionObjectDetection(new VisionIOPhotonVisionSim());
+        */
         break;
 
       default:

@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants;
 import java.util.ArrayList;
+
+import javax.xml.crypto.dsig.Transform;
+
 // import frc.trigon.robot.RobotContainer;
 // import frc.trigon.robot.commands.commandfactories.CoralCollectionCommands;
 import org.littletonrobotics.junction.Logger;
@@ -23,19 +26,20 @@ public class VisionObjectDetection extends SubsystemBase {
   private final VisionObjectDetectionInputsAutoLogged visionObjectDetectionInputs =
       new VisionObjectDetectionInputsAutoLogged();
   private final VisionObjectDetectionIO visionObjectDetectionIO;
-  private final String hostname;
   private final Transform3d robotCenterToCamera;
 
-  public VisionObjectDetection(String hostname, Transform3d robotCenterToCamera) {
-    this.hostname = hostname;
+  public VisionObjectDetection(VisionObjectDetectionIO io, Transform3d robotCenterToCamera) {
+    this.visionObjectDetectionIO = io;
     this.robotCenterToCamera = robotCenterToCamera;
-    this.visionObjectDetectionIO = generateIO(hostname, robotCenterToCamera);
   }
 
   @Override
   public void periodic() {
     visionObjectDetectionIO.updateInputs(visionObjectDetectionInputs);
-    Logger.processInputs(hostname, visionObjectDetectionInputs);
+    Logger.recordOutput("VisionObjectDetection/getClosestCoralPositionRelativeToCamera()", getClosestCoralPositionRelativeToCamera());
+    Logger.recordOutput("VisionObjectDetection/hasCoral", hasTargets(SimulatedGamePieceConstants.GamePieceType.CORAL));
+    Logger.recordOutput("VisionObjectDetection/hasAlgae", hasTargets(SimulatedGamePieceConstants.GamePieceType.ALGAE));
+    Logger.processInputs("VisionObjectDetection", visionObjectDetectionInputs);
   }
 
   /**
@@ -134,15 +138,6 @@ public class VisionObjectDetection extends SubsystemBase {
       if (difference < Constants.VisionObjectDetection.LOLLIPOP_TOLERANCE.getDegrees()) return true;
     }
     return false;
-  }
-
-  private VisionObjectDetectionIO generateIO(String hostname, Transform3d robotCenterToCamera) {
-    if (Constants.currentMode == Constants.Mode.REPLAY) return new VisionObjectDetectionIO();
-    /*
-    if (Constants.currentMode == Constants.Mode.SIM)
-        return new SimulationObjectDetectionCameraIO(hostname, robotCenterToCamera);
-    */
-    return new VisionObjectDetectionIOPhoton(hostname);
   }
 
   public Translation2d getClosestCoralPositionRelativeToCamera() {
