@@ -53,7 +53,8 @@ public class Arm extends SubsystemBase {
     } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
       requestedSetpoint = minSafeArmDegree;
 
-    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight() && !isAlgaeHeld()) {
+    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
+        && !superstructure.isAlgaeHeld()) {
       requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
     }
 

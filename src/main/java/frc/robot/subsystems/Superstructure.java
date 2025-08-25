@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,6 +10,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
+import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -131,8 +130,7 @@ public class Superstructure extends SubsystemBase {
             && arm.atSetpoint()
             && elevator.atSetpoint()) {
           state = Superstates.END_EFFECTOR_CORAL_PICKUP;
-        } else if (requestIntakeAlgaeFloor
-            && !endEffector.hasAlgae()) {
+        } else if (requestIntakeAlgaeFloor && !endEffector.hasAlgae()) {
           state = Superstates.INTAKE_ALGAE_FLOOR;
         } else if (requestDescoreAlgae) {
           state = Superstates.DESCORE_ALGAE;
@@ -162,8 +160,7 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.EJECT;
         } else if (!endEffector.hasAlgae()) {
           state = Superstates.IDLE;
-        }
-        else if (requestAlgaePrescore) {
+        } else if (requestAlgaePrescore) {
           state = Superstates.ALGAE_PRESCORE;
         }
 
@@ -209,13 +206,12 @@ public class Superstructure extends SubsystemBase {
         arm.algaeReef();
         elevator.algaeReef(algaeLevel);
         endEffector.intakeAlgae();
-        
+
         if (endEffector.hasAlgae() /*&& atSafeDrive */) {
           state = Superstates.ALGAE_IDLE;
         } else if (!requestDescoreAlgae && !endEffector.hasAlgae()) {
           state = Superstates.IDLE;
         }
-       
 
         break;
       case END_EFFECTOR_CORAL_PICKUP:
@@ -427,7 +423,7 @@ public class Superstructure extends SubsystemBase {
     return state;
   }
 
-  public Superstates getPrevState(){
+  public Superstates getPrevState() {
     return prevState;
   }
 
