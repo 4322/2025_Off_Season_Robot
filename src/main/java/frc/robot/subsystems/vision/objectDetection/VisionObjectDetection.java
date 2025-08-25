@@ -7,7 +7,6 @@ package frc.robot.subsystems.vision.objectDetection;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Superstructure;
 import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants;
 import java.util.ArrayList;
 // import frc.trigon.robot.RobotContainer;
@@ -47,23 +46,25 @@ public class VisionObjectDetection extends SubsystemBase {
    *
    * @return the best object's 2D position on the field (z is assumed to be 0)
    */
-  public Translation2d calculateBestObjectPositionOnField(
+  public Translation2d calculateBestObjectPositionRelativeToCamera(
       SimulatedGamePieceConstants.GamePieceType targetGamePiece) {
-    final Translation2d[] targetObjectsTranslation = getObjectPositionsOnField(targetGamePiece);
-    final Translation2d currentRobotTranslation =
-        Superstructure.getVisionPoseEstimate2d().getTranslation();
+    final Translation2d[] targetObjectsTranslation =
+        getObjectPositionsRelativeToCamera(targetGamePiece);
+
     if (targetObjectsTranslation.length == 0) return null;
+
     Translation2d bestObjectTranslation = targetObjectsTranslation[0];
 
     for (int i = 1; i < targetObjectsTranslation.length; i++) {
       final Translation2d currentObjectTranslation = targetObjectsTranslation[i];
-      final double bestObjectDifference =
-          currentRobotTranslation.getDistance(bestObjectTranslation);
-      final double currentObjectDifference =
-          currentRobotTranslation.getDistance(currentObjectTranslation);
-      if (currentObjectDifference < bestObjectDifference)
+      final double bestObjectDistance = bestObjectTranslation.getNorm();
+      final double currentObjectDistance = currentObjectTranslation.getNorm();
+
+      if (currentObjectDistance < bestObjectDistance) {
         bestObjectTranslation = currentObjectTranslation;
+      }
     }
+
     return bestObjectTranslation;
   }
 
@@ -71,33 +72,37 @@ public class VisionObjectDetection extends SubsystemBase {
     return visionObjectDetectionInputs.hasTarget[targetGamePiece.id];
   }
 
-  public Translation2d[] getObjectPositionsOnField(
-      SimulatedGamePieceConstants.GamePieceType targetGamePiece) {
+  public Translation2d[] getObjectPositionsRelativeToCamera(SimulatedGamePieceConstants.GamePieceType targetGamePiece) {
     final Rotation3d[] visibleObjectsRotations = getTargetObjectsRotations(targetGamePiece);
-    final Translation2d[] objectsPositionsOnField =
-        new Translation2d[visibleObjectsRotations.length];
+    if (visibleObjectsRotations == null || visibleObjectsRotations.length == 0) {
+        return new Translation2d[0];
+    }
 
-    for (int i = 0; i < visibleObjectsRotations.length; i++)
-      objectsPositionsOnField[i] = calculateObjectPositionFromRotation(visibleObjectsRotations[i]);
+    final Translation2d[] objectsPositionsRelativeToCamera = new Translation2d[visibleObjectsRotations.length];
+    for (int i = 0; i < visibleObjectsRotations.length; i++) {
+        objectsPositionsRelativeToCamera[i] = calculateObjectPositionFromRotation(visibleObjectsRotations[i]);
+    }
 
     Logger.recordOutput(
-        "ObjectDetectionCamera/Visible" + targetGamePiece.name(), objectsPositionsOnField);
-    return objectsPositionsOnField;
-  }
+        "ObjectDetectionCamera/Visible" + targetGamePiece.name(), objectsPositionsRelativeToCamera);
+    return objectsPositionsRelativeToCamera;
+}
 
-  public Rotation3d[] getTargetObjectsRotations(
-      SimulatedGamePieceConstants.GamePieceType targetGamePiece) {
+  public Rotation3d[] getTargetObjectsRotations(SimulatedGamePieceConstants.GamePieceType targetGamePiece) {
+    if (targetGamePiece.id < 0 || targetGamePiece.id >= visionObjectDetectionInputs.visibleObjectRotations.length) {
+        return new Rotation3d[0];
+    }
+
     if (targetGamePiece == SimulatedGamePieceConstants.GamePieceType.CORAL
         && Constants.VisionObjectDetection.SHOULD_IGNORE_LOLLIPOP_CORAL) {
-      ArrayList<Rotation3d> rotations = new ArrayList<>();
-      for (Rotation3d rotation :
-          visionObjectDetectionInputs.visibleObjectRotations[targetGamePiece.id]) {
-        if (!isLollipop(rotation.toRotation2d())) rotations.add(rotation);
-      }
-      return rotations.toArray(new Rotation3d[0]);
+        ArrayList<Rotation3d> rotations = new ArrayList<>();
+        for (Rotation3d rotation : visionObjectDetectionInputs.visibleObjectRotations[targetGamePiece.id]) {
+            if (!isLollipop(rotation.toRotation2d())) rotations.add(rotation);
+        }
+        return rotations.toArray(new Rotation3d[0]);
     }
     return visionObjectDetectionInputs.visibleObjectRotations[targetGamePiece.id];
-  }
+}
 
   /**
    * Calculates the position of the object on the field from the 3D rotation of the object relative
@@ -109,26 +114,18 @@ public class VisionObjectDetection extends SubsystemBase {
    * @return the object's 2D position on the field (z is assumed to be 0)
    */
   private Translation2d calculateObjectPositionFromRotation(Rotation3d objectRotation) {
-    final Pose2d robotPoseAtResultTimestamp =
-        Superstructure.getVisionPoseEstimate2dAtTimestamp(
-            visionObjectDetectionInputs.latestResultTimestamp);
-    if (robotPoseAtResultTimestamp == null) return new Translation2d();
-    final Pose3d cameraPose = new Pose3d(robotPoseAtResultTimestamp).plus(robotCenterToCamera);
-    objectRotation =
-        new Rotation3d(objectRotation.getX(), -objectRotation.getY(), objectRotation.getZ());
-    final Pose3d objectRotationStart = cameraPose.plus(new Transform3d(0, 0, 0, objectRotation));
+    final double cameraHeight = robotCenterToCamera.getZ(); // Camera height above the ground
+    final double objectPitchSin = Math.sin(objectRotation.getY());
 
-    final double cameraZ = cameraPose.getTranslation().getZ();
-    final double objectPitchSin = Math.sin(objectRotationStart.getRotation().getY());
-    final double xTransform = cameraZ / objectPitchSin;
-    final Transform3d objectRotationStartToGround =
-        new Transform3d(xTransform, 0, 0, new Rotation3d());
+    if (Math.abs(objectPitchSin) < 0.000001) {
+        return new Translation2d(); // Return a default or zero position
+    }
 
-    return objectRotationStart
-        .transformBy(objectRotationStartToGround)
-        .getTranslation()
-        .toTranslation2d();
-  }
+    final double xTransform = cameraHeight / objectPitchSin;
+
+    final Transform3d objectRotationToGround = new Transform3d(xTransform, 0, 0, new Rotation3d());
+    return objectRotationToGround.getTranslation().toTranslation2d();
+}
 
   private boolean isLollipop(Rotation2d objectYaw) {
     for (Rotation3d algaeYaw :
@@ -146,5 +143,11 @@ public class VisionObjectDetection extends SubsystemBase {
         return new SimulationObjectDetectionCameraIO(hostname, robotCenterToCamera);
     */
     return new VisionObjectDetectionIOPhoton(hostname);
+  }
+
+  public Translation2d getClosestCoralPositionRelativeToCamera() {
+    // Get the closest coral's position relative to the camera
+    return calculateBestObjectPositionRelativeToCamera(
+        SimulatedGamePieceConstants.GamePieceType.CORAL);
   }
 }
