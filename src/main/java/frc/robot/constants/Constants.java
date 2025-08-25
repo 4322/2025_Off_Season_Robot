@@ -76,7 +76,6 @@ public final class Constants {
     public static final double scoringL2AngleDegCoral = 17.5; // TODO: Set to actual angle
     public static final double scoringL3AngleDegCoral = 39.2; // TODO: Set to actual angle
     public static final double scoringL4AngleDegCoral = 37.2; // TODO: Set to actual angle
-    public static final double algaePrescorePosition = 0.15; // TODO: Set to actual position
     public static final double maxElevatorSafeHeightMeters = 70; //need actual values
     public static final double scoreCoralL1HeightMeters = 0.3; // TODO: Set to actual position
     public static final double scoreCoralL2HeightMeters = 0.5; // TODO: Set to actual position
@@ -115,6 +114,7 @@ public final class Constants {
     public static final double kP = 0; // TODO: Set to actual value
     public static final double kI = 0; // TODO: Set to actual value
     public static final double kD = 0; // TODO: Set to actual value
+    public static final double intializationVoltage = -0.1; //need actual values
     public static final double minElevatorSafeHeightMeters = 45; //need actual values
     public static final double elevatorHeightToleranceMeters = 0.01;
     public static final double algaeHoldMeters = 0.1; //need actual values
@@ -127,6 +127,8 @@ public final class Constants {
     public static final double prescoreCoralL3HeightMeters = 1.25; // TODO: Set to actual position
     public static final double prescoreCoralL4HeightMeters = 1.45; // TODO: Set to actual position
     public static final double pickupCoralHeightMeters = 0.5; // TODO: Set to actual position
+    public static final double initializationTimerThresholdSecs = 0.01; //
+    public static final double initializationVelocityMetersThresholdPerSecs = 0.01; //
   }
 
   // TODO all of these are placeholder values

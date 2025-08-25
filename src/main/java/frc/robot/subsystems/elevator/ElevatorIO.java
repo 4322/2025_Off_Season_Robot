@@ -9,7 +9,7 @@ public interface ElevatorIO {
   public static class ElevatorIOInputs {
     public double heightMeters = 0.0;
     //current setpoint
-    
+    public double velocityMetersSecond = 0.0;
     public double appliedVoltage = 0.0;
     public double[] supplyCurrentAmps = new double[] {}; // {leader, follower}
     public double[] statorCurrentAmps = new double[] {}; // {leader, follower}
@@ -22,7 +22,7 @@ public interface ElevatorIO {
 
   public default void setVoltage(double voltage) {}
 
-  public default void seedPosition(double motorPositionRot) {}
+  public default void setElevatorEncoder() {}
 
   public default void stopElevator(IdleMode mode) {}
 

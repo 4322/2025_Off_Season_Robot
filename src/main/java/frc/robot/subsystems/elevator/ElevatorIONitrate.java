@@ -17,8 +17,8 @@ public class ElevatorIONitrate implements ElevatorIO {
   private final Nitrate leaderMotor;
   private final Nitrate followerMotor;
 
-  private final PIDPositionRequest elevatorPIDPositionRequest =
-      new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
+  //private final PIDPositionRequest elevatorPIDPositionRequest =
+      //new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
 
   public ElevatorIONitrate() {
     leaderMotor = new Nitrate(Constants.Elevator.leftMotorID, MotorType.kCu60);
@@ -28,6 +28,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     elevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
     elevatorMotorOutputSettings.setInvert(Constants.Elevator.motorInvert);
     elevatorConfig.setElectricalLimitSettings(Constants.Elevator.elevatorElectricalLimitSettings);
+    
     elevatorConfig
         .setPIDSettings(Constants.Elevator.elevatorMotorGains, PIDConfigSlot.kSlot1)
         .getPIDSettings(PIDConfigSlot.kSlot0)
@@ -57,8 +58,10 @@ public class ElevatorIONitrate implements ElevatorIO {
   @Override
   public void updateInputs(ElevatorIOInputs elevatorInputs) {
     // Implementation for updating inputs from the Nitrate hardware
-    Stg.constructForwardSoftLimit(SoftLimitMode.kDisabled, 0, 1); //allows to mess with the name :3
-    NitrateSettings x = new NitrateSettings();
-    x.setEphemeral(true);
+  }
+  @Override
+  public void setElevatorEncoder() {
+    leaderMotor.setPosition(0);
+    followerMotor.setPosition(0);
   }
 }
