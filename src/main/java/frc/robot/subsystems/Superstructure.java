@@ -132,13 +132,11 @@ public class Superstructure extends SubsystemBase {
             && elevator.atSetpoint()) {
           state = Superstates.END_EFFECTOR_CORAL_PICKUP;
         } else if (requestIntakeAlgaeFloor
-            && !endEffector.hasAlgae()
-            && arm.atSetpoint()
-            && elevator.atSetpoint()) {
+            && !endEffector.hasAlgae()) {
           state = Superstates.INTAKE_ALGAE_FLOOR;
         } else if (requestDescoreAlgae) {
           state = Superstates.DESCORE_ALGAE;
-        } else if (requestPreClimb && DriverStation.getMatchTime() < 30.1) {
+        } else if (requestPreClimb && DriverStation.getMatchTime() < 30.0) {
           state = Superstates.PRECLIMB;
         }
 
@@ -164,10 +162,8 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.EJECT;
         } else if (!endEffector.hasAlgae()) {
           state = Superstates.IDLE;
-        } else {
-          arm.algaeHold();
         }
-        if (requestAlgaePrescore) {
+        else if (requestAlgaePrescore) {
           state = Superstates.ALGAE_PRESCORE;
         }
 
@@ -175,6 +171,8 @@ public class Superstructure extends SubsystemBase {
         break;
       case ALGAE_PRESCORE:
         arm.scoreAlgae();
+        elevator.scoreAlgae();
+
         if (!requestAlgaePrescore) {
           state = Superstates.ALGAE_IDLE;
         } else if (requestAlgaeScore) {
@@ -185,6 +183,7 @@ public class Superstructure extends SubsystemBase {
         break;
       case ALGAE_SCORE:
         endEffector.releaseAlgae();
+
         if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
           state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
         } else if (requestSafeScoreAlgaeRetract) {
@@ -197,11 +196,10 @@ public class Superstructure extends SubsystemBase {
         elevator.algaeGround();
         arm.algaeGround();
         endEffector.intakeAlgae();
+
         if (endEffector.hasAlgae()) {
           state = Superstates.ALGAE_IDLE;
         } else if (!requestIntakeAlgaeFloor) {
-          state = Superstates.IDLE;
-        } else if (requestIdle) {
           state = Superstates.IDLE;
         }
 
@@ -211,7 +209,14 @@ public class Superstructure extends SubsystemBase {
         arm.algaeReef();
         elevator.algaeReef(algaeLevel);
         endEffector.intakeAlgae();
-        // TODO
+        
+        if (endEffector.hasAlgae() /*&& atSafeDrive */) {
+          state = Superstates.ALGAE_IDLE;
+        } else if (!requestDescoreAlgae && !endEffector.hasAlgae()) {
+          state = Superstates.IDLE;
+        }
+       
+
         break;
       case END_EFFECTOR_CORAL_PICKUP:
         if (indexer.isCoralDetectedPickupArea()) {
@@ -257,7 +262,6 @@ public class Superstructure extends SubsystemBase {
       case SCORE_CORAL: // TODO When have elevator
         arm.scoreCoral(coralLevel);
         elevator.scoreCoral(coralLevel);
-
         endEffector.releaseCoral();
         if (!requestScoreCoral) {
           state = Superstates.IDLE;

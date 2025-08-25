@@ -46,23 +46,18 @@ public class Arm extends SubsystemBase {
       prevSetpoint = newSetpoint;
     }
 
-    if (superstructure.getPrevState() == Superstructure.prevState.IDLE) {
-      if (superstructure.getElevatorHeight() >= Constants.Elevator.minElevatorSafeHeightMeters) {
-       prevsetpoint = newSetpoint;
-      }
-    }
-    else if (requestedSetpoint < minSafeArmDegree
+    if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
       requestedSetpoint = minSafeArmDegree; // Do we want driver to have to input setpoint again?
 
     } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
       requestedSetpoint = minSafeArmDegree;
 
-    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()) {
+    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight() && !isAlgaeHeld()) {
       requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
     }
 
-    //Moves the Elevator
+    // Moves the Elevator
     if (prevSetpoint != requestedSetpoint) {
       io.requestPosition(requestedSetpoint);
       prevSetpoint = requestedSetpoint;
