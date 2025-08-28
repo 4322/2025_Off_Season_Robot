@@ -103,6 +103,7 @@ public final class Constants {
     public static final double setpointToleranceDegrees = 0.01;
     public static final double supplyCurrentLimit = 40; // TODO
     public static final double statorCurrentLimit = 100; // TODO
+    public static final double armFeedforward = 20;
 
     public static final ElectricalLimitSettings armElectricalLimitSettings =
         new ElectricalLimitSettings();
