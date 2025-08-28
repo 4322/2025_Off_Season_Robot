@@ -5,9 +5,10 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
-
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
+import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -30,6 +31,7 @@ public final class Constants {
 
   public static final boolean visionEnabled = true;
   public static final boolean driveEnabled = true;
+public static final boolean visionObjectDetectionEnabled = false;
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -270,4 +272,13 @@ public final class Constants {
     public static final double scoringL3CoralMeters = 30;
     public static final double scoringL4CoralMeters = 40;
   } // TODO placeholder values
+
+  public static class VisionObjectDetection {
+
+    public static final int NUMBER_OF_GAME_PIECE_TYPES =
+        SimulatedGamePieceConstants.GamePieceType.values().length;
+    static final double TRACKED_OBJECT_TOLERANCE_METERS = 0.12;
+    public static final Rotation2d LOLLIPOP_TOLERANCE = Rotation2d.fromDegrees(3.5);
+    public static final boolean SHOULD_IGNORE_LOLLIPOP_CORAL = false;
+  }
 }

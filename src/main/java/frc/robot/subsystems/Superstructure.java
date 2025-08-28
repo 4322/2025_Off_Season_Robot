@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,6 +11,8 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
@@ -76,6 +79,7 @@ public class Superstructure extends SubsystemBase {
   // TODO wait for Ellie to merge this into main: private Climber climber;
   private Drive drive;
   private Vision vision;
+  private VisionObjectDetection visionObjectDetection;
   private IntakeSuperstructure intakeSuperstructure;
 
   public Superstructure(
@@ -421,6 +425,16 @@ public class Superstructure extends SubsystemBase {
 
   public Superstates getState() {
     return state;
+  }
+
+  public static Pose2d getVisionPoseEstimate2d() {
+    // TODO get vision pose estimate from vision and return it here
+    return new Pose2d();
+  }
+
+  public static Pose2d getVisionPoseEstimate2dAtTimestamp(double timestamp) {
+    // TODO get vision pose estimate from vision and return it here
+    return new Pose2d();
   }
 
   public Superstates getPrevState() {
