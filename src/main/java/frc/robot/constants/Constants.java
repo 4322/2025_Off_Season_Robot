@@ -5,7 +5,6 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -96,6 +95,7 @@ public final class Constants {
     public static final double climbingDeg = 10.0;
 
     // The purpose of
+    public static final double scoringAlgaeDeg = 130.0; // TODO: Set to actual angle
     public static final double minArmSafeDeg = 45.0;
     public static final double minArmSafeWithCoralDeg = 50.0;
     public static final double maxArmSafeAngle = 245.0;
@@ -118,7 +118,7 @@ public final class Constants {
     public static final double armOffsetEncoderDeg = -90;
 
     public static final PIDSettings armMotorGains = new PIDSettings();
-    public static final double armkP =0;
+    public static final double armkP = 0;
     public static final double armkI = 0;
     public static final double armkD = 0;
   }

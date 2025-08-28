@@ -39,7 +39,7 @@ public class Arm extends SubsystemBase {
 
     superstructure.getElevatorHeight();
     // Safety Logic
-   //Checks the logic checking for if it is in a dangerous position
+    // Checks the logic checking for if it is in a dangerous position
 
     if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
@@ -50,10 +50,10 @@ public class Arm extends SubsystemBase {
 
     } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
         && !superstructure.isAlgaeHeld()) {
-          newSetpoint = armConstants.safeBargeRetractAngleDeg;
+      newSetpoint = armConstants.safeBargeRetractAngleDeg;
 
     } else {
-      requestedSetpoint = newSetpoint; //Makes it to the requested setpoint if no dangers detected 
+      requestedSetpoint = newSetpoint; // Makes it to the requested setpoint if no dangers detected
     }
 
     // Moves the Elevator
@@ -87,7 +87,7 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = armConstants.descoringAlgaeDeg;
   }
 
-  public void scoreAlgae(/*Side scoringSide*/) {
+  public void scoreAlgae(/*Side scoringSide*/ ) {
     requestedSetpoint = armConstants.scoringAlgaeDeg;
   }
 
