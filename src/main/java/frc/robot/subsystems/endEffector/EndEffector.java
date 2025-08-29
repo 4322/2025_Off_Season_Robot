@@ -71,7 +71,8 @@ public class EndEffector extends SubsystemBase {
     Logger.recordOutput("End Effector/State", state.toString());
     Logger.recordOutput("End Effector/coralHeld", coralHeld);
     Logger.recordOutput("End Effector/algaeHeld", algaeHeld);
-    Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
+    Logger.recordOutput(
+        "End Effector/isPiecePickupDetected", isPiecePickupDetected()); // TODO after 76-78
 
     isPiecePickupDetected =
         currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps)
@@ -145,7 +146,7 @@ public class EndEffector extends SubsystemBase {
           state = EndEffectorStates.EJECT;
         }
         break;
-      case RELEASE_ALGAE:
+      case RELEASE_ALGAE: // TODO allow cancelling this and release coral
         io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeReleaseVolts);
         if (!inputs.isAlgaeProximityDetected) {
           state = EndEffectorStates.IDLE;
@@ -159,10 +160,14 @@ public class EndEffector extends SubsystemBase {
           coralHeld = false;
         }
         break;
-      case EJECT:
+      case EJECT: // TODO be able to cancel it
         if (ClockUtil.inBound(
-            RobotContainer.superstructure.getArmAngle(), 20, 50, true)) /*TODO set acual values*/ {
-          io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
+            RobotContainer.superstructure.getArmAngle(),
+            Constants.Arm.ejectDeg - Constants.Arm.setpointToleranceDegrees,
+            Constants.Arm.ejectDeg + Constants.Arm.setpointToleranceDegrees,
+            true)) /*TODO set acual values*/ {
+          io.setEndEffectorMotorVoltage(
+              Constants.EndEffector.ejectVolts); // TODO fix this to use constants
           if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
             state = EndEffectorStates.IDLE;
             coralHeld = false;

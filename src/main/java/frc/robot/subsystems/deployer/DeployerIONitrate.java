@@ -40,7 +40,7 @@ public class DeployerIONitrate implements DeployerIO {
     }
   }
 
-  private void configMotor() {
+  private void configMotor() { // TODO this initializes the configuration, rename this
     // TODO add other settings for motor
 
     ElectricalLimitSettings deployerMotorElectricalLimitSettings = new ElectricalLimitSettings();
@@ -95,14 +95,12 @@ public class DeployerIONitrate implements DeployerIO {
     if (rotations != previousRequestedPosition) {
       deployerMotorRequestedPositionRotations = rotations * Constants.Deployer.motorGearRatio;
       previousRequestedPosition = rotations;
-      if (deployerMotor.getPosition() < rotations * Constants.Deployer.motorGearRatio) {
+      if (deployerMotor.getPosition() < deployerMotorRequestedPositionRotations) {
         deployerMotor.setRequest(
-            deployerMotorDeployPIDRequest.setPosition(
-                rotations * Constants.Deployer.motorGearRatio));
+            deployerMotorDeployPIDRequest.setPosition(deployerMotorRequestedPositionRotations));
       } else {
         deployerMotor.setRequest(
-            deployerMotorRetractPIDRequest.setPosition(
-                rotations * Constants.Deployer.motorGearRatio));
+            deployerMotorRetractPIDRequest.setPosition(deployerMotorRequestedPositionRotations));
       }
     }
   }

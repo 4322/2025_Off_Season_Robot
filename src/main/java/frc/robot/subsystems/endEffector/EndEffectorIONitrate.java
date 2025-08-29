@@ -65,7 +65,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     endEffectorMotorConfig.setOutputSettings(endEffectorMotorOutputSettings);
   }
 
-  private void configSensor() {
+  private void configSensor() { // TODO rename this
     // TODO add other settings for sensor
     //
   }
@@ -88,10 +88,10 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.isCoralProximityDetected =
         endEffectorSensor.getProximity() < Constants.EndEffector.sensorCoralProximityThreshold;
     inputs.isAlgaeProximityDetected =
-        endEffectorSensor.getProximity() < Constants.EndEffector.sensorAlgaeProximityThreshold
-            && endEffectorSensor.getProximity()
-                > Constants.EndEffector
-                    .sensorCoralProximityThreshold; // TODO Assuming algae is farther from sensor
+        endEffectorSensor.getProximity()
+                < Constants.EndEffector
+                    .sensorAlgaeProximityThreshold // TODO use boolean instead of repetitive checks
+            && !inputs.isCoralProximityDetected; // TODO Assuming algae is farther from sensor
     // than coral is
 
     // Enable color detection based on Constant setting
@@ -141,7 +141,8 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
   @Override
   // This covers both stopping motor as well as setting brake/coast mode
-  public void stopEndEffectorMotor(IdleMode idleMode) {
+  public void stopEndEffectorMotor(
+      IdleMode idleMode) { // TODO reset previous requested voltage also for deployer
     endEffectorMotor.stop(idleMode);
   }
 }

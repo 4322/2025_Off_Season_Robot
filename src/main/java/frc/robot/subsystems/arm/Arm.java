@@ -39,36 +39,27 @@ public class Arm extends SubsystemBase {
 
     superstructure.getElevatorHeight();
     // Safety Logic
-    // newsetpoint = prevsetpoint when it can move with elevator
-
-    if (Constants.Elevator.minElevatorSafeHeightMeters <= superstructure.getElevatorHeight()
-        && maxElevatorSafeMeters >= superstructure.getElevatorHeight()) {
-      prevSetpoint = newSetpoint;
-    }
+    // Checks the logic checking for if it is in a dangerous position
 
     if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
-      requestedSetpoint = minSafeArmDegree; // Do we want driver to have to input setpoint again?
+      newSetpoint = minSafeArmDegree; // Do we want driver to have to input setpoint again?
 
     } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
-      requestedSetpoint = minSafeArmDegree;
+      newSetpoint = minSafeArmDegree;
 
     } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
         && !superstructure.isAlgaeHeld()) {
-      requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
+      newSetpoint = armConstants.safeBargeRetractAngleDeg;
 
-    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
-        && !superstructure
-            .isCoralHeld()) // Don't want it to go to the safe retract when scoring as it will be
-    // over max safe height before it scores
-    {
-      requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
+    } else {
+      requestedSetpoint = newSetpoint; // Makes it to the requested setpoint if no dangers detected
     }
 
     // Moves the Elevator
-    if (prevSetpoint != requestedSetpoint) {
-      io.requestPosition(requestedSetpoint);
-      prevSetpoint = requestedSetpoint;
+    if (prevSetpoint != newSetpoint) {
+      io.requestPosition(newSetpoint);
+      prevSetpoint = newSetpoint;
     }
   }
 
@@ -92,11 +83,11 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = armConstants.algaeGroundDeg;
   }
 
-  public void algaeReef() /*Noticed that the angle is the same for both heights*/ {
+  public void algaeReef() {
     requestedSetpoint = armConstants.descoringAlgaeDeg;
   }
 
-  public void scoreAlgae(/*Side scoringSide. Why would scoring side matter?*/ ) {
+  public void scoreAlgae(/*Side scoringSide*/ ) {
     requestedSetpoint = armConstants.scoringAlgaeDeg;
   }
 
@@ -122,7 +113,6 @@ public class Arm extends SubsystemBase {
   }
 
   public void climbing() {
-    requestedSetpoint = armConstants.climbingDeg;
     requestedSetpoint = armConstants.climbingDeg;
   }
 

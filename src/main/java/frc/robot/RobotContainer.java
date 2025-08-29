@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveManual;
 import frc.robot.constants.Constants;
 import frc.robot.constants.DrivetrainConstants;
@@ -154,6 +156,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     drive.setDefaultCommand(new DriveManual(drive));
+
+    new JoystickButton(driver, XboxController.Button.kX.value)
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  superstructure.isHomeButtonPressed();
+                }));
   }
 
   /**

@@ -47,11 +47,13 @@ public class Rollers extends SubsystemBase {
 
     io.updateInputs(inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
-    Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected);
+    Logger.recordOutput(
+        "Rollers/isCoralPickupDetected", isCoralPickupDetected); // TODO move after 52-54
 
     isCoralPickupDetected =
         currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps)
             && velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec);
+    // TODO log and set local variables to results of these ^
   }
 
   public void feed() {
@@ -64,7 +66,7 @@ public class Rollers extends SubsystemBase {
     io.setRollersMotorVoltage(Constants.Rollers.motorVoltageFeedSlow);
   }
 
-  public void reject() {
+  public void reject() { // TODO check whether this is necessary
     currentAction = RollersStatus.REJECT;
     io.setRollersMotorVoltage(Constants.Rollers.motorVoltageReject);
   }

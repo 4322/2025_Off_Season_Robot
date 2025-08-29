@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drive.Drive;
@@ -107,7 +108,7 @@ public class Superstructure extends SubsystemBase {
     }
 
     switch (state) {
-      case START: // TODO
+      case START:
         if (isHomeButtonPressed()) {
           if (startTimer.hasElapsed(1)) {
             elevator.setManualInitialization();
@@ -138,7 +139,6 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.PRECLIMB;
         }
 
-        // TODO
         break;
       case EJECT:
         elevator.eject();
@@ -164,7 +164,6 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.ALGAE_PRESCORE;
         }
 
-        // TODO
         break;
       case ALGAE_PRESCORE:
         arm.scoreAlgae();
@@ -176,7 +175,6 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.ALGAE_SCORE;
         }
 
-        // TODO
         break;
       case ALGAE_SCORE:
         endEffector.releaseAlgae();
@@ -187,7 +185,6 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.ALGAE_IDLE;
         }
 
-        // TODO
         break;
       case INTAKE_ALGAE_FLOOR: // Needs to move up then arm out then back down
         elevator.algaeGround();
@@ -200,14 +197,13 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.IDLE;
         }
 
-        // TODO
         break;
       case DESCORE_ALGAE:
         arm.algaeReef();
         elevator.algaeReef(algaeLevel);
         endEffector.intakeAlgae();
 
-        if (endEffector.hasAlgae() /*&& atSafeDrive */) {
+        if (endEffector.hasAlgae() /*&& atSafeDrive (Place Holder)*/) {
           state = Superstates.ALGAE_IDLE;
         } else if (!requestDescoreAlgae && !endEffector.hasAlgae()) {
           state = Superstates.IDLE;
@@ -242,7 +238,6 @@ public class Superstructure extends SubsystemBase {
         } else if (requestPrescoreCoral) {
           state = Superstates.PRESCORE_CORAL;
         }
-        // TODO
         break;
       case PRESCORE_CORAL:
         arm.prescoreCoral(coralLevel);
@@ -253,9 +248,8 @@ public class Superstructure extends SubsystemBase {
         } else if (!requestPrescoreCoral) {
           state = Superstates.CORAL_HELD;
         }
-        // TODO
         break;
-      case SCORE_CORAL: // TODO When have elevator
+      case SCORE_CORAL:
         arm.scoreCoral(coralLevel);
         elevator.scoreCoral(coralLevel);
         endEffector.releaseCoral();
@@ -267,7 +261,6 @@ public class Superstructure extends SubsystemBase {
         } else if (endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
         }
-        // TODO
         break;
       case SAFE_SCORE_ALGAE_RETRACT:
         endEffector.idle();
@@ -280,7 +273,6 @@ public class Superstructure extends SubsystemBase {
         if (endEffector.hasAlgae() && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.ALGAE_IDLE;
         }
-        // TODO
         break;
       case PRECLIMB:
 
@@ -293,7 +285,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public boolean isHomeButtonPressed() {
-    return true; // TODO add actual button logic
+    return RobotContainer.superstructure.isHomeButtonPressed();
   }
 
   private void unsetAllRequests() {
