@@ -4,6 +4,7 @@ import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
@@ -11,6 +12,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -86,5 +88,10 @@ public class ArmIONitrate implements ArmIO {
     armMotor.setRequest(
         armPIDPositionRequest.setPosition(
             Constants.Arm.armOffsetEncoderDeg + Units.degreesToRotations(requestSetpoint)));
+  }
+
+  @Override
+  public void stopArmMotor(IdleMode idleMode) {
+    armMotor.stop(idleMode);
   }
 }

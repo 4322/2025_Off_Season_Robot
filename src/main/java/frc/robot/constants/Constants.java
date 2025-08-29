@@ -4,6 +4,7 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -82,6 +83,7 @@ public final class Constants {
     public static final int armMotorId = 0; // TODO: Set to actual motor ID
     public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
 
+    public static final double armMotorRatio = 4.0; // TODO: Set to actual gear ratio
     public static final double armMotorGear = 4.0; // TODO: Set to actual gear ratio
 
     public static final double armIdleDeg = 0.0;
@@ -94,7 +96,6 @@ public final class Constants {
     public static final double climbingDeg = 10.0;
 
     // The purpose of
-    public static final double scoringAlgaeDeg = 130.0; // TODO: Set to actual angle
     public static final double minArmSafeDeg = 45.0;
     public static final double minArmSafeWithCoralDeg = 50.0;
     public static final double maxArmSafeAngle = 245.0;
@@ -111,6 +112,7 @@ public final class Constants {
     public static final double scoringL2CoralDeg = 20;
     public static final double scoringL3CoralDeg = 30;
     public static final double scoringL4CoralDeg = 40;
+    public static final double scoringAlgaeDeg = 70; // TODO: Set to actual angle
 
     public static final double descoringAlgaeDeg = 90;
     public static final double safeBargeRetractAngleDeg = 100; // TODO: Set to actual angle

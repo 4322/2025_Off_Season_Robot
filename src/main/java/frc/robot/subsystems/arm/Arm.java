@@ -48,12 +48,24 @@ public class Arm extends SubsystemBase {
     } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
       newSetpoint = minSafeArmDegree;
 
+<<<<<<< HEAD
     } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
         && !superstructure.isAlgaeHeld()) {
       newSetpoint = armConstants.safeBargeRetractAngleDeg;
 
     } else {
       requestedSetpoint = newSetpoint; // Makes it to the requested setpoint if no dangers detected
+=======
+    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()) {
+      requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
+
+    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
+        && !superstructure
+            .isCoralHeld()) // Don't want it to go to the safe retract when scoring as it will be
+    // over max safe height before it scores
+    {
+      requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
+>>>>>>> origin/Arm
     }
 
     // Moves the Elevator
@@ -83,11 +95,15 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = armConstants.algaeGroundDeg;
   }
 
-  public void algaeReef() {
+  public void algaeReef() /*Noticed that the angle is the same for both heights*/ {
     requestedSetpoint = armConstants.descoringAlgaeDeg;
   }
 
+<<<<<<< HEAD
   public void scoreAlgae(/*Side scoringSide*/ ) {
+=======
+  public void scoreAlgae(/*Side scoringSide. Why would scoring side matter?*/ ) {
+>>>>>>> origin/Arm
     requestedSetpoint = armConstants.scoringAlgaeDeg;
   }
 
@@ -108,9 +124,12 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
   }
 
-  public void setNeutralMode(IdleMode idlemode) {}
+  public void setNeutralMode(IdleMode mode) {
+    io.stopArmMotor(mode);
+  }
 
   public void climbing() {
+    requestedSetpoint = armConstants.climbingDeg;
     requestedSetpoint = armConstants.climbingDeg;
   }
 
