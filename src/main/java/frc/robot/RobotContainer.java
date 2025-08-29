@@ -162,13 +162,25 @@ public class RobotContainer {
                 () -> {
                   superstructure.isHomeButtonPressed();
                 }));
-    
+
     new JoystickButton(driver, XboxController.Button.kB.value)
-          .onTrue(
-              new InstantCommand(
-              () -> {
+        .onTrue(
+            new InstantCommand(
+                () -> {
                   superstructure.requestIdle();
-               }));
+                }));
+    new JoystickButton(driver, XboxController.Button.kX.value)
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                 if (!endEffector.hasCoral()) {
+                  superstructure.requestAlgaePrescore();
+                 }
+                 else {
+                  superstructure.requestPrescoreCoral();
+                 }
+                  
+                }));
   }
 
   /**

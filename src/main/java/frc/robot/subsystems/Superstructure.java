@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,7 +13,6 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
-import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -74,7 +75,7 @@ public class Superstructure extends SubsystemBase {
   private Arm arm;
   private Indexer indexer;
   private Elevator elevator;
-  // TODO wait for Ellie to merge this into main: private Climber climber;
+  // TODO wait for Ellie to merge this into main: private Climber climber; We aren't using climber yet
   private Drive drive;
   private Vision vision;
   private IntakeSuperstructure intakeSuperstructure;
@@ -84,14 +85,14 @@ public class Superstructure extends SubsystemBase {
       Arm arm,
       Indexer indexer,
       Elevator elevator,
-      // TODO wait for Ellie to merge this into main: Climber climber,
+      // TODO wait for Ellie to merge this into main: Climber climber, We aren't using climber yet
       Drive drive,
       Vision vision,
       IntakeSuperstructure intakeSuperstructure) {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
-    // TODO wait for Ellie to merge this into main: this.climber = climber;
+    // TODO wait for Ellie to merge this into main: this.climber = climber; We aren't using climber yet
     this.drive = drive;
     this.indexer = indexer;
     this.vision = vision;

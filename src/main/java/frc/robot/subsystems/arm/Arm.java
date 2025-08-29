@@ -43,7 +43,7 @@ public class Arm extends SubsystemBase {
 
     if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
-      newSetpoint = minSafeArmDegree; 
+      newSetpoint = minSafeArmDegree;
     } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
       newSetpoint = minSafeArmDegree;
 
