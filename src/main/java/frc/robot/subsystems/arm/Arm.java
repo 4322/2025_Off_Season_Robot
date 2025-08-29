@@ -43,8 +43,7 @@ public class Arm extends SubsystemBase {
 
     if (requestedSetpoint < minSafeArmDegree
         && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
-      newSetpoint = minSafeArmDegree; // Do we want driver to have to input setpoint again?
-
+      newSetpoint = minSafeArmDegree; 
     } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
       newSetpoint = minSafeArmDegree;
 
