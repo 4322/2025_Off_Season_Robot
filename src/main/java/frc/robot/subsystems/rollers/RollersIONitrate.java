@@ -31,7 +31,7 @@ public class RollersIONitrate implements RollersIO {
     }
   }
 
-  private void configMotor() {
+  private void configMotor() { // TODO rename this and all other ones
     // TODO add other settings for motor
     ElectricalLimitSettings rollersMotorElectricalLimitSettings = new ElectricalLimitSettings();
     rollersMotorElectricalLimitSettings.setBusCurrentLimit(Constants.Rollers.motorBusCurrentLimit);
@@ -66,7 +66,7 @@ public class RollersIONitrate implements RollersIO {
   }
 
   @Override
-  public void stopRollersMotor(IdleMode mode) {
+  public void stopRollersMotor(IdleMode mode) { // TODO clear previous requested voltage and and for all other subsystems.
     rollersMotor.stop(mode);
   }
 }

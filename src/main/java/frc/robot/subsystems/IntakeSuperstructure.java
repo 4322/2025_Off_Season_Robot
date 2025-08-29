@@ -174,7 +174,7 @@ public class IntakeSuperstructure extends SubsystemBase {
 
   public void requestEject() {
     unsetAllRequests();
-    requestReject = true;
+    requestIntakeEject = true;
   }
 
   public boolean isCoralDetectedPickupArea() {
@@ -184,4 +184,5 @@ public class IntakeSuperstructure extends SubsystemBase {
   public boolean isCoralDetectedIndexer() {
     return indexer.isCoralDetectedIndexer();
   }
-}
+} // TODO check usage of reject vs. reject slow and eject vs eject slow
+// Review logic
