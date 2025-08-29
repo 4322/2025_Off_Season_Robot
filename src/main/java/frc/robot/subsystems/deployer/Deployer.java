@@ -39,7 +39,7 @@ public class Deployer extends SubsystemBase {
     io.setDeployerMotorPosition(Constants.Deployer.retractPositionRotations);
   }
 
-  public void ejectPosition() {
+  public void ejectPosition() { // TODO rename this
     currentAction = DeployerStatus.EJECT;
     io.setDeployerMotorPosition(Constants.Deployer.ejectPositionRotations);
   }
@@ -51,4 +51,7 @@ public class Deployer extends SubsystemBase {
   public void setNeutralMode(IdleMode mode) {
     io.stopDeployerMotor(mode);
   }
+  // TODO make nothing move until home is set; Boolean to determine if homed yet; Log it; Clearhome method
+  // Ignore requests when not homed
+  // Use start state and make homed/not homed
 }
