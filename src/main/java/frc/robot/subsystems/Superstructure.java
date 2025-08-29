@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drive.Drive;
@@ -10,7 +13,6 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
-import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -284,7 +286,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public boolean isHomeButtonPressed() {
-    return true; // TODO add actual button logic
+  return RobotContainer.superstructure.isHomeButtonPressed();
   }
 
   private void unsetAllRequests() {

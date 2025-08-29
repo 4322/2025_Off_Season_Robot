@@ -1,10 +1,10 @@
 package frc.robot.constants;
 
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -118,7 +118,6 @@ public final class Constants {
     // To the encoder 0 is horizontal but to us its straight down
     public static final double armOffsetEncoderDeg = -90;
 
-    public static final PIDSettings armMotorGains = new PIDSettings();
     public static final double armkP = 0;
     public static final double armkI = 0;
     public static final double armkD = 0;
