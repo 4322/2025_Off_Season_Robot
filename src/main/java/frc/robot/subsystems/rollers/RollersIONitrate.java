@@ -66,7 +66,8 @@ public class RollersIONitrate implements RollersIO {
   }
 
   @Override
-  public void stopRollersMotor(IdleMode mode) { // TODO clear previous requested voltage and and for all other subsystems.
+  public void stopRollersMotor(
+      IdleMode mode) { // TODO clear previous requested voltage and and for all other subsystems.
     rollersMotor.stop(mode);
   }
 }

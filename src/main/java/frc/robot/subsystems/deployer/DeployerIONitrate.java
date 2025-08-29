@@ -97,12 +97,10 @@ public class DeployerIONitrate implements DeployerIO {
       previousRequestedPosition = rotations;
       if (deployerMotor.getPosition() < deployerMotorRequestedPositionRotations) {
         deployerMotor.setRequest(
-            deployerMotorDeployPIDRequest.setPosition(
-                deployerMotorRequestedPositionRotations));
+            deployerMotorDeployPIDRequest.setPosition(deployerMotorRequestedPositionRotations));
       } else {
         deployerMotor.setRequest(
-            deployerMotorRetractPIDRequest.setPosition(
-                deployerMotorRequestedPositionRotations));
+            deployerMotorRetractPIDRequest.setPosition(deployerMotorRequestedPositionRotations));
       }
     }
   }
