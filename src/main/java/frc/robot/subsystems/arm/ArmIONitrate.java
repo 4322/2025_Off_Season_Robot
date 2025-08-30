@@ -39,12 +39,12 @@ public class ArmIONitrate implements ArmIO {
         .getFeedbackSensorSettings()
         .setFeedbackSensor(
             new FeedbackSensor.CanandmagRelative(
-                Constants.Arm.armEncoderId, Constants.Arm.armMotorGear));
+                Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft));
     armConfig
         .setPIDSettings(armPIDSettings, PIDConfigSlot.kSlot0)
         .getPIDSettings(PIDConfigSlot.kSlot0)
         .setMotionProfileMode(MotionProfileMode.kTrapezoidal)
-        .setMinwrapConfig(new MinwrapConfig.Enabled());
+        .setMinwrapConfig(new MinwrapConfig.Disabled());
 
     CanandmagSettings settings = new CanandmagSettings();
     CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
@@ -68,7 +68,8 @@ public class ArmIONitrate implements ArmIO {
 
   @Override
   public void updateInputs(ArmIOInputs armInputs) {
-    armInputs.armPositionDegrees = Units.rotationsToDegrees(armMotor.getPosition());
+    armInputs.armPositionDegrees =
+        Units.rotationsToDegrees(armMotor.getPosition() - Constants.Arm.armOffsetEncoderDeg);
     armInputs.armConnected = armMotor.isConnected();
     armInputs.armSupplyCurrentAmps = armMotor.getBusCurrent();
     armInputs.armStatorCurrentAmps = armMotor.getStatorCurrent();
@@ -79,7 +80,7 @@ public class ArmIONitrate implements ArmIO {
 
   @Override
   public void setManualInitialization() {
-    armMotor.setPosition(0);
+    armMotor.setPosition(Units.degreesToRotations(Constants.Arm.armOffsetEncoderDeg));
   }
 
   @Override

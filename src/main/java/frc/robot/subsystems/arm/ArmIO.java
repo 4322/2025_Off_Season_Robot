@@ -13,7 +13,8 @@ public interface ArmIO {
     public double armSupplyCurrentAmps = 0.0;
     public double armStatorCurrentAmps = 0.0;
     public double armTempCelsius = 0.0;
-    public double armPositionDegrees = 0.0; // In radians, 0 is horizontal to front of robot
+    public double armPositionDegrees =
+        0.0; // 0 is vertical to front of robot. Posititve clockwise looking from the left
   }
 
   public default void setManualInitialization() {}

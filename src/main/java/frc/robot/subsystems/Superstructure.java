@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drive.Drive;
@@ -75,7 +76,8 @@ public class Superstructure extends SubsystemBase {
   private Arm arm;
   private Indexer indexer;
   private Elevator elevator;
-  // TODO wait for Ellie to merge this into main: private Climber climber; We aren't using climber yet
+  // TODO wait for Ellie to merge this into main: private Climber climber; We aren't using climber
+  // yet
   private Drive drive;
   private Vision vision;
   private IntakeSuperstructure intakeSuperstructure;
@@ -92,7 +94,8 @@ public class Superstructure extends SubsystemBase {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
-    // TODO wait for Ellie to merge this into main: this.climber = climber; We aren't using climber yet
+    // TODO wait for Ellie to merge this into main: this.climber = climber; We aren't using climber
+    // yet
     this.drive = drive;
     this.indexer = indexer;
     this.vision = vision;
@@ -268,10 +271,10 @@ public class Superstructure extends SubsystemBase {
         arm.safeBargeRetract();
         elevator.safeBargeRetract();
 
-        if (arm.atSetpoint() && elevator.atSetpoint() && !endEffector.hasAlgae()) {
+        if (!endEffector.hasAlgae() && (elevator.getHeightMeters() < Constants.Elevator.maxElevatorSafeHeightMeters) ) {
           state = Superstates.IDLE;
         }
-        if (endEffector.hasAlgae() && arm.atSetpoint() && elevator.atSetpoint()) {
+        if (endEffector.hasAlgae() && (elevator.getHeightMeters() < Constants.Elevator.maxElevatorSafeHeightMeters)) {
           state = Superstates.ALGAE_IDLE;
         }
         break;

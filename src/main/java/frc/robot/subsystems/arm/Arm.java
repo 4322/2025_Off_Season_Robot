@@ -17,8 +17,9 @@ public class Arm extends SubsystemBase {
   private Constants.Arm armConstants;
 
   public double requestedSetpoint;
-  public double prevSetpoint;
+  public double prevSetpoint = -1000;
   public double newSetpoint;
+  public double elevatorHeight = superstructure.getElevatorHeight();
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -28,7 +29,6 @@ public class Arm extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
-    Logger.recordOutput("Arm/angleDegrees", inputs.armPositionDegrees);
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
 
     if (superstructure.isCoralHeld()) {
@@ -37,22 +37,19 @@ public class Arm extends SubsystemBase {
       minSafeArmDegree = armConstants.minArmSafeDeg;
     }
 
-    superstructure.getElevatorHeight();
+   
     // Safety Logic
     // Checks the logic checking for if it is in a dangerous position
 
     if (requestedSetpoint < minSafeArmDegree
-        && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
+        && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters) {
       newSetpoint = minSafeArmDegree;
-    } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
-      newSetpoint = minSafeArmDegree;
-
-    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
-        && !superstructure.isAlgaeHeld()) {
-      newSetpoint = armConstants.safeBargeRetractAngleDeg;
+    } else if (maxElevatorSafeMeters > elevatorHeight
+        && requestedsetpoint < armConstants.safeBargeRetractAngleDeg) {
+      newSetpoint = prevSetpoint;
 
     } else {
-      requestedSetpoint = newSetpoint; // Makes it to the requested setpoint if no dangers detected
+      newSetpoint = requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
     }
 
     // Moves the Elevator
@@ -108,6 +105,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void setNeutralMode(IdleMode mode) {
+    prevSetpoint = -1000;
     io.stopArmMotor(mode);
   }
 

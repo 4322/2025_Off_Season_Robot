@@ -1,5 +1,10 @@
 package frc.robot;
 
+import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
+import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,10 +36,6 @@ import frc.robot.subsystems.indexer.IndexerIONitrate;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
-import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
-import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
@@ -173,13 +174,11 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                 if (!endEffector.hasCoral()) {
-                  superstructure.requestAlgaePrescore();
-                 }
-                 else {
-                  superstructure.requestPrescoreCoral();
-                 }
-                  
+                  if (!endEffector.hasCoral()) {
+                    superstructure.requestAlgaePrescore();
+                  } else {
+                    superstructure.requestPrescoreCoral();
+                  }
                 }));
   }
 
