@@ -12,6 +12,8 @@ public class Rollers extends SubsystemBase {
   private RollersIOInputsAutoLogged inputs = new RollersIOInputsAutoLogged();
 
   private boolean isCoralPickupDetected = false;
+  private boolean currentDetectionTriggered = false;
+  private boolean velocityDetectionTriggered = false;
 
   // Current goes from low -> high and velocity goes from high -> low on piece pickup
   private DeltaDebouncer currentDetectionDebouncer =
@@ -49,13 +51,19 @@ public class Rollers extends SubsystemBase {
 
     io.updateInputs(inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
+    
+    currentDetectionTriggered =
+        currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps);
+    velocityDetectionTriggered =
+        velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec);
+    isCoralPickupDetected = currentDetectionTriggered && velocityDetectionTriggered;
+    
     Logger.recordOutput(
-        "Rollers/isCoralPickupDetected", isCoralPickupDetected); // TODO move after 52-54
+        "Rollers/isCoralPickupDetected", isCoralPickupDetected);
+    Logger.recordOutput("Rollers/currentDetectionTriggered", currentDetectionTriggered);
+    Logger.recordOutput("Rollers/velocityDetectionTriggered", velocityDetectionTriggered);
 
-    isCoralPickupDetected =
-        currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps)
-            && velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec);
-    // TODO log and set local variables to results of these ^
+    
   }
 
   public void feed() {
@@ -68,7 +76,7 @@ public class Rollers extends SubsystemBase {
     io.setRollersMotorVoltage(Constants.Rollers.motorVoltageFeedSlow);
   }
 
-  public void reject() { // TODO check whether this is necessary
+  public void reject() {
     currentAction = RollersStatus.REJECT;
     io.setRollersMotorVoltage(Constants.Rollers.motorVoltageReject);
   }
