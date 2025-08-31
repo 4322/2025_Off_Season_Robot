@@ -45,7 +45,7 @@ public class Arm extends SubsystemBase {
         && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters) {
       newSetpoint = minSafeArmDegree;
     } else if (maxElevatorSafeMeters > elevatorHeight
-        && requestedsetpoint < armConstants.safeBargeRetractAngleDeg) {
+        && requestedSetpoint < armConstants.safeBargeRetractAngleDeg) {
       newSetpoint = prevSetpoint;
 
     } else {
