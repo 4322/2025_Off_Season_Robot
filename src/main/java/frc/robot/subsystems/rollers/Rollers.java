@@ -5,6 +5,8 @@ import frc.robot.constants.Constants;
 import frc.robot.util.DeltaDebouncer;
 import org.littletonrobotics.junction.Logger;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 public class Rollers extends SubsystemBase {
   private RollersIO io;
   private RollersIOInputsAutoLogged inputs = new RollersIOInputsAutoLogged();
@@ -28,7 +30,7 @@ public class Rollers extends SubsystemBase {
           DeltaDebouncer.ChangeType.DECREASE);
 
   private enum RollersStatus {
-    START,
+    IDLE,
     FEED,
     FEED_SLOW,
     REJECT,
@@ -36,7 +38,7 @@ public class Rollers extends SubsystemBase {
     EJECT
   }
 
-  private RollersStatus currentAction = RollersStatus.START;
+  private RollersStatus currentAction = RollersStatus.IDLE;
 
   public Rollers(RollersIO io) {
     this.io = io;
@@ -79,6 +81,11 @@ public class Rollers extends SubsystemBase {
   public void eject() {
     currentAction = RollersStatus.EJECT;
     io.setRollersMotorVoltage(Constants.Rollers.motorVoltageEject);
+  }
+
+  public void idle() {
+    currentAction = RollersStatus.IDLE;
+    io.stopRollersMotor(IdleMode.kCoast);
   }
 
   public boolean isCoralPickupDetected() {

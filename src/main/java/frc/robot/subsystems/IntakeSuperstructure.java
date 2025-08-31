@@ -16,6 +16,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   private boolean requestFeed;
   private boolean requestReject;
   private boolean requestIntakeEject;
+  private boolean requestUnhome;
 
   private enum RetractLockedOutStates {
     FALSE,
@@ -27,14 +28,14 @@ public class IntakeSuperstructure extends SubsystemBase {
   private Timer retractTimeOutPickupAreaTimer = new Timer();
   private RetractLockedOutStates retractLockedOutState = RetractLockedOutStates.FALSE;
 
-  private IntakeSuperstates state = IntakeSuperstates.START;
+  private IntakeSuperstates state = IntakeSuperstates.UNHOMED;
 
   private Deployer deployer;
   private Rollers rollers;
   private Indexer indexer;
 
   public static enum IntakeSuperstates {
-    START,
+    UNHOMED,
     RETRACT_IDLE,
     FEED,
     REJECT,
@@ -53,7 +54,7 @@ public class IntakeSuperstructure extends SubsystemBase {
     Logger.recordOutput("IntakeSuperstructure/State", state.toString());
     switch (state) {
         // TODO update this with new homing logic
-      case START:
+      case UNHOMED:
         if (RobotContainer.superstructure.isHomeButtonPressed()) {
           deployer.setHome();
           state = IntakeSuperstates.RETRACT_IDLE;
@@ -79,6 +80,13 @@ public class IntakeSuperstructure extends SubsystemBase {
         }
         if (requestReject) {
           state = IntakeSuperstates.REJECT;
+        }
+        if (requestUnhome) {
+          deployer.retract();
+          deployer.clearHome();
+          rollers.idle();
+          indexer.idle();
+          state = IntakeSuperstates.UNHOMED;
         }
         break;
       case FEED:
@@ -136,7 +144,7 @@ public class IntakeSuperstructure extends SubsystemBase {
         }
         break;
       case INTAKE_EJECT:
-        deployer.ejectPosition();
+        deployer.eject();
         rollers.eject();
         indexer.eject();
         if (requestRetractIdle) {
@@ -175,6 +183,11 @@ public class IntakeSuperstructure extends SubsystemBase {
   public void requestEject() {
     unsetAllRequests();
     requestIntakeEject = true;
+  }
+
+  public void requestUnhome() {
+    unsetAllRequests();
+    requestUnhome = true;
   }
 
   public boolean isCoralDetectedPickupArea() {

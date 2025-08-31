@@ -17,6 +17,7 @@ public class Deployer extends SubsystemBase {
   }
 
   private DeployerStatus currentAction = DeployerStatus.START;
+  private boolean isHomed = false;
 
   public Deployer(DeployerIO io) {
     this.io = io;
@@ -27,25 +28,40 @@ public class Deployer extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Deployer", inputs);
     Logger.recordOutput("Deployer/currentAction", currentAction.toString());
+    Logger.recordOutput("Deployer/isHomed", isHomed);
   }
 
   public void deploy() {
+    if (!isHomed) {
+      return;
+    }
     currentAction = DeployerStatus.DEPLOY;
     io.setDeployerMotorPosition(Constants.Deployer.deployPositionRotations);
   }
 
   public void retract() {
+    if (!isHomed) {
+      return;
+    }
     currentAction = DeployerStatus.RETRACT;
     io.setDeployerMotorPosition(Constants.Deployer.retractPositionRotations);
   }
 
-  public void ejectPosition() { // TODO rename this
+  public void eject() {
+    if (!isHomed) {
+      return;
+    }
     currentAction = DeployerStatus.EJECT;
     io.setDeployerMotorPosition(Constants.Deployer.ejectPositionRotations);
   }
 
   public void setHome() {
     io.deployerMotorEncoderSetHome();
+    isHomed = true;
+  }
+
+  public void clearHome() {
+    isHomed = false;
   }
 
   public void setNeutralMode(IdleMode mode) {

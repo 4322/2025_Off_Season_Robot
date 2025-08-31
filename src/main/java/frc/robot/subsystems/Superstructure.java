@@ -186,6 +186,7 @@ public class Superstructure extends SubsystemBase {
         if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
           state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
         } else if (requestSafeScoreAlgaeRetract) {
+          endEffector.holdAlgae();
           state = Superstates.ALGAE_IDLE;
         }
 
@@ -263,6 +264,7 @@ public class Superstructure extends SubsystemBase {
         if (!endEffector.hasCoral()) {
           state = Superstates.IDLE;
         } else if (endEffector.hasCoral()) {
+          endEffector.holdCoral();
           state = Superstates.CORAL_HELD;
         }
         break;
@@ -275,6 +277,7 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.IDLE;
         }
         if (endEffector.hasAlgae() && (elevator.getHeightMeters() < Constants.Elevator.maxElevatorSafeHeightMeters)) {
+          endEffector.holdAlgae();
           state = Superstates.ALGAE_IDLE;
         }
         break;
