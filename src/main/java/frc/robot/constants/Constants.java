@@ -222,8 +222,6 @@ public final class Constants {
     public static final double motorVoltageFeed = 5;
     public static final double motorVoltageRejectSlow = -3;
     public static final double motorVoltageFeedSlow = 3;
-    public static final double motorVoltageEject = -5;
-    public static final double motorVoltageEjectSlow = -3;
     public static final double motorVoltageReject = -5;
   }
 
@@ -241,7 +239,6 @@ public final class Constants {
     public static final double motorVoltageFeedSlow = 3;
     public static final double motorVoltageReject = -5;
     public static final double motorVoltageRejectSlow = -3;
-    public static final double motorVoltageEject = -5;
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
         0.25; // Time for the delta of the current to spike and stay there before detection is

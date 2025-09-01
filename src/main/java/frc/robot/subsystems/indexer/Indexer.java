@@ -43,16 +43,6 @@ public class Indexer extends SubsystemBase {
     io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageFeedSlow);
   }
 
-  public void eject() {
-    currentAction = IndexerStatus.EJECT;
-    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageEject);
-  }
-
-  public void ejectSlow() {
-    currentAction = IndexerStatus.EJECT_SLOW;
-    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageEjectSlow);
-  }
-
   public void reject() {
     currentAction = IndexerStatus.REJECT;
     io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageReject);

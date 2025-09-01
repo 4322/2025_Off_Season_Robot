@@ -86,10 +86,6 @@ public class Rollers extends SubsystemBase {
     io.setRollersMotorVoltage(Constants.Rollers.motorVoltageRejectSlow);
   }
 
-  public void eject() {
-    currentAction = RollersStatus.EJECT;
-    io.setRollersMotorVoltage(Constants.Rollers.motorVoltageEject);
-  }
 
   public void idle() {
     currentAction = RollersStatus.IDLE;
