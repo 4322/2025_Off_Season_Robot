@@ -73,14 +73,13 @@ public class EndEffector extends SubsystemBase {
     Logger.recordOutput("End Effector/State", state.toString());
     Logger.recordOutput("End Effector/coralHeld", coralHeld);
     Logger.recordOutput("End Effector/algaeHeld", algaeHeld);
-    
+
     isPiecePickupDetected =
         currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps)
             && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec);
 
-    Logger.recordOutput(
-        "End Effector/isPiecePickupDetected", isPiecePickupDetected());
-    
+    Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
+
     switch (state) {
       case IDLE:
         io.stopEndEffectorMotor(IdleMode.kCoast);
@@ -189,8 +188,7 @@ public class EndEffector extends SubsystemBase {
             Constants.Arm.ejectDeg - Constants.Arm.setpointToleranceDegrees,
             Constants.Arm.ejectDeg + Constants.Arm.setpointToleranceDegrees,
             true)) /*TODO set acual values*/ {
-          io.setEndEffectorMotorVoltage(
-              Constants.EndEffector.ejectVolts);
+          io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
           if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
             state = EndEffectorStates.IDLE;
             coralHeld = false;
