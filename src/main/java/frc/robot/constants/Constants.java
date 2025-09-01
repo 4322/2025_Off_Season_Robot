@@ -128,7 +128,7 @@ public final class Constants {
     public static final double initializationTimerThresholdSecs = 0.01; //
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01; //
     public static final double ejectSafeHeightMeters = 0.01; //
-    public static final double safeBargeRetractHieghtMeters = 0.01;
+    public static final double safeBargeRetractHeightMeters = 0.01;
     public static final double supplyCurrentLimitAmps = 0.1;
     public static final double statorCurrentLimitAmps = 0.1;
     public static final double kG = 0;

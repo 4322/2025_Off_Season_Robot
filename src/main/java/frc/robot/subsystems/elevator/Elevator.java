@@ -30,6 +30,7 @@ public class Elevator extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
     Logger.recordOutput("Elevator/atHeight", atHeight());
+    Logger.recordOutput("Elevator/ElevatorStates", state.toString());
     switch (state) {
       case INITIALIZATIONPROCEDURE:
         initializationTimer.start();
@@ -151,8 +152,8 @@ public class Elevator extends SubsystemBase {
   }
 
   public void safeBargeRetract() {
-    if((getHeightMeters() >= Constants.Elevator.safeBargeRetractHieghtMeters) && (RobotContainer.superstructure.getArmAngle() == Constants.Arm.maxArmSafeAngle)){
-    requestedHeightMeters = Constants.Elevator.safeBargeRetractHieghtMeters;
+    if((getHeightMeters() >= Constants.Elevator.safeBargeRetractHeightMeters) && (RobotContainer.superstructure.getArmAngle() == Constants.Arm.maxArmSafeAngle)){
+    requestedHeightMeters = Constants.Elevator.safeBargeRetractHeightMeters;
     }
   }
 
