@@ -151,7 +151,9 @@ public class Elevator extends SubsystemBase {
   }
 
   public void safeBargeRetract() {
-    requestedHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
+    if((getHeightMeters() >= Constants.Elevator.safeBargeRetractHieghtMeters) && (RobotContainer.superstructure.getArmAngle() == Constants.Arm.maxArmSafeAngle)){
+    requestedHeightMeters = Constants.Elevator.safeBargeRetractHieghtMeters;
+    }
   }
 
   public void climbing() {
@@ -159,7 +161,9 @@ public class Elevator extends SubsystemBase {
   }
 
   public void eject() {
-    requestedHeightMeters = 0; //set eject values
+    if((getHeightMeters() >= Constants.Elevator.ejectSafeHeightMeters) && (RobotContainer.superstructure.getArmAngle() == Constants.Arm.maxArmSafeAngle)){ 
+    requestedHeightMeters = Constants.Elevator.ejectSafeHeightMeters;
+    }
   }
   public void peformInitialization(){
     state = ElevatorStates.INITIALIZATIONPROCEDURE;

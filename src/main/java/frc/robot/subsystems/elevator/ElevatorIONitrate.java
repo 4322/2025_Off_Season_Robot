@@ -28,7 +28,6 @@ public class ElevatorIONitrate implements ElevatorIO {
     elevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
     elevatorMotorOutputSettings.setInvert(Constants.Elevator.motorInvert);
     elevatorConfig.setElectricalLimitSettings(Constants.Elevator.elevatorElectricalLimitSettings);
-    
     elevatorConfig
         .setPIDSettings(Constants.Elevator.elevatorMotorGains, PIDConfigSlot.kSlot1)
         .getPIDSettings(PIDConfigSlot.kSlot0)

@@ -129,6 +129,8 @@ public final class Constants {
     public static final double pickupCoralHeightMeters = 0.5; // TODO: Set to actual position
     public static final double initializationTimerThresholdSecs = 0.01; //
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01; //
+    public static final double ejectSafeHeightMeters = 0.01; //
+    public static final double safeBargeRetractHieghtMeters = 0.01;
   }
 
   // TODO all of these are placeholder values
