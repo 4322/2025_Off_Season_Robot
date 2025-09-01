@@ -14,6 +14,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
+import com.reduxrobotics.motorcontrol.requests.FollowMotorRequest;
 
 public class ElevatorIONitrate implements ElevatorIO {
   private final Nitrate leaderMotor;
@@ -29,6 +30,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     OutputSettings elevatorMotorOutputSettings = new OutputSettings();
     PIDSettings elevatorMotorPIDSettings = new PIDSettings();
     ElectricalLimitSettings elevatorElectricalLimitSettings = new ElectricalLimitSettings();
+    FollowMotorRequest followerRequest = new FollowMotorRequest(leaderMotor);
     elevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
     elevatorMotorOutputSettings.setInvert(Constants.Elevator.motorInvert);
     elevatorConfig.setOutputSettings(elevatorMotorOutputSettings);
@@ -41,6 +43,7 @@ public class ElevatorIONitrate implements ElevatorIO {
         .setPIDSettings(elevatorMotorPIDSettings, PIDConfigSlot.kSlot0)
         .getPIDSettings(PIDConfigSlot.kSlot0)
         .setMotionProfileMode(MotionProfileMode.kTrapezoidal);
+    followerMotor.setRequest(followerRequest);
     NitrateSettings leaderConfigStatus = leaderMotor.setSettings(elevatorConfig, 0.02, 5);
     NitrateSettings followerConfigStatus = followerMotor.setSettings(elevatorConfig, 0.02, 5);
     //get position is an internal encoder, so we need to set it

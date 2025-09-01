@@ -148,7 +148,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setNeutralMode(IdleMode mode) {
-    io.stopElevator(mode);
+    io.setNeutralMode(mode);
   }
 
   public void safeBargeRetract() {

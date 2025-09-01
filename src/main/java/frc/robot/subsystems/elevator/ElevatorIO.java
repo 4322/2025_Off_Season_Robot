@@ -9,14 +9,13 @@ public interface ElevatorIO {
   public static class ElevatorIOInputs {
     public double heightMeters = 0.0;
     //current setpoint
+    public boolean elevatorConnected = false;
+    public boolean elevatorEncoderConnected = false;
     public double velocityMetersSecond = 0.0;
     public double appliedVoltage = 0.0;
-    public double supplyCurrentAmpsF = 0.0; // {leader, follower}
-    public double statorCurrentAmpsF = 0.0; // {leader, follower}
-    public double tempCelciusF = 0.0; // {leader, follower}
-    public double supplyCurrentAmpsL = 0.0; // {leader, follower}
-    public double statorCurrentAmpsL = 0.0; // {leader, follower}
-    public double tempCelciusL = 0.0; // {leader, follower}
+    public double supplyCurrentAmps = 0.0; // {leader, follower}
+    public double statorCurrentAmps = 0.0; // {leader, follower}
+    public double tempCelcius = 0.0; // {leader, follower}
   }
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
@@ -27,5 +26,5 @@ public interface ElevatorIO {
 
   public default void setElevatorEncoder() {}
 
-  public default void stopElevator(IdleMode mode) {}
+  public default void setNeutralMode(IdleMode mode) {}
 }
