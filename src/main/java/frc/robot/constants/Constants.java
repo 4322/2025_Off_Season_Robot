@@ -105,8 +105,6 @@ public final class Constants {
   public static class Elevator {
     public static final int leftMotorID = 0; // TODO: Set to actual motor ID
     public static final int rightMotorID = 0; // TODO: Set to actual encoder ID
-    public static final ElectricalLimitSettings elevatorElectricalLimitSettings =
-        new ElectricalLimitSettings();
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
     public static final InvertMode motorInvert = InvertMode.kInverted;
     public static final double elevatorMotorGearRatio = 1.0; // TODO: Set to actual gear ratio
@@ -131,6 +129,9 @@ public final class Constants {
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01; //
     public static final double ejectSafeHeightMeters = 0.01; //
     public static final double safeBargeRetractHieghtMeters = 0.01;
+    public static final double supplyCurrentLimitAmps = 0.1;
+    public static final double statorCurrentLimitAmps = 0.1;
+    public static final double kG = 0;
   }
 
   // TODO all of these are placeholder values

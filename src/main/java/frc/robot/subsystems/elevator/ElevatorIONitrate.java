@@ -4,7 +4,9 @@ import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateDetails.Stg;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateDetails.Enums.SoftLimitMode;
+import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
@@ -25,14 +27,20 @@ public class ElevatorIONitrate implements ElevatorIO {
     followerMotor = new Nitrate(Constants.Elevator.rightMotorID, MotorType.kCu60);
     NitrateSettings elevatorConfig = new NitrateSettings();
     OutputSettings elevatorMotorOutputSettings = new OutputSettings();
+    PIDSettings elevatorMotorPIDSettings = new PIDSettings();
+    ElectricalLimitSettings elevatorElectricalLimitSettings = new ElectricalLimitSettings();
     elevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
     elevatorMotorOutputSettings.setInvert(Constants.Elevator.motorInvert);
-    elevatorConfig.setElectricalLimitSettings(Constants.Elevator.elevatorElectricalLimitSettings);
+    elevatorConfig.setOutputSettings(elevatorMotorOutputSettings);
+    elevatorElectricalLimitSettings.setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps);
+    elevatorElectricalLimitSettings.setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps);
+    elevatorConfig.setElectricalLimitSettings(elevatorElectricalLimitSettings);
+    elevatorMotorPIDSettings.setPID(Constants.Elevator.kP, Constants.Elevator.kI, Constants.Elevator.kD);
+    elevatorMotorPIDSettings.setGravitationalFeedforward(Constants.Elevator.kG);
     elevatorConfig
-        .setPIDSettings(Constants.Elevator.elevatorMotorGains, PIDConfigSlot.kSlot1)
+        .setPIDSettings(elevatorMotorPIDSettings, PIDConfigSlot.kSlot0)
         .getPIDSettings(PIDConfigSlot.kSlot0)
-        .setMotionProfileMode(MotionProfileMode.kTrapezoidal)
-        .setMinwrapConfig(new MinwrapConfig.Enabled());
+        .setMotionProfileMode(MotionProfileMode.kTrapezoidal);
     NitrateSettings leaderConfigStatus = leaderMotor.setSettings(elevatorConfig, 0.02, 5);
     NitrateSettings followerConfigStatus = followerMotor.setSettings(elevatorConfig, 0.02, 5);
     //get position is an internal encoder, so we need to set it
