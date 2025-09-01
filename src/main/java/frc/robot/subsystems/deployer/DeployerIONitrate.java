@@ -28,7 +28,7 @@ public class DeployerIONitrate implements DeployerIO {
 
   public DeployerIONitrate() {
     deployerMotor = new Nitrate(Constants.Deployer.deployerMotorId, MotorType.kCu60);
-    configMotor();
+    initMotorConfig();
     NitrateSettings deployerMotorConfigStatus =
         deployerMotor.setSettings(deployerMotorConfig, 0.02, 5);
     if (!deployerMotorConfigStatus.allSettingsReceived()) {
@@ -40,7 +40,7 @@ public class DeployerIONitrate implements DeployerIO {
     }
   }
 
-  private void configMotor() { // TODO this initializes the configuration, rename this
+  private void initMotorConfig() {
     // TODO add other settings for motor
 
     ElectricalLimitSettings deployerMotorElectricalLimitSettings = new ElectricalLimitSettings();
@@ -107,6 +107,7 @@ public class DeployerIONitrate implements DeployerIO {
 
   @Override
   public void stopDeployerMotor(IdleMode idleMode) {
+    previousRequestedPosition = -999;
     deployerMotor.stop(idleMode);
   }
 
