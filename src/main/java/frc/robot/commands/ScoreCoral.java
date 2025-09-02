@@ -1,9 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.arm.ArmIO;
 
 public class ScoreCoral extends Command {
-  public ScoreCoral() {}
+  private ArmIO armio;
+  public ScoreCoral() {
+   
+  }
 
   @Override
   public void initialize() {}

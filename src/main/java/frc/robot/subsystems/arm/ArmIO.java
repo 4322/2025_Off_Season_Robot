@@ -1,7 +1,8 @@
 package frc.robot.subsystems.arm;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
+
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 
 public interface ArmIO {
   @AutoLog
@@ -27,5 +28,5 @@ public interface ArmIO {
 
   public default void stopArmMotor(IdleMode idlemode) {}
 
-  public default void armSlowMode() {}
+  public default void setSpeed(double velocity, double acceleration) {}
 }
