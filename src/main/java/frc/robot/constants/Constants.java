@@ -4,7 +4,6 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -84,8 +83,8 @@ public final class Constants {
     public static final int armMotorId = 0; // TODO: Set to actual motor ID
     public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
 
-    public static final double sensorToArm = 56/16; // TODO: Set to actual gear ratio
-    public static final double motorShaftToSensorShaft = 85/10; // TODO: Set to actual gear ratio
+    public static final double sensorToArm = 56 / 16; // TODO: Set to actual gear ratio
+    public static final double motorShaftToSensorShaft = 85 / 10; // TODO: Set to actual gear ratio
 
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0; // TODO: Set to actual angle
