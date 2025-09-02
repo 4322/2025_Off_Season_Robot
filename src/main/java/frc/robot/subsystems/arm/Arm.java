@@ -1,6 +1,8 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
@@ -114,6 +116,10 @@ public class Arm extends SubsystemBase {
 
   public void eject() {
     requestedSetpoint = armConstants.ejectDeg;
+  }
+
+  public void slowmode() {
+   io.armSlowMode();
   }
 
   public double getAngleDegrees() {

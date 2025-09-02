@@ -26,4 +26,8 @@ public interface ArmIO {
   public default void requestPosition(double requestedSetpoint) {}
 
   public default void stopArmMotor(IdleMode idlemode) {}
+
+
+  public default void armSlowMode(){
+  }
 }
