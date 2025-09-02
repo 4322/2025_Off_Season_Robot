@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +11,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
+import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -110,8 +109,8 @@ public class Superstructure extends SubsystemBase {
 
     switch (state) {
       case UNHOMED:
-        if (Robot.homeButton.get())//Not correct
-         {
+        if (Robot.homeButton.get()) // Not correct
+        {
           elevator.setManualInitialization();
           arm.setManualInitialization();
         }
@@ -341,7 +340,6 @@ public class Superstructure extends SubsystemBase {
     requestIntakeAlgaeFloor = false;
   }
 
-
   public void requestIntakeAlgaeReef(Level algaeLevel) {
     unsetAllRequests();
     requestIntakeAlgaeFloor = true;
@@ -352,7 +350,6 @@ public class Superstructure extends SubsystemBase {
     requestDescoreAlgae = true;
   }
 
-  
   public void cancelDescoreAlgae() {
     unsetAllRequests();
     requestDescoreAlgae = false;
@@ -377,7 +374,6 @@ public class Superstructure extends SubsystemBase {
     unsetAllRequests();
     requestPrescoreCoral = false;
   }
-
 
   public void requestScoreCoral(Level coralLevel) {
     unsetAllRequests();
