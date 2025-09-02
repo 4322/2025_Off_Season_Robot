@@ -6,7 +6,7 @@ import frc.robot.subsystems.arm.ArmIO;
 public class ScoreCoral extends Command {
   private ArmIO armio;
   public ScoreCoral() {
-   
+   armio.setSpeed(50,50);
   }
 
   @Override

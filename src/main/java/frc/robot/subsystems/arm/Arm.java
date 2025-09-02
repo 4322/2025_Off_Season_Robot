@@ -118,10 +118,6 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = armConstants.ejectDeg;
   }
 
-  public void slowmode() {
-    io.setSpeed(50, 50);
-  }
-
   public double getAngleDegrees() {
     return inputs.armPositionDegrees;
   }
