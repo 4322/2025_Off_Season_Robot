@@ -29,6 +29,7 @@ public final class Constants {
 
   public static final boolean visionEnabled = true;
   public static final boolean driveEnabled = true;
+  public static final int dioHomeButton = 0;
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -83,12 +84,12 @@ public final class Constants {
     public static final int armMotorId = 0; // TODO: Set to actual motor ID
     public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
 
-    public static final double sensorToArm = 4.0; // TODO: Set to actual gear ratio
-    public static final double motorShaftToSensorShaft = 4.0; // TODO: Set to actual gear ratio
+    public static final double sensorToArm = 56/16; // TODO: Set to actual gear ratio
+    public static final double motorShaftToSensorShaft = 85/10; // TODO: Set to actual gear ratio
 
     public static final double armIdleDeg = 0.0;
-    public static final double algaeHoldDeg = 100.0; // TODO: Set to actual angle
-    public static final double coralHoldDeg = 180.0; // TODO: Set to actual angle
+    public static final double algaeHoldDeg = 180.0; // TODO: Set to actual angle
+    public static final double coralHoldDeg = 150.0; // TODO: Set to actual angle
     public static final double algaeGroundDeg = 35.0; // TODO: Set to actual angle
     public static final double safeBargeRetractDeg = 100.0; // TODO: Set to actual angle
 

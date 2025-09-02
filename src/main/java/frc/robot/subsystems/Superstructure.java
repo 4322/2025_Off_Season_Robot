@@ -2,9 +2,11 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
@@ -17,16 +19,17 @@ import frc.robot.subsystems.vision.Vision;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
-  private boolean requestIdle = false;
+  private boolean cancelEject = false;
   private boolean requestEject = false;
-  private boolean requestAlgaeIdle = false;
   private boolean requestAlgaePrescore = false;
+  private boolean cancelAlgaePrescore = false;
   private boolean requestAlgaeScore = false;
   private boolean requestIntakeAlgaeFloor = false;
   private boolean requestDescoreAlgae = false;
   private boolean requestEndEffectorCoralPickup = false;
   private boolean requestCoralHeld = false;
   private boolean requestPrescoreCoral = false;
+  private boolean cancelPrescoreCoral = false;
   private boolean requestScoreCoral = false;
   private boolean requestSafeScoreAlgaeRetract = false;
   private boolean requestPreClimb = false;
@@ -37,7 +40,7 @@ public class Superstructure extends SubsystemBase {
   private Level algaeLevel = Level.L1;
 
   public enum Superstates {
-    START,
+    UNHOMED,
     IDLE,
     EJECT,
     ALGAE_IDLE,
@@ -68,9 +71,9 @@ public class Superstructure extends SubsystemBase {
 
   OperationMode mode = OperationMode.Auto;
 
-  Superstates state = Superstates.START;
-  Superstates prevState = Superstates.START;
-  Superstates savedState = Superstates.START;
+  Superstates state = Superstates.UNHOMED;
+  Superstates prevState = Superstates.UNHOMED;
+  Superstates savedState = Superstates.UNHOMED;
 
   private EndEffector endEffector;
   private Arm arm;
@@ -106,23 +109,12 @@ public class Superstructure extends SubsystemBase {
   public void periodic() {
     Logger.recordOutput("Superstructure/currentState", state.toString());
 
-    if (state != savedState) {
-      prevState = savedState;
-      savedState = state;
-    }
-
     switch (state) {
-      case START:
-        if (isHomeButtonPressed()) {
-          if (startTimer.hasElapsed(1)) {
+      case UNHOMED:
+        if (Robot.RobotContainer.prevHomeButtonPressed) {
             elevator.setManualInitialization();
             arm.setManualInitialization();
-          }
         }
-        if (DriverStation.isEnabled()) {
-          state = Superstates.IDLE;
-        }
-
         break;
       case IDLE:
         endEffector.idle();
@@ -160,6 +152,7 @@ public class Superstructure extends SubsystemBase {
         break;
       case ALGAE_IDLE:
         arm.algaeHold();
+        endEffector.holdAlgae();
         if (requestEject) {
           state = Superstates.EJECT;
         } else if (!endEffector.hasAlgae()) {
@@ -175,7 +168,7 @@ public class Superstructure extends SubsystemBase {
 
         if (!requestAlgaePrescore) {
           state = Superstates.ALGAE_IDLE;
-        } else if (requestAlgaeScore) {
+        } else if (requestAlgaeScore && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.ALGAE_SCORE;
         }
 
@@ -185,8 +178,7 @@ public class Superstructure extends SubsystemBase {
 
         if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
           state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
-        } else if (requestSafeScoreAlgaeRetract) {
-          endEffector.holdAlgae();
+        } else if (endEffector.hasAlgae()) {
           state = Superstates.ALGAE_IDLE;
         }
 
@@ -208,7 +200,7 @@ public class Superstructure extends SubsystemBase {
         elevator.algaeReef(algaeLevel);
         endEffector.intakeAlgae();
 
-        if (endEffector.hasAlgae() /*&& atSafeDrive (Place Holder)*/) {
+        if (endEffector.hasAlgae() /*&& atSafeDrive (Place Holder: Will be delt with in commands)*/) {
           state = Superstates.ALGAE_IDLE;
         } else if (!requestDescoreAlgae && !endEffector.hasAlgae()) {
           state = Superstates.IDLE;
@@ -218,9 +210,7 @@ public class Superstructure extends SubsystemBase {
       case END_EFFECTOR_CORAL_PICKUP:
         if (indexer.isCoralDetectedPickupArea()) {
           elevator.pickupCoral();
-          if (elevator.atSetpoint()) {
             endEffector.intakeCoral();
-          }
         }
 
         if (endEffector.hasCoral() && elevator.atSetpoint()) {
@@ -250,7 +240,7 @@ public class Superstructure extends SubsystemBase {
 
         if (requestScoreCoral && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.SCORE_CORAL;
-        } else if (!requestPrescoreCoral) {
+        } else if (!requestPrescoreCoral && endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
         }
         break;
@@ -258,13 +248,12 @@ public class Superstructure extends SubsystemBase {
         arm.scoreCoral(coralLevel);
         elevator.scoreCoral(coralLevel);
         endEffector.releaseCoral();
-        if (!requestScoreCoral) {
+        if (!requestScoreCoral && !endEffector.hasCoral()) {
           state = Superstates.IDLE;
         }
         if (!endEffector.hasCoral()) {
           state = Superstates.IDLE;
         } else if (endEffector.hasCoral()) {
-          endEffector.holdCoral();
           state = Superstates.CORAL_HELD;
         }
         break;
@@ -273,11 +262,9 @@ public class Superstructure extends SubsystemBase {
         arm.safeBargeRetract();
         elevator.safeBargeRetract();
 
-        if (!endEffector.hasAlgae() && (elevator.getHeightMeters() < Constants.Elevator.maxElevatorSafeHeightMeters) ) {
+        if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
           state = Superstates.IDLE;
-        }
-        if (endEffector.hasAlgae() && (elevator.getHeightMeters() < Constants.Elevator.maxElevatorSafeHeightMeters)) {
-          endEffector.holdAlgae();
+        } else if (endEffector.hasAlgae()) {
           state = Superstates.ALGAE_IDLE;
         }
         break;
@@ -291,15 +278,8 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
-  public boolean isHomeButtonPressed() {
-    return RobotContainer.superstructure.isHomeButtonPressed();
-  }
-
   private void unsetAllRequests() {
-    requestIdle = false;
     requestEject = false;
-    requestAlgaeIdle = false;
-    requestAlgaePrescore = false;
     requestAlgaeScore = false;
     requestIntakeAlgaeFloor = false;
     requestDescoreAlgae = false;
@@ -327,24 +307,26 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
-  public void requestIdle() {
-    unsetAllRequests();
-    requestIdle = true;
-  }
+
 
   public void requestEject() {
     unsetAllRequests();
     requestEject = true;
   }
 
-  public void requestAlgaeIdle() {
+  public void cancelEject() {
     unsetAllRequests();
-    requestAlgaeIdle = true;
+    requestEject = false;
   }
 
   public void requestAlgaePrescore() {
     unsetAllRequests();
     requestAlgaePrescore = true;
+  }
+
+  public void cancelAlgaePrescore() {
+    unsetAllRequests();
+    requestAlgaePrescore = false;
   }
 
   public void requestAlgaeScore() {
@@ -362,7 +344,7 @@ public class Superstructure extends SubsystemBase {
     requestIntakeAlgaeFloor = true;
   }
 
-  public void requestDescoreAlgae() {
+  public void requestDescoreAlgae(Level algaeLevel) {
     unsetAllRequests();
     requestDescoreAlgae = true;
   }
@@ -377,12 +359,12 @@ public class Superstructure extends SubsystemBase {
     requestCoralHeld = true;
   }
 
-  public void requestPrescoreCoral() {
+  public void requestPrescoreCoral(Level coralLevel) {
     unsetAllRequests();
     requestPrescoreCoral = true;
   }
 
-  public void requestScoreCoral() {
+  public void requestScoreCoral(Level coralLevel) {
     unsetAllRequests();
     requestScoreCoral = true;
   }

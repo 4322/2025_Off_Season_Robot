@@ -1,10 +1,5 @@
 package frc.robot;
 
-import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
-import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,6 +11,7 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.arm.ArmIONitrate;
@@ -36,6 +32,10 @@ import frc.robot.subsystems.indexer.IndexerIONitrate;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
+import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
+import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
@@ -161,25 +161,35 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  superstructure.isHomeButtonPressed();
+                  superstructure.requestEject();
                 }));
+    new JoystickButton(driver, XboxController.Button.kA.value)
+      .onFalse(
+        new InstantCommand(
+          () -> {
+                  superstructure.cancelEject();          
+                        }));
 
-    new JoystickButton(driver, XboxController.Button.kB.value)
-        .onTrue(
-            new InstantCommand(
-                () -> {
-                  superstructure.requestIdle();
-                }));
     new JoystickButton(driver, XboxController.Button.kX.value)
         .onTrue(
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral()) {
                     superstructure.requestAlgaePrescore();
-                  } else {
-                    superstructure.requestPrescoreCoral();
+                  } else if (!endEffector.hasAlgae()) {
+                    superstructure.requestPrescoreCoral(Level.L1);
                   }
                 }));
+  new JoystickButton(driver, XboxController.Button.kX.value)
+  .onFalse(
+      new InstantCommand(
+          () -> {
+            if (!endEffector.hasCoral()) {
+              superstructure.cancelAlgaePrescore();
+            } else if (!endEffector.hasAlgae()) {
+              superstructure.requestPrescoreCoral(Level.L1);
+            }
+          }));
   }
 
   /**

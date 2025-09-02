@@ -1,18 +1,21 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.constants.Constants;
 import java.util.Optional;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.constants.Constants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,6 +29,9 @@ public class Robot extends LoggedRobot {
 
   public static Alliance alliance = DriverStation.Alliance.Blue;
   private Timer allianceUpdateTimer = new Timer();
+  public static DigitalInput homeButton = new DigitalInput(Constants.dioHomeButton);
+
+  private boolean prevHomeButtonPressed;
 
   public Robot() {
     // Record metadata
@@ -109,7 +115,14 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+
+      if (!homeButton.get() && !prevHomeButtonPressed) {
+      prevHomeButtonPressed = true;
+    } else if (homeButton.get() && prevHomeButtonPressed) {
+      prevHomeButtonPressed = false;
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
