@@ -1,11 +1,10 @@
 package frc.robot.subsystems.rollers;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.util.DeltaDebouncer;
 import org.littletonrobotics.junction.Logger;
-
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 
 public class Rollers extends SubsystemBase {
   private RollersIO io;
@@ -51,19 +50,16 @@ public class Rollers extends SubsystemBase {
 
     io.updateInputs(inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
-    
+
     currentDetectionTriggered =
         currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps);
     velocityDetectionTriggered =
         velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec);
     isCoralPickupDetected = currentDetectionTriggered && velocityDetectionTriggered;
-    
-    Logger.recordOutput(
-        "Rollers/isCoralPickupDetected", isCoralPickupDetected);
+
+    Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected);
     Logger.recordOutput("Rollers/currentDetectionTriggered", currentDetectionTriggered);
     Logger.recordOutput("Rollers/velocityDetectionTriggered", velocityDetectionTriggered);
-
-    
   }
 
   public void feed() {
@@ -85,7 +81,6 @@ public class Rollers extends SubsystemBase {
     currentAction = RollersStatus.REJECT_SLOW;
     io.setRollersMotorVoltage(Constants.Rollers.motorVoltageRejectSlow);
   }
-
 
   public void idle() {
     currentAction = RollersStatus.IDLE;

@@ -37,7 +37,6 @@ public class Arm extends SubsystemBase {
       minSafeArmDegree = armConstants.minArmSafeDeg;
     }
 
-   
     // Safety Logic
     // Checks the logic checking for if it is in a dangerous position
 

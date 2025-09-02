@@ -6,7 +6,6 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
@@ -63,7 +62,6 @@ public class DeployerIONitrate implements DeployerIO {
         Constants.Deployer.motorDeploykP,
         Constants.Deployer.motorDeploykI,
         Constants.Deployer.motorDeploykD);
-    deployerMotorPIDSettingsDeploy.setMotionProfileMode(MotionProfileMode.kTrapezoidal);
     deployerMotorPIDSettingsDeploy.setGravitationalFeedforward(
         Constants.Deployer.motorDeployGravitationalFeedforward); // TODO is this kG value?
     deployerMotorConfig.setPIDSettings(deployerMotorPIDSettingsDeploy, PIDConfigSlot.kSlot0);
@@ -73,7 +71,6 @@ public class DeployerIONitrate implements DeployerIO {
         Constants.Deployer.motorRetractkP,
         Constants.Deployer.motorRetractkI,
         Constants.Deployer.motorRetractkD);
-    deployerMotorPIDSettingsRetract.setMotionProfileMode(MotionProfileMode.kTrapezoidal);
     deployerMotorConfig.setPIDSettings(deployerMotorPIDSettingsRetract, PIDConfigSlot.kSlot1);
   }
 

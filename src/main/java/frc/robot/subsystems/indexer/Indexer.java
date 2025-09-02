@@ -1,10 +1,9 @@
 package frc.robot.subsystems.indexer;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import org.littletonrobotics.junction.Logger;
-
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 
 public class Indexer extends SubsystemBase {
   private IndexerIO io;

@@ -66,8 +66,7 @@ public class RollersIONitrate implements RollersIO {
   }
 
   @Override
-  public void stopRollersMotor(
-      IdleMode mode) {
+  public void stopRollersMotor(IdleMode mode) {
     previousRequestedVoltage = -999;
     rollersMotor.stop(mode);
   }
