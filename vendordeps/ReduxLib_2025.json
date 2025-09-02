@@ -1,7 +1,7 @@
 {
-  "fileName": "ReduxLib-2025.0.2.json",
+  "fileName": "ReduxLib-2025.2.0-nitrate-alpha2.json",
   "name": "ReduxLib",
-  "version": "2025.0.2",
+  "version": "2025.2.0-nitrate-alpha2",
   "frcYear": "2025",
   "uuid": "151ecca8-670b-4026-8160-cdd2679ef2bd",
   "mavenUrls": [
@@ -12,7 +12,7 @@
     {
       "groupId": "com.reduxrobotics.frc",
       "artifactId": "ReduxLib-java",
-      "version": "2025.0.2"
+      "version": "2025.2.0-nitrate-alpha2"
     }
   ],
   "jniDependencies": [
@@ -35,7 +35,7 @@
     {
       "groupId": "com.reduxrobotics.frc",
       "artifactId": "ReduxLib-cpp",
-      "version": "2025.0.2",
+      "version": "2025.2.0-nitrate-alpha2",
       "libName": "ReduxLib",
       "headerClassifier": "headers",
       "sourcesClassifier": "sources",
@@ -52,7 +52,7 @@
     {
       "groupId": "com.reduxrobotics.frc",
       "artifactId": "ReduxLib-fifo",
-      "version": "2025.0.2",
+      "version": "2025.1.1-alpha0",
       "libName": "reduxfifo",
       "headerClassifier": "headers",
       "sharedLibrary": true,

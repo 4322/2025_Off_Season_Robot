@@ -6,12 +6,13 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
-import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
+
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -39,12 +40,11 @@ public class ArmIONitrate implements ArmIO {
         .getFeedbackSensorSettings()
         .setFeedbackSensor(
             new FeedbackSensor.CanandmagRelative(
-                Constants.Arm.armEncoderId, Constants.Arm.armMotorGear));
+                Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft));
     armConfig
         .setPIDSettings(armPIDSettings, PIDConfigSlot.kSlot0)
         .getPIDSettings(PIDConfigSlot.kSlot0)
-        .setMotionProfileMode(MotionProfileMode.kTrapezoidal)
-        .setMinwrapConfig(new MinwrapConfig.Enabled());
+        .setMinwrapConfig(new MinwrapConfig.Disabled());
 
     CanandmagSettings settings = new CanandmagSettings();
     CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
@@ -68,7 +68,8 @@ public class ArmIONitrate implements ArmIO {
 
   @Override
   public void updateInputs(ArmIOInputs armInputs) {
-    armInputs.armPositionDegrees = Units.rotationsToDegrees(armMotor.getPosition());
+    armInputs.armPositionDegrees =
+        Units.rotationsToDegrees(armMotor.getPosition() - Constants.Arm.armOffsetEncoderDeg);
     armInputs.armConnected = armMotor.isConnected();
     armInputs.armSupplyCurrentAmps = armMotor.getBusCurrent();
     armInputs.armStatorCurrentAmps = armMotor.getStatorCurrent();
@@ -79,7 +80,7 @@ public class ArmIONitrate implements ArmIO {
 
   @Override
   public void setManualInitialization() {
-    armMotor.setPosition(0);
+    armMotor.setPosition(Units.degreesToRotations(Constants.Arm.armOffsetEncoderDeg));
   }
 
   @Override
@@ -92,5 +93,10 @@ public class ArmIONitrate implements ArmIO {
   @Override
   public void stopArmMotor(IdleMode idleMode) {
     armMotor.stop(idleMode);
+  }
+
+  @Override
+  public void armSlowMode(){
+   TrapezoidProfile.Constraints armconstraints = new TrapezoidProfile.Constraints(90000, 90000);
   }
 }

@@ -19,6 +19,8 @@ public class EndEffector extends SubsystemBase {
   private boolean requestReleaseAlgae;
   private boolean requestReleaseCoral;
   private boolean requestEject;
+  private boolean holdAlgae;
+  private boolean holdCoral;
 
   private boolean coralHeld = false;
   private boolean algaeHeld = false;
@@ -71,12 +73,12 @@ public class EndEffector extends SubsystemBase {
     Logger.recordOutput("End Effector/State", state.toString());
     Logger.recordOutput("End Effector/coralHeld", coralHeld);
     Logger.recordOutput("End Effector/algaeHeld", algaeHeld);
-    Logger.recordOutput(
-        "End Effector/isPiecePickupDetected", isPiecePickupDetected()); // TODO after 76-78
 
     isPiecePickupDetected =
         currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps)
             && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec);
+
+    Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
 
     switch (state) {
       case IDLE:
@@ -137,6 +139,10 @@ public class EndEffector extends SubsystemBase {
         } else if (requestEject) {
           state = EndEffectorStates.EJECT;
         }
+
+        if (!algaeHeld) {
+          state = EndEffectorStates.IDLE;
+        }
         break;
       case HOLD_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.coralHoldVolts);
@@ -145,29 +151,44 @@ public class EndEffector extends SubsystemBase {
         } else if (requestEject) {
           state = EndEffectorStates.EJECT;
         }
+
+        if (!coralHeld) {
+          state = EndEffectorStates.IDLE;
+        }
         break;
-      case RELEASE_ALGAE: // TODO allow cancelling this and release coral
+      case RELEASE_ALGAE:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeReleaseVolts);
-        if (!inputs.isAlgaeProximityDetected) {
+        if (holdAlgae) {
+          state = EndEffectorStates.HOLD_ALGAE;
+        } else if (!inputs.isAlgaeProximityDetected) {
           state = EndEffectorStates.IDLE;
           algaeHeld = false;
+        } else if (inputs.isAlgaeProximityDetected) {
+          state = EndEffectorStates.HOLD_ALGAE;
         }
         break;
       case RELEASE_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.coralReleaseVolts);
-        if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+        if (holdCoral) {
+          state = EndEffectorStates.HOLD_CORAL;
+        } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
+        } else if (inputs.isCoralProximityDetected) {
+          state = EndEffectorStates.HOLD_CORAL;
         }
         break;
-      case EJECT: // TODO be able to cancel it
-        if (ClockUtil.inBound(
+      case EJECT:
+        if (holdAlgae) {
+          state = EndEffectorStates.HOLD_ALGAE;
+        } else if (holdCoral) {
+          state = EndEffectorStates.HOLD_CORAL;
+        } else if (ClockUtil.inBound(
             RobotContainer.superstructure.getArmAngle(),
             Constants.Arm.ejectDeg - Constants.Arm.setpointToleranceDegrees,
             Constants.Arm.ejectDeg + Constants.Arm.setpointToleranceDegrees,
             true)) /*TODO set acual values*/ {
-          io.setEndEffectorMotorVoltage(
-              Constants.EndEffector.ejectVolts); // TODO fix this to use constants
+          io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
           if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
             state = EndEffectorStates.IDLE;
             coralHeld = false;
@@ -203,6 +224,16 @@ public class EndEffector extends SubsystemBase {
     requestReleaseCoral = true;
   }
 
+  public void holdAlgae() {
+    unsetAllRequests();
+    holdAlgae = true;
+  }
+
+  public void holdCoral() {
+    unsetAllRequests();
+    holdCoral = true;
+  }
+
   public void eject() {
     requestEject = true;
   }
@@ -226,6 +257,8 @@ public class EndEffector extends SubsystemBase {
     requestReleaseAlgae = false;
     requestReleaseCoral = false;
     requestEject = false;
+    holdAlgae = false;
+    holdCoral = false;
   }
 
   public boolean isPiecePickupDetected() {

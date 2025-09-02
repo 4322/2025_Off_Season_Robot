@@ -1,6 +1,8 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
@@ -17,8 +19,9 @@ public class Arm extends SubsystemBase {
   private Constants.Arm armConstants;
 
   public double requestedSetpoint;
-  public double prevSetpoint;
+  public double prevSetpoint = -1000;
   public double newSetpoint;
+  public double elevatorHeight = superstructure.getElevatorHeight();
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -28,7 +31,6 @@ public class Arm extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
-    Logger.recordOutput("Arm/angleDegrees", inputs.armPositionDegrees);
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
 
     if (superstructure.isCoralHeld()) {
@@ -37,23 +39,18 @@ public class Arm extends SubsystemBase {
       minSafeArmDegree = armConstants.minArmSafeDeg;
     }
 
-    superstructure.getElevatorHeight();
     // Safety Logic
     // Checks the logic checking for if it is in a dangerous position
 
     if (requestedSetpoint < minSafeArmDegree
-        && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
-      newSetpoint = minSafeArmDegree; // Do we want driver to have to input setpoint again?
-
-    } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
+        && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters) {
       newSetpoint = minSafeArmDegree;
-
-    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
-        && !superstructure.isAlgaeHeld()) {
-      newSetpoint = armConstants.safeBargeRetractAngleDeg;
+    } else if (maxElevatorSafeMeters > elevatorHeight
+        && requestedSetpoint < armConstants.safeBargeRetractAngleDeg) {
+      newSetpoint = prevSetpoint;
 
     } else {
-      requestedSetpoint = newSetpoint; // Makes it to the requested setpoint if no dangers detected
+      newSetpoint = requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
     }
 
     // Moves the Elevator
@@ -109,6 +106,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void setNeutralMode(IdleMode mode) {
+    prevSetpoint = -1000;
     io.stopArmMotor(mode);
   }
 
@@ -118,6 +116,10 @@ public class Arm extends SubsystemBase {
 
   public void eject() {
     requestedSetpoint = armConstants.ejectDeg;
+  }
+
+  public void slowmode() {
+   io.armSlowMode();
   }
 
   public double getAngleDegrees() {

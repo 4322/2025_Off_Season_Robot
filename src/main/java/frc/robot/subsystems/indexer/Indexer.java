@@ -1,5 +1,6 @@
 package frc.robot.subsystems.indexer;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import org.littletonrobotics.junction.Logger;
@@ -41,16 +42,6 @@ public class Indexer extends SubsystemBase {
     io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageFeedSlow);
   }
 
-  public void eject() {
-    currentAction = IndexerStatus.EJECT;
-    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageEject);
-  }
-
-  public void ejectSlow() {
-    currentAction = IndexerStatus.EJECT_SLOW;
-    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageEjectSlow);
-  }
-
   public void reject() {
     currentAction = IndexerStatus.REJECT;
     io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageReject);
@@ -59,6 +50,11 @@ public class Indexer extends SubsystemBase {
   public void rejectSlow() {
     currentAction = IndexerStatus.REJECT_SLOW;
     io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageRejectSlow);
+  }
+
+  public void idle() {
+    currentAction = IndexerStatus.START;
+    io.stopIndexerMotor(IdleMode.kCoast);
   }
 
   public boolean isCoralDetectedIndexer() {
