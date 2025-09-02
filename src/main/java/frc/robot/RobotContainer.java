@@ -250,6 +250,12 @@ public class RobotContainer {
                               superstructure.cancelPrescoreCoral();
                             }
                           }));
+    driver.home()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  superstructure.requestStow();
+                }));
    
   }
 
