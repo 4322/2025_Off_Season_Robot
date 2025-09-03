@@ -12,6 +12,8 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
+
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 import com.reduxrobotics.motorcontrol.requests.FollowMotorRequest;
@@ -73,5 +75,10 @@ public class ElevatorIONitrate implements ElevatorIO {
   public void setElevatorEncoder() {
     leaderMotor.setPosition(0);
     followerMotor.setPosition(0);
+  }
+
+  @Override
+  public void setSpeed(double velocity, double acceleration) {
+    TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(velocity, acceleration);
   }
 }

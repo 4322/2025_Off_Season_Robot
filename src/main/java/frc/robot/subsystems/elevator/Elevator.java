@@ -79,9 +79,6 @@ public class Elevator extends SubsystemBase {
   public void algaeReef(Level level) {
     //requestElevator = true;
     switch (level) {
-      case L1:
-        requestedHeightMeters = Constants.Elevator.algaeReefL1HeightMeters;
-        break;
       case L2:
         requestedHeightMeters = Constants.Elevator.algaeReefL2HeightMeters;
         break;
@@ -113,8 +110,8 @@ public class Elevator extends SubsystemBase {
     }
   }
 
-  public void scoreCoral(Level level) {
-    switch (level) {
+  public void scoreCoral(Level coalLevel) {
+    switch (coalLevel) {
       case L1:
         requestedHeightMeters = Constants.Scoring.scoreCoralL1HeightMeters;
         break;
@@ -168,5 +165,10 @@ public class Elevator extends SubsystemBase {
   }
   public void peformInitialization(){
     state = ElevatorStates.INITIALIZATIONPROCEDURE;
+  }
+
+  public boolean atSetpoint() {
+    return ClockUtil.atReference(
+        inputs.heightMeters, requestedHeightMeters, Constants.Elevator.elevatorHeightToleranceMeters, true);
   }
 }
