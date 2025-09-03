@@ -34,7 +34,7 @@ public class Superstructure extends SubsystemBase {
 
   private Level coralLevel = Level.L1;
   private Level algaeLevel = Level.L1;
-
+  
   public enum Superstates {
     UNHOMED,
     IDLE,

@@ -97,6 +97,6 @@ public class ArmIONitrate implements ArmIO {
 
   @Override
   public void setSpeed(double velocity, double acceleration) {
-    TrapezoidProfile.Constraints armconstraints = new TrapezoidProfile.Constraints(velocity, acceleration);
+    TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(velocity, acceleration);
   }
 }

@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
@@ -304,5 +305,7 @@ public final class Constants {
     public static final double scoringL2CoralMeters = 20;
     public static final double scoringL3CoralMeters = 30;
     public static final double scoringL4CoralMeters = 40;
+
+    public static final double setpointToleranceDegrees = 0.01;
   } // TODO placeholder values
 }

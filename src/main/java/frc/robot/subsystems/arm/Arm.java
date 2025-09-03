@@ -88,17 +88,18 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = armConstants.scoringAlgaeDeg;
   }
 
-  public void prescoreCoral(Level coralLevel) {
-    setcoralheight(coralLevel);
+  public void prescoreCoral(Level level) {
+    setcoralheight(level);
   }
 
-  public void scoreCoral(Level coralLevel) {
-    setcoralheight(coralLevel);
+  public void scoreCoral() {
+    requestedSetpoint = armConstants.armIdleDeg;
+    //Arm starts going down to Idle at a slow speed
   }
 
   public boolean atSetpoint() {
     return ClockUtil.atReference(
-        inputs.armPositionDegrees, requestedSetpoint, armConstants.setpointToleranceDegrees, true);
+        inputs.heightMeters, requestedSetpoint, armConstants.setpointToleranceDegrees, true);
   }
 
   public void safeBargeRetract() {
@@ -122,8 +123,8 @@ public class Arm extends SubsystemBase {
     return inputs.armPositionDegrees;
   }
 
-  private void setcoralheight(Level coralLevel) {
-    switch (coralLevel) {
+  private void setcoralheight(Level level) {
+    switch (level) {
       case L1:
         requestedSetpoint = armConstants.scoringL1CoralDeg;
         break;
