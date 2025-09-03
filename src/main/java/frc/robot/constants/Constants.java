@@ -136,7 +136,7 @@ public final class Constants {
     public static final double coralIntakeVolts = 3.0;
 
     public static final double algaeReleaseVolts = -3.0;
-    public static final double coralReleaseVolts = -3.0;
+    public static final double coralReleaseVolts = -3.0; // TODO make sure this is slow enough for scoring coral.
 
     public static final double ejectVolts = -3.0;
 
