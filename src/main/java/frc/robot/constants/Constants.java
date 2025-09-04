@@ -115,9 +115,13 @@ public final class Constants {
         new ElectricalLimitSettings();
 
     public static final double scoringL1CoralDeg = 30;
-    public static final double scoringL2CoralDeg = 20;
-    public static final double scoringL3CoralDeg = 40;
-    public static final double scoringL4CoralDeg = 50;
+    public static final double scoringL2CoralDeg = 0;
+    public static final double scoringL3CoralDeg = 0;
+    public static final double scoringL4CoralDeg = 90;
+    public static final double prescoringL1CoralDeg = 70;
+    public static final double prescoringL2CoralDeg = 110;
+    public static final double prescoringL3CoralDeg = 100;
+    public static final double prescoringL4CoralDeg = 120;
     public static final double scoringAlgaeDeg = 70; // TODO: Set to actual angle
 
     public static final double descoringAlgaeDeg = 90;
@@ -141,7 +145,6 @@ public final class Constants {
     public static final double kI = 0; // TODO: Set to actual value
     public static final double kD = 0; // TODO: Set to actual value
     public static final double intializationVoltage = -0.1; //need actual values
-    public static final double minElevatorSafeHeightMeters = 45; //need actual values
     public static final double elevatorHeightToleranceMeters = 0.01;
     public static final double algaeHoldMeters = 0.1; //need actual values
     public static final double algaeGroundHeightMeters = 5; //need actual values
@@ -160,6 +163,16 @@ public final class Constants {
     public static final double supplyCurrentLimitAmps = 0.1;
     public static final double statorCurrentLimitAmps = 0.1;
     public static final double kG = 0;
+
+    public static final double minElevatorSafeHeightMeters = 45.0;
+    public static final double maxElevatorSafeHeightMeters = 100.0; // TODO: Set to actual height
+
+    public static final double scoringL1CoralMeters = 10;
+    public static final double scoringL2CoralMeters = 20;
+    public static final double scoringL3CoralMeters = 30;
+    public static final double scoringL4CoralMeters = 40;
+
+    public static final double setpointToleranceDegrees = 0.01;
   }
 
   // TODO all of these are placeholder values
@@ -297,15 +310,5 @@ public final class Constants {
     public static final double pickupAreaRetractTimeoutSeconds = 3.0;
   }
 
-  public static class Elevator {
-    public static final double minElevatorSafeHeightMeters = 45.0;
-    public static final double maxElevatorSafeHeightMeters = 100.0; // TODO: Set to actual height
-
-    public static final double scoringL1CoralMeters = 10;
-    public static final double scoringL2CoralMeters = 20;
-    public static final double scoringL3CoralMeters = 30;
-    public static final double scoringL4CoralMeters = 40;
-
-    public static final double setpointToleranceDegrees = 0.01;
-  } // TODO placeholder values
+  
 }

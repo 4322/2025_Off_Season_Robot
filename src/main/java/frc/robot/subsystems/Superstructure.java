@@ -32,9 +32,8 @@ public class Superstructure extends SubsystemBase {
   private boolean requestClimb = false;
   private boolean requestswitchOperationMode = false;
 
-  private Level coralLevel = Level.L1;
-  private Level algaeLevel = Level.L1;
-  
+
+
   public enum Superstates {
     UNHOMED,
     IDLE,
@@ -59,6 +58,8 @@ public class Superstructure extends SubsystemBase {
     L3,
     L4
   }
+
+  Level level = Level.L1;
 
   public static enum OperationMode {
     Auto,
@@ -196,7 +197,7 @@ public class Superstructure extends SubsystemBase {
         break;
       case DESCORE_ALGAE:
         arm.algaeReef();
-        elevator.algaeReef(algaeLevel);
+        elevator.algaeReef(level);
         endEffector.intakeAlgae();
 
         if (endEffector
@@ -235,8 +236,8 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case PRESCORE_CORAL:
-        arm.prescoreCoral(coralLevel);
-        elevator.prescoreCoral(coralLevel);
+        arm.prescoreCoral(level);
+        elevator.prescoreCoral(level);
 
         if (requestScoreCoral && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.SCORE_CORAL;
@@ -245,8 +246,8 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case SCORE_CORAL:
-        arm.scoreCoral(coralLevel);
-        elevator.scoreCoral(coralLevel);
+        arm.scoreCoral(level);
+        elevator.scoreCoral(level);
         endEffector.releaseCoral();
 
         if (!endEffector.hasCoral()) {
@@ -340,12 +341,12 @@ public class Superstructure extends SubsystemBase {
     requestIntakeAlgaeFloor = false;
   }
 
-  public void requestIntakeAlgaeReef(Level algaeLevel) {
+  public void requestIntakeAlgaeReef(Level level) {
     unsetAllRequests();
     requestIntakeAlgaeFloor = true;
   }
 
-  public void requestDescoreAlgae(Level algaeLevel) {
+  public void requestDescoreAlgae(Level level) {
     unsetAllRequests();
     requestDescoreAlgae = true;
   }

@@ -89,12 +89,37 @@ public class Arm extends SubsystemBase {
   }
 
   public void prescoreCoral(Level level) {
-    setcoralheight(level);
+    switch (level) {
+      case L1:
+        requestedSetpoint = armConstants.prescoringL1CoralDeg;
+        break;
+      case L2:
+        requestedSetpoint = armConstants.prescoringL2CoralDeg;
+        break;
+      case L3:
+        requestedSetpoint = armConstants.prescoringL3CoralDeg;
+        break;
+      case L4:
+        requestedSetpoint = armConstants.prescoringL4CoralDeg;
+        break;
+    }
   }
 
-  public void scoreCoral() {
-    requestedSetpoint = armConstants.armIdleDeg;
-    //Arm starts going down to Idle at a slow speed
+  public void scoreCoral(Level level) {
+    switch (level) {
+      case L1:
+        requestedSetpoint = armConstants.scoringL1CoralDeg;
+        break;
+      case L2:
+        requestedSetpoint = armConstants.scoringL2CoralDeg;
+        break;
+      case L3:
+        requestedSetpoint = armConstants.scoringL3CoralDeg;
+        break;
+      case L4:
+        requestedSetpoint = armConstants.scoringL4CoralDeg;
+        break;
+    }
   }
 
   public boolean atSetpoint() {
@@ -123,20 +148,5 @@ public class Arm extends SubsystemBase {
     return inputs.armPositionDegrees;
   }
 
-  private void setcoralheight(Level level) {
-    switch (level) {
-      case L1:
-        requestedSetpoint = armConstants.scoringL1CoralDeg;
-        break;
-      case L2:
-        requestedSetpoint = armConstants.scoringL2CoralDeg;
-        break;
-      case L3:
-        requestedSetpoint = armConstants.scoringL3CoralDeg;
-        break;
-      case L4:
-        requestedSetpoint = armConstants.scoringL4CoralDeg;
-        break;
-    }
-  }
+
 }

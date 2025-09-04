@@ -24,9 +24,10 @@ public class ScoreCoral extends Command {
 
   @Override
   public void execute() {
-    arm.scoreCoral();
+ 
+  
+    arm.scoreCoral(level);
     elevator.scoreCoral(level);
-    
   }
 
   @Override
