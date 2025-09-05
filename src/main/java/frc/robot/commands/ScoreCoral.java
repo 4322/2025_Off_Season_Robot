@@ -20,15 +20,16 @@ public class ScoreCoral extends Command {
   @Override
   public void initialize() {
     arm.setSpeed(50, 50);
-    elevatorio.setSpeed(20, 20);//TODO: Change like changed in arm
   }
 
   @Override
   public void execute() {
     if (superstructure.getState() == Superstructure.Superstates.PRESCORE_CORAL) {
-     
-    } else {
-      level = Superstructure.Level.L3;
+      superstructure.getReefStatus();
+      if (superstructure.isAutoOperationMode()) {
+      } else {
+
+      }
     }
 
     arm.scoreCoral(level);
