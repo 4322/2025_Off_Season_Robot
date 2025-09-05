@@ -46,8 +46,7 @@ public class ElevatorIONitrate implements ElevatorIO {
         Constants.Elevator.kP, Constants.Elevator.kI, Constants.Elevator.kD);
     elevatorMotorPIDSettings.setGravitationalFeedforward(Constants.Elevator.kG);
     elevatorConfig
-        .setPIDSettings(elevatorMotorPIDSettings, PIDConfigSlot.kSlot0)
-        .getPIDSettings(PIDConfigSlot.kSlot0);
+        .setPIDSettings(elevatorMotorPIDSettings, PIDConfigSlot.kSlot0);
     followerMotor.setRequest(followerRequest);
     NitrateSettings leaderConfigStatus = leaderMotor.setSettings(elevatorConfig, 0.02, 5);
     NitrateSettings followerConfigStatus = followerMotor.setSettings(elevatorConfig, 0.02, 5);
