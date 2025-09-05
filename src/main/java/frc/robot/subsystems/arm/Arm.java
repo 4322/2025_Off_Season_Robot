@@ -1,8 +1,6 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
@@ -146,13 +144,5 @@ public class Arm extends SubsystemBase {
 
   public double getAngleDegrees() {
     return inputs.armPositionDegrees;
-  }
-
-  public void setSpeed(double velocity, double acceleration) {
-    TrapezoidProfile.Constraints constraints =
-        new TrapezoidProfile.Constraints(velocity, acceleration);
-    ProfiledPIDController armController = new ProfiledPIDController(0, 0, 0, constraints);
-    double output = armController.calculate(inputs.armPositionDegrees, requestedSetpoint);
-    io.setVoltage(output);
   }
 }

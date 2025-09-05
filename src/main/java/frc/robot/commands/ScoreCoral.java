@@ -18,9 +18,7 @@ public class ScoreCoral extends Command {
   public ScoreCoral() {}
 
   @Override
-  public void initialize() {
-    arm.setSpeed(50, 50);
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
