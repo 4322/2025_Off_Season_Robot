@@ -10,11 +10,14 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveManual;
 import frc.robot.constants.Constants;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.arm.ArmIONitrate;
@@ -48,7 +51,7 @@ import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOPhoton
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  public static XboxController driver = new XboxController(0);
+  public static CommandXboxController driver = new CommandXboxController(0);
 
   private static Vision vision;
   private static VisionObjectDetection visionObjectDetection;
@@ -165,6 +168,109 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     drive.setDefaultCommand(new DriveManual(drive));
+    driver
+        .povUp()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  superstructure.requestEject();
+                }));
+    driver
+        .povUp()
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  superstructure.cancelEject();
+                }));
+    // Prescore/Descore Levels
+    driver
+        .a()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                    superstructure.requestIntakeAlgaeFloor();
+                  } else if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                    superstructure.requestPrescoreCoral(Level.L1);
+                  }
+                }));
+    driver
+        .a()
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                    superstructure.cancelIntakeAlgaeFloor();
+                  } else if (endEffector.hasAlgae() && endEffector.hasCoral()) {
+                    superstructure.cancelPrescoreCoral();
+                  }
+                }));
+    driver
+        .x()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                    superstructure.requestDescoreAlgae(Level.L2);
+                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                    superstructure.requestPrescoreCoral(Level.L2);
+                  }
+                }));
+    driver
+        .x()
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                    superstructure.cancelDescoreAlgae();
+                  } else if (!endEffector.hasAlgae() && endEffector.hasCoral()) {
+                    superstructure.cancelPrescoreCoral();
+                  }
+                }));
+    driver
+        .y()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                    superstructure.requestDescoreAlgae(Level.L3);
+                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                    superstructure.requestPrescoreCoral(Level.L3);
+                  }
+                }));
+    driver
+        .y()
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                    superstructure.cancelDescoreAlgae();
+                  } else if (!endEffector.hasAlgae() && endEffector.hasCoral()) {
+                    superstructure.cancelPrescoreCoral();
+                  }
+                }));
+    driver
+        .b()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                    superstructure.requestAlgaePrescore();
+                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                    superstructure.requestPrescoreCoral(Level.L4);
+                  }
+                }));
+    driver
+        .b()
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                    superstructure.cancelAlgaePrescore();
+                  } else if (!endEffector.hasAlgae() && endEffector.hasCoral()) {
+                    superstructure.cancelPrescoreCoral();
+                  }
+                }));
   }
 
   /**

@@ -11,6 +11,7 @@ public class DrivetrainConstants {
   public static final int gyroId = 0; // TODO
   public static final double maxSpeedAt12Volts = 4.0; // TODO
 
+  public static final double driveMotorKv = 800; // RPM/v
   private static final double driveGearRatio = 7.363636363636365; // TODO
   private static final double turnGearRatio = 150.0 / 7.0;
   private static final double turnCoupleRatio = 3.8181818181818183; // TODO

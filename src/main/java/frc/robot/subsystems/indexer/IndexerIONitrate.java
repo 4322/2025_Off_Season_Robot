@@ -27,7 +27,7 @@ public class IndexerIONitrate implements IndexerIO {
     indexerSensor = new Canandcolor(Constants.Indexer.indexerSensorId);
     pickupAreaSensor = new Canandcolor(Constants.Indexer.pickupAreaSensorId);
 
-    configMotor();
+    initMotorConfig();
     NitrateSettings indexerMotorConfigStatus =
         indexerMotor.setSettings(indexerMotorConfig, 0.02, 5);
     if (!indexerMotorConfigStatus.allSettingsReceived()) {
@@ -60,7 +60,7 @@ public class IndexerIONitrate implements IndexerIO {
     }
   }
 
-  private void configMotor() {
+  private void initMotorConfig() {
     // TODO add other settings for motor
     ElectricalLimitSettings indexerMotorElectricalLimitSettings = new ElectricalLimitSettings();
     indexerMotorElectricalLimitSettings.setBusCurrentLimit(Constants.Indexer.motorBusCurrentLimit);
@@ -110,6 +110,7 @@ public class IndexerIONitrate implements IndexerIO {
 
   @Override
   public void stopIndexerMotor(IdleMode mode) {
+    previousRequestedVoltage = -999;
     indexerMotor.stop(mode);
   }
 }
