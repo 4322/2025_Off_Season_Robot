@@ -1,15 +1,12 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
-import frc.robot.subsystems.arm.ArmIO.ArmIOInputs;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
 
@@ -127,7 +124,7 @@ public class Arm extends SubsystemBase {
 
   public boolean atSetpoint() {
     return ClockUtil.atReference(
-        inputs.heightMeters, requestedSetpoint, armConstants.setpointToleranceDegrees, true);
+        inputs.armPositionDegrees, requestedSetpoint, armConstants.setpointToleranceDegrees, true);
   }
 
   public void safeBargeRetract() {
@@ -150,13 +147,12 @@ public class Arm extends SubsystemBase {
   public double getAngleDegrees() {
     return inputs.armPositionDegrees;
   }
-
   public void setSpeed(double velocity, double acceleration) {
     TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(velocity, acceleration);
-  ProfiledPIDController armController = new ProfiledPIDController(0, 0, 0, constraints);
-  double output = armController.calculate(inputs.armPositionDegrees, requestedSetpoint);
-  io.setVoltage(output);
+    ProfiledPIDController armController = new ProfiledPIDController(0, 0, 0, constraints);
+    double output = armController.calculate(inputs.armPositionDegrees, requestedSetpoint);
+    io.setVoltage(output);
   }
 
 }

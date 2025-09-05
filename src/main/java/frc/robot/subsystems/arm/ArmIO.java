@@ -26,10 +26,6 @@ public interface ArmIO {
   public default void requestPosition(double requestedSetpoint) {}
 
   public default void stopArmMotor(IdleMode idlemode) {}
-  
-  public default void setVoltage(double volts) {
 
-  }
-
-
+  public default void setVoltage(double volts) {}
 }
