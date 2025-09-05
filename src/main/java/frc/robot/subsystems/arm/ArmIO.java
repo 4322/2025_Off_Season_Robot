@@ -27,7 +27,5 @@ public interface ArmIO {
 
   public default void stopArmMotor(IdleMode idlemode) {}
 
-
-  public default void armSlowMode(){
-  }
+  public default void setVoltage(double volts) {}
 }

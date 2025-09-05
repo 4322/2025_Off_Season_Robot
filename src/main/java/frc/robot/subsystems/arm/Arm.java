@@ -1,8 +1,6 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
@@ -88,12 +86,38 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = armConstants.scoringAlgaeDeg;
   }
 
-  public void prescoreCoral(Level coralLevel) {
-    setcoralheight(coralLevel);
+  public void prescoreCoral(Level level) {
+    switch (level) {
+      case L1:
+        requestedSetpoint = armConstants.prescoringL1CoralDeg;
+        break;
+      case L2:
+        requestedSetpoint = armConstants.prescoringL2CoralDeg;
+        break;
+      case L3:
+        requestedSetpoint = armConstants.prescoringL3CoralDeg;
+        break;
+      case L4:
+        requestedSetpoint = armConstants.prescoringL4CoralDeg;
+        break;
+    }
   }
 
-  public void scoreCoral(Level coralLevel) {
-    setcoralheight(coralLevel);
+  public void scoreCoral(Level level) {
+    switch (level) {
+      case L1:
+        requestedSetpoint = armConstants.scoringL1CoralDeg;
+        break;
+      case L2:
+        requestedSetpoint = armConstants.scoringL2CoralDeg;
+        break;
+      case L3:
+        requestedSetpoint = armConstants.scoringL3CoralDeg;
+        break;
+      case L4:
+        requestedSetpoint = armConstants.scoringL4CoralDeg;
+        break;
+    }
   }
 
   public boolean atSetpoint() {
@@ -118,28 +142,7 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = armConstants.ejectDeg;
   }
 
-  public void slowmode() {
-   io.armSlowMode();
-  }
-
   public double getAngleDegrees() {
     return inputs.armPositionDegrees;
-  }
-
-  private void setcoralheight(Level coralLevel) {
-    switch (coralLevel) {
-      case L1:
-        requestedSetpoint = armConstants.scoringL1CoralDeg;
-        break;
-      case L2:
-        requestedSetpoint = armConstants.scoringL2CoralDeg;
-        break;
-      case L3:
-        requestedSetpoint = armConstants.scoringL3CoralDeg;
-        break;
-      case L4:
-        requestedSetpoint = armConstants.scoringL4CoralDeg;
-        break;
-    }
   }
 }
