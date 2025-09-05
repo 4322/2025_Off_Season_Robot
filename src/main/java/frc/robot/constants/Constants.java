@@ -76,12 +76,11 @@ public final class Constants {
     public static final double scoringL2AngleDegCoral = 17.5; // TODO: Set to actual angle
     public static final double scoringL3AngleDegCoral = 39.2; // TODO: Set to actual angle
     public static final double scoringL4AngleDegCoral = 37.2; // TODO: Set to actual angle
-    public static final double maxElevatorSafeHeightMeters = 70; //need actual values
+    public static final double maxElevatorSafeHeightMeters = 70; // need actual values
     public static final double scoreCoralL1HeightMeters = 0.3; // TODO: Set to actual position
     public static final double scoreCoralL2HeightMeters = 0.5; // TODO: Set to actual position
     public static final double scoreCoralL3HeightMeters = 0.7; // TODO: Set to actual position
     public static final double scoreCoralL4HeightMeters = 0.9; // TODO: Set to actual position
- 
   }
 
   public static class Arm {
@@ -103,20 +102,20 @@ public final class Constants {
   }
 
   public static class Elevator {
-    public static final int leftMotorID = 0; // TODO: Set to actual motor ID
-    public static final int rightMotorID = 0; // TODO: Set to actual encoder ID
-    public static final IdleMode motorIdleMode = IdleMode.kCoast;
-    public static final InvertMode motorInvert = InvertMode.kInverted;
+    public static final int leftMotorID = 1; // TODO: Set to actual motor ID
+    public static final int rightMotorID = 2; // TODO: Set to actual encoder ID
+    public static final IdleMode motorIdleMode = IdleMode.kBrake;
+    public static final InvertMode motorInvert = null;
     public static final double elevatorMotorGearRatio = 1.0; // TODO: Set to actual gear ratio
     public static final PIDSettings elevatorMotorGains = new PIDSettings();
     public static final double kP = 0; // TODO: Set to actual value
     public static final double kI = 0; // TODO: Set to actual value
     public static final double kD = 0; // TODO: Set to actual value
-    public static final double intializationVoltage = -0.1; //need actual values
-    public static final double minElevatorSafeHeightMeters = 45; //need actual values
+    public static final double intializationVoltage = -0.1; // need actual values
+    public static final double minElevatorSafeHeightMeters = 45; // need actual values
     public static final double elevatorHeightToleranceMeters = 0.01;
-    public static final double algaeHoldMeters = 0.1; //need actual values
-    public static final double algaeGroundHeightMeters = 5; //need actual values
+    public static final double algaeHoldMeters = 0.1; // need actual values
+    public static final double algaeGroundHeightMeters = 5; // need actual values
     public static final double algaeReefL1HeightMeters = 0.25; // TODO: Set to actual position
     public static final double algaeReefL2HeightMeters = 0.45; // TODO: Set to actual position
     public static final double algaeReefL3HeightMeters = 0.65; // TODO: Set to actual position
@@ -255,8 +254,4 @@ public final class Constants {
     public static final double indexerRetractTimeoutSeconds = 3.0;
     public static final double pickupAreaRetractTimeoutSeconds = 3.0;
   }
-
-  public static class Elevator {
-    public static final double minElevatorSafeHeight = 45.0;
-  } // TODO placeholder values
 }

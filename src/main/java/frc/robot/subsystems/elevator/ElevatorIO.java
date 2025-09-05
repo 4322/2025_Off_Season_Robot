@@ -1,15 +1,14 @@
 package frc.robot.subsystems.elevator;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface ElevatorIO {
   @AutoLog
   public static class ElevatorIOInputs {
     public double heightMeters = 0.0;
-    //current setpoint
-    public boolean elevatorConnected = false;
+    // current setpoint
+    public boolean elevatorMotorConnected = false;
     public boolean elevatorEncoderConnected = false;
     public double velocityMetersSecond = 0.0;
     public double appliedVoltage = 0.0;
@@ -26,5 +25,5 @@ public interface ElevatorIO {
 
   public default void setElevatorEncoder() {}
 
-  public default void setNeutralMode(IdleMode mode) {}
+  public default void setNeutralMode(IdleMode idleMode) {}
 }
