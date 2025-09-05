@@ -6,7 +6,6 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.FollowMotorRequest;
@@ -47,9 +46,7 @@ public class ElevatorIONitrate implements ElevatorIO {
         Constants.Elevator.kP, Constants.Elevator.kI, Constants.Elevator.kD);
     elevatorMotorPIDSettings.setGravitationalFeedforward(Constants.Elevator.kG);
     elevatorConfig
-        .setPIDSettings(elevatorMotorPIDSettings, PIDConfigSlot.kSlot0)
-        .getPIDSettings(PIDConfigSlot.kSlot0)
-        .setMotionProfileMode(MotionProfileMode.kTrapezoidal);
+        .setPIDSettings(elevatorMotorPIDSettings, PIDConfigSlot.kSlot0);
     followerMotor.setRequest(followerRequest);
     NitrateSettings leaderConfigStatus = leaderMotor.setSettings(elevatorConfig, 0.02, 5);
     NitrateSettings followerConfigStatus = followerMotor.setSettings(elevatorConfig, 0.02, 5);
@@ -83,7 +80,6 @@ public class ElevatorIONitrate implements ElevatorIO {
     inputs.statorCurrentAmps = leaderMotor.getStatorCurrent();
     inputs.tempCelcius = leaderMotor.getMotorTemperatureFrame().getValue();
   }
-
 
   @Override
   public void setElevatorEncoder() {
