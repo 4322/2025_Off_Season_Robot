@@ -138,7 +138,6 @@ public final class Constants {
     public static final int rightMotorID = 0; // TODO: Set to actual encoder ID
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert = InvertMode.kNotInverted;
-    public static final double elevatorMotorGearRatio = 1.0; // TODO: Set to actual gear ratio
     public static final double kP = 0; // TODO: Set to actual value
     public static final double kI = 0; // TODO: Set to actual value
     public static final double kD = 0; // TODO: Set to actual value
@@ -169,7 +168,7 @@ public final class Constants {
     public static final double scoringL2CoralMeters = 20;
     public static final double scoringL3CoralMeters = 30;
     public static final double scoringL4CoralMeters = 40;
-
+    public static final double gearRatio = 0.1;
     public static final double setpointToleranceDegrees = 0.01;
   }
 
