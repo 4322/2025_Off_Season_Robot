@@ -6,26 +6,31 @@ import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
+
 public class ScoreCoral extends Command {
   private ArmIO armio;
   private Arm arm;
   private ElevatorIO elevatorio;
   private Elevator elevator;
   private Superstructure.Level level;
-  public ScoreCoral() {
-   
-  }
+  private Superstructure superstructure;
+
+  public ScoreCoral() {}
 
   @Override
   public void initialize() {
-    armio.setSpeed(50,50);
-    elevatorio.setSpeed(20,20);
+    arm.setSpeed(50, 50);
+    elevatorio.setSpeed(20, 20);//TODO: Change like changed in arm
   }
 
   @Override
   public void execute() {
- 
-  
+    if (superstructure.getState() == Superstructure.Superstates.PRESCORE_CORAL) {
+     
+    } else {
+      level = Superstructure.Level.L3;
+    }
+
     arm.scoreCoral(level);
     elevator.scoreCoral(level);
   }
