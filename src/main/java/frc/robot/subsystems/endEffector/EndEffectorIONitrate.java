@@ -25,7 +25,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     endEffectorMotor = new Nitrate(Constants.EndEffector.endEffectorMotorId, MotorType.kCu60);
     endEffectorSensor = new Canandcolor(Constants.EndEffector.endEffectorSensorId);
 
-    configMotor();
+    initMotorConfig();
     NitrateSettings endEffectorMotorConfigStatus =
         endEffectorMotor.setSettings(endEffectorMotorConfig, 0.02, 5);
     if (!endEffectorMotorConfigStatus.allSettingsReceived()) {
@@ -36,7 +36,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
           null);
     }
 
-    configSensor();
+    initSensorConfig();
     CanandcolorSettings endEffectorSensorConfigStatus =
         endEffectorSensor.setSettings(endEffectorSensorConfig, 0.02, 5);
     if (!endEffectorSensorConfigStatus.allSettingsReceived()) {
@@ -48,7 +48,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     }
   }
 
-  private void configMotor() {
+  private void initMotorConfig() {
     // TODO add other settings for motor
     ElectricalLimitSettings endEffectorMotorElectricalLimitSettings = new ElectricalLimitSettings();
     endEffectorMotorElectricalLimitSettings.setBusCurrentLimit(
@@ -65,7 +65,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     endEffectorMotorConfig.setOutputSettings(endEffectorMotorOutputSettings);
   }
 
-  private void configSensor() {
+  private void initSensorConfig() {
     // TODO add other settings for sensor
     //
   }
@@ -89,14 +89,12 @@ public class EndEffectorIONitrate implements EndEffectorIO {
         endEffectorSensor.getProximity() < Constants.EndEffector.sensorCoralProximityThreshold;
     inputs.isAlgaeProximityDetected =
         endEffectorSensor.getProximity() < Constants.EndEffector.sensorAlgaeProximityThreshold
-            && endEffectorSensor.getProximity()
-                > Constants.EndEffector
-                    .sensorCoralProximityThreshold; // TODO Assuming algae is farther from sensor
+            && !inputs.isCoralProximityDetected; // TODO Assuming algae is farther from sensor
     // than coral is
 
     // Enable color detection based on Constant setting
     if (Constants.EndEffector.useSensorColor) {
-      if (inputs.endEffectorSensorProximity < Constants.EndEffector.sensorAlgaeProximityThreshold) {
+      if (inputs.isAlgaeProximityDetected) {
 
         // Green detected is within range; Blue detected is within range; Red detected is below
         // threshold
@@ -120,10 +118,9 @@ public class EndEffectorIONitrate implements EndEffectorIO {
         inputs.sensorPieceDetected = gamePiece.NONE;
       }
     } else {
-      if (inputs.endEffectorSensorProximity < Constants.EndEffector.sensorAlgaeProximityThreshold) {
+      if (inputs.isAlgaeProximityDetected) {
         inputs.sensorPieceDetected = gamePiece.ALGAE;
-      } else if (inputs.endEffectorSensorProximity
-          < Constants.EndEffector.sensorCoralProximityThreshold) {
+      } else if (inputs.isCoralProximityDetected) {
         inputs.sensorPieceDetected = gamePiece.CORAL;
       } else {
         inputs.sensorPieceDetected = gamePiece.NONE;
@@ -142,6 +139,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   @Override
   // This covers both stopping motor as well as setting brake/coast mode
   public void stopEndEffectorMotor(IdleMode idleMode) {
+    previousRequestedVoltage = -999;
     endEffectorMotor.stop(idleMode);
   }
 }

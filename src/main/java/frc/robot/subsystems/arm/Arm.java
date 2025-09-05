@@ -1,6 +1,8 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
@@ -17,8 +19,9 @@ public class Arm extends SubsystemBase {
   private Constants.Arm armConstants;
 
   public double requestedSetpoint;
-  public double prevSetpoint;
+  public double prevSetpoint = -1000;
   public double newSetpoint;
+  public double elevatorHeight = superstructure.getElevatorHeight();
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -28,7 +31,6 @@ public class Arm extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
-    Logger.recordOutput("Arm/angleDegrees", inputs.armPositionDegrees);
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
 
     if (superstructure.isCoralHeld()) {
@@ -37,31 +39,24 @@ public class Arm extends SubsystemBase {
       minSafeArmDegree = armConstants.minArmSafeDeg;
     }
 
-    superstructure.getElevatorHeight();
     // Safety Logic
-    // newsetpoint = prevsetpoint when it can move with elevator
-
-    if (Constants.Elevator.minElevatorSafeHeightMeters <= superstructure.getElevatorHeight()
-        && maxElevatorSafeMeters >= superstructure.getElevatorHeight()) {
-      prevSetpoint = newSetpoint;
-    }
+    // Checks the logic checking for if it is in a dangerous position
 
     if (requestedSetpoint < minSafeArmDegree
-        && superstructure.getElevatorHeight() < Constants.Elevator.minElevatorSafeHeightMeters) {
-      requestedSetpoint = minSafeArmDegree; // Do we want driver to have to input setpoint again?
+        && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters) {
+      newSetpoint = minSafeArmDegree;
+    } else if (maxElevatorSafeMeters > elevatorHeight
+        && requestedSetpoint < armConstants.safeBargeRetractAngleDeg) {
+      newSetpoint = prevSetpoint;
 
-    } else if (getAngleDegrees() > minSafeArmDegree && requestedSetpoint < minSafeArmDegree) {
-      requestedSetpoint = minSafeArmDegree;
-
-    } else if (maxElevatorSafeMeters > superstructure.getElevatorHeight()
-        && !superstructure.isAlgaeHeld()) {
-      requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
+    } else {
+      newSetpoint = requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
     }
 
     // Moves the Elevator
-    if (prevSetpoint != requestedSetpoint) {
-      io.requestPosition(requestedSetpoint);
-      prevSetpoint = requestedSetpoint;
+    if (prevSetpoint != newSetpoint) {
+      io.requestPosition(newSetpoint);
+      prevSetpoint = newSetpoint;
     }
   }
 
@@ -89,41 +84,29 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = armConstants.descoringAlgaeDeg;
   }
 
-  public void scoreAlgae(/*Side scoringSide*/ ) {}
-
-  public void prescoreCoral(Level coralLevel) {
-    setcoralheight(coralLevel);
+  public void scoreAlgae(/*Side scoringSide*/ ) {
+    requestedSetpoint = armConstants.scoringAlgaeDeg;
   }
 
-  public void scoreCoral(Level coralLevel) {
-    setcoralheight(coralLevel);
+  public void prescoreCoral(Level level) {
+    switch (level) {
+      case L1:
+        requestedSetpoint = armConstants.prescoringL1CoralDeg;
+        break;
+      case L2:
+        requestedSetpoint = armConstants.prescoringL2CoralDeg;
+        break;
+      case L3:
+        requestedSetpoint = armConstants.prescoringL3CoralDeg;
+        break;
+      case L4:
+        requestedSetpoint = armConstants.prescoringL4CoralDeg;
+        break;
+    }
   }
 
-  public boolean atSetpoint() {
-    return ClockUtil.atReference(
-        inputs.armPositionDegrees, requestedSetpoint, armConstants.setpointToleranceDegrees, true);
-  }
-
-  public void safeBargeRetract() {
-    requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
-  }
-
-  public void setNeutralMode(IdleMode idlemode) {}
-
-  public void climbing() {
-    requestedSetpoint = armConstants.climbingDeg;
-  }
-
-  public void eject() {
-    requestedSetpoint = armConstants.ejectDeg;
-  }
-
-  public double getAngleDegrees() {
-    return inputs.armPositionDegrees;
-  }
-
-  private void setcoralheight(Level coralLevel) {
-    switch (coralLevel) {
+  public void scoreCoral(Level level) {
+    switch (level) {
       case L1:
         requestedSetpoint = armConstants.scoringL1CoralDeg;
         break;
@@ -137,5 +120,40 @@ public class Arm extends SubsystemBase {
         requestedSetpoint = armConstants.scoringL4CoralDeg;
         break;
     }
+  }
+
+  public boolean atSetpoint() {
+    return ClockUtil.atReference(
+        inputs.armPositionDegrees, requestedSetpoint, armConstants.setpointToleranceDegrees, true);
+  }
+
+  public void safeBargeRetract() {
+    requestedSetpoint = armConstants.safeBargeRetractAngleDeg;
+  }
+
+  public void setNeutralMode(IdleMode mode) {
+    prevSetpoint = -1000;
+    io.stopArmMotor(mode);
+  }
+
+  public void climbing() {
+    requestedSetpoint = armConstants.climbingDeg;
+  }
+
+  public void eject() {
+    requestedSetpoint = armConstants.ejectDeg;
+  }
+
+  public double getAngleDegrees() {
+    return inputs.armPositionDegrees;
+  }
+
+  public void setSpeed(double velocity, double acceleration) {
+    TrapezoidProfile.Constraints constraints =
+        new TrapezoidProfile.Constraints(velocity, acceleration);
+    ProfiledPIDController armController = new ProfiledPIDController(0, 0, 0, constraints);
+    double output = armController.calculate(inputs.armPositionDegrees, requestedSetpoint);
+    io.setVoltage(output);
+    
   }
 }

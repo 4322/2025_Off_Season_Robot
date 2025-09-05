@@ -1,5 +1,6 @@
 package frc.robot.subsystems.arm;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
@@ -8,11 +9,12 @@ public interface ArmIO {
     public double appliedVolts = 0.0;
     public boolean armConnected = false;
     public boolean armEncoderConnected = false;
-    public double armVelocityRadPerSec = 0.0;
+    public double armVelocityRotationsPerSec = 0.0;
     public double armSupplyCurrentAmps = 0.0;
     public double armStatorCurrentAmps = 0.0;
     public double armTempCelsius = 0.0;
-    public double armPositionDegrees = 0.0; // In radians, 0 is horizontal to front of robot
+    public double armPositionDegrees =
+        0.0; // 0 is vertical to front of robot. Posititve clockwise looking from the left
   }
 
   public default void setManualInitialization() {}
@@ -22,4 +24,8 @@ public interface ArmIO {
   public default void setArmOpenLoop(double outputVoltage) {}
 
   public default void requestPosition(double requestedSetpoint) {}
+
+  public default void stopArmMotor(IdleMode idlemode) {}
+
+  public default void setVoltage(double volts) {}
 }

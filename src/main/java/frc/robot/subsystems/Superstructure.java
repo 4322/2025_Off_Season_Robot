@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drive.Drive;
@@ -17,27 +18,25 @@ import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
-  private boolean requestIdle = false;
+  private boolean cancelEject = false;
   private boolean requestEject = false;
-  private boolean requestAlgaeIdle = false;
   private boolean requestAlgaePrescore = false;
+  private boolean cancelAlgaePrescore = false;
   private boolean requestAlgaeScore = false;
   private boolean requestIntakeAlgaeFloor = false;
   private boolean requestDescoreAlgae = false;
   private boolean requestEndEffectorCoralPickup = false;
   private boolean requestCoralHeld = false;
   private boolean requestPrescoreCoral = false;
+  private boolean cancelPrescoreCoral = false;
   private boolean requestScoreCoral = false;
   private boolean requestSafeScoreAlgaeRetract = false;
   private boolean requestPreClimb = false;
   private boolean requestClimb = false;
   private boolean requestswitchOperationMode = false;
 
-  private Level coralLevel = Level.L1;
-  private Level algaeLevel = Level.L1;
-
   public enum Superstates {
-    START,
+    UNHOMED,
     IDLE,
     EJECT,
     ALGAE_IDLE,
@@ -61,6 +60,8 @@ public class Superstructure extends SubsystemBase {
     L4
   }
 
+  Level level = Level.L1;
+
   public static enum OperationMode {
     Auto,
     Manual,
@@ -68,33 +69,37 @@ public class Superstructure extends SubsystemBase {
 
   OperationMode mode = OperationMode.Auto;
 
-  Superstates state = Superstates.START;
-  Superstates prevState = Superstates.START;
-  Superstates savedState = Superstates.START;
+  Superstates state = Superstates.UNHOMED;
+  Superstates prevState = Superstates.UNHOMED;
+  Superstates savedState = Superstates.UNHOMED;
 
   private EndEffector endEffector;
   private Arm arm;
   private Indexer indexer;
   private Elevator elevator;
-  // TODO wait for Ellie to merge this into main: private Climber climber;
+  // TODO wait for Ellie to merge this into main: private Climber climber; We aren't using climber
+  // yet
   private Drive drive;
   private Vision vision;
   private VisionObjectDetection visionObjectDetection;
   private IntakeSuperstructure intakeSuperstructure;
+
+  // Add this variable to track the previous state of the home button
 
   public Superstructure(
       EndEffector endEffector,
       Arm arm,
       Indexer indexer,
       Elevator elevator,
-      // TODO wait for Ellie to merge this into main: Climber climber,
+      // TODO wait for Ellie to merge this into main: Climber climber, We aren't using climber yet
       Drive drive,
       Vision vision,
       IntakeSuperstructure intakeSuperstructure) {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
-    // TODO wait for Ellie to merge this into main: this.climber = climber;
+    // TODO wait for Ellie to merge this into main: this.climber = climber; We aren't using climber
+    // yet
     this.drive = drive;
     this.indexer = indexer;
     this.vision = vision;
@@ -105,23 +110,13 @@ public class Superstructure extends SubsystemBase {
   public void periodic() {
     Logger.recordOutput("Superstructure/currentState", state.toString());
 
-    if (state != savedState) {
-      prevState = savedState;
-      savedState = state;
-    }
-
     switch (state) {
-      case START: // TODO
-        if (isHomeButtonPressed()) {
-          if (startTimer.hasElapsed(1)) {
-            elevator.setManualInitialization();
-            arm.setManualInitialization();
-          }
+      case UNHOMED:
+        if (Robot.homeButton.get()) // Not correct
+        {
+          elevator.setManualInitialization();
+          arm.setManualInitialization();
         }
-        if (DriverStation.isEnabled()) {
-          state = Superstates.IDLE;
-        }
-
         break;
       case IDLE:
         endEffector.idle();
@@ -142,7 +137,6 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.PRECLIMB;
         }
 
-        // TODO
         break;
       case EJECT:
         elevator.eject();
@@ -160,6 +154,7 @@ public class Superstructure extends SubsystemBase {
         break;
       case ALGAE_IDLE:
         arm.algaeHold();
+        endEffector.holdAlgae();
         if (requestEject) {
           state = Superstates.EJECT;
         } else if (!endEffector.hasAlgae()) {
@@ -168,7 +163,6 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.ALGAE_PRESCORE;
         }
 
-        // TODO
         break;
       case ALGAE_PRESCORE:
         arm.scoreAlgae();
@@ -176,22 +170,20 @@ public class Superstructure extends SubsystemBase {
 
         if (!requestAlgaePrescore) {
           state = Superstates.ALGAE_IDLE;
-        } else if (requestAlgaeScore) {
+        } else if (requestAlgaeScore && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.ALGAE_SCORE;
         }
 
-        // TODO
         break;
       case ALGAE_SCORE:
         endEffector.releaseAlgae();
 
         if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
           state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
-        } else if (requestSafeScoreAlgaeRetract) {
+        } else if (endEffector.hasAlgae()) {
           state = Superstates.ALGAE_IDLE;
         }
 
-        // TODO
         break;
       case INTAKE_ALGAE_FLOOR: // Needs to move up then arm out then back down
         elevator.algaeGround();
@@ -204,14 +196,14 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.IDLE;
         }
 
-        // TODO
         break;
       case DESCORE_ALGAE:
         arm.algaeReef();
-        elevator.algaeReef(algaeLevel);
+        elevator.algaeReef(level);
         endEffector.intakeAlgae();
 
-        if (endEffector.hasAlgae() /*&& atSafeDrive */) {
+        if (endEffector
+            .hasAlgae() /*&& atSafeDrive (Place Holder: Will be delt with in commands)*/) {
           state = Superstates.ALGAE_IDLE;
         } else if (!requestDescoreAlgae && !endEffector.hasAlgae()) {
           state = Superstates.IDLE;
@@ -221,9 +213,7 @@ public class Superstructure extends SubsystemBase {
       case END_EFFECTOR_CORAL_PICKUP:
         if (indexer.isCoralDetectedPickupArea()) {
           elevator.pickupCoral();
-          if (elevator.atSetpoint()) {
-            endEffector.intakeCoral();
-          }
+          endEffector.intakeCoral();
         }
 
         if (endEffector.hasCoral() && elevator.atSetpoint()) {
@@ -246,45 +236,38 @@ public class Superstructure extends SubsystemBase {
         } else if (requestPrescoreCoral) {
           state = Superstates.PRESCORE_CORAL;
         }
-        // TODO
         break;
       case PRESCORE_CORAL:
-        arm.prescoreCoral(coralLevel);
-        elevator.prescoreCoral(coralLevel);
+        arm.prescoreCoral(level);
+        elevator.prescoreCoral(level);
 
         if (requestScoreCoral && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.SCORE_CORAL;
-        } else if (!requestPrescoreCoral) {
+        } else if (!requestPrescoreCoral && endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
         }
-        // TODO
         break;
-      case SCORE_CORAL: // TODO When have elevator
-        arm.scoreCoral(coralLevel);
-        elevator.scoreCoral(coralLevel);
+      case SCORE_CORAL:
+        arm.scoreCoral(level);
+        elevator.scoreCoral(level);
         endEffector.releaseCoral();
-        if (!requestScoreCoral) {
-          state = Superstates.IDLE;
-        }
+
         if (!endEffector.hasCoral()) {
           state = Superstates.IDLE;
         } else if (endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
         }
-        // TODO
         break;
       case SAFE_SCORE_ALGAE_RETRACT:
         endEffector.idle();
         arm.safeBargeRetract();
         elevator.safeBargeRetract();
 
-        if (arm.atSetpoint() && elevator.atSetpoint() && !endEffector.hasAlgae()) {
+        if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
           state = Superstates.IDLE;
-        }
-        if (endEffector.hasAlgae() && arm.atSetpoint() && elevator.atSetpoint()) {
+        } else if (endEffector.hasAlgae()) {
           state = Superstates.ALGAE_IDLE;
         }
-        // TODO
         break;
       case PRECLIMB:
 
@@ -296,15 +279,8 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
-  public boolean isHomeButtonPressed() {
-    return true; // TODO add actual button logic
-  }
-
   private void unsetAllRequests() {
-    requestIdle = false;
     requestEject = false;
-    requestAlgaeIdle = false;
-    requestAlgaePrescore = false;
     requestAlgaeScore = false;
     requestIntakeAlgaeFloor = false;
     requestDescoreAlgae = false;
@@ -332,24 +308,24 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
-  public void requestIdle() {
-    unsetAllRequests();
-    requestIdle = true;
-  }
-
   public void requestEject() {
     unsetAllRequests();
     requestEject = true;
   }
 
-  public void requestAlgaeIdle() {
+  public void cancelEject() {
     unsetAllRequests();
-    requestAlgaeIdle = true;
+    requestEject = false;
   }
 
   public void requestAlgaePrescore() {
     unsetAllRequests();
     requestAlgaePrescore = true;
+  }
+
+  public void cancelAlgaePrescore() {
+    unsetAllRequests();
+    requestAlgaePrescore = false;
   }
 
   public void requestAlgaeScore() {
@@ -362,14 +338,24 @@ public class Superstructure extends SubsystemBase {
     requestIntakeAlgaeFloor = true;
   }
 
-  public void requestIntakeAlgaeReef(Level algaeLevel) {
+  public void cancelIntakeAlgaeFloor() {
+    unsetAllRequests();
+    requestIntakeAlgaeFloor = false;
+  }
+
+  public void requestIntakeAlgaeReef(Level level) {
     unsetAllRequests();
     requestIntakeAlgaeFloor = true;
   }
 
-  public void requestDescoreAlgae() {
+  public void requestDescoreAlgae(Level level) {
     unsetAllRequests();
     requestDescoreAlgae = true;
+  }
+
+  public void cancelDescoreAlgae() {
+    unsetAllRequests();
+    requestDescoreAlgae = false;
   }
 
   public void requestEndEffectorCoralPickup() {
@@ -382,12 +368,17 @@ public class Superstructure extends SubsystemBase {
     requestCoralHeld = true;
   }
 
-  public void requestPrescoreCoral() {
+  public void requestPrescoreCoral(Level coralLevel) {
     unsetAllRequests();
     requestPrescoreCoral = true;
   }
 
-  public void requestScoreCoral() {
+  public void cancelPrescoreCoral() {
+    unsetAllRequests();
+    requestPrescoreCoral = false;
+  }
+
+  public void requestScoreCoral(Level coralLevel) {
     unsetAllRequests();
     requestScoreCoral = true;
   }
