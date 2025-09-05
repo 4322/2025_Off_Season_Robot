@@ -154,6 +154,5 @@ public class Arm extends SubsystemBase {
     ProfiledPIDController armController = new ProfiledPIDController(0, 0, 0, constraints);
     double output = armController.calculate(inputs.armPositionDegrees, requestedSetpoint);
     io.setVoltage(output);
-    
   }
 }

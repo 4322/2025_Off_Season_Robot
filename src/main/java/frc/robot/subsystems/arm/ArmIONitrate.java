@@ -33,6 +33,7 @@ public class ArmIONitrate implements ArmIO {
     PIDSettings armPIDSettings = new PIDSettings();
     armPIDSettings.setPID(Constants.Arm.armkP, Constants.Arm.armkI, Constants.Arm.armkD);
     armPIDSettings.setGravitationalFeedforward(Constants.Arm.armFeedforward);
+    armPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
 
     NitrateSettings armConfig = new NitrateSettings();
 
@@ -43,8 +44,7 @@ public class ArmIONitrate implements ArmIO {
                 Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft));
     armConfig
         .setPIDSettings(armPIDSettings, PIDConfigSlot.kSlot0)
-        .getPIDSettings(PIDConfigSlot.kSlot0)
-        .setMinwrapConfig(new MinwrapConfig.Disabled());
+        .getPIDSettings(PIDConfigSlot.kSlot0);
 
     CanandmagSettings settings = new CanandmagSettings();
     CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
