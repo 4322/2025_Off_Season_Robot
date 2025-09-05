@@ -1,8 +1,12 @@
 package frc.robot.subsystems.endEffector;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.util.ClockUtil;
+import frc.robot.util.DeltaDebouncer;
 import org.littletonrobotics.junction.Logger;
 
 public class EndEffector extends SubsystemBase {
@@ -15,9 +19,14 @@ public class EndEffector extends SubsystemBase {
   private boolean requestReleaseAlgae;
   private boolean requestReleaseCoral;
   private boolean requestEject;
+  private boolean holdAlgae;
+  private boolean holdCoral;
 
   private boolean coralHeld = false;
   private boolean algaeHeld = false;
+  private boolean isPiecePickupDetected = false;
+
+  private Timer intakingTimer = new Timer();
 
   private enum EndEffectorStates {
     IDLE,
@@ -27,22 +36,49 @@ public class EndEffector extends SubsystemBase {
     HOLD_CORAL,
     RELEASE_ALGAE,
     RELEASE_CORAL,
+    INTAKING_CORAL, // This and below state used to give delay before reducing intake voltage to
+    // allow a piece to fully come in
+    INTAKING_ALGAE,
     EJECT
   }
 
   private EndEffectorStates state = EndEffectorStates.IDLE;
 
+  private DeltaDebouncer currentDetectionDebouncer =
+      new DeltaDebouncer(
+          Constants.EndEffector.currentDetectionDebounceTimeSeconds,
+          Constants.EndEffector.CurrentDetectionDeltaThresholdAmps,
+          DeltaDebouncer.Mode.CUMULATIVE,
+          Constants.EndEffector.CurrentDetectionMaxAccumulationSeconds,
+          DeltaDebouncer.ChangeType.INCREASE);
+  private DeltaDebouncer velocityDetectionDebouncer =
+      new DeltaDebouncer(
+          Constants.EndEffector.velocityDetectionDebounceTimeSeconds,
+          Constants.EndEffector.VelocityDetectionDeltaThresholdRotationsPerSecond,
+          DeltaDebouncer.Mode.CUMULATIVE,
+          Constants.EndEffector.VelocityDetectionMaxAccumulationSeconds,
+          DeltaDebouncer.ChangeType.DECREASE);
+
   public EndEffector(EndEffectorIO io) {
     this.io = io;
+    intakingTimer.stop();
+    intakingTimer.reset();
   }
 
   @Override
   public void periodic() {
+
     io.updateInputs(inputs);
     Logger.processInputs("End Effector", inputs);
     Logger.recordOutput("End Effector/State", state.toString());
     Logger.recordOutput("End Effector/coralHeld", coralHeld);
     Logger.recordOutput("End Effector/algaeHeld", algaeHeld);
+
+    isPiecePickupDetected =
+        currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps)
+            && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec);
+
+    Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
 
     switch (state) {
       case IDLE:
@@ -55,8 +91,8 @@ public class EndEffector extends SubsystemBase {
         break;
       case INTAKE_ALGAE:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeIntakeVolts);
-        if (io.isAlgaeProximityDetected() || io.isCurrentDetectionPickupTriggered()) {
-          state = EndEffectorStates.HOLD_ALGAE;
+        if (inputs.isAlgaeProximityDetected || isPiecePickupDetected) {
+          state = EndEffectorStates.INTAKING_ALGAE;
           algaeHeld = true;
         }
         if (requestIdle) {
@@ -66,13 +102,34 @@ public class EndEffector extends SubsystemBase {
         break;
       case INTAKE_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.coralIntakeVolts);
-        if (io.isCoralProximityDetected() || io.isCurrentDetectionPickupTriggered()) {
-          state = EndEffectorStates.HOLD_CORAL;
+        if (inputs.isCoralProximityDetected || isPiecePickupDetected) {
+          state = EndEffectorStates.INTAKING_CORAL;
           coralHeld = true;
         }
         if (requestIdle) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
+        }
+        break;
+      case INTAKING_ALGAE:
+        if (intakingTimer.isRunning()) {
+          if (intakingTimer.hasElapsed(Constants.EndEffector.algaeIntakingDelaySeconds)) {
+            state = EndEffectorStates.HOLD_ALGAE;
+            intakingTimer.stop();
+            intakingTimer.reset();
+          }
+        } else {
+          intakingTimer.start();
+        }
+      case INTAKING_CORAL:
+        if (intakingTimer.isRunning()) {
+          if (intakingTimer.hasElapsed(Constants.EndEffector.coralIntakingDelaySeconds)) {
+            state = EndEffectorStates.HOLD_CORAL;
+            intakingTimer.stop();
+            intakingTimer.reset();
+          }
+        } else {
+          intakingTimer.start();
         }
         break;
       case HOLD_ALGAE:
@@ -82,6 +139,10 @@ public class EndEffector extends SubsystemBase {
         } else if (requestEject) {
           state = EndEffectorStates.EJECT;
         }
+
+        if (!algaeHeld) {
+          state = EndEffectorStates.IDLE;
+        }
         break;
       case HOLD_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.coralHoldVolts);
@@ -90,29 +151,49 @@ public class EndEffector extends SubsystemBase {
         } else if (requestEject) {
           state = EndEffectorStates.EJECT;
         }
+
+        if (!coralHeld) {
+          state = EndEffectorStates.IDLE;
+        }
         break;
       case RELEASE_ALGAE:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeReleaseVolts);
-        if (io.isCurrentDetectionReleaseTriggered() || !io.isAlgaeProximityDetected()) {
+        if (holdAlgae) {
+          state = EndEffectorStates.HOLD_ALGAE;
+        } else if (!inputs.isAlgaeProximityDetected) {
           state = EndEffectorStates.IDLE;
           algaeHeld = false;
+        } else if (inputs.isAlgaeProximityDetected) {
+          state = EndEffectorStates.HOLD_ALGAE;
         }
         break;
       case RELEASE_CORAL:
         io.setEndEffectorMotorVoltage(Constants.EndEffector.coralReleaseVolts);
-        if (io.isCurrentDetectionReleaseTriggered()
-            || (!io.isCoralProximityDetected() && !io.isAlgaeProximityDetected())) {
+        if (holdCoral) {
+          state = EndEffectorStates.HOLD_CORAL;
+        } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
+        } else if (inputs.isCoralProximityDetected) {
+          state = EndEffectorStates.HOLD_CORAL;
         }
         break;
       case EJECT:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
-        if (io.isCurrentDetectionReleaseTriggered()
-            || (!io.isCoralProximityDetected() && !io.isAlgaeProximityDetected())) {
-          state = EndEffectorStates.IDLE;
-          coralHeld = false;
-          algaeHeld = false;
+        if (holdAlgae) {
+          state = EndEffectorStates.HOLD_ALGAE;
+        } else if (holdCoral) {
+          state = EndEffectorStates.HOLD_CORAL;
+        } else if (ClockUtil.inBound(
+            RobotContainer.superstructure.getArmAngle(),
+            Constants.Arm.ejectDeg - Constants.Arm.setpointToleranceDegrees,
+            Constants.Arm.ejectDeg + Constants.Arm.setpointToleranceDegrees,
+            true)) /*TODO set acual values*/ {
+          io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
+          if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+            state = EndEffectorStates.IDLE;
+            coralHeld = false;
+            algaeHeld = false;
+          }
         }
         break;
     }
@@ -143,6 +224,16 @@ public class EndEffector extends SubsystemBase {
     requestReleaseCoral = true;
   }
 
+  public void holdAlgae() {
+    unsetAllRequests();
+    holdAlgae = true;
+  }
+
+  public void holdCoral() {
+    unsetAllRequests();
+    holdCoral = true;
+  }
+
   public void eject() {
     requestEject = true;
   }
@@ -166,5 +257,11 @@ public class EndEffector extends SubsystemBase {
     requestReleaseAlgae = false;
     requestReleaseCoral = false;
     requestEject = false;
+    holdAlgae = false;
+    holdCoral = false;
+  }
+
+  public boolean isPiecePickupDetected() {
+    return isPiecePickupDetected;
   }
 }

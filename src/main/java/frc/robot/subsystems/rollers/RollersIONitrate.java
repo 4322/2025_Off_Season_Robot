@@ -14,10 +14,12 @@ public class RollersIONitrate implements RollersIO {
 
   private NitrateSettings rollersMotorConfig = new NitrateSettings();
 
+  private double previousRequestedVoltage = -999;
+
   public RollersIONitrate() {
     rollersMotor = new Nitrate(Constants.Rollers.rollersMotorId, MotorType.kCu60);
 
-    configMotor();
+    initMotorConfig();
     NitrateSettings rollersMotorConfigStatus =
         rollersMotor.setSettings(rollersMotorConfig, 0.02, 5);
     if (!rollersMotorConfigStatus.allSettingsReceived()) {
@@ -29,7 +31,7 @@ public class RollersIONitrate implements RollersIO {
     }
   }
 
-  private void configMotor() {
+  private void initMotorConfig() {
     // TODO add other settings for motor
     ElectricalLimitSettings rollersMotorElectricalLimitSettings = new ElectricalLimitSettings();
     rollersMotorElectricalLimitSettings.setBusCurrentLimit(Constants.Rollers.motorBusCurrentLimit);
@@ -57,21 +59,15 @@ public class RollersIONitrate implements RollersIO {
 
   @Override
   public void setRollersMotorVoltage(double voltage) {
-    rollersMotor.setVoltage(voltage);
+    if (voltage != previousRequestedVoltage) {
+      rollersMotor.setVoltage(voltage);
+      previousRequestedVoltage = voltage;
+    }
   }
 
   @Override
   public void stopRollersMotor(IdleMode mode) {
+    previousRequestedVoltage = -999;
     rollersMotor.stop(mode);
-  }
-
-  @Override
-  public double getRollersMotorStatorCurrent() {
-    return rollersMotor.getStatorCurrent();
-  }
-
-  @Override
-  public double getRollersMotorVelocityRotationsPerSec() {
-    return rollersMotor.getVelocity();
   }
 }

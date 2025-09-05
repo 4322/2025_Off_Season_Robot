@@ -19,11 +19,13 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   private NitrateSettings endEffectorMotorConfig = new NitrateSettings();
   private CanandcolorSettings endEffectorSensorConfig = new CanandcolorSettings();
 
+  private double previousRequestedVoltage = -999;
+
   public EndEffectorIONitrate() {
     endEffectorMotor = new Nitrate(Constants.EndEffector.endEffectorMotorId, MotorType.kCu60);
     endEffectorSensor = new Canandcolor(Constants.EndEffector.endEffectorSensorId);
 
-    configMotor();
+    initMotorConfig();
     NitrateSettings endEffectorMotorConfigStatus =
         endEffectorMotor.setSettings(endEffectorMotorConfig, 0.02, 5);
     if (!endEffectorMotorConfigStatus.allSettingsReceived()) {
@@ -34,7 +36,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
           null);
     }
 
-    configSensor();
+    initSensorConfig();
     CanandcolorSettings endEffectorSensorConfigStatus =
         endEffectorSensor.setSettings(endEffectorSensorConfig, 0.02, 5);
     if (!endEffectorSensorConfigStatus.allSettingsReceived()) {
@@ -46,7 +48,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     }
   }
 
-  private void configMotor() {
+  private void initMotorConfig() {
     // TODO add other settings for motor
     ElectricalLimitSettings endEffectorMotorElectricalLimitSettings = new ElectricalLimitSettings();
     endEffectorMotorElectricalLimitSettings.setBusCurrentLimit(
@@ -63,7 +65,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     endEffectorMotorConfig.setOutputSettings(endEffectorMotorOutputSettings);
   }
 
-  private void configSensor() {
+  private void initSensorConfig() {
     // TODO add other settings for sensor
     //
   }
@@ -83,65 +85,61 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.endEffectorSensorColorGreen = endEffectorSensor.getGreen();
     inputs.endEffectorSensorColorRed = endEffectorSensor.getRed();
 
-    if (inputs.endEffectorSensorProximity < Constants.EndEffector.sensorAlgaeProximityThreshold) {
+    inputs.isCoralProximityDetected =
+        endEffectorSensor.getProximity() < Constants.EndEffector.sensorCoralProximityThreshold;
+    inputs.isAlgaeProximityDetected =
+        endEffectorSensor.getProximity() < Constants.EndEffector.sensorAlgaeProximityThreshold
+            && !inputs.isCoralProximityDetected; // TODO Assuming algae is farther from sensor
+    // than coral is
 
-      // Green detected is within range; Blue detected is within range; Red detected is below
-      // threshold
-      if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorGreenDetectGreenLower
-          && inputs.endEffectorSensorColorGreen < Constants.EndEffector.sensorGreenDetectGreenUpper
-          && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorGreenDetectBlueLower
-          && inputs.endEffectorSensorColorBlue < Constants.EndEffector.sensorGreenDetectBlueUpper
-          && inputs.endEffectorSensorColorRed < Constants.EndEffector.sensorGreenDetectRed) {
-        inputs.sensorPieceDetected = gamePiece.ALGAE;
+    // Enable color detection based on Constant setting
+    if (Constants.EndEffector.useSensorColor) {
+      if (inputs.isAlgaeProximityDetected) {
 
-        // All colors detected are above threshold
-      } else if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorWhiteDetectGreen
-          && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorWhiteDetectBlue
-          && inputs.endEffectorSensorColorRed > Constants.EndEffector.sensorWhiteDetectRed) {
-        inputs.sensorPieceDetected = gamePiece.CORAL;
+        // Green detected is within range; Blue detected is within range; Red detected is below
+        // threshold
+        if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorGreenDetectGreenLower
+            && inputs.endEffectorSensorColorGreen
+                < Constants.EndEffector.sensorGreenDetectGreenUpper
+            && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorGreenDetectBlueLower
+            && inputs.endEffectorSensorColorBlue < Constants.EndEffector.sensorGreenDetectBlueUpper
+            && inputs.endEffectorSensorColorRed < Constants.EndEffector.sensorGreenDetectRed) {
+          inputs.sensorPieceDetected = gamePiece.ALGAE;
+
+          // All colors detected are above threshold
+        } else if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorWhiteDetectGreen
+            && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorWhiteDetectBlue
+            && inputs.endEffectorSensorColorRed > Constants.EndEffector.sensorWhiteDetectRed) {
+          inputs.sensorPieceDetected = gamePiece.CORAL;
+        } else {
+          inputs.sensorPieceDetected = gamePiece.UNKNOWN;
+        }
       } else {
-        inputs.sensorPieceDetected = gamePiece.UNKNOWN;
+        inputs.sensorPieceDetected = gamePiece.NONE;
       }
     } else {
-      inputs.sensorPieceDetected = gamePiece.NONE;
+      if (inputs.isAlgaeProximityDetected) {
+        inputs.sensorPieceDetected = gamePiece.ALGAE;
+      } else if (inputs.isCoralProximityDetected) {
+        inputs.sensorPieceDetected = gamePiece.CORAL;
+      } else {
+        inputs.sensorPieceDetected = gamePiece.NONE;
+      }
     }
-    inputs.currentDetectionPickupTriggered = isCurrentDetectionPickupTriggered();
   }
 
   @Override
   public void setEndEffectorMotorVoltage(double voltage) {
-    endEffectorMotor.setVoltage(voltage);
+    if (voltage != previousRequestedVoltage) {
+      previousRequestedVoltage = voltage;
+      endEffectorMotor.setVoltage(voltage);
+    }
   }
 
   @Override
   // This covers both stopping motor as well as setting brake/coast mode
   public void stopEndEffectorMotor(IdleMode idleMode) {
+    previousRequestedVoltage = -999;
     endEffectorMotor.stop(idleMode);
-  }
-
-  @Override // TODO maybe move current detection logic to subsystem periodic?
-  // Returns whether a difference in current is detected after picking up piece (low -> high
-  // current; Velocity high -> low)
-  public boolean isCurrentDetectionPickupTriggered() {
-    return false; // TODO figure out how current detection works
-  }
-
-  @Override
-  // Returns whether a difference in current is detected after releasing a piece (high -> low
-  // current; Velocity low -> high)
-  public boolean isCurrentDetectionReleaseTriggered() {
-    return false; // TODO figure out how current detection works
-  }
-
-  @Override
-  public boolean isCoralProximityDetected() {
-    return endEffectorSensor.getProximity() < Constants.EndEffector.sensorCoralProximityThreshold;
-  }
-
-  @Override
-  public boolean isAlgaeProximityDetected() {
-    // This is assuming the coral will be closer to the sensor than the algae is when held
-    return endEffectorSensor.getProximity() < Constants.EndEffector.sensorAlgaeProximityThreshold
-        && endEffectorSensor.getProximity() > Constants.EndEffector.sensorCoralProximityThreshold;
   }
 }

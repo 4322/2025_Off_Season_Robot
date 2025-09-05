@@ -7,17 +7,17 @@ import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
-import com.reduxrobotics.motorcontrol.nitrate.types.MotionProfileMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
-import com.reduxrobotics.motorcontrol.requests.OpenLoopVelocityRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDVelocityRequest;
+import com.reduxrobotics.motorcontrol.requests.VoltageRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.constants.DrivetrainConstants;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 
 public class ModuleIONitrate implements ModuleIO {
@@ -25,8 +25,7 @@ public class ModuleIONitrate implements ModuleIO {
   private final Nitrate turnMotor;
   private final Canandmag turnEncoder;
 
-  private final OpenLoopVelocityRequest driveOpenLoopVelocityRequest =
-      new OpenLoopVelocityRequest(0);
+  private final VoltageRequest driveVoltageRequest = new VoltageRequest(0);
   private final PIDVelocityRequest drivePIDVelocityRequest =
       new PIDVelocityRequest(PIDConfigSlot.kSlot0, 0);
   private final PIDPositionRequest turnPIDPositionRequest =
@@ -73,7 +72,6 @@ public class ModuleIONitrate implements ModuleIO {
     turnConfig
         .setPIDSettings(constants.turnMotorGains, PIDConfigSlot.kSlot0)
         .getPIDSettings(PIDConfigSlot.kSlot0)
-        .setMotionProfileMode(MotionProfileMode.kTrapezoidal)
         .setMinwrapConfig(new MinwrapConfig.Enabled());
     NitrateSettings turnConfigStatus = turnMotor.setSettings(turnConfig, 0.02, 5);
 
@@ -129,15 +127,17 @@ public class ModuleIONitrate implements ModuleIO {
   @Override
   public void setDriveOpenLoop(double velocityRadPerSec) {
     driveMotor.setRequest(
-        driveOpenLoopVelocityRequest.setVelocity(Units.radiansToRotations(velocityRadPerSec)));
+        driveVoltageRequest.setVoltage(
+            Units.radiansToRotations(
+                velocityRadPerSec
+                    / Units.rotationsPerMinuteToRadiansPerSecond(
+                        DrivetrainConstants.driveMotorKv))));
   }
 
   @Override
   public void setDriveVelocity(double driveWheelVelocityRadPerSec) {
     driveMotor.setRequest(
-        drivePIDVelocityRequest.setPosition(
-            Units.radiansToRotations(
-                driveWheelVelocityRadPerSec))); // TODO: Wait for API to get fixed
+        drivePIDVelocityRequest.setVelocity(Units.radiansToRotations(driveWheelVelocityRadPerSec)));
   }
 
   @Override

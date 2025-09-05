@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -26,6 +27,9 @@ public class Robot extends LoggedRobot {
 
   public static Alliance alliance = DriverStation.Alliance.Blue;
   private Timer allianceUpdateTimer = new Timer();
+  public static DigitalInput homeButton = new DigitalInput(Constants.dioHomeButton);
+
+  public boolean prevHomeButtonPressed;
 
   public Robot() {
     // Record metadata
@@ -109,7 +113,14 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+
+    if (!homeButton.get() && !prevHomeButtonPressed) {
+      prevHomeButtonPressed = true;
+    } else if (homeButton.get() && prevHomeButtonPressed) {
+      prevHomeButtonPressed = false;
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

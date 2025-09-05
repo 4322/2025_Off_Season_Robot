@@ -1,5 +1,6 @@
 package frc.robot.subsystems.elevator;
 
+
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,16 +11,18 @@ import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
+  private boolean elevatorIdle;
   private ElevatorIO io;
-  private Timer initializationTimer = new Timer();
-  ElevatorStates state = ElevatorStates.INITIALIZATIONPROCEDURE;
+  private Timer homingTimer = new Timer();
+  ElevatorStates state = ElevatorStates.STARTING_CONFIG;
   ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   private double requestedHeightMeters = 0.0;
 
   private enum ElevatorStates {
-    INITIALIZATIONPROCEDURE,
-    WAIT_FOR_ARM,
+    STARTING_CONFIG,
+    HOMING,
     REQUEST_SETPOINT,
+    JIGGLE
   }
 
   public Elevator(ElevatorIO ELVIO) {
@@ -78,6 +81,7 @@ public class Elevator extends SubsystemBase {
 
   public void algaeReef(Level level) {
     // requestElevator = true;
+    // requestElevator = true;
     switch (level) {
       case L1:
         requestedHeightMeters = Constants.Elevator.algaeReefL1HeightMeters;
@@ -92,6 +96,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void scoreAlgae() {
+    // equestElevator = true;
     // equestElevator = true;
     requestedHeightMeters = Constants.Scoring.maxElevatorSafeHeightMeters;
   }
@@ -150,9 +155,7 @@ public class Elevator extends SubsystemBase {
     return inputs.heightMeters;
   }
 
-  public void setHome() {
-    io.setElevatorEncoder();
-  }
+  public void setManualInitialization() {}
 
   public void setNeutralMode(IdleMode idleMode) {
     io.setNeutralMode(idleMode);

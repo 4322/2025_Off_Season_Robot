@@ -20,12 +20,14 @@ public class IndexerIONitrate implements IndexerIO {
   private CanandcolorSettings indexerSensorConfig = new CanandcolorSettings();
   private CanandcolorSettings pickupAreaSensorConfig = new CanandcolorSettings();
 
+  private double previousRequestedVoltage = -999;
+
   public IndexerIONitrate() {
     indexerMotor = new Nitrate(Constants.Indexer.indexerMotorId, MotorType.kCu60);
     indexerSensor = new Canandcolor(Constants.Indexer.indexerSensorId);
     pickupAreaSensor = new Canandcolor(Constants.Indexer.pickupAreaSensorId);
 
-    configMotor();
+    initMotorConfig();
     NitrateSettings indexerMotorConfigStatus =
         indexerMotor.setSettings(indexerMotorConfig, 0.02, 5);
     if (!indexerMotorConfigStatus.allSettingsReceived()) {
@@ -58,7 +60,7 @@ public class IndexerIONitrate implements IndexerIO {
     }
   }
 
-  private void configMotor() {
+  private void initMotorConfig() {
     // TODO add other settings for motor
     ElectricalLimitSettings indexerMotorElectricalLimitSettings = new ElectricalLimitSettings();
     indexerMotorElectricalLimitSettings.setBusCurrentLimit(Constants.Indexer.motorBusCurrentLimit);
@@ -88,31 +90,27 @@ public class IndexerIONitrate implements IndexerIO {
     inputs.indexerMotorSpeedRotationsPerSec = indexerMotor.getVelocity();
 
     inputs.indexerSensorConnected = indexerSensor.isConnected();
-    inputs.indexerSensorTriggered = isIndexerSensorTriggered();
+    inputs.indexerSensorTriggered =
+        indexerSensor.getProximity() < Constants.Indexer.indexerSensorMax;
     inputs.indexerSensorProximity = indexerSensor.getProximity();
 
     inputs.pickupAreaSensorConnected = pickupAreaSensor.isConnected();
-    inputs.pickupAreaSensorTriggered = isPickupAreaSensorTriggered();
+    inputs.pickupAreaSensorTriggered =
+        pickupAreaSensor.getProximity() < Constants.Indexer.pickupAreaSensorMax;
     inputs.pickupAreaSensorProximity = pickupAreaSensor.getProximity();
   }
 
   @Override
   public void setIndexerMotorVoltage(double voltage) {
-    indexerMotor.setVoltage(voltage);
+    if (voltage != previousRequestedVoltage) {
+      indexerMotor.setVoltage(voltage);
+      previousRequestedVoltage = voltage;
+    }
   }
 
   @Override
   public void stopIndexerMotor(IdleMode mode) {
+    previousRequestedVoltage = -999;
     indexerMotor.stop(mode);
-  }
-
-  @Override
-  public boolean isIndexerSensorTriggered() {
-    return indexerSensor.getProximity() < Constants.Indexer.indexerSensorMax;
-  }
-
-  @Override
-  public boolean isPickupAreaSensorTriggered() {
-    return pickupAreaSensor.getProximity() < Constants.Indexer.pickupAreaSensorMax;
   }
 }

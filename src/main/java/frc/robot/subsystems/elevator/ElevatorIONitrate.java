@@ -20,6 +20,8 @@ public class ElevatorIONitrate implements ElevatorIO {
 
   // private final PIDPositionRequest elevatorPIDPositionRequest =
   // new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
+  // private final PIDPositionRequest elevatorPIDPositionRequest =
+  // new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
 
   public ElevatorIONitrate() {
     // Initialize leader and follower motors
@@ -81,6 +83,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     inputs.statorCurrentAmps = leaderMotor.getStatorCurrent();
     inputs.tempCelcius = leaderMotor.getMotorTemperatureFrame().getValue();
   }
+
 
   @Override
   public void setElevatorEncoder() {

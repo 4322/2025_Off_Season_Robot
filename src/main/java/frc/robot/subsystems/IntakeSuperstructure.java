@@ -16,6 +16,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   private boolean requestFeed;
   private boolean requestReject;
   private boolean requestIntakeEject;
+  private boolean requestUnhome;
 
   private enum RetractLockedOutStates {
     FALSE,
@@ -27,17 +28,17 @@ public class IntakeSuperstructure extends SubsystemBase {
   private Timer retractTimeOutPickupAreaTimer = new Timer();
   private RetractLockedOutStates retractLockedOutState = RetractLockedOutStates.FALSE;
 
-  private IntakeSuperstates state = IntakeSuperstates.START;
+  private IntakeSuperstates state = IntakeSuperstates.UNHOMED;
 
   private Deployer deployer;
   private Rollers rollers;
   private Indexer indexer;
 
   public static enum IntakeSuperstates {
-    START,
+    UNHOMED,
     RETRACT_IDLE,
     FEED,
-    REJECT,
+    REJECT, // TODO rename this
     INTAKE_EJECT
   }
 
@@ -52,8 +53,10 @@ public class IntakeSuperstructure extends SubsystemBase {
   public void periodic() {
     Logger.recordOutput("IntakeSuperstructure/State", state.toString());
     switch (state) {
-      case START:
-        if (RobotContainer.superstructure.isHomeButtonPressed()) {
+        // TODO update this with new homing logic
+      case UNHOMED:
+        if (
+        /*RobotContainer.superstructure.isHomeButtonPressed()*/ true) {
           deployer.setHome();
           state = IntakeSuperstates.RETRACT_IDLE;
         }
@@ -85,7 +88,8 @@ public class IntakeSuperstructure extends SubsystemBase {
         indexer.feed();
         deployer.deploy();
 
-        if (rollers.isCoralDetected() && retractLockedOutState == RetractLockedOutStates.FALSE) {
+        if (rollers.isCoralPickupDetected()
+            && retractLockedOutState == RetractLockedOutStates.FALSE) {
           retractLockedOutState = RetractLockedOutStates.INDEXER;
           retractTimeOutIndexerTimer.reset();
           retractTimeOutIndexerTimer.start();
@@ -132,11 +136,14 @@ public class IntakeSuperstructure extends SubsystemBase {
         if (requestRetractIdle) {
           state = IntakeSuperstates.RETRACT_IDLE;
         }
+        if (requestIntakeEject) {
+          state = IntakeSuperstates.INTAKE_EJECT;
+        }
         break;
       case INTAKE_EJECT:
-        deployer.ejectPosition();
-        rollers.eject();
-        indexer.eject();
+        deployer.eject();
+        rollers.reject();
+        indexer.reject();
         if (requestRetractIdle) {
           state = IntakeSuperstates.RETRACT_IDLE;
         }
@@ -172,7 +179,16 @@ public class IntakeSuperstructure extends SubsystemBase {
 
   public void requestEject() {
     unsetAllRequests();
-    requestReject = true;
+    requestIntakeEject = true;
+  }
+
+  public void requestUnhome() {
+    deployer.clearHome();
+    rollers.idle();
+    indexer.idle();
+    state = IntakeSuperstates.UNHOMED;
+    unsetAllRequests();
+    requestUnhome = true;
   }
 
   public boolean isCoralDetectedPickupArea() {
@@ -182,4 +198,5 @@ public class IntakeSuperstructure extends SubsystemBase {
   public boolean isCoralDetectedIndexer() {
     return indexer.isCoralDetectedIndexer();
   }
-}
+} // TODO check usage of reject vs. reject slow and eject vs eject slow
+// Review logic
