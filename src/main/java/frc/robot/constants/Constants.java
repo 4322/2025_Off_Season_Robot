@@ -143,7 +143,7 @@ public final class Constants {
     public static final double kP = 0; // TODO: Set to actual value
     public static final double kI = 0; // TODO: Set to actual value
     public static final double kD = 0; // TODO: Set to actual value
-    public static final double intializationVoltage = -0.1; // need actual values
+    public static final double intializationVoltage = 0.1; // need actual values
     public static final double elevatorHeightToleranceMeters = 0.01;
     public static final double algaeHoldMeters = 0.1; // need actual values
     public static final double algaeGroundHeightMeters = 5; // need actual values

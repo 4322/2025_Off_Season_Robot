@@ -1,6 +1,5 @@
 package frc.robot.subsystems.elevator;
 
-
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,16 +10,15 @@ import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
-  private boolean elevatorIdle;
   private ElevatorIO io;
-  private Timer homingTimer = new Timer();
-  ElevatorStates state = ElevatorStates.STARTING_CONFIG;
+  private Timer initializationTimer = new Timer();
+  ElevatorStates state = ElevatorStates.INITIALIZATIONPROCEDURE;
   ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   private double requestedHeightMeters = 0.0;
 
   private enum ElevatorStates {
-    STARTING_CONFIG,
-    HOMING,
+    INITIALIZATIONPROCEDURE,
+    WAIT_FOR_ARM,
     REQUEST_SETPOINT,
     JIGGLE
   }
@@ -50,7 +48,7 @@ public class Elevator extends SubsystemBase {
           state = ElevatorStates.WAIT_FOR_ARM;
         }
       case WAIT_FOR_ARM:
-        if (RobotContainer.superstructure.getArmAngle() >= Constants.Arm.minArmSafeAngle) {
+        if (RobotContainer.superstructure.getArmAngle() >= Constants.Arm.minArmSafeDeg) {
           state = ElevatorStates.REQUEST_SETPOINT;
         }
         break;
@@ -173,7 +171,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void eject() {
-    if ((getElevatortHeightMeters() >= Constants.Elevator.ejectSafeHeightMeters)
+    if ((getElevatorHeightMeters() >= Constants.Elevator.ejectSafeHeightMeters)
         && (RobotContainer.superstructure.getArmAngle() == Constants.Arm.maxArmSafeAngle)) {
       requestedHeightMeters = Constants.Elevator.ejectSafeHeightMeters;
     }
