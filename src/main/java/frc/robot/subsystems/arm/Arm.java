@@ -147,6 +147,7 @@ public class Arm extends SubsystemBase {
   public double getAngleDegrees() {
     return inputs.armPositionDegrees;
   }
+
   public void setSpeed(double velocity, double acceleration) {
     TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(velocity, acceleration);
@@ -154,5 +155,4 @@ public class Arm extends SubsystemBase {
     double output = armController.calculate(inputs.armPositionDegrees, requestedSetpoint);
     io.setVoltage(output);
   }
-
 }

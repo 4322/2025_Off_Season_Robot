@@ -26,6 +26,4 @@ public interface ElevatorIO {
   public default void setElevatorEncoder() {}
 
   public default void setNeutralMode(IdleMode mode) {}
-
-  public default void setSpeed(double velocity, double acceleration) {}
 }
