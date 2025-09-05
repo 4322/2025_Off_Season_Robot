@@ -11,6 +11,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
+import frc.robot.subsystems.Superstructure;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -29,6 +30,8 @@ public class ArmIONitrate implements ArmIO {
 
   private final PIDPositionRequest armPIDPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
+  private final PIDPositionRequest armSlowPIDPositionRequest =
+      new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
   public ArmIONitrate() {
     armMotor = new Nitrate(Constants.Arm.armMotorId, MotorType.kCu60);
@@ -103,10 +106,10 @@ public class ArmIONitrate implements ArmIO {
 
   @Override
   public void requestPosition(double requestSetpoint) {
-    armMotor.setRequest(
-        armPIDPositionRequest.setPosition(
-            Constants.Arm.armOffsetEncoderDeg + Units.degreesToRotations(requestSetpoint)));
-  }
+      armMotor.setRequest(
+          armPIDPositionRequest.setPosition(
+              Constants.Arm.armOffsetEncoderDeg + Units.degreesToRotations(requestSetpoint)));
+}
 
   @Override
   public void stopArmMotor(IdleMode idleMode) {

@@ -18,7 +18,9 @@ public class ScoreCoral extends Command {
   public ScoreCoral() {}
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+  }
 
   @Override
   public void execute() {
