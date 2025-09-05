@@ -32,8 +32,6 @@ public class Superstructure extends SubsystemBase {
   private boolean requestClimb = false;
   private boolean requestswitchOperationMode = false;
 
-
-
   public enum Superstates {
     UNHOMED,
     IDLE,

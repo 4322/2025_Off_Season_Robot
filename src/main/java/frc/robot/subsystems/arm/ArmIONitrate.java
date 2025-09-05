@@ -11,8 +11,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
-
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -22,6 +21,7 @@ public class ArmIONitrate implements ArmIO {
 
   private final Nitrate armMotor;
   private final Canandmag armEncoder;
+  private double appliedVolts = 0.0;
 
   private final PIDPositionRequest armPIDPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
@@ -96,7 +96,7 @@ public class ArmIONitrate implements ArmIO {
   }
 
   @Override
-  public void setSpeed(double velocity, double acceleration) {
-    TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(velocity, acceleration);
+  public void setVoltage(double volts) {
+    appliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
   }
 }

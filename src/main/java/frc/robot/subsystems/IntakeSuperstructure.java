@@ -82,13 +82,6 @@ public class IntakeSuperstructure extends SubsystemBase {
         if (requestReject) {
           state = IntakeSuperstates.REJECT;
         }
-        if (requestUnhome) {
-          deployer.retract(); // TODO take this out for now
-          deployer.clearHome();
-          rollers.idle();
-          indexer.idle();
-          state = IntakeSuperstates.UNHOMED;
-        }
         break;
       case FEED:
         rollers.feed();
@@ -130,7 +123,7 @@ public class IntakeSuperstructure extends SubsystemBase {
           state = IntakeSuperstates.INTAKE_EJECT;
         }
         break;
-      case REJECT: // TODO allow for eject
+      case REJECT:
         deployer.deploy();
         rollers.reject();
         indexer.reject();
@@ -142,6 +135,9 @@ public class IntakeSuperstructure extends SubsystemBase {
         }
         if (requestRetractIdle) {
           state = IntakeSuperstates.RETRACT_IDLE;
+        }
+        if (requestIntakeEject) {
+          state = IntakeSuperstates.INTAKE_EJECT;
         }
         break;
       case INTAKE_EJECT:
@@ -187,7 +183,10 @@ public class IntakeSuperstructure extends SubsystemBase {
   }
 
   public void requestUnhome() {
-    // TODO set state here; unhome everything here
+    deployer.clearHome();
+    rollers.idle();
+    indexer.idle();
+    state = IntakeSuperstates.UNHOMED;
     unsetAllRequests();
     requestUnhome = true;
   }
