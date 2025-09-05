@@ -134,12 +134,11 @@ public final class Constants {
   }
 
   public static class Elevator {
-    public static final int leftMotorID = 1; // TODO: Set to actual motor ID
-    public static final int rightMotorID = 2; // TODO: Set to actual encoder ID
+    public static final int leftMotorID = 0; // TODO: Set to actual motor ID
+    public static final int rightMotorID = 0; // TODO: Set to actual encoder ID
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorInvert = null;
+    public static final InvertMode motorInvert = InvertMode.kNotInverted;
     public static final double elevatorMotorGearRatio = 1.0; // TODO: Set to actual gear ratio
-    public static final PIDSettings elevatorMotorGains = new PIDSettings();
     public static final double kP = 0; // TODO: Set to actual value
     public static final double kI = 0; // TODO: Set to actual value
     public static final double kD = 0; // TODO: Set to actual value

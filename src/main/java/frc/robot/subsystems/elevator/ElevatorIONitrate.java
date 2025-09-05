@@ -16,7 +16,8 @@ import frc.robot.constants.Constants;
 public class ElevatorIONitrate implements ElevatorIO {
   private final Nitrate leaderMotor;
   private final Nitrate followerMotor;
-
+    PIDPositionRequest elvPositionRequest =
+        new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
   // private final PIDPositionRequest elevatorPIDPositionRequest =
   // new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
   // private final PIDPositionRequest elevatorPIDPositionRequest =
@@ -29,8 +30,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     // setup objects
     NitrateSettings elevatorConfig = new NitrateSettings();
     OutputSettings elevatorMotorOutputSettings = new OutputSettings();
-    PIDPositionRequest elvPositionRequest =
-        new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
+
     PIDSettings elevatorMotorPIDSettings = new PIDSettings();
     ElectricalLimitSettings elevatorElectricalLimitSettings = new ElectricalLimitSettings();
     FollowMotorRequest followerRequest = new FollowMotorRequest(leaderMotor);
@@ -90,9 +90,8 @@ public class ElevatorIONitrate implements ElevatorIO {
 
   @Override
   public void requestHeight(double heightMeters) {
-    // ask
-    leaderMotor.setRequest(null);
-
+    leaderMotor.setRequest(elvPositionRequest.setPosition
+    (metersToRotations(heightMeters)));
   }
 
   @Override
@@ -105,5 +104,9 @@ public class ElevatorIONitrate implements ElevatorIO {
   public void setNeutralMode(IdleMode idleMode) {
     leaderMotor.stop(idleMode);
     followerMotor.stop(idleMode);
+  }
+
+  public double metersToRotations(double meters) {
+    return meters;
   }
 }
