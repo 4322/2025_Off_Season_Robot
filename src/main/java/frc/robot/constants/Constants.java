@@ -1,7 +1,6 @@
 package frc.robot.constants;
 
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
@@ -157,7 +156,6 @@ public final class Constants {
     public static final double kG = 0;
 
     public static final double minElevatorSafeHeightMeters = 45.0;
-    public static final double maxElevatorSafeHeightMeters = 100.0; // TODO: Set to actual height
 
     public static final double scoringL1CoralMeters = 10;
     public static final double scoringL2CoralMeters = 20;
@@ -165,6 +163,11 @@ public final class Constants {
     public static final double scoringL4CoralMeters = 40;
     public static final double gearRatio = 0.1;
     public static final double setpointToleranceDegrees = 0.01;
+    public static final double maxElevatorSafeHeightMeters = 70; // need actual values
+    public static final double scoreCoralL1HeightMeters = 0.3; // TODO: Set to actual position
+    public static final double scoreCoralL2HeightMeters = 0.5; // TODO: Set to actual position
+    public static final double scoreCoralL3HeightMeters = 0.7; // TODO: Set to actual position
+    public static final double scoreCoralL4HeightMeters = 0.9; // TODO: Set to actual position
   }
 
   // TODO all of these are placeholder values

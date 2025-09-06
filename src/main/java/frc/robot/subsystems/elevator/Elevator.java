@@ -96,7 +96,7 @@ public class Elevator extends SubsystemBase {
   public void scoreAlgae() {
     // equestElevator = true;
     // equestElevator = true;
-    requestedHeightMeters = Constants.Scoring.maxElevatorSafeHeightMeters;
+    requestedHeightMeters = Constants.Elevator.maxElevatorSafeHeightMeters;
   }
 
   public void prescoreCoral(Level level) {
@@ -119,16 +119,16 @@ public class Elevator extends SubsystemBase {
   public void scoreCoral(Level level) {
     switch (level) {
       case L1:
-        requestedHeightMeters = Constants.Scoring.scoreCoralL1HeightMeters;
+        requestedHeightMeters = Constants.Elevator.scoreCoralL1HeightMeters;
         break;
       case L2:
-        requestedHeightMeters = Constants.Scoring.scoreCoralL2HeightMeters;
+        requestedHeightMeters = Constants.Elevator.scoreCoralL2HeightMeters;
         break;
       case L3:
-        requestedHeightMeters = Constants.Scoring.scoreCoralL3HeightMeters;
+        requestedHeightMeters = Constants.Elevator.scoreCoralL3HeightMeters;
         break;
       case L4:
-        requestedHeightMeters = Constants.Scoring.scoreCoralL4HeightMeters;
+        requestedHeightMeters = Constants.Elevator.scoreCoralL4HeightMeters;
         break;
     }
   }
