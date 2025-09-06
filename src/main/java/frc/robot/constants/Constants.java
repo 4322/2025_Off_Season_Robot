@@ -77,11 +77,6 @@ public final class Constants {
     public static final double scoringL2AngleDegCoral = 17.5; // TODO: Set to actual angle
     public static final double scoringL3AngleDegCoral = 39.2; // TODO: Set to actual angle
     public static final double scoringL4AngleDegCoral = 37.2; // TODO: Set to actual angle
-    public static final double maxElevatorSafeHeightMeters = 70; // need actual values
-    public static final double scoreCoralL1HeightMeters = 0.3; // TODO: Set to actual position
-    public static final double scoreCoralL2HeightMeters = 0.5; // TODO: Set to actual position
-    public static final double scoreCoralL3HeightMeters = 0.7; // TODO: Set to actual position
-    public static final double scoreCoralL4HeightMeters = 0.9; // TODO: Set to actual position
   }
 
   public static class Arm {

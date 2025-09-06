@@ -106,6 +106,6 @@ public class ElevatorIONitrate implements ElevatorIO {
   }
 
   public double metersToRotations(double meters) {
-    return meters/ Math.PI / Constants.Elevator.gearRatio;
+    return (meters * Constants.Elevator.gearRatio) / (Math.PI);
   }
 }
