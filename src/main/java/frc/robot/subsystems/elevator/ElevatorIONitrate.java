@@ -98,9 +98,9 @@ public class ElevatorIONitrate implements ElevatorIO {
   }
 
   @Override
-  public void setManualInitialization() {
-    leaderMotor.setPosition(0);
-    followerMotor.setPosition(0);
+  public void setPosition(double elevatorPositionMeters) {
+    leaderMotor.setPosition(metersToRotations(elevatorPositionMeters));
+    followerMotor.setPosition(metersToRotations(elevatorPositionMeters));
   }
 
   @Override
