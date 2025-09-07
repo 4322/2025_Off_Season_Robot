@@ -12,15 +12,15 @@ import org.littletonrobotics.junction.Logger;
 public class Elevator extends SubsystemBase {
   private ElevatorIO io;
   private Timer initializationTimer = new Timer();
-  ElevatorStates state = ElevatorStates.INITIALIZATIONPROCEDURE;
+  ElevatorStates state = ElevatorStates.UNHOMED;
   ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   private double requestedHeightMeters = 0.0;
 
   private enum ElevatorStates {
+    UNHOMED,
     INITIALIZATIONPROCEDURE,
     WAIT_FOR_ARM,
-    REQUEST_SETPOINT,
-    JIGGLE
+    REQUEST_SETPOINT
   }
 
   public Elevator(ElevatorIO ELVIO) {
@@ -34,6 +34,8 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("Elevator/atHeight", atSetpoint());
     Logger.recordOutput("Elevator/ElevatorStates", state.toString());
     switch (state) {
+      case UNHOMED:
+        break;
       case INITIALIZATIONPROCEDURE:
         initializationTimer.start();
         io.setVoltage(Constants.Elevator.intializationVoltage);
@@ -42,7 +44,7 @@ public class Elevator extends SubsystemBase {
             && Math.abs(inputs.velocityMetersSecond)
                 < Constants.Elevator.initializationVelocityMetersThresholdPerSecs) {
           io.setVoltage(0.1); // idk value
-          io.setManualInitialization();
+          io.setPosition(Constants.Elevator.maxHeightMeters);
           initializationTimer.stop();
           initializationTimer.reset();
           state = ElevatorStates.WAIT_FOR_ARM;
@@ -156,11 +158,12 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setManualInitialization() {
-    io.setManualInitialization();
+    io.setPosition(Constants.Elevator.homeHeightMeters);
   }
 
   public void setNeutralMode(IdleMode idleMode) {
     io.setNeutralMode(idleMode);
+    idle();
   }
 
   public void safeBargeRetract() {

@@ -23,7 +23,7 @@ public interface ElevatorIO {
 
   public default void setVoltage(double voltage) {}
 
-  public default void setManualInitialization() {}
+  public default void setPosition(double elevatorPositionMeters) {}
 
   public default void setNeutralMode(IdleMode idleMode) {}
 }

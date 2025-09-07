@@ -160,12 +160,16 @@ public final class Constants {
     public static final double DeaccelerationLimit = 10;
     public static final double VelocityLimit = 10;
     public static final double minElevatorSafeHeightMeters = 45.0;
+    public static final double homeHeightMeters =
+        0.5; // resting on pickup bracket TODO: Set to actual position
+    public static final double maxHeightMeters =
+        1.0; // top of physical travel TODO: Set to actual position
 
     public static final double scoringL1CoralMeters = 0.1;
     public static final double scoringL2CoralMeters = 0.2;
     public static final double scoringL3CoralMeters = 0.3;
     public static final double scoringL4CoralMeters = 0.4;
-    public static final double gearRatio = 6/1;
+    public static final double gearRatio = 6 / 1;
     public static final double setpointToleranceDegrees = 0.01;
     public static final double maxElevatorSafeHeightMeters = 0.8; // need actual values
     public static final double scoreCoralL1HeightMeters = 0.3; // TODO: Set to actual position
