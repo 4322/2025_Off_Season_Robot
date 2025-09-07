@@ -48,7 +48,7 @@ public class Elevator extends SubsystemBase {
           state = ElevatorStates.WAIT_FOR_ARM;
         }
       case WAIT_FOR_ARM:
-        if (((RobotContainer.superstructure.getArmAngle() >= Constants.Arm.minArmSafeDeg)
+        if (((RobotContainer.getSuperstructure().getArmAngle() >= Constants.Arm.minArmSafeDeg)
                 && (requestedHeightMeters <= Constants.Elevator.minElevatorSafeHeightMeters)
             || (requestedHeightMeters >= Constants.Elevator.minElevatorSafeHeightMeters))) {
           state = ElevatorStates.REQUEST_SETPOINT;
@@ -165,7 +165,7 @@ public class Elevator extends SubsystemBase {
 
   public void safeBargeRetract() {
     if ((getElevatorHeightMeters() >= Constants.Elevator.safeBargeRetractHeightMeters)
-        && (RobotContainer.superstructure.getArmAngle() == Constants.Arm.maxArmSafeAngle)) {
+        && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.maxArmSafeAngle)) {
       requestedHeightMeters = Constants.Elevator.safeBargeRetractHeightMeters;
     }
   }
@@ -176,7 +176,7 @@ public class Elevator extends SubsystemBase {
 
   public void eject() {
     if ((getElevatorHeightMeters() >= Constants.Elevator.ejectSafeHeightMeters)
-        && (RobotContainer.superstructure.getArmAngle() == Constants.Arm.maxArmSafeAngle)) {
+        && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.maxArmSafeAngle)) {
       requestedHeightMeters = Constants.Elevator.ejectSafeHeightMeters;
     }
   }
