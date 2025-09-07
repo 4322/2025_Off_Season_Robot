@@ -41,14 +41,16 @@ public class Elevator extends SubsystemBase {
         if (initializationTimer.hasElapsed(Constants.Elevator.initializationTimerThresholdSecs)
             && Math.abs(inputs.velocityMetersSecond)
                 < Constants.Elevator.initializationVelocityMetersThresholdPerSecs) {
-          io.setVoltage(0); // idk value
-          io.setElevatorEncoder();
+          io.setVoltage(0.1); // idk value
+          io.setManualInitialization();
           initializationTimer.stop();
           initializationTimer.reset();
           state = ElevatorStates.WAIT_FOR_ARM;
         }
       case WAIT_FOR_ARM:
-        if (RobotContainer.superstructure.getArmAngle() >= Constants.Arm.minArmSafeDeg) {
+        if (((RobotContainer.superstructure.getArmAngle() >= Constants.Arm.minArmSafeDeg)
+                && (requestedHeightMeters <= Constants.Elevator.minElevatorSafeHeightMeters)
+            || (requestedHeightMeters >= Constants.Elevator.minElevatorSafeHeightMeters))) {
           state = ElevatorStates.REQUEST_SETPOINT;
         }
         break;
@@ -153,7 +155,9 @@ public class Elevator extends SubsystemBase {
     return inputs.heightMeters;
   }
 
-  public void setManualInitialization() {}
+  public void setManualInitialization() {
+    io.setManualInitialization();
+  }
 
   public void setNeutralMode(IdleMode idleMode) {
     io.setNeutralMode(idleMode);

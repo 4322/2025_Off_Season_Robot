@@ -81,7 +81,7 @@ public class ElevatorIONitrate implements ElevatorIO {
   }
 
   @Override
-  public void setElevatorEncoder() {
+  public void setManualInitialization() {
     leaderMotor.setPosition(0);
     followerMotor.setPosition(0);
   }
