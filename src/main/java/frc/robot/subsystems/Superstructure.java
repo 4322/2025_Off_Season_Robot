@@ -74,8 +74,6 @@ public class Superstructure extends SubsystemBase {
   private Arm arm;
   private Indexer indexer;
   private Elevator elevator;
-  // TODO wait for Ellie to merge this into main: private Climber climber; We aren't using climber
-  // yet
   private Drive drive;
   private Vision vision;
   private IntakeSuperstructure intakeSuperstructure;
@@ -87,15 +85,12 @@ public class Superstructure extends SubsystemBase {
       Arm arm,
       Indexer indexer,
       Elevator elevator,
-      // TODO wait for Ellie to merge this into main: Climber climber, We aren't using climber yet
       Drive drive,
       Vision vision,
       IntakeSuperstructure intakeSuperstructure) {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
-    // TODO wait for Ellie to merge this into main: this.climber = climber; We aren't using climber
-    // yet
     this.drive = drive;
     this.indexer = indexer;
     this.vision = vision;
