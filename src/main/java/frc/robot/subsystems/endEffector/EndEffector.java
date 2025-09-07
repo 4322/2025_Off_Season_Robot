@@ -184,7 +184,7 @@ public class EndEffector extends SubsystemBase {
         } else if (holdCoral) {
           state = EndEffectorStates.HOLD_CORAL;
         } else if (ClockUtil.inBound(
-            RobotContainer.superstructure.getArmAngle(),
+            RobotContainer.getSuperstructure().getArmAngle(),
             Constants.Arm.ejectDeg - Constants.Arm.setpointToleranceDegrees,
             Constants.Arm.ejectDeg + Constants.Arm.setpointToleranceDegrees,
             true)) /*TODO set acual values*/ {

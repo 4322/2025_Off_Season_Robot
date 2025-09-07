@@ -22,12 +22,11 @@ public final class Constants {
   public static final boolean indexerEnabled = true;
   public static final boolean rollersEnabled = true;
   public static final boolean endEffectorEnabled = true;
-
-  public static final Mode simMode = Mode.SIM;
-  public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
-
   public static final boolean visionEnabled = true;
   public static final boolean driveEnabled = true;
+
+  public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
+
   public static final int dioHomeButton = 0;
 
   public static enum Mode {

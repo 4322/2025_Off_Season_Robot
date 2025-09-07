@@ -55,8 +55,7 @@ public class IntakeSuperstructure extends SubsystemBase {
     switch (state) {
         // TODO update this with new homing logic
       case UNHOMED:
-        if (
-        /*RobotContainer.superstructure.isHomeButtonPressed()*/ true) {
+        if (true) { // TODO: Acceot request for home button pressed instead
           deployer.setHome();
           state = IntakeSuperstates.RETRACT_IDLE;
         }
@@ -66,7 +65,7 @@ public class IntakeSuperstructure extends SubsystemBase {
 
         if (isCoralDetectedIndexer()
             || isCoralDetectedPickupArea()
-            || RobotContainer.superstructure.isCoralHeld()) {
+            || RobotContainer.getSuperstructure().isCoralHeld()) {
           rollers.rejectSlow();
           indexer.rejectSlow();
         } else {
@@ -116,7 +115,7 @@ public class IntakeSuperstructure extends SubsystemBase {
         }
         if (isCoralDetectedIndexer()
             || isCoralDetectedPickupArea()
-            || RobotContainer.superstructure.isCoralHeld()) {
+            || RobotContainer.getSuperstructure().isCoralHeld()) {
           state = IntakeSuperstates.REJECT;
         }
         if (requestIntakeEject) {
@@ -130,7 +129,7 @@ public class IntakeSuperstructure extends SubsystemBase {
 
         if (!isCoralDetectedIndexer()
             && !isCoralDetectedPickupArea()
-            && !RobotContainer.superstructure.isCoralHeld()) {
+            && !RobotContainer.getSuperstructure().isCoralHeld()) {
           state = IntakeSuperstates.FEED;
         }
         if (requestRetractIdle) {
