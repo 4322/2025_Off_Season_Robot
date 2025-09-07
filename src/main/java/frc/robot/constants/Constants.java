@@ -133,19 +133,19 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert = InvertMode.kNotInverted;
     public static final double kP = 0; // TODO: Set to actual value
-    public static final double kI = 0; // TODO: Set to actual value
+    public static final double kI = 1; // TODO: Set to actual value
     public static final double kD = 0; // TODO: Set to actual value
     public static final double intializationVoltage = 0.1; // need actual values
     public static final double elevatorHeightToleranceMeters = 0.01;
     public static final double algaeHoldMeters = 0.1; // need actual values
-    public static final double algaeGroundHeightMeters = 5; // need actual values
+    public static final double algaeGroundHeightMeters = 0.3; // need actual values
     public static final double algaeReefL1HeightMeters = 0.25; // TODO: Set to actual position
     public static final double algaeReefL2HeightMeters = 0.45; // TODO: Set to actual position
     public static final double algaeReefL3HeightMeters = 0.65; // TODO: Set to actual position
     public static final double prescoreCoralL1HeightMeters = 0.85; // TODO: Set to actual position
     public static final double prescoreCoralL2HeightMeters = 1.05; // TODO: Set to actual position
-    public static final double prescoreCoralL3HeightMeters = 1.25; // TODO: Set to actual position
-    public static final double prescoreCoralL4HeightMeters = 1.45; // TODO: Set to actual position
+    public static final double prescoreCoralL3HeightMeters = 0.75; // TODO: Set to actual position
+    public static final double prescoreCoralL4HeightMeters = 0.95; // TODO: Set to actual position
     public static final double pickupCoralHeightMeters = 0.5; // TODO: Set to actual position
     public static final double initializationTimerThresholdSecs = 0.01; //
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01; //
@@ -157,13 +157,13 @@ public final class Constants {
 
     public static final double minElevatorSafeHeightMeters = 45.0;
 
-    public static final double scoringL1CoralMeters = 10;
-    public static final double scoringL2CoralMeters = 20;
-    public static final double scoringL3CoralMeters = 30;
-    public static final double scoringL4CoralMeters = 40;
+    public static final double scoringL1CoralMeters = 0.1;
+    public static final double scoringL2CoralMeters = 0.2;
+    public static final double scoringL3CoralMeters = 0.3;
+    public static final double scoringL4CoralMeters = 0.4;
     public static final double gearRatio = 0.1;
     public static final double setpointToleranceDegrees = 0.01;
-    public static final double maxElevatorSafeHeightMeters = 70; // need actual values
+    public static final double maxElevatorSafeHeightMeters = 0.8; // need actual values
     public static final double scoreCoralL1HeightMeters = 0.3; // TODO: Set to actual position
     public static final double scoreCoralL2HeightMeters = 0.5; // TODO: Set to actual position
     public static final double scoreCoralL3HeightMeters = 0.7; // TODO: Set to actual position
