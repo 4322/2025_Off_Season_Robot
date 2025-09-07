@@ -64,7 +64,7 @@ public class RobotContainer {
   private static Rollers rollers;
   private static Deployer deployer;
   private static IntakeSuperstructure intakeSuperstructure;
-  public static Superstructure superstructure;
+  private static Superstructure superstructure;
   private static Elevator elevator;
 
   /** The container for the robot. Contains subsystems, IO devices, and commands. */
@@ -182,6 +182,9 @@ public class RobotContainer {
     if (deployer == null) {
       deployer = new Deployer(new DeployerIO() {});
     }
+
+    // Configure the button bindings
+    configureButtonBindings();
   }
 
   /**
@@ -295,6 +298,10 @@ public class RobotContainer {
                     superstructure.cancelPrescoreCoral();
                   }
                 }));
+  }
+
+  public static Superstructure getSuperstructure() {
+    return superstructure;
   }
 
   /**
