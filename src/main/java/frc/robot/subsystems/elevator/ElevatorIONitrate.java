@@ -6,6 +6,7 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.FollowMotorRequest;
@@ -31,6 +32,24 @@ public class ElevatorIONitrate implements ElevatorIO {
     NitrateSettings elevatorConfig = new NitrateSettings();
     OutputSettings elevatorMotorOutputSettings = new OutputSettings();
 
+    PIDSettings elevatorPIDSettings = new PIDSettings();
+    elevatorPIDSettings.setPID(Constants.Elevator.kP0, Constants.Elevator.kI0, Constants.Elevator.kD0);
+    elevatorPIDSettings.setGravitationalFeedforward(Constants.Elevator.kG);
+    elevatorPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
+    elevatorPIDSettings.setMotionProfileAccelLimit(Constants.Elevator.AccelerationLimit);
+    elevatorPIDSettings.setMotionProfileDeaccelLimit(Constants.Elevator.DeaccelerationLimit);
+    elevatorPIDSettings.setMotionProfileVelocityLimit(Constants.Elevator.VelocityLimit);
+
+    PIDSettings ElevatorSlowPIDSettings = new PIDSettings();
+    ElevatorSlowPIDSettings.setPID(Constants.Elevator.kP1, Constants.Elevator.kI1, Constants.Elevator.kD1);
+    ElevatorSlowPIDSettings.setGravitationalFeedforward(Constants.Elevator.kG);
+    ElevatorSlowPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
+    ElevatorSlowPIDSettings.setMotionProfileAccelLimit(Constants.Elevator.AccelerationLimit);
+    ElevatorSlowPIDSettings.setMotionProfileDeaccelLimit(Constants.Elevator.DeaccelerationLimit);
+    ElevatorSlowPIDSettings.setMotionProfileVelocityLimit(Constants.Elevator.VelocityLimit);
+
+
+
     PIDSettings elevatorMotorPIDSettings = new PIDSettings();
     ElectricalLimitSettings elevatorElectricalLimitSettings = new ElectricalLimitSettings();
     FollowMotorRequest followerRequest = new FollowMotorRequest(leaderMotor);
@@ -42,10 +61,8 @@ public class ElevatorIONitrate implements ElevatorIO {
     elevatorElectricalLimitSettings.setStatorCurrentLimit(
         Constants.Elevator.statorCurrentLimitAmps);
     elevatorConfig.setElectricalLimitSettings(elevatorElectricalLimitSettings);
-    elevatorMotorPIDSettings.setPID(
-        Constants.Elevator.kP, Constants.Elevator.kI, Constants.Elevator.kD);
-    elevatorMotorPIDSettings.setGravitationalFeedforward(Constants.Elevator.kG);
     elevatorConfig.setPIDSettings(elevatorMotorPIDSettings, PIDConfigSlot.kSlot0);
+    elevatorConfig.setPIDSettings(ElevatorSlowPIDSettings, PIDConfigSlot.kSlot1);
     followerMotor.setRequest(followerRequest);
     NitrateSettings leaderConfigStatus = leaderMotor.setSettings(elevatorConfig, 0.02, 5);
     NitrateSettings followerConfigStatus = followerMotor.setSettings(elevatorConfig, 0.02, 5);

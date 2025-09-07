@@ -132,9 +132,12 @@ public final class Constants {
     public static final int rightMotorID = 0; // TODO: Set to actual encoder ID
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert = InvertMode.kNotInverted;
-    public static final double kP = 0; // TODO: Set to actual value
-    public static final double kI = 1; // TODO: Set to actual value
-    public static final double kD = 0; // TODO: Set to actual value
+    public static final double kP0 = 0; // TODO: Set to actual value
+    public static final double kI0 = 1; // TODO: Set to actual value
+    public static final double kD0 = 0; // TODO: Set to actual value
+    public static final double kP1 = 0; // TODO: Set to actual value
+    public static final double kI1 = 1; // TODO: Set to actual value
+    public static final double kD1 = 0; // TODO: Set to actual value
     public static final double intializationVoltage = 0.1; // need actual values
     public static final double elevatorHeightToleranceMeters = 0.01;
     public static final double algaeHoldMeters = 0.1; // need actual values
@@ -154,7 +157,9 @@ public final class Constants {
     public static final double supplyCurrentLimitAmps = 0.1;
     public static final double statorCurrentLimitAmps = 0.1;
     public static final double kG = 0;
-
+    public static final double AccelerationLimit = 10;
+    public static final double DeaccelerationLimit = 10;
+    public static final double VelocityLimit = 10;
     public static final double minElevatorSafeHeightMeters = 45.0;
 
     public static final double scoringL1CoralMeters = 0.1;
