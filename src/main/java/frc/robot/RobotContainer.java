@@ -67,11 +67,12 @@ public class RobotContainer {
   private static Superstructure superstructure;
   private static Elevator elevator;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /** The container for the robot. Contains subsystems, IO devices, and commands. */
   public RobotContainer() {
 
     switch (Constants.currentMode) {
       case REAL:
+        initializeEmptySubsystems();
 
         // Real robot, instantiate hardware IO implementations
         if (Constants.armEnabled) {
@@ -110,6 +111,10 @@ public class RobotContainer {
         if (Constants.deployerEnabled) {
           deployer = new Deployer(new DeployerIONitrate());
         }
+        if (vision == null) {
+          vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        }
+
         intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
         superstructure =
             new Superstructure(
@@ -118,11 +123,16 @@ public class RobotContainer {
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
+        initializeEmptySubsystems();
         vision =
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+        intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
+        superstructure =
+            new Superstructure(
+                endEffector, arm, indexer, elevator, drive, vision, intakeSuperstructure);
         break;
 
       default:
@@ -130,9 +140,14 @@ public class RobotContainer {
     }
 
     // Used during replay mode or when certain subsystems are disabled
-    if (vision == null) {
-      vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-    }
+    
+
+
+    // Configure the button bindings
+    configureButtonBindings();
+  }
+
+  private void initializeEmptySubsystems() {
     if (arm == null) {
       arm = new Arm(new ArmIO() {});
     }
@@ -144,6 +159,9 @@ public class RobotContainer {
               new ModuleIO() {},
               new ModuleIO() {},
               new ModuleIO() {});
+    }
+    if (vision == null) {
+      vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
     }
     if (elevator == null) {
       elevator = new Elevator(new ElevatorIO() {});
