@@ -15,6 +15,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
+  private boolean requestHomed = false;
   private boolean cancelEject = false;
   private boolean requestEject = false;
   private boolean requestAlgaePrescore = false;
@@ -99,15 +100,19 @@ public class Superstructure extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+    // The home button can only be activated when the robot is disabled, so accept it from any state
+    if (requestHomed) {
+      elevator.setHomePosition();
+      arm.setHomePosition();
+      requestHomed = false;
+      state = Superstates.IDLE;
+    }
+
     Logger.recordOutput("Superstructure/currentState", state.toString());
 
     switch (state) {
       case UNHOMED:
-        if (Robot.homeButton.get()) // Not correct
-        {
-          elevator.setManualInitialization();
-          arm.setManualInitialization();
-        }
         break;
       case IDLE:
         endEffector.idle();
@@ -271,6 +276,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   private void unsetAllRequests() {
+    // don't clear requestHomed since it must be processed
     requestEject = false;
     requestAlgaeScore = false;
     requestIntakeAlgaeFloor = false;
@@ -420,6 +426,10 @@ public class Superstructure extends SubsystemBase {
 
   public IntakeSuperstructure getIntakeSuperstructure() {
     return intakeSuperstructure;
+  }
+
+  public void homeButtonActivated() {
+    requestHomed = true;
   }
 
   // Other Methods are related to Vision Pose Estimation

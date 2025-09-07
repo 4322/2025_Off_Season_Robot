@@ -160,6 +160,7 @@ public class Elevator extends SubsystemBase {
   public void setManualInitialization() {
     io.setPosition(Constants.Elevator.homeHeightMeters);
   }
+  public void setHomePosition() {}
 
   public void setNeutralMode(IdleMode idleMode) {
     io.setNeutralMode(idleMode);
