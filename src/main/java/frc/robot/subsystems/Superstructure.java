@@ -398,7 +398,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public double getElevatorHeight() {
-    return elevator.getHeightMeters();
+    return elevator.getElevatorHeightMeters();
   }
 
   public double getArmAngle() {
