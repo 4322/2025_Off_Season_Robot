@@ -2,6 +2,7 @@ package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
@@ -11,7 +12,6 @@ import org.littletonrobotics.junction.Logger;
 public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
-  private Superstructure superstructure;
   public double minSafeArmDegree;
   public double maxElevatorSafeMeters = Constants.Elevator.scoringL4CoralMeters;
   private Constants.Arm armConstants;
@@ -19,7 +19,7 @@ public class Arm extends SubsystemBase {
   public double requestedSetpoint;
   public double prevSetpoint = -1000;
   public double newSetpoint;
-  public double elevatorHeight = superstructure.getElevatorHeight();
+  public double elevatorHeight;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -31,7 +31,7 @@ public class Arm extends SubsystemBase {
     Logger.processInputs("Arm", inputs);
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
 
-    if (superstructure.isCoralHeld()) {
+    if (RobotContainer.getSuperstructure().isCoralHeld()) {
       minSafeArmDegree = armConstants.minArmSafeWithCoralDeg;
     } else {
       minSafeArmDegree = armConstants.minArmSafeDeg;
@@ -39,7 +39,7 @@ public class Arm extends SubsystemBase {
 
     // Safety Logic
     // Checks the logic checking for if it is in a dangerous position
-
+    elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
     if (requestedSetpoint < minSafeArmDegree
         && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters) {
       newSetpoint = minSafeArmDegree;
