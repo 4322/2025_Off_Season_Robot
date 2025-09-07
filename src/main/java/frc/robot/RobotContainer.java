@@ -140,8 +140,6 @@ public class RobotContainer {
     }
 
     // Used during replay mode or when certain subsystems are disabled
-    
-
 
     // Configure the button bindings
     configureButtonBindings();
