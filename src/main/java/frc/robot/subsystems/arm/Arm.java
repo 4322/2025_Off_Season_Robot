@@ -50,14 +50,10 @@ public class Arm extends SubsystemBase {
       newSetpoint = requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
     }
 
+    // Moves the Elevator
     if (prevSetpoint != newSetpoint) {
-      if (superstructure.getState() == Superstructure.Superstates.PRESCORE_CORAL) {
-        io.requestSlowPosition(newSetpoint);
-        prevSetpoint = newSetpoint;
-      } else {
-        io.requestPosition(newSetpoint);
-        prevSetpoint = newSetpoint;
-      }
+      io.requestPosition(newSetpoint);
+      prevSetpoint = newSetpoint;
     }
   }
 
