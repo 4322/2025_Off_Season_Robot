@@ -21,6 +21,7 @@ import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.arm.ArmIONitrate;
 import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.deployer.DeployerIO;
 import frc.robot.subsystems.deployer.DeployerIONitrate;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -31,10 +32,13 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIONitrate;
 import frc.robot.subsystems.endEffector.EndEffector;
+import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIONitrate;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIONitrate;
 import frc.robot.subsystems.rollers.Rollers;
+import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
@@ -144,6 +148,23 @@ public class RobotContainer {
     if (elevator == null) {
       elevator = new Elevator(new ElevatorIO() {});
     }
+
+    if (endEffector == null) {
+      endEffector = new EndEffector(new EndEffectorIO() {});
+    }
+
+    if (indexer == null) {
+      indexer = new Indexer(new IndexerIO() {});
+    }
+
+    if (rollers == null) {
+      rollers = new Rollers(new RollersIO() {});
+    }
+
+    if (deployer == null) {
+      deployer = new Deployer(new DeployerIO() {});
+    }
+
 
     // Configure the button bindings
     configureButtonBindings();
