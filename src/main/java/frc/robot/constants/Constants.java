@@ -28,6 +28,7 @@ public final class Constants {
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
 
   public static final int dioHomeButton = 0;
+  public static final double homeButtonDelaySec = 1.0;
 
   public static enum Mode {
     /** Running on a real robot. */

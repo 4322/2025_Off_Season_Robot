@@ -97,7 +97,7 @@ public class ArmIONitrate implements ArmIO {
   // You need method in ArmIO as well to do Override Remember to check - Personal Note / Reminder
 
   @Override
-  public void setManualInitialization() {
+  public void setHomePosition() {
     armMotor.setPosition(Units.degreesToRotations(Constants.Arm.armOffsetEncoderDeg));
   }
 
