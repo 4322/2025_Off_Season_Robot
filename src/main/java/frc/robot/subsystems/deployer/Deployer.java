@@ -32,7 +32,7 @@ public class Deployer extends SubsystemBase {
   }
 
   public void deploy() {
-    if (!isHomed || currentAction == DeployerStatus.DEPLOY) {
+    if (!isHomed) {
       return;
     }
     currentAction = DeployerStatus.DEPLOY;
@@ -40,7 +40,7 @@ public class Deployer extends SubsystemBase {
   }
 
   public void retract() {
-    if (!isHomed || currentAction == DeployerStatus.RETRACT) {
+    if (!isHomed) {
       return;
     }
     currentAction = DeployerStatus.RETRACT;
@@ -48,7 +48,7 @@ public class Deployer extends SubsystemBase {
   }
 
   public void eject() {
-    if (!isHomed || currentAction == DeployerStatus.EJECT) {
+    if (!isHomed) {
       return;
     }
     currentAction = DeployerStatus.EJECT;
