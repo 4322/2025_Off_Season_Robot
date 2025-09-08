@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
+import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
 
@@ -50,7 +51,7 @@ public class Arm extends SubsystemBase {
     }
 
     if (prevSetpoint != newSetpoint) {
-      if (superstructure.getState() == Superstructure.Superstates.PRESCORE_CORAL) {
+      if (RobotContainer.getSuperstructure().getState() == Superstates.PRESCORE_CORAL) {
         io.requestSlowPosition(newSetpoint);
         prevSetpoint = newSetpoint;
       } else {
