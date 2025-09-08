@@ -306,7 +306,6 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
-
   public void requestIdle() {
     unsetAllRequests();
     requestIdle = true;

@@ -32,7 +32,7 @@ public class Eject extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    superstructure.requestIdle() = false;
+    superstructure.requestIdle();
     intakeSuperstructure.requestRetractIdle();
   }
 }
