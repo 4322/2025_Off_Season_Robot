@@ -12,6 +12,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class IntakeSuperstructure extends SubsystemBase {
 
+  private boolean requestHomed;
   private boolean requestRetractIdle;
   private boolean requestFeed;
   private boolean requestReject;
@@ -51,22 +52,25 @@ public class IntakeSuperstructure extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+    // The home button can only be activated when the robot is disabled, so accept it from any state
+    if (requestHomed) {
+      deployer.setHome();
+      requestHomed = false;
+      state = IntakeSuperstates.RETRACT_IDLE;
+    }
+
     Logger.recordOutput("IntakeSuperstructure/State", state.toString());
+
     switch (state) {
-        // TODO update this with new homing logic
       case UNHOMED:
-        if (
-        /*RobotContainer.superstructure.isHomeButtonPressed()*/ true) {
-          deployer.setHome();
-          state = IntakeSuperstates.RETRACT_IDLE;
-        }
         break;
       case RETRACT_IDLE:
         deployer.retract();
 
         if (isCoralDetectedIndexer()
             || isCoralDetectedPickupArea()
-            || RobotContainer.superstructure.isCoralHeld()) {
+            || RobotContainer.getSuperstructure().isCoralHeld()) {
           rollers.rejectSlow();
           indexer.rejectSlow();
         } else {
@@ -116,7 +120,7 @@ public class IntakeSuperstructure extends SubsystemBase {
         }
         if (isCoralDetectedIndexer()
             || isCoralDetectedPickupArea()
-            || RobotContainer.superstructure.isCoralHeld()) {
+            || RobotContainer.getSuperstructure().isCoralHeld()) {
           state = IntakeSuperstates.REJECT;
         }
         if (requestIntakeEject) {
@@ -130,7 +134,7 @@ public class IntakeSuperstructure extends SubsystemBase {
 
         if (!isCoralDetectedIndexer()
             && !isCoralDetectedPickupArea()
-            && !RobotContainer.superstructure.isCoralHeld()) {
+            && !RobotContainer.getSuperstructure().isCoralHeld()) {
           state = IntakeSuperstates.FEED;
         }
         if (requestRetractIdle) {
@@ -152,6 +156,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   }
 
   private void unsetAllRequests() {
+    // don't clear requestHomed since it must be processed
     requestRetractIdle = false;
     requestFeed = false;
     requestReject = false;
@@ -198,5 +203,10 @@ public class IntakeSuperstructure extends SubsystemBase {
   public boolean isCoralDetectedIndexer() {
     return indexer.isCoralDetectedIndexer();
   }
+
+  public void homeButtonActivated() {
+    requestHomed = true;
+  }
 } // TODO check usage of reject vs. reject slow and eject vs eject slow
+  // TODO add manual homing procedure
 // Review logic

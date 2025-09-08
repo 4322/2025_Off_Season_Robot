@@ -11,7 +11,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -21,10 +20,11 @@ public class ArmIONitrate implements ArmIO {
 
   private final Nitrate armMotor;
   private final Canandmag armEncoder;
-  private double appliedVolts = 0.0;
 
   private final PIDPositionRequest armPIDPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
+  private final PIDPositionRequest armSlowPIDPositionRequest =
+      new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
   public ArmIONitrate() {
     armMotor = new Nitrate(Constants.Arm.armMotorId, MotorType.kCu60);
@@ -33,6 +33,18 @@ public class ArmIONitrate implements ArmIO {
     PIDSettings armPIDSettings = new PIDSettings();
     armPIDSettings.setPID(Constants.Arm.armkP, Constants.Arm.armkI, Constants.Arm.armkD);
     armPIDSettings.setGravitationalFeedforward(Constants.Arm.armFeedforward);
+    armPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
+    armPIDSettings.setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit);
+    armPIDSettings.setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit);
+    armPIDSettings.setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit);
+
+    PIDSettings armSlowPIDSettings = new PIDSettings();
+    armSlowPIDSettings.setPID(Constants.Arm.armkP, Constants.Arm.armkI, Constants.Arm.armkD);
+    armSlowPIDSettings.setGravitationalFeedforward(Constants.Arm.armFeedforward);
+    armSlowPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
+    armSlowPIDSettings.setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit);
+    armSlowPIDSettings.setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit);
+    armSlowPIDSettings.setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit);
 
     NitrateSettings armConfig = new NitrateSettings();
 
@@ -43,8 +55,10 @@ public class ArmIONitrate implements ArmIO {
                 Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft));
     armConfig
         .setPIDSettings(armPIDSettings, PIDConfigSlot.kSlot0)
-        .getPIDSettings(PIDConfigSlot.kSlot0)
-        .setMinwrapConfig(new MinwrapConfig.Disabled());
+        .getPIDSettings(PIDConfigSlot.kSlot0);
+    armConfig
+        .setPIDSettings(armSlowPIDSettings, PIDConfigSlot.kSlot1)
+        .getPIDSettings(PIDConfigSlot.kSlot1);
 
     CanandmagSettings settings = new CanandmagSettings();
     CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
@@ -71,6 +85,7 @@ public class ArmIONitrate implements ArmIO {
     armInputs.armPositionDegrees =
         Units.rotationsToDegrees(armMotor.getPosition() - Constants.Arm.armOffsetEncoderDeg);
     armInputs.armConnected = armMotor.isConnected();
+    armInputs.velocity = armMotor.getVelocity();
     armInputs.armSupplyCurrentAmps = armMotor.getBusCurrent();
     armInputs.armStatorCurrentAmps = armMotor.getStatorCurrent();
     armInputs.armTempCelsius = armMotor.getMotorTemperatureFrame().getData();
@@ -79,7 +94,7 @@ public class ArmIONitrate implements ArmIO {
   // You need method in ArmIO as well to do Override Remember to check - Personal Note / Reminder
 
   @Override
-  public void setManualInitialization() {
+  public void setHomePosition() {
     armMotor.setPosition(Units.degreesToRotations(Constants.Arm.armOffsetEncoderDeg));
   }
 
@@ -91,12 +106,14 @@ public class ArmIONitrate implements ArmIO {
   }
 
   @Override
-  public void stopArmMotor(IdleMode idleMode) {
-    armMotor.stop(idleMode);
+  public void requestSlowPosition(double requestSetpoint) {
+    armMotor.setRequest(
+        armSlowPIDPositionRequest.setPosition(
+            Constants.Arm.armOffsetEncoderDeg + Units.degreesToRotations(requestSetpoint)));
   }
 
   @Override
-  public void setVoltage(double volts) {
-    appliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
+  public void stopArmMotor(IdleMode idleMode) {
+    armMotor.stop(idleMode);
   }
 }

@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drive.Drive;
@@ -18,6 +17,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
+  private boolean requestHomed = false;
   private boolean cancelEject = false;
   private boolean requestEject = false;
   private boolean requestAlgaePrescore = false;
@@ -77,8 +77,6 @@ public class Superstructure extends SubsystemBase {
   private Arm arm;
   private Indexer indexer;
   private Elevator elevator;
-  // TODO wait for Ellie to merge this into main: private Climber climber; We aren't using climber
-  // yet
   private Drive drive;
   private Vision vision;
   private VisionObjectDetection visionObjectDetection;
@@ -91,15 +89,12 @@ public class Superstructure extends SubsystemBase {
       Arm arm,
       Indexer indexer,
       Elevator elevator,
-      // TODO wait for Ellie to merge this into main: Climber climber, We aren't using climber yet
       Drive drive,
       Vision vision,
       IntakeSuperstructure intakeSuperstructure) {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
-    // TODO wait for Ellie to merge this into main: this.climber = climber; We aren't using climber
-    // yet
     this.drive = drive;
     this.indexer = indexer;
     this.vision = vision;
@@ -108,15 +103,19 @@ public class Superstructure extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+    // The home button can only be activated when the robot is disabled, so accept it from any state
+    if (requestHomed) {
+      elevator.setHomePosition();
+      arm.setHomePosition();
+      requestHomed = false;
+      state = Superstates.IDLE;
+    }
+
     Logger.recordOutput("Superstructure/currentState", state.toString());
 
     switch (state) {
       case UNHOMED:
-        if (Robot.homeButton.get()) // Not correct
-        {
-          elevator.setManualInitialization();
-          arm.setManualInitialization();
-        }
         break;
       case IDLE:
         endEffector.idle();
@@ -280,6 +279,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   private void unsetAllRequests() {
+    // don't clear requestHomed since it must be processed
     requestEject = false;
     requestAlgaeScore = false;
     requestIntakeAlgaeFloor = false;
@@ -407,7 +407,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public double getElevatorHeight() {
-    return elevator.getHeightMeters();
+    return elevator.getElevatorHeightMeters();
   }
 
   public double getArmAngle() {
@@ -429,6 +429,10 @@ public class Superstructure extends SubsystemBase {
 
   public IntakeSuperstructure getIntakeSuperstructure() {
     return intakeSuperstructure;
+  }
+
+  public void homeButtonActivated() {
+    requestHomed = true;
   }
 
   // Other Methods are related to Vision Pose Estimation
