@@ -160,7 +160,7 @@ public final class Constants {
     public static final double AccelerationLimit = 10;
     public static final double DeaccelerationLimit = 10;
     public static final double VelocityLimit = 10;
-    public static final double minElevatorSafeHeightMeters = 45.0;
+    public static final double minElevatorSafeHeightMeters = 1.0;
     public static final double homeHeightMeters =
         0.5; // resting on pickup bracket TODO: Set to actual position
     public static final double maxHeightMeters =
