@@ -55,7 +55,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     FollowMotorRequest followerRequest = new FollowMotorRequest(leaderMotor);
     // configs
     elevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
-    elevatorMotorOutputSettings.setInvert(Constants.Elevator.motorInvert); //make this leader motor
+    elevatorMotorOutputSettings.setInvert(Constants.Elevator.motorInvert); // make this leader motor
     // invert follower
     elevatorConfig.setOutputSettings(elevatorMotorOutputSettings);
     elevatorElectricalLimitSettings.setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps);

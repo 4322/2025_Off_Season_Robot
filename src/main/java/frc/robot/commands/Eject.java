@@ -13,7 +13,6 @@ public class Eject extends Command {
     this.superstructure = superstructure;
 
     addRequirements(intakeSuperstructure, superstructure);
-
   }
 
   @Override

@@ -44,14 +44,15 @@ public class Arm extends SubsystemBase {
       newSetpoint = minSafeArmDegree;
     } else if (maxElevatorSafeMeters > elevatorHeight
         && requestedSetpoint < Constants.Arm.safeBargeRetractAngleDeg) {
-      newSetpoint = prevSetpoint;
-
+      newSetpoint =
+          inputs.armPositionDegrees; // Makes it so it won't move in case the elevator also needs to
+      // move as well as button spamming
     } else {
       newSetpoint = requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
     }
 
     if (prevSetpoint != newSetpoint) {
-      if (RobotContainer.getSuperstructure().getState() == Superstates.PRESCORE_CORAL) {
+      if (RobotContainer.getSuperstructure().getState() == Superstates.SCORE_CORAL) {
         io.requestSlowPosition(newSetpoint);
         prevSetpoint = newSetpoint;
       } else {
