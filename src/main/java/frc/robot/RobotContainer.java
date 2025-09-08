@@ -22,6 +22,7 @@ import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.arm.ArmIONitrate;
 import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.deployer.DeployerIO;
 import frc.robot.subsystems.deployer.DeployerIONitrate;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -32,10 +33,13 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIONitrate;
 import frc.robot.subsystems.endEffector.EndEffector;
+import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIONitrate;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIONitrate;
 import frc.robot.subsystems.rollers.Rollers;
+import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
@@ -64,14 +68,15 @@ public class RobotContainer {
   private static Rollers rollers;
   private static Deployer deployer;
   private static IntakeSuperstructure intakeSuperstructure;
-  public static Superstructure superstructure;
+  private static Superstructure superstructure;
   private static Elevator elevator;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /** The container for the robot. Contains subsystems, IO devices, and commands. */
   public RobotContainer() {
 
     switch (Constants.currentMode) {
       case REAL:
+        initializeEmptySubsystems();
 
         // Real robot, instantiate hardware IO implementations
         if (Constants.armEnabled) {
@@ -110,6 +115,10 @@ public class RobotContainer {
         if (Constants.deployerEnabled) {
           deployer = new Deployer(new DeployerIONitrate());
         }
+        if (vision == null) {
+          vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        }
+
         if (Constants.visionObjectDetectionEnabled) {
           visionObjectDetection = new VisionObjectDetection(new VisionObjectDetectionIOPhoton(), new Transform3d()/*Transform3d robotCenterToCamera */);
         }
@@ -121,15 +130,16 @@ public class RobotContainer {
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
+        initializeEmptySubsystems();
         vision =
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
-        /*
-        visionObjectDetection =
-            new VisionObjectDetection(new VisionIOPhotonVisionSim());
-        */
+        intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
+        superstructure =
+            new Superstructure(
+                endEffector, arm, indexer, elevator, drive, vision, intakeSuperstructure);
         break;
 
       default:
@@ -137,9 +147,12 @@ public class RobotContainer {
     }
 
     // Used during replay mode or when certain subsystems are disabled
-    if (vision == null) {
-      vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-    }
+
+    // Configure the button bindings
+    configureButtonBindings();
+  }
+
+  private void initializeEmptySubsystems() {
     if (arm == null) {
       arm = new Arm(new ArmIO() {});
     }
@@ -152,8 +165,27 @@ public class RobotContainer {
               new ModuleIO() {},
               new ModuleIO() {});
     }
+    if (vision == null) {
+      vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+    }
     if (elevator == null) {
       elevator = new Elevator(new ElevatorIO() {});
+    }
+
+    if (endEffector == null) {
+      endEffector = new EndEffector(new EndEffectorIO() {});
+    }
+
+    if (indexer == null) {
+      indexer = new Indexer(new IndexerIO() {});
+    }
+
+    if (rollers == null) {
+      rollers = new Rollers(new RollersIO() {});
+    }
+
+    if (deployer == null) {
+      deployer = new Deployer(new DeployerIO() {});
     }
 
     // Configure the button bindings
@@ -271,6 +303,10 @@ public class RobotContainer {
                     superstructure.cancelPrescoreCoral();
                   }
                 }));
+  }
+
+  public static Superstructure getSuperstructure() {
+    return superstructure;
   }
 
   /**
