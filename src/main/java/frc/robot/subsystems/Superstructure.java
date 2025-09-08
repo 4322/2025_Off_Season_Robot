@@ -407,7 +407,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public double getElevatorHeight() {
-    return elevator.getHeightMeters();
+    return elevator.getElevatorHeightMeters();
   }
 
   public double getArmAngle() {
@@ -446,4 +446,14 @@ public class Superstructure extends SubsystemBase {
   }
 
   // Other Methods are related to Vision Pose Estimation
+
+  public static Pose2d getVisionPoseEstimate2d() {
+    // TODO get vision pose estimate from vision and return it here
+    return new Pose2d();
+  }
+
+  public static Pose2d getVisionPoseEstimate2dAtTimestamp(double timestamp) {
+    // TODO get vision pose estimate from vision and return it here
+    return new Pose2d();
+  }
 }
