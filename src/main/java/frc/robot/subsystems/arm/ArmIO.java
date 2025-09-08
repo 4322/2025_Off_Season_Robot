@@ -18,7 +18,7 @@ public interface ArmIO {
         0.0; // 0 is vertical to front of robot. Posititve clockwise looking from the left
   }
 
-  public default void setManualInitialization() {}
+  public default void setHomePosition() {}
 
   public default void updateInputs(ArmIOInputs inputs) {}
 

@@ -27,9 +27,8 @@ public class Robot extends LoggedRobot {
 
   public static Alliance alliance = DriverStation.Alliance.Blue;
   private Timer allianceUpdateTimer = new Timer();
-  public static DigitalInput homeButton = new DigitalInput(Constants.dioHomeButton);
-
-  public boolean prevHomeButtonPressed;
+  private DigitalInput homeButton = new DigitalInput(Constants.dioHomeButton);
+  private Timer homeButtonTimer = new Timer();
 
   public Robot() {
     // Record metadata
@@ -115,10 +114,15 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {
 
-    if (!homeButton.get() && !prevHomeButtonPressed) {
-      prevHomeButtonPressed = true;
-    } else if (homeButton.get() && prevHomeButtonPressed) {
-      prevHomeButtonPressed = false;
+    if (!homeButton.get()) {
+      // button is pressed in
+      if (homeButtonTimer.hasElapsed(Constants.homeButtonDelaySec)) {
+        homeButtonTimer.restart();
+        RobotContainer.getSuperstructure().homeButtonActivated();
+      } else {
+        homeButtonTimer.stop();
+        homeButtonTimer.reset();
+      }
     }
   }
 
