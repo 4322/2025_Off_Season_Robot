@@ -13,6 +13,8 @@ public class ScoreCoral extends Command {
   private Superstructure superstructure;
   private EndEffector endEffector;
 
+  public boolean isFast = true;
+
   public ScoreCoral() {
     this.superstructure = superstructure;
     this.arm = arm;
@@ -21,7 +23,9 @@ public class ScoreCoral extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    isFast = false;
+  }
 
   @Override
   public void execute() {}

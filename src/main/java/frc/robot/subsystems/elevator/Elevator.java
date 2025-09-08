@@ -88,9 +88,6 @@ public class Elevator extends SubsystemBase {
     // requestElevator = true;
     // requestElevator = true;
     switch (level) {
-      case L1:
-        requestedHeightMeters = Constants.Elevator.algaeReefL1HeightMeters;
-        break;
       case L2:
         requestedHeightMeters = Constants.Elevator.algaeReefL2HeightMeters;
         break;
