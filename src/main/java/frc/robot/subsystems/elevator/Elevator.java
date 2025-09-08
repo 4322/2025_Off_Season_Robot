@@ -52,12 +52,15 @@ public class Elevator extends SubsystemBase {
       case WAIT_FOR_ARM:
         if (((RobotContainer.getSuperstructure().getArmAngle() >= Constants.Arm.minArmSafeDeg)
                 && (requestedHeightMeters <= Constants.Elevator.minElevatorSafeHeightMeters)
-            || (requestedHeightMeters >= Constants.Elevator.minElevatorSafeHeightMeters))) {
+            || (requestedHeightMeters > Constants.Elevator.minElevatorSafeHeightMeters))) {
           state = ElevatorStates.REQUEST_SETPOINT;
         }
         break;
       case REQUEST_SETPOINT:
         io.requestHeight(requestedHeightMeters);
+        if (atSetpoint()) {
+          state = ElevatorStates.WAIT_FOR_ARM;
+        }
         break;
     }
   }

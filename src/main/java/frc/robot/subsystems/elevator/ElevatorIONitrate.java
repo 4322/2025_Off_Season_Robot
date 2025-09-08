@@ -55,7 +55,8 @@ public class ElevatorIONitrate implements ElevatorIO {
     FollowMotorRequest followerRequest = new FollowMotorRequest(leaderMotor);
     // configs
     elevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
-    elevatorMotorOutputSettings.setInvert(Constants.Elevator.motorInvert);
+    elevatorMotorOutputSettings.setInvert(Constants.Elevator.motorInvert); //make this leader motor
+    // invert follower
     elevatorConfig.setOutputSettings(elevatorMotorOutputSettings);
     elevatorElectricalLimitSettings.setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps);
     elevatorElectricalLimitSettings.setStatorCurrentLimit(
@@ -63,9 +64,9 @@ public class ElevatorIONitrate implements ElevatorIO {
     elevatorConfig.setElectricalLimitSettings(elevatorElectricalLimitSettings);
     elevatorConfig.setPIDSettings(elevatorMotorPIDSettings, PIDConfigSlot.kSlot0);
     elevatorConfig.setPIDSettings(ElevatorSlowPIDSettings, PIDConfigSlot.kSlot1);
-    followerMotor.setRequest(followerRequest);
     NitrateSettings leaderConfigStatus = leaderMotor.setSettings(elevatorConfig, 0.02, 5);
     NitrateSettings followerConfigStatus = followerMotor.setSettings(elevatorConfig, 0.02, 5);
+    followerMotor.setRequest(followerRequest);
     // get position is an internal encoder, so we need to set it
     // 6 to 1 gear ratio for elevator first stage
     // 9 to 1 gear ratio for elevator second stage
@@ -121,6 +122,6 @@ public class ElevatorIONitrate implements ElevatorIO {
   }
 
   public double metersToRotations(double meters) {
-    return (meters / Math.PI) * Constants.Elevator.gearRatio;
+    return (meters / (2 * Math.PI)) * Constants.Elevator.gearRatio;
   }
 }
