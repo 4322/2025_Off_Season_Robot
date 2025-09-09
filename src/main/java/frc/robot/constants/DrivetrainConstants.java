@@ -2,6 +2,7 @@ package frc.robot.constants;
 
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
+
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 import frc.robot.util.SwerveUtil.SwerveModuleConstantsFactory;
@@ -30,6 +31,7 @@ public class DrivetrainConstants {
   public static final double turnSupplyCurrentLimit = 40.0; // TODO
   public static final double turnSupplyCurrentTime = 0.5; // TODO
   public static final double turnStatorCurrentLimit = 100; // TODO
+  
   private static final double drivekP = 0; // TODO
   private static final double drivekD = 0; // TODO
   private static final double drivekS = 0; // TODO
@@ -48,34 +50,35 @@ public class DrivetrainConstants {
   // Front Left
   private static final int frontLeftDriveMotorId = 0; // TODO
   private static final int frontLeftTurnMotorId = 0; // TODO
-  private static final int frontLeftTurnEncoderId = 0; // TODO
+  private static final int frontLeftTurnEncoderId = 0; // TODO'
+  private static final double wheelBaseConstant = 0.5773223912 / 2; // TODO
 
-  private static final double frontLeftXPos = 0; // TODO
-  private static final double frontLeftYPos = 0; // TODO
+  private static final double frontLeftXPos = wheelBaseConstant; // TODO
+  private static final double frontLeftYPos = wheelBaseConstant; // TODO
 
   // Front Right
   private static final int frontRightDriveMotorId = 0; // TODO
   private static final int frontRightTurnMotorId = 0; // TODO
   private static final int frontRightTurnEncoderId = 0; // TODO
 
-  private static final double frontRightXPos = 0; // TODO
-  private static final double frontRightYPos = 0; // TODO
+  private static final double frontRightXPos = wheelBaseConstant; // TODO
+  private static final double frontRightYPos = wheelBaseConstant; // TODO
 
   // Back Left
   private static final int backLeftDriveMotorId = 0; // TODO
   private static final int backLeftTurnMotorId = 0; // TODO
   private static final int backLeftTurnEncoderId = 0; // TODO
 
-  private static final double backLeftXPos = 0; // TODO
-  private static final double backLeftYPos = 0; // TODO
+  private static final double backLeftXPos = wheelBaseConstant; // TODO
+  private static final double backLeftYPos = wheelBaseConstant; // TODO
 
   // Back Right
   private static final int backRightDriveMotorId = 0; // TODO
   private static final int backRightTurnMotorId = 0; // TODO
   private static final int backRightTurnEncoderId = 0; // TODO
 
-  private static final double backRightXPos = 0; // TODO
-  private static final double backRightYPos = 0; // TODO
+  private static final double backRightXPos = wheelBaseConstant; // TODO
+  private static final double backRightYPos = wheelBaseConstant; // TODO
 
   // Auto-configured objects below
   public static final ElectricalLimitSettings driveElectricalLimitSettings =
