@@ -105,11 +105,11 @@ public final class Constants {
     public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20;
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 40;
 
-      //Prescore Degrees Arm
-    public static final double prescoringL1CoralDeg = 70;
-    public static final double prescoringL2CoralDeg = 110;
-    public static final double prescoringL3CoralDeg = 100;
-    public static final double prescoringL4CoralDeg = 120;
+    // Prescore Degrees Arm
+    public static final double prescoringL1CoralDeg = 60;
+    public static final double prescoringL2CoralDeg = 135.006848;
+    public static final double prescoringL3CoralDeg = 148.644524;
+    public static final double prescoringL4CoralDeg = 180;
     public static final double scoringAlgaeDeg = 139.326425; // TODO: Set to actual angle
 
     public static final double descoringAlgaeDeg = 81.946341;

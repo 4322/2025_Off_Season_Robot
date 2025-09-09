@@ -2,7 +2,6 @@ package frc.robot.constants;
 
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
-
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 import frc.robot.util.SwerveUtil.SwerveModuleConstantsFactory;
@@ -51,9 +50,9 @@ public class DrivetrainConstants {
   private static final int frontLeftDriveMotorId = 0; // TODO
   private static final int frontLeftTurnMotorId = 0; // TODO
   private static final int frontLeftTurnEncoderId = 0; // TODO'
-  private static final double halfWheelBaseMeters = 0.57785; 
+  private static final double halfWheelBaseMeters = 0.57785;
 
-  private static final double frontLeftXPos = halfWheelBaseMeters; 
+  private static final double frontLeftXPos = halfWheelBaseMeters;
   private static final double frontLeftYPos = halfWheelBaseMeters;
 
   // Front Right
@@ -61,24 +60,24 @@ public class DrivetrainConstants {
   private static final int frontRightTurnMotorId = 0; // TODO
   private static final int frontRightTurnEncoderId = 0; // TODO
 
-  private static final double frontRightXPos = halfWheelBaseMeters; 
-  private static final double frontRightYPos = -halfWheelBaseMeters; 
+  private static final double frontRightXPos = halfWheelBaseMeters;
+  private static final double frontRightYPos = -halfWheelBaseMeters;
 
   // Back Left
   private static final int backLeftDriveMotorId = 0; // TODO
   private static final int backLeftTurnMotorId = 0; // TODO
   private static final int backLeftTurnEncoderId = 0; // TODO
 
-  private static final double backLeftXPos = -halfWheelBaseMeters; 
-  private static final double backLeftYPos = halfWheelBaseMeters; 
+  private static final double backLeftXPos = -halfWheelBaseMeters;
+  private static final double backLeftYPos = halfWheelBaseMeters;
 
   // Back Right
   private static final int backRightDriveMotorId = 0; // TODO
   private static final int backRightTurnMotorId = 0; // TODO
   private static final int backRightTurnEncoderId = 0; // TODO
 
-  private static final double backRightXPos = -halfWheelBaseMeters; 
-  private static final double backRightYPos = -halfWheelBaseMeters; 
+  private static final double backRightXPos = -halfWheelBaseMeters;
+  private static final double backRightYPos = -halfWheelBaseMeters;
 
   // Auto-configured objects below
   public static final ElectricalLimitSettings driveElectricalLimitSettings =
