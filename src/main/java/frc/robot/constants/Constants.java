@@ -127,8 +127,8 @@ public final class Constants {
     public static final double armkI = 0;
     public static final double armkD = 0;
 
-    public static final double AccelerationLimit = .68; // TODO
-    public static final double DeaccelerationLimit = .68;
+    public static final double AccelerationLimit = 0.68; // TODO
+    public static final double DeaccelerationLimit = 0.68;
     public static final double VelocityLimit = 1.7;
     public static final double slowVelocityLimit = 0.6;
   }
