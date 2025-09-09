@@ -47,24 +47,24 @@ public final class Constants {
 
     public static final double angularErrorToleranceRad = Units.degreesToRadians(7);
     public static final double angularErrorToleranceRadPerSec = Units.degreesToRadians(20.0);
-    public static final double driveDeadband = .1;
-    public static final double rotDeadband = .1;
+    public static final double driveDeadband = 0.1;
+    public static final double rotDeadband = 0.1;
 
     public static final double pseudoAutoRotatekP = 6;
     public static final double pseudoAutoRotatekI = 0;
-    public static final double pseudoAutoRotatekD = .0;
+    public static final double pseudoAutoRotatekD = 0.0;
     public static final double pseudoAutoRotateRadTolerance = Units.degreesToRadians(1.5);
     public static final double inhibitPseudoAutoRotateRadPerSec = Units.degreesToRadians(4);
     public static final double pseudoAutoRotateMinMetersPerSec =
-        .6; // disable below this speed for fine adjustments
+        0.6; // disable below this speed for fine adjustments
   }
 
   public static class PathPlanner {
     public static final double translationkP = 0;
     public static final double translationkD = 0;
 
-    public static final double rotkP = .0;
-    public static final double rotkD = .0;
+    public static final double rotkP = 0.0;
+    public static final double rotkD = 0.0;
 
     public static final double robotMassKg = 74.088; // TODO: Weigh robot
     public static final double robotMOI = 6.883; // TODO: Use CAD
@@ -72,7 +72,7 @@ public final class Constants {
   }
 
   public static class Scoring {
-    public static final double scoringL1AngleDegCoral = .0;
+    public static final double scoringL1AngleDegCoral = 0.0;
     public static final double scoringL2AngleDegCoral = 17.5; // TODO: Set to actual angle
     public static final double scoringL3AngleDegCoral = 39.2; // TODO: Set to actual angle
     public static final double scoringL4AngleDegCoral = 37.2; // TODO: Set to actual angle
@@ -85,7 +85,7 @@ public final class Constants {
     public static final double sensorToArm = 56 / 16; // TODO: Set to actual gear ratio
     public static final double motorShaftToSensorShaft = 85 / 10; // TODO: Set to actual gear ratio
 
-    public static final double armIdleDeg = .0;
+    public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0; // TODO: Set to actual angle
     public static final double coralHoldDeg = 150.0; // TODO: Set to actual angle
     public static final double algaeGroundDeg = 35.0; // TODO: Set to actual angle
@@ -99,7 +99,7 @@ public final class Constants {
     public static final double minArmSafeWithCoralDeg = 50.0;
     public static final double maxArmSafeAngle = 245.0;
 
-    public static final double setpointToleranceDegrees = .01;
+    public static final double setpointToleranceDegrees = 0.01;
     public static final double supplyCurrentLimit = 40; // TODO
     public static final double statorCurrentLimit = 100; // TODO
     public static final double armFeedforward = 20;
@@ -127,10 +127,10 @@ public final class Constants {
     public static final double armkI = 0;
     public static final double armkD = 0;
 
-    public static final double AccelerationLimit = .68; // TODO
-    public static final double DeaccelerationLimit = .68;
+    public static final double AccelerationLimit = 0.68; // TODO
+    public static final double DeaccelerationLimit = 0.68;
     public static final double VelocityLimit = 1.7;
-    public static final double slowVelocityLimit = .6;
+    public static final double slowVelocityLimit = 0.6;
   }
 
   public static class Elevator {
@@ -144,45 +144,45 @@ public final class Constants {
     public static final double kP1 = 0; // TODO: Set to actual value
     public static final double kI1 = 1; // TODO: Set to actual value
     public static final double kD1 = 0; // TODO: Set to actual value
-    public static final double intializationVoltage = .1; // need actual values
-    public static final double elevatorHeightToleranceMeters = .01;
-    public static final double algaeHoldMeters = .1; // need actual values
-    public static final double algaeGroundHeightMeters = .3; // need actual values
-    public static final double algaeReefL1HeightMeters = .25; // TODO: Set to actual position
-    public static final double algaeReefL2HeightMeters = .45; // TODO: Set to actual position
-    public static final double algaeReefL3HeightMeters = .65; // TODO: Set to actual position
-    public static final double prescoreCoralL1HeightMeters = .85; // TODO: Set to actual position
+    public static final double intializationVoltage = 0.1; // need actual values
+    public static final double elevatorHeightToleranceMeters = 0.01;
+    public static final double algaeHoldMeters = 0.1; // need actual values
+    public static final double algaeGroundHeightMeters = 0.3; // need actual values
+    public static final double algaeReefL1HeightMeters = 0.25; // TODO: Set to actual position
+    public static final double algaeReefL2HeightMeters = 0.45; // TODO: Set to actual position
+    public static final double algaeReefL3HeightMeters = 0.65; // TODO: Set to actual position
+    public static final double prescoreCoralL1HeightMeters = 0.85; // TODO: Set to actual position
     public static final double prescoreCoralL2HeightMeters = 1.05; // TODO: Set to actual position
-    public static final double prescoreCoralL3HeightMeters = .75; // TODO: Set to actual position
-    public static final double prescoreCoralL4HeightMeters = .95; // TODO: Set to actual position
-    public static final double pickupCoralHeightMeters = .5; // TODO: Set to actual position
-    public static final double initializationTimerThresholdSecs = .01; //
-    public static final double initializationVelocityMetersThresholdPerSecs = .01; //
-    public static final double ejectSafeHeightMeters = .01; //
-    public static final double safeBargeRetractHeightMeters = .01;
-    public static final double supplyCurrentLimitAmps = .1;
-    public static final double statorCurrentLimitAmps = .1;
+    public static final double prescoreCoralL3HeightMeters = 0.75; // TODO: Set to actual position
+    public static final double prescoreCoralL4HeightMeters = 0.95; // TODO: Set to actual position
+    public static final double pickupCoralHeightMeters = 0.5; // TODO: Set to actual position
+    public static final double initializationTimerThresholdSecs = 0.01; //
+    public static final double initializationVelocityMetersThresholdPerSecs = 0.01; //
+    public static final double ejectSafeHeightMeters = 0.01; //
+    public static final double safeBargeRetractHeightMeters = 0.01;
+    public static final double supplyCurrentLimitAmps = 0.1;
+    public static final double statorCurrentLimitAmps = 0.1;
     public static final double kG = 0;
     public static final double AccelerationLimit = 10;
     public static final double DeaccelerationLimit = 10;
     public static final double VelocityLimit = 10;
     public static final double minElevatorSafeHeightMeters = 1.0;
     public static final double homeHeightMeters =
-        .5; // resting on pickup bracket TODO: Set to actual position
+        0.5; // resting on pickup bracket TODO: Set to actual position
     public static final double maxHeightMeters =
         1.0; // top of physical travel TODO: Set to actual position
 
-    public static final double scoringL1CoralMeters = .1;
-    public static final double scoringL2CoralMeters = .2;
-    public static final double scoringL3CoralMeters = .3;
-    public static final double scoringL4CoralMeters = .4;
+    public static final double scoringL1CoralMeters = 0.1;
+    public static final double scoringL2CoralMeters = 0.2;
+    public static final double scoringL3CoralMeters = 0.3;
+    public static final double scoringL4CoralMeters = 0.4;
     public static final double gearRatio = 6 / 1;
-    public static final double setpointToleranceDegrees = .01;
-    public static final double maxElevatorSafeHeightMeters = .8; // need actual values
-    public static final double scoreCoralL1HeightMeters = .3; // TODO: Set to actual position
-    public static final double scoreCoralL2HeightMeters = .5; // TODO: Set to actual position
-    public static final double scoreCoralL3HeightMeters = .7; // TODO: Set to actual position
-    public static final double scoreCoralL4HeightMeters = .9; // TODO: Set to actual position
+    public static final double setpointToleranceDegrees = 0.01;
+    public static final double maxElevatorSafeHeightMeters = 0.8; // need actual values
+    public static final double scoreCoralL1HeightMeters = 0.3; // TODO: Set to actual position
+    public static final double scoreCoralL2HeightMeters = 0.5; // TODO: Set to actual position
+    public static final double scoreCoralL3HeightMeters = 0.7; // TODO: Set to actual position
+    public static final double scoreCoralL4HeightMeters = 0.9; // TODO: Set to actual position
   }
 
   // TODO all of these are placeholder values
@@ -228,18 +228,18 @@ public final class Constants {
 
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
-        .25; // Time for the current to spike and stay there before detection is triggered
+        0.25; // Time for the current to spike and stay there before detection is triggered
     public static final double velocityDetectionDebounceTimeSeconds =
-        .25; // Time for veleocity to spike and stay there before detection is triggered
+        0.25; // Time for veleocity to spike and stay there before detection is triggered
     public static final double CurrentDetectionDeltaThresholdAmps = 0;
     public static final double CurrentDetectionMaxAccumulationSeconds = 1;
     public static final double VelocityDetectionMaxAccumulationSeconds = 1;
     public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
 
     public static final double algaeIntakingDelaySeconds =
-        .05; // Time to wait after algae is detected in End Effector before reducing voltage
+        0.05; // Time to wait after algae is detected in End Effector before reducing voltage
     public static final double coralIntakingDelaySeconds =
-        .05; // Time to wait after coral is detected in End Effector before reducing voltage
+        0.05; // Time to wait after coral is detected in End Effector before reducing voltage
   }
 
   public static class Deployer {
@@ -303,10 +303,10 @@ public final class Constants {
     public static final double motorVoltageRejectSlow = -3;
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
-        .25; // Time for the delta of the current to spike and stay there before detection is
+        0.25; // Time for the delta of the current to spike and stay there before detection is
     // triggered
     public static final double velocityDetectionDebounceTimeSeconds =
-        .25; // Time for delta of the velocity to spike and stay there before detection is
+        0.25; // Time for delta of the velocity to spike and stay there before detection is
     // triggered
 
     public static final double CurrentDetectionDeltaThresholdAmps = 0;
