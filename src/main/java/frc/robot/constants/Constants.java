@@ -151,7 +151,8 @@ public final class Constants {
     public static final double prescoreCoralL2HeightMeters = 0.0; // TODO: Set to actual position
     public static final double prescoreCoralL3HeightMeters =
         0.2303808194; // TODO: Set to actual position
-    public static final double prescoreCoralL4HeightMeters = 0.8427878242; // TODO: Set to actual position
+    public static final double prescoreCoralL4HeightMeters =
+        0.8427878242; // TODO: Set to actual position
     public static final double pickupCoralHeightMeters = 0.5; // TODO: Set to actual position
     public static final double initializationTimerThresholdSecs = 0.01; //
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01; //
