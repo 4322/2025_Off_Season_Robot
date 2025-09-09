@@ -202,9 +202,9 @@ public final class Constants {
 
     public static final double ejectVolts = -3.0;
 
-    public static final double motorBusCurrentLimit = 0;
-    public static final double motorBusCurrentLimitTime = 0;
-    public static final double motorStatorCurrentLimit = 0;
+    public static final double motorBusCurrentLimit = 40;
+    public static final double motorBusCurrentLimitTime = 40;
+    public static final double motorStatorCurrentLimit = 60;
 
     public static final double sensorCoralProximityThreshold = 0;
     public static final double sensorAlgaeProximityThreshold = 0;
@@ -246,9 +246,9 @@ public final class Constants {
     public static final int deployerMotorId = 1;
     public static final double deployVoltage = 3.0;
 
-    public static final double motorStatorCurrentLimit = 0;
-    public static final double motorBusCurrentLimitTime = 0;
-    public static final double motorBusCurrentLimit = 0;
+    public static final double motorStatorCurrentLimit = 40;
+    public static final double motorBusCurrentLimitTime = 40;
+    public static final double motorBusCurrentLimit = 60;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvertMode = null;
     public static final HardLimitConfig motorForwardHardLimit = null;
@@ -272,9 +272,9 @@ public final class Constants {
 
   public static class Indexer {
     public static final int indexerMotorId = 2;
-    public static final double motorBusCurrentLimit = 0;
-    public static final double motorBusCurrentLimitTime = 0;
-    public static final double motorStatorCurrentLimit = 0;
+    public static final double motorBusCurrentLimit = 40;
+    public static final double motorBusCurrentLimitTime = 0.5;
+    public static final double motorStatorCurrentLimit = 60;
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
     public static final InvertMode motorInvert = null;
     public static final double indexerSensorMax = 0;
@@ -290,9 +290,9 @@ public final class Constants {
   public static class Rollers {
     public static final int rollersMotorId = 0;
 
-    public static final double motorBusCurrentLimitTime = 0;
-    public static final double motorStatorCurrentLimit = 0;
-    public static final double motorBusCurrentLimit = 0;
+    public static final double motorBusCurrentLimitTime = 0.5;
+    public static final double motorStatorCurrentLimit = 60;
+    public static final double motorBusCurrentLimit = 40;
 
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
     public static final InvertMode motorInvert = null;
