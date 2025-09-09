@@ -17,7 +17,7 @@ import frc.robot.constants.Constants;
 public class ElevatorIONitrate implements ElevatorIO {
   private final Nitrate leaderMotor;
   private final Nitrate followerMotor;
-  PIDPositionRequest elvPositionRequest =
+  PIDPositionRequest elvSlowPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
   // private final PIDPositionRequest elevatorPIDPositionRequest =
   // new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
@@ -55,7 +55,8 @@ public class ElevatorIONitrate implements ElevatorIO {
     FollowMotorRequest followerRequest = new FollowMotorRequest(leaderMotor);
     // configs
     elevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
-    elevatorMotorOutputSettings.setInvert(Constants.Elevator.motorInvert); //make this leader motor
+    elevatorMotorOutputSettings.setInvert(
+        Constants.Elevator.motorLeftInvert); // make this leader motor
     // invert follower
     elevatorConfig.setOutputSettings(elevatorMotorOutputSettings);
     elevatorElectricalLimitSettings.setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps);
@@ -105,8 +106,13 @@ public class ElevatorIONitrate implements ElevatorIO {
   }
 
   @Override
-  public void requestHeight(double heightMeters) {
-    leaderMotor.setRequest(elvPositionRequest.setPosition(metersToRotations(heightMeters)));
+  public void requestSlowHeightMeters(double heightMeters) {
+    leaderMotor.setRequest(elvSlowPositionRequest.setPosition(metersToRotations(heightMeters)));
+  }
+
+  @Override
+  public void requestFastHeightMeters(double heightMeters) {
+    leaderMotor.setRequest(elvSlowPositionRequest.setPosition(metersToRotations(heightMeters)));
   }
 
   @Override
