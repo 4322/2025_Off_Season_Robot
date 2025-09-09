@@ -193,19 +193,14 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     drive.setDefaultCommand(new DriveManual(drive));
+    // The commands deal with the on False logic if the button is no longer held
+
     driver
         .povUp()
         .onTrue(
             new InstantCommand(
                 () -> {
                   superstructure.requestEject();
-                }));
-    driver
-        .povUp()
-        .onFalse(
-            new InstantCommand(
-                () -> {
-                  superstructure.cancelEject();
                 }));
     // Prescore/Descore Levels
     driver
@@ -220,17 +215,6 @@ public class RobotContainer {
                   }
                 }));
     driver
-        .a()
-        .onFalse(
-            new InstantCommand(
-                () -> {
-                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    superstructure.cancelIntakeAlgaeFloor();
-                  } else if (endEffector.hasAlgae() && endEffector.hasCoral()) {
-                    superstructure.cancelPrescoreCoral();
-                  }
-                }));
-    driver
         .x()
         .onTrue(
             new InstantCommand(
@@ -239,17 +223,6 @@ public class RobotContainer {
                     superstructure.requestDescoreAlgae(Level.L2);
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     superstructure.requestPrescoreCoral(Level.L2);
-                  }
-                }));
-    driver
-        .x()
-        .onFalse(
-            new InstantCommand(
-                () -> {
-                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    superstructure.cancelDescoreAlgae();
-                  } else if (!endEffector.hasAlgae() && endEffector.hasCoral()) {
-                    superstructure.cancelPrescoreCoral();
                   }
                 }));
     driver
@@ -264,17 +237,6 @@ public class RobotContainer {
                   }
                 }));
     driver
-        .y()
-        .onFalse(
-            new InstantCommand(
-                () -> {
-                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    superstructure.cancelDescoreAlgae();
-                  } else if (!endEffector.hasAlgae() && endEffector.hasCoral()) {
-                    superstructure.cancelPrescoreCoral();
-                  }
-                }));
-    driver
         .b()
         .onTrue(
             new InstantCommand(
@@ -283,17 +245,6 @@ public class RobotContainer {
                     superstructure.requestAlgaePrescore();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     superstructure.requestPrescoreCoral(Level.L4);
-                  }
-                }));
-    driver
-        .b()
-        .onFalse(
-            new InstantCommand(
-                () -> {
-                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    superstructure.cancelAlgaePrescore();
-                  } else if (!endEffector.hasAlgae() && endEffector.hasCoral()) {
-                    superstructure.cancelPrescoreCoral();
                   }
                 }));
   }

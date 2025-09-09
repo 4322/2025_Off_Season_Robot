@@ -71,13 +71,6 @@ public final class Constants {
     public static final double wheelCOF = 1.2;
   }
 
-  public static class Scoring {
-    public static final double scoringL1AngleDegCoral = 0.0;
-    public static final double scoringL2AngleDegCoral = 17.5; // TODO: Set to actual angle
-    public static final double scoringL3AngleDegCoral = 39.2; // TODO: Set to actual angle
-    public static final double scoringL4AngleDegCoral = 37.2; // TODO: Set to actual angle
-  }
-
   public static class Arm {
     public static final int armMotorId = 0; // TODO: Set to actual motor ID
     public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
@@ -112,13 +105,14 @@ public final class Constants {
     public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20;
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 40;
 
+      //Prescore Degrees Arm
     public static final double prescoringL1CoralDeg = 70;
     public static final double prescoringL2CoralDeg = 110;
     public static final double prescoringL3CoralDeg = 100;
     public static final double prescoringL4CoralDeg = 120;
-    public static final double scoringAlgaeDeg = 70; // TODO: Set to actual angle
+    public static final double scoringAlgaeDeg = 139.326425; // TODO: Set to actual angle
 
-    public static final double descoringAlgaeDeg = 90;
+    public static final double descoringAlgaeDeg = 81.946341;
     public static final double safeBargeRetractAngleDeg = 180;
     // To the encoder 0 is horizontal but to us its straight down
     public static final double armOffsetEncoderDeg = -90;
@@ -127,8 +121,8 @@ public final class Constants {
     public static final double armkI = 0;
     public static final double armkD = 0;
 
-    public static final double AccelerationLimit = .68; // TODO
-    public static final double DeaccelerationLimit = .68;
+    public static final double AccelerationLimit = 0.68; // TODO
+    public static final double DeaccelerationLimit = 0.68;
     public static final double VelocityLimit = 1.7;
     public static final double slowVelocityLimit = 0.6;
   }

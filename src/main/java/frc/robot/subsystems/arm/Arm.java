@@ -3,6 +3,7 @@ package frc.robot.subsystems.arm;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.commands.ScoreCoral;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.Superstructure.Superstates;
@@ -19,6 +20,7 @@ public class Arm extends SubsystemBase {
   public double prevSetpoint = -1000;
   public double newSetpoint;
   public double elevatorHeight;
+  private ScoreCoral scoreCoralCommand;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -38,20 +40,38 @@ public class Arm extends SubsystemBase {
 
     // Safety Logic
     // Checks the logic checking for if it is in a dangerous position
+
+    /* n
+      ||
+    nn||nn
+    |     |
+    (______)
+    */
+
     elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
     if (requestedSetpoint < minSafeArmDegree
-        && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters) {
+        && elevatorHeight
+            < Constants.Elevator
+                .minElevatorSafeHeightMeters) { // So if the requested setpoint is under the min
+      // safe angle and the elevator is too low the arm
+      // will go to min safe angle
       newSetpoint = minSafeArmDegree;
     } else if (maxElevatorSafeMeters > elevatorHeight
-        && requestedSetpoint < Constants.Arm.safeBargeRetractAngleDeg) {
-      newSetpoint = prevSetpoint;
-
+        && requestedSetpoint
+            < Constants.Arm
+                .safeBargeRetractAngleDeg) { // If the elevator is too high and the requested
+      // setpoint is not the safe retract then it will stay
+      // in place
+      newSetpoint =
+          inputs.armPositionDegrees; // Makes it so it won't move in case the elevator also needs to
+      // move as well as button spamming
     } else {
       newSetpoint = requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
     }
 
     if (prevSetpoint != newSetpoint) {
-      if (RobotContainer.getSuperstructure().getState() == Superstates.PRESCORE_CORAL) {
+      if (!scoreCoralCommand.isFast
+          || RobotContainer.getSuperstructure().getState() == Superstates.SCORE_CORAL) {
         io.requestSlowPosition(newSetpoint);
         prevSetpoint = newSetpoint;
       } else {
