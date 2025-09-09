@@ -44,7 +44,7 @@ public class Elevator extends SubsystemBase {
             && Math.abs(inputs.velocityMetersSecond)
                 < Constants.Elevator.initializationVelocityMetersThresholdPerSecs) {
           io.setVoltage(0.1); // idk value
-          io.setPosition(Constants.Elevator.maxHeightMeters);
+          io.setPosition(Constants.Elevator.maxElevatorHeightMeters);
           initializationTimer.stop();
           initializationTimer.reset();
           state = ElevatorStates.WAIT_FOR_ARM;
@@ -57,7 +57,7 @@ public class Elevator extends SubsystemBase {
         }
         break;
       case REQUEST_SETPOINT:
-        io.requestHeight(requestedHeightMeters);
+        io.requestSlowHeightMeters(requestedHeightMeters);
         if (atSetpoint()) {
           state = ElevatorStates.WAIT_FOR_ARM;
         }
@@ -100,7 +100,7 @@ public class Elevator extends SubsystemBase {
   public void scoreAlgae() {
     // equestElevator = true;
     // equestElevator = true;
-    requestedHeightMeters = Constants.Elevator.maxElevatorSafeHeightMeters;
+    requestedHeightMeters = Constants.Elevator.scoreAlgaeHeightMeters;
   }
 
   public void prescoreCoral(Level level) {

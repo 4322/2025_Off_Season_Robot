@@ -14,7 +14,7 @@ public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   public double minSafeArmDegree;
-  public double maxElevatorSafeMeters = Constants.Elevator.scoringL4CoralMeters;
+  public double maxElevatorSafeMeters = Constants.Elevator.scoreCoralL4HeightMeters;
 
   public double requestedSetpoint;
   public double prevSetpoint = -1000;

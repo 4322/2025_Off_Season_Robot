@@ -18,7 +18,9 @@ public interface ElevatorIO {
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
 
-  public default void requestHeight(double heightMeters) {}
+  public default void requestSlowHeightMeters(double heightMeters) {}
+
+  public default void requestFastHeightMeters(double heightMeters) {}
 
   public default void setVoltage(double voltage) {}
 
