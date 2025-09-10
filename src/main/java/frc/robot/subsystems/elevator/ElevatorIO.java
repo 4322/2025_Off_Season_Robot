@@ -8,8 +8,7 @@ public interface ElevatorIO {
   public static class ElevatorIOInputs {
     public double heightMeters = 0.0;
     // current setpoint
-    public boolean elevatorConnected = false;
-    public boolean elevatorEncoderConnected = false;
+    public boolean elevatorMotorConnected = false;
     public double velocityMetersSecond = 0.0;
     public double appliedVoltage = 0.0;
     public double supplyCurrentAmps = 0.0; // {leader, follower}
@@ -19,11 +18,13 @@ public interface ElevatorIO {
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
 
-  public default void requestHeight(double heightMeters) {}
+  public default void requestSlowHeightMeters(double heightMeters) {}
+
+  public default void requestFastHeightMeters(double heightMeters) {}
 
   public default void setVoltage(double voltage) {}
 
-  public default void setElevatorEncoder() {}
+  public default void setPosition(double elevatorPositionMeters) {}
 
-  public default void setNeutralMode(IdleMode mode) {}
+  public default void setNeutralMode(IdleMode idleMode) {}
 }
