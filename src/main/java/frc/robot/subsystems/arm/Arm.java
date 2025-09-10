@@ -42,12 +42,7 @@ public class Arm extends SubsystemBase {
     // Safety Logic
     // Checks the logic checking for if it is in a dangerous position
 
-    /* n
-      ||
-    nn||nn
-    |     |
-    (______)
-    */
+  
 
     elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
     if (requestedSetpoint < minSafeArmDegree
