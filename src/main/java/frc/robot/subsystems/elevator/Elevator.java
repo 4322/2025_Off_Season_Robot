@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
+import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
 
@@ -41,7 +42,7 @@ public class Elevator extends SubsystemBase {
         io.setVoltage(Constants.Elevator.intializationVoltage);
         // setup initialization procedure logic
         if (initializationTimer.hasElapsed(Constants.Elevator.initializationTimerThresholdSecs)
-            && Math.abs(inputs.velocityMetersSecond)
+            && Math.abs(inputs.leaderMotorVelocityMetersSecond)
                 < Constants.Elevator.initializationVelocityMetersThresholdPerSecs) {
           io.setVoltage(0.1); // idk value
           io.setPosition(Constants.Elevator.maxElevatorHeightMeters);
@@ -53,13 +54,15 @@ public class Elevator extends SubsystemBase {
         if (((RobotContainer.getSuperstructure().getArmAngle() >= Constants.Arm.minArmSafeDeg)
                 && (requestedHeightMeters <= Constants.Elevator.minElevatorSafeHeightMeters)
             || (requestedHeightMeters > Constants.Elevator.minElevatorSafeHeightMeters))) {
-          state = ElevatorStates.REQUEST_SETPOINT;
+          io.requestHeightMeters(requestedHeightMeters);
+        } else {
+          io.requestHeightMeters(inputs.leaderMotorheightMeters);
         }
-        break;
-      case REQUEST_SETPOINT:
-        io.requestSlowHeightMeters(requestedHeightMeters);
-        if (atSetpoint()) {
-          state = ElevatorStates.WAIT_FOR_ARM;
+        if ((RobotContainer.getSuperstructure().getState() == Superstates.PRESCORE_CORAL)
+            || (RobotContainer.getSuperstructure().getState() == Superstates.ALGAE_SCORE)) {
+          io.requestSlowHeightMeters(requestedHeightMeters);
+        } else {
+          io.requestHeightMeters(requestedHeightMeters);
         }
         break;
     }
@@ -154,7 +157,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getElevatorHeightMeters() {
-    return inputs.heightMeters;
+    return inputs.leaderMotorheightMeters;
   }
 
   public void setHomePosition() {
