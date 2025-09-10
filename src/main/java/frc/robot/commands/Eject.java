@@ -27,7 +27,6 @@ public class Eject extends Command {
   @Override
   public boolean isFinished() {
     return false; // While held
-    // TODO should we automatically cancel this when no piece is detected?
   }
 
   @Override
