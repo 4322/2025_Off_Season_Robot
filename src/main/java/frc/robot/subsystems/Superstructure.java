@@ -32,6 +32,7 @@ public class Superstructure extends SubsystemBase {
   private boolean requestPreClimb = false;
   private boolean requestClimb = false;
   private boolean requestswitchOperationMode = false;
+  public boolean isSlow = false;
 
   public enum Superstates {
     UNHOMED,
@@ -244,9 +245,12 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case SCORE_CORAL:
-        arm.scoreCoral(level);
-        elevator.scoreCoral(level);
-        endEffector.releaseCoral();
+        isSlow = true;
+        if (isSlow) { // Safety Check for race case
+          arm.scoreCoral(level);
+          elevator.scoreCoral(level);
+          endEffector.releaseCoral();
+        }
 
         if (!endEffector.hasCoral()) {
           state = Superstates.IDLE;

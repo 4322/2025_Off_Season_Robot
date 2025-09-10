@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
-import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
 
@@ -21,6 +21,7 @@ public class Arm extends SubsystemBase {
   public double newSetpoint;
   public double elevatorHeight;
   private ScoreCoral scoreCoralCommand;
+  private Superstructure superstructure;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -70,8 +71,7 @@ public class Arm extends SubsystemBase {
     }
 
     if (prevSetpoint != newSetpoint) {
-      if (!scoreCoralCommand.isFast
-          || RobotContainer.getSuperstructure().getState() == Superstates.SCORE_CORAL) {
+      if (superstructure.isSlow) {
         io.requestSlowPosition(newSetpoint);
         prevSetpoint = newSetpoint;
       } else {
