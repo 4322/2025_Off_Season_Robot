@@ -39,7 +39,7 @@ public class IntakeSuperstructure extends SubsystemBase {
     UNHOMED,
     RETRACT_IDLE,
     FEED,
-    REJECT, // TODO rename this
+    SLOW_REJECT,
     INTAKE_EJECT
   }
 
@@ -84,7 +84,7 @@ public class IntakeSuperstructure extends SubsystemBase {
           state = IntakeSuperstates.FEED;
         }
         if (requestReject) {
-          state = IntakeSuperstates.REJECT;
+          state = IntakeSuperstates.SLOW_REJECT;
         }
         break;
       case FEED:
@@ -121,13 +121,13 @@ public class IntakeSuperstructure extends SubsystemBase {
         if (isCoralDetectedIndexer()
             || isCoralDetectedPickupArea()
             || RobotContainer.getSuperstructure().isCoralHeld()) {
-          state = IntakeSuperstates.REJECT;
+          state = IntakeSuperstates.SLOW_REJECT;
         }
         if (requestIntakeEject) {
           state = IntakeSuperstates.INTAKE_EJECT;
         }
         break;
-      case REJECT:
+      case SLOW_REJECT:
         deployer.deploy();
         rollers.reject();
         indexer.reject();

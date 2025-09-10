@@ -13,7 +13,6 @@ public class Eject extends Command {
     this.superstructure = superstructure;
 
     addRequirements(intakeSuperstructure, superstructure);
-
   }
 
   @Override
@@ -28,12 +27,11 @@ public class Eject extends Command {
   @Override
   public boolean isFinished() {
     return false; // While held
-    // TODO should we automatically cancel this when no piece is detected?
   }
 
   @Override
   public void end(boolean interrupted) {
-    superstructure.cancelEject();
+    superstructure.requestIdle();
     intakeSuperstructure.requestRetractIdle();
   }
 }

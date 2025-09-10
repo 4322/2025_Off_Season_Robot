@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
+import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
 
@@ -41,10 +42,10 @@ public class Elevator extends SubsystemBase {
         io.setVoltage(Constants.Elevator.intializationVoltage);
         // setup initialization procedure logic
         if (initializationTimer.hasElapsed(Constants.Elevator.initializationTimerThresholdSecs)
-            && Math.abs(inputs.velocityMetersSecond)
+            && Math.abs(inputs.leaderMotorVelocityMetersSecond)
                 < Constants.Elevator.initializationVelocityMetersThresholdPerSecs) {
           io.setVoltage(0.1); // idk value
-          io.setPosition(Constants.Elevator.maxHeightMeters);
+          io.setPosition(Constants.Elevator.maxElevatorHeightMeters);
           initializationTimer.stop();
           initializationTimer.reset();
           state = ElevatorStates.WAIT_FOR_ARM;
@@ -53,13 +54,15 @@ public class Elevator extends SubsystemBase {
         if (((RobotContainer.getSuperstructure().getArmAngle() >= Constants.Arm.minArmSafeDeg)
                 && (requestedHeightMeters <= Constants.Elevator.minElevatorSafeHeightMeters)
             || (requestedHeightMeters > Constants.Elevator.minElevatorSafeHeightMeters))) {
-          state = ElevatorStates.REQUEST_SETPOINT;
+          io.requestHeightMeters(requestedHeightMeters);
+        } else {
+          io.requestHeightMeters(inputs.leaderMotorheightMeters);
         }
-        break;
-      case REQUEST_SETPOINT:
-        io.requestHeight(requestedHeightMeters);
-        if (atSetpoint()) {
-          state = ElevatorStates.WAIT_FOR_ARM;
+        if ((RobotContainer.getSuperstructure().getState() == Superstates.PRESCORE_CORAL)
+            || (RobotContainer.getSuperstructure().getState() == Superstates.ALGAE_SCORE)) {
+          io.requestSlowHeightMeters(requestedHeightMeters);
+        } else {
+          io.requestHeightMeters(requestedHeightMeters);
         }
         break;
     }
@@ -88,9 +91,6 @@ public class Elevator extends SubsystemBase {
     // requestElevator = true;
     // requestElevator = true;
     switch (level) {
-      case L1:
-        requestedHeightMeters = Constants.Elevator.algaeReefL1HeightMeters;
-        break;
       case L2:
         requestedHeightMeters = Constants.Elevator.algaeReefL2HeightMeters;
         break;
@@ -103,7 +103,7 @@ public class Elevator extends SubsystemBase {
   public void scoreAlgae() {
     // equestElevator = true;
     // equestElevator = true;
-    requestedHeightMeters = Constants.Elevator.maxElevatorSafeHeightMeters;
+    requestedHeightMeters = Constants.Elevator.scoreAlgaeHeightMeters;
   }
 
   public void prescoreCoral(Level level) {
@@ -157,7 +157,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getElevatorHeightMeters() {
-    return inputs.heightMeters;
+    return inputs.leaderMotorheightMeters;
   }
 
   public void setHomePosition() {

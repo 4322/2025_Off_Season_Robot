@@ -11,6 +11,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -52,7 +53,9 @@ public class ArmIONitrate implements ArmIO {
         .getFeedbackSensorSettings()
         .setFeedbackSensor(
             new FeedbackSensor.CanandmagRelative(
-                Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft));
+                Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft))
+        .setSensorToMechanismRatio(Constants.Arm.sensorToArm);
+
     armConfig
         .setPIDSettings(armPIDSettings, PIDConfigSlot.kSlot0)
         .getPIDSettings(PIDConfigSlot.kSlot0);

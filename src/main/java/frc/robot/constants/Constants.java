@@ -74,13 +74,6 @@ public static final boolean visionObjectDetectionEnabled = false;
     public static final double wheelCOF = 1.2;
   }
 
-  public static class Scoring {
-    public static final double scoringL1AngleDegCoral = 0.0;
-    public static final double scoringL2AngleDegCoral = 17.5; // TODO: Set to actual angle
-    public static final double scoringL3AngleDegCoral = 39.2; // TODO: Set to actual angle
-    public static final double scoringL4AngleDegCoral = 37.2; // TODO: Set to actual angle
-  }
-
   public static class Arm {
     public static final int armMotorId = 0; // TODO: Set to actual motor ID
     public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
@@ -115,13 +108,14 @@ public static final boolean visionObjectDetectionEnabled = false;
     public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20;
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 40;
 
-    public static final double prescoringL1CoralDeg = 70;
-    public static final double prescoringL2CoralDeg = 110;
-    public static final double prescoringL3CoralDeg = 100;
-    public static final double prescoringL4CoralDeg = 120;
-    public static final double scoringAlgaeDeg = 70; // TODO: Set to actual angle
+    // Prescore Degrees Arm
+    public static final double prescoringL1CoralDeg = 60;
+    public static final double prescoringL2CoralDeg = 135.006848;
+    public static final double prescoringL3CoralDeg = 148.644524;
+    public static final double prescoringL4CoralDeg = 180;
+    public static final double scoringAlgaeDeg = 139.326425; // TODO: Set to actual angle
 
-    public static final double descoringAlgaeDeg = 90;
+    public static final double descoringAlgaeDeg = 81.946341;
     public static final double safeBargeRetractAngleDeg = 180;
     // To the encoder 0 is horizontal but to us its straight down
     public static final double armOffsetEncoderDeg = -90;
@@ -130,8 +124,8 @@ public static final boolean visionObjectDetectionEnabled = false;
     public static final double armkI = 0;
     public static final double armkD = 0;
 
-    public static final double AccelerationLimit = .68; // TODO
-    public static final double DeaccelerationLimit = .68;
+    public static final double AccelerationLimit = 0.68; // TODO
+    public static final double DeaccelerationLimit = 0.68;
     public static final double VelocityLimit = 1.7;
     public static final double slowVelocityLimit = 0.6;
   }
@@ -140,7 +134,8 @@ public static final boolean visionObjectDetectionEnabled = false;
     public static final int leftMotorID = 0; // TODO: Set to actual motor ID
     public static final int rightMotorID = 0; // TODO: Set to actual encoder ID
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorInvert = InvertMode.kNotInverted;
+    public static final InvertMode motorLeftInvert = InvertMode.kNotInverted;
+    public static final InvertMode motorRightInvert = InvertMode.kInverted;
     public static final double kP0 = 0; // TODO: Set to actual value
     public static final double kI0 = 1; // TODO: Set to actual value
     public static final double kD0 = 0; // TODO: Set to actual value
@@ -151,41 +146,41 @@ public static final boolean visionObjectDetectionEnabled = false;
     public static final double elevatorHeightToleranceMeters = 0.01;
     public static final double algaeHoldMeters = 0.1; // need actual values
     public static final double algaeGroundHeightMeters = 0.3; // need actual values
-    public static final double algaeReefL1HeightMeters = 0.25; // TODO: Set to actual position
-    public static final double algaeReefL2HeightMeters = 0.45; // TODO: Set to actual position
-    public static final double algaeReefL3HeightMeters = 0.65; // TODO: Set to actual position
+    public static final double algaeReefL2HeightMeters =
+        0.5021688204; // TODO: Set to actual position
+    public static final double algaeReefL3HeightMeters =
+        0.8739758746; // TODO: Set to actual position
     public static final double prescoreCoralL1HeightMeters = 0.85; // TODO: Set to actual position
-    public static final double prescoreCoralL2HeightMeters = 1.05; // TODO: Set to actual position
-    public static final double prescoreCoralL3HeightMeters = 0.75; // TODO: Set to actual position
-    public static final double prescoreCoralL4HeightMeters = 0.95; // TODO: Set to actual position
+    public static final double prescoreCoralL2HeightMeters = 0.0; // TODO: Set to actual position
+    public static final double prescoreCoralL3HeightMeters =
+        0.2303808194; // TODO: Set to actual position
+    public static final double prescoreCoralL4HeightMeters =
+        0.8427878242; // TODO: Set to actual position
     public static final double pickupCoralHeightMeters = 0.5; // TODO: Set to actual position
     public static final double initializationTimerThresholdSecs = 0.01; //
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01; //
     public static final double ejectSafeHeightMeters = 0.01; //
-    public static final double safeBargeRetractHeightMeters = 0.01;
+    public static final double safeBargeRetractHeightMeters = 0.773472037;
+    public static final double safeBargeRetractWithAlgaeHeightMeters = 0.3321799808;
+
     public static final double supplyCurrentLimitAmps = 0.1;
     public static final double statorCurrentLimitAmps = 0.1;
     public static final double kG = 0;
     public static final double AccelerationLimit = 10;
     public static final double DeaccelerationLimit = 10;
     public static final double VelocityLimit = 10;
-    public static final double minElevatorSafeHeightMeters = 1.0;
+    public static final double minElevatorSafeHeightMeters = 0.3917895136;
     public static final double homeHeightMeters =
         0.5; // resting on pickup bracket TODO: Set to actual position
-    public static final double maxHeightMeters =
-        1.0; // top of physical travel TODO: Set to actual position
 
-    public static final double scoringL1CoralMeters = 0.1;
-    public static final double scoringL2CoralMeters = 0.2;
-    public static final double scoringL3CoralMeters = 0.3;
-    public static final double scoringL4CoralMeters = 0.4;
     public static final double gearRatio = 6 / 1;
     public static final double setpointToleranceDegrees = 0.01;
-    public static final double maxElevatorSafeHeightMeters = 0.8; // need actual values
+    public static final double maxElevatorHeightMeters = 1.3068401092; // need actual values
     public static final double scoreCoralL1HeightMeters = 0.3; // TODO: Set to actual position
     public static final double scoreCoralL2HeightMeters = 0.5; // TODO: Set to actual position
     public static final double scoreCoralL3HeightMeters = 0.7; // TODO: Set to actual position
     public static final double scoreCoralL4HeightMeters = 0.9; // TODO: Set to actual position
+    public static final double scoreAlgaeHeightMeters = maxElevatorHeightMeters - 0.00635;
   }
 
   // TODO all of these are placeholder values
@@ -205,9 +200,9 @@ public static final boolean visionObjectDetectionEnabled = false;
 
     public static final double ejectVolts = -3.0;
 
-    public static final double motorBusCurrentLimit = 0;
-    public static final double motorBusCurrentLimitTime = 0;
-    public static final double motorStatorCurrentLimit = 0;
+    public static final double motorBusCurrentLimit = 40;
+    public static final double motorBusCurrentLimitTime = 40;
+    public static final double motorStatorCurrentLimit = 60;
 
     public static final double sensorCoralProximityThreshold = 0;
     public static final double sensorAlgaeProximityThreshold = 0;
@@ -249,9 +244,9 @@ public static final boolean visionObjectDetectionEnabled = false;
     public static final int deployerMotorId = 1;
     public static final double deployVoltage = 3.0;
 
-    public static final double motorStatorCurrentLimit = 0;
-    public static final double motorBusCurrentLimitTime = 0;
-    public static final double motorBusCurrentLimit = 0;
+    public static final double motorStatorCurrentLimit = 40;
+    public static final double motorBusCurrentLimitTime = 40;
+    public static final double motorBusCurrentLimit = 60;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvertMode = null;
     public static final HardLimitConfig motorForwardHardLimit = null;
@@ -275,9 +270,9 @@ public static final boolean visionObjectDetectionEnabled = false;
 
   public static class Indexer {
     public static final int indexerMotorId = 2;
-    public static final double motorBusCurrentLimit = 0;
-    public static final double motorBusCurrentLimitTime = 0;
-    public static final double motorStatorCurrentLimit = 0;
+    public static final double motorBusCurrentLimit = 40;
+    public static final double motorBusCurrentLimitTime = 0.5;
+    public static final double motorStatorCurrentLimit = 60;
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
     public static final InvertMode motorInvert = null;
     public static final double indexerSensorMax = 0;
@@ -293,9 +288,9 @@ public static final boolean visionObjectDetectionEnabled = false;
   public static class Rollers {
     public static final int rollersMotorId = 0;
 
-    public static final double motorBusCurrentLimitTime = 0;
-    public static final double motorStatorCurrentLimit = 0;
-    public static final double motorBusCurrentLimit = 0;
+    public static final double motorBusCurrentLimitTime = 0.5;
+    public static final double motorStatorCurrentLimit = 60;
+    public static final double motorBusCurrentLimit = 40;
 
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
     public static final InvertMode motorInvert = null;

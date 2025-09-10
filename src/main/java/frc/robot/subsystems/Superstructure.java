@@ -17,6 +17,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
+  private boolean requestIdle = false;
   private boolean requestHomed = false;
   private boolean cancelEject = false;
   private boolean requestEject = false;
@@ -281,6 +282,7 @@ public class Superstructure extends SubsystemBase {
   private void unsetAllRequests() {
     // don't clear requestHomed since it must be processed
     requestEject = false;
+    requestIdle = false;
     requestAlgaeScore = false;
     requestIntakeAlgaeFloor = false;
     requestDescoreAlgae = false;
@@ -308,24 +310,19 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
+  public void requestIdle() {
+    unsetAllRequests();
+    requestIdle = true;
+  }
+
   public void requestEject() {
     unsetAllRequests();
     requestEject = true;
   }
 
-  public void cancelEject() {
-    unsetAllRequests();
-    requestEject = false;
-  }
-
   public void requestAlgaePrescore() {
     unsetAllRequests();
     requestAlgaePrescore = true;
-  }
-
-  public void cancelAlgaePrescore() {
-    unsetAllRequests();
-    requestAlgaePrescore = false;
   }
 
   public void requestAlgaeScore() {
@@ -338,11 +335,6 @@ public class Superstructure extends SubsystemBase {
     requestIntakeAlgaeFloor = true;
   }
 
-  public void cancelIntakeAlgaeFloor() {
-    unsetAllRequests();
-    requestIntakeAlgaeFloor = false;
-  }
-
   public void requestIntakeAlgaeReef(Level level) {
     unsetAllRequests();
     requestIntakeAlgaeFloor = true;
@@ -351,11 +343,6 @@ public class Superstructure extends SubsystemBase {
   public void requestDescoreAlgae(Level level) {
     unsetAllRequests();
     requestDescoreAlgae = true;
-  }
-
-  public void cancelDescoreAlgae() {
-    unsetAllRequests();
-    requestDescoreAlgae = false;
   }
 
   public void requestEndEffectorCoralPickup() {
@@ -371,11 +358,6 @@ public class Superstructure extends SubsystemBase {
   public void requestPrescoreCoral(Level coralLevel) {
     unsetAllRequests();
     requestPrescoreCoral = true;
-  }
-
-  public void cancelPrescoreCoral() {
-    unsetAllRequests();
-    requestPrescoreCoral = false;
   }
 
   public void requestScoreCoral(Level coralLevel) {
