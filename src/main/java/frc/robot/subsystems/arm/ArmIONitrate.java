@@ -86,9 +86,9 @@ public class ArmIONitrate implements ArmIO {
   @Override
   public void updateInputs(ArmIOInputs armInputs) {
     armInputs.armPositionDegrees =
-        Units.rotationsToDegrees(armMotor.getPosition() - Constants.Arm.armOffsetEncoderDeg);
+        Units.rotationsToDegrees(armMotor.getPosition()) - Constants.Arm.armOffsetEncoderDeg;
     armInputs.armConnected = armMotor.isConnected();
-    armInputs.velocity = armMotor.getVelocity();
+    armInputs.velocity = Units.rotationsToDegrees(armMotor.getVelocity());
     armInputs.armSupplyCurrentAmps = armMotor.getBusCurrent();
     armInputs.armStatorCurrentAmps = armMotor.getStatorCurrent();
     armInputs.armTempCelsius = armMotor.getMotorTemperatureFrame().getData();
@@ -105,14 +105,14 @@ public class ArmIONitrate implements ArmIO {
   public void requestPosition(double requestSetpoint) {
     armMotor.setRequest(
         armPIDPositionRequest.setPosition(
-            Constants.Arm.armOffsetEncoderDeg + Units.degreesToRotations(requestSetpoint)));
+            Units.degreesToRotations(requestSetpoint + Constants.Arm.armOffsetEncoderDeg)));
   }
 
   @Override
   public void requestSlowPosition(double requestSetpoint) {
     armMotor.setRequest(
         armSlowPIDPositionRequest.setPosition(
-            Constants.Arm.armOffsetEncoderDeg + Units.degreesToRotations(requestSetpoint)));
+            Units.degreesToRotations(requestSetpoint + Constants.Arm.armOffsetEncoderDeg)));
   }
 
   @Override
