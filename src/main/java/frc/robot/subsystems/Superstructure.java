@@ -32,6 +32,7 @@ public class Superstructure extends SubsystemBase {
   private boolean requestPreClimb = false;
   private boolean requestClimb = false;
   private boolean requestswitchOperationMode = false;
+  public boolean isSlow = false;
 
   public enum Superstates {
     UNHOMED,
@@ -61,15 +62,13 @@ public class Superstructure extends SubsystemBase {
   Level level = Level.L1;
 
   public static enum OperationMode {
-    Auto,
-    Manual,
+    AUTO,
+    MANUAL,
   }
 
-  OperationMode mode = OperationMode.Auto;
+  OperationMode mode = OperationMode.AUTO;
 
   Superstates state = Superstates.UNHOMED;
-  Superstates prevState = Superstates.UNHOMED;
-  Superstates savedState = Superstates.UNHOMED;
 
   private EndEffector endEffector;
   private Arm arm;
@@ -244,9 +243,12 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case SCORE_CORAL:
-        arm.scoreCoral(level);
-        elevator.scoreCoral(level);
-        endEffector.releaseCoral();
+        isSlow = true;
+        if (isSlow) { // Safety Check for race case
+          arm.scoreCoral(level);
+          elevator.scoreCoral(level);
+          endEffector.releaseCoral();
+        }
 
         if (!endEffector.hasCoral()) {
           state = Superstates.IDLE;
@@ -259,11 +261,15 @@ public class Superstructure extends SubsystemBase {
         arm.safeBargeRetract();
         elevator.safeBargeRetract();
 
-        if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
-          state = Superstates.IDLE;
-        } else if (endEffector.hasAlgae()) {
-          state = Superstates.ALGAE_IDLE;
+        if (arm.atSetpoint() && elevator.atSetpoint()) {
+
+          if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
+            state = Superstates.IDLE;
+          } else if (endEffector.hasAlgae()) {
+            state = Superstates.ALGAE_IDLE;
+          }
         }
+
         break;
       case PRECLIMB:
 
@@ -299,7 +305,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public boolean isAutoOperationMode() {
-    if (mode == OperationMode.Auto) {
+    if (mode == OperationMode.AUTO) {
       return true;
     } else {
       return false;
@@ -394,10 +400,6 @@ public class Superstructure extends SubsystemBase {
 
   public Superstates getState() {
     return state;
-  }
-
-  public Superstates getPrevState() {
-    return prevState;
   }
 
   public void getReefStatus() {

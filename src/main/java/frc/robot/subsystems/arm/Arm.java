@@ -20,6 +20,8 @@ public class Arm extends SubsystemBase {
   public double prevSetpoint = -1000;
   public double newSetpoint;
   public double elevatorHeight;
+  private ScoreCoral scoreCoralCommand;
+  private Superstructure superstructure;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -56,7 +58,7 @@ public class Arm extends SubsystemBase {
     }
 
     if (prevSetpoint != newSetpoint) {
-      if (superstructure.getState() == Superstructure.Superstates.PRESCORE_CORAL) {
+      if (superstructure.isSlow) {
         io.requestSlowPosition(newSetpoint);
         prevSetpoint = newSetpoint;
       } else {
