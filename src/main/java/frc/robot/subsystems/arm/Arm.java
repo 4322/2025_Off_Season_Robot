@@ -48,9 +48,9 @@ public class Arm extends SubsystemBase {
         && requestedSetpoint < Constants.Arm.safeBargeRetractAngleDeg) {
       newSetpoint = inputs.armPositionDegrees;
     } // Holds position if trying to go into a dangerous position
-    else if (RobotContainer.getSuperstructure().getElevatorHeight() > safesquishHeight
+    else if (RobotContainer.getSuperstructure().getElevatorHeight() < safesquishHeight
         && requestedSetpoint == Constants.Arm.scoringAlgaeDeg) {
-      newSetpoint = requestedSetpoint;
+      newSetpoint = inputs.armPositionDegrees;
 
     } else {
       newSetpoint = requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
