@@ -68,7 +68,7 @@ public final class Constants {
     public static final double rotkD = 0.0;
 
     public static final double robotMassKg = 74.088; // TODO: Weigh robot
-    public static final double robotMOI = 6.883; // TODO: Use CAD
+    public static final double robotMOI = ; // TODO: Use CAD
     public static final double wheelCOF = 1.2;
   }
 
@@ -77,21 +77,21 @@ public final class Constants {
     public static final int armMotorId = 0; // TODO: Set to actual motor ID
     public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
 
-    public static final double sensorToArm = 85 / 10; // TODO: Set to actual gear ratio
-    public static final double motorShaftToSensorShaft = 56 / 16; // TODO: Set to actual gear ratio
+    public static final double sensorToArm = 85 / 10;
+    public static final double motorShaftToSensorShaft = 56 / 16; 
 
     public static final double armIdleDeg = 0.0;
-    public static final double algaeHoldDeg = 180.0; // TODO: Set to actual angle
-    public static final double coralHoldDeg = 150.0; // TODO: Set to actual angle
+    public static final double algaeHoldDeg = 180.0;
+    public static final double coralHoldDeg = 0.0; 
     public static final double algaeGroundDeg = 35.0; // TODO: Set to actual angle
     public static final double safeBargeRetractDeg = 100.0; // TODO: Set to actual angle
 
-    public static final double ejectDeg = 45.0; // TODO: Set to actual angle
-    public static final double climbingDeg = 25.0;
+    public static final double ejectDeg = 45.0; 
+    public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
     // The purpose of
-    public static final double minArmSafeDeg = 45.0;
-    public static final double minArmSafeWithCoralDeg = 50.0;
+    public static final double minArmSafeDeg = 45.0; //TODO: Set to actual angle
+    public static final double minArmSafeWithCoralDeg = 50.0;//TODO: Set to actual angle
     public static final double maxArmSafeAngle = 245.0;
 
     public static final double setpointToleranceDegrees = 0.01;
@@ -102,10 +102,10 @@ public final class Constants {
     public static final ElectricalLimitSettings armElectricalLimitSettings =
         new ElectricalLimitSettings();
 
-    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 40;
-    public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20;
-    public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20;
-    public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 40;
+    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 40;//TODO
+    public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20;//TODO
+    public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20;//TODO
+    public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 40;//TODO
 
     // Prescore Degrees Arm
     public static final double prescoringL1CoralDeg = 50.686373;
@@ -125,9 +125,9 @@ public final class Constants {
     public static final double armkD = 0;
 
     public static final double AccelerationLimit = 0.68; // TODO
-    public static final double DeaccelerationLimit = 0.68;
-    public static final double VelocityLimit = 1.7;
-    public static final double slowVelocityLimit = 0.6;
+    public static final double DeaccelerationLimit = 0.68; //TODO
+    public static final double VelocityLimit = 1.7; //TODO
+    public static final double slowVelocityLimit = 0.6;//TODO
   }
 
   public static class Elevator {
