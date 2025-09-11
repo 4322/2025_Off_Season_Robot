@@ -70,8 +70,6 @@ public class Superstructure extends SubsystemBase {
   OperationMode mode = OperationMode.Auto;
 
   Superstates state = Superstates.UNHOMED;
-  Superstates prevState = Superstates.UNHOMED;
-  Superstates savedState = Superstates.UNHOMED;
 
   private EndEffector endEffector;
   private Arm arm;
@@ -404,10 +402,6 @@ public class Superstructure extends SubsystemBase {
 
   public Superstates getState() {
     return state;
-  }
-
-  public Superstates getPrevState() {
-    return prevState;
   }
 
   public void getReefStatus() {

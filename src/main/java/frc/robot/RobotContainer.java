@@ -211,9 +211,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestIntakeAlgaeFloor();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    if (!superstructure.isAutoOperationMode()){
-                    superstructure.requestPrescoreCoral(Level.L1);
-                    }//Else put in command
+                    level = Level.L1;
                   }
                 }));
     driver
@@ -224,9 +222,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestDescoreAlgae(Level.L2);
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    if (!superstructure.isAutoOperationMode()){
-                    superstructure.requestPrescoreCoral(Level.L2);
-                    }//Else put in command
+                      level = Level.L2;
                   }
                 }));
     driver
@@ -235,11 +231,9 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    superstructure.requestDescoreAlgae(Level.L3);
+                    superstructure.requestDescoreAlgae(Level.L3); //TODO DELETE
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    if (!superstructure.isAutoOperationMode()){
-                      superstructure.requestPrescoreCoral(Level.L3);
-                      }//Else put in command
+                      level = Level.L3;
                     }
                 }));
     driver
@@ -250,9 +244,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestAlgaePrescore();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    if (!superstructure.isAutoOperationMode()){
-                      superstructure.requestPrescoreCoral(Level.L4);
-                      }//Else put in command
+                      level = Level.L4;
                     }
                 }));
     driver.rightTrigger()
