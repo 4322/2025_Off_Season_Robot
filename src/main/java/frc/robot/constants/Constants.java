@@ -73,6 +73,7 @@ public final class Constants {
   }
 
   public static class Arm {
+    public static final InvertMode ArmMotorInvert = InvertMode.kInverted;
     public static final int armMotorId = 0; // TODO: Set to actual motor ID
     public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
 
@@ -221,7 +222,7 @@ public final class Constants {
     public static final double sensorWhiteDetectRed = 180;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert =
-        InvertMode.kNotInverted; // InvertMode.kInverted or InvertMode.kNotInverted
+        InvertMode.kNotInverted;
 
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
@@ -258,7 +259,7 @@ public final class Constants {
     public static final double motorRetractkI = 0;
     public static final double motorRetractkD = 0;
     public static final int deployerMotorEncoderId = 0;
-    public static final boolean motorEncoderInverted = false; // TODO maybe change this?
+    public static final InvertMode motorEncoderInverted = InvertMode.kInverted; // TODO maybe change this?
     // 1 motor rotation is 1/49 of deployer rotation
     // Range of motion of deployer is about 0-140 degrees
     public static final double motorGearRatio = 14.58333333333;
@@ -269,11 +270,12 @@ public final class Constants {
 
   public static class Indexer {
     public static final int indexerMotorId = 2;
+    public static final int indexerMotorId2 = 2;
     public static final double motorBusCurrentLimit = 40;
     public static final double motorBusCurrentLimitTime = 0.5;
     public static final double motorStatorCurrentLimit = 60;
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
-    public static final InvertMode motorInvert = null;
+    public static final InvertMode motorInvert = InvertMode.kNotInverted;
     public static final double indexerSensorMax = 0;
     public static final double pickupAreaSensorMax = 0;
     public static final int indexerSensorId = 0;
