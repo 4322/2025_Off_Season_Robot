@@ -4,6 +4,7 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -75,8 +76,8 @@ public final class Constants {
     public static final int armMotorId = 0; // TODO: Set to actual motor ID
     public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
 
-    public static final double sensorToArm = 56 / 16; // TODO: Set to actual gear ratio
-    public static final double motorShaftToSensorShaft = 85 / 10; // TODO: Set to actual gear ratio
+    public static final double sensorToArm = 85 / 10; // TODO: Set to actual gear ratio
+    public static final double motorShaftToSensorShaft = 56 / 16; // TODO: Set to actual gear ratio
 
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0; // TODO: Set to actual angle
@@ -106,10 +107,10 @@ public final class Constants {
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 40;
 
     // Prescore Degrees Arm
-    public static final double prescoringL1CoralDeg = 60;
-    public static final double prescoringL2CoralDeg = 135.006848;
-    public static final double prescoringL3CoralDeg = 148.644524;
-    public static final double prescoringL4CoralDeg = 180;
+    public static final double prescoringL1CoralDeg = 50.686373;
+    public static final double prescoringL2CoralDeg = 130.751475;
+    public static final double prescoringL3CoralDeg = 125.970093;
+    public static final double prescoringL4CoralDeg = 121.294978;
     public static final double scoringAlgaeDeg = 139.326425; // TODO: Set to actual angle
 
     public static final double descoringAlgaeDeg = 81.946341;
