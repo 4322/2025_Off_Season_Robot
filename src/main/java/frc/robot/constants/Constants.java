@@ -258,7 +258,7 @@ public final class Constants {
     public static final double motorRetractkI = 0;
     public static final double motorRetractkD = 0;
     public static final int deployerMotorEncoderId = 0;
-    public static final InvertMode motorEncoderInverted = InvertMode.kInverted; // TODO maybe change this?
+    public static final InvertMode motorEncoderInverted = InvertMode.kInverted; 
     // 1 motor rotation is 1/49 of deployer rotation
     // Range of motion of deployer is about 0-140 degrees
     public static final double motorGearRatio = 14.58333333333;
