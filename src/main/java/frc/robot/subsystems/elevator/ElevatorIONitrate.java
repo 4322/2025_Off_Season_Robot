@@ -28,10 +28,8 @@ public class ElevatorIONitrate implements ElevatorIO {
     followerMotor = new Nitrate(Constants.Elevator.rightMotorID, MotorType.kCu60);
     // setup objects
     NitrateSettings leftElevatorMotorConfig = new NitrateSettings();
-    NitrateSettings rightElevatorMotorConfig = new NitrateSettings();
 
     OutputSettings leftElevatorMotorOutputSettings = new OutputSettings();
-    OutputSettings rightElevatorMotorOutputSettings = new OutputSettings();
 
     PIDSettings elevatorPIDSettings = new PIDSettings();
     elevatorPIDSettings.setPID(
@@ -53,33 +51,28 @@ public class ElevatorIONitrate implements ElevatorIO {
 
     ElectricalLimitSettings elevatorElectricalLimitSettings = new ElectricalLimitSettings();
     FollowMotorRequest followerRequest = new FollowMotorRequest(leaderMotor);
+    followerRequest.setInverted(true);
     // configs
 
     leftElevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
     leftElevatorMotorOutputSettings.setInvert(
         Constants.Elevator.motorLeftInvert); // make this leader motor
     // invert follower
-    rightElevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
-    rightElevatorMotorOutputSettings.setInvert(
-        Constants.Elevator.motorRightInvert); // make this follower motor
 
     leftElevatorMotorConfig.setOutputSettings(leftElevatorMotorOutputSettings);
-    rightElevatorMotorConfig.setOutputSettings(rightElevatorMotorOutputSettings);
 
     elevatorElectricalLimitSettings.setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps);
     elevatorElectricalLimitSettings.setStatorCurrentLimit(
         Constants.Elevator.statorCurrentLimitAmps);
 
     leftElevatorMotorConfig.setElectricalLimitSettings(elevatorElectricalLimitSettings);
-    rightElevatorMotorConfig.setElectricalLimitSettings(elevatorElectricalLimitSettings);
 
     leftElevatorMotorConfig.setPIDSettings(elevatorPIDSettings, PIDConfigSlot.kSlot0);
     leftElevatorMotorConfig.setPIDSettings(elevatorSlowPIDSettings, PIDConfigSlot.kSlot1);
-    rightElevatorMotorConfig.setPIDSettings(elevatorPIDSettings, PIDConfigSlot.kSlot0);
-    rightElevatorMotorConfig.setPIDSettings(elevatorSlowPIDSettings, PIDConfigSlot.kSlot1);
+
     NitrateSettings leaderConfigStatus = leaderMotor.setSettings(leftElevatorMotorConfig, 0.02, 5);
     NitrateSettings followerConfigStatus =
-        followerMotor.setSettings(rightElevatorMotorConfig, 0.02, 5);
+        followerMotor.setSettings(leftElevatorMotorConfig, 0.02, 5);
     followerMotor.setRequest(followerRequest);
     // get position is an internal encoder, so we need to set it
     // 6 to 1 gear ratio for elevator first stage

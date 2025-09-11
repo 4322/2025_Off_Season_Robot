@@ -16,6 +16,11 @@ public class Elevator extends SubsystemBase {
   ElevatorStates state = ElevatorStates.UNHOMED;
   ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   private double requestedHeightMeters = 0.0;
+  private double prevHeightMeters = 0.0;
+  private double newHeightMeters = 0.0;
+
+
+
 
   private enum ElevatorStates {
     UNHOMED,
@@ -51,26 +56,29 @@ public class Elevator extends SubsystemBase {
         }
       case ELEVATOR_MOVEMENT:
         if((getElevatorHeightMeters() >= Constants.Elevator.ejectSafeHeightMeters)
-        && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.maxArmSafeAngle)){
-          io.requestHeightMeters(requestedHeightMeters);
+        && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.ejectDeg)){
+          newHeightMeters = getElevatorHeightMeters();
         }
         else if((getElevatorHeightMeters() >= Constants.Elevator.safeBargeRetractHeightMeters)
-        && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.maxArmSafeAngle)){
-          io.requestHeightMeters(requestedHeightMeters);
+        && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.safeBargeRetractAngleDeg)){
+          newHeightMeters = getElevatorHeightMeters();
         }
-        else if (((RobotContainer.getSuperstructure().getArmAngle() >= Constants.Arm.minArmSafeDeg)
-                && (requestedHeightMeters <= Constants.Elevator.minElevatorSafeHeightMeters)
-            || (requestedHeightMeters > Constants.Elevator.minElevatorSafeHeightMeters))) {
-          io.requestHeightMeters(requestedHeightMeters);
-        } else {
-          io.requestHeightMeters(inputs.leaderMotorheightMeters);
+        else if (((RobotContainer.getSuperstructure().getArmAngle() <= Constants.Arm.minArmSafeDeg)
+                && (getElevatorHeightMeters() == Constants.Elevator.minElevatorSafeHeightMeters))) {
+          newHeightMeters = getElevatorHeightMeters();
+        }
+        else if((RobotContainer.getSuperstructure().getArmAngle() < Constants.Arm.minArmSafeDeg) && (getElevatorHeightMeters() < Constants.Elevator.minElevatorSafeHeightMeters)){
+          newHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
+        } 
+        else{
+          newHeightMeters = requestedHeightMeters;
         }
         if ((RobotContainer.getSuperstructure().getState() == Superstates.SCORE_CORAL)
             || (RobotContainer.getSuperstructure().getState() == Superstates.ALGAE_SCORE)) {
-          io.requestSlowHeightMeters(requestedHeightMeters);
+          io.requestSlowHeightMeters(newHeightMeters);
         } 
         else {
-          io.requestHeightMeters(requestedHeightMeters);
+          io.requestHeightMeters(newHeightMeters);
         }
         break;
         
