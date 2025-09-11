@@ -11,6 +11,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.FollowMotorRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 
@@ -24,8 +25,8 @@ public class ElevatorIONitrate implements ElevatorIO {
 
   public ElevatorIONitrate() {
     // Initialize leader and follower motors
-    leaderMotor = new Nitrate(Constants.Elevator.leftMotorID, MotorType.kCu60);
-    followerMotor = new Nitrate(Constants.Elevator.rightMotorID, MotorType.kCu60);
+    leaderMotor = new Nitrate(Constants.Elevator.rightMotorID, MotorType.kCu60);
+    followerMotor = new Nitrate(Constants.Elevator.leftMotorID, MotorType.kCu60);
     // setup objects
     NitrateSettings leftElevatorMotorConfig = new NitrateSettings();
     NitrateSettings rightElevatorMotorConfig = new NitrateSettings();

@@ -115,6 +115,7 @@ public final class Constants {
 
     public static final double descoringAlgaeDeg = 81.946341;
     public static final double safeBargeRetractAngleDeg = 180;
+
     // To the encoder 0 is horizontal but to us its straight down
     public static final double armOffsetEncoderDeg = -90;
 
@@ -153,7 +154,7 @@ public final class Constants {
     public static final double prescoreCoralL3HeightMeters =
         0.2303808194; // TODO: Set to actual position
     public static final double prescoreCoralL4HeightMeters =
-        0.8427878242; // TODO: Set to actual position
+    Constants.Elevator.maxElevatorHeightMeters; // TODO: Set to actual position
     public static final double pickupCoralHeightMeters = 0.5; // TODO: Set to actual position
     public static final double initializationTimerThresholdSecs = 0.01; //
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01; //
@@ -260,10 +261,10 @@ public final class Constants {
     public static final boolean motorEncoderInverted = false; // TODO maybe change this?
     // 1 motor rotation is 1/49 of deployer rotation
     // Range of motion of deployer is about 0-140 degrees
-    public static final double motorGearRatio = 49;
-    public static final double ejectPositionRotations = Units.degreesToRotations(30);
-    public static final double retractPositionRotations = Units.degreesToRotations(10);
-    public static final double deployPositionRotations = Units.degreesToRotations(140);
+    public static final double motorGearRatio = 14.58333333333;
+    public static final double ejectPositionRotations = Units.degreesToRotations(94.931222);
+    public static final double retractPositionRotations = Units.degreesToRotations(4.931222);
+    public static final double deployPositionRotations = Units.degreesToRotations(145.353984);
   }
 
   public static class Indexer {
