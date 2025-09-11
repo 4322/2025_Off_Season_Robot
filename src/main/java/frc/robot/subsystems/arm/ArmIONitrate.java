@@ -34,7 +34,7 @@ public class ArmIONitrate implements ArmIO {
 
     PIDSettings armPIDSettings = new PIDSettings();
     armPIDSettings.setPID(Constants.Arm.armkP, Constants.Arm.armkI, Constants.Arm.armkD);
-    armPIDSettings.setGravitationalFeedforward(Constants.Arm.armFeedforward);
+    armPIDSettings.setGravitationalFeedforward(Constants.Arm.kg);
     armPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
     armPIDSettings.setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit);
     armPIDSettings.setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit);
@@ -42,7 +42,7 @@ public class ArmIONitrate implements ArmIO {
 
     PIDSettings armSlowPIDSettings = new PIDSettings();
     armSlowPIDSettings.setPID(Constants.Arm.armkP, Constants.Arm.armkI, Constants.Arm.armkD);
-    armSlowPIDSettings.setGravitationalFeedforward(Constants.Arm.armFeedforward);
+    armSlowPIDSettings.setGravitationalFeedforward(Constants.Arm.kg);
     armSlowPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
     armSlowPIDSettings.setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit);
     armSlowPIDSettings.setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit);

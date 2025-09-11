@@ -60,7 +60,7 @@ public class Elevator extends SubsystemBase {
           newHeightMeters = getElevatorHeightMeters();
         }
         else if((getElevatorHeightMeters() >= Constants.Elevator.safeBargeRetractHeightMeters)
-        && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.safeBargeRetractAngleDeg)){
+        && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.safeBargeRetractDeg)){
           newHeightMeters = getElevatorHeightMeters();
         }
         else if (((RobotContainer.getSuperstructure().getArmAngle() <= Constants.Arm.minArmSafeDeg)

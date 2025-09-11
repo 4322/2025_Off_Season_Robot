@@ -44,7 +44,7 @@ public class Arm extends SubsystemBase {
         && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters) {
       newSetpoint = minSafeArmDegree;
     } else if (maxElevatorSafeMeters > elevatorHeight
-        && requestedSetpoint < Constants.Arm.safeBargeRetractAngleDeg) {
+        && requestedSetpoint < Constants.Arm.safeBargeRetractDeg) {
       newSetpoint = inputs.armPositionDegrees;
     } // Holds position if trying to go into a dangerous position
     else if (RobotContainer.getSuperstructure().getElevatorHeight() < Constants.Elevator.safeBargeRetractWithAlgaeHeightMeters
@@ -134,7 +134,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void safeBargeRetract() {
-    requestedSetpoint = Constants.Arm.safeBargeRetractAngleDeg;
+    requestedSetpoint = Constants.Arm.safeBargeRetractDeg;
   }
 
   public void setNeutralMode(IdleMode mode) {

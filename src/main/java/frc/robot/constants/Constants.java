@@ -6,7 +6,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -85,47 +84,46 @@ public final class Constants {
     public static final double algaeHoldDeg = 180.0;
     public static final double coralHoldDeg = 0.0; 
     public static final double algaeGroundDeg = 35.0; // TODO: Set to actual angle
-    public static final double safeBargeRetractDeg = 100.0; // TODO: Set to actual angle
-
+   
     public static final double ejectDeg = 45.0; 
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
     // The purpose of
     public static final double minArmSafeDeg = 45.0; //TODO: Set to actual angle
     public static final double minArmSafeWithCoralDeg = 50.0;//TODO: Set to actual angle
-    public static final double maxArmSafeAngle = 245.0;
+    public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = 0.01;
-    public static final double supplyCurrentLimit = 40; // TODO
-    public static final double statorCurrentLimit = 100; // TODO
-    public static final double armFeedforward = 20;
+    public static final double supplyCurrentLimit = 40; 
+    public static final double statorCurrentLimit = 100; 
+    public static final double kg = 20;
 
     public static final ElectricalLimitSettings armElectricalLimitSettings =
         new ElectricalLimitSettings();
 
-    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 40;//TODO
+    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 10;//TODO
     public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20;//TODO
     public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20;//TODO
-    public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 40;//TODO
+    public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 30;//TODO
 
     // Prescore Degrees Arm
     public static final double prescoringL1CoralDeg = 50.686373;
     public static final double prescoringL2CoralDeg = 130.751475;
     public static final double prescoringL3CoralDeg = 125.970093;
     public static final double prescoringL4CoralDeg = 121.294978;
-    public static final double scoringAlgaeDeg = 139.326425; // TODO: Set to actual angle
+    public static final double scoringAlgaeDeg = 139.326425; 
 
     public static final double descoringAlgaeDeg = 81.946341;
-    public static final double safeBargeRetractAngleDeg = 180;
+    public static final double safeBargeRetractDeg = 180;
 
     // To the encoder 0 is horizontal but to us its straight down
     public static final double armOffsetEncoderDeg = -90;
 
-    public static final double armkP = 0;
+    public static final double armkP = 1;
     public static final double armkI = 0;
     public static final double armkD = 0;
 
-    public static final double AccelerationLimit = 0.68; // TODO
+    public static final double AccelerationLimit = 0.68; //TODO
     public static final double DeaccelerationLimit = 0.68; //TODO
     public static final double VelocityLimit = 1.7; //TODO
     public static final double slowVelocityLimit = 0.6;//TODO
@@ -137,8 +135,8 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorLeftInvert = InvertMode.kNotInverted;
     public static final InvertMode motorRightInvert = InvertMode.kInverted;
-    public static final double kP0 = 0; // TODO: Set to actual value
-    public static final double kI0 = 1; // TODO: Set to actual value
+    public static final double kP0 = 1; // TODO: Set to actual value
+    public static final double kI0 = 0; // TODO: Set to actual value
     public static final double kD0 = 0; // TODO: Set to actual value
     public static final double kP1 = 0; // TODO: Set to actual value
     public static final double kI1 = 1; // TODO: Set to actual value
@@ -178,7 +176,7 @@ public final class Constants {
     public static final double setpointToleranceDegrees = 0.01;
     public static final double maxElevatorHeightMeters = 1.3068401092; // need actual values
     public static final double scoreCoralL1HeightMeters = 0.3; // TODO: Set to actual position
-    public static final double scoreCoralL2HeightMeters = 0.5; // TODO: Set to actual position
+    public static final double scoreCoralL2HeightMeters = 0.5;
     public static final double scoreCoralL3HeightMeters = 0.7; // TODO: Set to actual position
     public static final double scoreCoralL4HeightMeters = 0.9; // TODO: Set to actual position
     public static final double scoreAlgaeHeightMeters = maxElevatorHeightMeters - 0.00635;
