@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,6 +10,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
+import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -63,11 +62,11 @@ public class Superstructure extends SubsystemBase {
   Level level = Level.L1;
 
   public static enum OperationMode {
-    Auto,
-    Manual,
+    AUTO,
+    MANUAL,
   }
 
-  OperationMode mode = OperationMode.Auto;
+  OperationMode mode = OperationMode.AUTO;
 
   Superstates state = Superstates.UNHOMED;
 
@@ -262,15 +261,14 @@ public class Superstructure extends SubsystemBase {
         arm.safeBargeRetract();
         elevator.safeBargeRetract();
 
-        if (arm.atSetpoint() && elevator.atSetpoint()){
+        if (arm.atSetpoint() && elevator.atSetpoint()) {
 
-        if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
-          state = Superstates.IDLE;
-        } else if (endEffector.hasAlgae()) {
-          state = Superstates.ALGAE_IDLE;
+          if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
+            state = Superstates.IDLE;
+          } else if (endEffector.hasAlgae()) {
+            state = Superstates.ALGAE_IDLE;
+          }
         }
-        
-      }
 
         break;
       case PRECLIMB:
@@ -307,7 +305,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public boolean isAutoOperationMode() {
-    if (mode == OperationMode.Auto) {
+    if (mode == OperationMode.AUTO) {
       return true;
     } else {
       return false;

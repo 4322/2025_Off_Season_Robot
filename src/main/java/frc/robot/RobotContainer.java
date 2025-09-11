@@ -1,5 +1,10 @@
 package frc.robot;
 
+import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
+import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -7,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveManual;
+import frc.robot.commands.SwitchOperationModeCommand;
 import frc.robot.constants.Constants;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
@@ -36,10 +42,6 @@ import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
-import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
-import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
@@ -52,6 +54,7 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
  */
 public class RobotContainer {
   public static CommandXboxController driver = new CommandXboxController(0);
+  public static XboxController test = new XboxController(1);
 
   private static Vision vision;
   private static Drive drive;
@@ -197,7 +200,7 @@ public class RobotContainer {
 
     driver
         .povUp()
-        .onTrue(
+        .whileTrue(
             new InstantCommand(
                 () -> {
                   superstructure.requestEject();
@@ -205,56 +208,70 @@ public class RobotContainer {
     // Prescore/Descore Levels
     driver
         .a()
-        .onTrue(
+        .whileTrue(
             new InstantCommand(
                 () -> {
+                  level = Level.L1;
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestIntakeAlgaeFloor();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    level = Level.L1;
+
                   }
                 }));
     driver
         .x()
-        .onTrue(
+        .whileTrue(
             new InstantCommand(
                 () -> {
+                  level = Level.L2;
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestDescoreAlgae(Level.L2);
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                      level = Level.L2;
+
                   }
                 }));
     driver
         .y()
-        .onTrue(
+        .whileTrue(
             new InstantCommand(
                 () -> {
+                  level = Level.L3;
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    superstructure.requestDescoreAlgae(Level.L3); //TODO DELETE
+                    superstructure.requestDescoreAlgae(Level.L3); // TODO DELETE
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                      level = Level.L3;
-                    }
+
+                  }
                 }));
     driver
         .b()
-        .onTrue(
+        .whileTrue(
             new InstantCommand(
                 () -> {
+                  level = Level.L4;
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestAlgaePrescore();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                      level = Level.L4;
-                    }
+
+                  }
                 }));
-    driver.rightTrigger()
-    .onTrue(
+    driver
+        .rightTrigger()
+        .onTrue(
             new InstantCommand(
                 () -> {
                   if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                      superstructure.requestScoreCoral(level);
-                    }
+                    superstructure.requestScoreCoral(level);
+                  }
                 }));
+    driver
+        .leftStick() // Figure out what to do with this because this is a tigger when we want it to
+        // be a button
+        .onTrue(
+            new InstantCommand(
+                    () -> {
+                      new SwitchOperationModeCommand(superstructure);
+                    })
+                .ignoringDisable(false));
   }
 
   public static Superstructure getSuperstructure() {

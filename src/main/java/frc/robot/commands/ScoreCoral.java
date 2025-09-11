@@ -1,7 +1,8 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import static frc.robot.RobotContainer.driver;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
 
 public class ScoreCoral extends Command {
@@ -9,14 +10,14 @@ public class ScoreCoral extends Command {
   private Superstructure.Level level;
   private Superstructure superstructure;
 
-  public ScoreCoral() {
+  public ScoreCoral(Superstructure superstructure) {
     this.superstructure = superstructure;
+
+    addRequirements(superstructure);
   }
 
   @Override
-  public void initialize() {
-    
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
@@ -24,9 +25,12 @@ public class ScoreCoral extends Command {
     if (driver.rightTrigger().getAsBoolean() && !superstructure.isAutoOperationMode()) {
       superstructure.requestScoreCoral(level);
     }
-    if (!(driver.a().getAsBoolean() || driver.x().getAsBoolean() || driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
+    if (!driver.a().getAsBoolean()
+        && !driver.x().getAsBoolean()
+        && !driver.y().getAsBoolean()
+        && !driver.b().getAsBoolean()) {
       cancel();
-      }
+    }
   }
 
   @Override
@@ -36,8 +40,11 @@ public class ScoreCoral extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    if (!(driver.a().getAsBoolean() || driver.x().getAsBoolean() || driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
-    superstructure.requestIdle();
+    if (!driver.a().getAsBoolean()
+        && !driver.x().getAsBoolean()
+        && !driver.y().getAsBoolean()
+        && !driver.b().getAsBoolean()) {
+      superstructure.requestIdle();
     }
   }
 }
