@@ -3,10 +3,9 @@ package frc.robot.subsystems.arm;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
-import frc.robot.commands.ScoreCoral;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
-import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
 
@@ -14,13 +13,14 @@ public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   public double minSafeArmDegree;
-  public double maxElevatorSafeMeters = Constants.Elevator.scoreCoralL4HeightMeters;
+  public double maxElevatorSafeMeters = Constants.Elevator.maxElevatorHeightMeters;
+  public double safesquishHeight;
+  public Superstructure superstructure;
 
   public double requestedSetpoint;
   public double prevSetpoint = -1000;
   public double newSetpoint;
   public double elevatorHeight;
-  private ScoreCoral scoreCoralCommand;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -40,38 +40,24 @@ public class Arm extends SubsystemBase {
 
     // Safety Logic
     // Checks the logic checking for if it is in a dangerous position
-
-    /* n
-      ||
-    nn||nn
-    |     |
-    (______)
-    */
-
     elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
     if (requestedSetpoint < minSafeArmDegree
-        && elevatorHeight
-            < Constants.Elevator
-                .minElevatorSafeHeightMeters) { // So if the requested setpoint is under the min
-      // safe angle and the elevator is too low the arm
-      // will go to min safe angle
+        && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters) {
       newSetpoint = minSafeArmDegree;
     } else if (maxElevatorSafeMeters > elevatorHeight
-        && requestedSetpoint
-            < Constants.Arm
-                .safeBargeRetractAngleDeg) { // If the elevator is too high and the requested
-      // setpoint is not the safe retract then it will stay
-      // in place
-      newSetpoint =
-          inputs.armPositionDegrees; // Makes it so it won't move in case the elevator also needs to
-      // move as well as button spamming
+        && requestedSetpoint < Constants.Arm.safeBargeRetractAngleDeg) {
+      newSetpoint = inputs.armPositionDegrees;
+    } // Holds position if trying to go into a dangerous position
+    else if (RobotContainer.getSuperstructure().getElevatorHeight() < safesquishHeight
+        && requestedSetpoint == Constants.Arm.scoringAlgaeDeg) {
+      newSetpoint = inputs.armPositionDegrees;
+
     } else {
       newSetpoint = requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
     }
 
     if (prevSetpoint != newSetpoint) {
-      if (!scoreCoralCommand.isFast
-          || RobotContainer.getSuperstructure().getState() == Superstates.SCORE_CORAL) {
+      if (superstructure.getState() == Superstructure.Superstates.PRESCORE_CORAL) {
         io.requestSlowPosition(newSetpoint);
         prevSetpoint = newSetpoint;
       } else {
