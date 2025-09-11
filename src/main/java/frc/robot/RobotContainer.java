@@ -1,10 +1,5 @@
 package frc.robot;
 
-import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
-import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,6 +36,10 @@ import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
+import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
+import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
@@ -58,6 +57,7 @@ public class RobotContainer {
   private static Drive drive;
   private static Arm arm; // IO for the arm subsystem, null if not enabled
   // Declare Arm variable
+  private Superstructure.Level level;
 
   private static EndEffector endEffector;
   private static Indexer indexer;
@@ -210,8 +210,10 @@ public class RobotContainer {
                 () -> {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestIntakeAlgaeFloor();
-                  } else if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                    if (!superstructure.isAutoOperationMode()){
                     superstructure.requestPrescoreCoral(Level.L1);
+                    }//Else put in command
                   }
                 }));
     driver
@@ -222,7 +224,9 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestDescoreAlgae(Level.L2);
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                    if (!superstructure.isAutoOperationMode()){
                     superstructure.requestPrescoreCoral(Level.L2);
+                    }//Else put in command
                   }
                 }));
     driver
@@ -233,8 +237,10 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestDescoreAlgae(Level.L3);
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    superstructure.requestPrescoreCoral(Level.L3);
-                  }
+                    if (!superstructure.isAutoOperationMode()){
+                      superstructure.requestPrescoreCoral(Level.L3);
+                      }//Else put in command
+                    }
                 }));
     driver
         .b()
@@ -244,8 +250,18 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestAlgaePrescore();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    superstructure.requestPrescoreCoral(Level.L4);
-                  }
+                    if (!superstructure.isAutoOperationMode()){
+                      superstructure.requestPrescoreCoral(Level.L4);
+                      }//Else put in command
+                    }
+                }));
+    driver.rightTrigger()
+    .onTrue(
+            new InstantCommand(
+                () -> {
+                  if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                      superstructure.requestScoreCoral(level);
+                    }
                 }));
   }
 

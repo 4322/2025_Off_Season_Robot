@@ -19,11 +19,7 @@ public class ScoreCoral extends Command {
 
   @Override
   public void execute() {
-
-    if (
-    /*It is at the right position */ true) {
-      superstructure.requestScoreCoral(level);
-    }
+    superstructure.requestScoreCoral(level);
   }
 
   @Override
