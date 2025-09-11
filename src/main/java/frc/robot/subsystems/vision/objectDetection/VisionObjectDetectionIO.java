@@ -4,11 +4,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import frc.robot.constants.Constants;
 import org.littletonrobotics.junction.AutoLog;
 
-public class VisionObjectDetectionIO {
-  protected VisionObjectDetectionIO() {}
-
-  protected void updateInputs(VisionObjectDetectionInputsAutoLogged inputs) {}
-
+public interface VisionObjectDetectionIO {
   @AutoLog
   public static class VisionObjectDetectionInputs {
     /**
@@ -26,4 +22,6 @@ public class VisionObjectDetectionIO {
 
     public double latestResultTimestamp = 0;
   }
+
+  public default void updateInputs(VisionObjectDetectionInputs inputs) {}
 }

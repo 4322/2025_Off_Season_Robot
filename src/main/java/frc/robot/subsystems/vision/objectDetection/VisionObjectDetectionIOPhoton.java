@@ -16,7 +16,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 
-public class VisionObjectDetectionIOPhoton extends VisionObjectDetectionIO {
+public class VisionObjectDetectionIOPhoton implements VisionObjectDetectionIO {
   private final PhotonCamera photonCamera;
 
   public VisionObjectDetectionIOPhoton() {
@@ -25,7 +25,7 @@ public class VisionObjectDetectionIOPhoton extends VisionObjectDetectionIO {
   }
 
   @Override
-  protected void updateInputs(VisionObjectDetectionInputsAutoLogged inputs) {
+  public void updateInputs(VisionObjectDetectionInputs inputs) {
     if (!photonCamera.isConnected()) {
       updateNoNewResultInputs(inputs);
       return;
@@ -45,14 +45,14 @@ public class VisionObjectDetectionIOPhoton extends VisionObjectDetectionIO {
     return unreadResults.isEmpty() ? null : unreadResults.get(unreadResults.size() - 1);
   }
 
-  private void updateNoNewResultInputs(VisionObjectDetectionInputsAutoLogged inputs) {
+  private void updateNoNewResultInputs(VisionObjectDetectionInputs inputs) {
     inputs.hasTarget = new boolean[Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES];
     inputs.visibleObjectRotations =
         new Rotation3d[Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES][0];
   }
 
   private void updateHasNewResultInputs(
-      VisionObjectDetectionInputsAutoLogged inputs, PhotonPipelineResult result) {
+      VisionObjectDetectionInputs inputs, PhotonPipelineResult result) {
     final List<Rotation3d>[] visibleObjectsRotations =
         new List[Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES];
     for (int i = 0; i < Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES; i++)

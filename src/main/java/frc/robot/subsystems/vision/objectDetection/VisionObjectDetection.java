@@ -10,8 +10,6 @@ import frc.robot.constants.Constants;
 import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants;
 import java.util.ArrayList;
 
-import javax.xml.crypto.dsig.Transform;
-
 // import frc.trigon.robot.RobotContainer;
 // import frc.trigon.robot.commands.commandfactories.CoralCollectionCommands;
 import org.littletonrobotics.junction.Logger;
@@ -23,9 +21,9 @@ import org.littletonrobotics.junction.Logger;
  * apriltags, most likely game pieces.
  */
 public class VisionObjectDetection extends SubsystemBase {
+  private final VisionObjectDetectionIO visionObjectDetectionIO;
   private final VisionObjectDetectionInputsAutoLogged visionObjectDetectionInputs =
       new VisionObjectDetectionInputsAutoLogged();
-  private final VisionObjectDetectionIO visionObjectDetectionIO;
   private final Transform3d robotCenterToCamera;
 
   public VisionObjectDetection(VisionObjectDetectionIO io, Transform3d robotCenterToCamera) {
