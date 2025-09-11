@@ -4,6 +4,7 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -130,11 +131,11 @@ public final class Constants {
   }
 
   public static class Elevator {
-    public static final int leftMotorID = 0; // TODO: Set to actual motor ID
-    public static final int rightMotorID = 0; // TODO: Set to actual encoder ID
+    public static final int frontMotorID = 0; // TODO: Set to actual motor ID
+    public static final int backMotorID = 0; // TODO: Set to actual encoder ID
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorLeftInvert = InvertMode.kNotInverted;
-    public static final InvertMode motorRightInvert = InvertMode.kInverted;
+    public static final InvertMode motorFrontInvert = InvertMode.kNotInverted;
+    public static final InvertMode motorBackInvert = InvertMode.kInverted;
     public static final double kP0 = 1; // TODO: Set to actual value
     public static final double kI0 = 0; // TODO: Set to actual value
     public static final double kD0 = 0; // TODO: Set to actual value
