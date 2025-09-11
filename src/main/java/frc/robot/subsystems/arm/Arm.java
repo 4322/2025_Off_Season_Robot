@@ -14,7 +14,6 @@ public class Arm extends SubsystemBase {
   public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   public double minSafeArmDegree;
   public double maxElevatorSafeMeters = Constants.Elevator.maxElevatorHeightMeters;
-  public double safesquishHeight;
   public Superstructure superstructure;
 
   public double requestedSetpoint;
@@ -48,7 +47,7 @@ public class Arm extends SubsystemBase {
         && requestedSetpoint < Constants.Arm.safeBargeRetractAngleDeg) {
       newSetpoint = inputs.armPositionDegrees;
     } // Holds position if trying to go into a dangerous position
-    else if (RobotContainer.getSuperstructure().getElevatorHeight() < safesquishHeight
+    else if (RobotContainer.getSuperstructure().getElevatorHeight() < Constants.Elevator.safeBargeRetractWithAlgaeHeightMeters
         && requestedSetpoint == Constants.Arm.scoringAlgaeDeg) {
       newSetpoint = inputs.armPositionDegrees;
 
