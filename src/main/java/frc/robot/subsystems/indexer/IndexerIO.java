@@ -7,12 +7,19 @@ public interface IndexerIO {
 
   @AutoLog
   public static class IndexerIOInputs {
-    public boolean indexerMotorConnected = false;
-    public double indexerMotorAppliedVoltage = 0.0;
-    public double indexerMotorBusCurrentAmps = 0.0;
-    public double indexerMotorStatorCurrentAmps = 0.0;
-    public double indexerMotorTempCelcius = 0.0;
-    public double indexerMotorSpeedRotationsPerSec = 0.0;
+    public boolean indexerMotorLeftConnected = false;
+    public double indexerMotorLeftAppliedVoltage = 0.0;
+    public double indexerMotorLeftBusCurrentAmps = 0.0;
+    public double indexerMotorLeftStatorCurrentAmps = 0.0;
+    public double indexerMotorLeftTempCelcius = 0.0;
+    public double indexerMotorLeftSpeedRotationsPerSec = 0.0;
+
+    public boolean indexerMotorRightConnected = false;
+    public double indexerMotorRightAppliedVoltage = 0.0;
+    public double indexerMotorRightBusCurrentAmps = 0.0;
+    public double indexerMotorRightStatorCurrentAmps = 0.0;
+    public double indexerMotorRightTempCelcius = 0.0;
+    public double indexerMotorRightSpeedRotationsPerSec = 0.0;
 
     public boolean indexerSensorConnected = false;
     public boolean indexerSensorTriggered = false;
@@ -25,7 +32,7 @@ public interface IndexerIO {
 
   public default void updateInputs(IndexerIOInputs inputs) {}
 
-  public default void setIndexerMotorVoltage(double voltage) {}
+  public default void setIndexerMotorsVoltage(double voltage) {}
 
   public default void stopIndexerMotor(IdleMode mode) {}
 }
