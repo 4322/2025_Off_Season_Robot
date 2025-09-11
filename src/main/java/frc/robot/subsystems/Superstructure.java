@@ -400,16 +400,6 @@ public class Superstructure extends SubsystemBase {
     return state;
   }
 
-  public static Pose2d getVisionPoseEstimate2d() {
-    // TODO get vision pose estimate from vision and return it here
-    return new Pose2d();
-  }
-
-  public static Pose2d getVisionPoseEstimate2dAtTimestamp(double timestamp) {
-    // TODO get vision pose estimate from vision and return it here
-    return new Pose2d();
-  }
-
   public Superstates getPrevState() {
     return prevState;
   }
