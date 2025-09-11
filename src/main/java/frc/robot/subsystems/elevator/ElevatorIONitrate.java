@@ -108,6 +108,9 @@ public class ElevatorIONitrate implements ElevatorIO {
     inputs.followerElevatorMotorConnected = followerMotor.isConnected();
 
     inputs.leaderMotorheightMeters = leaderMotor.getPosition();
+    inputs.followerMotorheightMeters = followerMotor.getPosition();
+    
+    inputs.followerMotorVelocityMetersSecond = followerMotor.getVelocity();
     inputs.leaderMotorVelocityMetersSecond = leaderMotor.getVelocity();
 
     inputs.leaderMotorSupplyCurrentAmps = leaderMotor.getBusCurrent();
@@ -143,7 +146,6 @@ public class ElevatorIONitrate implements ElevatorIO {
   @Override
   public void setNeutralMode(IdleMode idleMode) {
     leaderMotor.stop(idleMode);
-    followerMotor.stop(idleMode);
   }
 
   public double metersToRotations(double meters) {

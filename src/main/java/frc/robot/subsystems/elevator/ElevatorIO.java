@@ -16,7 +16,9 @@ public interface ElevatorIO {
     public double leaderMotorStatorCurrentAmps = 0.0; // {leader, follower}
     public double leaderMotortempCelcius = 0.0; // {leader, follower}
     // current setpoint
+    public double followerMotorheightMeters = 0.0;
     public boolean followerElevatorMotorConnected = false;
+    public double followerMotorVelocityMetersSecond = 0.0;
     public double followerMotorAppliedVoltage = 0.0;
     public double followerMotorSupplyCurrentAmps = 0.0; // {leader, follower}
     public double followerMotorStatorCurrentAmps = 0.0; // {leader, follower}
