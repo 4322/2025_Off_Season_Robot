@@ -1,7 +1,8 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import static frc.robot.RobotContainer.driver;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
 
 public class AlgaeScoreCommand extends Command {
@@ -26,10 +27,8 @@ public class AlgaeScoreCommand extends Command {
       superstructure.requestAlgaePrescore();
     }
 
-    if (!driver.a().getAsBoolean()
-        && !driver.x().getAsBoolean()
-        && !driver.y().getAsBoolean()
-        && !driver.b().getAsBoolean()) {
+    if ((!driver.b().getAsBoolean() && !superstructure.isAutoOperationMode())
+        || (!superstructure.isAlgaeHeld() && superstructure.isAutoOperationMode())) {
       cancel();
     }
   }

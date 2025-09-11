@@ -27,9 +27,10 @@ public class ScoreCoral extends Command {
     }
 
     if ((!driver.a().getAsBoolean()
-        && !driver.x().getAsBoolean()
-        && !driver.y().getAsBoolean()
-        && !driver.b().getAsBoolean()) || superstructure.isCoralHeld()) {
+            && !driver.x().getAsBoolean()
+            && !driver.y().getAsBoolean()
+            && !driver.b().getAsBoolean())
+        || !superstructure.isCoralHeld()) {
       cancel();
     }
   }

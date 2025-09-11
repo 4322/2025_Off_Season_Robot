@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AlgaeScoreCommand;
 import frc.robot.commands.DriveManual;
 import frc.robot.commands.Eject;
 import frc.robot.commands.ScoreCoral;
@@ -55,7 +56,6 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
  */
 public class RobotContainer {
   public static CommandXboxController driver = new CommandXboxController(0);
-  public static XboxController test = new XboxController(1);
 
   private static Vision vision;
   private static Drive drive;
@@ -250,7 +250,7 @@ public class RobotContainer {
                 () -> {
                   level = Level.L4;
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    superstructure.requestAlgaePrescore();
+                    new AlgaeScoreCommand(superstructure);
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new ScoreCoral(superstructure);
                   }
@@ -264,14 +264,12 @@ public class RobotContainer {
                       && !endEffector.hasAlgae()
                       && !superstructure.isAutoOperationMode()) {
                     superstructure.requestScoreCoral(level);
-                  } else if (!endEffector.hasCoral()
-                      && endEffector.hasAlgae()) {
+                  } else if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestAlgaeScore();
                   }
                 }));
     driver
-        .leftStick() // Figure out what to do with this because this is a tigger when we want it to
-        // be a button
+        .leftStick() 
         .onTrue(
             new InstantCommand(
                     () -> {
