@@ -33,7 +33,8 @@ public class SwitchOperationModeCommand extends Command {
         && !driver.povLeft().getAsBoolean()
         && !driver.povRight().getAsBoolean()
         && !driver.start().getAsBoolean()
-        && !driver.back().getAsBoolean()) {
+        && !driver.back().getAsBoolean()
+        && driver.leftStick().getAsBoolean()) {
       if (superstructure.isAutoOperationMode()) {
         mode = OperationMode.MANUAL;
       } else {
