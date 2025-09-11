@@ -1,14 +1,13 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
-
 import edu.wpi.first.wpilibj2.command.Command;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.OperationMode;
 
 public class SwitchOperationModeCommand extends Command {
 
-  private Superstructure.Level level;
+  private Superstructure.OperationMode mode;
   private Superstructure superstructure;
 
   public SwitchOperationModeCommand(Superstructure superstructure) {
@@ -35,16 +34,11 @@ public class SwitchOperationModeCommand extends Command {
         && !driver.start().getAsBoolean()
         && !driver.back().getAsBoolean()) {
       if (superstructure.isAutoOperationMode()) {
-        Superstructure.OperationMode mode = OperationMode.MANUAL;
+        mode = OperationMode.MANUAL;
       } else {
-        Superstructure.OperationMode mode = OperationMode.AUTO;
+        mode = OperationMode.AUTO;
       }
     }
-  }
-
-  @Override
-  public boolean isFinished() {
-    return false; // TODO have actual logic
   }
 
   @Override

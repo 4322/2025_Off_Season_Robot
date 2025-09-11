@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 
@@ -22,12 +23,10 @@ public class Eject extends Command {
   public void execute() {
     superstructure.requestEject();
     intakeSuperstructure.requestEject();
-  }
 
-  @Override
-  public boolean isFinished() {
-    return false; // While held
-    // TODO should we automatically cancel this when no piece is detected?
+    if (!driver.povUp().getAsBoolean()) {
+       cancel();
+    }
   }
 
   @Override
