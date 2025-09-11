@@ -5,12 +5,12 @@ import static frc.robot.RobotContainer.driver;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
 
-public class ScoreCoral extends Command {
+public class AlgaeScoreCommand extends Command {
 
   private Superstructure.Level level;
   private Superstructure superstructure;
 
-  public ScoreCoral(Superstructure superstructure) {
+  public AlgaeScoreCommand(Superstructure superstructure) {
     this.superstructure = superstructure;
 
     addRequirements(superstructure);
@@ -22,9 +22,9 @@ public class ScoreCoral extends Command {
   @Override
   public void execute() {
     if (driver.rightTrigger().getAsBoolean() && !superstructure.isAutoOperationMode()) {
-      superstructure.requestScoreCoral(level);
+      superstructure.requestAlgaeScore();
     } else {
-      superstructure.requestPrescoreCoral(level);
+      superstructure.requestAlgaePrescore();
     }
 
     if (!driver.a().getAsBoolean()
