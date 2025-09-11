@@ -6,6 +6,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -68,7 +69,7 @@ public final class Constants {
     public static final double rotkD = 0.0;
 
     public static final double robotMassKg = 74.088; // TODO: Weigh robot
-    public static final double robotMOI = ; // TODO: Use CAD
+    public static final double robotMOI = Units.lbsToKilograms(Units.inchesToMeters(402.462753)); // -Lxy
     public static final double wheelCOF = 1.2;
   }
 
