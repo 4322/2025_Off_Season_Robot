@@ -55,8 +55,9 @@ public class VisionObjectDetectionIOPhoton implements VisionObjectDetectionIO {
       VisionObjectDetectionInputs inputs, PhotonPipelineResult result) {
     final List<Rotation3d>[] visibleObjectsRotations =
         new List[Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES];
-    for (int i = 0; i < Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES; i++)
+    for (int i = 0; i < Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES; i++) {
       visibleObjectsRotations[i] = new ArrayList<>();
+    }
     Arrays.fill(inputs.hasTarget, false);
     inputs.latestResultTimestamp = result.getTimestampSeconds();
 
@@ -68,8 +69,9 @@ public class VisionObjectDetectionIOPhoton implements VisionObjectDetectionIO {
           extractRotation3d(currentTarget));
     }
 
-    for (int i = 0; i < Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES; i++)
+    for (int i = 0; i < Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES; i++) {
       inputs.visibleObjectRotations[i] = toArray(visibleObjectsRotations[i]);
+    }
   }
 
   private Rotation3d[] toArray(List<Rotation3d> list) {
