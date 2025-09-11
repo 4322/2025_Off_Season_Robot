@@ -209,7 +209,9 @@ public class IntakeSuperstructure extends SubsystemBase {
   }
 
   public boolean isCoralDetectedIntake() {
-    return rollers.isCoralPickupDetected() || indexer.isCoralDetectedPickupArea() || indexer.isCoralDetectedIndexer();
+    return rollers.isCoralPickupDetected()
+        || indexer.isCoralDetectedPickupArea()
+        || indexer.isCoralDetectedIndexer();
   }
 } // TODO check usage of reject vs. reject slow and eject vs eject slow
   // TODO add manual homing procedure

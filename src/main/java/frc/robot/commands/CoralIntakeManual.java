@@ -1,15 +1,15 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import static frc.robot.RobotContainer.driver;
+
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSuperstructure;
 
 public class CoralIntakeManual extends Command {
-    private IntakeSuperstructure intakeSuperstructure;
-    private Timer rumbleTimer = new Timer();
+  private IntakeSuperstructure intakeSuperstructure;
+  private Timer rumbleTimer = new Timer();
 
   public CoralIntakeManual(IntakeSuperstructure intakeSuperstructure) {
     this.intakeSuperstructure = intakeSuperstructure;
@@ -19,26 +19,23 @@ public class CoralIntakeManual extends Command {
   }
 
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
     intakeSuperstructure.requestIntake();
     if (intakeSuperstructure.isCoralDetectedIntake()) {
-        if (!rumbleTimer.isRunning()) {
-            rumbleTimer.reset();
-            rumbleTimer.start();
-            driver.setRumble(RumbleType.kBothRumble, 1);
-        } else if (rumbleTimer.hasElapsed(0.25)) {
-            driver.setRumble(RumbleType.kBothRumble, 0);
-            rumbleTimer.stop();
-        }
-        
+      if (!rumbleTimer.isRunning()) {
+        rumbleTimer.reset();
+        rumbleTimer.start();
+        driver.setRumble(RumbleType.kBothRumble, 1);
+      } else if (rumbleTimer.hasElapsed(0.25)) {
+        driver.setRumble(RumbleType.kBothRumble, 0);
+        rumbleTimer.stop();
+      }
     }
     if (!(driver.getLeftTriggerAxis() > 0.5)) {
-        cancel();
+      cancel();
     }
   }
 
@@ -52,6 +49,3 @@ public class CoralIntakeManual extends Command {
     intakeSuperstructure.requestRetractIdle();
   }
 }
-
-
-

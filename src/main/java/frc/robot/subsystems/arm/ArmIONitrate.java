@@ -12,7 +12,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -68,7 +67,7 @@ public class ArmIONitrate implements ArmIO {
     CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
 
     NitrateSettings armConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);
- OutputSettings armMotorOutputSettings = new OutputSettings();
+    OutputSettings armMotorOutputSettings = new OutputSettings();
     armMotorOutputSettings.setInvert(Constants.Arm.ArmMotorInvert);
     if (!armConfigStatus.isEmpty()) {
       DriverStation.reportError(

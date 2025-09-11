@@ -19,9 +19,6 @@ public class Elevator extends SubsystemBase {
   private double prevHeightMeters = 0.0;
   private double newHeightMeters = 0.0;
 
-
-
-
   private enum ElevatorStates {
     UNHOMED,
     INITIALIZATIONPROCEDURE,
@@ -55,33 +52,30 @@ public class Elevator extends SubsystemBase {
           state = ElevatorStates.ELEVATOR_MOVEMENT;
         }
       case ELEVATOR_MOVEMENT:
-        if((getElevatorHeightMeters() >= Constants.Elevator.ejectSafeHeightMeters)
-        && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.ejectDeg)){
+        if ((getElevatorHeightMeters() >= Constants.Elevator.ejectSafeHeightMeters)
+            && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.ejectDeg)) {
           newHeightMeters = getElevatorHeightMeters();
-        }
-        else if((getElevatorHeightMeters() >= Constants.Elevator.safeBargeRetractHeightMeters)
-        && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.safeBargeRetractDeg)){
+        } else if ((getElevatorHeightMeters() >= Constants.Elevator.safeBargeRetractHeightMeters)
+            && (RobotContainer.getSuperstructure().getArmAngle()
+                == Constants.Arm.safeBargeRetractDeg)) {
           newHeightMeters = getElevatorHeightMeters();
-        }
-        else if (((RobotContainer.getSuperstructure().getArmAngle() <= Constants.Arm.minArmSafeDeg)
-                && (getElevatorHeightMeters() == Constants.Elevator.minElevatorSafeHeightMeters))) {
+        } else if (((RobotContainer.getSuperstructure().getArmAngle()
+                <= Constants.Arm.minArmSafeDeg)
+            && (getElevatorHeightMeters() == Constants.Elevator.minElevatorSafeHeightMeters))) {
           newHeightMeters = getElevatorHeightMeters();
-        }
-        else if((RobotContainer.getSuperstructure().getArmAngle() < Constants.Arm.minArmSafeDeg) && (getElevatorHeightMeters() < Constants.Elevator.minElevatorSafeHeightMeters)){
+        } else if ((RobotContainer.getSuperstructure().getArmAngle() < Constants.Arm.minArmSafeDeg)
+            && (getElevatorHeightMeters() < Constants.Elevator.minElevatorSafeHeightMeters)) {
           newHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
-        } 
-        else{
+        } else {
           newHeightMeters = requestedHeightMeters;
         }
         if ((RobotContainer.getSuperstructure().getState() == Superstates.SCORE_CORAL)
             || (RobotContainer.getSuperstructure().getState() == Superstates.ALGAE_SCORE)) {
           io.requestSlowHeightMeters(newHeightMeters);
-        } 
-        else {
+        } else {
           io.requestHeightMeters(newHeightMeters);
         }
         break;
-        
     }
   }
 
@@ -188,7 +182,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void safeBargeRetract() {
-      requestedHeightMeters = Constants.Elevator.safeBargeRetractHeightMeters;
+    requestedHeightMeters = Constants.Elevator.safeBargeRetractHeightMeters;
   }
 
   public void climbing() {
@@ -196,7 +190,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void eject() {
-      requestedHeightMeters = Constants.Elevator.ejectSafeHeightMeters;
+    requestedHeightMeters = Constants.Elevator.ejectSafeHeightMeters;
   }
 
   public void peformInitialization() {

@@ -13,14 +13,12 @@ public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   public double minSafeArmDegree;
-  public double maxElevatorSafeMeters = Constants.Elevator.maxElevatorHeightMeters;
-  public Superstructure superstructure;
+  public double maxElevatorSafeMeters = Constants.Elevator.scoreCoralL4HeightMeters;
 
   public double requestedSetpoint;
   public double prevSetpoint = -1000;
   public double newSetpoint;
   public double elevatorHeight;
-  private ScoreCoral scoreCoralCommand;
   private Superstructure superstructure;
 
   public Arm(ArmIO io) {
@@ -41,18 +39,23 @@ public class Arm extends SubsystemBase {
 
     // Safety Logic
     // Checks the logic checking for if it is in a dangerous position
+
     elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
     if (requestedSetpoint < minSafeArmDegree
-        && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters) {
+        && elevatorHeight
+            < Constants.Elevator
+                .minElevatorSafeHeightMeters) { // So if the requested setpoint is under the min
+      // safe angle and the elevator is too low the arm
+      // will go to min safe angle
       newSetpoint = minSafeArmDegree;
     } else if (maxElevatorSafeMeters > elevatorHeight
-        && requestedSetpoint < Constants.Arm.safeBargeRetractDeg) {
-      newSetpoint = inputs.armPositionDegrees;
-    } // Holds position if trying to go into a dangerous position
-    else if (RobotContainer.getSuperstructure().getElevatorHeight() < Constants.Elevator.safeBargeRetractWithAlgaeHeightMeters
-        && requestedSetpoint == Constants.Arm.scoringAlgaeDeg) {
-      newSetpoint = inputs.armPositionDegrees;
-
+        && requestedSetpoint
+            < Constants.Arm.safeBargeRetractDeg) { // If the elevator is too high and the requested
+      // setpoint is not the safe retract then it will stay
+      // in place
+      newSetpoint =
+          inputs.armPositionDegrees; // Makes it so it won't move in case the elevator also needs to
+      // move as well as button spamming
     } else {
       newSetpoint = requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
     }
