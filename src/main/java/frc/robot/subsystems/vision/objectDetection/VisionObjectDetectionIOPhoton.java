@@ -21,7 +21,7 @@ public class VisionObjectDetectionIOPhoton implements VisionObjectDetectionIO {
 
   public VisionObjectDetectionIOPhoton() {
     PhotonCamera.setVersionCheckEnabled(false);
-    photonCamera = new PhotonCamera("VisionObjectDetection");
+    photonCamera = new PhotonCamera("VisionObjectDetection"); // TODO set the name in constants
   }
 
   @Override
@@ -64,7 +64,7 @@ public class VisionObjectDetectionIOPhoton implements VisionObjectDetectionIO {
     for (PhotonTrackedTarget currentTarget : result.getTargets()) {
       if (currentTarget.getDetectedObjectClassID() == -1) continue;
 
-      inputs.hasTarget[currentTarget.getDetectedObjectClassID()] = true;
+      inputs.hasTarget[currentTarget.getDetectedObjectClassID()] = true; // TODO manually set id in gui?
       visibleObjectsRotations[currentTarget.getDetectedObjectClassID()].add(
           extractRotation3d(currentTarget));
     }
@@ -99,8 +99,9 @@ public class VisionObjectDetectionIOPhoton implements VisionObjectDetectionIO {
 
   private Rotation3d calculateMiddleRotation(PhotonTrackedTarget target) {
     return new Rotation3d(
-        0, Units.degreesToRadians(target.getPitch()), Units.degreesToRadians(-target.getYaw()));
-  }
+        0, Units.degreesToRadians(target.getPitch()), Units.degreesToRadians(-target.getYaw())); // TODO move this into actual code; check updated code from Trigon
+  } // TODO yaw shouldn't be inverted; left is positive; get rid of negative
+  // TODO pitch should be negative
 
   private Point findAverageOfLowestTwo(List<TargetCorner> corners) {
     TargetCorner lowest = corners.get(0);

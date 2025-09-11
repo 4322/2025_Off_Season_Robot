@@ -1,7 +1,7 @@
 /*
  * Code based off of FRC Team 5990 Trigon's object detection code
  * https://github.com/Programming-TRIGON/RobotCode2025/tree/main/src/main/java/frc/trigon/robot/misc/objectdetectioncamera
- */
+ */ // TODO auto drive to piece commmand; Drive while rotating; test if driving without rotating works
 package frc.robot.subsystems.vision.objectDetection;
 
 import edu.wpi.first.math.geometry.*;
@@ -115,10 +115,10 @@ public class VisionObjectDetection extends SubsystemBase {
    * @param objectRotation the object's 3D rotation relative to the camera
    * @return the object's 2D position on the field (z is assumed to be 0)
    */
-  private Translation2d calculateObjectPositionFromRotation(Rotation3d objectRotation) {
-    final double cameraHeight = robotCenterToCamera.getZ(); // Camera height above the ground
+  private Translation2d calculateObjectPositionFromRotation(Rotation3d objectRotation) { // TODO account for pitch in code or gui
+    final double cameraHeight = robotCenterToCamera.getZ(); // Camera height above the ground 
     final double objectPitchSin = Math.sin(objectRotation.getY());
-
+    // TODO rotate by yaw
     if (Math.abs(objectPitchSin) < 0.000001) {
         return new Translation2d(); // Return a default or zero position
     }
