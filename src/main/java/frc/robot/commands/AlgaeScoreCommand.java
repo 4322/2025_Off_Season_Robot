@@ -1,8 +1,7 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
-
 import edu.wpi.first.wpilibj2.command.Command;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.subsystems.Superstructure;
 
 public class AlgaeScoreCommand extends Command {
@@ -21,7 +20,7 @@ public class AlgaeScoreCommand extends Command {
 
   @Override
   public void execute() {
-    if (driver.rightTrigger().getAsBoolean() && !superstructure.isAutoOperationMode()) {
+    if (driver.rightTrigger().getAsBoolean() || superstructure.isAlgaeHeld()) {
       superstructure.requestAlgaeScore();
     } else {
       superstructure.requestAlgaePrescore();
