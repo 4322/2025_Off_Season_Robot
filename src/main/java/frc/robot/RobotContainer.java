@@ -1,10 +1,5 @@
 package frc.robot;
 
-import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
-import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,6 +40,10 @@ import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
+import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
+import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
@@ -62,7 +61,6 @@ public class RobotContainer {
   private static Drive drive;
   private static Arm arm; // IO for the arm subsystem, null if not enabled
   // Declare Arm variable
-  private Superstructure.Level level;
   private Superstructure.OperationMode mode;
 
   private static EndEffector endEffector;
@@ -214,11 +212,11 @@ public class RobotContainer {
         .whileTrue(
             new InstantCommand(
                 () -> {
-                  level = Level.L1;
+
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestIntakeAlgaeFloor();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, level.L1);
+                    new ScoreCoral(superstructure, Level.L1);
                   }
                 }));
     driver
@@ -226,11 +224,11 @@ public class RobotContainer {
         .whileTrue(
             new InstantCommand(
                 () -> {
-                  level = Level.L2;
+
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestDescoreAlgae(Level.L2);
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, level.L2);
+                    new ScoreCoral(superstructure, Level.L2);
                   }
                 }));
     driver
@@ -238,11 +236,10 @@ public class RobotContainer {
         .whileTrue(
             new InstantCommand(
                 () -> {
-                  level = Level.L3;
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestDescoreAlgae(Level.L3); // TODO DELETE
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, level.L3);
+                    new ScoreCoral(superstructure, Level.L3);
                   }
                 }));
     driver
@@ -250,25 +247,10 @@ public class RobotContainer {
         .whileTrue(
             new InstantCommand(
                 () -> {
-                  level = Level.L4;
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure);
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, level.L4);
-                  }
-                }));
-    driver
-        .rightTrigger()
-        .onTrue(
-            new InstantCommand(
-                () -> { // Maybe has double logic (Get rid of if it works in the command)
-                  if (endEffector.hasCoral()
-                      && !endEffector.hasAlgae()
-                      && !superstructure.isAutoOperationMode()) {
-                    superstructure.requestScoreCoral(level);
-                  } else if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    superstructure.requestAlgaeScore();
-                    new SwitchOperationModeCommand(superstructure, mode.MANUAL);
+                    new ScoreCoral(superstructure, Level.L4);
                   }
                 }));
     driver
