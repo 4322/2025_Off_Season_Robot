@@ -24,8 +24,8 @@ public class ElevatorIONitrate implements ElevatorIO {
 
   public ElevatorIONitrate() {
     // Initialize leader and follower motors
-    leaderMotor = new Nitrate(Constants.Elevator.backMotorID, MotorType.kCu60);
-    followerMotor = new Nitrate(Constants.Elevator.frontMotorID, MotorType.kCu60);
+    leaderMotor = new Nitrate(Constants.Elevator.frontMotorID, MotorType.kCu60);
+    followerMotor = new Nitrate(Constants.Elevator.backMotorID, MotorType.kCu60);
     // setup objects
     NitrateSettings frontElevatorMotorConfig = new NitrateSettings();
 
