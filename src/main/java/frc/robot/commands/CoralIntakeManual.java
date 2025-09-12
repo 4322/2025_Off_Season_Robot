@@ -34,14 +34,11 @@ public class CoralIntakeManual extends Command {
         rumbleTimer.stop();
       }
     }
-    if (!(driver.getLeftTriggerAxis() > 0.5)) {
-      cancel();
-    }
   }
 
   @Override
   public boolean isFinished() {
-    return false;
+    return !(driver.getLeftTriggerAxis() > 0.5);
   }
 
   @Override
