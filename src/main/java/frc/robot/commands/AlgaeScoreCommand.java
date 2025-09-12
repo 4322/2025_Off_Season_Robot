@@ -16,15 +16,15 @@ public class AlgaeScoreCommand extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    superstructure.requestAlgaePrescore();
+  }
 
   @Override
   public void execute() {
-    if (driver.rightTrigger().getAsBoolean() || superstructure.isAlgaeHeld()) {
+    if (driver.rightTrigger().getAsBoolean() && superstructure.isAlgaeHeld()) {
       superstructure.requestAlgaeScore();
-    } else {
-      superstructure.requestAlgaePrescore();
-    }
+    } 
   }
 
   @Override

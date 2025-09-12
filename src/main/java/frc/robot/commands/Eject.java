@@ -1,8 +1,7 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
-
 import edu.wpi.first.wpilibj2.command.Command;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 
@@ -27,13 +26,15 @@ public class Eject extends Command {
   }
 
   @Override
+  public boolean isFinished() {
+    return !driver.povUp().getAsBoolean();
+  }
+  
+  @Override
   public void end(boolean interrupted) {
     superstructure.requestIdle();
     intakeSuperstructure.requestRetractIdle();
   }
 
-  @Override
-  public boolean isFinished() {
-    return !driver.povUp().getAsBoolean();
-  }
+ 
 }

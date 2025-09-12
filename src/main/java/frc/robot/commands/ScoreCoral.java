@@ -7,7 +7,7 @@ import frc.robot.subsystems.Superstructure;
 public class ScoreCoral extends Command {
 
   private Superstructure.Level Level;
-  private Superstructure superstructure;
+  private final Superstructure superstructure;
   public boolean isSlow = false;
 
   public ScoreCoral(Superstructure superstructure, Superstructure.Level Level) {

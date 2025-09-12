@@ -16,6 +16,7 @@ import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
+import frc.robot.subsystems.Superstructure.OperationMode;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.arm.ArmIONitrate;
@@ -61,7 +62,6 @@ public class RobotContainer {
   private static Drive drive;
   private static Arm arm; // IO for the arm subsystem, null if not enabled
   // Declare Arm variable
-  private Superstructure.OperationMode mode;
 
   private static EndEffector endEffector;
   private static Indexer indexer;
@@ -258,7 +258,7 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  new SwitchOperationModeCommand(superstructure, mode.MANUAL);
+                  new SwitchOperationModeCommand(superstructure, OperationMode.AUTO);
                 }));
   }
 
