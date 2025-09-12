@@ -25,14 +25,16 @@ public class Eject extends Command {
     superstructure.requestEject();
     intakeSuperstructure.requestEject();
 
-    if (!driver.povUp().getAsBoolean()) {
-      cancel();
-    }
   }
 
   @Override
   public void end(boolean interrupted) {
     superstructure.requestIdle();
     intakeSuperstructure.requestRetractIdle();
+  }
+
+  @Override
+  public boolean isFinished() {
+    return !driver.povUp().getAsBoolean();
   }
 }

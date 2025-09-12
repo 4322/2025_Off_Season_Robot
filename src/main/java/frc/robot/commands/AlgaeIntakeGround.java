@@ -20,10 +20,6 @@ public class AlgaeIntakeGround extends Command {
   @Override
   public void execute() {
     superstructure.requestIntakeAlgaeFloor();
-
-    if (!driver.a().getAsBoolean() || superstructure.isAlgaeHeld()) {
-      cancel();
-    }
   }
 
   @Override
@@ -31,5 +27,10 @@ public class AlgaeIntakeGround extends Command {
     if (!superstructure.isAlgaeHeld()) {
       superstructure.requestIdle();
     } // Superstructure automatically handles the transition back to algae idle
+  }
+
+  @Override
+  public boolean isFinished() {
+    return !driver.a().getAsBoolean() || superstructure.isAlgaeHeld();
   }
 }
