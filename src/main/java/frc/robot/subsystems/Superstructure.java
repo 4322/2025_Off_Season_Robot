@@ -244,15 +244,13 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case SCORE_CORAL:
-        isSlow = true;
-        if (isSlow) { // Safety Check for race case
           arm.scoreCoral(level);
           elevator.scoreCoral(level);
           endEffector.releaseCoral();
-        }
 
         if (!endEffector.hasCoral()) {
           state = Superstates.IDLE;
+          
         } else if (endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
         }

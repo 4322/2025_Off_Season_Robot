@@ -8,7 +8,7 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
-
+import frc.robot.commands.ScoreCoral;
 public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
@@ -20,6 +20,8 @@ public class Arm extends SubsystemBase {
   public double newSetpoint;
   public double elevatorHeight;
   private Superstructure superstructure;
+  private ScoreCoral scoreCoral;
+
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -61,7 +63,7 @@ public class Arm extends SubsystemBase {
     }
 
     if (prevSetpoint != newSetpoint) {
-      if (superstructure.isSlow) {
+      if (scoreCoral.isSlow) {
         io.requestSlowPosition(newSetpoint);
         prevSetpoint = newSetpoint;
       } else {
