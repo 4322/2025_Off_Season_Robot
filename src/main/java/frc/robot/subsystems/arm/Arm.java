@@ -3,12 +3,13 @@ package frc.robot.subsystems.arm;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.commands.ScoreCoral;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
-import frc.robot.commands.ScoreCoral;
+
 public class Arm extends SubsystemBase {
   private ArmIO io;
   public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
@@ -21,7 +22,6 @@ public class Arm extends SubsystemBase {
   public double elevatorHeight;
   private Superstructure superstructure;
   private ScoreCoral scoreCoral;
-
 
   public Arm(ArmIO io) {
     this.io = io;

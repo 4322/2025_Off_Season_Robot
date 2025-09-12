@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,6 +10,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
+import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -244,13 +243,13 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case SCORE_CORAL:
-          arm.scoreCoral(level);
-          elevator.scoreCoral(level);
-          endEffector.releaseCoral();
+        arm.scoreCoral(level);
+        elevator.scoreCoral(level);
+        endEffector.releaseCoral();
 
         if (!endEffector.hasCoral()) {
           state = Superstates.IDLE;
-          
+
         } else if (endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
         }
@@ -299,8 +298,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void requestOperationMode(OperationMode mode) {
-    unsetAllRequests();
-    requestswitchOperationMode = true;
+    this.mode = mode;
   }
 
   public boolean isAutoOperationMode() {

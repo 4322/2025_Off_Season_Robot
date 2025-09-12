@@ -63,6 +63,7 @@ public class RobotContainer {
   private static Arm arm; // IO for the arm subsystem, null if not enabled
   // Declare Arm variable
   private Superstructure.Level level;
+  private Superstructure.OperationMode mode;
 
   private static EndEffector endEffector;
   private static Indexer indexer;
@@ -217,7 +218,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestIntakeAlgaeFloor();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure);
+                    new ScoreCoral(superstructure, level.L1);
                   }
                 }));
     driver
@@ -229,7 +230,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestDescoreAlgae(Level.L2);
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure);
+                    new ScoreCoral(superstructure, level.L2);
                   }
                 }));
     driver
@@ -241,7 +242,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestDescoreAlgae(Level.L3); // TODO DELETE
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure);
+                    new ScoreCoral(superstructure, level.L3);
                   }
                 }));
     driver
@@ -253,7 +254,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure);
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure);
+                    new ScoreCoral(superstructure, level.L4);
                   }
                 }));
     driver
@@ -267,16 +268,16 @@ public class RobotContainer {
                     superstructure.requestScoreCoral(level);
                   } else if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestAlgaeScore();
+                    new SwitchOperationModeCommand(superstructure, mode.MANUAL);
                   }
                 }));
     driver
         .leftStick()
         .onTrue(
             new InstantCommand(
-                    () -> {
-                      new SwitchOperationModeCommand(superstructure);
-                    })
-                .ignoringDisable(false));
+                () -> {
+                  new SwitchOperationModeCommand(superstructure, mode.MANUAL);
+                }));
   }
 
   public static Superstructure getSuperstructure() {

@@ -12,7 +12,6 @@ public class AlgaeScoreCommand extends Command {
 
   public AlgaeScoreCommand(Superstructure superstructure) {
     this.superstructure = superstructure;
-
     addRequirements(superstructure);
   }
 
@@ -26,11 +25,12 @@ public class AlgaeScoreCommand extends Command {
     } else {
       superstructure.requestAlgaePrescore();
     }
+  }
 
-    if ((!driver.b().getAsBoolean() && !superstructure.isAutoOperationMode())
-        || (!superstructure.isAlgaeHeld() && superstructure.isAutoOperationMode())) {
-      cancel();
-    }
+  @Override
+  public boolean isFinished() {
+    return (!driver.b().getAsBoolean() && !superstructure.isAutoOperationMode())
+        || (!superstructure.isAlgaeHeld() && superstructure.isAutoOperationMode());
   }
 
   @Override

@@ -1,7 +1,8 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import static frc.robot.RobotContainer.driver;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
 
 public class ScoreCoral extends Command {
@@ -13,7 +14,6 @@ public class ScoreCoral extends Command {
   public ScoreCoral(Superstructure superstructure, Superstructure.Level level) {
     this.superstructure = superstructure;
     this.level = level;
-
     addRequirements(superstructure);
   }
 
@@ -25,20 +25,18 @@ public class ScoreCoral extends Command {
   @Override
   public void execute() {
     isSlow = true;
-    if (driver.rightTrigger().getAsBoolean() && !superstructure.isAutoOperationMode()) {
+    if (driver.rightTrigger().getAsBoolean()) {
       superstructure.requestScoreCoral(level);
-    } 
-
-   
+    }
   }
 
   @Override
   public boolean isFinished() {
     return (!driver.a().getAsBoolean()
-    && !driver.x().getAsBoolean()
-    && !driver.y().getAsBoolean()
-    && !driver.b().getAsBoolean())
-|| !superstructure.isCoralHeld();
+            && !driver.x().getAsBoolean()
+            && !driver.y().getAsBoolean()
+            && !driver.b().getAsBoolean())
+        || !superstructure.isCoralHeld();
   }
 
   @Override

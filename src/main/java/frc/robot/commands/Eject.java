@@ -24,7 +24,6 @@ public class Eject extends Command {
   public void execute() {
     superstructure.requestEject();
     intakeSuperstructure.requestEject();
-
   }
 
   @Override
