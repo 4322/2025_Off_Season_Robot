@@ -5,6 +5,7 @@ import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -207,51 +208,51 @@ public class RobotContainer {
         .whileTrue(
             new InstantCommand(
                 () -> {
-                  new Eject(intakeSuperstructure, superstructure);
+                  new Eject(intakeSuperstructure, superstructure).schedule();
                 }));
     // Prescore/Descore Levels
     driver
         .a()
-        .whileTrue(
+        .onTrue(
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     superstructure.requestIntakeAlgaeFloor();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L1);
+                    new ScoreCoral(superstructure, Level.L1).schedule();
                   }
                 }));
     driver
         .x()
-        .whileTrue(
+        .onTrue(
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    new DescoreAlgae(superstructure, Level.L2);
+                    new DescoreAlgae(superstructure, Level.L2).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L2);
+                    new ScoreCoral(superstructure, Level.L2).schedule();
                   }
                 }));
     driver
         .y()
-        .whileTrue(
+        .onTrue(
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    new DescoreAlgae(superstructure, Level.L3);
+                    new DescoreAlgae(superstructure, Level.L3).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L3);
+                    new ScoreCoral(superstructure, Level.L3).schedule();
                   }
                 }));
     driver
         .b()
-        .whileTrue(
+        .onTrue(
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    new AlgaeScoreCommand(superstructure);
+                    new AlgaeScoreCommand(superstructure).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L4);
+                    new ScoreCoral(superstructure, Level.L4).schedule();
                   }
                 }));
     driver
@@ -259,15 +260,18 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  new SwitchOperationModeCommand(superstructure, OperationMode.AUTO);
+                  new SwitchOperationModeCommand(superstructure, OperationMode.AUTO).schedule();
                 }));
     driver
         .back()
         .onTrue(
             new InstantCommand(
-                () -> {
-                  new CoastCommand(arm, elevator, deployer);
-                }));
+                    () -> {
+                      if (DriverStation.isDisabled()) {
+                        new CoastCommand(arm, elevator, deployer).schedule();
+                      }
+                    })
+                .ignoringDisable(true));
   }
 
   public static Superstructure getSuperstructure() {
