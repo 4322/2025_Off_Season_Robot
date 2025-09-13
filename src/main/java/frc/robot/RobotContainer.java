@@ -11,6 +11,7 @@ import frc.robot.commands.DriveManual;
 import frc.robot.commands.Eject;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.SwitchOperationModeCommand;
+import frc.robot.commands.DescoreAlgae;
 import frc.robot.constants.Constants;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
@@ -224,9 +225,8 @@ public class RobotContainer {
         .whileTrue(
             new InstantCommand(
                 () -> {
-
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    superstructure.requestDescoreAlgae(Level.L2);
+                    new DescoreAlgae(superstructure, Level.L2); 
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new ScoreCoral(superstructure, Level.L2);
                   }
@@ -237,7 +237,7 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    superstructure.requestDescoreAlgae(Level.L3); // TODO DELETE
+                    new DescoreAlgae(superstructure, Level.L3); 
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new ScoreCoral(superstructure, Level.L3);
                   }

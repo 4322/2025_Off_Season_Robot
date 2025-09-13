@@ -20,7 +20,7 @@ public class Superstructure extends SubsystemBase {
   private boolean cancelEject = false;
   private boolean requestEject = false;
   private boolean requestAlgaePrescore = false;
-  private boolean cancelAlgaePrescore = false;
+  private boolean requestAlgaeIdle = false;
   private boolean requestAlgaeScore = false;
   private boolean requestIntakeAlgaeFloor = false;
   private boolean requestDescoreAlgae = false;
@@ -198,8 +198,7 @@ public class Superstructure extends SubsystemBase {
         elevator.algaeReef(level);
         endEffector.intakeAlgae();
 
-        if (endEffector
-            .hasAlgae() /*&& atSafeDrive (Place Holder: Will be delt with in commands)*/) {
+        if (endEffector.hasAlgae() && requestIdle) {
           state = Superstates.ALGAE_IDLE;
         } else if (!requestDescoreAlgae && !endEffector.hasAlgae()) {
           state = Superstates.IDLE;
@@ -325,7 +324,6 @@ public class Superstructure extends SubsystemBase {
     unsetAllRequests();
     requestAlgaeScore = true;
   }
-
   public void requestIntakeAlgaeFloor() {
     unsetAllRequests();
     requestIntakeAlgaeFloor = true;
