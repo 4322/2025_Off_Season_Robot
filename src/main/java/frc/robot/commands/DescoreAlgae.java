@@ -1,7 +1,8 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import static frc.robot.RobotContainer.driver;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
 
 public class DescoreAlgae extends Command {
@@ -23,15 +24,18 @@ public class DescoreAlgae extends Command {
 
   @Override
   public void execute() {
-   
-      superstructure.requestDescoreAlgae(Level);
 
+    superstructure.requestDescoreAlgae(Level);
   }
 
   @Override
   public boolean isFinished() {
     return (!driver.x().getAsBoolean()
-            && !driver.y().getAsBoolean() && superstructure.isAlgaeHeld() && !superstructure.isAutoOperationMode()) || (superstructure.isAutoOperationMode() && superstructure.isAlgaeHeld() /*Add drive safeback */);
+            && !driver.y().getAsBoolean()
+            && superstructure.isAlgaeHeld()
+            && !superstructure.isAutoOperationMode())
+        || (superstructure.isAutoOperationMode()
+            && superstructure.isAlgaeHeld() /*Add drive safeback */);
   }
 
   @Override

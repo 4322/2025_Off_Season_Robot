@@ -24,7 +24,7 @@ public class AlgaeScoreCommand extends Command {
   public void execute() {
     if (driver.rightTrigger().getAsBoolean() && superstructure.isAlgaeHeld()) {
       superstructure.requestAlgaeScore();
-    } 
+    }
   }
 
   @Override
