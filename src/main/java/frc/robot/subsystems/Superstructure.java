@@ -222,6 +222,7 @@ public class Superstructure extends SubsystemBase {
       case CORAL_HELD:
         arm.coralHold();
         elevator.coralHold();
+        endEffector.holdCoral();
 
         if (requestEject) {
           state = Superstates.EJECT;

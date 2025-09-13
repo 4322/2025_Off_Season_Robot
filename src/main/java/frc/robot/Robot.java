@@ -29,6 +29,7 @@ public class Robot extends LoggedRobot {
   private Timer allianceUpdateTimer = new Timer();
   private DigitalInput homeButton = new DigitalInput(Constants.dioHomeButton);
   private Timer homeButtonTimer = new Timer();
+  private DigitalInput coastButton = new DigitalInput(Constants.dioHomeButton);
 
   public Robot() {
     // Record metadata

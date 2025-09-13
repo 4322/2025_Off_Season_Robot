@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AlgaeScoreCommand;
+import frc.robot.commands.CoastCommand;
 import frc.robot.commands.DescoreAlgae;
 import frc.robot.commands.DriveManual;
 import frc.robot.commands.Eject;
@@ -259,6 +260,13 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   new SwitchOperationModeCommand(superstructure, OperationMode.AUTO);
+                }));
+    driver
+        .back()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  new CoastCommand(arm, elevator, deployer);
                 }));
   }
 
