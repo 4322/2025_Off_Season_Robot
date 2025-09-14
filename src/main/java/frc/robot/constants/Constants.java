@@ -72,7 +72,6 @@ public final class Constants {
     public static final double wheelCOF = 1.2;
   }
 
-
   public static class Arm {
     public static final InvertMode ArmMotorInvert = InvertMode.kInverted;
     public static final int armMotorId = 10;

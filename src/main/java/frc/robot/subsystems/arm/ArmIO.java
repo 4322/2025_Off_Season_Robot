@@ -31,4 +31,6 @@ public interface ArmIO {
   public default void setVoltage(double volts) {}
 
   public default void requestSlowPosition(double requestSetpoint) {}
+
+  public default void setManualInitialization() {}
 }

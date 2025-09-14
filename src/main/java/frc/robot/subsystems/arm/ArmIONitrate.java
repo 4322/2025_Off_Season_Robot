@@ -30,7 +30,7 @@ public class ArmIONitrate implements ArmIO {
 
     PIDSettings armPIDSettings = new PIDSettings();
     armPIDSettings.setPID(Constants.Arm.armkP, Constants.Arm.armkI, Constants.Arm.armkD);
-    armPIDSettings.setGravitationalFeedforward(Constants.Arm.armFeedforward);
+    armPIDSettings.setGravitationalFeedforward(Constants.Arm.kg);
 
     NitrateSettings armConfig = new NitrateSettings();
 
