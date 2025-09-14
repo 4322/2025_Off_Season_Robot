@@ -5,13 +5,13 @@ import static frc.robot.RobotContainer.driver;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
 
-public class ScoreCoral extends Command {
+public class DescoreAlgae extends Command {
 
   private Superstructure.Level Level;
   private final Superstructure superstructure;
   public boolean isSlow = false;
 
-  public ScoreCoral(Superstructure superstructure, Superstructure.Level Level) {
+  public DescoreAlgae(Superstructure superstructure, Superstructure.Level Level) {
     this.superstructure = superstructure;
     this.Level = Level;
     addRequirements(superstructure);
@@ -24,19 +24,18 @@ public class ScoreCoral extends Command {
 
   @Override
   public void execute() {
-    isSlow = true;
-    if (driver.rightTrigger().getAsBoolean()) {
-      superstructure.requestScoreCoral(Level);
-    }
+
+    superstructure.requestDescoreAlgae(Level);
   }
 
   @Override
   public boolean isFinished() {
-    return (!driver.a().getAsBoolean()
-            && !driver.x().getAsBoolean()
+    return (!driver.x().getAsBoolean()
             && !driver.y().getAsBoolean()
-            && !driver.b().getAsBoolean())
-        || !superstructure.isCoralHeld();
+            && superstructure.isAlgaeHeld()
+            && !superstructure.isAutoOperationMode())
+        || (superstructure.isAutoOperationMode()
+            && superstructure.isAlgaeHeld() /*Add drive safeback */);
   }
 
   @Override

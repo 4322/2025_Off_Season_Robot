@@ -4,15 +4,17 @@ import static frc.robot.RobotContainer.driver;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.Superstructure.OperationMode;
 
 public class SwitchOperationModeCommand extends Command {
 
   private Superstructure.OperationMode mode;
   private Superstructure superstructure;
 
-  public SwitchOperationModeCommand(Superstructure superstructure) {
+  public SwitchOperationModeCommand(
+      Superstructure superstructure, Superstructure.OperationMode mode) {
     this.superstructure = superstructure;
+    this.mode = mode;
+    addRequirements(superstructure);
   }
 
   @Override
@@ -36,15 +38,18 @@ public class SwitchOperationModeCommand extends Command {
         && !driver.back().getAsBoolean()
         && driver.leftStick().getAsBoolean()) {
       if (superstructure.isAutoOperationMode()) {
-        mode = OperationMode.MANUAL;
+        superstructure.requestOperationMode(Superstructure.OperationMode.MANUAL);
       } else {
-        mode = OperationMode.AUTO;
+        superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
       }
     }
   }
 
   @Override
-  public void end(boolean interrupted) {
-    superstructure.requestIdle();
+  public boolean isFinished() {
+    return false;
   }
+
+  @Override
+  public void end(boolean interrupted) {}
 }

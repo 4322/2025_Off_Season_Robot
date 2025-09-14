@@ -80,18 +80,17 @@ public final class Constants {
     public static final double motorShaftToSensorShaft = 56 / 16; // TODO: Set to actual gear ratio
 
     public static final double armIdleDeg = 0.0;
-    public static final double algaeHoldDeg = 180.0; // TODO: Set to actual angle
-    public static final double coralHoldDeg = 150.0; // TODO: Set to actual angle
-    public static final double algaeGroundDeg = 35.0; // TODO: Set to actual angle
-    public static final double safeBargeRetractDeg = 100.0; // TODO: Set to actual angle
+    public static final double algaeHoldDeg = 180.0;
+    public static final double coralHoldDeg = 0.0;
+    public static final double algaeGroundDeg = 55.0; // TODO: Set to actual angle
 
     public static final double ejectDeg = 45.0; // TODO: Set to actual angle
     public static final double climbingDeg = 25.0;
 
     // The purpose of
-    public static final double minArmSafeDeg = 45.0;
-    public static final double minArmSafeWithCoralDeg = 50.0;
-    public static final double maxArmSafeAngle = 245.0;
+    public static final double minArmSafeDeg = 45.0; // TODO: Set to actual angle
+    public static final double minArmSafeWithCoralDeg = 55.0; // TODO: Set to actual angle
+    public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = 0.01;
     public static final double supplyCurrentLimit = 40; // TODO
