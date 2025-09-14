@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,13 +25,14 @@ public class CoastCommand extends Command {
   @Override
   public void initialize() {
     coastTimer.start();
+    arm.setNeutralMode(IdleMode.kCoast);
+    elevator.setNeutralMode(IdleMode.kCoast);
+    deployer.setNeutralMode(IdleMode.kCoast);
   }
 
   @Override
   public void execute() {
-    arm.setNeutralMode(IdleMode.kCoast);
-    elevator.setNeutralMode(IdleMode.kCoast);
-    deployer.setNeutralMode(IdleMode.kCoast);
+   
   }
 
   @Override
