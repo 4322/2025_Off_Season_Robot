@@ -16,14 +16,14 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final boolean armEnabled = true;
-  public static final boolean elevatorEnabled = true;
-  public static final boolean deployerEnabled = true;
-  public static final boolean indexerEnabled = true;
-  public static final boolean rollersEnabled = true;
-  public static final boolean endEffectorEnabled = true;
-  public static final boolean visionEnabled = true;
-  public static final boolean driveEnabled = true;
+  public static final boolean armEnabled = false;
+  public static final boolean elevatorEnabled = false;
+  public static final boolean deployerEnabled = false;
+  public static final boolean indexerEnabled = false;
+  public static final boolean rollersEnabled = false;
+  public static final boolean endEffectorEnabled = false;
+  public static final boolean visionEnabled = false;
+  public static final boolean driveEnabled = false;
 
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
 
