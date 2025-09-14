@@ -16,7 +16,6 @@ public class Elevator extends SubsystemBase {
   ElevatorStates state = ElevatorStates.UNHOMED;
   ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   private double requestedHeightMeters = 0.0;
-  private double prevHeightMeters = 0.0;
   private double newHeightMeters = 0.0;
 
   private enum ElevatorStates {
@@ -39,6 +38,7 @@ public class Elevator extends SubsystemBase {
       case UNHOMED:
         break;
       case INITIALIZATIONPROCEDURE:
+      /* 
         initializationTimer.start();
         io.setVoltage(Constants.Elevator.intializationVoltage);
         // setup initialization procedure logic
@@ -50,7 +50,7 @@ public class Elevator extends SubsystemBase {
           initializationTimer.stop();
           initializationTimer.reset();
           state = ElevatorStates.ELEVATOR_MOVEMENT;
-        }
+        }*/
       case ELEVATOR_MOVEMENT:
         if ((getElevatorHeightMeters() >= Constants.Elevator.ejectSafeHeightMeters)
             && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.ejectDeg)) {

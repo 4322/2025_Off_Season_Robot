@@ -146,8 +146,8 @@ public final class Constants {
         0.5021688204; // TODO: Set to actual position
     public static final double algaeReefL3HeightMeters =
         0.8739758746; // TODO: Set to actual position
-    public static final double prescoreCoralL1HeightMeters = 0.85; // TODO: Set to actual position
-    public static final double prescoreCoralL2HeightMeters = 0.0; // TODO: Set to actual position
+    public static final double prescoreCoralL1HeightMeters = 0.5144884808; // TODO: Set to actual position
+    public static final double prescoreCoralL2HeightMeters = 0.012381357; // TODO: Set to actual position
     public static final double prescoreCoralL3HeightMeters =
         0.2303808194; // TODO: Set to actual position
     public static final double prescoreCoralL4HeightMeters =
@@ -177,6 +177,7 @@ public final class Constants {
     public static final double scoreCoralL3HeightMeters = 0.7; // TODO: Set to actual position
     public static final double scoreCoralL4HeightMeters = 0.9; // TODO: Set to actual position
     public static final double scoreAlgaeHeightMeters = maxElevatorHeightMeters - 0.00635;
+    public static final double algaeSQueezeRetractMeters = 0.3321799808;
   }
 
   // TODO all of these are placeholder values
