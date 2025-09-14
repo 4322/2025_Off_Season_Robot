@@ -13,15 +13,10 @@ public class EmergencyInitilization extends Command {
   }
 
   @Override
-  public void initialize() {
-   
-  }
+  public void initialize() {}
 
   @Override
-  public void execute() {
-
-    
-  }
+  public void execute() {}
 
   @Override
   public boolean isFinished() {
@@ -29,6 +24,5 @@ public class EmergencyInitilization extends Command {
   }
 
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 }

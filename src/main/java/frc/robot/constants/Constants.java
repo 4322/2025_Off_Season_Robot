@@ -4,7 +4,6 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -68,24 +67,26 @@ public final class Constants {
     public static final double rotkD = 0.0;
 
     public static final double robotMassKg = 74.088; // TODO: Weigh robot
-    public static final double robotMOI = 6.883; // TODO: Use CAD
+    public static final double robotMOI =
+        Units.lbsToKilograms(Units.inchesToMeters(402.462753)); // -Lxy
     public static final double wheelCOF = 1.2;
   }
 
   public static class Arm {
-    public static final int armMotorId = 0; // TODO: Set to actual motor ID
-    public static final int armEncoderId = 0; // TODO: Set to actual encoder ID
+    public static final InvertMode ArmMotorInvert = InvertMode.kInverted;
+    public static final int armMotorId = 10;
+    public static final int armEncoderId = 10;
 
-    public static final double sensorToArm = 85 / 10; // TODO: Set to actual gear ratio
-    public static final double motorShaftToSensorShaft = 56 / 16; // TODO: Set to actual gear ratio
+    public static final double sensorToArm = 85 / 10;
+    public static final double motorShaftToSensorShaft = 56 / 16;
 
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0;
     public static final double coralHoldDeg = 0.0;
     public static final double algaeGroundDeg = 55.0; // TODO: Set to actual angle
 
-    public static final double ejectDeg = 45.0; // TODO: Set to actual angle
-    public static final double climbingDeg = 25.0;
+    public static final double ejectDeg = 45.0;
+    public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
     // The purpose of
     public static final double minArmSafeDeg = 45.0; // TODO: Set to actual angle
@@ -93,47 +94,49 @@ public final class Constants {
     public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = 0.01;
-    public static final double supplyCurrentLimit = 40; // TODO
-    public static final double statorCurrentLimit = 100; // TODO
-    public static final double armFeedforward = 20;
+    public static final double supplyCurrentLimit = 40;
+    public static final double statorCurrentLimit = 100;
+    public static final double kg = 20;
 
     public static final ElectricalLimitSettings armElectricalLimitSettings =
         new ElectricalLimitSettings();
 
-    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 40;
-    public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20;
-    public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20;
-    public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 40;
+    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 10; // TODO
+    public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20; // TODO
+    public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20; // TODO
+    public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 30; // TODO
 
     // Prescore Degrees Arm
     public static final double prescoringL1CoralDeg = 50.686373;
     public static final double prescoringL2CoralDeg = 130.751475;
     public static final double prescoringL3CoralDeg = 125.970093;
     public static final double prescoringL4CoralDeg = 121.294978;
-    public static final double scoringAlgaeDeg = 139.326425; // TODO: Set to actual angle
+    public static final double scoringAlgaeDeg = 139.326425;
 
     public static final double descoringAlgaeDeg = 81.946341;
-    public static final double safeBargeRetractAngleDeg = 180;
+    public static final double safeBargeRetractDeg = 180;
+
     // To the encoder 0 is horizontal but to us its straight down
     public static final double armOffsetEncoderDeg = -90;
 
-    public static final double armkP = 0;
+    public static final double armkP = 1;
     public static final double armkI = 0;
     public static final double armkD = 0;
 
     public static final double AccelerationLimit = 0.68; // TODO
-    public static final double DeaccelerationLimit = 0.68;
-    public static final double VelocityLimit = 1.7;
-    public static final double slowVelocityLimit = 0.6;
+    public static final double DeaccelerationLimit = 0.68; // TODO
+    public static final double VelocityLimit = 1.7; // TODO
+    public static final double slowVelocityLimit = 0.6; // TODO
   }
 
   public static class Elevator {
-    public static final int backMotorID = 0; // TODO: Set to actual motor ID
-    public static final int frontMotorID = 0; // TODO: Set to actual encoder ID
+    public static final int frontMotorID = 20;
+    public static final int backMotorID = 21;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorFrontInvert = InvertMode.kInverted;
-    public static final double kP0 = 0; // TODO: Set to actual value
-    public static final double kI0 = 1; // TODO: Set to actual value
+    public static final InvertMode motorFrontInvert = InvertMode.kNotInverted;
+    public static final InvertMode motorBackInvert = InvertMode.kInverted;
+    public static final double kP0 = 1; // TODO: Set to actual value
+    public static final double kI0 = 0; // TODO: Set to actual value
     public static final double kD0 = 0; // TODO: Set to actual value
     public static final double kP1 = 0; // TODO: Set to actual value
     public static final double kI1 = 1; // TODO: Set to actual value
@@ -146,12 +149,12 @@ public final class Constants {
         0.5021688204; // TODO: Set to actual position
     public static final double algaeReefL3HeightMeters =
         0.8739758746; // TODO: Set to actual position
-    public static final double prescoreCoralL1HeightMeters = 0.5144884808; // TODO: Set to actual position
-    public static final double prescoreCoralL2HeightMeters = 0.012381357; // TODO: Set to actual position
+    public static final double prescoreCoralL1HeightMeters = 0.85; // TODO: Set to actual position
+    public static final double prescoreCoralL2HeightMeters = 0.0; // TODO: Set to actual position
     public static final double prescoreCoralL3HeightMeters =
         0.2303808194; // TODO: Set to actual position
     public static final double prescoreCoralL4HeightMeters =
-        0.8427878242; // TODO: Set to actual position
+        Constants.Elevator.maxElevatorHeightMeters; // TODO: Set to actual position
     public static final double pickupCoralHeightMeters = 0.5; // TODO: Set to actual position
     public static final double initializationTimerThresholdSecs = 0.01; //
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01; //
@@ -173,17 +176,16 @@ public final class Constants {
     public static final double setpointToleranceDegrees = 0.01;
     public static final double maxElevatorHeightMeters = 1.3068401092; // need actual values
     public static final double scoreCoralL1HeightMeters = 0.3; // TODO: Set to actual position
-    public static final double scoreCoralL2HeightMeters = 0.5; // TODO: Set to actual position
+    public static final double scoreCoralL2HeightMeters = 0.5;
     public static final double scoreCoralL3HeightMeters = 0.7; // TODO: Set to actual position
     public static final double scoreCoralL4HeightMeters = 0.9; // TODO: Set to actual position
     public static final double scoreAlgaeHeightMeters = maxElevatorHeightMeters - 0.00635;
-    public static final double algaeSQueezeRetractMeters = 0.3321799808;
   }
 
   // TODO all of these are placeholder values
   public static class EndEffector {
-    public static final int endEffectorMotorId = 0;
-    public static final int endEffectorSensorId = 0;
+    public static final int endEffectorMotorId = 30;
+    public static final int endEffectorSensorId = 30;
 
     public static final double algaeHoldVolts = 1.0;
     public static final double coralHoldVolts = 1.0;
@@ -218,8 +220,7 @@ public final class Constants {
     public static final double sensorWhiteDetectBlue = 180;
     public static final double sensorWhiteDetectRed = 180;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorInvert =
-        InvertMode.kNotInverted; // InvertMode.kInverted or InvertMode.kNotInverted
+    public static final InvertMode motorInvert = InvertMode.kNotInverted;
 
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
@@ -238,7 +239,7 @@ public final class Constants {
   }
 
   public static class Deployer {
-    public static final int deployerMotorId = 1;
+    public static final int deployerMotorId = 40;
     public static final double deployVoltage = 3.0;
 
     public static final double motorStatorCurrentLimit = 40;
@@ -256,22 +257,24 @@ public final class Constants {
     public static final double motorRetractkI = 0;
     public static final double motorRetractkD = 0;
     public static final int deployerMotorEncoderId = 0;
-    public static final boolean motorEncoderInverted = false; // TODO maybe change this?
+    public static final InvertMode motorEncoderInverted = InvertMode.kInverted;
     // 1 motor rotation is 1/49 of deployer rotation
     // Range of motion of deployer is about 0-140 degrees
-    public static final double motorGearRatio = 49;
-    public static final double ejectPositionRotations = Units.degreesToRotations(30);
-    public static final double retractPositionRotations = Units.degreesToRotations(10);
-    public static final double deployPositionRotations = Units.degreesToRotations(140);
+    public static final double motorGearRatio = 14.58333333333;
+    public static final double ejectPositionRotations = Units.degreesToRotations(94.931222);
+    public static final double retractPositionRotations = Units.degreesToRotations(4.931222);
+    public static final double deployPositionRotations = Units.degreesToRotations(145.353984);
   }
 
   public static class Indexer {
-    public static final int indexerMotorId = 2;
+    public static final int indexerMotorRightId = 50;
+    public static final int indexerMotorLeftId = 51;
     public static final double motorBusCurrentLimit = 40;
     public static final double motorBusCurrentLimitTime = 0.5;
     public static final double motorStatorCurrentLimit = 60;
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
-    public static final InvertMode motorInvert = null;
+    public static final InvertMode motorRightInvert = InvertMode.kInverted;
+    public static final InvertMode motorLeftInvert = InvertMode.kNotInverted;
     public static final double indexerSensorMax = 0;
     public static final double pickupAreaSensorMax = 0;
     public static final int indexerSensorId = 0;
@@ -283,7 +286,7 @@ public final class Constants {
   }
 
   public static class Rollers {
-    public static final int rollersMotorId = 0;
+    public static final int rollersMotorId = 60;
 
     public static final double motorBusCurrentLimitTime = 0.5;
     public static final double motorStatorCurrentLimit = 60;

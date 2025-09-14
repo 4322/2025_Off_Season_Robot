@@ -38,7 +38,7 @@ public class Elevator extends SubsystemBase {
       case UNHOMED:
         break;
       case INITIALIZATIONPROCEDURE:
-      /* 
+        /*
         initializationTimer.start();
         io.setVoltage(Constants.Elevator.intializationVoltage);
         // setup initialization procedure logic

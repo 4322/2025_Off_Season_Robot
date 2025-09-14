@@ -47,34 +47,34 @@ public class DrivetrainConstants {
 
   // Specific module constants:
   // Front Left
-  private static final int frontLeftDriveMotorId = 0; // TODO
-  private static final int frontLeftTurnMotorId = 0; // TODO
-  private static final int frontLeftTurnEncoderId = 0; // TODO'
+  private static final int frontLeftDriveMotorId = 1; // TODO
+  private static final int frontLeftTurnMotorId = 2; // TODO
+  private static final int frontLeftTurnEncoderId = 1; // TODO'
   private static final double halfWheelBaseMeters = 0.57785;
 
   private static final double frontLeftXPos = halfWheelBaseMeters;
   private static final double frontLeftYPos = halfWheelBaseMeters;
 
   // Front Right
-  private static final int frontRightDriveMotorId = 0; // TODO
-  private static final int frontRightTurnMotorId = 0; // TODO
-  private static final int frontRightTurnEncoderId = 0; // TODO
+  private static final int frontRightDriveMotorId = 3; // TODO
+  private static final int frontRightTurnMotorId = 4; // TODO
+  private static final int frontRightTurnEncoderId = 2; // TODO
 
   private static final double frontRightXPos = halfWheelBaseMeters;
   private static final double frontRightYPos = -halfWheelBaseMeters;
 
   // Back Left
-  private static final int backLeftDriveMotorId = 0; // TODO
-  private static final int backLeftTurnMotorId = 0; // TODO
-  private static final int backLeftTurnEncoderId = 0; // TODO
+  private static final int backLeftDriveMotorId = 5; // TODO
+  private static final int backLeftTurnMotorId = 6; // TODO
+  private static final int backLeftTurnEncoderId = 3; // TODO
 
   private static final double backLeftXPos = -halfWheelBaseMeters;
   private static final double backLeftYPos = halfWheelBaseMeters;
 
   // Back Right
-  private static final int backRightDriveMotorId = 0; // TODO
-  private static final int backRightTurnMotorId = 0; // TODO
-  private static final int backRightTurnEncoderId = 0; // TODO
+  private static final int backRightDriveMotorId = 7; // TODO
+  private static final int backRightTurnMotorId = 8; // TODO
+  private static final int backRightTurnEncoderId = 4; // TODO
 
   private static final double backRightXPos = -halfWheelBaseMeters;
   private static final double backRightYPos = -halfWheelBaseMeters;
