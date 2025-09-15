@@ -3,7 +3,9 @@ package frc.robot.subsystems.arm;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.commands.ScoreCoral;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
@@ -18,6 +20,7 @@ public class Arm extends SubsystemBase {
   public double prevSetpoint = -1000;
   public double newSetpoint;
   public double elevatorHeight;
+  private Superstructure superstructure;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -59,14 +62,13 @@ public class Arm extends SubsystemBase {
     }
 
     if (prevSetpoint != newSetpoint) {
-      // TODO: Refactor? (command in subsystem member var is sus) -NXM
-      // if (scoreCoral.isSlow) {
-      //   io.requestSlowPosition(newSetpoint);
-      //   prevSetpoint = newSetpoint;
-      // } else {
-      //   io.requestPosition(newSetpoint);
-      //   prevSetpoint = newSetpoint;
-      // }
+      if (superstructure.isSlow) {
+        io.requestSlowPosition(newSetpoint);
+        prevSetpoint = newSetpoint;
+      } else {
+        io.requestPosition(newSetpoint);
+        prevSetpoint = newSetpoint;
+      }
     }
   }
 
