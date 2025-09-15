@@ -155,7 +155,7 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.EJECT;
         } else if (!endEffector.hasAlgae()) {
           state = Superstates.IDLE;
-        } else if (requestAlgaePrescore) {
+        } else if (requestAlgaePrescore && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.ALGAE_PRESCORE;
         }
 
@@ -239,33 +239,36 @@ public class Superstructure extends SubsystemBase {
 
         if (requestScoreCoral && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.SCORE_CORAL;
-        } else if (!requestPrescoreCoral && endEffector.hasCoral()) {
+        } else if (requestIdle && endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
         }
         break;
       case SCORE_CORAL:
+        isSlow = true;
         arm.scoreCoral(level);
         elevator.scoreCoral(level);
         endEffector.releaseCoral();
 
-        if (!endEffector.hasCoral()) {
+        if (!endEffector.hasCoral() && arm.atSetpoint() && elevator.atSetpoint()) {
+          isSlow = false;
           state = Superstates.IDLE;
 
-        } else if (endEffector.hasCoral()) {
+        } else if (endEffector.hasCoral() && arm.atSetpoint() && elevator.atSetpoint()) {
+          isSlow = false;
           state = Superstates.CORAL_HELD;
         }
         break;
       case SAFE_SCORE_ALGAE_RETRACT:
         endEffector.idle();
         arm.safeBargeRetract();
-        elevator.safeBargeRetract();
-
-        if (arm.atSetpoint() && elevator.atSetpoint()) {
-
-          if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
-            state = Superstates.IDLE;
-          } else if (endEffector.hasAlgae()) {
-            state = Superstates.ALGAE_IDLE;
+        if (arm.atSetpoint()) {
+          elevator.safeBargeRetract();
+          if (elevator.atSetpoint()) {
+            if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
+              state = Superstates.IDLE;
+            } else if (endEffector.hasAlgae()) {
+              state = Superstates.ALGAE_IDLE;
+            }
           }
         }
 
@@ -296,7 +299,6 @@ public class Superstructure extends SubsystemBase {
     requestClimb = false;
     requestswitchOperationMode = false;
     requestIntakeAlgaeFloor = false;
-    isSlow = false;
   }
 
   public void requestOperationMode(OperationMode mode) {
@@ -354,7 +356,6 @@ public class Superstructure extends SubsystemBase {
 
   public void requestScoreCoral(Level level) {
     unsetAllRequests();
-    isSlow = true;
     requestScoreCoral = true;
   }
 

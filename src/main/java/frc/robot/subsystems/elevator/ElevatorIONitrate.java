@@ -26,7 +26,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     // Initialize leader and follower motors
     leaderMotor = new Nitrate(Constants.Elevator.frontMotorID, MotorType.kCu60);
     followerMotor = new Nitrate(Constants.Elevator.backMotorID, MotorType.kCu60);
-    
+
     // Setup config objects
     NitrateSettings frontElevatorMotorConfig = new NitrateSettings();
     OutputSettings frontElevatorMotorOutputSettings = new OutputSettings();
@@ -52,13 +52,12 @@ public class ElevatorIONitrate implements ElevatorIO {
     elevatorSlowPIDSettings.setMotionProfileVelocityLimit(Constants.Elevator.VelocityLimit);
 
     frontElevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
-    frontElevatorMotorOutputSettings.setInvert(
-        Constants.Elevator.motorFrontInvert);
+    frontElevatorMotorOutputSettings.setInvert(Constants.Elevator.motorFrontInvert);
 
     elevatorElectricalLimitSettings.setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps);
     elevatorElectricalLimitSettings.setStatorCurrentLimit(
         Constants.Elevator.statorCurrentLimitAmps);
-    
+
     followerRequest.setInverted(true);
 
     frontElevatorMotorConfig.setElectricalLimitSettings(elevatorElectricalLimitSettings);
