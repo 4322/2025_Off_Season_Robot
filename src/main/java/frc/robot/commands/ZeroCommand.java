@@ -5,7 +5,6 @@ import frc.robot.subsystems.Superstructure;
 
 public class ZeroCommand extends Command {
   private final Superstructure superstructure;
-  public boolean isSlow = false;
 
   public ZeroCommand(Superstructure superstructure) {
     this.superstructure = superstructure;
