@@ -10,7 +10,7 @@ public interface ElevatorIO {
     public double leaderMotorheightMeters = 0.0;
     // current setpoint
     public boolean leaderElevatorMotorConnected = false;
-    public double leaderMotorVelocityMetersSecond = 0.0;
+    public double leaderMotorVelocityMetersPerSecond = 0.0;
     public double leaderMotorAppliedVoltage = 0.0;
     public double leaderMotorSupplyCurrentAmps = 0.0; // {leader, follower}
     public double leaderMotorStatorCurrentAmps = 0.0; // {leader, follower}
@@ -18,7 +18,7 @@ public interface ElevatorIO {
     // current setpoint
     public double followerMotorheightMeters = 0.0;
     public boolean followerElevatorMotorConnected = false;
-    public double followerMotorVelocityMetersSecond = 0.0;
+    public double followerMotorVelocityMetersPerSecond = 0.0;
     public double followerMotorAppliedVoltage = 0.0;
     public double followerMotorSupplyCurrentAmps = 0.0; // {leader, follower}
     public double followerMotorStatorCurrentAmps = 0.0; // {leader, follower}
