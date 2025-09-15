@@ -96,11 +96,11 @@ public class ElevatorIONitrate implements ElevatorIO {
     inputs.leaderElevatorMotorConnected = leaderMotor.isConnected();
     inputs.followerElevatorMotorConnected = followerMotor.isConnected();
 
-    inputs.leaderMotorheightMeters = leaderMotor.getPosition();
-    inputs.followerMotorheightMeters = followerMotor.getPosition();
+    inputs.leaderMotorheightMeters = rotationsToMeters(leaderMotor.getPosition());
+    inputs.followerMotorheightMeters = rotationsToMeters(followerMotor.getPosition());
 
-    inputs.followerMotorVelocityMetersSecond = followerMotor.getVelocity();
-    inputs.leaderMotorVelocityMetersSecond = leaderMotor.getVelocity();
+    inputs.followerMotorVelocityMetersPerSecond = followerMotor.getVelocity();
+    inputs.leaderMotorVelocityMetersPerSecond = leaderMotor.getVelocity();
 
     inputs.leaderMotorSupplyCurrentAmps = leaderMotor.getBusCurrent();
     inputs.followerMotorSupplyCurrentAmps = followerMotor.getBusCurrent();
@@ -139,5 +139,8 @@ public class ElevatorIONitrate implements ElevatorIO {
 
   public double metersToRotations(double meters) {
     return (meters / (2 * Math.PI)) * Constants.Elevator.gearRatio;
+  }
+  public double rotationsToMeters(double rotations) {
+    return (rotations * (2 * Math.PI)) / Constants.Elevator.gearRatio;
   }
 }

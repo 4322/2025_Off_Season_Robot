@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.util.ClockUtil;
@@ -16,7 +17,8 @@ public class Elevator extends SubsystemBase {
   ElevatorStates state = ElevatorStates.UNHOMED;
   ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   private double requestedHeightMeters = 0.0;
-  private double newHeightMeters = 0.0;
+  private double prevHeightMeters = 0.0;
+  Superstructure superstructure;
 
   private enum ElevatorStates {
     UNHOMED,
@@ -52,29 +54,13 @@ public class Elevator extends SubsystemBase {
           state = ElevatorStates.ELEVATOR_MOVEMENT;
         }*/
       case ELEVATOR_MOVEMENT:
-        if ((getElevatorHeightMeters() >= Constants.Elevator.ejectSafeHeightMeters)
-            && (RobotContainer.getSuperstructure().getArmAngle() == Constants.Arm.ejectDeg)) {
-          newHeightMeters = getElevatorHeightMeters();
-        } else if ((getElevatorHeightMeters() >= Constants.Elevator.safeBargeRetractHeightMeters)
-            && (RobotContainer.getSuperstructure().getArmAngle()
-                == Constants.Arm.safeBargeRetractDeg)) {
-          newHeightMeters = getElevatorHeightMeters();
-        } else if (((RobotContainer.getSuperstructure().getArmAngle()
-                <= Constants.Arm.minArmSafeDeg)
-            && (getElevatorHeightMeters() == Constants.Elevator.minElevatorSafeHeightMeters))) {
-          newHeightMeters = getElevatorHeightMeters();
-        } else if ((RobotContainer.getSuperstructure().getArmAngle() < Constants.Arm.minArmSafeDeg)
-            && (getElevatorHeightMeters() < Constants.Elevator.minElevatorSafeHeightMeters)) {
-          newHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
+      if(prevHeightMeters != requestedHeightMeters){
+        if (superstructure.isSlow) {
+          io.requestSlowHeightMeters(requestedHeightMeters);
         } else {
-          newHeightMeters = requestedHeightMeters;
+          io.requestHeightMeters(requestedHeightMeters);
         }
-        if ((RobotContainer.getSuperstructure().getState() == Superstates.SCORE_CORAL)
-            || (RobotContainer.getSuperstructure().getState() == Superstates.ALGAE_SCORE)) {
-          io.requestSlowHeightMeters(newHeightMeters);
-        } else {
-          io.requestHeightMeters(newHeightMeters);
-        }
+      }
         break;
     }
   }
@@ -178,7 +164,6 @@ public class Elevator extends SubsystemBase {
 
   public void setNeutralMode(IdleMode idleMode) {
     io.setNeutralMode(idleMode);
-    idle();
   }
 
   public void safeBargeRetract() {
