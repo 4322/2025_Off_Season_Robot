@@ -2,6 +2,7 @@ package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
@@ -23,6 +24,8 @@ public class ArmIONitrate implements ArmIO {
 
   private final PIDPositionRequest armPIDPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
+  private final PIDPositionRequest armSlowPIDPositionRequest =
+      new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
   public ArmIONitrate() {
     armMotor = new Nitrate(Constants.Arm.armMotorId, MotorType.kCu60);
@@ -31,6 +34,18 @@ public class ArmIONitrate implements ArmIO {
     PIDSettings armPIDSettings = new PIDSettings();
     armPIDSettings.setPID(Constants.Arm.armkP, Constants.Arm.armkI, Constants.Arm.armkD);
     armPIDSettings.setGravitationalFeedforward(Constants.Arm.kg);
+    armPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
+    armPIDSettings.setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit);
+    armPIDSettings.setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit);
+    armPIDSettings.setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit);
+
+    PIDSettings armSlowPIDSettings = new PIDSettings();
+    armSlowPIDSettings.setPID(Constants.Arm.armkP, Constants.Arm.armkI, Constants.Arm.armkD);
+    armSlowPIDSettings.setGravitationalFeedforward(Constants.Arm.kg);
+    armSlowPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
+    armSlowPIDSettings.setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit);
+    armSlowPIDSettings.setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit);
+    armSlowPIDSettings.setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit);
 
     NitrateSettings armConfig = new NitrateSettings();
 
@@ -38,17 +53,22 @@ public class ArmIONitrate implements ArmIO {
         .getFeedbackSensorSettings()
         .setFeedbackSensor(
             new FeedbackSensor.CanandmagRelative(
-                Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft));
+                Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft))
+        .setSensorToMechanismRatio(Constants.Arm.sensorToArm);
+
     armConfig
         .setPIDSettings(armPIDSettings, PIDConfigSlot.kSlot0)
-        .getPIDSettings(PIDConfigSlot.kSlot0)
-        .setMinwrapConfig(new MinwrapConfig.Disabled());
+        .getPIDSettings(PIDConfigSlot.kSlot0);
+    armConfig
+        .setPIDSettings(armSlowPIDSettings, PIDConfigSlot.kSlot1)
+        .getPIDSettings(PIDConfigSlot.kSlot1);
 
     CanandmagSettings settings = new CanandmagSettings();
     CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
 
     NitrateSettings armConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);
-
+    OutputSettings armMotorOutputSettings = new OutputSettings();
+    armMotorOutputSettings.setInvert(Constants.Arm.ArmMotorInvert);
     if (!armConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate " + armMotor.getAddress().getDeviceId() + " (Arm motor) failed to configure",
@@ -67,8 +87,9 @@ public class ArmIONitrate implements ArmIO {
   @Override
   public void updateInputs(ArmIOInputs armInputs) {
     armInputs.armPositionDegrees =
-        Units.rotationsToDegrees(armMotor.getPosition() - Constants.Arm.armOffsetEncoderDeg);
+        Units.rotationsToDegrees(armMotor.getPosition()) - Constants.Arm.armOffsetEncoderDeg;
     armInputs.armConnected = armMotor.isConnected();
+    armInputs.velocity = Units.rotationsToDegrees(armMotor.getVelocity());
     armInputs.armSupplyCurrentAmps = armMotor.getBusCurrent();
     armInputs.armStatorCurrentAmps = armMotor.getStatorCurrent();
     armInputs.armTempCelsius = armMotor.getMotorTemperatureFrame().getData();
@@ -77,7 +98,7 @@ public class ArmIONitrate implements ArmIO {
   // You need method in ArmIO as well to do Override Remember to check - Personal Note / Reminder
 
   @Override
-  public void setManualInitialization() {
+  public void setHomePosition() {
     armMotor.setPosition(Units.degreesToRotations(Constants.Arm.armOffsetEncoderDeg));
   }
 
@@ -85,7 +106,14 @@ public class ArmIONitrate implements ArmIO {
   public void requestPosition(double requestSetpoint) {
     armMotor.setRequest(
         armPIDPositionRequest.setPosition(
-            Constants.Arm.armOffsetEncoderDeg + Units.degreesToRotations(requestSetpoint)));
+            Units.degreesToRotations(requestSetpoint + Constants.Arm.armOffsetEncoderDeg)));
+  }
+
+  @Override
+  public void requestSlowPosition(double requestSetpoint) {
+    armMotor.setRequest(
+        armSlowPIDPositionRequest.setPosition(
+            Units.degreesToRotations(requestSetpoint + Constants.Arm.armOffsetEncoderDeg)));
   }
 
   @Override
