@@ -26,12 +26,15 @@ public class ElevatorIONitrate implements ElevatorIO {
     // Initialize leader and follower motors
     leaderMotor = new Nitrate(Constants.Elevator.frontMotorID, MotorType.kCu60);
     followerMotor = new Nitrate(Constants.Elevator.backMotorID, MotorType.kCu60);
-    // setup objects
+    
+    // Setup config objects
     NitrateSettings frontElevatorMotorConfig = new NitrateSettings();
-
     OutputSettings frontElevatorMotorOutputSettings = new OutputSettings();
-
     PIDSettings elevatorPIDSettings = new PIDSettings();
+    PIDSettings elevatorSlowPIDSettings = new PIDSettings();
+    ElectricalLimitSettings elevatorElectricalLimitSettings = new ElectricalLimitSettings();
+    FollowMotorRequest followerRequest = new FollowMotorRequest(leaderMotor);
+
     elevatorPIDSettings.setPID(
         Constants.Elevator.kP0, Constants.Elevator.kI0, Constants.Elevator.kD0);
     elevatorPIDSettings.setGravitationalFeedforward(Constants.Elevator.kG);
@@ -40,7 +43,6 @@ public class ElevatorIONitrate implements ElevatorIO {
     elevatorPIDSettings.setMotionProfileDeaccelLimit(Constants.Elevator.DeaccelerationLimit);
     elevatorPIDSettings.setMotionProfileVelocityLimit(Constants.Elevator.VelocityLimit);
 
-    PIDSettings elevatorSlowPIDSettings = new PIDSettings();
     elevatorSlowPIDSettings.setPID(
         Constants.Elevator.kP1, Constants.Elevator.kI1, Constants.Elevator.kD1);
     elevatorSlowPIDSettings.setGravitationalFeedforward(Constants.Elevator.kG);
@@ -49,26 +51,20 @@ public class ElevatorIONitrate implements ElevatorIO {
     elevatorSlowPIDSettings.setMotionProfileDeaccelLimit(Constants.Elevator.DeaccelerationLimit);
     elevatorSlowPIDSettings.setMotionProfileVelocityLimit(Constants.Elevator.VelocityLimit);
 
-    ElectricalLimitSettings elevatorElectricalLimitSettings = new ElectricalLimitSettings();
-    FollowMotorRequest followerRequest = new FollowMotorRequest(leaderMotor);
-    followerRequest.setInverted(true);
-    // configs
-
     frontElevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
     frontElevatorMotorOutputSettings.setInvert(
-        Constants.Elevator.motorFrontInvert); // make this leader motor
-    // invert follower
-
-    frontElevatorMotorConfig.setOutputSettings(frontElevatorMotorOutputSettings);
+        Constants.Elevator.motorFrontInvert);
 
     elevatorElectricalLimitSettings.setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps);
     elevatorElectricalLimitSettings.setStatorCurrentLimit(
         Constants.Elevator.statorCurrentLimitAmps);
+    
+    followerRequest.setInverted(true);
 
     frontElevatorMotorConfig.setElectricalLimitSettings(elevatorElectricalLimitSettings);
-
     frontElevatorMotorConfig.setPIDSettings(elevatorPIDSettings, PIDConfigSlot.kSlot0);
     frontElevatorMotorConfig.setPIDSettings(elevatorSlowPIDSettings, PIDConfigSlot.kSlot1);
+    frontElevatorMotorConfig.setOutputSettings(frontElevatorMotorOutputSettings);
 
     NitrateSettings leaderConfigStatus = leaderMotor.setSettings(frontElevatorMotorConfig, 0.02, 5);
     NitrateSettings followerConfigStatus =
