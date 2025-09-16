@@ -4,35 +4,25 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.vision.Vision;
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
   private boolean requestIdle = false;
   private boolean requestHomed = false;
-  private boolean cancelEject = false;
   private boolean requestEject = false;
   private boolean requestAlgaePrescore = false;
-  private boolean requestAlgaeIdle = false;
   private boolean requestAlgaeScore = false;
   private boolean requestIntakeAlgaeFloor = false;
   private boolean requestDescoreAlgae = false;
-  private boolean requestEndEffectorCoralPickup = false;
-  private boolean requestCoralHeld = false;
   private boolean requestPrescoreCoral = false;
-  private boolean cancelPrescoreCoral = false;
   private boolean requestScoreCoral = false;
-  private boolean requestSafeScoreAlgaeRetract = false;
   private boolean requestPreClimb = false;
   private boolean requestClimb = false;
-  private boolean requestswitchOperationMode = false;
 
   public enum Superstates {
     UNHOMED,
@@ -74,8 +64,6 @@ public class Superstructure extends SubsystemBase {
   private Arm arm;
   private Indexer indexer;
   private Elevator elevator;
-  private Drive drive;
-  private Vision vision;
   private IntakeSuperstructure intakeSuperstructure;
 
   // Add this variable to track the previous state of the home button
@@ -85,15 +73,11 @@ public class Superstructure extends SubsystemBase {
       Arm arm,
       Indexer indexer,
       Elevator elevator,
-      Drive drive,
-      Vision vision,
       IntakeSuperstructure intakeSuperstructure) {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
-    this.drive = drive;
     this.indexer = indexer;
-    this.vision = vision;
     this.intakeSuperstructure = intakeSuperstructure;
   }
 
@@ -298,14 +282,10 @@ public class Superstructure extends SubsystemBase {
     requestAlgaeScore = false;
     requestIntakeAlgaeFloor = false;
     requestDescoreAlgae = false;
-    requestEndEffectorCoralPickup = false;
-    requestCoralHeld = false;
     requestPrescoreCoral = false;
     requestScoreCoral = false;
-    requestSafeScoreAlgaeRetract = false;
     requestPreClimb = false;
     requestClimb = false;
-    requestswitchOperationMode = false;
     requestIntakeAlgaeFloor = false;
   }
 
@@ -345,31 +325,19 @@ public class Superstructure extends SubsystemBase {
   public void requestDescoreAlgae(Level level) {
     unsetAllRequests();
     requestDescoreAlgae = true;
-  }
-
-  public void requestEndEffectorCoralPickup() {
-    unsetAllRequests();
-    requestEndEffectorCoralPickup = true;
-  }
-
-  public void requestCoralHeld() {
-    unsetAllRequests();
-    requestCoralHeld = true;
+    this.level = level;
   }
 
   public void requestPrescoreCoral(Level level) {
     unsetAllRequests();
     requestPrescoreCoral = true;
+    this.level = level;
   }
 
   public void requestScoreCoral(Level level) {
     unsetAllRequests();
     requestScoreCoral = true;
-  }
-
-  public void requestSafeScoreAlgaeRetract() {
-    unsetAllRequests();
-    requestSafeScoreAlgaeRetract = true;
+    this.level = level;
   }
 
   public void requestPreClimb() {
