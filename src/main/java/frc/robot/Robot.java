@@ -78,6 +78,11 @@ public class Robot extends LoggedRobot {
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
     allianceUpdateTimer.start();
+
+    if (Constants.currentMode == Constants.Mode.SIM) {
+      // enable subsystems in sim mode
+      RobotContainer.getSuperstructure().homeButtonActivated();
+    }
   }
 
   /** This function is called periodically during all modes. */

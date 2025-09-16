@@ -34,22 +34,22 @@ public class Indexer extends SubsystemBase {
 
   public void feed() {
     currentAction = IndexerStatus.FEED;
-    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageFeed);
+    io.setIndexerMotorsVoltage(Constants.Indexer.motorVoltageFeed);
   }
 
   public void feedSlow() {
     currentAction = IndexerStatus.FEED_SLOW;
-    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageFeedSlow);
+    io.setIndexerMotorsVoltage(Constants.Indexer.motorVoltageFeedSlow);
   }
 
   public void reject() {
     currentAction = IndexerStatus.REJECT;
-    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageReject);
+    io.setIndexerMotorsVoltage(Constants.Indexer.motorVoltageReject);
   }
 
   public void rejectSlow() {
     currentAction = IndexerStatus.REJECT_SLOW;
-    io.setIndexerMotorVoltage(Constants.Indexer.motorVoltageRejectSlow);
+    io.setIndexerMotorsVoltage(Constants.Indexer.motorVoltageRejectSlow);
   }
 
   public void idle() {

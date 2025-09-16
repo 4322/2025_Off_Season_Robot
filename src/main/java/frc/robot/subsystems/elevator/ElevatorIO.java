@@ -7,20 +7,25 @@ public interface ElevatorIO {
   @AutoLog
   public static class ElevatorIOInputs {
 
+    public double requestedPosMeters;
+
     public double leaderMotorheightMeters = 0.0;
-    // current setpoint
+    public double leaderMotorVoltage = 0.0;
     public boolean leaderElevatorMotorConnected = false;
-    public double leaderMotorVelocityMetersSecond = 0.0;
+    public double leaderMotorVelocityMetersPerSecond = 0.0;
     public double leaderMotorAppliedVoltage = 0.0;
-    public double leaderMotorSupplyCurrentAmps = 0.0; // {leader, follower}
-    public double leaderMotorStatorCurrentAmps = 0.0; // {leader, follower}
-    public double leaderMotortempCelcius = 0.0; // {leader, follower}
-    // current setpoint
+    public double leaderMotorSupplyCurrentAmps = 0.0;
+    public double leaderMotorStatorCurrentAmps = 0.0;
+    public double leaderMotortempCelcius = 0.0;
+
+    public double followerMotorheightMeters = 0.0;
+    public double followerMotorVoltage = 0.0;
     public boolean followerElevatorMotorConnected = false;
+    public double followerMotorVelocityMetersPerSecond = 0.0;
     public double followerMotorAppliedVoltage = 0.0;
-    public double followerMotorSupplyCurrentAmps = 0.0; // {leader, follower}
-    public double followerMotorStatorCurrentAmps = 0.0; // {leader, follower}
-    public double followerMotortempCelcius = 0.0; // {leader, follower}
+    public double followerMotorSupplyCurrentAmps = 0.0;
+    public double followerMotorStatorCurrentAmps = 0.0;
+    public double followerMotortempCelcius = 0.0;
   }
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
@@ -33,5 +38,5 @@ public interface ElevatorIO {
 
   public default void setPosition(double elevatorPositionMeters) {}
 
-  public default void setNeutralMode(IdleMode idleMode) {}
+  public default void stop(IdleMode idleMode) {}
 }
