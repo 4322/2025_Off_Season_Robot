@@ -82,7 +82,7 @@ public final class Constants {
 
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0;
-    public static final double coralHoldDeg = 0.0;
+    public static final double coralHoldDeg = armIdleDeg;
     public static final double algaeGroundDeg = 55.0; // TODO: Set to actual angle
 
     public static final double ejectDeg = 45.0;
@@ -92,6 +92,8 @@ public final class Constants {
     public static final double minArmSafeDeg = 45.0; // TODO: Set to actual angle
     public static final double minArmSafeWithCoralDeg = 55.0; // TODO: Set to actual angle
     public static final double maxArmSafeDeg = 245.0;
+    public static final double ArmBufferDeg =
+        .0; // Degrees of buffer zone for min and max safe angles
 
     public static final double setpointToleranceDegrees = 0.01;
     public static final double supplyCurrentLimit = 40;

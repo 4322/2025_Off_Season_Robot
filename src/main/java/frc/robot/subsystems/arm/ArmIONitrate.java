@@ -69,12 +69,12 @@ public class ArmIONitrate implements ArmIO {
     NitrateSettings armConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);
     OutputSettings armMotorOutputSettings = new OutputSettings();
     armMotorOutputSettings.setInvert(Constants.Arm.ArmMotorInvert);
+
     if (!armConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate " + armMotor.getAddress().getDeviceId() + " (Arm motor) failed to configure",
           false);
     }
-
     if (!armEncoderConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandmag "
