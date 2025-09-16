@@ -92,7 +92,7 @@ public final class Constants {
     public static final double minArmSafeDeg = 45.0; // TODO: Set to actual angle
     public static final double minArmSafeWithCoralDeg = 55.0; // TODO: Set to actual angle
     public static final double maxArmSafeDeg = 245.0;
-    public static final double bufferDeg = 3; // Degrees of buffer zone for min and max safe angles
+    public static final double bufferDeg = 3; // Degrees of buffer zone for min safe angle
 
     public static final double setpointToleranceDegrees = 0.01;
     public static final double supplyCurrentLimit = 40;
