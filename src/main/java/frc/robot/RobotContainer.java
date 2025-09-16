@@ -28,6 +28,7 @@ import frc.robot.subsystems.Superstructure.OperationMode;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.arm.ArmIONitrate;
+import frc.robot.subsystems.arm.ArmIOSim;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.deployer.DeployerIO;
 import frc.robot.subsystems.deployer.DeployerIONitrate;
@@ -133,6 +134,7 @@ public class RobotContainer {
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         elevator = new Elevator(new ElevatorIOSim());
+        arm = new Arm(new ArmIOSim());
         initializeEmptySubsystems();
         vision =
             new Vision(
