@@ -45,18 +45,10 @@ public class Arm extends SubsystemBase {
     if (requestedSetpoint < minSafeArmDegree
         && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters
         && getAngleDegrees()
-            > (minSafeArmDegree - 1)) { // So if the requested setpoint is under the min
+            > (minSafeArmDegree - Constants.Arm.bufferDeg)) { // So if the requested setpoint is under the min
       // safe angle and the elevator is too low the arm
       // will go to min safe angle
       newSetpoint = minSafeArmDegree;
-    } else if (maxElevatorSafeMeters > elevatorHeight
-        && requestedSetpoint
-            < Constants.Arm.safeBargeRetractDeg) { // If the elevator is too high and the requested
-      // setpoint is not the safe retract then it will stay
-      // in place
-      newSetpoint =
-          inputs.armPositionDegrees; // Makes it so it won't move in case the elevator also needs to
-      // move as well as button spamming
     } else {
       newSetpoint = requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
     }
