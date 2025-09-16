@@ -31,7 +31,7 @@ public class Arm extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
-    Logger.recordOutput("Elevator/TargetAngle", requestedSetpoint);
+    Logger.recordOutput("Arm/TargetAngle", requestedSetpoint);
 
     if (RobotContainer.getSuperstructure().isCoralHeld()) {
       minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
