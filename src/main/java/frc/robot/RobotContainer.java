@@ -80,10 +80,24 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, IO devices, and commands. */
   public RobotContainer() {
 
+    // create default non-existant subsystems
+    arm = new Arm(new ArmIO() {});
+    drive =
+        new Drive(
+            new GyroIO() {},
+            new ModuleIO() {},
+            new ModuleIO() {},
+            new ModuleIO() {},
+            new ModuleIO() {});
+    vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+    elevator = new Elevator(new ElevatorIO() {});
+    endEffector = new EndEffector(new EndEffectorIO() {});
+    indexer = new Indexer(new IndexerIO() {});
+    rollers = new Rollers(new RollersIO() {});
+    deployer = new Deployer(new DeployerIO() {});
+
     switch (Constants.currentMode) {
       case REAL:
-        initializeEmptySubsystems();
-
         // Real robot, instantiate hardware IO implementations
         if (Constants.armEnabled) {
           arm = new Arm(new ArmIONitrate()); // Create the arm subsystem if enabled
@@ -124,74 +138,27 @@ public class RobotContainer {
         if (vision == null) {
           vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         }
-
-        intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
-        superstructure =
-            new Superstructure(
-                endEffector, arm, indexer, elevator, drive, vision, intakeSuperstructure);
         break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         elevator = new Elevator(new ElevatorIOSim());
         arm = new Arm(new ArmIOSim());
-        initializeEmptySubsystems();
         vision =
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
-        intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
-        superstructure =
-            new Superstructure(
-                endEffector, arm, indexer, elevator, drive, vision, intakeSuperstructure);
         break;
 
-      default:
+      case REPLAY:
         break;
     }
 
-    // Used during replay mode or when certain subsystems are disabled
-
-    // Configure the button bindings
-    configureButtonBindings();
-  }
-
-  private void initializeEmptySubsystems() {
-    if (arm == null) {
-      arm = new Arm(new ArmIO() {});
-    }
-    if (drive == null) {
-      drive =
-          new Drive(
-              new GyroIO() {},
-              new ModuleIO() {},
-              new ModuleIO() {},
-              new ModuleIO() {},
-              new ModuleIO() {});
-    }
-    if (vision == null) {
-      vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-    }
-    if (elevator == null) {
-      elevator = new Elevator(new ElevatorIO() {});
-    }
-
-    if (endEffector == null) {
-      endEffector = new EndEffector(new EndEffectorIO() {});
-    }
-
-    if (indexer == null) {
-      indexer = new Indexer(new IndexerIO() {});
-    }
-
-    if (rollers == null) {
-      rollers = new Rollers(new RollersIO() {});
-    }
-
-    if (deployer == null) {
-      deployer = new Deployer(new DeployerIO() {});
-    }
+    intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
+    superstructure =
+        new Superstructure(
+            endEffector, arm, indexer, elevator, drive, vision, intakeSuperstructure);
 
     // Configure the button bindings
     configureButtonBindings();
