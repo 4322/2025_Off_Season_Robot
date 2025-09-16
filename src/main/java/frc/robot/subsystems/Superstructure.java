@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
@@ -67,6 +66,7 @@ public class Superstructure extends SubsystemBase {
 
   private EndEffector endEffector;
   private Arm arm;
+  private Indexer indexer;
   private Elevator elevator;
   private Drive drive;
   private Vision vision;
@@ -78,11 +78,13 @@ public class Superstructure extends SubsystemBase {
   public Superstructure(
       EndEffector endEffector,
       Arm arm,
+      Indexer indexer,
       Elevator elevator,
       IntakeSuperstructure intakeSuperstructure) {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
+    this.indexer = indexer;
     this.intakeSuperstructure = intakeSuperstructure;
   }
 
