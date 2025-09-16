@@ -153,7 +153,7 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
-        sim1 = new CommandXboxController(0);
+        sim1 = new CommandXboxController(1);
         break;
 
       case REPLAY:
