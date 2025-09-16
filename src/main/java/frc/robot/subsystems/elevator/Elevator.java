@@ -54,14 +54,14 @@ public class Elevator extends SubsystemBase {
           state = ElevatorStates.ELEVATOR_MOVEMENT;
         }*/
       case ELEVATOR_MOVEMENT:
-      if(prevHeightMeters != requestedHeightMeters){
-        if (RobotContainer.getSuperstructure().getState() == Superstates.SCORE_CORAL) {
-          io.requestSlowHeightMeters(requestedHeightMeters);
-        } else {
-          io.requestHeightMeters(requestedHeightMeters);
+        if (prevHeightMeters != requestedHeightMeters) {
+          if (RobotContainer.getSuperstructure().getState() == Superstates.SCORE_CORAL) {
+            io.requestSlowHeightMeters(requestedHeightMeters);
+          } else {
+            io.requestHeightMeters(requestedHeightMeters);
+          }
+          prevHeightMeters = requestedHeightMeters;
         }
-        prevHeightMeters = requestedHeightMeters;
-      }
         break;
     }
   }
