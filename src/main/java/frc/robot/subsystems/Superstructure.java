@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +11,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
+import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -259,28 +258,24 @@ public class Superstructure extends SubsystemBase {
         break;
       case SAFE_SCORE_ALGAE_RETRACT:
         endEffector.idle();
+
         if (elevator.getElevatorHeightMeters() < Constants.Elevator.safeBargeRetractHeightMeters) {
           if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
             state = Superstates.IDLE;
           } else if (endEffector.hasAlgae()) {
             state = Superstates.ALGAE_IDLE;
           }
-        } 
-        arm.safeBargeRetract();
-        if (elevator.getElevatorHeightMeters() < Constants.Elevator.safeBargeRetractHeightMeters) {
-          if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
-            state = Superstates.IDLE;
-          } else if (endEffector.hasAlgae()) {
-            state = Superstates.ALGAE_IDLE;
-          }
-        } 
-        if (arm.atSetpoint()) {
-          elevator.safeBargeRetract();
-          if (elevator.atSetpoint()) {
-            if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
-              state = Superstates.IDLE;
-            } else if (endEffector.hasAlgae()) {
-              state = Superstates.ALGAE_IDLE;
+        } else if (elevator.getElevatorHeightMeters()
+            > Constants.Elevator.safeBargeRetractHeightMeters) {
+          arm.safeBargeRetract();
+          if (arm.atSetpoint()) {
+            elevator.safeBargeRetract();
+            if (elevator.atSetpoint()) {
+              if (!endEffector.hasAlgae() || !requestAlgaePrescore) {
+                state = Superstates.IDLE;
+              } else if (endEffector.hasAlgae()) {
+                state = Superstates.ALGAE_IDLE;
+              }
             }
           }
         }
