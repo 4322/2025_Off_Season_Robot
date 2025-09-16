@@ -24,7 +24,6 @@ import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
-import frc.robot.subsystems.Superstructure.OperationMode;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.arm.ArmIONitrate;
@@ -65,6 +64,7 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
  */
 public class RobotContainer {
   public static CommandXboxController driver = new CommandXboxController(0);
+  private static CommandXboxController sim1;
 
   private static Vision vision;
   private static Drive drive;
@@ -153,6 +153,7 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+        sim1 = new CommandXboxController(0);
         break;
 
       case REPLAY:
@@ -222,13 +223,21 @@ public class RobotContainer {
                     new ScoreCoral(superstructure, Level.L4).schedule();
                   }
                 }));
-    driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure, OperationMode.AUTO));
+    driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
     driver
         .back()
         .onTrue(
             new CoastCommand(arm, elevator, deployer)
                 .onlyIf(() -> DriverStation.isDisabled())
                 .ignoringDisable(true));
+  }
+
+  public static boolean isScoringTriggerHeld() {
+    if (Constants.currentMode == Constants.Mode.SIM) {
+      return sim1.a().getAsBoolean();
+    } else {
+      return driver.rightTrigger().getAsBoolean();
+    }
   }
 
   public static Superstructure getSuperstructure() {

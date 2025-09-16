@@ -3,17 +3,15 @@ package frc.robot.commands;
 import static frc.robot.RobotContainer.driver;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Superstructure;
 
 public class SwitchOperationModeCommand extends Command {
 
-  private Superstructure.OperationMode mode;
   private Superstructure superstructure;
 
-  public SwitchOperationModeCommand(
-      Superstructure superstructure, Superstructure.OperationMode mode) {
+  public SwitchOperationModeCommand(Superstructure superstructure) {
     this.superstructure = superstructure;
-    this.mode = mode;
     addRequirements(superstructure);
   }
 
@@ -26,7 +24,7 @@ public class SwitchOperationModeCommand extends Command {
         && !driver.x().getAsBoolean()
         && !driver.y().getAsBoolean()
         && !driver.b().getAsBoolean()
-        && !driver.rightTrigger().getAsBoolean()
+        && !RobotContainer.isScoringTriggerHeld()
         && !driver.leftBumper().getAsBoolean()
         && !driver.rightBumper().getAsBoolean()
         && !driver.leftTrigger().getAsBoolean()
