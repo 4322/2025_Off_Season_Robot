@@ -44,7 +44,7 @@ public class Arm extends SubsystemBase {
 
     elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
     if (requestedSetpoint < minSafeArmDegree
-        && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters
+        && elevatorHeight < (Constants.Elevator.minElevatorSafeHeightMeters - Constants.Elevator.bufferHeightMeters)
         && getAngleDegrees()
             > (minSafeArmDegree
                 - Constants.Arm.bufferDeg)) { // So if the requested setpoint is under the min

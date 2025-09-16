@@ -38,9 +38,10 @@ public class Elevator extends SubsystemBase {
         break;
       case ELEVATOR_MOVEMENT:
         double armAngle = RobotContainer.getSuperstructure().getArmAngle();
-        if ((armAngle > Constants.Arm.bufferDeg)
+        // TODO: Safety logic unsafe when going from coral held to score L2, FIX
+        if (armAngle > Constants.Arm.bufferDeg
             && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters
-            && (armAngle < Constants.Arm.minArmSafeDeg)) {
+            && armAngle < (Constants.Arm.minArmSafeDeg - Constants.Arm.bufferDeg)) {
           newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
         } else {
           newElevatorHeight = requestedHeightMeters;
