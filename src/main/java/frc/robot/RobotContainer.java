@@ -44,6 +44,7 @@ import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIONitrate;
+import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIONitrate;
@@ -144,6 +145,7 @@ public class RobotContainer {
         // Sim robot, instantiate physics sim IO implementations
         elevator = new Elevator(new ElevatorIOSim());
         arm = new Arm(new ArmIOSim());
+        endEffector = new EndEffector(new EndEffectorIOSim());
         vision =
             new Vision(
                 drive::addVisionMeasurement,

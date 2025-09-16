@@ -94,7 +94,8 @@ public final class Constants {
     public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = 0.5;
-    public static final double bufferDeg = setpointToleranceDegrees * 4; // Degrees of buffer zone for min safe angle
+    public static final double bufferDeg =
+        setpointToleranceDegrees * 4; // Degrees of buffer zone for min safe angle
     public static final double supplyCurrentLimit = 40;
     public static final double statorCurrentLimit = 100;
     public static final double kg = 20;
