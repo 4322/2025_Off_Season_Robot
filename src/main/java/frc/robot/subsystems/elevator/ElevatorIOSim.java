@@ -50,14 +50,14 @@ public class ElevatorIOSim implements ElevatorIO {
 
   @Override
   public void requestSlowHeightMeters(double heightMeters) {
-    requestedPosition = position;
+    requestedPosition = heightMeters;
     rate = slowRate;
     requestedVoltage = undefinedVoltage;
   }
 
   @Override
   public void requestHeightMeters(double heightMeters) {
-    requestedPosition = position;
+    requestedPosition = heightMeters;
     rate = fastRate;
     requestedVoltage = undefinedVoltage;
   }
