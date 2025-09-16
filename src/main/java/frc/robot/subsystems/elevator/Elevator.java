@@ -1,28 +1,24 @@
 package frc.robot.subsystems.elevator;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
   private ElevatorIO io;
-  private Timer initializationTimer = new Timer();
   ElevatorStates state = ElevatorStates.UNHOMED;
   ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   private double requestedHeightMeters = 0.0;
   private double prevHeightMeters = 0.0;
   private double newElevatorHeight;
   private boolean isSlow = false;
-  Superstructure superstructure;
 
   private enum ElevatorStates {
     UNHOMED,
-    INITIALIZATIONPROCEDURE,
     ELEVATOR_MOVEMENT
   }
 
@@ -40,24 +36,11 @@ public class Elevator extends SubsystemBase {
     switch (state) {
       case UNHOMED:
         break;
-      case INITIALIZATIONPROCEDURE:
-        /*
-        initializationTimer.start();
-        io.setVoltage(Constants.Elevator.intializationVoltage);
-        // setup initialization procedure logic
-        if (initializationTimer.hasElapsed(Constants.Elevator.initializationTimerThresholdSecs)
-            && Math.abs(inputs.leaderMotorVelocityMetersSecond)
-                < Constants.Elevator.initializationVelocityMetersThresholdPerSecs) {
-          io.setVoltage(0.1); // idk value
-          io.setPosition(Constants.Elevator.maxElevatorHeightMeters);
-          initializationTimer.stop();
-          initializationTimer.reset();
-          state = ElevatorStates.ELEVATOR_MOVEMENT;
-        }*/
       case ELEVATOR_MOVEMENT:
-        if ((superstructure.getArmAngle() > Constants.Arm.bufferDeg)
+        double armAngle = RobotContainer.getSuperstructure().getArmAngle();
+        if ((armAngle > Constants.Arm.bufferDeg)
             && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters
-            && (superstructure.getArmAngle() < Constants.Arm.minArmSafeDeg)) {
+            && (armAngle < Constants.Arm.minArmSafeDeg)) {
           newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
         } else {
           newElevatorHeight = requestedHeightMeters;
@@ -80,26 +63,21 @@ public class Elevator extends SubsystemBase {
   }
 
   public void algaeHold() {
-    // requestElevator = true;
     requestedHeightMeters = Constants.Elevator.algaeHoldMeters;
     isSlow = false;
   }
 
   public void coralHold() {
-    // requestElevator = true;
     requestedHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
     isSlow = false;
   }
 
   public void algaeGround() {
-    // requestElevator = true;
     requestedHeightMeters = Constants.Elevator.algaeGroundHeightMeters;
     isSlow = false;
   }
 
   public void algaeReef(Level level) {
-    // requestElevator = true;
-    // requestElevator = true;
     switch (level) {
       case L2:
         requestedHeightMeters = Constants.Elevator.algaeReefL2HeightMeters;
@@ -107,13 +85,14 @@ public class Elevator extends SubsystemBase {
       case L3:
         requestedHeightMeters = Constants.Elevator.algaeReefL3HeightMeters;
         break;
+      default:
+        System.out.println("Invalid level in Elevator.algaeReef()");
+        System.exit(-1); // die so someone has to fix this
     }
     isSlow = false;
   }
 
   public void scoreAlgae() {
-    // equestElevator = true;
-    // equestElevator = true;
     requestedHeightMeters = Constants.Elevator.scoreAlgaeHeightMeters;
     isSlow = false;
   }
@@ -155,11 +134,9 @@ public class Elevator extends SubsystemBase {
   }
 
   public void pickupCoral() {
-    // requestElevator = true;
     requestedHeightMeters =
         Constants.Elevator
             .pickupCoralHeightMeters; // Adjust this value based on the desired height for coral
-    // pickup
     isSlow = false;
   }
 
@@ -191,17 +168,8 @@ public class Elevator extends SubsystemBase {
     isSlow = false;
   }
 
-  public void climbing() {
-    // needs work
-  }
-
   public void eject() {
     requestedHeightMeters = Constants.Elevator.ejectSafeHeightMeters;
-    isSlow = false;
-  }
-
-  public void peformInitialization() {
-    state = ElevatorStates.INITIALIZATIONPROCEDURE;
     isSlow = false;
   }
 }
