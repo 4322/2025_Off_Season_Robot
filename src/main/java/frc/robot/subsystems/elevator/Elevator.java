@@ -54,20 +54,21 @@ public class Elevator extends SubsystemBase {
           state = ElevatorStates.ELEVATOR_MOVEMENT;
         }*/
       case ELEVATOR_MOVEMENT:
-      if((superstructure.getArmAngle() > Constants.Arm.bufferDeg) && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters && (superstructure.getArmAngle() < Constants.Arm.minArmSafeDeg)){
-        newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
-      }
-      else{
-      newElevatorHeight = requestedHeightMeters;
-    }
-      if(prevHeightMeters != newElevatorHeight){
-        if (isSlow) {
-          io.requestSlowHeightMeters(newElevatorHeight);
+        if ((superstructure.getArmAngle() > Constants.Arm.bufferDeg)
+            && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters
+            && (superstructure.getArmAngle() < Constants.Arm.minArmSafeDeg)) {
+          newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
         } else {
-          io.requestHeightMeters(newElevatorHeight);
+          newElevatorHeight = requestedHeightMeters;
         }
-        prevHeightMeters = requestedHeightMeters;
-      }
+        if (prevHeightMeters != newElevatorHeight) {
+          if (isSlow) {
+            io.requestSlowHeightMeters(newElevatorHeight);
+          } else {
+            io.requestHeightMeters(newElevatorHeight);
+          }
+          prevHeightMeters = requestedHeightMeters;
+        }
         break;
     }
   }
@@ -179,8 +180,8 @@ public class Elevator extends SubsystemBase {
     isSlow = false;
   }
 
-  public void setNeutralMode(IdleMode idleMode) {
-    io.setNeutralMode(idleMode);
+  public void stop(IdleMode idleMode) {
+    io.stop(idleMode);
     isSlow = false;
   }
 

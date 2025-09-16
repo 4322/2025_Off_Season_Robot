@@ -15,12 +15,12 @@ import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.arm.ArmIO.ArmIOInputs;
 
 public class ArmIONitrate implements ArmIO {
 
   private final Nitrate armMotor;
   private final Canandmag armEncoder;
+  private double lastRequestedPosDeg;
 
   private final PIDPositionRequest armPIDPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
@@ -86,10 +86,12 @@ public class ArmIONitrate implements ArmIO {
 
   @Override
   public void updateInputs(ArmIOInputs armInputs) {
+    armInputs.requestedPosDeg = lastRequestedPosDeg;
     armInputs.armPositionDegrees =
         Units.rotationsToDegrees(armMotor.getPosition()) - Constants.Arm.armOffsetEncoderDeg;
     armInputs.armConnected = armMotor.isConnected();
-    armInputs.velocity = Units.rotationsToDegrees(armMotor.getVelocity());
+    armInputs.voltage = armMotor.getBusVoltageFrame().getValue();
+    armInputs.velocityDegSec = Units.rotationsToDegrees(armMotor.getVelocity());
     armInputs.armSupplyCurrentAmps = armMotor.getBusCurrent();
     armInputs.armStatorCurrentAmps = armMotor.getStatorCurrent();
     armInputs.armTempCelsius = armMotor.getMotorTemperatureFrame().getData();
@@ -99,6 +101,7 @@ public class ArmIONitrate implements ArmIO {
 
   @Override
   public void setHomePosition() {
+    stopArmMotor(IdleMode.kBrake);
     armMotor.setPosition(Units.degreesToRotations(Constants.Arm.armOffsetEncoderDeg));
   }
 
@@ -107,6 +110,7 @@ public class ArmIONitrate implements ArmIO {
     armMotor.setRequest(
         armPIDPositionRequest.setPosition(
             Units.degreesToRotations(requestSetpoint + Constants.Arm.armOffsetEncoderDeg)));
+    lastRequestedPosDeg = requestSetpoint;
   }
 
   @Override
@@ -114,10 +118,12 @@ public class ArmIONitrate implements ArmIO {
     armMotor.setRequest(
         armSlowPIDPositionRequest.setPosition(
             Units.degreesToRotations(requestSetpoint + Constants.Arm.armOffsetEncoderDeg)));
+    lastRequestedPosDeg = requestSetpoint;
   }
 
   @Override
   public void stopArmMotor(IdleMode idleMode) {
     armMotor.stop(idleMode);
+    lastRequestedPosDeg = -1;
   }
 }

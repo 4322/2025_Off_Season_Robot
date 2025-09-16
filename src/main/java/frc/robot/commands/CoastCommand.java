@@ -24,9 +24,9 @@ public class CoastCommand extends Command {
   @Override
   public void initialize() {
     coastTimer.start();
-    arm.setNeutralMode(IdleMode.kCoast);
-    elevator.setNeutralMode(IdleMode.kCoast);
-    deployer.setNeutralMode(IdleMode.kCoast);
+    arm.stop(IdleMode.kCoast);
+    elevator.stop(IdleMode.kCoast);
+    deployer.stop(IdleMode.kCoast);
   }
 
   @Override
@@ -39,9 +39,9 @@ public class CoastCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    arm.setNeutralMode(IdleMode.kBrake);
-    elevator.setNeutralMode(IdleMode.kBrake);
-    deployer.setNeutralMode(IdleMode.kBrake);
+    arm.stop(IdleMode.kBrake);
+    elevator.stop(IdleMode.kBrake);
+    deployer.stop(IdleMode.kBrake);
     coastTimer.stop();
     coastTimer.reset();
   }

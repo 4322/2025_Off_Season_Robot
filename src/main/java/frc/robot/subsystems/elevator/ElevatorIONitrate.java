@@ -17,6 +17,7 @@ import frc.robot.constants.Constants;
 public class ElevatorIONitrate implements ElevatorIO {
   private final Nitrate leaderMotor;
   private final Nitrate followerMotor;
+  private double lastRequestedPosMeters;
   PIDPositionRequest elvSlowPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
   PIDPositionRequest elvPositionRequest =
@@ -95,8 +96,13 @@ public class ElevatorIONitrate implements ElevatorIO {
     inputs.leaderElevatorMotorConnected = leaderMotor.isConnected();
     inputs.followerElevatorMotorConnected = followerMotor.isConnected();
 
+    inputs.requestedPosMeters = lastRequestedPosMeters;
+
     inputs.leaderMotorheightMeters = rotationsToMeters(leaderMotor.getPosition());
     inputs.followerMotorheightMeters = rotationsToMeters(followerMotor.getPosition());
+
+    inputs.leaderMotorVoltage = leaderMotor.getBusVoltageFrame().getValue();
+    inputs.followerMotorVoltage = followerMotor.getBusVoltageFrame().getValue();
 
     inputs.followerMotorVelocityMetersPerSecond = followerMotor.getVelocity();
     inputs.leaderMotorVelocityMetersPerSecond = leaderMotor.getVelocity();
@@ -113,27 +119,32 @@ public class ElevatorIONitrate implements ElevatorIO {
 
   @Override
   public void setPosition(double elevatorPositionMeters) {
+    stop(IdleMode.kBrake);
     leaderMotor.setPosition(metersToRotations(elevatorPositionMeters));
   }
 
   @Override
   public void requestSlowHeightMeters(double heightMeters) {
     leaderMotor.setRequest(elvSlowPositionRequest.setPosition(metersToRotations(heightMeters)));
+    lastRequestedPosMeters = heightMeters;
   }
 
   @Override
   public void requestHeightMeters(double heightMeters) {
     leaderMotor.setRequest(elvPositionRequest.setPosition(metersToRotations(heightMeters)));
+    lastRequestedPosMeters = heightMeters;
   }
 
   @Override
   public void setVoltage(double voltage) {
     leaderMotor.setVoltage(voltage);
+    lastRequestedPosMeters = -1;
   }
 
   @Override
-  public void setNeutralMode(IdleMode idleMode) {
+  public void stop(IdleMode idleMode) {
     leaderMotor.stop(idleMode);
+    lastRequestedPosMeters = -1;
   }
 
   public double metersToRotations(double meters) {

@@ -64,7 +64,7 @@ public class Deployer extends SubsystemBase {
     isHomed = false;
   }
 
-  public void setNeutralMode(IdleMode mode) {
+  public void stop(IdleMode mode) {
     io.stopDeployerMotor(mode);
   }
 }

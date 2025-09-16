@@ -137,7 +137,7 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = Constants.Arm.safeBargeRetractDeg;
   }
 
-  public void setNeutralMode(IdleMode mode) {
+  public void stop(IdleMode mode) {
     prevSetpoint = -1000;
     io.stopArmMotor(mode);
   }
