@@ -71,6 +71,7 @@ public class Elevator extends SubsystemBase {
         break;
     }
   }
+  }
 
   public void idle() {
     requestedHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
