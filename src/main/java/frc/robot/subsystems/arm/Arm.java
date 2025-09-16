@@ -45,7 +45,8 @@ public class Arm extends SubsystemBase {
     if (requestedSetpoint < minSafeArmDegree
         && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters
         && getAngleDegrees()
-            > (minSafeArmDegree - Constants.Arm.bufferDeg)) { // So if the requested setpoint is under the min
+            > (minSafeArmDegree
+                - Constants.Arm.bufferDeg)) { // So if the requested setpoint is under the min
       // safe angle and the elevator is too low the arm
       // will go to min safe angle
       newSetpoint = minSafeArmDegree;
