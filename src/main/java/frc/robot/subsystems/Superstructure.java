@@ -245,20 +245,20 @@ public class Superstructure extends SubsystemBase {
         endEffector.idle();
 
         if (elevator.getElevatorHeightMeters() < Constants.Elevator.safeBargeRetractHeightMeters) {
-          if (!endEffector.hasAlgae()) {
-            state = Superstates.IDLE;
-          } else if (endEffector.hasAlgae()) {
+          if (endEffector.hasAlgae()) {
             state = Superstates.ALGAE_IDLE;
+          } else {
+            state = Superstates.IDLE;
           }
         } else {
           arm.safeBargeRetract();
           if (arm.atSetpoint()) {
             elevator.safeBargeRetract();
             if (elevator.atSetpoint()) {
-              if (!endEffector.hasAlgae()) {
-                state = Superstates.IDLE;
-              } else if (endEffector.hasAlgae()) {
+              if (endEffector.hasAlgae()) {
                 state = Superstates.ALGAE_IDLE;
+              } else {
+                state = Superstates.IDLE;
               }
             }
           }
