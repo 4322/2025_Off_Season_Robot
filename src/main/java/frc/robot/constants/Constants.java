@@ -152,8 +152,7 @@ public final class Constants {
         0.8739758746; // TODO: Set to actual position
     public static final double prescoreCoralL1HeightMeters = 0.85; // TODO: Set to actual position
     public static final double prescoreCoralL2HeightMeters = 0.0; // TODO: Set to actual position
-    public static final double prescoreCoralL3HeightMeters =
-        0.2303808194; 
+    public static final double prescoreCoralL3HeightMeters = 0.2303808194;
     public static final double prescoreCoralL4HeightMeters =
         Constants.Elevator.maxElevatorHeightMeters; // TODO: Set to actual position
     public static final double pickupCoralHeightMeters = 0.5; // TODO: Set to actual position
@@ -171,12 +170,11 @@ public final class Constants {
     public static final double VelocityLimit = 10;
     public static final double minElevatorSafeHeightMeters = 0.1; // need actual values
     public static final double minElevatorSafeWithCoralHeightMeters = 0.2; // need actual values
-    public static final double homeHeightMeters =
-        0.3917895136; 
+    public static final double homeHeightMeters = 0.3917895136;
 
     public static final double gearRatio = 6 / 1;
     public static final double setpointToleranceDegrees = 0.01;
-    public static final double maxElevatorHeightMeters = 1.3068401092; 
+    public static final double maxElevatorHeightMeters = 1.3068401092;
     public static final double scoreCoralL1HeightMeters = 0.3; // TODO: Set to actual position
     public static final double scoreCoralL2HeightMeters = 0.5;
     public static final double scoreCoralL3HeightMeters = 0.7; // TODO: Set to actual position

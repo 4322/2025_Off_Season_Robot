@@ -18,8 +18,8 @@ public class Elevator extends SubsystemBase {
   ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   private double requestedHeightMeters = 0.0;
   private double prevHeightMeters = 0.0;
+  private boolean isSlow = false;
   Superstructure superstructure;
-
   private enum ElevatorStates {
     UNHOMED,
     INITIALIZATIONPROCEDURE,
@@ -54,8 +54,11 @@ public class Elevator extends SubsystemBase {
           state = ElevatorStates.ELEVATOR_MOVEMENT;
         }*/
       case ELEVATOR_MOVEMENT:
+      if(requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters && superstructure.getArmAngle() < Constants.Arm.minArmSafeDeg) {
+        requestedHeightMeters = inputs.leaderMotorheightMeters;
+      }
       if(prevHeightMeters != requestedHeightMeters){
-        if (RobotContainer.getSuperstructure().getState() == Superstates.SCORE_CORAL) {
+        if (isSlow) {
           io.requestSlowHeightMeters(requestedHeightMeters);
         } else {
           io.requestHeightMeters(requestedHeightMeters);
@@ -68,21 +71,27 @@ public class Elevator extends SubsystemBase {
 
   public void idle() {
     requestedHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
+    isSlow = false;
   }
 
   public void algaeHold() {
     // requestElevator = true;
     requestedHeightMeters = Constants.Elevator.algaeHoldMeters;
+    isSlow = false;
   }
 
   public void coralHold() {
     // requestElevator = true;
     requestedHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
+    isSlow = false;
+
   }
 
   public void algaeGround() {
     // requestElevator = true;
     requestedHeightMeters = Constants.Elevator.algaeGroundHeightMeters;
+    isSlow = false;
+
   }
 
   public void algaeReef(Level level) {
@@ -96,12 +105,16 @@ public class Elevator extends SubsystemBase {
         requestedHeightMeters = Constants.Elevator.algaeReefL3HeightMeters;
         break;
     }
+    isSlow = false;
+
   }
 
   public void scoreAlgae() {
     // equestElevator = true;
     // equestElevator = true;
     requestedHeightMeters = Constants.Elevator.scoreAlgaeHeightMeters;
+    isSlow = false;
+
   }
 
   public void prescoreCoral(Level level) {
@@ -119,6 +132,8 @@ public class Elevator extends SubsystemBase {
         requestedHeightMeters = Constants.Elevator.prescoreCoralL4HeightMeters;
         break;
     }
+    isSlow = false;
+
   }
 
   public void scoreCoral(Level level) {
@@ -136,6 +151,7 @@ public class Elevator extends SubsystemBase {
         requestedHeightMeters = Constants.Elevator.scoreCoralL4HeightMeters;
         break;
     }
+    isSlow = true;
   }
 
   public void pickupCoral() {
@@ -144,6 +160,8 @@ public class Elevator extends SubsystemBase {
         Constants.Elevator
             .pickupCoralHeightMeters; // Adjust this value based on the desired height for coral
     // pickup
+    isSlow = false;
+
   }
 
   public boolean atSetpoint() {
@@ -161,14 +179,20 @@ public class Elevator extends SubsystemBase {
   public void setHomePosition() {
     io.setPosition(Constants.Elevator.homeHeightMeters);
     state = ElevatorStates.ELEVATOR_MOVEMENT;
+    isSlow = false;
+
   }
 
   public void setNeutralMode(IdleMode idleMode) {
     io.setNeutralMode(idleMode);
+    isSlow = false;
+
   }
 
   public void safeBargeRetract() {
     requestedHeightMeters = Constants.Elevator.safeBargeRetractHeightMeters;
+    isSlow = false;
+
   }
 
   public void climbing() {
@@ -177,9 +201,13 @@ public class Elevator extends SubsystemBase {
 
   public void eject() {
     requestedHeightMeters = Constants.Elevator.ejectSafeHeightMeters;
+    isSlow = false;
+
   }
 
   public void peformInitialization() {
     state = ElevatorStates.INITIALIZATIONPROCEDURE;
+    isSlow = false;
+
   }
 }
