@@ -48,6 +48,7 @@ import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIONitrate;
+import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
@@ -146,6 +147,7 @@ public class RobotContainer {
         elevator = new Elevator(new ElevatorIOSim());
         arm = new Arm(new ArmIOSim());
         endEffector = new EndEffector(new EndEffectorIOSim());
+        indexer = new Indexer(new IndexerIOSim());
         vision =
             new Vision(
                 drive::addVisionMeasurement,
