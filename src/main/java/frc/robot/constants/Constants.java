@@ -31,7 +31,7 @@ public final class Constants {
 
   public static final int dioHomeButton = 0;
   public static final double homeButtonDelaySec = 1.0;
-public static final boolean visionObjectDetectionEnabled = false;
+  public static final boolean visionObjectDetectionEnabled = false;
 
   public static enum Mode {
     /** Running on a real robot. */

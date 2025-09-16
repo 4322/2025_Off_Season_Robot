@@ -6,7 +6,6 @@ import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 
-
 public class CoralIntake extends Command {
 
   private IntakeSuperstructure intakeSuperstructure;
@@ -14,16 +13,17 @@ public class CoralIntake extends Command {
   private VisionObjectDetection visionObjectDetection;
   private Translation2d coralPosition;
 
-  public CoralIntake(IntakeSuperstructure intakeSuperstructure, Drive drive, VisionObjectDetection visionObjectDetection) {
+  public CoralIntake(
+      IntakeSuperstructure intakeSuperstructure,
+      Drive drive,
+      VisionObjectDetection visionObjectDetection) {
     this.intakeSuperstructure = intakeSuperstructure;
     this.drive = drive;
     this.visionObjectDetection = visionObjectDetection;
   }
 
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {

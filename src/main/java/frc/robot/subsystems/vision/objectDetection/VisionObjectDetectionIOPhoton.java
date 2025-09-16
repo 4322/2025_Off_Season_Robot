@@ -64,7 +64,8 @@ public class VisionObjectDetectionIOPhoton implements VisionObjectDetectionIO {
     for (PhotonTrackedTarget currentTarget : result.getTargets()) {
       if (currentTarget.getDetectedObjectClassID() == -1) continue;
 
-      inputs.hasTarget[currentTarget.getDetectedObjectClassID()] = true; // TODO manually set id in gui?
+      inputs.hasTarget[currentTarget.getDetectedObjectClassID()] =
+          true; // TODO manually set id in gui?
       visibleObjectsRotations[currentTarget.getDetectedObjectClassID()].add(
           extractRotation3d(currentTarget));
     }
@@ -99,7 +100,10 @@ public class VisionObjectDetectionIOPhoton implements VisionObjectDetectionIO {
 
   private Rotation3d calculateMiddleRotation(PhotonTrackedTarget target) {
     return new Rotation3d(
-        0, Units.degreesToRadians(target.getPitch()), Units.degreesToRadians(-target.getYaw())); // TODO move this into actual code; check updated code from Trigon
+        0,
+        Units.degreesToRadians(target.getPitch()),
+        Units.degreesToRadians(
+            -target.getYaw())); // TODO move this into actual code; check updated code from Trigon
   } // TODO yaw shouldn't be inverted; left is positive; get rid of negative
   // TODO pitch should be negative
 

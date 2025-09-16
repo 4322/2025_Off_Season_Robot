@@ -5,8 +5,8 @@ import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -146,7 +146,10 @@ public class RobotContainer {
         }
 
         if (Constants.visionObjectDetectionEnabled) {
-          visionObjectDetection = new VisionObjectDetection(new VisionObjectDetectionIOPhoton(), new Transform3d()/*Transform3d robotCenterToCamera */);
+          visionObjectDetection =
+              new VisionObjectDetection(
+                  new VisionObjectDetectionIOPhoton(),
+                  new Transform3d() /*Transform3d robotCenterToCamera */);
         }
         intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
         superstructure =
@@ -173,7 +176,9 @@ public class RobotContainer {
     }
 
     intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
-    superstructure = new Superstructure(endEffector, arm, indexer, elevator, drive, vision, intakeSuperstructure);
+    superstructure =
+        new Superstructure(
+            endEffector, arm, indexer, elevator, drive, vision, intakeSuperstructure);
 
     // Configure the button bindings
     configureButtonBindings();

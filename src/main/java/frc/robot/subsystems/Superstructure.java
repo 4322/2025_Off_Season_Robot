@@ -12,7 +12,6 @@ import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
