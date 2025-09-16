@@ -37,20 +37,25 @@ public class ElevatorIONitrate implements ElevatorIO {
     FollowMotorRequest followerRequest = new FollowMotorRequest(leaderMotor);
 
     elevatorPIDSettings.setPID(
-        Constants.Elevator.kP0, Constants.Elevator.kI0, Constants.Elevator.kD0);
+        Constants.Elevator.fast_kP, Constants.Elevator.fast_kI, Constants.Elevator.fast_kD);
     elevatorPIDSettings.setGravitationalFeedforward(Constants.Elevator.kG);
     elevatorPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
-    elevatorPIDSettings.setMotionProfileAccelLimit(Constants.Elevator.AccelerationLimit);
-    elevatorPIDSettings.setMotionProfileDeaccelLimit(Constants.Elevator.DeaccelerationLimit);
-    elevatorPIDSettings.setMotionProfileVelocityLimit(Constants.Elevator.VelocityLimit);
+    elevatorPIDSettings.setMotionProfileAccelLimit(
+        Constants.Elevator.fastAccelerationMetersPerSec2);
+    elevatorPIDSettings.setMotionProfileDeaccelLimit(
+        Constants.Elevator.fastDecelerationMetersPerSec2);
+    elevatorPIDSettings.setMotionProfileVelocityLimit(Constants.Elevator.fastVelocityMetersPerSec);
 
     elevatorSlowPIDSettings.setPID(
-        Constants.Elevator.kP1, Constants.Elevator.kI1, Constants.Elevator.kD1);
+        Constants.Elevator.slow_kP, Constants.Elevator.slow_kI, Constants.Elevator.slow_kD);
     elevatorSlowPIDSettings.setGravitationalFeedforward(Constants.Elevator.kG);
     elevatorSlowPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
-    elevatorSlowPIDSettings.setMotionProfileAccelLimit(Constants.Elevator.AccelerationLimit);
-    elevatorSlowPIDSettings.setMotionProfileDeaccelLimit(Constants.Elevator.DeaccelerationLimit);
-    elevatorSlowPIDSettings.setMotionProfileVelocityLimit(Constants.Elevator.VelocityLimit);
+    elevatorSlowPIDSettings.setMotionProfileAccelLimit(
+        Constants.Elevator.slowAccelerationMetersPerSec2);
+    elevatorSlowPIDSettings.setMotionProfileDeaccelLimit(
+        Constants.Elevator.slowDecelerationMetersPerSec2);
+    elevatorSlowPIDSettings.setMotionProfileVelocityLimit(
+        Constants.Elevator.slowVelocityMetersPerSec);
 
     frontElevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
     frontElevatorMotorOutputSettings.setInvert(Constants.Elevator.motorFrontInvert);

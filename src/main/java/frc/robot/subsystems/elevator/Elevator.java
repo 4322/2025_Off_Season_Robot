@@ -69,7 +69,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void coralHold() {
-    requestedHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
+    requestedHeightMeters = Constants.Elevator.minElevatorSafeWithCoralHeightMeters;
     isSlow = false;
   }
 
@@ -170,7 +170,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void eject() {
-    requestedHeightMeters = Constants.Elevator.ejectSafeHeightMeters;
+    requestedHeightMeters = Constants.Elevator.ejectHeightMeters;
     isSlow = false;
   }
 }
