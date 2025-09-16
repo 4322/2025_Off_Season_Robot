@@ -54,18 +54,13 @@ public class Elevator extends SubsystemBase {
           state = ElevatorStates.ELEVATOR_MOVEMENT;
         }*/
       case ELEVATOR_MOVEMENT:
-      if (superstructure.getArmAngle() >= Constants.Arm.bufferDeg ) {
-      if(requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters && ((superstructure.getArmAngle() < Constants.Arm.minArmSafeDeg))){
+      if((superstructure.getArmAngle() > Constants.Arm.bufferDeg) && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters && (superstructure.getArmAngle() < Constants.Arm.minArmSafeDeg)){
         newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
-      }
-      else if (superstructure.getArmAngle() < Constants.Arm.minArmSafeWithCoralDeg){
-        newElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralHeightMeters;
       }
       else{
       newElevatorHeight = requestedHeightMeters;
-      }
     }
-      if(prevHeightMeters != requestedHeightMeters){
+      if(prevHeightMeters != newElevatorHeight){
         if (isSlow) {
           io.requestSlowHeightMeters(newElevatorHeight);
         } else {
