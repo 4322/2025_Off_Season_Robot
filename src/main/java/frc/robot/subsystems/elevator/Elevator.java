@@ -19,6 +19,7 @@ public class Elevator extends SubsystemBase {
   ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   private double requestedHeightMeters = 0.0;
   private double prevHeightMeters = 0.0;
+  private double newElevatorHeight;
   private boolean isSlow = false;
   Superstructure superstructure;
   private enum ElevatorStates {
@@ -55,22 +56,27 @@ public class Elevator extends SubsystemBase {
           state = ElevatorStates.ELEVATOR_MOVEMENT;
         }*/
       case ELEVATOR_MOVEMENT:
-      if (superstructure.getArmAngle() <= Constants.Arm.bufferDeg ) {
-      if(requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters && ((superstructure.getArmAngle() < Constants.Arm.minArmSafeDeg)||(superstructure.getArmAngle() < Constants.Arm.minArmSafeWithCoralDeg))){ {
-        requestedHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
+      if (superstructure.getArmAngle() >= Constants.Arm.bufferDeg ) {
+      if(requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters && ((superstructure.getArmAngle() < Constants.Arm.minArmSafeDeg))){
+        newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
+      }
+      else if (superstructure.getArmAngle() < Constants.Arm.minArmSafeWithCoralDeg){
+        newElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralHeightMeters;
+      }
+      else{
+      newElevatorHeight = requestedHeightMeters;
       }
     }
       if(prevHeightMeters != requestedHeightMeters){
         if (isSlow) {
-          io.requestSlowHeightMeters(requestedHeightMeters);
+          io.requestSlowHeightMeters(newElevatorHeight);
         } else {
-          io.requestHeightMeters(requestedHeightMeters);
+          io.requestHeightMeters(newElevatorHeight);
         }
         prevHeightMeters = requestedHeightMeters;
       }
         break;
     }
-  }
   }
 
   public void idle() {
