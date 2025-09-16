@@ -36,6 +36,7 @@ public class Elevator extends SubsystemBase {
     Logger.processInputs("Elevator", inputs);
     Logger.recordOutput("Elevator/atHeight", atSetpoint());
     Logger.recordOutput("Elevator/ElevatorStates", state.toString());
+    Logger.recordOutput("Elevator/TargetHeight", requestedHeightMeters);
     switch (state) {
       case UNHOMED:
         break;
