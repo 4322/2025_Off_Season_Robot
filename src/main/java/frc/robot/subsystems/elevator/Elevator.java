@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.Arm;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.Superstructure.Superstates;
@@ -54,9 +55,11 @@ public class Elevator extends SubsystemBase {
           state = ElevatorStates.ELEVATOR_MOVEMENT;
         }*/
       case ELEVATOR_MOVEMENT:
-      if(requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters && superstructure.getArmAngle() < Constants.Arm.minArmSafeDeg) {
-        requestedHeightMeters = inputs.leaderMotorheightMeters;
+      if (superstructure.getArmAngle() <= Constants.Arm.bufferDeg ) {
+      if(requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters && ((superstructure.getArmAngle() < Constants.Arm.minArmSafeDeg)||(superstructure.getArmAngle() < Constants.Arm.minArmSafeWithCoralDeg))){ {
+        requestedHeightMeters = Constants.Elevator.minElevatorSafeHeightMeters;
       }
+    }
       if(prevHeightMeters != requestedHeightMeters){
         if (isSlow) {
           io.requestSlowHeightMeters(requestedHeightMeters);
