@@ -23,7 +23,7 @@ public class ScoreCoral extends Command {
 
   @Override
   public void execute() {
-    if (driver.rightTrigger().getAsBoolean() &&) {
+    if (driver.rightTrigger().getAsBoolean()) {
       superstructure.requestScoreCoral(Level);
     }
   }

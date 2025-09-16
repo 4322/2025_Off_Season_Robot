@@ -20,6 +20,7 @@ public class Arm extends SubsystemBase {
   public double newSetpoint;
   public double elevatorHeight;
   private Superstructure superstructure;
+  private boolean isSlow = false;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -42,9 +43,9 @@ public class Arm extends SubsystemBase {
 
     elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
     if (requestedSetpoint < minSafeArmDegree
-        && elevatorHeight
-            < Constants.Elevator
-                .minElevatorSafeHeightMeters) { // So if the requested setpoint is under the min
+        && elevatorHeight < Constants.Elevator.minElevatorSafeHeightMeters
+        && getAngleDegrees()
+            > (minSafeArmDegree - 1)) { // So if the requested setpoint is under the min
       // safe angle and the elevator is too low the arm
       // will go to min safe angle
       newSetpoint = minSafeArmDegree;
@@ -61,7 +62,7 @@ public class Arm extends SubsystemBase {
     }
 
     if (prevSetpoint != newSetpoint) {
-      if (superstructure.isSlow) {
+      if (isSlow) {
         io.requestSlowPosition(newSetpoint);
         prevSetpoint = newSetpoint;
       } else {
@@ -117,6 +118,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void scoreCoral(Level level) {
+    isSlow = true;
     switch (level) {
       case L1:
         requestedSetpoint = Constants.Arm.scoringL1CoralDeg;
