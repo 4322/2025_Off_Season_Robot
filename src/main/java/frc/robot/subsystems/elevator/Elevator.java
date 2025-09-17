@@ -33,28 +33,33 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("Elevator/atHeight", atSetpoint());
     Logger.recordOutput("Elevator/ElevatorStates", state.toString());
     Logger.recordOutput("Elevator/TargetHeight", requestedHeightMeters);
-    switch (state) {
-      case UNHOMED:
-        break;
-      case ELEVATOR_MOVEMENT:
-        double armAngle = RobotContainer.getSuperstructure().getArmAngle();
-        // TODO: Safety logic unsafe when going from coral held to score L2, FIX
-        if (armAngle > Constants.Arm.bufferDeg
-            && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters
-            && armAngle < (Constants.Arm.minArmSafeDeg - Constants.Arm.bufferDeg)) {
-          newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
-        } else {
-          newElevatorHeight = requestedHeightMeters;
-        }
-        if (prevHeightMeters != newElevatorHeight) {
-          if (isSlow) {
-            io.requestSlowHeightMeters(newElevatorHeight);
+
+    if (Constants.Elevator.manualControl) {
+      io.setVoltage(-RobotContainer.driver.getLeftY() * 12.0);
+    } else {
+      switch (state) {
+        case UNHOMED:
+          break;
+        case ELEVATOR_MOVEMENT:
+          double armAngle = RobotContainer.getSuperstructure().getArmAngle();
+          // TODO: Safety logic unsafe when going from coral held to score L2, FIX
+          if (armAngle > Constants.Arm.bufferDeg
+              && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters
+              && armAngle < (Constants.Arm.minArmSafeDeg - Constants.Arm.bufferDeg)) {
+            newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
           } else {
-            io.requestHeightMeters(newElevatorHeight);
+            newElevatorHeight = requestedHeightMeters;
           }
-          prevHeightMeters = requestedHeightMeters;
-        }
-        break;
+          if (prevHeightMeters != newElevatorHeight) {
+            if (isSlow) {
+              io.requestSlowHeightMeters(newElevatorHeight);
+            } else {
+              io.requestHeightMeters(newElevatorHeight);
+            }
+            prevHeightMeters = requestedHeightMeters;
+          }
+          break;
+      }
     }
   }
 

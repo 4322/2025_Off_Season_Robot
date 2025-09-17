@@ -28,23 +28,23 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     initMotorConfig();
     NitrateSettings endEffectorMotorConfigStatus =
         endEffectorMotor.setSettings(endEffectorMotorConfig, 0.02, 5);
-    if (!endEffectorMotorConfigStatus.allSettingsReceived()) {
+    if (!endEffectorMotorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
               + endEffectorMotor.getAddress().getDeviceId()
               + " error (End Effector Motor); Did not receive settings",
-          null);
+          false);
     }
 
     initSensorConfig();
     CanandcolorSettings endEffectorSensorConfigStatus =
         endEffectorSensor.setSettings(endEffectorSensorConfig, 0.02, 5);
-    if (!endEffectorSensorConfigStatus.allSettingsReceived()) {
+    if (!endEffectorSensorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandcolor "
               + endEffectorSensor.getAddress().getDeviceId()
               + " error (End Effector Sensor); Did not receive settings",
-          null);
+          false);
     }
   }
 

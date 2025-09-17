@@ -13,7 +13,6 @@ public interface ElevatorIO {
     public double leaderMotorVoltage = 0.0;
     public boolean leaderElevatorMotorConnected = false;
     public double leaderMotorVelocityMetersPerSecond = 0.0;
-    public double leaderMotorAppliedVoltage = 0.0;
     public double leaderMotorSupplyCurrentAmps = 0.0;
     public double leaderMotorStatorCurrentAmps = 0.0;
     public double leaderMotortempCelcius = 0.0;
@@ -22,7 +21,6 @@ public interface ElevatorIO {
     public double followerMotorVoltage = 0.0;
     public boolean followerElevatorMotorConnected = false;
     public double followerMotorVelocityMetersPerSecond = 0.0;
-    public double followerMotorAppliedVoltage = 0.0;
     public double followerMotorSupplyCurrentAmps = 0.0;
     public double followerMotorStatorCurrentAmps = 0.0;
     public double followerMotortempCelcius = 0.0;

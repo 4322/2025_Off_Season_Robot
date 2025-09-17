@@ -1,7 +1,6 @@
 package frc.robot.constants;
 
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
-import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import edu.wpi.first.math.util.Units;
@@ -16,16 +15,19 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final boolean armEnabled = true;
-  public static final boolean elevatorEnabled = true;
-  public static final boolean deployerEnabled = true;
-  public static final boolean indexerEnabled = true;
-  public static final boolean rollersEnabled = true;
-  public static final boolean endEffectorEnabled = true;
-  public static final boolean visionEnabled = true;
-  public static final boolean driveEnabled = true;
+  public static final boolean armEnabled = false;
+  public static final boolean elevatorEnabled = false;
+  public static final boolean deployerEnabled = false;
+  public static final boolean indexerEnabled = false;
+  public static final boolean rollersEnabled = false;
+  public static final boolean endEffectorEnabled = false;
+  public static final boolean visionEnabled = false;
+  public static final boolean driveEnabled = false;
 
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
+
+  public static final String logPath = "/home/lvuser/logs";
+  public static final long minFreeSpace = 1000000000; // 1 GB
 
   public static final int dioHomeButton = 0;
   public static final double homeButtonDelaySec = 1.0;
@@ -73,9 +75,13 @@ public final class Constants {
   }
 
   public static class Arm {
-    public static final InvertMode ArmMotorInvert = InvertMode.kInverted;
     public static final int armMotorId = 10;
     public static final int armEncoderId = 10;
+
+    public static final boolean manualontrol = false;
+    public static final InvertMode armMotorInvert =
+        InvertMode.kNotInverted; // positive is up toward scoring side
+    public static final IdleMode motorIdleMode = IdleMode.kBrake;
 
     public static final double sensorToArm = 85 / 10;
     public static final double motorShaftToSensorShaft = 56 / 16;
@@ -88,7 +94,6 @@ public final class Constants {
     public static final double ejectDeg = 45.0;
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
-    // The purpose of
     public static final double minArmSafeDeg = 45.0; // TODO: Set to actual angle
     public static final double minArmSafeWithCoralDeg = 55.0; // TODO: Set to actual angle
     public static final double maxArmSafeDeg = 245.0;
@@ -96,14 +101,14 @@ public final class Constants {
     public static final double setpointToleranceDegrees = 0.5;
     public static final double bufferDeg =
         setpointToleranceDegrees * 4; // Degrees of buffer zone for min safe angle
-    public static final double supplyCurrentLimit = 40;
-    public static final double statorCurrentLimit = 100;
+    public static final double supplyCurrentLimitAmps = 40;
+    public static final double statorCurrentLimitAmps = 100;
     public static final double kg = 20;
 
     public static final ElectricalLimitSettings armElectricalLimitSettings =
         new ElectricalLimitSettings();
 
-    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg -5; // TODO
+    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 5; // TODO
     public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20; // TODO
     public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20; // TODO
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 30; // TODO
@@ -134,9 +139,11 @@ public final class Constants {
   public static class Elevator {
     public static final int frontMotorID = 20;
     public static final int backMotorID = 21;
+
+    public static final boolean manualControl = false;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorFrontInvert = InvertMode.kNotInverted;
-    public static final InvertMode motorBackInvert = InvertMode.kInverted;
+    public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
+    public static final InvertMode motorBackInvert = InvertMode.kInverted; // positive is up
     public static final double fast_kP = 1; // TODO: Set to actual value
     public static final double fast_kI = 0; // TODO: Set to actual value
     public static final double fast_kD = 0; // TODO: Set to actual value
@@ -198,6 +205,7 @@ public final class Constants {
     public static final double algaeReleaseVolts = -3.0;
     public static final double coralReleaseVolts =
         -3.0; // TODO make sure this is slow enough for scoring coral.
+    public static final double coralReleaseVoltsL1 = -2.0;
 
     public static final double ejectVolts = -3.0;
 
@@ -222,7 +230,7 @@ public final class Constants {
     public static final double sensorWhiteDetectBlue = 180;
     public static final double sensorWhiteDetectRed = 180;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorInvert = InvertMode.kNotInverted;
+    public static final InvertMode motorInvert = InvertMode.kNotInverted; // positive is intaking
 
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
@@ -248,9 +256,8 @@ public final class Constants {
     public static final double motorBusCurrentLimitTime = 40;
     public static final double motorBusCurrentLimit = 60;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorInvertMode = null;
-    public static final HardLimitConfig motorForwardHardLimit = null;
-    public static final HardLimitConfig motorReverseHardLimit = null;
+    public static final InvertMode motorInvertMode =
+        InvertMode.kNotInverted; // positive is retracting
     public static final double motorDeploykP = 1;
     public static final double motorDeploykI = 0;
     public static final double motorDeploykD = 0;
@@ -258,8 +265,9 @@ public final class Constants {
     public static final double motorRetractkP = 1;
     public static final double motorRetractkI = 0;
     public static final double motorRetractkD = 0;
-    public static final int deployerMotorEncoderId = 0;
-    public static final InvertMode motorEncoderInverted = InvertMode.kInverted;
+    public static final int deployerMotorEncoderId = 0; // not currently installed
+    public static final InvertMode motorEncoderInverted =
+        InvertMode.kInverted; // reverse of motor, if installed
     // 1 motor rotation is 1/49 of deployer rotation
     // Range of motion of deployer is about 0-140 degrees
     public static final double motorGearRatio = 14.58333333333;
@@ -275,8 +283,9 @@ public final class Constants {
     public static final double motorBusCurrentLimitTime = 0.5;
     public static final double motorStatorCurrentLimit = 60;
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
-    public static final InvertMode motorRightInvert = InvertMode.kInverted;
-    public static final InvertMode motorLeftInvert = InvertMode.kNotInverted;
+    public static final InvertMode motorRightInvert = InvertMode.kInverted; // positive is intaking
+    public static final InvertMode motorLeftInvert =
+        InvertMode.kNotInverted; // positive is intaking
     public static final double indexerSensorMax = 0;
     public static final double pickupAreaSensorMax = 0;
     public static final int indexerSensorId = 0;
@@ -295,7 +304,8 @@ public final class Constants {
     public static final double motorBusCurrentLimit = 40;
 
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
-    public static final InvertMode motorInvert = null;
+    public static final InvertMode motorInvert =
+        InvertMode.kNotInverted; // positive is intaking, TODO: verify direction
 
     public static final double motorVoltageFeed = 5;
     public static final double motorVoltageFeedSlow = 3;

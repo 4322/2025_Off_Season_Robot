@@ -22,12 +22,12 @@ public class RollersIONitrate implements RollersIO {
     initMotorConfig();
     NitrateSettings rollersMotorConfigStatus =
         rollersMotor.setSettings(rollersMotorConfig, 0.02, 5);
-    if (!rollersMotorConfigStatus.allSettingsReceived()) {
+    if (!rollersMotorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
               + rollersMotor.getAddress().getDeviceId()
               + " error (Rollers Motor); Did not receive settings",
-          null);
+          false);
     }
   }
 

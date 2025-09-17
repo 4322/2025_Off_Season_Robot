@@ -33,42 +33,42 @@ public class IndexerIONitrate implements IndexerIO {
     initMotorConfig();
     NitrateSettings indexerMotorConfigStatus =
         indexerMotorRight.setSettings(indexerMotorRightConfig, 0.02, 5);
-    if (!indexerMotorConfigStatus.allSettingsReceived()) {
+    if (!indexerMotorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
               + indexerMotorRight.getAddress().getDeviceId()
               + " error (Indexer Motor); Did not receive settings",
-          null);
+          false);
     }
     NitrateSettings indexerMotorLeftConfigStatus =
         indexerMotorLeft.setSettings(indexerMotorLeftConfig, 0.02, 5);
-    if (!indexerMotorLeftConfigStatus.allSettingsReceived()) {
+    if (!indexerMotorLeftConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
               + indexerMotorLeft.getAddress().getDeviceId()
               + " error (Indexer Motor Left); Did not receive settings",
-          null);
+          false);
     }
 
     configSensor();
     CanandcolorSettings indexerSensorConfigStatus =
         indexerSensor.setSettings(indexerSensorConfig, 0.02, 5);
-    if (!indexerSensorConfigStatus.allSettingsReceived()) {
+    if (!indexerSensorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandcolor "
               + indexerSensor.getAddress().getDeviceId()
               + " error (Indexer Sensor); Did not receive settings",
-          null);
+          false);
     }
 
     CanandcolorSettings pickupAreaSensorConfigStatus =
         pickupAreaSensor.setSettings(pickupAreaSensorConfig, 0.02, 5);
-    if (!pickupAreaSensorConfigStatus.allSettingsReceived()) {
+    if (!pickupAreaSensorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandcolor "
               + pickupAreaSensor.getAddress().getDeviceId()
               + " error (Pickup Area Sensor); Did not receive settings",
-          null);
+          false);
     }
   }
 
