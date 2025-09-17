@@ -1,7 +1,6 @@
 package frc.robot.constants;
 
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
-import com.reduxrobotics.motorcontrol.nitrate.types.HardLimitConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import edu.wpi.first.math.util.Units;
@@ -249,9 +248,7 @@ public final class Constants {
     public static final double motorBusCurrentLimitTime = 40;
     public static final double motorBusCurrentLimit = 60;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorInvertMode = null;
-    public static final HardLimitConfig motorForwardHardLimit = null;
-    public static final HardLimitConfig motorReverseHardLimit = null;
+    public static final InvertMode motorInvertMode = InvertMode.kNotInverted; // TODO: Set direction
     public static final double motorDeploykP = 1;
     public static final double motorDeploykI = 0;
     public static final double motorDeploykD = 0;
@@ -296,7 +293,7 @@ public final class Constants {
     public static final double motorBusCurrentLimit = 40;
 
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
-    public static final InvertMode motorInvert = null;
+    public static final InvertMode motorInvert = InvertMode.kNotInverted; // TODO: Set direction
 
     public static final double motorVoltageFeed = 5;
     public static final double motorVoltageFeedSlow = 3;
