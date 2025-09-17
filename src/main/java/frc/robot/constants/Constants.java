@@ -78,7 +78,7 @@ public final class Constants {
     public static final int armMotorId = 10;
     public static final int armEncoderId = 10;
 
-    public static final boolean manualontrol = false;
+    public static final boolean manualControl = false;
     public static final InvertMode armMotorInvert =
         InvertMode.kNotInverted; // positive is up toward scoring side
     public static final IdleMode motorIdleMode = IdleMode.kBrake;

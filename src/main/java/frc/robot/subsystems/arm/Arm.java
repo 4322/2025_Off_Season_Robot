@@ -31,7 +31,7 @@ public class Arm extends SubsystemBase {
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
     Logger.recordOutput("Arm/TargetAngle", requestedSetpoint);
 
-    if (Constants.Arm.manualontrol) {
+    if (Constants.Arm.manualControl) {
       io.setVoltage(RobotContainer.driver.getLeftX() * 12.0);
     } else if (isHomed) {
       if (RobotContainer.getSuperstructure().isCoralHeld()) {
