@@ -63,7 +63,6 @@ public class Superstructure extends SubsystemBase {
 
   private EndEffector endEffector;
   private Arm arm;
-  private Indexer indexer;
   private Elevator elevator;
   private IntakeSuperstructure intakeSuperstructure;
 
@@ -78,7 +77,6 @@ public class Superstructure extends SubsystemBase {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
-    this.indexer = indexer;
     this.intakeSuperstructure = intakeSuperstructure;
   }
 
@@ -196,15 +194,14 @@ public class Superstructure extends SubsystemBase {
       }
         break;
       case END_EFFECTOR_CORAL_PICKUP:
-        if (indexer.isCoralDetectedPickupArea()) {
           elevator.pickupCoral();
           endEffector.intakeCoral();
-        }
+        
 
         if (endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
         } else if (!endEffector.hasCoral()
-            && !indexer.isCoralDetectedPickupArea()) {
+            && !intakeSuperstructure.isCoralDetectedPickupArea()) {
           state = Superstates.IDLE;
         }
 
