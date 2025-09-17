@@ -26,6 +26,9 @@ public final class Constants {
 
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
 
+  public static final String logPath = "/home/lvuser/logs";
+  public static final long minFreeSpace = 1000000000; // 1 GB
+
   public static final int dioHomeButton = 0;
   public static final double homeButtonDelaySec = 1.0;
 
