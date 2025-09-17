@@ -198,6 +198,7 @@ public final class Constants {
     public static final double algaeReleaseVolts = -3.0;
     public static final double coralReleaseVolts =
         -3.0; // TODO make sure this is slow enough for scoring coral.
+        public static final double coralReleaseVoltsL1 = -2.0;
 
     public static final double ejectVolts = -3.0;
 
@@ -238,6 +239,7 @@ public final class Constants {
         0.05; // Time to wait after algae is detected in End Effector before reducing voltage
     public static final double coralIntakingDelaySeconds =
         0.05; // Time to wait after coral is detected in End Effector before reducing voltage
+    
   }
 
   public static class Deployer {

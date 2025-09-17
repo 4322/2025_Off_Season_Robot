@@ -237,11 +237,11 @@ public class Superstructure extends SubsystemBase {
         elevator.scoreCoral(level);
         if (level == Level.L1) {
           if (arm.atSetpoint() && elevator.atSetpoint()) {
-            endEffector.releaseCoral();
+            endEffector.releaseCoralL1();
           }
         }
         else {
-          endEffector.releaseCoral();
+          endEffector.releaseCoralNormal();
         }
 
         if (!endEffector.hasCoral() && arm.atSetpoint() && elevator.atSetpoint()) {
