@@ -75,9 +75,11 @@ public final class Constants {
   }
 
   public static class Arm {
-    public static final InvertMode ArmMotorInvert = InvertMode.kInverted;
     public static final int armMotorId = 10;
     public static final int armEncoderId = 10;
+
+    public static final InvertMode armMotorInvert = InvertMode.kInverted;
+    public static final IdleMode motorIdleMode = IdleMode.kBrake;
 
     public static final double sensorToArm = 85 / 10;
     public static final double motorShaftToSensorShaft = 56 / 16;

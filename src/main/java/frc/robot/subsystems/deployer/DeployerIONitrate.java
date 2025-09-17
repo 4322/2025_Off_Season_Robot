@@ -53,6 +53,7 @@ public class DeployerIONitrate implements DeployerIO {
 
     OutputSettings deployerMotorOutputSettings = new OutputSettings();
     deployerMotorOutputSettings.setInvert(Constants.Deployer.motorInvertMode);
+    deployerMotorOutputSettings.setIdleMode(Constants.Deployer.motorIdleMode);
     deployerMotorConfig.setOutputSettings(deployerMotorOutputSettings);
 
     // Deploy PID has a kG value and is in slot 0

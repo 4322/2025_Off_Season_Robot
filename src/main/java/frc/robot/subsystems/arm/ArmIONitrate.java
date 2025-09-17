@@ -68,7 +68,8 @@ public class ArmIONitrate implements ArmIO {
 
     NitrateSettings armConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);
     OutputSettings armMotorOutputSettings = new OutputSettings();
-    armMotorOutputSettings.setInvert(Constants.Arm.ArmMotorInvert);
+    armMotorOutputSettings.setIdleMode(Constants.Arm.motorIdleMode);
+    armMotorOutputSettings.setInvert(Constants.Arm.armMotorInvert);
 
     if (!armConfigStatus.isEmpty()) {
       DriverStation.reportError(
