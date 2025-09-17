@@ -4,23 +4,21 @@ import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
-  public ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
-  public double minSafeArmDegree;
-  public double maxElevatorSafeMeters = Constants.Elevator.scoreCoralL4HeightMeters;
+  private ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
+  private double minSafeArmDegree;
 
-  public double requestedSetpoint;
-  public double prevSetpoint = -1000;
-  public double newSetpoint;
-  public double elevatorHeight;
-  private Superstructure superstructure;
+  private double requestedSetpoint;
+  private double prevSetpoint = -1000;
+  private double newSetpoint;
+  private double elevatorHeight;
   private boolean isSlow = false;
+  private boolean isHomed;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -33,43 +31,49 @@ public class Arm extends SubsystemBase {
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
     Logger.recordOutput("Arm/TargetAngle", requestedSetpoint);
 
-    if (RobotContainer.getSuperstructure().isCoralHeld()) {
-      minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
-    } else {
-      minSafeArmDegree = Constants.Arm.minArmSafeDeg;
-    }
-
-    // Safety Logic
-    // Checks the logic checking for if it is in a dangerous position
-
-    elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
-    if (requestedSetpoint < minSafeArmDegree
-        && elevatorHeight
-            < (Constants.Elevator.minElevatorSafeHeightMeters
-                - Constants.Elevator.bufferHeightMeters)
-        && getAngleDegrees()
-            > (minSafeArmDegree
-                - Constants.Arm.bufferDeg)) { // So if the requested setpoint is under the min
-      // safe angle and the elevator is too low the arm
-      // will go to min safe angle
-      newSetpoint = minSafeArmDegree;
-    } else {
-      newSetpoint = requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
-    }
-
-    if (prevSetpoint != newSetpoint) {
-      if (isSlow) {
-        io.requestSlowPosition(newSetpoint);
-        prevSetpoint = newSetpoint;
+    if (Constants.Arm.manualontrol) {
+      io.setVoltage(RobotContainer.driver.getLeftX() * 12.0);
+    } else if (isHomed) {
+      if (RobotContainer.getSuperstructure().isCoralHeld()) {
+        minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
       } else {
-        io.requestPosition(newSetpoint);
-        prevSetpoint = newSetpoint;
+        minSafeArmDegree = Constants.Arm.minArmSafeDeg;
+      }
+
+      // Safety Logic
+      // Checks the logic checking for if it is in a dangerous position
+
+      elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
+      if (requestedSetpoint < minSafeArmDegree
+          && elevatorHeight
+              < (Constants.Elevator.minElevatorSafeHeightMeters
+                  - Constants.Elevator.bufferHeightMeters)
+          && getAngleDegrees()
+              > (minSafeArmDegree
+                  - Constants.Arm.bufferDeg)) { // So if the requested setpoint is under the min
+        // safe angle and the elevator is too low the arm
+        // will go to min safe angle
+        newSetpoint = minSafeArmDegree;
+      } else {
+        newSetpoint =
+            requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
+      }
+
+      if (prevSetpoint != newSetpoint) {
+        if (isSlow) {
+          io.requestSlowPosition(newSetpoint);
+          prevSetpoint = newSetpoint;
+        } else {
+          io.requestPosition(newSetpoint);
+          prevSetpoint = newSetpoint;
+        }
       }
     }
   }
 
   public void setHomePosition() {
     io.setHomePosition();
+    isHomed = true;
   }
 
   public void idle() {

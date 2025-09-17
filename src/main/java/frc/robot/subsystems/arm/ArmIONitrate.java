@@ -2,6 +2,7 @@ package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
@@ -56,20 +57,23 @@ public class ArmIONitrate implements ArmIO {
                 Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft))
         .setSensorToMechanismRatio(Constants.Arm.sensorToArm);
 
-    armConfig
-        .setPIDSettings(armPIDSettings, PIDConfigSlot.kSlot0)
-        .getPIDSettings(PIDConfigSlot.kSlot0);
-    armConfig
-        .setPIDSettings(armSlowPIDSettings, PIDConfigSlot.kSlot1)
-        .getPIDSettings(PIDConfigSlot.kSlot1);
+    ElectricalLimitSettings electricalLimitSettings = new ElectricalLimitSettings();
+    electricalLimitSettings.setBusCurrentLimit(Constants.Arm.supplyCurrentLimitAmps);
+    electricalLimitSettings.setStatorCurrentLimit(Constants.Arm.statorCurrentLimitAmps);
+
+    OutputSettings armMotorOutputSettings = new OutputSettings();
+    armMotorOutputSettings.setIdleMode(Constants.Arm.motorIdleMode);
+    armMotorOutputSettings.setInvert(Constants.Arm.armMotorInvert);
+
+    armConfig.setPIDSettings(armPIDSettings, PIDConfigSlot.kSlot0);
+    armConfig.setPIDSettings(armSlowPIDSettings, PIDConfigSlot.kSlot1);
+    armConfig.setElectricalLimitSettings(electricalLimitSettings);
+    armConfig.setOutputSettings(armMotorOutputSettings);
 
     CanandmagSettings settings = new CanandmagSettings();
     CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
 
     NitrateSettings armConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);
-    OutputSettings armMotorOutputSettings = new OutputSettings();
-    armMotorOutputSettings.setIdleMode(Constants.Arm.motorIdleMode);
-    armMotorOutputSettings.setInvert(Constants.Arm.armMotorInvert);
 
     if (!armConfigStatus.isEmpty()) {
       DriverStation.reportError(
@@ -120,6 +124,12 @@ public class ArmIONitrate implements ArmIO {
         armSlowPIDPositionRequest.setPosition(
             Units.degreesToRotations(requestSetpoint + Constants.Arm.armOffsetEncoderDeg)));
     lastRequestedPosDeg = requestSetpoint;
+  }
+
+  @Override
+  public void setVoltage(double voltage) {
+    armMotor.setVoltage(voltage);
+    lastRequestedPosDeg = -1;
   }
 
   @Override

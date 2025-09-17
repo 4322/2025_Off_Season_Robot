@@ -15,14 +15,14 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final boolean armEnabled = true;
-  public static final boolean elevatorEnabled = true;
-  public static final boolean deployerEnabled = true;
-  public static final boolean indexerEnabled = true;
-  public static final boolean rollersEnabled = true;
-  public static final boolean endEffectorEnabled = true;
-  public static final boolean visionEnabled = true;
-  public static final boolean driveEnabled = true;
+  public static final boolean armEnabled = false;
+  public static final boolean elevatorEnabled = false;
+  public static final boolean deployerEnabled = false;
+  public static final boolean indexerEnabled = false;
+  public static final boolean rollersEnabled = false;
+  public static final boolean endEffectorEnabled = false;
+  public static final boolean visionEnabled = false;
+  public static final boolean driveEnabled = false;
 
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
 
@@ -78,7 +78,8 @@ public final class Constants {
     public static final int armMotorId = 10;
     public static final int armEncoderId = 10;
 
-    public static final InvertMode armMotorInvert = InvertMode.kInverted;
+    public static final boolean manualontrol = false;
+    public static final InvertMode armMotorInvert = InvertMode.kNotInverted;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
 
     public static final double sensorToArm = 85 / 10;
@@ -100,8 +101,8 @@ public final class Constants {
     public static final double setpointToleranceDegrees = 0.5;
     public static final double bufferDeg =
         setpointToleranceDegrees * 4; // Degrees of buffer zone for min safe angle
-    public static final double supplyCurrentLimit = 40;
-    public static final double statorCurrentLimit = 100;
+    public static final double supplyCurrentLimitAmps = 40;
+    public static final double statorCurrentLimitAmps = 100;
     public static final double kg = 20;
 
     public static final ElectricalLimitSettings armElectricalLimitSettings =
@@ -138,6 +139,8 @@ public final class Constants {
   public static class Elevator {
     public static final int frontMotorID = 20;
     public static final int backMotorID = 21;
+
+    public static final boolean manualControl = false;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted;
     public static final InvertMode motorBackInvert = InvertMode.kInverted;

@@ -30,7 +30,7 @@ public class DeployerIONitrate implements DeployerIO {
     initMotorConfig();
     NitrateSettings deployerMotorConfigStatus =
         deployerMotor.setSettings(deployerMotorConfig, 0.02, 5);
-    if (!deployerMotorConfigStatus.allSettingsReceived()) {
+    if (!deployerMotorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
               + deployerMotor.getAddress().getDeviceId()
