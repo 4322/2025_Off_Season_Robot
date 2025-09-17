@@ -1,13 +1,12 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
+import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -192,14 +191,12 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case END_EFFECTOR_CORAL_PICKUP:
-          elevator.pickupCoral();
-          endEffector.intakeCoral();
-        
+        elevator.pickupCoral();
+        endEffector.intakeCoral();
 
         if (endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
-        } else if (!endEffector.hasCoral()
-            && !intakeSuperstructure.isCoralDetectedPickupArea()) {
+        } else if (!endEffector.hasCoral() && !intakeSuperstructure.isCoralDetectedPickupArea()) {
           state = Superstates.IDLE;
         }
 
