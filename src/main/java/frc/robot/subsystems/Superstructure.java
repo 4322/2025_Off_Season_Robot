@@ -235,7 +235,14 @@ public class Superstructure extends SubsystemBase {
       case SCORE_CORAL:
         arm.scoreCoral(level);
         elevator.scoreCoral(level);
-        endEffector.releaseCoral();
+        if (level == Level.L1) {
+          if (arm.atSetpoint() && elevator.atSetpoint()) {
+            endEffector.releaseCoral();
+          }
+        }
+        else {
+          endEffector.releaseCoral();
+        }
 
         if (!endEffector.hasCoral() && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.IDLE;
