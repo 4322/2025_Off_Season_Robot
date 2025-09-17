@@ -38,7 +38,7 @@ public class IndexerIONitrate implements IndexerIO {
           "Nitrate "
               + indexerMotorRight.getAddress().getDeviceId()
               + " error (Indexer Motor); Did not receive settings",
-          null);
+          false);
     }
     NitrateSettings indexerMotorLeftConfigStatus =
         indexerMotorLeft.setSettings(indexerMotorLeftConfig, 0.02, 5);
@@ -47,7 +47,7 @@ public class IndexerIONitrate implements IndexerIO {
           "Nitrate "
               + indexerMotorLeft.getAddress().getDeviceId()
               + " error (Indexer Motor Left); Did not receive settings",
-          null);
+          false);
     }
 
     configSensor();
@@ -58,7 +58,7 @@ public class IndexerIONitrate implements IndexerIO {
           "Canandcolor "
               + indexerSensor.getAddress().getDeviceId()
               + " error (Indexer Sensor); Did not receive settings",
-          null);
+          false);
     }
 
     CanandcolorSettings pickupAreaSensorConfigStatus =
@@ -68,7 +68,7 @@ public class IndexerIONitrate implements IndexerIO {
           "Canandcolor "
               + pickupAreaSensor.getAddress().getDeviceId()
               + " error (Pickup Area Sensor); Did not receive settings",
-          null);
+          false);
     }
   }
 

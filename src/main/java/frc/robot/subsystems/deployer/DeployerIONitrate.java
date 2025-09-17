@@ -35,7 +35,7 @@ public class DeployerIONitrate implements DeployerIO {
           "Nitrate "
               + deployerMotor.getAddress().getDeviceId()
               + " error (Deployer Motor); Did not receive settings",
-          null);
+          false);
     }
   }
 

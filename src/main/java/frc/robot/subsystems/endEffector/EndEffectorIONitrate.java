@@ -33,7 +33,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
           "Nitrate "
               + endEffectorMotor.getAddress().getDeviceId()
               + " error (End Effector Motor); Did not receive settings",
-          null);
+          false);
     }
 
     initSensorConfig();
@@ -44,7 +44,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
           "Canandcolor "
               + endEffectorSensor.getAddress().getDeviceId()
               + " error (End Effector Sensor); Did not receive settings",
-          null);
+          false);
     }
   }
 

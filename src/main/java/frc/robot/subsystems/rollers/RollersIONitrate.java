@@ -27,7 +27,7 @@ public class RollersIONitrate implements RollersIO {
           "Nitrate "
               + rollersMotor.getAddress().getDeviceId()
               + " error (Rollers Motor); Did not receive settings",
-          null);
+          false);
     }
   }
 
