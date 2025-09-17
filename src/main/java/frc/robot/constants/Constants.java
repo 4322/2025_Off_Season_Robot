@@ -103,7 +103,7 @@ public final class Constants {
     public static final ElectricalLimitSettings armElectricalLimitSettings =
         new ElectricalLimitSettings();
 
-    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg -5; // TODO
+    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 5; // TODO
     public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20; // TODO
     public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20; // TODO
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 30; // TODO
@@ -198,7 +198,7 @@ public final class Constants {
     public static final double algaeReleaseVolts = -3.0;
     public static final double coralReleaseVolts =
         -3.0; // TODO make sure this is slow enough for scoring coral.
-        public static final double coralReleaseVoltsL1 = -2.0;
+    public static final double coralReleaseVoltsL1 = -2.0;
 
     public static final double ejectVolts = -3.0;
 
@@ -239,7 +239,6 @@ public final class Constants {
         0.05; // Time to wait after algae is detected in End Effector before reducing voltage
     public static final double coralIntakingDelaySeconds =
         0.05; // Time to wait after coral is detected in End Effector before reducing voltage
-    
   }
 
   public static class Deployer {

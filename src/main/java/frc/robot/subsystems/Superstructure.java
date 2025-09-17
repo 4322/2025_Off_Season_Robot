@@ -1,15 +1,13 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
+import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -162,12 +160,13 @@ public class Superstructure extends SubsystemBase {
       case ALGAE_SCORE:
         endEffector.releaseAlgae();
 
-        if (requestIdle){
-        if (!endEffector.hasAlgae()) {
-          state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
-        } else if (endEffector.hasAlgae()) {
-          state = Superstates.ALGAE_IDLE;
-        }}
+        if (requestIdle) {
+          if (!endEffector.hasAlgae()) {
+            state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
+          } else if (endEffector.hasAlgae()) {
+            state = Superstates.ALGAE_IDLE;
+          }
+        }
 
         break;
       case INTAKE_ALGAE_FLOOR: // Needs to move up then arm out then back down
@@ -187,13 +186,13 @@ public class Superstructure extends SubsystemBase {
         elevator.algaeReef(level);
         endEffector.intakeAlgae();
 
-        if (requestIdle){
-        if (endEffector.hasAlgae()) {
-          state = Superstates.ALGAE_IDLE;
-        } else if (!endEffector.hasAlgae()) {
-          state = Superstates.IDLE;
+        if (requestIdle) {
+          if (endEffector.hasAlgae()) {
+            state = Superstates.ALGAE_IDLE;
+          } else if (!endEffector.hasAlgae()) {
+            state = Superstates.IDLE;
+          }
         }
-      }
         break;
       case END_EFFECTOR_CORAL_PICKUP:
         if (indexer.isCoralDetectedPickupArea()) {
@@ -203,8 +202,7 @@ public class Superstructure extends SubsystemBase {
 
         if (endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
-        } else if (!endEffector.hasCoral()
-            && !indexer.isCoralDetectedPickupArea()) {
+        } else if (!endEffector.hasCoral() && !indexer.isCoralDetectedPickupArea()) {
           state = Superstates.IDLE;
         }
 
@@ -239,8 +237,7 @@ public class Superstructure extends SubsystemBase {
           if (arm.atSetpoint() && elevator.atSetpoint()) {
             endEffector.releaseCoralL1();
           }
-        }
-        else {
+        } else {
           endEffector.releaseCoralNormal();
         }
 
@@ -263,7 +260,7 @@ public class Superstructure extends SubsystemBase {
               state = Superstates.ALGAE_IDLE;
             }
           }
-      }
+        }
 
         break;
       case PRECLIMB:
