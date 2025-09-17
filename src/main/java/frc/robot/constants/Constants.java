@@ -79,7 +79,8 @@ public final class Constants {
     public static final int armEncoderId = 10;
 
     public static final boolean manualontrol = false;
-    public static final InvertMode armMotorInvert = InvertMode.kNotInverted;
+    public static final InvertMode armMotorInvert =
+        InvertMode.kNotInverted; // positive is up toward scoring side
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
 
     public static final double sensorToArm = 85 / 10;
@@ -93,7 +94,6 @@ public final class Constants {
     public static final double ejectDeg = 45.0;
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
-    // The purpose of
     public static final double minArmSafeDeg = 45.0; // TODO: Set to actual angle
     public static final double minArmSafeWithCoralDeg = 55.0; // TODO: Set to actual angle
     public static final double maxArmSafeDeg = 245.0;
@@ -142,8 +142,8 @@ public final class Constants {
 
     public static final boolean manualControl = false;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorFrontInvert = InvertMode.kNotInverted;
-    public static final InvertMode motorBackInvert = InvertMode.kInverted;
+    public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
+    public static final InvertMode motorBackInvert = InvertMode.kInverted; // positive is up
     public static final double fast_kP = 1; // TODO: Set to actual value
     public static final double fast_kI = 0; // TODO: Set to actual value
     public static final double fast_kD = 0; // TODO: Set to actual value
@@ -230,7 +230,7 @@ public final class Constants {
     public static final double sensorWhiteDetectBlue = 180;
     public static final double sensorWhiteDetectRed = 180;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorInvert = InvertMode.kNotInverted;
+    public static final InvertMode motorInvert = InvertMode.kNotInverted; // positive is intaking
 
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
@@ -256,7 +256,8 @@ public final class Constants {
     public static final double motorBusCurrentLimitTime = 40;
     public static final double motorBusCurrentLimit = 60;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorInvertMode = InvertMode.kNotInverted; // TODO: Set direction
+    public static final InvertMode motorInvertMode =
+        InvertMode.kNotInverted; // positive is retracting
     public static final double motorDeploykP = 1;
     public static final double motorDeploykI = 0;
     public static final double motorDeploykD = 0;
@@ -264,8 +265,9 @@ public final class Constants {
     public static final double motorRetractkP = 1;
     public static final double motorRetractkI = 0;
     public static final double motorRetractkD = 0;
-    public static final int deployerMotorEncoderId = 0;
-    public static final InvertMode motorEncoderInverted = InvertMode.kInverted;
+    public static final int deployerMotorEncoderId = 0; // not currently installed
+    public static final InvertMode motorEncoderInverted =
+        InvertMode.kInverted; // reverse of motor, if installed
     // 1 motor rotation is 1/49 of deployer rotation
     // Range of motion of deployer is about 0-140 degrees
     public static final double motorGearRatio = 14.58333333333;
@@ -281,8 +283,9 @@ public final class Constants {
     public static final double motorBusCurrentLimitTime = 0.5;
     public static final double motorStatorCurrentLimit = 60;
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
-    public static final InvertMode motorRightInvert = InvertMode.kInverted;
-    public static final InvertMode motorLeftInvert = InvertMode.kNotInverted;
+    public static final InvertMode motorRightInvert = InvertMode.kInverted; // positive is intaking
+    public static final InvertMode motorLeftInvert =
+        InvertMode.kNotInverted; // positive is intaking
     public static final double indexerSensorMax = 0;
     public static final double pickupAreaSensorMax = 0;
     public static final int indexerSensorId = 0;
@@ -301,7 +304,8 @@ public final class Constants {
     public static final double motorBusCurrentLimit = 40;
 
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
-    public static final InvertMode motorInvert = InvertMode.kNotInverted; // TODO: Set direction
+    public static final InvertMode motorInvert =
+        InvertMode.kNotInverted; // positive is intaking, TODO: verify direction
 
     public static final double motorVoltageFeed = 5;
     public static final double motorVoltageFeedSlow = 3;
