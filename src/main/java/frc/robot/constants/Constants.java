@@ -103,7 +103,7 @@ public final class Constants {
     public static final ElectricalLimitSettings armElectricalLimitSettings =
         new ElectricalLimitSettings();
 
-    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 10; // TODO
+    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg -5; // TODO
     public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20; // TODO
     public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20; // TODO
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 30; // TODO
