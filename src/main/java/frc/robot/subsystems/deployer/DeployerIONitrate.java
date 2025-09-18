@@ -2,24 +2,20 @@ package frc.robot.subsystems.deployer;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
-
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
-// TODO add constant for offset pid 
+// TODO add constant for offset pid
 // Fully deployed is 0
 // Home is what fully deployed used to be
 // Idle retract is home position - before
 // Verify that all constants are being used
 // Enable GravitationalFeedForward mode
+
 public class DeployerIONitrate implements DeployerIO {
   private Nitrate deployerMotor;
 
@@ -48,19 +44,22 @@ public class DeployerIONitrate implements DeployerIO {
   }
 
   private void initMotorConfig() {
-    deployerMotorConfig.getElectricalLimitSettings()
-    .setBusCurrentLimit(Constants.Deployer.motorBusCurrentLimit)
-    .setBusCurrentLimitTime(Constants.Deployer.motorBusCurrentLimitTime)
+    deployerMotorConfig
+        .getElectricalLimitSettings()
+        .setBusCurrentLimit(Constants.Deployer.motorBusCurrentLimit)
+        .setBusCurrentLimitTime(Constants.Deployer.motorBusCurrentLimitTime)
         .setStatorCurrentLimit(Constants.Deployer.motorStatorCurrentLimit);
 
-    deployerMotorConfig.getOutputSettings()
+    deployerMotorConfig
+        .getOutputSettings()
         .setIdleMode(Constants.Deployer.motorIdleMode)
         .setInvert(Constants.Deployer.motorInvertMode);
 
     // Deploy PID has a kG value and is in slot 0
     // Retract PID does not have a kG value and is in slot 1
 
-    deployerMotorConfig.getPIDSettings(PIDConfigSlot.kSlot0)
+    deployerMotorConfig
+        .getPIDSettings(PIDConfigSlot.kSlot0)
         .setPID(
             Constants.Deployer.motorDeploykP,
             Constants.Deployer.motorDeploykI,
@@ -68,13 +67,13 @@ public class DeployerIONitrate implements DeployerIO {
         .setGravitationalFeedforward(Constants.Deployer.motorDeployGravitationalFeedforward)
         .setFeedforwardMode(Constants.Deployer.motorFeedforwardMode);
 
-    deployerMotorConfig.getPIDSettings(PIDConfigSlot.kSlot1)
+    deployerMotorConfig
+        .getPIDSettings(PIDConfigSlot.kSlot1)
         .setPID(
             Constants.Deployer.motorRetractkP,
             Constants.Deployer.motorRetractkI,
             Constants.Deployer.motorRetractkD)
         .setFeedforwardMode(Constants.Deployer.motorFeedforwardMode);
-
   }
 
   @Override
@@ -83,7 +82,9 @@ public class DeployerIONitrate implements DeployerIO {
     inputs.deployerMotorStatorCurrentAmps = deployerMotor.getStatorCurrent();
     inputs.deployerMotorBusCurrentAmps = deployerMotor.getBusCurrent();
     inputs.deployerMotorTempCelcius = deployerMotor.getMotorTemperatureFrame().getValue();
-    inputs.deployerMotorPositionRotations = Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees) - deployerMotor.getPosition();
+    inputs.deployerMotorPositionRotations =
+        Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees)
+            - deployerMotor.getPosition();
     inputs.deployerMotorSpeedRotationsPerSec = deployerMotor.getVelocity();
     inputs.deployerMotorAppliedVolts = deployerMotor.getBusVoltageFrame().getValue();
 
@@ -93,14 +94,21 @@ public class DeployerIONitrate implements DeployerIO {
   @Override
   public void setDeployerMotorPosition(double rotations) {
     if (rotations != previousRequestedPosition) {
-      deployerMotorRequestedPositionRotations = Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees) - (rotations * Constants.Deployer.motorGearRatio);
+      deployerMotorRequestedPositionRotations =
+          Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees)
+              - (rotations * Constants.Deployer.motorGearRatio);
       previousRequestedPosition = rotations;
-      if ((Constants.Deployer.motorOffsetDegrees - deployerMotor.getPosition()) < deployerMotorRequestedPositionRotations) {
+      if ((Constants.Deployer.motorOffsetDegrees - deployerMotor.getPosition())
+          < deployerMotorRequestedPositionRotations) {
         deployerMotor.setRequest(
-            deployerMotorDeployPIDRequest.setPosition(Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees) - deployerMotorRequestedPositionRotations));
+            deployerMotorDeployPIDRequest.setPosition(
+                Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees)
+                    - deployerMotorRequestedPositionRotations));
       } else {
         deployerMotor.setRequest(
-            deployerMotorRetractPIDRequest.setPosition(Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees) - deployerMotorRequestedPositionRotations));
+            deployerMotorRetractPIDRequest.setPosition(
+                Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees)
+                    - deployerMotorRequestedPositionRotations));
       }
     }
   }

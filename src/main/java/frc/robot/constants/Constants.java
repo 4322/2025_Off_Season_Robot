@@ -3,7 +3,6 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -80,7 +79,7 @@ public final class Constants {
     public static final int armEncoderId = 10;
 
     public static final boolean manualControl = false;
-    public static final InvertMode armMotorInvert =
+    public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // positive is up toward scoring side
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
 

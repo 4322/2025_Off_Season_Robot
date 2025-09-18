@@ -8,7 +8,7 @@ import org.littletonrobotics.junction.Logger;
 public class Deployer extends SubsystemBase {
   private DeployerIO io;
   private DeployerIOInputsAutoLogged inputs = new DeployerIOInputsAutoLogged();
-// TODO go through states and make sure safe if disabled since code is still running 
+  // TODO go through states and make sure safe if disabled since code is still running
   private enum DeployerStatus {
     START,
     DEPLOY,

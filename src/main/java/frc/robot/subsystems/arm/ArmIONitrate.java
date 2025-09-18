@@ -10,9 +10,11 @@ import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
+import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -34,6 +36,7 @@ public class ArmIONitrate implements ArmIO {
 
     PIDSettings PIDSettings = new PIDSettings();
     PIDSettings.setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
+    PIDSettings.setFeedforwardMode(PIDFeedforwardMode.kArm);
     PIDSettings.setGravitationalFeedforward(Constants.Arm.kG);
     PIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
     PIDSettings.setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit);
@@ -42,6 +45,7 @@ public class ArmIONitrate implements ArmIO {
 
     PIDSettings SlowPIDSettings = new PIDSettings();
     SlowPIDSettings.setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
+    PIDSettings.setFeedforwardMode(PIDFeedforwardMode.kArm);
     SlowPIDSettings.setGravitationalFeedforward(Constants.Arm.kG);
     SlowPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
     SlowPIDSettings.setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit);
