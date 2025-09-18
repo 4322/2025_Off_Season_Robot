@@ -1,12 +1,14 @@
 package frc.robot.subsystems.arm;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
-import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
@@ -77,30 +79,37 @@ public class Arm extends SubsystemBase {
   }
 
   public void idle() {
+    isSlow = false;
     requestedSetpoint = Constants.Arm.armIdleDeg;
   }
 
   public void algaeHold() {
+    isSlow = false;
     requestedSetpoint = Constants.Arm.algaeHoldDeg;
   }
 
   public void coralHold() {
+    isSlow = false;
     requestedSetpoint = Constants.Arm.coralHoldDeg;
   }
 
   public void algaeGround() {
+    isSlow = false;
     requestedSetpoint = Constants.Arm.algaeGroundDeg;
   }
 
   public void algaeReef() {
+    isSlow = false;
     requestedSetpoint = Constants.Arm.descoringAlgaeDeg;
   }
 
   public void scoreAlgae(/*Side scoringSide*/ ) {
+    isSlow = false;
     requestedSetpoint = Constants.Arm.scoringAlgaeDeg;
   }
 
   public void prescoreCoral(Level level) {
+    isSlow = false;
     switch (level) {
       case L1:
         requestedSetpoint = Constants.Arm.prescoringL1CoralDeg;
@@ -141,6 +150,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void safeBargeRetract() {
+    isSlow = false;
     requestedSetpoint = Constants.Arm.safeBargeRetractDeg;
   }
 
@@ -150,10 +160,12 @@ public class Arm extends SubsystemBase {
   }
 
   public void climbing() {
+    isSlow = false;
     requestedSetpoint = Constants.Arm.climbingDeg;
   }
 
   public void eject() {
+    isSlow = false;
     requestedSetpoint = Constants.Arm.ejectDeg;
   }
 
