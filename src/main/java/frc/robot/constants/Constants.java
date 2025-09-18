@@ -3,6 +3,8 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
+import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -272,6 +274,8 @@ public final class Constants {
     public static final double ejectPositionRotations = Units.degreesToRotations(94.931222);
     public static final double retractPositionRotations = Units.degreesToRotations(4.931222);
     public static final double deployPositionRotations = Units.degreesToRotations(145.353984);
+    public static final PIDFeedforwardMode motorFeedforwardMode = PIDFeedforwardMode.kStandard;
+    public static final double motorOffsetDegrees = 145.353984;
   }
 
   public static class Indexer {
