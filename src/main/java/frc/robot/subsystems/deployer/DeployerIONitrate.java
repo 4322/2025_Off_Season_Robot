@@ -16,10 +16,20 @@ import frc.robot.constants.Constants;
 // Verify that all constants are being used
 // Enable GravitationalFeedForward mode
 
+/* Code coordinate system:
+ * 145.353984 -> 0 where 0 is fully retracted against hardstop and 145.353984 is fully deployed
+ * Motor controller coordinate system:
+ * -10? -> 0 -> 135.353984 where 135.353984 is fully retracted against hardstop, 0 is the the point where the deployer is the most affected by gravity, and -10? is fully deployed
+ * 
+ * code = -motor + 135.353984
+ * motor = -code + 135.353984
+ * 
+ */
+
 public class DeployerIONitrate implements DeployerIO {
   private Nitrate deployerMotor;
 
-  private NitrateSettings deployerMotorConfig = new NitrateSettings();
+  private NitrateSettings motorConfig = new NitrateSettings();
 
   private final PIDPositionRequest deployerMotorDeployPIDRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
@@ -27,13 +37,13 @@ public class DeployerIONitrate implements DeployerIO {
       new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
   private double previousRequestedPosition = -999;
-  private double deployerMotorRequestedPositionRotations = 0.0;
+  private double requestedPositionDegrees = 0.0;
 
   public DeployerIONitrate() {
     deployerMotor = new Nitrate(Constants.Deployer.deployerMotorId, MotorType.kCu60);
     initMotorConfig();
     NitrateSettings deployerMotorConfigStatus =
-        deployerMotor.setSettings(deployerMotorConfig, 0.02, 5);
+        deployerMotor.setSettings(motorConfig, 0.02, 5);
     if (!deployerMotorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
@@ -44,36 +54,37 @@ public class DeployerIONitrate implements DeployerIO {
   }
 
   private void initMotorConfig() {
-    deployerMotorConfig
+    motorConfig
         .getElectricalLimitSettings()
-        .setBusCurrentLimit(Constants.Deployer.motorBusCurrentLimit)
-        .setBusCurrentLimitTime(Constants.Deployer.motorBusCurrentLimitTime)
-        .setStatorCurrentLimit(Constants.Deployer.motorStatorCurrentLimit);
+        .setBusCurrentLimit(Constants.Deployer.busCurrentLimit)
+        .setBusCurrentLimitTime(Constants.Deployer.busCurrentLimitTime)
+        .setStatorCurrentLimit(Constants.Deployer.statorCurrentLimit);
 
-    deployerMotorConfig
+    motorConfig
         .getOutputSettings()
-        .setIdleMode(Constants.Deployer.motorIdleMode)
-        .setInvert(Constants.Deployer.motorInvertMode);
+        .setIdleMode(Constants.Deployer.idleMode)
+        .setInvert(Constants.Deployer.invertMode);
 
-    // Deploy PID has a kG value and is in slot 0
-    // Retract PID does not have a kG value and is in slot 1
+    // Deploy PID in slot 0
+    // Retract PID in slot 1
 
-    deployerMotorConfig
+    motorConfig
         .getPIDSettings(PIDConfigSlot.kSlot0)
         .setPID(
-            Constants.Deployer.motorDeploykP,
-            Constants.Deployer.motorDeploykI,
-            Constants.Deployer.motorDeploykD)
-        .setGravitationalFeedforward(Constants.Deployer.motorDeployGravitationalFeedforward)
-        .setFeedforwardMode(Constants.Deployer.motorFeedforwardMode);
+            Constants.Deployer.deploykP,
+            Constants.Deployer.deploykI,
+            Constants.Deployer.deploykD)
+        .setGravitationalFeedforward(Constants.Deployer.deploykG)
+        .setFeedforwardMode(Constants.Deployer.feedforwardMode);
 
-    deployerMotorConfig
+    motorConfig
         .getPIDSettings(PIDConfigSlot.kSlot1)
         .setPID(
-            Constants.Deployer.motorRetractkP,
-            Constants.Deployer.motorRetractkI,
-            Constants.Deployer.motorRetractkD)
-        .setFeedforwardMode(Constants.Deployer.motorFeedforwardMode);
+            Constants.Deployer.retractkP,
+            Constants.Deployer.retractkI,
+            Constants.Deployer.retractkD)
+        .setGravitationalFeedforward(Constants.Deployer.retractkG)
+        .setFeedforwardMode(Constants.Deployer.feedforwardMode);
   }
 
   @Override
@@ -82,33 +93,31 @@ public class DeployerIONitrate implements DeployerIO {
     inputs.deployerMotorStatorCurrentAmps = deployerMotor.getStatorCurrent();
     inputs.deployerMotorBusCurrentAmps = deployerMotor.getBusCurrent();
     inputs.deployerMotorTempCelcius = deployerMotor.getMotorTemperatureFrame().getValue();
-    inputs.deployerMotorPositionRotations =
-        Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees)
-            - deployerMotor.getPosition();
+    inputs.deployerMotorPositionRotations = switchCoordinateSystem(deployerMotor.getPosition());
+    inputs.deployerMotorMechanismPositionDegrees = switchCoordinateSystem(inputs.deployerMotorPositionRotations) / Constants.Deployer.motorGearRatio;
     inputs.deployerMotorSpeedRotationsPerSec = deployerMotor.getVelocity();
     inputs.deployerMotorAppliedVolts = deployerMotor.getBusVoltageFrame().getValue();
 
-    inputs.deployerMotorRequestedPositionRotations = deployerMotorRequestedPositionRotations;
+    inputs.deployerMotorRequestedPositionRotations = requestedPositionDegrees;
   }
 
   @Override
-  public void setDeployerMotorPosition(double rotations) {
-    if (rotations != previousRequestedPosition) {
-      deployerMotorRequestedPositionRotations =
-          Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees)
-              - (rotations * Constants.Deployer.motorGearRatio);
-      previousRequestedPosition = rotations;
-      if ((Constants.Deployer.motorOffsetDegrees - deployerMotor.getPosition())
-          < deployerMotorRequestedPositionRotations) {
+  public void setDeployerMotorPosition(double degrees) {
+    if (degrees != previousRequestedPosition) {
+      // Requested position in code coordinate system
+      requestedPositionDegrees =
+          degrees * Constants.Deployer.motorGearRatio;
+      previousRequestedPosition = degrees * Constants.Deployer.motorGearRatio;
+      
+      if ((switchCoordinateSystem(Units.rotationsToDegrees(deployerMotor.getPosition()) * Constants.Deployer.motorGearRatio))
+          < requestedPositionDegrees) {
         deployerMotor.setRequest(
             deployerMotorDeployPIDRequest.setPosition(
-                Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees)
-                    - deployerMotorRequestedPositionRotations));
+                switchCoordinateSystem(requestedPositionDegrees)));
       } else {
         deployerMotor.setRequest(
             deployerMotorRetractPIDRequest.setPosition(
-                Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees)
-                    - deployerMotorRequestedPositionRotations));
+                switchCoordinateSystem(requestedPositionDegrees)));
       }
     }
   }
@@ -121,6 +130,10 @@ public class DeployerIONitrate implements DeployerIO {
 
   @Override
   public void deployerMotorEncoderSetHome() {
-    deployerMotor.setPosition(Units.degreesToRotations(Constants.Deployer.motorOffsetDegrees));
+    deployerMotor.setPosition(switchCoordinateSystem(0));
+  }
+
+  private double switchCoordinateSystem(double position) {
+    return -position + (Constants.Deployer.rangeDegrees - Constants.Deployer.maxGravityDegrees);
   }
 }

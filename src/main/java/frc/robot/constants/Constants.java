@@ -250,30 +250,35 @@ public final class Constants {
     public static final int deployerMotorId = 40;
     public static final double deployVoltage = 3.0;
 
-    public static final double motorStatorCurrentLimit = 40;
-    public static final double motorBusCurrentLimitTime = 40;
-    public static final double motorBusCurrentLimit = 60;
-    public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorInvertMode =
+    public static final double statorCurrentLimit = 40;
+    public static final double busCurrentLimitTime = 40;
+    public static final double busCurrentLimit = 60;
+    public static final IdleMode idleMode = IdleMode.kBrake;
+    public static final InvertMode invertMode =
         InvertMode.kNotInverted; // positive is retracting
-    public static final double motorDeploykP = 1;
-    public static final double motorDeploykI = 0;
-    public static final double motorDeploykD = 0;
-    public static final double motorDeployGravitationalFeedforward = 0;
-    public static final double motorRetractkP = 1;
-    public static final double motorRetractkI = 0;
-    public static final double motorRetractkD = 0;
+    public static final double deploykP = 1;
+    public static final double deploykI = 0;
+    public static final double deploykD = 0;
+    public static final double deploykG = 0;
+
+    public static final double retractkP = 1;
+    public static final double retractkI = 0;
+    public static final double retractkD = 0;
+    public static final double retractkG = 0;
+
     public static final int deployerMotorEncoderId = 0; // not currently installed
     public static final InvertMode motorEncoderInverted =
-        InvertMode.kInverted; // reverse of motor, if installed
-    // 1 motor rotation is 1/49 of deployer rotation
+        InvertMode.kInverted; // reverse of motor, if installed TODO
+
     // Range of motion of deployer is about 0-140 degrees
     public static final double motorGearRatio = 14.58333333333;
-    public static final double ejectPositionRotations = Units.degreesToRotations(94.931222);
-    public static final double retractPositionRotations = Units.degreesToRotations(4.931222);
-    public static final double deployPositionRotations = Units.degreesToRotations(145.353984);
-    public static final PIDFeedforwardMode motorFeedforwardMode = PIDFeedforwardMode.kStandard;
-    public static final double motorOffsetDegrees = 145.353984;
+    public static final double ejectPositionDegrees = 94.931222;
+    public static final double retractPositionDegrees = 4.931222;
+    public static final double deployPositionDegrees = 145.353984;
+    public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kStandard;
+    public static final double rangeDegrees = 145.353984;
+    public static final double maxGravityDegrees = 10.0;
+  
   }
 
   public static class Indexer {

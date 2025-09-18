@@ -36,7 +36,7 @@ public class Deployer extends SubsystemBase {
       return;
     }
     currentAction = DeployerStatus.DEPLOY;
-    io.setDeployerMotorPosition(Constants.Deployer.deployPositionRotations);
+    io.setDeployerMotorPosition(Constants.Deployer.deployPositionDegrees);
   }
 
   public void retract() {
@@ -44,7 +44,7 @@ public class Deployer extends SubsystemBase {
       return;
     }
     currentAction = DeployerStatus.RETRACT;
-    io.setDeployerMotorPosition(Constants.Deployer.retractPositionRotations);
+    io.setDeployerMotorPosition(Constants.Deployer.retractPositionDegrees);
   }
 
   public void eject() {
@@ -52,7 +52,7 @@ public class Deployer extends SubsystemBase {
       return;
     }
     currentAction = DeployerStatus.EJECT;
-    io.setDeployerMotorPosition(Constants.Deployer.ejectPositionRotations);
+    io.setDeployerMotorPosition(Constants.Deployer.ejectPositionDegrees);
   }
 
   public void setHome() {

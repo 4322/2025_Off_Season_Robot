@@ -16,6 +16,8 @@ public interface DeployerIO {
     public double deployerMotorAppliedVolts = 0.0;
     public double deployerMotorPositionRotations = 0.0;
 
+    public double deployerMotorMechanismPositionDegrees = 0.0;
+
     public double deployerMotorRequestedPositionRotations = 0.0;
   }
 
