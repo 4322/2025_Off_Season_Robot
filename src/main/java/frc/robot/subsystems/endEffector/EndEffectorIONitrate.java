@@ -49,25 +49,17 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   }
 
   private void initMotorConfig() {
-    // TODO add other settings for motor
-    ElectricalLimitSettings endEffectorMotorElectricalLimitSettings = new ElectricalLimitSettings();
-    endEffectorMotorElectricalLimitSettings.setBusCurrentLimit(
-        Constants.EndEffector.motorBusCurrentLimit);
-    endEffectorMotorElectricalLimitSettings.setBusCurrentLimitTime(
-        Constants.EndEffector.motorBusCurrentLimitTime);
-    endEffectorMotorElectricalLimitSettings.setStatorCurrentLimit(
-        Constants.EndEffector.motorStatorCurrentLimit);
-    endEffectorMotorConfig.setElectricalLimitSettings(endEffectorMotorElectricalLimitSettings);
+    endEffectorMotorConfig.getElectricalLimitSettings()
+        .setBusCurrentLimit(Constants.EndEffector.motorBusCurrentLimit)
+        .setBusCurrentLimitTime(Constants.EndEffector.motorBusCurrentLimitTime)
+        .setStatorCurrentLimit(Constants.EndEffector.motorStatorCurrentLimit);
 
-    OutputSettings endEffectorMotorOutputSettings = new OutputSettings();
-    endEffectorMotorOutputSettings.setIdleMode(Constants.EndEffector.motorIdleMode);
-    endEffectorMotorOutputSettings.setInvert(Constants.EndEffector.motorInvert);
-    endEffectorMotorConfig.setOutputSettings(endEffectorMotorOutputSettings);
+    endEffectorMotorConfig.getOutputSettings()
+        .setIdleMode(Constants.EndEffector.motorIdleMode)
+        .setInvert(Constants.EndEffector.motorInvert);
   }
 
   private void initSensorConfig() {
-    // TODO add other settings for sensor
-    //
   }
 
   @Override

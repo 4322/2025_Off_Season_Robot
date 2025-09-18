@@ -73,29 +73,26 @@ public class IndexerIONitrate implements IndexerIO {
   }
 
   private void initMotorConfig() {
-    // These are shared between both motors for now
-    ElectricalLimitSettings indexerMotorElectricalLimitSettings = new ElectricalLimitSettings();
-    indexerMotorElectricalLimitSettings.setBusCurrentLimit(Constants.Indexer.motorBusCurrentLimit);
-    indexerMotorElectricalLimitSettings.setBusCurrentLimitTime(
-        Constants.Indexer.motorBusCurrentLimitTime);
-    indexerMotorElectricalLimitSettings.setStatorCurrentLimit(
-        Constants.Indexer.motorStatorCurrentLimit);
-    indexerMotorRightConfig.setElectricalLimitSettings(indexerMotorElectricalLimitSettings);
-    indexerMotorLeftConfig.setElectricalLimitSettings(indexerMotorElectricalLimitSettings);
-
-    OutputSettings indexerMotorRightOutputSettings = new OutputSettings();
-    indexerMotorRightOutputSettings.setIdleMode(Constants.Indexer.motorIdleMode);
-    indexerMotorRightOutputSettings.setInvert(Constants.Indexer.motorRightInvert);
-    indexerMotorRightConfig.setOutputSettings(indexerMotorRightOutputSettings);
-
-    OutputSettings indexerMotorLeftOutputSettings = new OutputSettings();
-    indexerMotorLeftOutputSettings.setIdleMode(Constants.Indexer.motorIdleMode);
-    indexerMotorLeftOutputSettings.setInvert(Constants.Indexer.motorLeftInvert);
-    indexerMotorLeftConfig.setOutputSettings(indexerMotorLeftOutputSettings);
+    indexerMotorLeftConfig.getElectricalLimitSettings()
+        .setBusCurrentLimit(Constants.Indexer.motorBusCurrentLimit)
+        .setBusCurrentLimitTime(Constants.Indexer.motorBusCurrentLimitTime)
+        .setStatorCurrentLimit(Constants.Indexer.motorStatorCurrentLimit);
+    
+    indexerMotorRightConfig.getElectricalLimitSettings()
+        .setBusCurrentLimit(Constants.Indexer.motorBusCurrentLimit)
+        .setBusCurrentLimitTime(Constants.Indexer.motorBusCurrentLimitTime)
+        .setStatorCurrentLimit(Constants.Indexer.motorStatorCurrentLimit);
+    
+    indexerMotorLeftConfig.getOutputSettings()
+        .setIdleMode(Constants.Indexer.motorIdleMode)
+        .setInvert(Constants.Indexer.motorLeftInvert);
+    
+    indexerMotorRightConfig.getOutputSettings()
+        .setIdleMode(Constants.Indexer.motorIdleMode)
+        .setInvert(Constants.Indexer.motorRightInvert);
   }
 
   private void configSensor() {
-    // TODO add other settings for sensors
   }
 
   @Override
