@@ -77,14 +77,14 @@ public class EndEffector extends SubsystemBase {
     Logger.recordOutput("End Effector/algaeHeld", algaeHeld);
 
     isPiecePickupDetected =
-        currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps)
-            && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec);
+        currentDetectionDebouncer.calculate(inputs.statorCurrentAmps)
+            && velocityDetectionDebouncer.calculate(inputs.speedRotationsPerSec);
 
     Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
 
     switch (state) {
       case IDLE:
-        io.stopEndEffectorMotor(IdleMode.kCoast);
+        io.stop(IdleMode.kCoast);
         if (requestIntakeAlgae) {
           state = EndEffectorStates.INTAKE_ALGAE;
         } else if (requestIntakeCoral) {
@@ -92,7 +92,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case INTAKE_ALGAE:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeIntakeVolts);
+        io.setVoltage(Constants.EndEffector.algaeIntakeVolts);
         if (inputs.isAlgaeProximityDetected || isPiecePickupDetected) {
           state = EndEffectorStates.INTAKING_ALGAE;
           algaeHeld = true;
@@ -103,7 +103,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case INTAKE_CORAL:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.coralIntakeVolts);
+        io.setVoltage(Constants.EndEffector.coralIntakeVolts);
         if (inputs.isCoralProximityDetected || isPiecePickupDetected) {
           state = EndEffectorStates.INTAKING_CORAL;
           coralHeld = true;
@@ -135,7 +135,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case HOLD_ALGAE:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeHoldVolts);
+        io.setVoltage(Constants.EndEffector.algaeHoldVolts);
         if (requestReleaseAlgae) {
           state = EndEffectorStates.RELEASE_ALGAE;
         } else if (requestEject) {
@@ -147,7 +147,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case HOLD_CORAL:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.coralHoldVolts);
+        io.setVoltage(Constants.EndEffector.coralHoldVolts);
         if (requestReleaseCoralNormal) {
           state = EndEffectorStates.RELEASE_CORAL_NORMAL;
         } else if (requestReleaseCoralL1) {
@@ -161,7 +161,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case RELEASE_ALGAE:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeReleaseVolts);
+        io.setVoltage(Constants.EndEffector.algaeReleaseVolts);
         if (holdAlgae) {
           state = EndEffectorStates.HOLD_ALGAE;
         } else if (!inputs.isAlgaeProximityDetected) {
@@ -172,7 +172,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case RELEASE_CORAL_NORMAL:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.coralReleaseVolts);
+        io.setVoltage(Constants.EndEffector.coralReleaseVolts);
         if (holdCoral) {
           state = EndEffectorStates.HOLD_CORAL;
         } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
@@ -183,7 +183,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case RELEASE_CORAL_L1:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.coralReleaseVoltsL1);
+        io.setVoltage(Constants.EndEffector.coralReleaseVoltsL1);
         if (holdCoral) {
           state = EndEffectorStates.HOLD_CORAL;
         } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
@@ -203,7 +203,7 @@ public class EndEffector extends SubsystemBase {
             Constants.Arm.ejectDeg - Constants.Arm.setpointToleranceDegrees,
             Constants.Arm.ejectDeg + Constants.Arm.setpointToleranceDegrees,
             true)) /*TODO set acual values*/ {
-          io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
+          io.setVoltage(Constants.EndEffector.ejectVolts);
           if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
             state = EndEffectorStates.IDLE;
             coralHeld = false;
@@ -267,7 +267,7 @@ public class EndEffector extends SubsystemBase {
   }
 
   public void setNeutralMode(IdleMode mode) {
-    io.stopEndEffectorMotor(mode);
+    io.stop(mode);
   }
 
   private void unsetAllRequests() {

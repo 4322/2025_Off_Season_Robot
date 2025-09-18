@@ -191,8 +191,8 @@ public final class Constants {
 
   // TODO all of these are placeholder values
   public static class EndEffector {
-    public static final int endEffectorMotorId = 30;
-    public static final int endEffectorSensorId = 30;
+    public static final int motorId = 30;
+    public static final int sensorId = 30;
 
     public static final double algaeHoldVolts = 1.0;
     public static final double coralHoldVolts = 1.0;
@@ -207,9 +207,9 @@ public final class Constants {
 
     public static final double ejectVolts = -3.0;
 
-    public static final double motorBusCurrentLimit = 40;
-    public static final double motorBusCurrentLimitTime = 0;
-    public static final double motorStatorCurrentLimit = 60;
+    public static final double busCurrentLimit = 40;
+    public static final double busCurrentLimitTime = 0;
+    public static final double statorCurrentLimit = 60;
 
     public static final double sensorCoralProximityThreshold = 0;
     public static final double sensorAlgaeProximityThreshold = 0;

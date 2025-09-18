@@ -7,18 +7,18 @@ public interface EndEffectorIO {
 
   @AutoLog
   public static class EndEffectorIOInputs {
-    public boolean endEffectorMotorConnected = false;
-    public double endEffectorMotorStatorCurrentAmps = 0.0;
-    public double endEffectorMotorBusCurrentAmps = 0.0;
-    public double endEffectorMotorTempCelcius = 0.0;
-    public double endEffectorMotorSpeedRotationsPerSec = 0.0;
-    public double endEffectorMotorAppliedVolts = 0.0;
+    public boolean motorConnected = false;
+    public double statorCurrentAmps = 0.0;
+    public double busCurrentAmps = 0.0;
+    public double tempCelcius = 0.0;
+    public double speedRotationsPerSec = 0.0;
+    public double appliedVolts = 0.0;
 
-    public boolean endEffectorSensorConnected = false;
-    public double endEffectorSensorProximity = 0.0;
-    public double endEffectorSensorColorRed = 0.0;
-    public double endEffectorSensorColorGreen = 0.0;
-    public double endEffectorSensorColorBlue = 0.0;
+    public boolean sensorConnected = false;
+    public double sensorProximity = 0.0;
+    public double sensorColorRed = 0.0;
+    public double sensorColorGreen = 0.0;
+    public double sensorColorBlue = 0.0;
 
     public boolean isCoralProximityDetected = false;
     public boolean isAlgaeProximityDetected = false;
@@ -35,7 +35,7 @@ public interface EndEffectorIO {
 
   public default void updateInputs(EndEffectorIOInputs inputs) {}
 
-  public default void setEndEffectorMotorVoltage(double voltage) {}
+  public default void setVoltage(double voltage) {}
 
-  public default void stopEndEffectorMotor(IdleMode idleMode) {}
+  public default void stop(IdleMode idleMode) {}
 }
