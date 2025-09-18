@@ -23,7 +23,7 @@ public interface DeployerIO {
 
   public default void updateInputs(DeployerIOInputs inputs) {}
 
-  public default void setDeployerMotorPosition(double rotations) {}
+  public default void setPosition(double rotations) {}
 
   public default void stop(IdleMode idleMode) {}
 

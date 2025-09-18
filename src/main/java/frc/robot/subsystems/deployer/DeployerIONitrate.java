@@ -116,13 +116,13 @@ public class DeployerIONitrate implements DeployerIO {
   }
 
   @Override
-  public void setDeployerMotorPosition(double degrees) {
+  public void setPosition(double degrees) {
     if (degrees != previousRequestedPositionDeg) {
       // Requested position in code coordinate system
       previousRequestedPositionDeg = degrees;
 
-      if ((toCodeCoords(Units.rotationsToDegrees(mechanismAngleDeg)))
-          < degrees) {
+      if ((mechanismAngleDeg)
+          > degrees) {
         deployerMotor.setRequest(
             deployerMotorDeployPIDRequest.setPosition(
                 Units.degreesToRotations(toMotorCoords(degrees))));
