@@ -8,13 +8,13 @@ public interface DeployerIO {
   @AutoLog
   public static class DeployerIOInputs {
 
-    public boolean deployerMotorConnected = false;
-    public double deployerMotorStatorCurrentAmps = 0.0;
-    public double deployerMotorBusCurrentAmps = 0.0;
-    public double deployerMotorTempCelcius = 0.0;
-    public double deployerMotorSpeedRotationsPerSec = 0.0;
-    public double deployerMotorAppliedVolts = 0.0;
-    public double deployerMotorPositionRotations = 0.0;
+    public boolean connected = false;
+    public double statorCurrentAmps = 0.0;
+    public double busCurrentAmps = 0.0;
+    public double tempCelcius = 0.0;
+    public double speedRotationsPerSec = 0.0;
+    public double appliedVolts = 0.0;
+    public double angleDeg = 0.0;
 
     public double deployerMotorMechanismPositionDegrees = 0.0;
 
@@ -25,7 +25,7 @@ public interface DeployerIO {
 
   public default void setDeployerMotorPosition(double rotations) {}
 
-  public default void stopDeployerMotor(IdleMode idleMode) {}
+  public default void stop(IdleMode idleMode) {}
 
-  public default void deployerMotorEncoderSetHome() {}
+  public default void setHome() {}
 }

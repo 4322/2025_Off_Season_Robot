@@ -278,6 +278,9 @@ public final class Constants {
     public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kStandard;
     public static final double rangeDegrees = 145.353984;
     public static final double maxGravityDegrees = 10.0;
+    public static final double accelerationLimit = 0;
+    public static final double deaccelerationLimit = 0;
+    public static final double velocityLimit = 0;
   
   }
 

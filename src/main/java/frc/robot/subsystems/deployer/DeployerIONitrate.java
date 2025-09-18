@@ -3,6 +3,7 @@ package frc.robot.subsystems.deployer;
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
@@ -64,6 +65,10 @@ public class DeployerIONitrate implements DeployerIO {
         .getOutputSettings()
         .setIdleMode(Constants.Deployer.idleMode)
         .setInvert(Constants.Deployer.invertMode);
+    
+    motorConfig
+      .getFeedbackSensorSettings()
+      .setSensorToMechanismRatio(1 / Constants.Deployer.motorGearRatio);
 
     // Deploy PID in slot 0
     // Retract PID in slot 1
@@ -75,7 +80,11 @@ public class DeployerIONitrate implements DeployerIO {
             Constants.Deployer.deploykI,
             Constants.Deployer.deploykD)
         .setGravitationalFeedforward(Constants.Deployer.deploykG)
-        .setFeedforwardMode(Constants.Deployer.feedforwardMode);
+        .setFeedforwardMode(Constants.Deployer.feedforwardMode)
+        .setMinwrapConfig(new MinwrapConfig.Disabled())
+        .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
+        .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
+        .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit);
 
     motorConfig
         .getPIDSettings(PIDConfigSlot.kSlot1)
@@ -84,19 +93,22 @@ public class DeployerIONitrate implements DeployerIO {
             Constants.Deployer.retractkI,
             Constants.Deployer.retractkD)
         .setGravitationalFeedforward(Constants.Deployer.retractkG)
-        .setFeedforwardMode(Constants.Deployer.feedforwardMode);
+        .setFeedforwardMode(Constants.Deployer.feedforwardMode)
+        .setMinwrapConfig(new MinwrapConfig.Disabled())
+        .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
+        .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
+        .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit);
   }
 
   @Override
   public void updateInputs(DeployerIOInputs inputs) {
-    inputs.deployerMotorConnected = deployerMotor.isConnected();
-    inputs.deployerMotorStatorCurrentAmps = deployerMotor.getStatorCurrent();
-    inputs.deployerMotorBusCurrentAmps = deployerMotor.getBusCurrent();
-    inputs.deployerMotorTempCelcius = deployerMotor.getMotorTemperatureFrame().getValue();
-    inputs.deployerMotorPositionRotations = switchCoordinateSystem(deployerMotor.getPosition());
-    inputs.deployerMotorMechanismPositionDegrees = switchCoordinateSystem(inputs.deployerMotorPositionRotations) / Constants.Deployer.motorGearRatio;
-    inputs.deployerMotorSpeedRotationsPerSec = deployerMotor.getVelocity();
-    inputs.deployerMotorAppliedVolts = deployerMotor.getBusVoltageFrame().getValue();
+    inputs.connected = deployerMotor.isConnected();
+    inputs.statorCurrentAmps = deployerMotor.getStatorCurrent();
+    inputs.busCurrentAmps = deployerMotor.getBusCurrent();
+    inputs.tempCelcius = deployerMotor.getMotorTemperatureFrame().getValue();
+    inputs.angleDeg = switchCoordinateSystem(deployerMotor.getPosition());
+    inputs.speedRotationsPerSec = deployerMotor.getVelocity();
+    inputs.appliedVolts = deployerMotor.getBusVoltageFrame().getValue();
 
     inputs.deployerMotorRequestedPositionRotations = requestedPositionDegrees;
   }
@@ -108,7 +120,7 @@ public class DeployerIONitrate implements DeployerIO {
       requestedPositionDegrees =
           degrees * Constants.Deployer.motorGearRatio;
       previousRequestedPosition = degrees * Constants.Deployer.motorGearRatio;
-      
+
       if ((switchCoordinateSystem(Units.rotationsToDegrees(deployerMotor.getPosition()) * Constants.Deployer.motorGearRatio))
           < requestedPositionDegrees) {
         deployerMotor.setRequest(
@@ -123,13 +135,13 @@ public class DeployerIONitrate implements DeployerIO {
   }
 
   @Override
-  public void stopDeployerMotor(IdleMode idleMode) {
+  public void stop(IdleMode idleMode) {
     previousRequestedPosition = -999;
     deployerMotor.stop(idleMode);
   }
 
   @Override
-  public void deployerMotorEncoderSetHome() {
+  public void setHome() {
     deployerMotor.setPosition(switchCoordinateSystem(0));
   }
 

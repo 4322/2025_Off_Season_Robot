@@ -56,7 +56,7 @@ public class Deployer extends SubsystemBase {
   }
 
   public void setHome() {
-    io.deployerMotorEncoderSetHome();
+    io.setHome();
     isHomed = true;
   }
 
@@ -65,6 +65,6 @@ public class Deployer extends SubsystemBase {
   }
 
   public void stop(IdleMode mode) {
-    io.stopDeployerMotor(mode);
+    io.stop(mode);
   }
 }
