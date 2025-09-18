@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -55,69 +54,75 @@ public class Robot extends LoggedRobot {
         break;
     }
 
-    if (isReal()) {
-      var directory = new File(Constants.logPath);
-      if (!directory.exists()) {
-        directory.mkdir();
-      }
-      var files = directory.listFiles();
+    switch (Constants.currentMode) {
+      case REAL:
+        var directory = new File(Constants.logPath);
+        if (!directory.exists()) {
+          directory.mkdir();
+        }
+        var files = directory.listFiles();
 
-      // delete all garbage hoot files and wpilogs not connected to ds before good wpilogs
-      if (files != null) {
-        for (File file : files) {
-          if (file.getName().endsWith(".hoot")
-              || (!file.getName().contains("-") && file.getName().endsWith(".wpilog"))) {
-            file.delete();
-            DriverStation.reportWarning("Deleted " + file.getName() + " to free up space", false);
+        // delete all garbage hoot files and wpilogs not connected to ds before good wpilogs
+        if (files != null) {
+          for (File file : files) {
+            if (file.getName().endsWith(".hoot")
+                || (!file.getName().contains("-") && file.getName().endsWith(".wpilog"))) {
+              file.delete();
+              DriverStation.reportWarning("Deleted " + file.getName() + " to free up space", false);
+            }
           }
         }
-      }
 
-      // ensure that there is enough space on the roboRIO to log data
-      if (directory.getFreeSpace() < Constants.minFreeSpace) {
-        files = directory.listFiles();
-        if (files != null) {
-          // Sorting the files by name will ensure that the oldest files are deleted first
-          files = Arrays.stream(files).sorted().toArray(File[]::new);
+        // ensure that there is enough space on the roboRIO to log data
+        if (directory.getFreeSpace() < Constants.minFreeSpace) {
+          files = directory.listFiles();
+          if (files != null) {
+            // Sorting the files by name will ensure that the oldest files are deleted first
+            files = Arrays.stream(files).sorted().toArray(File[]::new);
 
-          long bytesToDelete = Constants.minFreeSpace - directory.getFreeSpace();
+            long bytesToDelete = Constants.minFreeSpace - directory.getFreeSpace();
 
-          for (File file : files) {
-            if (file.getName().endsWith(".wpilog")) {
-              try {
-                bytesToDelete -= Files.size(file.toPath());
-              } catch (IOException e) {
-                DriverStation.reportError("Failed to get size of file " + file.getName(), false);
-                continue;
-              }
-              if (file.delete()) {
-                DriverStation.reportWarning(
-                    "Deleted " + file.getName() + " to free up space", false);
-              } else {
-                DriverStation.reportError("Failed to delete " + file.getName(), false);
-              }
-              if (bytesToDelete <= 0) {
-                break;
+            for (File file : files) {
+              if (file.getName().endsWith(".wpilog")) {
+                try {
+                  bytesToDelete -= Files.size(file.toPath());
+                } catch (IOException e) {
+                  DriverStation.reportError("Failed to get size of file " + file.getName(), false);
+                  continue;
+                }
+                if (file.delete()) {
+                  DriverStation.reportWarning(
+                      "Deleted " + file.getName() + " to free up space", false);
+                } else {
+                  DriverStation.reportError("Failed to delete " + file.getName(), false);
+                }
+                if (bytesToDelete <= 0) {
+                  break;
+                }
               }
             }
           }
         }
-      }
 
-      Logger.addDataReceiver(
-          new WPILOGWriter(Constants.logPath)); // Log to a USB stick is ("/U/logs")
-      Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-      new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
-    } else {
-      setUseTiming(false); // Run as fast as possible
-      String logPath =
-          LogFileUtil
-              .findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-      Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
-      Logger.addDataReceiver(
-          new WPILOGWriter(
-              LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
-      RobotController.setBrownoutVoltage(7.5);
+        Logger.addDataReceiver(
+            new WPILOGWriter(Constants.logPath)); // Log to a USB stick is ("/U/logs")
+        Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+        new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+        break;
+      case SIM:
+        // Running a physics simulator, log to NT
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
+      case REPLAY:
+        setUseTiming(false); // Run as fast as possible
+        String logPath =
+            LogFileUtil
+                .findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
+        Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+        Logger.addDataReceiver(
+            new WPILOGWriter(
+                LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+        break;
     }
 
     Logger.start();

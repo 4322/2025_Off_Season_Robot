@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
-import frc.robot.subsystems.indexer.Indexer;
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
@@ -61,7 +60,6 @@ public class Superstructure extends SubsystemBase {
 
   private EndEffector endEffector;
   private Arm arm;
-  private Indexer indexer;
   private Elevator elevator;
   private IntakeSuperstructure intakeSuperstructure;
 
@@ -70,13 +68,11 @@ public class Superstructure extends SubsystemBase {
   public Superstructure(
       EndEffector endEffector,
       Arm arm,
-      Indexer indexer,
       Elevator elevator,
       IntakeSuperstructure intakeSuperstructure) {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
-    this.indexer = indexer;
     this.intakeSuperstructure = intakeSuperstructure;
   }
 
@@ -104,7 +100,7 @@ public class Superstructure extends SubsystemBase {
 
         if (requestEject) {
           state = Superstates.EJECT;
-        } else if (indexer.isCoralDetectedPickupArea()
+        } else if (intakeSuperstructure.isCoralDetectedPickupArea()
             && arm.atSetpoint()
             && elevator.atSetpoint()) {
           state = Superstates.END_EFFECTOR_CORAL_PICKUP;
@@ -195,14 +191,12 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case END_EFFECTOR_CORAL_PICKUP:
-        if (indexer.isCoralDetectedPickupArea()) {
-          elevator.pickupCoral();
-          endEffector.intakeCoral();
-        }
+        elevator.pickupCoral();
+        endEffector.intakeCoral();
 
         if (endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
-        } else if (!endEffector.hasCoral() && !indexer.isCoralDetectedPickupArea()) {
+        } else if (!endEffector.hasCoral() && !intakeSuperstructure.isCoralDetectedPickupArea()) {
           state = Superstates.IDLE;
         }
 
