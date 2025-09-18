@@ -145,7 +145,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void stop(IdleMode mode) {
-    prevSetpoint = -1000;
+    prevSetpoint = -1000; // To reset the setpoint so we can send a new request
     io.stopArmMotor(mode);
   }
 
