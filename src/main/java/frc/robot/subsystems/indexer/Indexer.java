@@ -34,27 +34,27 @@ public class Indexer extends SubsystemBase {
 
   public void feed() {
     currentAction = IndexerStatus.FEED;
-    io.setIndexerMotorsVoltage(Constants.Indexer.motorVoltageFeed);
+    io.setVoltage(Constants.Indexer.voltageFeed);
   }
 
   public void feedSlow() {
     currentAction = IndexerStatus.FEED_SLOW;
-    io.setIndexerMotorsVoltage(Constants.Indexer.motorVoltageFeedSlow);
+    io.setVoltage(Constants.Indexer.voltageFeedSlow);
   }
 
   public void reject() {
     currentAction = IndexerStatus.REJECT;
-    io.setIndexerMotorsVoltage(Constants.Indexer.motorVoltageReject);
+    io.setVoltage(Constants.Indexer.voltageReject);
   }
 
   public void rejectSlow() {
     currentAction = IndexerStatus.REJECT_SLOW;
-    io.setIndexerMotorsVoltage(Constants.Indexer.motorVoltageRejectSlow);
+    io.setVoltage(Constants.Indexer.voltageRejectSlow);
   }
 
   public void idle() {
     currentAction = IndexerStatus.START;
-    io.stopIndexerMotor(IdleMode.kCoast);
+    io.stop(IdleMode.kCoast);
   }
 
   public boolean isCoralDetectedIndexer() {

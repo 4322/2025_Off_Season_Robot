@@ -16,8 +16,8 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   private Nitrate endEffectorMotor;
   private Canandcolor endEffectorSensor;
 
-  private NitrateSettings endEffectorMotorConfig = new NitrateSettings();
-  private CanandcolorSettings endEffectorSensorConfig = new CanandcolorSettings();
+  private NitrateSettings motorConfig = new NitrateSettings();
+  private CanandcolorSettings sensorConfig = new CanandcolorSettings();
 
   private double previousRequestedVoltage = -999;
 
@@ -27,7 +27,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
     initMotorConfig();
     NitrateSettings endEffectorMotorConfigStatus =
-        endEffectorMotor.setSettings(endEffectorMotorConfig, 0.02, 5);
+        endEffectorMotor.setSettings(motorConfig, 0.02, 5);
     if (!endEffectorMotorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
@@ -38,7 +38,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
     initSensorConfig();
     CanandcolorSettings endEffectorSensorConfigStatus =
-        endEffectorSensor.setSettings(endEffectorSensorConfig, 0.02, 5);
+        endEffectorSensor.setSettings(sensorConfig, 0.02, 5);
     if (!endEffectorSensorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandcolor "
@@ -49,12 +49,12 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   }
 
   private void initMotorConfig() {
-    endEffectorMotorConfig.getElectricalLimitSettings()
+    motorConfig.getElectricalLimitSettings()
         .setBusCurrentLimit(Constants.EndEffector.busCurrentLimit)
         .setBusCurrentLimitTime(Constants.EndEffector.busCurrentLimitTime)
         .setStatorCurrentLimit(Constants.EndEffector.statorCurrentLimit);
 
-    endEffectorMotorConfig.getOutputSettings()
+    motorConfig.getOutputSettings()
         .setIdleMode(Constants.EndEffector.motorIdleMode)
         .setInvert(Constants.EndEffector.motorInvert);
   }
@@ -78,9 +78,9 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.sensorColorRed = endEffectorSensor.getRed();
 
     inputs.isCoralProximityDetected =
-        endEffectorSensor.getProximity() < Constants.EndEffector.sensorCoralProximityThreshold;
+        endEffectorSensor.getProximity() < Constants.EndEffector.coralProximityThreshold;
     inputs.isAlgaeProximityDetected =
-        endEffectorSensor.getProximity() < Constants.EndEffector.sensorAlgaeProximityThreshold
+        endEffectorSensor.getProximity() < Constants.EndEffector.algaeProximityThreshold
             && !inputs.isCoralProximityDetected; // TODO Assuming algae is farther from sensor
     // than coral is
 
@@ -90,18 +90,18 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
         // Green detected is within range; Blue detected is within range; Red detected is below
         // threshold
-        if (inputs.sensorColorGreen > Constants.EndEffector.sensorGreenDetectGreenLower
+        if (inputs.sensorColorGreen > Constants.EndEffector.greenDetectGreenLower
             && inputs.sensorColorGreen
-                < Constants.EndEffector.sensorGreenDetectGreenUpper
-            && inputs.sensorColorBlue > Constants.EndEffector.sensorGreenDetectBlueLower
-            && inputs.sensorColorBlue < Constants.EndEffector.sensorGreenDetectBlueUpper
-            && inputs.sensorColorRed < Constants.EndEffector.sensorGreenDetectRed) {
+                < Constants.EndEffector.greenDetectGreenUpper
+            && inputs.sensorColorBlue > Constants.EndEffector.greenDetectBlueLower
+            && inputs.sensorColorBlue < Constants.EndEffector.greenDetectBlueUpper
+            && inputs.sensorColorRed < Constants.EndEffector.greenDetectRed) {
           inputs.sensorPieceDetected = gamePiece.ALGAE;
 
           // All colors detected are above threshold
-        } else if (inputs.sensorColorGreen > Constants.EndEffector.sensorWhiteDetectGreen
-            && inputs.sensorColorBlue > Constants.EndEffector.sensorWhiteDetectBlue
-            && inputs.sensorColorRed > Constants.EndEffector.sensorWhiteDetectRed) {
+        } else if (inputs.sensorColorGreen > Constants.EndEffector.whiteDetectGreen
+            && inputs.sensorColorBlue > Constants.EndEffector.whiteDetectBlue
+            && inputs.sensorColorRed > Constants.EndEffector.whiteDetectRed) {
           inputs.sensorPieceDetected = gamePiece.CORAL;
         } else {
           inputs.sensorPieceDetected = gamePiece.UNKNOWN;

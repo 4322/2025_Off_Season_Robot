@@ -17,32 +17,32 @@ public class IndexerIONitrate implements IndexerIO {
   private Canandcolor indexerSensor;
   private Canandcolor pickupAreaSensor;
 
-  private NitrateSettings indexerMotorRightConfig = new NitrateSettings();
-  private NitrateSettings indexerMotorLeftConfig = new NitrateSettings();
+  private NitrateSettings motorRightConfig = new NitrateSettings();
+  private NitrateSettings motorLeftConfig = new NitrateSettings();
   private CanandcolorSettings indexerSensorConfig = new CanandcolorSettings();
   private CanandcolorSettings pickupAreaSensorConfig = new CanandcolorSettings();
 
-  private double previousRequestedVoltage = -999;
+  private double prevRequestedVoltage = -999;
 
   public IndexerIONitrate() {
-    indexerMotorRight = new Nitrate(Constants.Indexer.indexerMotorRightId, MotorType.kCu60);
-    indexerMotorLeft = new Nitrate(Constants.Indexer.indexerMotorLeftId, MotorType.kCu60);
+    indexerMotorRight = new Nitrate(Constants.Indexer.rightId, MotorType.kCu60);
+    indexerMotorLeft = new Nitrate(Constants.Indexer.leftId, MotorType.kCu60);
     indexerSensor = new Canandcolor(Constants.Indexer.indexerSensorId);
     pickupAreaSensor = new Canandcolor(Constants.Indexer.pickupAreaSensorId);
 
     initMotorConfig();
-    NitrateSettings indexerMotorConfigStatus =
-        indexerMotorRight.setSettings(indexerMotorRightConfig, 0.02, 5);
-    if (!indexerMotorConfigStatus.isEmpty()) {
+    NitrateSettings motorRightConfigStatus =
+        indexerMotorRight.setSettings(motorRightConfig, 0.02, 5);
+    if (!motorRightConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
               + indexerMotorRight.getAddress().getDeviceId()
               + " error (Indexer Motor); Did not receive settings",
           false);
     }
-    NitrateSettings indexerMotorLeftConfigStatus =
-        indexerMotorLeft.setSettings(indexerMotorLeftConfig, 0.02, 5);
-    if (!indexerMotorLeftConfigStatus.isEmpty()) {
+    NitrateSettings motorLeftConfigStatus =
+        indexerMotorLeft.setSettings(motorLeftConfig, 0.02, 5);
+    if (!motorLeftConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
               + indexerMotorLeft.getAddress().getDeviceId()
@@ -73,23 +73,23 @@ public class IndexerIONitrate implements IndexerIO {
   }
 
   private void initMotorConfig() {
-    indexerMotorLeftConfig.getElectricalLimitSettings()
-        .setBusCurrentLimit(Constants.Indexer.motorBusCurrentLimit)
-        .setBusCurrentLimitTime(Constants.Indexer.motorBusCurrentLimitTime)
-        .setStatorCurrentLimit(Constants.Indexer.motorStatorCurrentLimit);
+    motorLeftConfig.getElectricalLimitSettings()
+        .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
+        .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
+        .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit);
     
-    indexerMotorRightConfig.getElectricalLimitSettings()
-        .setBusCurrentLimit(Constants.Indexer.motorBusCurrentLimit)
-        .setBusCurrentLimitTime(Constants.Indexer.motorBusCurrentLimitTime)
-        .setStatorCurrentLimit(Constants.Indexer.motorStatorCurrentLimit);
+    motorRightConfig.getElectricalLimitSettings()
+        .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
+        .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
+        .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit);
     
-    indexerMotorLeftConfig.getOutputSettings()
-        .setIdleMode(Constants.Indexer.motorIdleMode)
-        .setInvert(Constants.Indexer.motorLeftInvert);
+    motorLeftConfig.getOutputSettings()
+        .setIdleMode(Constants.Indexer.idleMode)
+        .setInvert(Constants.Indexer.leftInvert);
     
-    indexerMotorRightConfig.getOutputSettings()
-        .setIdleMode(Constants.Indexer.motorIdleMode)
-        .setInvert(Constants.Indexer.motorRightInvert);
+    motorRightConfig.getOutputSettings()
+        .setIdleMode(Constants.Indexer.idleMode)
+        .setInvert(Constants.Indexer.rightInvert);
   }
 
   private void configSensor() {
@@ -98,19 +98,19 @@ public class IndexerIONitrate implements IndexerIO {
   @Override
   public void updateInputs(IndexerIOInputs inputs) {
 
-    inputs.indexerMotorLeftConnected = indexerMotorLeft.isConnected();
-    inputs.indexerMotorLeftAppliedVoltage = indexerMotorLeft.getBusVoltageFrame().getValue();
-    inputs.indexerMotorLeftBusCurrentAmps = indexerMotorLeft.getBusCurrent();
-    inputs.indexerMotorLeftStatorCurrentAmps = indexerMotorLeft.getStatorCurrent();
-    inputs.indexerMotorLeftTempCelcius = indexerMotorLeft.getMotorTemperatureFrame().getValue();
-    inputs.indexerMotorLeftSpeedRotationsPerSec = indexerMotorLeft.getVelocity();
+    inputs.leftConnected = indexerMotorLeft.isConnected();
+    inputs.leftAppliedVoltage = indexerMotorLeft.getBusVoltageFrame().getValue();
+    inputs.leftBusCurrentAmps = indexerMotorLeft.getBusCurrent();
+    inputs.leftStatorCurrentAmps = indexerMotorLeft.getStatorCurrent();
+    inputs.leftTempCelcius = indexerMotorLeft.getMotorTemperatureFrame().getValue();
+    inputs.leftSpeedRotationsPerSec = indexerMotorLeft.getVelocity();
 
-    inputs.indexerMotorRightConnected = indexerMotorRight.isConnected();
-    inputs.indexerMotorRightAppliedVoltage = indexerMotorRight.getBusVoltageFrame().getValue();
-    inputs.indexerMotorRightBusCurrentAmps = indexerMotorRight.getBusCurrent();
-    inputs.indexerMotorRightStatorCurrentAmps = indexerMotorRight.getStatorCurrent();
-    inputs.indexerMotorRightTempCelcius = indexerMotorRight.getMotorTemperatureFrame().getValue();
-    inputs.indexerMotorRightSpeedRotationsPerSec = indexerMotorRight.getVelocity();
+    inputs.rightConnected = indexerMotorRight.isConnected();
+    inputs.rightAppliedVoltage = indexerMotorRight.getBusVoltageFrame().getValue();
+    inputs.rightBusCurrentAmps = indexerMotorRight.getBusCurrent();
+    inputs.rightStatorCurrentAmps = indexerMotorRight.getStatorCurrent();
+    inputs.rightTempCelcius = indexerMotorRight.getMotorTemperatureFrame().getValue();
+    inputs.rightSpeedRotationsPerSec = indexerMotorRight.getVelocity();
 
     inputs.indexerSensorConnected = indexerSensor.isConnected();
     inputs.indexerSensorTriggered =
@@ -124,17 +124,17 @@ public class IndexerIONitrate implements IndexerIO {
   }
 
   @Override
-  public void setIndexerMotorsVoltage(double voltage) {
-    if (voltage != previousRequestedVoltage) {
+  public void setVoltage(double voltage) {
+    if (voltage != prevRequestedVoltage) {
       indexerMotorRight.setVoltage(voltage);
       indexerMotorLeft.setVoltage(voltage);
-      previousRequestedVoltage = voltage;
+      prevRequestedVoltage = voltage;
     }
   }
 
   @Override
-  public void stopIndexerMotor(IdleMode mode) {
-    previousRequestedVoltage = -999;
+  public void stop(IdleMode mode) {
+    prevRequestedVoltage = -999;
     indexerMotorRight.stop(mode);
     indexerMotorLeft.stop(mode);
   }

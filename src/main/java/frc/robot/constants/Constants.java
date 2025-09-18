@@ -211,22 +211,22 @@ public final class Constants {
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 60;
 
-    public static final double sensorCoralProximityThreshold = 0;
-    public static final double sensorAlgaeProximityThreshold = 0;
+    public static final double coralProximityThreshold = 0;
+    public static final double algaeProximityThreshold = 0;
 
     public static final boolean useSensorColor = false; // TODO change this when we get color tuned
     // TODO tune these
     // For algae
-    public static final double sensorGreenDetectGreenLower = 120;
-    public static final double sensorGreenDetectGreenUpper = 140;
-    public static final double sensorGreenDetectBlueLower = 120;
-    public static final double sensorGreenDetectBlueUpper = 140;
-    public static final double sensorGreenDetectRed = 38; // Max value
+    public static final double greenDetectGreenLower = 120;
+    public static final double greenDetectGreenUpper = 140;
+    public static final double greenDetectBlueLower = 120;
+    public static final double greenDetectBlueUpper = 140;
+    public static final double greenDetectRed = 38; // Max value
 
     // For coral; All are minimum values
-    public static final double sensorWhiteDetectGreen = 180;
-    public static final double sensorWhiteDetectBlue = 180;
-    public static final double sensorWhiteDetectRed = 180;
+    public static final double whiteDetectGreen = 180;
+    public static final double whiteDetectBlue = 180;
+    public static final double whiteDetectRed = 180;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert = InvertMode.kNotInverted; // positive is intaking
 
@@ -285,40 +285,38 @@ public final class Constants {
   }
 
   public static class Indexer {
-    public static final int indexerMotorRightId = 50;
-    public static final int indexerMotorLeftId = 51;
-    public static final double motorBusCurrentLimit = 40;
-    public static final double motorBusCurrentLimitTime = 0;
-    public static final double motorStatorCurrentLimit = 60;
-    public static final IdleMode motorIdleMode = IdleMode.kCoast;
-    public static final InvertMode motorRightInvert = InvertMode.kInverted; // positive is intaking
-    public static final InvertMode motorLeftInvert =
-        InvertMode.kNotInverted; // positive is intaking
-    public static final double indexerSensorMax = 0;
-    public static final double pickupAreaSensorMax = 0;
+    public static final int rightId = 50;
+    public static final int leftId = 51;
+    public static final double busCurrentLimit = 40;
+    public static final double busCurrentLimitTime = 0;
+    public static final double statorCurrentLimit = 60;
+    public static final IdleMode idleMode = IdleMode.kCoast;
+    public static final InvertMode rightInvert = InvertMode.kInverted; // positive is intaking
+    public static final InvertMode leftInvert = InvertMode.kNotInverted; // positive is intaking
+    public static final double indexerSensorMax = 5; // TODO tune these
+    public static final double pickupAreaSensorMax = 5;
     public static final int indexerSensorId = 0;
     public static final int pickupAreaSensorId = 0;
-    public static final double motorVoltageFeed = 5;
-    public static final double motorVoltageRejectSlow = -3;
-    public static final double motorVoltageFeedSlow = 3;
-    public static final double motorVoltageReject = -5;
+    public static final double voltageFeed = 5;
+    public static final double voltageRejectSlow = -3;
+    public static final double voltageFeedSlow = 3;
+    public static final double voltageReject = -5;
   }
 
   public static class Rollers {
-    public static final int rollersMotorId = 60;
+    public static final int motorId = 60;
 
-    public static final double motorBusCurrentLimitTime = 0;
-    public static final double motorStatorCurrentLimit = 60;
-    public static final double motorBusCurrentLimit = 40;
+    public static final double busCurrentLimitTime = 0;
+    public static final double statorCurrentLimit = 60;
+    public static final double busCurrentLimit = 40;
 
-    public static final IdleMode motorIdleMode = IdleMode.kCoast;
-    public static final InvertMode motorInvert =
-        InvertMode.kNotInverted; // positive is intaking, TODO: verify direction
+    public static final IdleMode idleMode = IdleMode.kCoast;
+    public static final InvertMode invert = InvertMode.kNotInverted; // positive is intaking, TODO: verify direction
 
-    public static final double motorVoltageFeed = 5;
-    public static final double motorVoltageFeedSlow = 3;
-    public static final double motorVoltageReject = -5;
-    public static final double motorVoltageRejectSlow = -3;
+    public static final double voltageFeed = 5;
+    public static final double voltageFeedSlow = 3;
+    public static final double voltageReject = -5;
+    public static final double voltageRejectSlow = -3;
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
         0.25; // Time for the delta of the current to spike and stay there before detection is
@@ -327,11 +325,11 @@ public final class Constants {
         0.25; // Time for delta of the velocity to spike and stay there before detection is
     // triggered
 
-    public static final double CurrentDetectionDeltaThresholdAmps = 0;
+    public static final double currentDetectionDeltaThresholdAmps = 0;
     public static final double velocityDetectionStallDeltaRotationsPerSec = 0;
-    public static final double CurrentDetectionMaxAccumulationSeconds = 1;
-    public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
-    public static final double VelocityDetectionMaxAccumulationSeconds = 1;
+    public static final double currentDetectionMaxAccumulationSeconds = 1;
+    public static final double velocityDetectionDeltaThresholdRotationsPerSecond = 0;
+    public static final double velocityDetectionMaxAccumulationSeconds = 1;
   }
 
   public static class IntakeSuperstructure {
