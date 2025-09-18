@@ -208,7 +208,7 @@ public final class Constants {
     public static final double ejectVolts = -3.0;
 
     public static final double motorBusCurrentLimit = 40;
-    public static final double motorBusCurrentLimitTime = 40;
+    public static final double motorBusCurrentLimitTime = 0;
     public static final double motorStatorCurrentLimit = 60;
 
     public static final double sensorCoralProximityThreshold = 0;
@@ -251,7 +251,7 @@ public final class Constants {
     public static final double deployVoltage = 3.0;
 
     public static final double statorCurrentLimit = 40;
-    public static final double busCurrentLimitTime = 40;
+    public static final double busCurrentLimitTime = 0;
     public static final double busCurrentLimit = 60;
     public static final IdleMode idleMode = IdleMode.kBrake;
     public static final InvertMode invertMode =
@@ -285,7 +285,7 @@ public final class Constants {
     public static final int indexerMotorRightId = 50;
     public static final int indexerMotorLeftId = 51;
     public static final double motorBusCurrentLimit = 40;
-    public static final double motorBusCurrentLimitTime = 0.5;
+    public static final double motorBusCurrentLimitTime = 0;
     public static final double motorStatorCurrentLimit = 60;
     public static final IdleMode motorIdleMode = IdleMode.kCoast;
     public static final InvertMode motorRightInvert = InvertMode.kInverted; // positive is intaking
@@ -304,7 +304,7 @@ public final class Constants {
   public static class Rollers {
     public static final int rollersMotorId = 60;
 
-    public static final double motorBusCurrentLimitTime = 0.5;
+    public static final double motorBusCurrentLimitTime = 0;
     public static final double motorStatorCurrentLimit = 60;
     public static final double motorBusCurrentLimit = 40;
 
