@@ -83,8 +83,8 @@ public final class Constants {
         InvertMode.kNotInverted; // positive is up toward scoring side
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
 
-    public static final double sensorToArm = 85 / 10;
-    public static final double motorShaftToSensorShaft = 56 / 16;
+    public static final double sensorToArm = 85 / 10.0;
+    public static final double motorShaftToSensorShaft = 56 / 16.0;
 
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0;
