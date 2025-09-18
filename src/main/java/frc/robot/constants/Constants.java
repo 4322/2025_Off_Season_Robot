@@ -179,6 +179,7 @@ public final class Constants {
     public static final double slowVelocityMetersPerSec = 0.2;
 
     public static final double gearRatio = 6 / 1.0;
+    public static final double beltPulleyPitchDiameterMeters = Units.inchesToMeters(1.504);
     public static final double scoreCoralL1HeightMeters = prescoreCoralL1HeightMeters;
     public static final double scoreCoralL2HeightMeters = prescoreCoralL2HeightMeters - 0.1;
     public static final double scoreCoralL3HeightMeters = prescoreCoralL3HeightMeters - 0.1;
