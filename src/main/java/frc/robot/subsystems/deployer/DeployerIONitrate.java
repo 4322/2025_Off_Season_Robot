@@ -37,8 +37,7 @@ public class DeployerIONitrate implements DeployerIO {
   private final PIDPositionRequest deployerMotorRetractPIDRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
-  private double previousRequestedPosition = -999;
-  private double requestedPositionDegrees = 0.0;
+  private double previousRequestedPositionDeg = -999;
 
   public DeployerIONitrate() {
     deployerMotor = new Nitrate(Constants.Deployer.deployerMotorId, MotorType.kCu60);
@@ -110,33 +109,31 @@ public class DeployerIONitrate implements DeployerIO {
     inputs.speedRotationsPerSec = deployerMotor.getVelocity();
     inputs.appliedVolts = deployerMotor.getBusVoltageFrame().getValue();
 
-    inputs.deployerMotorRequestedPositionRotations = requestedPositionDegrees;
+    inputs.prevRequestedPositionDeg = previousRequestedPositionDeg;
   }
 
   @Override
   public void setDeployerMotorPosition(double degrees) {
-    if (degrees != previousRequestedPosition) {
+    if (degrees != previousRequestedPositionDeg) {
       // Requested position in code coordinate system
-      requestedPositionDegrees =
-          degrees * Constants.Deployer.motorGearRatio;
-      previousRequestedPosition = degrees * Constants.Deployer.motorGearRatio;
+      previousRequestedPositionDeg = degrees;
 
-      if ((switchCoordinateSystem(Units.rotationsToDegrees(deployerMotor.getPosition()) * Constants.Deployer.motorGearRatio))
-          < requestedPositionDegrees) {
+      if ((switchCoordinateSystem(Units.rotationsToDegrees(deployerMotor.getPosition())))
+          < degrees) {
         deployerMotor.setRequest(
             deployerMotorDeployPIDRequest.setPosition(
-                switchCoordinateSystem(requestedPositionDegrees)));
+                switchCoordinateSystem(degrees)));
       } else {
         deployerMotor.setRequest(
             deployerMotorRetractPIDRequest.setPosition(
-                switchCoordinateSystem(requestedPositionDegrees)));
+                switchCoordinateSystem(degrees)));
       }
     }
   }
 
   @Override
   public void stop(IdleMode idleMode) {
-    previousRequestedPosition = -999;
+    previousRequestedPositionDeg = -999;
     deployerMotor.stop(idleMode);
   }
 
