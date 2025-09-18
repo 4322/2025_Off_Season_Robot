@@ -18,13 +18,13 @@ import frc.robot.constants.Constants;
 // Enable GravitationalFeedForward mode
 
 /* Code coordinate system:
- * 145.353984 -> 0 where 0 is fully retracted against hardstop and 145.353984 is fully deployed
+ * 0 -> 145.353984 where 0 is fully deployed and 145.353984 is fully retracted against hardstop
  * Motor controller coordinate system:
  * -10? -> 0 -> 135.353984 where 135.353984 is fully retracted against hardstop, 0 is the the point where the deployer is the most affected by gravity, and -10? is fully deployed
  * 
- * code = -motor + 135.353984
- * motor = -code + 135.353984
- * 
+ * code = motor + 10
+ * motor = code - 10
+ * 10 is used in place of offset
  */
 
 public class DeployerIONitrate implements DeployerIO {
@@ -38,6 +38,7 @@ public class DeployerIONitrate implements DeployerIO {
       new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
   private double previousRequestedPositionDeg = -999;
+  private double mechanismAngleDeg;
 
   public DeployerIONitrate() {
     deployerMotor = new Nitrate(Constants.Deployer.deployerMotorId, MotorType.kCu60);
@@ -67,7 +68,7 @@ public class DeployerIONitrate implements DeployerIO {
     
     motorConfig
       .getFeedbackSensorSettings()
-      .setSensorToMechanismRatio(1 / Constants.Deployer.motorGearRatio);
+      .setSensorToMechanismRatio(Constants.Deployer.motorGearRatio);
 
     // Deploy PID in slot 0
     // Retract PID in slot 1
@@ -105,11 +106,13 @@ public class DeployerIONitrate implements DeployerIO {
     inputs.statorCurrentAmps = deployerMotor.getStatorCurrent();
     inputs.busCurrentAmps = deployerMotor.getBusCurrent();
     inputs.tempCelcius = deployerMotor.getMotorTemperatureFrame().getValue();
-    inputs.angleDeg = switchCoordinateSystem(deployerMotor.getPosition());
+    inputs.angleDeg = toCodeCoords(Units.rotationsToDegrees(deployerMotor.getPosition()));
     inputs.speedRotationsPerSec = deployerMotor.getVelocity();
     inputs.appliedVolts = deployerMotor.getBusVoltageFrame().getValue();
 
     inputs.prevRequestedPositionDeg = previousRequestedPositionDeg;
+
+    mechanismAngleDeg = inputs.angleDeg;
   }
 
   @Override
@@ -118,15 +121,15 @@ public class DeployerIONitrate implements DeployerIO {
       // Requested position in code coordinate system
       previousRequestedPositionDeg = degrees;
 
-      if ((switchCoordinateSystem(Units.rotationsToDegrees(deployerMotor.getPosition())))
+      if ((toCodeCoords(Units.rotationsToDegrees(mechanismAngleDeg)))
           < degrees) {
         deployerMotor.setRequest(
             deployerMotorDeployPIDRequest.setPosition(
-                switchCoordinateSystem(degrees)));
+                Units.degreesToRotations(toMotorCoords(degrees))));
       } else {
         deployerMotor.setRequest(
             deployerMotorRetractPIDRequest.setPosition(
-                switchCoordinateSystem(degrees)));
+                Units.degreesToRotations(toMotorCoords(degrees))));
       }
     }
   }
@@ -139,10 +142,15 @@ public class DeployerIONitrate implements DeployerIO {
 
   @Override
   public void setHome() {
-    deployerMotor.setPosition(switchCoordinateSystem(0));
+    deployerMotor.setPosition(toMotorCoords(Constants.Deployer.maxRangeDegrees));
   }
 
-  private double switchCoordinateSystem(double position) {
-    return -position + (Constants.Deployer.rangeDegrees - Constants.Deployer.maxGravityDegrees);
+
+  private double toCodeCoords(double position) {
+    return position + Constants.Deployer.maxGravityDegrees;
   }
+
+  private double toMotorCoords(double position) {
+    return position - Constants.Deployer.maxGravityDegrees;
+  } 
 }

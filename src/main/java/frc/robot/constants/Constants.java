@@ -275,8 +275,8 @@ public final class Constants {
     public static final double ejectPositionDegrees = 94.931222;
     public static final double retractPositionDegrees = 4.931222;
     public static final double deployPositionDegrees = 145.353984;
-    public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kStandard;
-    public static final double rangeDegrees = 145.353984;
+    public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kArm;
+    public static final double maxRangeDegrees = 145.353984;
     public static final double maxGravityDegrees = 10.0;
     public static final double accelerationLimit = 0;
     public static final double deaccelerationLimit = 0;
