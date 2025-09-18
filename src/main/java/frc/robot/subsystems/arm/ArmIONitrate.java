@@ -32,21 +32,21 @@ public class ArmIONitrate implements ArmIO {
     armMotor = new Nitrate(Constants.Arm.armMotorId, MotorType.kCu60);
     armEncoder = new Canandmag(Constants.Arm.armEncoderId);
 
-    PIDSettings armPIDSettings = new PIDSettings();
-    armPIDSettings.setPID(Constants.Arm.armkP, Constants.Arm.armkI, Constants.Arm.armkD);
-    armPIDSettings.setGravitationalFeedforward(Constants.Arm.kg);
-    armPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
-    armPIDSettings.setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit);
-    armPIDSettings.setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit);
-    armPIDSettings.setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit);
+    PIDSettings PIDSettings = new PIDSettings();
+    PIDSettings.setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
+    PIDSettings.setGravitationalFeedforward(Constants.Arm.kG);
+    PIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
+    PIDSettings.setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit);
+    PIDSettings.setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit);
+    PIDSettings.setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit);
 
-    PIDSettings armSlowPIDSettings = new PIDSettings();
-    armSlowPIDSettings.setPID(Constants.Arm.armkP, Constants.Arm.armkI, Constants.Arm.armkD);
-    armSlowPIDSettings.setGravitationalFeedforward(Constants.Arm.kg);
-    armSlowPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
-    armSlowPIDSettings.setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit);
-    armSlowPIDSettings.setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit);
-    armSlowPIDSettings.setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit);
+    PIDSettings SlowPIDSettings = new PIDSettings();
+    SlowPIDSettings.setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
+    SlowPIDSettings.setGravitationalFeedforward(Constants.Arm.kG);
+    SlowPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
+    SlowPIDSettings.setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit);
+    SlowPIDSettings.setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit);
+    SlowPIDSettings.setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit);
 
     NitrateSettings armConfig = new NitrateSettings();
 
@@ -61,26 +61,26 @@ public class ArmIONitrate implements ArmIO {
     electricalLimitSettings.setBusCurrentLimit(Constants.Arm.supplyCurrentLimitAmps);
     electricalLimitSettings.setStatorCurrentLimit(Constants.Arm.statorCurrentLimitAmps);
 
-    OutputSettings armMotorOutputSettings = new OutputSettings();
-    armMotorOutputSettings.setIdleMode(Constants.Arm.motorIdleMode);
-    armMotorOutputSettings.setInvert(Constants.Arm.armMotorInvert);
+    OutputSettings MotorOutputSettings = new OutputSettings();
+    MotorOutputSettings.setIdleMode(Constants.Arm.motorIdleMode);
+    MotorOutputSettings.setInvert(Constants.Arm.motorInvert);
 
-    armConfig.setPIDSettings(armPIDSettings, PIDConfigSlot.kSlot0);
-    armConfig.setPIDSettings(armSlowPIDSettings, PIDConfigSlot.kSlot1);
+    armConfig.setPIDSettings(PIDSettings, PIDConfigSlot.kSlot0);
+    armConfig.setPIDSettings(SlowPIDSettings, PIDConfigSlot.kSlot1);
     armConfig.setElectricalLimitSettings(electricalLimitSettings);
-    armConfig.setOutputSettings(armMotorOutputSettings);
+    armConfig.setOutputSettings(MotorOutputSettings);
 
     CanandmagSettings settings = new CanandmagSettings();
-    CanandmagSettings armEncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
+    CanandmagSettings EncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
 
-    NitrateSettings armConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);
+    NitrateSettings motorConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);
 
-    if (!armConfigStatus.isEmpty()) {
+    if (!motorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate " + armMotor.getAddress().getDeviceId() + " (Arm motor) failed to configure",
           false);
     }
-    if (!armEncoderConfigStatus.isEmpty()) {
+    if (!EncoderConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandmag "
               + armEncoder.getAddress().getDeviceId()
@@ -93,7 +93,7 @@ public class ArmIONitrate implements ArmIO {
   public void updateInputs(ArmIOInputs armInputs) {
     armInputs.requestedPosDeg = lastRequestedPosDeg;
     armInputs.armPositionDegrees =
-        Units.rotationsToDegrees(armMotor.getPosition()) - Constants.Arm.armOffsetEncoderDeg;
+        Units.rotationsToDegrees(armMotor.getPosition()) - Constants.Arm.OffsetEncoderDeg;
     armInputs.armConnected = armMotor.isConnected();
     armInputs.voltage = armMotor.getBusVoltageFrame().getValue();
     armInputs.velocityDegSec = Units.rotationsToDegrees(armMotor.getVelocity());
@@ -103,18 +103,19 @@ public class ArmIONitrate implements ArmIO {
     armInputs.armEncoderConnected = armEncoder.isConnected();
   }
   // You need method in ArmIO as well to do Override Remember to check - Personal Note / Reminder
+  //
 
   @Override
   public void setHomePosition() {
     stopArmMotor(IdleMode.kBrake);
-    armMotor.setPosition(Units.degreesToRotations(Constants.Arm.armOffsetEncoderDeg));
+    armMotor.setPosition(Units.degreesToRotations(Constants.Arm.OffsetEncoderDeg));
   }
 
   @Override
   public void requestPosition(double requestSetpoint) {
     armMotor.setRequest(
         armPIDPositionRequest.setPosition(
-            Units.degreesToRotations(requestSetpoint + Constants.Arm.armOffsetEncoderDeg)));
+            Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg)));
     lastRequestedPosDeg = requestSetpoint;
   }
 
@@ -122,7 +123,7 @@ public class ArmIONitrate implements ArmIO {
   public void requestSlowPosition(double requestSetpoint) {
     armMotor.setRequest(
         armSlowPIDPositionRequest.setPosition(
-            Units.degreesToRotations(requestSetpoint + Constants.Arm.armOffsetEncoderDeg)));
+            Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg)));
     lastRequestedPosDeg = requestSetpoint;
   }
 

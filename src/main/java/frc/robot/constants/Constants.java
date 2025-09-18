@@ -1,8 +1,9 @@
 package frc.robot.constants;
 
-import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
+import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -103,10 +104,7 @@ public final class Constants {
         setpointToleranceDegrees * 4; // Degrees of buffer zone for min safe angle
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
-    public static final double kg = 20;
-
-    public static final ElectricalLimitSettings armElectricalLimitSettings =
-        new ElectricalLimitSettings();
+    public static final double kG = 20;
 
     public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 5; // TODO
     public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20; // TODO
@@ -124,11 +122,11 @@ public final class Constants {
     public static final double safeBargeRetractDeg = 180;
 
     // To the encoder 0 is horizontal but to us its straight down
-    public static final double armOffsetEncoderDeg = -90;
+    public static final double OffsetEncoderDeg = -90;
 
-    public static final double armkP = 1;
-    public static final double armkI = 0;
-    public static final double armkD = 0;
+    public static final double kP = 1;
+    public static final double kI = 0;
+    public static final double kD = 0;
 
     public static final double AccelerationLimit = 0.68; // TODO
     public static final double DeaccelerationLimit = 0.68; // TODO
@@ -274,6 +272,8 @@ public final class Constants {
     public static final double ejectPositionRotations = Units.degreesToRotations(94.931222);
     public static final double retractPositionRotations = Units.degreesToRotations(4.931222);
     public static final double deployPositionRotations = Units.degreesToRotations(145.353984);
+    public static final PIDFeedforwardMode motorFeedforwardMode = PIDFeedforwardMode.kStandard;
+    public static final double motorOffsetDegrees = 145.353984;
   }
 
   public static class Indexer {
