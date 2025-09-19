@@ -21,6 +21,7 @@ import frc.robot.commands.Eject;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.SwitchOperationModeCommand;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
@@ -105,10 +106,10 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        if (Constants.armEnabled) {
+        if (Constants.armMode != SubsystemMode.DISABLED) {
           arm = new Arm(new ArmIONitrate()); // Create the arm subsystem if enabled
         }
-        if (Constants.elevatorEnabled) {
+        if (Constants.elevatorMode != SubsystemMode.DISABLED) {
           elevator =
               new Elevator(new ElevatorIONitrate()); // Create the elevator subsystem if enabled
         }
@@ -138,7 +139,7 @@ public class RobotContainer {
         if (Constants.rollersEnabled) {
           rollers = new Rollers(new RollersIONitrate());
         }
-        if (Constants.deployerEnabled) {
+        if (Constants.deployerMode != SubsystemMode.DISABLED) {
           deployer = new Deployer(new DeployerIONitrate());
         }
         if (vision == null) {
@@ -244,13 +245,13 @@ public class RobotContainer {
     driver
         .back()
         .onTrue(
-            new CoastCommand(arm, elevator, deployer)
+            new CoastCommand(arm, elevator, deployer, superstructure)
                 .onlyIf(() -> DriverStation.isDisabled())
                 .ignoringDisable(true));
   }
 
   public static boolean isScoringTriggerHeld() {
-    if (Constants.currentMode == Constants.Mode.SIM) {
+    if (Constants.currentMode == Constants.RobotMode.SIM) {
       return sim1.a().getAsBoolean();
     } else {
       return driver.rightTrigger().getAsBoolean();

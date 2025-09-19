@@ -1,5 +1,6 @@
 package frc.robot.subsystems.deployer;
 
+import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -8,22 +9,28 @@ public interface DeployerIO {
   @AutoLog
   public static class DeployerIOInputs {
 
-    public boolean deployerMotorConnected = false;
-    public double deployerMotorStatorCurrentAmps = 0.0;
-    public double deployerMotorBusCurrentAmps = 0.0;
-    public double deployerMotorTempCelcius = 0.0;
-    public double deployerMotorSpeedRotationsPerSec = 0.0;
-    public double deployerMotorAppliedVolts = 0.0;
-    public double deployerMotorPositionRotations = 0.0;
+    public boolean connected = false;
+    public double statorCurrentAmps = 0.0;
+    public double busCurrentAmps = 0.0;
+    public double tempCelcius = 0.0;
+    public double speedRotationsPerSec = 0.0;
+    public double appliedVolts = 0.0;
+    public double angleDeg = 0.0;
 
-    public double deployerMotorRequestedPositionRotations = 0.0;
+    public double prevRequestedPositionDeg = 0.0;
   }
 
   public default void updateInputs(DeployerIOInputs inputs) {}
 
-  public default void setDeployerMotorPosition(double rotations) {}
+  public default void setPosition(double rotations) {}
 
-  public default void stopDeployerMotor(IdleMode idleMode) {}
+  public default void stop(IdleMode idleMode) {}
 
-  public default void deployerMotorEncoderSetHome() {}
+  public default void setHome() {}
+
+  public default void setVoltage(double voltage) {}
+
+  public default Nitrate getNitrate() {
+    return null;
+  } // for tuning
 }

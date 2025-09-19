@@ -4,8 +4,8 @@ public class IndexerIOSim implements IndexerIO {
 
   @Override
   public void updateInputs(IndexerIOInputs inputs) {
-    inputs.indexerMotorLeftConnected = true;
-    inputs.indexerMotorRightConnected = true;
+    inputs.leftConnected = true;
+    inputs.rightConnected = true;
 
     inputs.indexerSensorConnected = true;
     inputs.pickupAreaSensorConnected = true;

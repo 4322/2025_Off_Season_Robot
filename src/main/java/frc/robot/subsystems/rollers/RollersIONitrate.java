@@ -12,62 +12,58 @@ import frc.robot.constants.Constants;
 public class RollersIONitrate implements RollersIO {
   private Nitrate rollersMotor;
 
-  private NitrateSettings rollersMotorConfig = new NitrateSettings();
+  private NitrateSettings motorConfig = new NitrateSettings();
 
-  private double previousRequestedVoltage = -999;
+  private double prevRequestedVoltage = -999;
 
   public RollersIONitrate() {
-    rollersMotor = new Nitrate(Constants.Rollers.rollersMotorId, MotorType.kCu60);
+    rollersMotor = new Nitrate(Constants.Rollers.motorId, MotorType.kCu60);
 
     initMotorConfig();
-    NitrateSettings rollersMotorConfigStatus =
-        rollersMotor.setSettings(rollersMotorConfig, 0.02, 5);
-    if (!rollersMotorConfigStatus.allSettingsReceived()) {
+    NitrateSettings motorConfigStatus = rollersMotor.setSettings(motorConfig, 0.02, 5);
+    if (!motorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
               + rollersMotor.getAddress().getDeviceId()
               + " error (Rollers Motor); Did not receive settings",
-          null);
+          false);
     }
   }
 
   private void initMotorConfig() {
-    // TODO add other settings for motor
-    ElectricalLimitSettings rollersMotorElectricalLimitSettings = new ElectricalLimitSettings();
-    rollersMotorElectricalLimitSettings.setBusCurrentLimit(Constants.Rollers.motorBusCurrentLimit);
-    rollersMotorElectricalLimitSettings.setBusCurrentLimitTime(
-        Constants.Rollers.motorBusCurrentLimitTime);
-    rollersMotorElectricalLimitSettings.setStatorCurrentLimit(
-        Constants.Rollers.motorStatorCurrentLimit);
-    rollersMotorConfig.setElectricalLimitSettings(rollersMotorElectricalLimitSettings);
+    motorConfig.setElectricalLimitSettings(
+      new ElectricalLimitSettings()
+        .setBusCurrentLimit(Constants.Rollers.busCurrentLimit)
+        .setBusCurrentLimitTime(Constants.Rollers.busCurrentLimitTime)
+        .setStatorCurrentLimit(Constants.Rollers.statorCurrentLimit));
 
-    OutputSettings rollersMotorOutputSettings = new OutputSettings();
-    rollersMotorOutputSettings.setIdleMode(Constants.Rollers.motorIdleMode);
-    rollersMotorOutputSettings.setInvert(Constants.Rollers.motorInvert);
-    rollersMotorConfig.setOutputSettings(rollersMotorOutputSettings);
+    motorConfig.setOutputSettings(
+      new OutputSettings()
+        .setIdleMode(Constants.Rollers.idleMode)
+        .setInvert(Constants.Rollers.invert));
   }
 
   @Override
   public void updateInputs(RollersIOInputs inputs) {
-    inputs.rollersMotorConnected = rollersMotor.isConnected();
-    inputs.rollersMotorAppliedVoltage = rollersMotor.getBusVoltageFrame().getValue();
-    inputs.rollersMotorBusCurrentAmps = rollersMotor.getBusCurrent();
-    inputs.rollersMotorStatorCurrentAmps = rollersMotor.getStatorCurrent();
-    inputs.rollersMotorTempCelcius = rollersMotor.getMotorTemperatureFrame().getValue();
-    inputs.rollersMotorSpeedRotationsPerSec = rollersMotor.getVelocity();
+    inputs.connected = rollersMotor.isConnected();
+    inputs.appliedVoltage = rollersMotor.getBusVoltageFrame().getValue();
+    inputs.busCurrentAmps = rollersMotor.getBusCurrent();
+    inputs.statorCurrentAmps = rollersMotor.getStatorCurrent();
+    inputs.tempCelcius = rollersMotor.getMotorTemperatureFrame().getValue();
+    inputs.speedRotationsPerSec = rollersMotor.getVelocity();
   }
 
   @Override
-  public void setRollersMotorVoltage(double voltage) {
-    if (voltage != previousRequestedVoltage) {
+  public void setVoltage(double voltage) {
+    if (voltage != prevRequestedVoltage) {
       rollersMotor.setVoltage(voltage);
-      previousRequestedVoltage = voltage;
+      prevRequestedVoltage = voltage;
     }
   }
 
   @Override
-  public void stopRollersMotor(IdleMode mode) {
-    previousRequestedVoltage = -999;
+  public void stop(IdleMode mode) {
+    prevRequestedVoltage = -999;
     rollersMotor.stop(mode);
   }
 }

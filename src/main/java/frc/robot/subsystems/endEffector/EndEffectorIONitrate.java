@@ -16,79 +16,72 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   private Nitrate endEffectorMotor;
   private Canandcolor endEffectorSensor;
 
-  private NitrateSettings endEffectorMotorConfig = new NitrateSettings();
-  private CanandcolorSettings endEffectorSensorConfig = new CanandcolorSettings();
+  private NitrateSettings motorConfig = new NitrateSettings();
+  private CanandcolorSettings sensorConfig = new CanandcolorSettings();
 
   private double previousRequestedVoltage = -999;
 
   public EndEffectorIONitrate() {
-    endEffectorMotor = new Nitrate(Constants.EndEffector.endEffectorMotorId, MotorType.kCu60);
-    endEffectorSensor = new Canandcolor(Constants.EndEffector.endEffectorSensorId);
+    endEffectorMotor = new Nitrate(Constants.EndEffector.motorId, MotorType.kCu60);
+    endEffectorSensor = new Canandcolor(Constants.EndEffector.sensorId);
 
     initMotorConfig();
     NitrateSettings endEffectorMotorConfigStatus =
-        endEffectorMotor.setSettings(endEffectorMotorConfig, 0.02, 5);
-    if (!endEffectorMotorConfigStatus.allSettingsReceived()) {
+        endEffectorMotor.setSettings(motorConfig, 0.02, 5);
+    if (!endEffectorMotorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
               + endEffectorMotor.getAddress().getDeviceId()
               + " error (End Effector Motor); Did not receive settings",
-          null);
+          false);
     }
 
     initSensorConfig();
     CanandcolorSettings endEffectorSensorConfigStatus =
-        endEffectorSensor.setSettings(endEffectorSensorConfig, 0.02, 5);
-    if (!endEffectorSensorConfigStatus.allSettingsReceived()) {
+        endEffectorSensor.setSettings(sensorConfig, 0.02, 5);
+    if (!endEffectorSensorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandcolor "
               + endEffectorSensor.getAddress().getDeviceId()
               + " error (End Effector Sensor); Did not receive settings",
-          null);
+          false);
     }
   }
 
   private void initMotorConfig() {
-    // TODO add other settings for motor
-    ElectricalLimitSettings endEffectorMotorElectricalLimitSettings = new ElectricalLimitSettings();
-    endEffectorMotorElectricalLimitSettings.setBusCurrentLimit(
-        Constants.EndEffector.motorBusCurrentLimit);
-    endEffectorMotorElectricalLimitSettings.setBusCurrentLimitTime(
-        Constants.EndEffector.motorBusCurrentLimitTime);
-    endEffectorMotorElectricalLimitSettings.setStatorCurrentLimit(
-        Constants.EndEffector.motorStatorCurrentLimit);
-    endEffectorMotorConfig.setElectricalLimitSettings(endEffectorMotorElectricalLimitSettings);
+    motorConfig.setElectricalLimitSettings(
+        new ElectricalLimitSettings()
+        .setBusCurrentLimit(Constants.EndEffector.busCurrentLimit)
+        .setBusCurrentLimitTime(Constants.EndEffector.busCurrentLimitTime)
+        .setStatorCurrentLimit(Constants.EndEffector.statorCurrentLimit));
 
-    OutputSettings endEffectorMotorOutputSettings = new OutputSettings();
-    endEffectorMotorOutputSettings.setIdleMode(Constants.EndEffector.motorIdleMode);
-    endEffectorMotorOutputSettings.setInvert(Constants.EndEffector.motorInvert);
-    endEffectorMotorConfig.setOutputSettings(endEffectorMotorOutputSettings);
+    motorConfig.setOutputSettings(
+        new OutputSettings()
+        .setIdleMode(Constants.EndEffector.motorIdleMode)
+        .setInvert(Constants.EndEffector.motorInvert));
   }
 
-  private void initSensorConfig() {
-    // TODO add other settings for sensor
-    //
-  }
+  private void initSensorConfig() {}
 
   @Override
   public void updateInputs(EndEffectorIOInputs inputs) {
-    inputs.endEffectorMotorConnected = endEffectorMotor.isConnected();
-    inputs.endEffectorMotorSpeedRotationsPerSec = endEffectorMotor.getVelocity();
-    inputs.endEffectorMotorStatorCurrentAmps = endEffectorMotor.getStatorCurrent();
-    inputs.endEffectorMotorTempCelcius = endEffectorMotor.getMotorTemperatureFrame().getValue();
-    inputs.endEffectorMotorBusCurrentAmps = endEffectorMotor.getBusCurrent();
-    inputs.endEffectorMotorAppliedVolts = endEffectorMotor.getBusVoltageFrame().getValue();
+    inputs.motorConnected = endEffectorMotor.isConnected();
+    inputs.speedRotationsPerSec = endEffectorMotor.getVelocity();
+    inputs.statorCurrentAmps = endEffectorMotor.getStatorCurrent();
+    inputs.tempCelcius = endEffectorMotor.getMotorTemperatureFrame().getValue();
+    inputs.busCurrentAmps = endEffectorMotor.getBusCurrent();
+    inputs.appliedVolts = endEffectorMotor.getBusVoltageFrame().getValue();
 
-    inputs.endEffectorSensorConnected = endEffectorSensor.isConnected();
-    inputs.endEffectorSensorProximity = endEffectorSensor.getProximity();
-    inputs.endEffectorSensorColorBlue = endEffectorSensor.getBlue();
-    inputs.endEffectorSensorColorGreen = endEffectorSensor.getGreen();
-    inputs.endEffectorSensorColorRed = endEffectorSensor.getRed();
+    inputs.sensorConnected = endEffectorSensor.isConnected();
+    inputs.sensorProximity = endEffectorSensor.getProximity();
+    inputs.sensorColorBlue = endEffectorSensor.getBlue();
+    inputs.sensorColorGreen = endEffectorSensor.getGreen();
+    inputs.sensorColorRed = endEffectorSensor.getRed();
 
     inputs.isCoralProximityDetected =
-        endEffectorSensor.getProximity() < Constants.EndEffector.sensorCoralProximityThreshold;
+        endEffectorSensor.getProximity() < Constants.EndEffector.coralProximityThreshold;
     inputs.isAlgaeProximityDetected =
-        endEffectorSensor.getProximity() < Constants.EndEffector.sensorAlgaeProximityThreshold
+        endEffectorSensor.getProximity() < Constants.EndEffector.algaeProximityThreshold
             && !inputs.isCoralProximityDetected; // TODO Assuming algae is farther from sensor
     // than coral is
 
@@ -98,18 +91,17 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
         // Green detected is within range; Blue detected is within range; Red detected is below
         // threshold
-        if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorGreenDetectGreenLower
-            && inputs.endEffectorSensorColorGreen
-                < Constants.EndEffector.sensorGreenDetectGreenUpper
-            && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorGreenDetectBlueLower
-            && inputs.endEffectorSensorColorBlue < Constants.EndEffector.sensorGreenDetectBlueUpper
-            && inputs.endEffectorSensorColorRed < Constants.EndEffector.sensorGreenDetectRed) {
+        if (inputs.sensorColorGreen > Constants.EndEffector.greenDetectGreenLower
+            && inputs.sensorColorGreen < Constants.EndEffector.greenDetectGreenUpper
+            && inputs.sensorColorBlue > Constants.EndEffector.greenDetectBlueLower
+            && inputs.sensorColorBlue < Constants.EndEffector.greenDetectBlueUpper
+            && inputs.sensorColorRed < Constants.EndEffector.greenDetectRed) {
           inputs.sensorPieceDetected = gamePiece.ALGAE;
 
           // All colors detected are above threshold
-        } else if (inputs.endEffectorSensorColorGreen > Constants.EndEffector.sensorWhiteDetectGreen
-            && inputs.endEffectorSensorColorBlue > Constants.EndEffector.sensorWhiteDetectBlue
-            && inputs.endEffectorSensorColorRed > Constants.EndEffector.sensorWhiteDetectRed) {
+        } else if (inputs.sensorColorGreen > Constants.EndEffector.whiteDetectGreen
+            && inputs.sensorColorBlue > Constants.EndEffector.whiteDetectBlue
+            && inputs.sensorColorRed > Constants.EndEffector.whiteDetectRed) {
           inputs.sensorPieceDetected = gamePiece.CORAL;
         } else {
           inputs.sensorPieceDetected = gamePiece.UNKNOWN;
@@ -129,7 +121,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   }
 
   @Override
-  public void setEndEffectorMotorVoltage(double voltage) {
+  public void setVoltage(double voltage) {
     if (voltage != previousRequestedVoltage) {
       previousRequestedVoltage = voltage;
       endEffectorMotor.setVoltage(voltage);
@@ -138,7 +130,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
   @Override
   // This covers both stopping motor as well as setting brake/coast mode
-  public void stopEndEffectorMotor(IdleMode idleMode) {
+  public void stop(IdleMode idleMode) {
     previousRequestedVoltage = -999;
     endEffectorMotor.stop(idleMode);
   }

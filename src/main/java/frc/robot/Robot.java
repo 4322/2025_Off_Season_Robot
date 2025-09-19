@@ -3,10 +3,16 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.Constants;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Optional;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -29,10 +35,11 @@ public class Robot extends LoggedRobot {
   private Timer allianceUpdateTimer = new Timer();
   private DigitalInput homeButton = new DigitalInput(Constants.dioHomeButton);
   private Timer homeButtonTimer = new Timer();
+  private DigitalInput coastButton = new DigitalInput(Constants.dioCoastButton);
+  private Timer coastButtonTimer = new Timer();
 
   public Robot() {
-    // Record metadata
-    Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+    Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
     Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
@@ -49,37 +56,86 @@ public class Robot extends LoggedRobot {
         break;
     }
 
-    // Set up data receivers & replay source
     switch (Constants.currentMode) {
       case REAL:
-        // Running on a real robot, log to a USB stick ("/U/logs")
-        Logger.addDataReceiver(new WPILOGWriter());
-        Logger.addDataReceiver(new NT4Publisher());
-        break;
+        var directory = new File(Constants.logPath);
+        if (!directory.exists()) {
+          directory.mkdir();
+        }
+        var files = directory.listFiles();
 
+        // delete all garbage hoot files and wpilogs not connected to ds before good wpilogs
+        if (files != null) {
+          for (File file : files) {
+            if (file.getName().endsWith(".hoot")
+                || (!file.getName().contains("-") && file.getName().endsWith(".wpilog"))) {
+              file.delete();
+              DriverStation.reportWarning("Deleted " + file.getName() + " to free up space", false);
+            }
+          }
+        }
+
+        // ensure that there is enough space on the roboRIO to log data
+        if (directory.getFreeSpace() < Constants.minFreeSpace) {
+          files = directory.listFiles();
+          if (files != null) {
+            // Sorting the files by name will ensure that the oldest files are deleted first
+            files = Arrays.stream(files).sorted().toArray(File[]::new);
+
+            long bytesToDelete = Constants.minFreeSpace - directory.getFreeSpace();
+
+            for (File file : files) {
+              if (file.getName().endsWith(".wpilog")) {
+                try {
+                  bytesToDelete -= Files.size(file.toPath());
+                } catch (IOException e) {
+                  DriverStation.reportError("Failed to get size of file " + file.getName(), false);
+                  continue;
+                }
+                if (file.delete()) {
+                  DriverStation.reportWarning(
+                      "Deleted " + file.getName() + " to free up space", false);
+                } else {
+                  DriverStation.reportError("Failed to delete " + file.getName(), false);
+                }
+                if (bytesToDelete <= 0) {
+                  break;
+                }
+              }
+            }
+          }
+        }
+
+        Logger.addDataReceiver(
+            new WPILOGWriter(Constants.logPath)); // Log to a USB stick is ("/U/logs")
+        Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+        new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+        break;
       case SIM:
         // Running a physics simulator, log to NT
         Logger.addDataReceiver(new NT4Publisher());
         break;
-
       case REPLAY:
-        // Replaying a log, set up replay source
         setUseTiming(false); // Run as fast as possible
-        String logPath = LogFileUtil.findReplayLog();
-        Logger.setReplaySource(new WPILOGReader(logPath));
-        Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+        String logPath =
+            LogFileUtil
+                .findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
+        Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+        Logger.addDataReceiver(
+            new WPILOGWriter(
+                LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
         break;
     }
 
-    // Start AdvantageKit logger
     Logger.start();
+    Logger.disableConsoleCapture();
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
     allianceUpdateTimer.start();
 
-    if (Constants.currentMode == Constants.Mode.SIM) {
+    if (Constants.currentMode == Constants.RobotMode.SIM) {
       // enable subsystems in sim mode
       RobotContainer.getSuperstructure().homeButtonActivated();
     }
@@ -120,13 +176,26 @@ public class Robot extends LoggedRobot {
   public void disabledPeriodic() {
 
     if (!homeButton.get()) {
+      homeButtonTimer.start();
       // button is pressed in
       if (homeButtonTimer.hasElapsed(Constants.homeButtonDelaySec)) {
-        homeButtonTimer.restart();
         RobotContainer.getSuperstructure().homeButtonActivated();
-      } else {
         homeButtonTimer.stop();
         homeButtonTimer.reset();
+      }
+    } else {
+      homeButtonTimer.stop();
+      homeButtonTimer.reset();
+    }
+
+    if (!coastButton.get()) {
+      RobotContainer.getSuperstructure().CoastMotors();
+      coastButtonTimer.start();
+      // button is pressed in
+      if (coastButtonTimer.hasElapsed(Constants.coastButtonDelaySec)) {
+        RobotContainer.getSuperstructure().BreakMotors();
+        coastButtonTimer.stop();
+        coastButtonTimer.reset();
       }
     }
   }

@@ -31,7 +31,7 @@ public class IntakeSuperstructure extends SubsystemBase {
 
   private IntakeSuperstates state = IntakeSuperstates.UNHOMED;
 
-  private Deployer deployer;
+  public Deployer deployer;
   private Rollers rollers;
   private Indexer indexer;
 

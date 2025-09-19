@@ -2,13 +2,15 @@ package frc.robot.subsystems.deployer;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BabyAlchemist;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import org.littletonrobotics.junction.Logger;
 
 public class Deployer extends SubsystemBase {
   private DeployerIO io;
   private DeployerIOInputsAutoLogged inputs = new DeployerIOInputsAutoLogged();
-
+  // TODO go through states and make sure safe if disabled since code is still running
   private enum DeployerStatus {
     START,
     DEPLOY,
@@ -29,6 +31,21 @@ public class Deployer extends SubsystemBase {
     Logger.processInputs("Deployer", inputs);
     Logger.recordOutput("Deployer/currentAction", currentAction.toString());
     Logger.recordOutput("Deployer/isHomed", isHomed);
+    switch (Constants.armMode) {
+      case OPEN_LOOP:
+        io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
+        break;
+      case TUNING:
+        Double newPos = BabyAlchemist.run(io.getNitrate());
+        if (newPos != null) {
+          io.setPosition(newPos);
+        }
+        break;
+      case DISABLED:
+        break;
+      case NORMAL:
+        break;
+    }
   }
 
   public void deploy() {
@@ -36,7 +53,7 @@ public class Deployer extends SubsystemBase {
       return;
     }
     currentAction = DeployerStatus.DEPLOY;
-    io.setDeployerMotorPosition(Constants.Deployer.deployPositionRotations);
+    io.setPosition(Constants.Deployer.deployPositionDegrees);
   }
 
   public void retract() {
@@ -44,7 +61,7 @@ public class Deployer extends SubsystemBase {
       return;
     }
     currentAction = DeployerStatus.RETRACT;
-    io.setDeployerMotorPosition(Constants.Deployer.retractPositionRotations);
+    io.setPosition(Constants.Deployer.retractPositionDegrees);
   }
 
   public void eject() {
@@ -52,11 +69,11 @@ public class Deployer extends SubsystemBase {
       return;
     }
     currentAction = DeployerStatus.EJECT;
-    io.setDeployerMotorPosition(Constants.Deployer.ejectPositionRotations);
+    io.setPosition(Constants.Deployer.ejectPositionDegrees);
   }
 
   public void setHome() {
-    io.deployerMotorEncoderSetHome();
+    io.setHome();
     isHomed = true;
   }
 
@@ -65,6 +82,6 @@ public class Deployer extends SubsystemBase {
   }
 
   public void stop(IdleMode mode) {
-    io.stopDeployerMotor(mode);
+    io.stop(mode);
   }
 }

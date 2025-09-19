@@ -18,16 +18,16 @@ public class Rollers extends SubsystemBase {
   private DeltaDebouncer currentDetectionDebouncer =
       new DeltaDebouncer(
           Constants.Rollers.currentDetectionDebounceTimeSeconds,
-          Constants.Rollers.CurrentDetectionDeltaThresholdAmps,
+          Constants.Rollers.currentDetectionDeltaThresholdAmps,
           DeltaDebouncer.Mode.CUMULATIVE,
-          Constants.Rollers.CurrentDetectionMaxAccumulationSeconds,
+          Constants.Rollers.currentDetectionMaxAccumulationSeconds,
           DeltaDebouncer.ChangeType.INCREASE);
   private DeltaDebouncer velocityDetectionDebouncer =
       new DeltaDebouncer(
           Constants.Rollers.velocityDetectionDebounceTimeSeconds,
-          Constants.Rollers.VelocityDetectionDeltaThresholdRotationsPerSecond,
+          Constants.Rollers.velocityDetectionDeltaThresholdRotationsPerSecond,
           DeltaDebouncer.Mode.CUMULATIVE,
-          Constants.Rollers.VelocityDetectionMaxAccumulationSeconds,
+          Constants.Rollers.velocityDetectionMaxAccumulationSeconds,
           DeltaDebouncer.ChangeType.DECREASE);
 
   private enum RollersStatus {
@@ -51,10 +51,8 @@ public class Rollers extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
 
-    currentDetectionTriggered =
-        currentDetectionDebouncer.calculate(inputs.rollersMotorStatorCurrentAmps);
-    velocityDetectionTriggered =
-        velocityDetectionDebouncer.calculate(inputs.rollersMotorSpeedRotationsPerSec);
+    currentDetectionTriggered = currentDetectionDebouncer.calculate(inputs.statorCurrentAmps);
+    velocityDetectionTriggered = velocityDetectionDebouncer.calculate(inputs.speedRotationsPerSec);
     isCoralPickupDetected = currentDetectionTriggered && velocityDetectionTriggered;
 
     Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected);
@@ -64,27 +62,27 @@ public class Rollers extends SubsystemBase {
 
   public void feed() {
     currentAction = RollersStatus.FEED;
-    io.setRollersMotorVoltage(Constants.Rollers.motorVoltageFeed);
+    io.setVoltage(Constants.Rollers.voltageFeed);
   }
 
   public void feedSlow() {
     currentAction = RollersStatus.FEED_SLOW;
-    io.setRollersMotorVoltage(Constants.Rollers.motorVoltageFeedSlow);
+    io.setVoltage(Constants.Rollers.voltageFeedSlow);
   }
 
   public void reject() {
     currentAction = RollersStatus.REJECT;
-    io.setRollersMotorVoltage(Constants.Rollers.motorVoltageReject);
+    io.setVoltage(Constants.Rollers.voltageReject);
   }
 
   public void rejectSlow() {
     currentAction = RollersStatus.REJECT_SLOW;
-    io.setRollersMotorVoltage(Constants.Rollers.motorVoltageRejectSlow);
+    io.setVoltage(Constants.Rollers.voltageRejectSlow);
   }
 
   public void idle() {
     currentAction = RollersStatus.IDLE;
-    io.stopRollersMotor(IdleMode.kCoast);
+    io.stop(IdleMode.kCoast);
   }
 
   public boolean isCoralPickupDetected() {

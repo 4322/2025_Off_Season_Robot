@@ -17,8 +17,8 @@ public class ElevatorIOSim implements ElevatorIO {
 
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
-    inputs.leaderElevatorMotorConnected = true;
-    inputs.followerElevatorMotorConnected = true;
+    inputs.leaderConnected = true;
+    inputs.followerConnected = true;
 
     double prevPos = position;
     simPos();
@@ -26,14 +26,14 @@ public class ElevatorIOSim implements ElevatorIO {
     double velocity = (position - prevPos) * 50;
 
     inputs.requestedPosMeters = requestedPosition;
-    inputs.leaderMotorheightMeters = position;
-    inputs.followerMotorheightMeters = position;
+    inputs.leaderheightMeters = position;
+    inputs.followerHeightMeters = position;
 
-    inputs.leaderMotorVoltage = voltage;
-    inputs.followerMotorVoltage = voltage;
+    inputs.leaderVoltage = voltage;
+    inputs.followerVoltage = voltage;
 
-    inputs.followerMotorVelocityMetersPerSecond = velocity;
-    inputs.leaderMotorVelocityMetersPerSecond = velocity;
+    inputs.followerVelocityMetersPerSecond = velocity;
+    inputs.leaderVelocityMetersPerSecond = velocity;
   }
 
   @Override

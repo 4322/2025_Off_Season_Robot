@@ -1,5 +1,6 @@
 package frc.robot.subsystems.arm;
 
+import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -33,4 +34,8 @@ public interface ArmIO {
   public default void requestSlowPosition(double requestSetpoint) {}
 
   public default void setManualInitialization() {}
+
+  public default Nitrate getNitrate() {
+    return null;
+  } // for tuning
 }

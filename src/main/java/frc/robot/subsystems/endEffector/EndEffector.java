@@ -17,7 +17,8 @@ public class EndEffector extends SubsystemBase {
   private boolean requestIntakeAlgae;
   private boolean requestIntakeCoral;
   private boolean requestReleaseAlgae;
-  private boolean requestReleaseCoral;
+  private boolean requestReleaseCoralNormal;
+  private boolean requestReleaseCoralL1;
   private boolean requestEject;
   private boolean holdAlgae;
   private boolean holdCoral;
@@ -35,7 +36,8 @@ public class EndEffector extends SubsystemBase {
     HOLD_ALGAE,
     HOLD_CORAL,
     RELEASE_ALGAE,
-    RELEASE_CORAL,
+    RELEASE_CORAL_NORMAL,
+    RELEASE_CORAL_L1,
     INTAKING_CORAL, // This and below state used to give delay before reducing intake voltage to
     // allow a piece to fully come in
     INTAKING_ALGAE,
@@ -75,14 +77,14 @@ public class EndEffector extends SubsystemBase {
     Logger.recordOutput("End Effector/algaeHeld", algaeHeld);
 
     isPiecePickupDetected =
-        currentDetectionDebouncer.calculate(inputs.endEffectorMotorStatorCurrentAmps)
-            && velocityDetectionDebouncer.calculate(inputs.endEffectorMotorSpeedRotationsPerSec);
+        currentDetectionDebouncer.calculate(inputs.statorCurrentAmps)
+            && velocityDetectionDebouncer.calculate(inputs.speedRotationsPerSec);
 
     Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
 
     switch (state) {
       case IDLE:
-        io.stopEndEffectorMotor(IdleMode.kCoast);
+        io.stop(IdleMode.kCoast);
         if (requestIntakeAlgae) {
           state = EndEffectorStates.INTAKE_ALGAE;
         } else if (requestIntakeCoral) {
@@ -90,7 +92,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case INTAKE_ALGAE:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeIntakeVolts);
+        io.setVoltage(Constants.EndEffector.algaeIntakeVolts);
         if (inputs.isAlgaeProximityDetected || isPiecePickupDetected) {
           state = EndEffectorStates.INTAKING_ALGAE;
           algaeHeld = true;
@@ -101,7 +103,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case INTAKE_CORAL:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.coralIntakeVolts);
+        io.setVoltage(Constants.EndEffector.coralIntakeVolts);
         if (inputs.isCoralProximityDetected || isPiecePickupDetected) {
           state = EndEffectorStates.INTAKING_CORAL;
           coralHeld = true;
@@ -133,7 +135,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case HOLD_ALGAE:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeHoldVolts);
+        io.setVoltage(Constants.EndEffector.algaeHoldVolts);
         if (requestReleaseAlgae) {
           state = EndEffectorStates.RELEASE_ALGAE;
         } else if (requestEject) {
@@ -145,9 +147,11 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case HOLD_CORAL:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.coralHoldVolts);
-        if (requestReleaseCoral) {
-          state = EndEffectorStates.RELEASE_CORAL;
+        io.setVoltage(Constants.EndEffector.coralHoldVolts);
+        if (requestReleaseCoralNormal) {
+          state = EndEffectorStates.RELEASE_CORAL_NORMAL;
+        } else if (requestReleaseCoralL1) {
+          state = EndEffectorStates.RELEASE_CORAL_L1;
         } else if (requestEject) {
           state = EndEffectorStates.EJECT;
         }
@@ -157,7 +161,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case RELEASE_ALGAE:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.algaeReleaseVolts);
+        io.setVoltage(Constants.EndEffector.algaeReleaseVolts);
         if (holdAlgae) {
           state = EndEffectorStates.HOLD_ALGAE;
         } else if (!inputs.isAlgaeProximityDetected) {
@@ -167,8 +171,19 @@ public class EndEffector extends SubsystemBase {
           state = EndEffectorStates.HOLD_ALGAE;
         }
         break;
-      case RELEASE_CORAL:
-        io.setEndEffectorMotorVoltage(Constants.EndEffector.coralReleaseVolts);
+      case RELEASE_CORAL_NORMAL:
+        io.setVoltage(Constants.EndEffector.coralReleaseVolts);
+        if (holdCoral) {
+          state = EndEffectorStates.HOLD_CORAL;
+        } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+          state = EndEffectorStates.IDLE;
+          coralHeld = false;
+        } else if (inputs.isCoralProximityDetected) {
+          state = EndEffectorStates.HOLD_CORAL;
+        }
+        break;
+      case RELEASE_CORAL_L1:
+        io.setVoltage(Constants.EndEffector.coralReleaseVoltsL1);
         if (holdCoral) {
           state = EndEffectorStates.HOLD_CORAL;
         } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
@@ -188,7 +203,7 @@ public class EndEffector extends SubsystemBase {
             Constants.Arm.ejectDeg - Constants.Arm.setpointToleranceDegrees,
             Constants.Arm.ejectDeg + Constants.Arm.setpointToleranceDegrees,
             true)) /*TODO set acual values*/ {
-          io.setEndEffectorMotorVoltage(Constants.EndEffector.ejectVolts);
+          io.setVoltage(Constants.EndEffector.ejectVolts);
           if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
             state = EndEffectorStates.IDLE;
             coralHeld = false;
@@ -219,9 +234,14 @@ public class EndEffector extends SubsystemBase {
     requestReleaseAlgae = true;
   }
 
-  public void releaseCoral() {
+  public void releaseCoralNormal() {
     unsetAllRequests();
-    requestReleaseCoral = true;
+    requestReleaseCoralNormal = true;
+  }
+
+  public void releaseCoralL1() {
+    unsetAllRequests();
+    requestReleaseCoralL1 = true;
   }
 
   public void holdAlgae() {
@@ -247,7 +267,7 @@ public class EndEffector extends SubsystemBase {
   }
 
   public void setNeutralMode(IdleMode mode) {
-    io.stopEndEffectorMotor(mode);
+    io.stop(mode);
   }
 
   private void unsetAllRequests() {
@@ -255,7 +275,8 @@ public class EndEffector extends SubsystemBase {
     requestIntakeAlgae = false;
     requestIntakeCoral = false;
     requestReleaseAlgae = false;
-    requestReleaseCoral = false;
+    requestReleaseCoralNormal = false;
+    requestReleaseCoralL1 = false;
     requestEject = false;
     holdAlgae = false;
     holdCoral = false;
