@@ -32,7 +32,7 @@ public class Arm extends SubsystemBase {
     Logger.recordOutput("Arm/TargetAngle", requestedSetpoint);
 
     if (Constants.Arm.manualControl) {
-      io.setVoltage(RobotContainer.driver.getLeftX() * 12.0);
+      io.setVoltage(-RobotContainer.driver.getLeftX() * 4.0);
     } else if (isHomed) {
       if (RobotContainer.getSuperstructure().isCoralHeld()) {
         minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
