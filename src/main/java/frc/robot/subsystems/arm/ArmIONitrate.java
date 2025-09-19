@@ -15,7 +15,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -35,51 +34,45 @@ public class ArmIONitrate implements ArmIO {
     armMotor = new Nitrate(Constants.Arm.armMotorId, MotorType.kCu60);
     armEncoder = new Canandmag(Constants.Arm.armEncoderId);
     NitrateSettings armConfig = new NitrateSettings();
-    
 
     armConfig.setPIDSettings(
         new PIDSettings()
-        .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
-        .setFeedforwardMode(PIDFeedforwardMode.kArm)
-        .setGravitationalFeedforward(Constants.Arm.kG)
-        .setMinwrapConfig(new MinwrapConfig.Disabled())
-        .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
-        .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
-        .setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit),
+            .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
+            .setFeedforwardMode(PIDFeedforwardMode.kArm)
+            .setGravitationalFeedforward(Constants.Arm.kG)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
+            .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
+            .setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit),
         PIDConfigSlot.kSlot0);
 
-
     armConfig.setPIDSettings(
-      new PIDSettings()
-        .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
-        .setFeedforwardMode(PIDFeedforwardMode.kArm)
-        .setGravitationalFeedforward(Constants.Arm.kG)
-        .setMinwrapConfig(new MinwrapConfig.Disabled())
-        .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
-        .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
-        .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit),
+        new PIDSettings()
+            .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
+            .setFeedforwardMode(PIDFeedforwardMode.kArm)
+            .setGravitationalFeedforward(Constants.Arm.kG)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
+            .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
+            .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit),
         PIDConfigSlot.kSlot1);
 
-
     armConfig.setFeedbackSensorSettings(
-      new FeedbackSensorSettings().setSensorToMechanismRatio(Constants.Arm.sensorToArm)
-      .setFeedbackSensor(new FeedbackSensor.CanandmagRelative(Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft)));
-    
-       
-
-    ElectricalLimitSettings electricalLimitSettings = new ElectricalLimitSettings();
-    electricalLimitSettings.setBusCurrentLimit(Constants.Arm.supplyCurrentLimitAmps);
-    electricalLimitSettings.setStatorCurrentLimit(Constants.Arm.statorCurrentLimitAmps);
-
-    OutputSettings MotorOutputSettings = new OutputSettings();
-    MotorOutputSettings.setIdleMode(Constants.Arm.motorIdleMode)
-        .setInvert(Constants.Arm.motorInvert);
+        new FeedbackSensorSettings()
+            .setSensorToMechanismRatio(Constants.Arm.sensorToArm)
+            .setFeedbackSensor(
+                new FeedbackSensor.CanandmagRelative(
+                    Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft)));
 
     armConfig.setOutputSettings(
-        .setElectricalLimitSettings(electricalLimitSettings)
-        .setOutputSettings(MotorOutputSettings)
-        );
-        
+        new OutputSettings()
+            .setIdleMode(Constants.Arm.motorIdleMode)
+            .setInvert(Constants.Arm.motorInvert));
+
+    armConfig.setElectricalLimitSettings(
+        new ElectricalLimitSettings()
+            .setBusCurrentLimit(Constants.Arm.supplyCurrentLimitAmps)
+            .setStatorCurrentLimit(Constants.Arm.statorCurrentLimitAmps));
 
     CanandmagSettings settings = new CanandmagSettings();
     CanandmagSettings EncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
