@@ -51,10 +51,8 @@ public class Rollers extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
 
-    currentDetectionTriggered =
-        currentDetectionDebouncer.calculate(inputs.statorCurrentAmps);
-    velocityDetectionTriggered =
-        velocityDetectionDebouncer.calculate(inputs.speedRotationsPerSec);
+    currentDetectionTriggered = currentDetectionDebouncer.calculate(inputs.statorCurrentAmps);
+    velocityDetectionTriggered = velocityDetectionDebouncer.calculate(inputs.speedRotationsPerSec);
     isCoralPickupDetected = currentDetectionTriggered && velocityDetectionTriggered;
 
     Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected);

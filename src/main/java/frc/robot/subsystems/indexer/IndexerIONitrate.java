@@ -2,8 +2,6 @@ package frc.robot.subsystems.indexer;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
@@ -40,8 +38,7 @@ public class IndexerIONitrate implements IndexerIO {
               + " error (Indexer Motor); Did not receive settings",
           false);
     }
-    NitrateSettings motorLeftConfigStatus =
-        indexerMotorLeft.setSettings(motorLeftConfig, 0.02, 5);
+    NitrateSettings motorLeftConfigStatus = indexerMotorLeft.setSettings(motorLeftConfig, 0.02, 5);
     if (!motorLeftConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
@@ -73,27 +70,30 @@ public class IndexerIONitrate implements IndexerIO {
   }
 
   private void initMotorConfig() {
-    motorLeftConfig.getElectricalLimitSettings()
+    motorLeftConfig
+        .getElectricalLimitSettings()
         .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
         .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
         .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit);
-    
-    motorRightConfig.getElectricalLimitSettings()
+
+    motorRightConfig
+        .getElectricalLimitSettings()
         .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
         .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
         .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit);
-    
-    motorLeftConfig.getOutputSettings()
+
+    motorLeftConfig
+        .getOutputSettings()
         .setIdleMode(Constants.Indexer.idleMode)
         .setInvert(Constants.Indexer.leftInvert);
-    
-    motorRightConfig.getOutputSettings()
+
+    motorRightConfig
+        .getOutputSettings()
         .setIdleMode(Constants.Indexer.idleMode)
         .setInvert(Constants.Indexer.rightInvert);
   }
 
-  private void configSensor() {
-  }
+  private void configSensor() {}
 
   @Override
   public void updateInputs(IndexerIOInputs inputs) {

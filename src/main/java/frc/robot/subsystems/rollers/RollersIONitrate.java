@@ -2,8 +2,6 @@ package frc.robot.subsystems.rollers;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,8 +18,7 @@ public class RollersIONitrate implements RollersIO {
     rollersMotor = new Nitrate(Constants.Rollers.motorId, MotorType.kCu60);
 
     initMotorConfig();
-    NitrateSettings motorConfigStatus =
-        rollersMotor.setSettings(motorConfig, 0.02, 5);
+    NitrateSettings motorConfigStatus = rollersMotor.setSettings(motorConfig, 0.02, 5);
     if (!motorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
@@ -32,12 +29,14 @@ public class RollersIONitrate implements RollersIO {
   }
 
   private void initMotorConfig() {
-    motorConfig.getElectricalLimitSettings()
+    motorConfig
+        .getElectricalLimitSettings()
         .setBusCurrentLimit(Constants.Rollers.busCurrentLimit)
         .setBusCurrentLimitTime(Constants.Rollers.busCurrentLimitTime)
         .setStatorCurrentLimit(Constants.Rollers.statorCurrentLimit);
-    
-    motorConfig.getOutputSettings()
+
+    motorConfig
+        .getOutputSettings()
         .setIdleMode(Constants.Rollers.idleMode)
         .setInvert(Constants.Rollers.invert);
   }

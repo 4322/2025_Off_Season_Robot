@@ -14,7 +14,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -36,25 +35,23 @@ public class ArmIONitrate implements ArmIO {
 
     PIDSettings PIDSettings = new PIDSettings();
 
-    PIDSettings
-    .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
-    .setFeedforwardMode(PIDFeedforwardMode.kArm)
-    .setGravitationalFeedforward(Constants.Arm.kG)
-    .setMinwrapConfig(new MinwrapConfig.Disabled())
-    .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
-    .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
-    .setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit);
+    PIDSettings.setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
+        .setFeedforwardMode(PIDFeedforwardMode.kArm)
+        .setGravitationalFeedforward(Constants.Arm.kG)
+        .setMinwrapConfig(new MinwrapConfig.Disabled())
+        .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
+        .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
+        .setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit);
 
     PIDSettings SlowPIDSettings = new PIDSettings();
-    
-    SlowPIDSettings
-    .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
-    .setFeedforwardMode(PIDFeedforwardMode.kArm)
-    .setGravitationalFeedforward(Constants.Arm.kG)
-    .setMinwrapConfig(new MinwrapConfig.Disabled())
-    .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
-    .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
-    .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit);
+
+    SlowPIDSettings.setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
+        .setFeedforwardMode(PIDFeedforwardMode.kArm)
+        .setGravitationalFeedforward(Constants.Arm.kG)
+        .setMinwrapConfig(new MinwrapConfig.Disabled())
+        .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
+        .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
+        .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit);
 
     NitrateSettings armConfig = new NitrateSettings();
 
@@ -70,15 +67,14 @@ public class ArmIONitrate implements ArmIO {
     electricalLimitSettings.setStatorCurrentLimit(Constants.Arm.statorCurrentLimitAmps);
 
     OutputSettings MotorOutputSettings = new OutputSettings();
-    MotorOutputSettings
-    .setIdleMode(Constants.Arm.motorIdleMode)
-    .setInvert(Constants.Arm.motorInvert);
+    MotorOutputSettings.setIdleMode(Constants.Arm.motorIdleMode)
+        .setInvert(Constants.Arm.motorInvert);
 
     armConfig
-    .setPIDSettings(PIDSettings, PIDConfigSlot.kSlot0)
-    .setPIDSettings(SlowPIDSettings, PIDConfigSlot.kSlot1)
-    .setElectricalLimitSettings(electricalLimitSettings)
-    .setOutputSettings(MotorOutputSettings);
+        .setPIDSettings(PIDSettings, PIDConfigSlot.kSlot0)
+        .setPIDSettings(SlowPIDSettings, PIDConfigSlot.kSlot1)
+        .setElectricalLimitSettings(electricalLimitSettings)
+        .setOutputSettings(MotorOutputSettings);
 
     CanandmagSettings settings = new CanandmagSettings();
     CanandmagSettings EncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);

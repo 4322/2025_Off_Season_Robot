@@ -2,8 +2,6 @@ package frc.robot.subsystems.endEffector;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
@@ -49,18 +47,19 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   }
 
   private void initMotorConfig() {
-    motorConfig.getElectricalLimitSettings()
+    motorConfig
+        .getElectricalLimitSettings()
         .setBusCurrentLimit(Constants.EndEffector.busCurrentLimit)
         .setBusCurrentLimitTime(Constants.EndEffector.busCurrentLimitTime)
         .setStatorCurrentLimit(Constants.EndEffector.statorCurrentLimit);
 
-    motorConfig.getOutputSettings()
+    motorConfig
+        .getOutputSettings()
         .setIdleMode(Constants.EndEffector.motorIdleMode)
         .setInvert(Constants.EndEffector.motorInvert);
   }
 
-  private void initSensorConfig() {
-  }
+  private void initSensorConfig() {}
 
   @Override
   public void updateInputs(EndEffectorIOInputs inputs) {
@@ -91,8 +90,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
         // Green detected is within range; Blue detected is within range; Red detected is below
         // threshold
         if (inputs.sensorColorGreen > Constants.EndEffector.greenDetectGreenLower
-            && inputs.sensorColorGreen
-                < Constants.EndEffector.greenDetectGreenUpper
+            && inputs.sensorColorGreen < Constants.EndEffector.greenDetectGreenUpper
             && inputs.sensorColorBlue > Constants.EndEffector.greenDetectBlueLower
             && inputs.sensorColorBlue < Constants.EndEffector.greenDetectBlueUpper
             && inputs.sensorColorRed < Constants.EndEffector.greenDetectRed) {
