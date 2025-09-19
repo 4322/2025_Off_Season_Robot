@@ -20,7 +20,6 @@ import frc.robot.constants.Constants;
 // Idle retract is home position - before
 // Verify that all constants are being used
 // Enable GravitationalFeedForward mode
-import org.littletonrobotics.junction.Logger;
 
 /* Code coordinate system:
  * 0 -> 145.353984 where 0 is fully deployed and 145.353984 is fully retracted against hardstop
@@ -56,9 +55,6 @@ public class DeployerIONitrate implements DeployerIO {
               + " error (Deployer Motor); Did not receive settings",
           false);
     }
-    Logger.recordOutput(
-        "Deployer/inverted",
-        deployerMotor.getSettings().getOutputSettings().getInvert().toString());
   }
 
   private void initMotorConfig() {
