@@ -7,6 +7,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class BabyAlchemist {
   public static boolean init;
@@ -28,6 +29,8 @@ public class BabyAlchemist {
   private static GenericEntry velEntry;
   private static double vel;
 
+  private static final LoggedTunableNumber kP2 = new LoggedTunableNumber("Tuning/kP");
+
   public static Double run(Nitrate nitrate) {
     NitrateSettings settings;
     Double newPos = null;
@@ -40,6 +43,9 @@ public class BabyAlchemist {
       acc = settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileAccelLimit().get();
       dec = settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileDeaccelLimit().get();
       vel = settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileVelocityLimit().get();
+
+      kP2.initDefault(kP);
+      SmartDashboard.putNumber("Tuning2/kP", kP);
 
       tuningTab = Shuffleboard.getTab("Tuning");
       kP_entry = tuningTab.add("kP", kP).withPosition(0, 0).withSize(2, 1).getEntry();
