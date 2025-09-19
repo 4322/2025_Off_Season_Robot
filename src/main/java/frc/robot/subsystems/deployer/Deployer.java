@@ -30,7 +30,7 @@ public class Deployer extends SubsystemBase {
     Logger.processInputs("Deployer", inputs);
     Logger.recordOutput("Deployer/currentAction", currentAction.toString());
     Logger.recordOutput("Deployer/isHomed", isHomed);
-    if (Constants.Elevator.manualControl) {
+    if (Constants.Deployer.manualControl) {
       io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
     }
   }
