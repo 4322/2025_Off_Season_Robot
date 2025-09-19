@@ -2,6 +2,7 @@ package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BabyAlchemist;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
@@ -31,43 +32,55 @@ public class Arm extends SubsystemBase {
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
     Logger.recordOutput("Arm/TargetAngle", requestedSetpoint);
 
-    if (Constants.Arm.manualControl) {
-      io.setVoltage(-RobotContainer.driver.getLeftX() * 4.0);
-    } else if (isHomed) {
-      if (RobotContainer.getSuperstructure().isCoralHeld()) {
-        minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
-      } else {
-        minSafeArmDegree = Constants.Arm.minArmSafeDeg;
-      }
-
-      // Safety Logic
-      // Checks the logic checking for if it is in a dangerous position
-
-      elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
-      if (requestedSetpoint < minSafeArmDegree
-          && elevatorHeight
-              < (Constants.Elevator.minElevatorSafeHeightMeters
-                  - Constants.Elevator.bufferHeightMeters)
-          && getAngleDegrees()
-              > (minSafeArmDegree
-                  - Constants.Arm.bufferDeg)) { // So if the requested setpoint is under the min
-        // safe angle and the elevator is too low the arm
-        // will go to min safe angle
-        newSetpoint = minSafeArmDegree;
-      } else {
-        newSetpoint =
-            requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
-      }
-
-      if (prevSetpoint != newSetpoint) {
-        if (isSlow) {
-          io.requestSlowPosition(newSetpoint);
-          prevSetpoint = newSetpoint;
-        } else {
-          io.requestPosition(newSetpoint);
-          prevSetpoint = newSetpoint;
+    switch (Constants.armMode) {
+      case OPEN_LOOP:
+        io.setVoltage(-RobotContainer.driver.getLeftX() * 4.0);
+        break;
+      case TUNING:
+        Double newPos = BabyAlchemist.run(io.getNitrate());
+        if (newPos != null) {
+          io.requestPosition(newPos);
         }
-      }
+        break;
+      case DISABLED:
+        break;
+      case NORMAL:
+        if (isHomed) {
+          if (RobotContainer.getSuperstructure().isCoralHeld()) {
+            minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
+          } else {
+            minSafeArmDegree = Constants.Arm.minArmSafeDeg;
+          }
+
+          // Safety Logic
+          // Checks the logic checking for if it is in a dangerous position
+
+          elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
+          if (requestedSetpoint < minSafeArmDegree
+              && elevatorHeight
+                  < (Constants.Elevator.minElevatorSafeHeightMeters
+                      - Constants.Elevator.bufferHeightMeters)
+              && getAngleDegrees()
+                  > (minSafeArmDegree
+                      - Constants.Arm.bufferDeg)) { // So if the requested setpoint is under the min
+            // safe angle and the elevator is too low the arm
+            // will go to min safe angle
+            newSetpoint = minSafeArmDegree;
+          } else {
+            newSetpoint =
+                requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
+          }
+
+          if (prevSetpoint != newSetpoint) {
+            if (isSlow) {
+              io.requestSlowPosition(newSetpoint);
+              prevSetpoint = newSetpoint;
+            } else {
+              io.requestPosition(newSetpoint);
+              prevSetpoint = newSetpoint;
+            }
+          }
+        }
     }
   }
 

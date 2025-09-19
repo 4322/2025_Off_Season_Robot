@@ -2,6 +2,7 @@ package frc.robot.subsystems.elevator;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BabyAlchemist;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
@@ -34,32 +35,42 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("Elevator/ElevatorStates", state.toString());
     Logger.recordOutput("Elevator/TargetHeight", requestedHeightMeters);
 
-    if (Constants.Elevator.manualControl) {
-      io.setVoltage(-RobotContainer.driver.getLeftY() * 12.0);
-    } else {
-      switch (state) {
-        case UNHOMED:
-          break;
-        case ELEVATOR_MOVEMENT:
-          double armAngle = RobotContainer.getSuperstructure().getArmAngle();
-          // TODO: Safety logic unsafe when going from coral held to score L2, FIX
-          if (armAngle > Constants.Arm.bufferDeg
-              && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters
-              && armAngle < (Constants.Arm.minArmSafeDeg - Constants.Arm.bufferDeg)) {
-            newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
-          } else {
-            newElevatorHeight = requestedHeightMeters;
-          }
-          if (prevHeightMeters != newElevatorHeight) {
-            if (isSlow) {
-              io.requestSlowHeightMeters(newElevatorHeight);
+    switch (Constants.elevatorMode) {
+      case OPEN_LOOP:
+        io.setVoltage(-RobotContainer.driver.getLeftY() * 12.0);
+        break;
+      case TUNING:
+        Double newPos = BabyAlchemist.run(io.getNitrate());
+        if (newPos != null) {
+          io.requestHeightMeters(newPos);
+        }
+        break;
+      case DISABLED:
+        break;
+      case NORMAL:
+        switch (state) {
+          case UNHOMED:
+            break;
+          case ELEVATOR_MOVEMENT:
+            double armAngle = RobotContainer.getSuperstructure().getArmAngle();
+            // TODO: Safety logic unsafe when going from coral held to score L2, FIX
+            if (armAngle > Constants.Arm.bufferDeg
+                && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters
+                && armAngle < (Constants.Arm.minArmSafeDeg - Constants.Arm.bufferDeg)) {
+              newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
             } else {
-              io.requestHeightMeters(newElevatorHeight);
+              newElevatorHeight = requestedHeightMeters;
             }
-            prevHeightMeters = requestedHeightMeters;
-          }
-          break;
-      }
+            if (prevHeightMeters != newElevatorHeight) {
+              if (isSlow) {
+                io.requestSlowHeightMeters(newElevatorHeight);
+              } else {
+                io.requestHeightMeters(newElevatorHeight);
+              }
+              prevHeightMeters = requestedHeightMeters;
+            }
+            break;
+        }
     }
   }
 

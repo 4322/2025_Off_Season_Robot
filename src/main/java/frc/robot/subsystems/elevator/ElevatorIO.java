@@ -1,5 +1,6 @@
 package frc.robot.subsystems.elevator;
 
+import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -37,4 +38,8 @@ public interface ElevatorIO {
   public default void setPosition(double elevatorPositionMeters) {}
 
   public default void stop(IdleMode idleMode) {}
+
+  public default Nitrate getNitrate() {
+    return null;
+  } // for tuning
 }

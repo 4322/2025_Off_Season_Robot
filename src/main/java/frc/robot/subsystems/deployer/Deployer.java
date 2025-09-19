@@ -2,6 +2,7 @@ package frc.robot.subsystems.deployer;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BabyAlchemist;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import org.littletonrobotics.junction.Logger;
@@ -30,8 +31,20 @@ public class Deployer extends SubsystemBase {
     Logger.processInputs("Deployer", inputs);
     Logger.recordOutput("Deployer/currentAction", currentAction.toString());
     Logger.recordOutput("Deployer/isHomed", isHomed);
-    if (Constants.Deployer.manualControl) {
-      io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
+    switch (Constants.armMode) {
+      case OPEN_LOOP:
+        io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
+        break;
+      case TUNING:
+        Double newPos = BabyAlchemist.run(io.getNitrate());
+        if (newPos != null) {
+          io.setPosition(newPos);
+        }
+        break;
+      case DISABLED:
+        break;
+      case NORMAL:
+        break;
     }
   }
 

@@ -159,6 +159,12 @@ public class ElevatorIONitrate implements ElevatorIO {
     lastRequestedPosMeters = -1;
   }
 
+  @Override
+  public Nitrate getNitrate() {
+    followerMotor.setRequest(followerRequest); // temporary work-around for firmware issue
+    return leaderMotor;
+  }
+
   public double metersToRotations(double meters) {
     return meters
         / (Math.PI * Constants.Elevator.beltPulleyPitchDiameterMeters)

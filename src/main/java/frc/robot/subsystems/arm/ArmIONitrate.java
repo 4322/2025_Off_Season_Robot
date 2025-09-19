@@ -142,4 +142,9 @@ public class ArmIONitrate implements ArmIO {
     armMotor.stop(idleMode);
     lastRequestedPosDeg = -1;
   }
+
+  @Override
+  public Nitrate getNitrate() {
+    return armMotor;
+  }
 }

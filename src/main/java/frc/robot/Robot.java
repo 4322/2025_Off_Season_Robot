@@ -135,7 +135,7 @@ public class Robot extends LoggedRobot {
     robotContainer = new RobotContainer();
     allianceUpdateTimer.start();
 
-    if (Constants.currentMode == Constants.Mode.SIM) {
+    if (Constants.currentMode == Constants.RobotMode.SIM) {
       // enable subsystems in sim mode
       RobotContainer.getSuperstructure().homeButtonActivated();
     }

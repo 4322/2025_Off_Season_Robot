@@ -155,6 +155,11 @@ public class DeployerIONitrate implements DeployerIO {
         Units.degreesToRotations(toMotorCoords(Constants.Deployer.maxRangeDegrees)));
   }
 
+  @Override
+  public Nitrate getNitrate() {
+    return deployerMotor;
+  }
+
   private double toCodeCoords(double position) {
     return position + Constants.Deployer.maxGravityDegrees;
   }

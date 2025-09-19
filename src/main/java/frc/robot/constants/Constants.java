@@ -15,16 +15,16 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final boolean armEnabled = false;
-  public static final boolean elevatorEnabled = false;
-  public static final boolean deployerEnabled = false;
+  public static final SubsystemMode armMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
   public static final boolean indexerEnabled = false;
   public static final boolean rollersEnabled = false;
   public static final boolean endEffectorEnabled = false;
   public static final boolean visionEnabled = false;
   public static final boolean driveEnabled = false;
 
-  public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : Mode.SIM;
+  public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
   public static final String logPath = "/home/lvuser/logs";
   public static final long minFreeSpace = 1000000000; // 1 GB
@@ -34,7 +34,14 @@ public final class Constants {
   public static final double homeButtonDelaySec = 1.0;
   public static final double coastButtonDelaySec = 10.0;
 
-  public static enum Mode {
+  public static enum SubsystemMode {
+    DISABLED,
+    NORMAL,
+    OPEN_LOOP,
+    TUNING // only one susbsystem may be in this mode at a time
+  }
+
+  public static enum RobotMode {
     /** Running on a real robot. */
     REAL,
 
@@ -80,7 +87,6 @@ public final class Constants {
     public static final int armMotorId = 10;
     public static final int armEncoderId = 7;
 
-    public static final boolean manualControl = false;
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // positive is up toward scoring side
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
@@ -139,7 +145,6 @@ public final class Constants {
     public static final int frontMotorID = 20;
     public static final int backMotorID = 21;
 
-    public static final boolean manualControl = false;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
     public static final InvertMode motorBackInvert = InvertMode.kInverted; // positive is up
@@ -252,7 +257,6 @@ public final class Constants {
     public static final int deployerMotorId = 40;
     public static final double deployVoltage = 3.0;
 
-    public static final boolean manualControl = false;
     public static final double statorCurrentLimit = 40;
     public static final double busCurrentLimitTime = 0;
     public static final double busCurrentLimit = 60;

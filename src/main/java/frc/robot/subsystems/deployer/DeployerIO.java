@@ -1,5 +1,6 @@
 package frc.robot.subsystems.deployer;
 
+import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -28,4 +29,8 @@ public interface DeployerIO {
   public default void setHome() {}
 
   public default void setVoltage(double voltage) {}
+
+  public default Nitrate getNitrate() {
+    return null;
+  } // for tuning
 }
