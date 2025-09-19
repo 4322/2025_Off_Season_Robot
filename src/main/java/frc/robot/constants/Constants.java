@@ -78,7 +78,7 @@ public final class Constants {
 
   public static class Arm {
     public static final int armMotorId = 10;
-    public static final int armEncoderId = 10;
+    public static final int armEncoderId = 7;
 
     public static final boolean manualControl = false;
     public static final InvertMode motorInvert =
