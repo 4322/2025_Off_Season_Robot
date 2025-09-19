@@ -2,11 +2,13 @@ package frc.robot.subsystems.drive;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.AtomicBondSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.AtomicBondMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
-import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
@@ -37,42 +39,41 @@ public class ModuleIONitrate implements ModuleIO {
     turnEncoder = new Canandmag(constants.turnEncoderId);
 
     NitrateSettings driveConfig = new NitrateSettings();
-    driveConfig
-        .getAtomicBondSettings()
-        .setAtomicBondMode(AtomicBondMode.kSwerveModule)
-        .setAtomicSwerveConstants(
-            turnMotor,
-            turnEncoder,
-            gyro.getGyro(),
-            constants.driveMotorGearRatio,
-            constants.turnCouplingRatio);
-    driveConfig
-        .getOutputSettings()
-        .setIdleMode(IdleMode.kBrake)
-        .setInvert(constants.driveMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
+    driveConfig.setAtomicBondSettings(
+        new AtomicBondSettings()
+            .setAtomicBondMode(AtomicBondMode.kSwerveModule)
+            .setAtomicSwerveConstants(
+                turnMotor,
+                turnEncoder,
+                gyro.getGyro(),
+                constants.driveMotorGearRatio,
+                constants.turnCouplingRatio));
+    driveConfig.setOutputSettings(
+        new OutputSettings()
+            .setIdleMode(IdleMode.kBrake)
+            .setInvert(
+                constants.driveMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted));
     driveConfig.setElectricalLimitSettings(constants.driveElectricalLimitSettings);
-    driveConfig
-        .getFeedbackSensorSettings()
-        .setSensorToMechanismRatio(constants.driveMotorGearRatio);
+    driveConfig.setFeedbackSensorSettings(
+        new FeedbackSensorSettings().setSensorToMechanismRatio(constants.driveMotorGearRatio));
     driveConfig.setPIDSettings(constants.driveMotorGains, PIDConfigSlot.kSlot0);
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
 
     NitrateSettings turnConfig = new NitrateSettings();
-    turnConfig.getAtomicBondSettings().setAtomicBondMode(AtomicBondMode.kSwerveModule);
-    turnConfig
-        .getOutputSettings()
-        .setIdleMode(IdleMode.kBrake)
-        .setInvert(constants.turnMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted);
-    turnConfig
-        .getFeedbackSensorSettings()
-        .setFeedbackSensor(
-            new FeedbackSensor.CanandmagAbsolute(
-                constants.turnEncoderId, constants.turnMotorGearRatio));
+    turnConfig.setAtomicBondSettings(
+        new AtomicBondSettings().setAtomicBondMode(AtomicBondMode.kSwerveModule));
+    turnConfig.setOutputSettings(
+        new OutputSettings()
+            .setIdleMode(IdleMode.kBrake)
+            .setInvert(
+                constants.turnMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted));
+    turnConfig.setFeedbackSensorSettings(
+        new FeedbackSensorSettings()
+            .setFeedbackSensor(
+                new FeedbackSensor.CanandmagAbsolute(
+                    constants.turnEncoderId, constants.turnMotorGearRatio)));
     turnConfig.setElectricalLimitSettings(constants.turnElectricalLimitSettings);
-    turnConfig
-        .setPIDSettings(constants.turnMotorGains, PIDConfigSlot.kSlot0)
-        .getPIDSettings(PIDConfigSlot.kSlot0)
-        .setMinwrapConfig(new MinwrapConfig.Enabled());
+    turnConfig.setPIDSettings(constants.turnMotorGains, PIDConfigSlot.kSlot0);
     NitrateSettings turnConfigStatus = turnMotor.setSettings(turnConfig, 0.02, 5);
 
     CanandmagSettings settings = new CanandmagSettings();
