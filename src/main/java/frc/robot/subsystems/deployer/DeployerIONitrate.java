@@ -2,6 +2,10 @@ package frc.robot.subsystems.deployer;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
@@ -16,6 +20,7 @@ import frc.robot.constants.Constants;
 // Idle retract is home position - before
 // Verify that all constants are being used
 // Enable GravitationalFeedForward mode
+import org.littletonrobotics.junction.Logger;
 
 /* Code coordinate system:
  * 0 -> 145.353984 where 0 is fully deployed and 145.353984 is fully retracted against hardstop
@@ -51,50 +56,56 @@ public class DeployerIONitrate implements DeployerIO {
               + " error (Deployer Motor); Did not receive settings",
           false);
     }
+    Logger.recordOutput(
+        "Deployer/inverted",
+        deployerMotor.getSettings().getOutputSettings().getInvert().toString());
   }
 
   private void initMotorConfig() {
-    motorConfig
-        .getElectricalLimitSettings()
-        .setBusCurrentLimit(Constants.Deployer.busCurrentLimit)
-        .setBusCurrentLimitTime(Constants.Deployer.busCurrentLimitTime)
-        .setStatorCurrentLimit(Constants.Deployer.statorCurrentLimit);
+    motorConfig.setElectricalLimitSettings(
+        new ElectricalLimitSettings()
+            .setBusCurrentLimit(Constants.Deployer.busCurrentLimit)
+            .setBusCurrentLimitTime(Constants.Deployer.busCurrentLimitTime)
+            .setStatorCurrentLimit(Constants.Deployer.statorCurrentLimit));
 
-    motorConfig
-        .getOutputSettings()
-        .setIdleMode(Constants.Deployer.idleMode)
-        .setInvert(Constants.Deployer.invertMode);
+    motorConfig.setOutputSettings(
+        new OutputSettings()
+            .setIdleMode(Constants.Deployer.idleMode)
+            .setInvert(Constants.Deployer.invertMode));
 
-    motorConfig
-        .getFeedbackSensorSettings()
-        .setSensorToMechanismRatio(Constants.Deployer.motorGearRatio);
+    motorConfig.setFeedbackSensorSettings(
+        new FeedbackSensorSettings().setSensorToMechanismRatio(Constants.Deployer.motorGearRatio));
 
     // Deploy PID in slot 0
     // Retract PID in slot 1
 
-    motorConfig
-        .getPIDSettings(PIDConfigSlot.kSlot0)
-        .setPID(
-            Constants.Deployer.deploykP, Constants.Deployer.deploykI, Constants.Deployer.deploykD)
-        .setGravitationalFeedforward(Constants.Deployer.deploykG)
-        .setFeedforwardMode(Constants.Deployer.feedforwardMode)
-        .setMinwrapConfig(new MinwrapConfig.Disabled())
-        .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
-        .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
-        .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit);
+    motorConfig.setPIDSettings(
+        new PIDSettings()
+            .setPID(
+                Constants.Deployer.deploykP,
+                Constants.Deployer.deploykI,
+                Constants.Deployer.deploykD)
+            .setGravitationalFeedforward(Constants.Deployer.deploykG)
+            .setFeedforwardMode(Constants.Deployer.feedforwardMode)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
+            .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
+            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit),
+        PIDConfigSlot.kSlot0);
 
-    motorConfig
-        .getPIDSettings(PIDConfigSlot.kSlot1)
-        .setPID(
-            Constants.Deployer.retractkP,
-            Constants.Deployer.retractkI,
-            Constants.Deployer.retractkD)
-        .setGravitationalFeedforward(Constants.Deployer.retractkG)
-        .setFeedforwardMode(Constants.Deployer.feedforwardMode)
-        .setMinwrapConfig(new MinwrapConfig.Disabled())
-        .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
-        .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
-        .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit);
+    motorConfig.setPIDSettings(
+        new PIDSettings()
+            .setPID(
+                Constants.Deployer.retractkP,
+                Constants.Deployer.retractkI,
+                Constants.Deployer.retractkD)
+            .setGravitationalFeedforward(Constants.Deployer.retractkG)
+            .setFeedforwardMode(Constants.Deployer.feedforwardMode)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
+            .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
+            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit),
+        PIDConfigSlot.kSlot1);
   }
 
   @Override
