@@ -273,7 +273,7 @@ public final class Constants {
         InvertMode.kInverted; // reverse of motor, if installed TODO
 
     // Range of motion of deployer is about 0-140 degrees
-    public static final double motorGearRatio = 14.58333333333;
+    public static final double motorGearRatio = 61.25;
     public static final double ejectPositionDegrees = 94.931222;
     public static final double retractPositionDegrees = 4.931222;
     public static final double deployPositionDegrees = 145.353984;
