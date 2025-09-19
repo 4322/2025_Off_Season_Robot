@@ -2,6 +2,8 @@ package frc.robot.subsystems.rollers;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -29,16 +31,16 @@ public class RollersIONitrate implements RollersIO {
   }
 
   private void initMotorConfig() {
-    motorConfig
-        .getElectricalLimitSettings()
+    motorConfig.setElectricalLimitSettings(
+      new ElectricalLimitSettings()
         .setBusCurrentLimit(Constants.Rollers.busCurrentLimit)
         .setBusCurrentLimitTime(Constants.Rollers.busCurrentLimitTime)
-        .setStatorCurrentLimit(Constants.Rollers.statorCurrentLimit);
+        .setStatorCurrentLimit(Constants.Rollers.statorCurrentLimit));
 
-    motorConfig
-        .getOutputSettings()
+    motorConfig.setOutputSettings(
+      new OutputSettings()
         .setIdleMode(Constants.Rollers.idleMode)
-        .setInvert(Constants.Rollers.invert);
+        .setInvert(Constants.Rollers.invert));
   }
 
   @Override

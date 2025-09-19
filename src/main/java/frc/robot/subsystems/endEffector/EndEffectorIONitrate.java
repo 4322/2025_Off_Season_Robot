@@ -2,6 +2,8 @@ package frc.robot.subsystems.endEffector;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
@@ -47,16 +49,16 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   }
 
   private void initMotorConfig() {
-    motorConfig
-        .getElectricalLimitSettings()
+    motorConfig.setElectricalLimitSettings(
+        new ElectricalLimitSettings()
         .setBusCurrentLimit(Constants.EndEffector.busCurrentLimit)
         .setBusCurrentLimitTime(Constants.EndEffector.busCurrentLimitTime)
-        .setStatorCurrentLimit(Constants.EndEffector.statorCurrentLimit);
+        .setStatorCurrentLimit(Constants.EndEffector.statorCurrentLimit));
 
-    motorConfig
-        .getOutputSettings()
+    motorConfig.setOutputSettings(
+        new OutputSettings()
         .setIdleMode(Constants.EndEffector.motorIdleMode)
-        .setInvert(Constants.EndEffector.motorInvert);
+        .setInvert(Constants.EndEffector.motorInvert));
   }
 
   private void initSensorConfig() {}

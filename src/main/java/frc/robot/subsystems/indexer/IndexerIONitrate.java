@@ -2,6 +2,8 @@ package frc.robot.subsystems.indexer;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
@@ -70,27 +72,27 @@ public class IndexerIONitrate implements IndexerIO {
   }
 
   private void initMotorConfig() {
-    motorLeftConfig
-        .getElectricalLimitSettings()
+    motorLeftConfig.setElectricalLimitSettings(
+        new ElectricalLimitSettings()
         .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
         .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
-        .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit);
+        .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit));
 
-    motorRightConfig
-        .getElectricalLimitSettings()
+    motorRightConfig.setElectricalLimitSettings(
+        new ElectricalLimitSettings()
         .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
         .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
-        .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit);
+        .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit));
 
-    motorLeftConfig
-        .getOutputSettings()
+    motorLeftConfig.setOutputSettings(
+      new OutputSettings()
         .setIdleMode(Constants.Indexer.idleMode)
-        .setInvert(Constants.Indexer.leftInvert);
+        .setInvert(Constants.Indexer.leftInvert));
 
-    motorRightConfig
-        .getOutputSettings()
+    motorRightConfig.setOutputSettings(
+      new OutputSettings()
         .setIdleMode(Constants.Indexer.idleMode)
-        .setInvert(Constants.Indexer.rightInvert);
+        .setInvert(Constants.Indexer.rightInvert));
   }
 
   private void configSensor() {}
