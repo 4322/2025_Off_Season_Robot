@@ -225,7 +225,7 @@ public class RobotContainer {
                 }));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
     driver
-        .povDown()
+        .back()
         .onTrue(
             new CoastCommand(arm, elevator, deployer, superstructure)
                 .onlyIf(() -> DriverStation.isDisabled())

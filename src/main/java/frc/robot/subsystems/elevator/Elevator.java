@@ -74,7 +74,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void coralHold() {
-    requestedHeightMeters = Constants.Elevator.minElevatorSafeWithCoralHeightMeters;
+    requestedHeightMeters = Constants.Elevator.minElevatorSafeWithCoralMeters;
     isSlow = false;
   }
 
@@ -155,7 +155,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getElevatorHeightMeters() {
-    return inputs.leaderMotorheightMeters;
+    return inputs.leaderheightMeters;
   }
 
   public void setHomePosition() {

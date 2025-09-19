@@ -153,7 +153,7 @@ public final class Constants {
     public static final double maxElevatorHeightMeters = 1.3068401092;
     public static final double homeHeightMeters = 0.3917895136;
     public static final double minElevatorSafeHeightMeters = homeHeightMeters + 0.1;
-    public static final double minElevatorSafeWithCoralHeightMeters = homeHeightMeters + 0.3;
+    public static final double minElevatorSafeWithCoralMeters = homeHeightMeters + 0.3;
     public static final double elevatorHeightToleranceMeters = 0.01;
     public static final double algaeGroundHeightMeters = 0.2; // TODO: need actual value
     public static final double algaeReefL2HeightMeters = 0.5021688204;
@@ -166,7 +166,7 @@ public final class Constants {
     public static final double intializationVoltage = 2.0;
     public static final double initializationTimerThresholdSecs = 5;
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01;
-    public static final double ejectHeightMeters = minElevatorSafeWithCoralHeightMeters;
+    public static final double ejectHeightMeters = minElevatorSafeWithCoralMeters;
     public static final double safeBargeRetractHeightMeters = 0.773472037;
     public static final double safeBargeRetractWithAlgaeHeightMeters = 0.3321799808;
     public static final double algaeHoldMeters = prescoreCoralL3HeightMeters;
