@@ -1,18 +1,5 @@
 package frc.robot;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Optional;
-
-import org.littletonrobotics.junction.LogFileUtil;
-import org.littletonrobotics.junction.LoggedRobot;
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
-import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -22,6 +9,17 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.Constants;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.Optional;
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -39,6 +37,7 @@ public class Robot extends LoggedRobot {
   private Timer homeButtonTimer = new Timer();
   private DigitalInput coastButton = new DigitalInput(Constants.dioCoastButton);
   private Timer coastButtonTimer = new Timer();
+
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -182,19 +181,19 @@ public class Robot extends LoggedRobot {
       if (homeButtonTimer.hasElapsed(Constants.homeButtonDelaySec)) {
         homeButtonTimer.restart();
         RobotContainer.getSuperstructure().homeButtonActivated();
-      } else if (homeButtonTimer.hasElapsed(Constants.homeButtonDelaySec + 1)){
+      } else if (homeButtonTimer.hasElapsed(Constants.homeButtonDelaySec + 1)) {
         homeButtonTimer.stop();
         homeButtonTimer.reset();
       }
     }
-   if (!coastButton.get()) {
-    RobotContainer.getSuperstructure().CoastMotors();
-    coastButtonTimer.start();
+    if (!coastButton.get()) {
+      RobotContainer.getSuperstructure().CoastMotors();
+      coastButtonTimer.start();
       // button is pressed in
       if (coastButtonTimer.hasElapsed(Constants.coastButtonDelaySec)) {
         coastButtonTimer.restart();
         RobotContainer.getSuperstructure().BreakMotors();
-      } else if (coastButtonTimer.hasElapsed(Constants.coastButtonDelaySec + 1)){
+      } else if (coastButtonTimer.hasElapsed(Constants.coastButtonDelaySec + 1)) {
         coastButtonTimer.stop();
         coastButtonTimer.reset();
       }
