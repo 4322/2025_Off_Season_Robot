@@ -177,7 +177,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {
 
-    if (homeButton.get()) {
+    if (!homeButton.get()) {
       homeButtonTimer.start();
       // button is pressed in
       if (homeButtonTimer.hasElapsed(Constants.homeButtonDelaySec)) {
@@ -188,8 +188,8 @@ public class Robot extends LoggedRobot {
         homeButtonTimer.reset();
       }
     }
-    
-    if (coastButton.get()) {
+
+    if (!coastButton.get()) {
       RobotContainer.getSuperstructure().CoastMotors();
       coastButtonTimer.start();
       // button is pressed in
