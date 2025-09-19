@@ -185,8 +185,7 @@ public class Robot extends LoggedRobot {
         homeButtonTimer.reset();
         homeButtonTimer.stop();
       }
-    }
-    else {
+    } else {
       homeButtonTimer.reset();
       homeButtonTimer.stop();
     }
