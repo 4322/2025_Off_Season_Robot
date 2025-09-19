@@ -188,6 +188,7 @@ public class Robot extends LoggedRobot {
         homeButtonTimer.reset();
       }
     }
+    
     if (coastButton.get()) {
       RobotContainer.getSuperstructure().CoastMotors();
       coastButtonTimer.start();
