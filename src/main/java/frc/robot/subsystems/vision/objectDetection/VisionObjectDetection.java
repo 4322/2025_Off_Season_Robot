@@ -129,6 +129,8 @@ public class VisionObjectDetection extends SubsystemBase {
       Rotation3d objectRotation) { // TODO account for pitch in code or gui
     final double cameraHeight = robotCenterToCamera.getZ(); // Camera height above the ground
     final double objectPitchSin = Math.sin(objectRotation.getY());
+    final double objectYaw = objectRotation.getZ();
+    
     // TODO rotate by yaw
     if (Math.abs(objectPitchSin) < 0.000001) {
       return new Translation2d(); // Return a default or zero position
@@ -136,7 +138,7 @@ public class VisionObjectDetection extends SubsystemBase {
 
     final double xTransform = cameraHeight / objectPitchSin;
 
-    final Transform3d objectRotationToGround = new Transform3d(xTransform, 0, 0, new Rotation3d());
+    final Transform3d objectRotationToGround = new Transform3d(xTransform, 0, objectYaw, new Rotation3d());
     return objectRotationToGround.getTranslation().toTranslation2d();
   }
 
