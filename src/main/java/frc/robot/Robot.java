@@ -183,6 +183,9 @@ public class Robot extends LoggedRobot {
         homeButtonTimer.reset();
         homeButtonTimer.stop();
       }
+    } else {
+      homeButtonTimer.reset();
+      homeButtonTimer.stop();
     }
 
     if (!coastButton.get()) {
