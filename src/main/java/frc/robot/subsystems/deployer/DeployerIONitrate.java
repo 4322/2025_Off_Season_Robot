@@ -152,7 +152,7 @@ public class DeployerIONitrate implements DeployerIO {
 
   @Override
   public void setHome() {
-    deployerMotor.setPosition(Units.degreesToRotations(toMotorCoords(Constants.Deployer.maxRangeDegrees)/360.0));
+    deployerMotor.setPosition(Units.degreesToRotations(toMotorCoords(Constants.Deployer.maxRangeDegrees)));
   }
 
   private double toCodeCoords(double position) {
