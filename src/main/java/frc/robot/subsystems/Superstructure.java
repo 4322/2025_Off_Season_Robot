@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -373,6 +374,18 @@ public class Superstructure extends SubsystemBase {
 
   public void homeButtonActivated() {
     requestHomed = true;
+  }
+
+  public void CoastMotors() {
+    arm.stop(IdleMode.kCoast);
+    elevator.stop(IdleMode.kCoast);
+    intakeSuperstructure.deployer.stop(IdleMode.kCoast);
+  }
+
+  public void BreakMotors() {
+    arm.stop(IdleMode.kBrake);
+    elevator.stop(IdleMode.kBrake);
+    intakeSuperstructure.deployer.stop(IdleMode.kCoast);
   }
 
   // Other Methods are related to Vision Pose Estimation

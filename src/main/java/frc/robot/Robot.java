@@ -35,6 +35,8 @@ public class Robot extends LoggedRobot {
   private Timer allianceUpdateTimer = new Timer();
   private DigitalInput homeButton = new DigitalInput(Constants.dioHomeButton);
   private Timer homeButtonTimer = new Timer();
+  private DigitalInput coastButton = new DigitalInput(Constants.dioCoastButton);
+  private Timer coastButtonTimer = new Timer();
 
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
@@ -174,13 +176,26 @@ public class Robot extends LoggedRobot {
   public void disabledPeriodic() {
 
     if (!homeButton.get()) {
+      homeButtonTimer.start();
       // button is pressed in
       if (homeButtonTimer.hasElapsed(Constants.homeButtonDelaySec)) {
         homeButtonTimer.restart();
         RobotContainer.getSuperstructure().homeButtonActivated();
-      } else {
+      } else if (homeButtonTimer.hasElapsed(Constants.homeButtonDelaySec + 1)) {
         homeButtonTimer.stop();
         homeButtonTimer.reset();
+      }
+    }
+    if (!coastButton.get()) {
+      RobotContainer.getSuperstructure().CoastMotors();
+      coastButtonTimer.start();
+      // button is pressed in
+      if (coastButtonTimer.hasElapsed(Constants.coastButtonDelaySec)) {
+        coastButtonTimer.restart();
+        RobotContainer.getSuperstructure().BreakMotors();
+      } else if (coastButtonTimer.hasElapsed(Constants.coastButtonDelaySec + 1)) {
+        coastButtonTimer.stop();
+        coastButtonTimer.reset();
       }
     }
   }
