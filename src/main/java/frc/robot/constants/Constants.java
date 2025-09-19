@@ -255,7 +255,7 @@ public final class Constants {
     public static final double busCurrentLimitTime = 0;
     public static final double busCurrentLimit = 60;
     public static final IdleMode idleMode = IdleMode.kBrake;
-    public static final InvertMode invertMode = InvertMode.kNotInverted; // positive is retracting
+    public static final InvertMode invertMode = InvertMode.kInverted; // positive is retracting
     public static final double deploykP = 1;
     public static final double deploykI = 0;
     public static final double deploykD = 0;
