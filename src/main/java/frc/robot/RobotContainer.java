@@ -155,7 +155,7 @@ public class RobotContainer {
         intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
         superstructure =
             new Superstructure(
-                endEffector, arm, indexer, elevator, drive, vision, intakeSuperstructure);
+                endEffector, arm, elevator, drive, vision, intakeSuperstructure);
         break;
 
       case SIM:
@@ -179,7 +179,7 @@ public class RobotContainer {
     intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
     superstructure =
         new Superstructure(
-            endEffector, arm, indexer, elevator, drive, vision, intakeSuperstructure);
+            endEffector, arm, elevator, drive, vision, intakeSuperstructure);
 
     // Configure the button bindings
     configureButtonBindings();
