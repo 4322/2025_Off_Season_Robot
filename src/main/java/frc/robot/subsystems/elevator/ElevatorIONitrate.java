@@ -30,52 +30,52 @@ public class ElevatorIONitrate implements ElevatorIO {
     followerMotor = new Nitrate(Constants.Elevator.backMotorID, MotorType.kCu60);
 
     // Setup config objects
-    NitrateSettings frontElevatorMotorConfig = new NitrateSettings();
-    OutputSettings frontElevatorMotorOutputSettings = new OutputSettings();
-    PIDSettings elevatorPIDSettings = new PIDSettings();
-    PIDSettings elevatorSlowPIDSettings = new PIDSettings();
-    ElectricalLimitSettings elevatorElectricalLimitSettings = new ElectricalLimitSettings();
+    NitrateSettings frontConfig = new NitrateSettings();
+
     followerRequest = new FollowMotorRequest(leaderMotor);
 
-    elevatorPIDSettings.setPID(
-        Constants.Elevator.fast_kP, Constants.Elevator.fast_kI, Constants.Elevator.fast_kD);
-    elevatorPIDSettings.setGravitationalFeedforward(Constants.Elevator.kG);
-    elevatorPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
-    elevatorPIDSettings.setMotionProfileAccelLimit(
-        metersToRotations(Constants.Elevator.fastAccelerationMetersPerSec2));
-    elevatorPIDSettings.setMotionProfileDeaccelLimit(
-        metersToRotations(Constants.Elevator.fastDecelerationMetersPerSec2));
-    elevatorPIDSettings.setMotionProfileVelocityLimit(
-        metersToRotations(Constants.Elevator.fastVelocityMetersPerSec));
+    frontConfig.setPIDSettings(
+        new PIDSettings()
+            .setPID(
+                Constants.Elevator.fast_kP, Constants.Elevator.fast_kI, Constants.Elevator.fast_kD)
+            .setGravitationalFeedforward(Constants.Elevator.kG)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(
+                metersToRotations(Constants.Elevator.fastAccelerationMetersPerSec2))
+            .setMotionProfileDeaccelLimit(
+                metersToRotations(Constants.Elevator.fastDecelerationMetersPerSec2))
+            .setMotionProfileVelocityLimit(
+                metersToRotations(Constants.Elevator.fastVelocityMetersPerSec)),
+        PIDConfigSlot.kSlot0);
 
-    elevatorSlowPIDSettings.setPID(
-        Constants.Elevator.slow_kP, Constants.Elevator.slow_kI, Constants.Elevator.slow_kD);
-    elevatorSlowPIDSettings.setGravitationalFeedforward(Constants.Elevator.kG);
-    elevatorSlowPIDSettings.setMinwrapConfig(new MinwrapConfig.Disabled());
-    elevatorSlowPIDSettings.setMotionProfileAccelLimit(
-        metersToRotations(Constants.Elevator.slowAccelerationMetersPerSec2));
-    elevatorSlowPIDSettings.setMotionProfileDeaccelLimit(
-        metersToRotations(Constants.Elevator.slowDecelerationMetersPerSec2));
-    elevatorSlowPIDSettings.setMotionProfileVelocityLimit(
-        metersToRotations(Constants.Elevator.slowVelocityMetersPerSec));
+    frontConfig.setPIDSettings(
+        new PIDSettings()
+            .setPID(
+                Constants.Elevator.slow_kP, Constants.Elevator.slow_kI, Constants.Elevator.slow_kD)
+            .setGravitationalFeedforward(Constants.Elevator.kG)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(
+                metersToRotations(Constants.Elevator.slowAccelerationMetersPerSec2))
+            .setMotionProfileDeaccelLimit(
+                metersToRotations(Constants.Elevator.slowDecelerationMetersPerSec2))
+            .setMotionProfileVelocityLimit(
+                metersToRotations(Constants.Elevator.slowVelocityMetersPerSec)),
+        PIDConfigSlot.kSlot1);
 
-    frontElevatorMotorOutputSettings.setIdleMode(Constants.Elevator.motorIdleMode);
-    frontElevatorMotorOutputSettings.setInvert(Constants.Elevator.motorFrontInvert);
+    frontConfig.setOutputSettings(
+        new OutputSettings()
+            .setIdleMode(Constants.Elevator.motorIdleMode)
+            .setInvert(Constants.Elevator.motorFrontInvert));
 
-    elevatorElectricalLimitSettings.setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps);
-    elevatorElectricalLimitSettings.setStatorCurrentLimit(
-        Constants.Elevator.statorCurrentLimitAmps);
+    frontConfig.setElectricalLimitSettings(
+        new ElectricalLimitSettings()
+            .setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps)
+            .setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps));
 
     followerRequest.setInverted(true);
 
-    frontElevatorMotorConfig.setElectricalLimitSettings(elevatorElectricalLimitSettings);
-    frontElevatorMotorConfig.setPIDSettings(elevatorPIDSettings, PIDConfigSlot.kSlot0);
-    frontElevatorMotorConfig.setPIDSettings(elevatorSlowPIDSettings, PIDConfigSlot.kSlot1);
-    frontElevatorMotorConfig.setOutputSettings(frontElevatorMotorOutputSettings);
-
-    NitrateSettings leaderConfigStatus = leaderMotor.setSettings(frontElevatorMotorConfig, 0.02, 5);
-    NitrateSettings followerConfigStatus =
-        followerMotor.setSettings(frontElevatorMotorConfig, 0.02, 5);
+    NitrateSettings leaderConfigStatus = leaderMotor.setSettings(frontConfig, 0.02, 5);
+    NitrateSettings followerConfigStatus = followerMotor.setSettings(frontConfig, 0.02, 5);
     followerMotor.setRequest(followerRequest);
     // get position is an internal encoder, so we need to set it
     // 6 to 1 gear ratio for elevator first stage
@@ -100,28 +100,28 @@ public class ElevatorIONitrate implements ElevatorIO {
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
     // Implementation for updating inputs from the Nitrate hardware
-    inputs.leaderElevatorMotorConnected = leaderMotor.isConnected();
-    inputs.followerElevatorMotorConnected = followerMotor.isConnected();
+    inputs.leaderConnected = leaderMotor.isConnected();
+    inputs.followerConnected = followerMotor.isConnected();
 
     inputs.requestedPosMeters = lastRequestedPosMeters;
 
-    inputs.leaderMotorheightMeters = rotationsToMeters(leaderMotor.getPosition());
-    inputs.followerMotorheightMeters = rotationsToMeters(followerMotor.getPosition());
+    inputs.leaderheightMeters = rotationsToMeters(leaderMotor.getPosition());
+    inputs.followerHeightMeters = rotationsToMeters(followerMotor.getPosition());
 
-    inputs.leaderMotorVoltage = leaderMotor.getBusVoltageFrame().getValue();
-    inputs.followerMotorVoltage = followerMotor.getBusVoltageFrame().getValue();
+    inputs.leaderVoltage = leaderMotor.getBusVoltageFrame().getValue();
+    inputs.followerVoltage = followerMotor.getBusVoltageFrame().getValue();
 
-    inputs.followerMotorVelocityMetersPerSecond = followerMotor.getVelocity();
-    inputs.leaderMotorVelocityMetersPerSecond = leaderMotor.getVelocity();
+    inputs.followerVelocityMetersPerSecond = followerMotor.getVelocity();
+    inputs.leaderVelocityMetersPerSecond = leaderMotor.getVelocity();
 
-    inputs.leaderMotorSupplyCurrentAmps = leaderMotor.getBusCurrent();
-    inputs.followerMotorSupplyCurrentAmps = followerMotor.getBusCurrent();
+    inputs.leaderSupplyAmps = leaderMotor.getBusCurrent();
+    inputs.followerSupplyAmps = followerMotor.getBusCurrent();
 
-    inputs.leaderMotorStatorCurrentAmps = leaderMotor.getStatorCurrent();
-    inputs.followerMotorStatorCurrentAmps = followerMotor.getStatorCurrent();
+    inputs.leaderStatorAmps = leaderMotor.getStatorCurrent();
+    inputs.followerStatorAmps = followerMotor.getStatorCurrent();
 
-    inputs.leaderMotortempCelcius = leaderMotor.getMotorTemperatureFrame().getValue();
-    inputs.followerMotortempCelcius = followerMotor.getMotorTemperatureFrame().getValue();
+    inputs.leadertempCelcius = leaderMotor.getMotorTemperatureFrame().getValue();
+    inputs.followertempCelcius = followerMotor.getMotorTemperatureFrame().getValue();
   }
 
   @Override

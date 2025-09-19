@@ -2,13 +2,14 @@ package frc.robot.constants;
 
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
+import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 import frc.robot.util.SwerveUtil.SwerveModuleConstantsFactory;
 
 public class DrivetrainConstants {
   // Shared drivetrain constants
-  public static final int gyroId = 0; // TODO
+  public static final int gyroId = 0;
   public static final double maxSpeedAt12Volts = 4.0; // TODO
 
   public static final double driveMotorKv = 800; // RPM/v
@@ -42,39 +43,39 @@ public class DrivetrainConstants {
   private static final double turnDeaccelerationLimit = 0; // TODO
   private static final double turnVelocityLimit = 0; // TODO
 
-  private static final double simTurnInertia = 0.00001; // TODO
-  private static final double simDriveInertia = 0.001; // TODO
+  private static final double simTurnInertia = 0.00001;
+  private static final double simDriveInertia = 0.001;
 
   // Specific module constants:
   // Front Left
-  private static final int frontLeftDriveMotorId = 1; // TODO
-  private static final int frontLeftTurnMotorId = 2; // TODO
-  private static final int frontLeftTurnEncoderId = 1; // TODO'
+  private static final int frontLeftDriveMotorId = 1;
+  private static final int frontLeftTurnMotorId = 2;
+  private static final int frontLeftTurnEncoderId = 1;
   private static final double halfWheelBaseMeters = 0.57785;
 
   private static final double frontLeftXPos = halfWheelBaseMeters;
   private static final double frontLeftYPos = halfWheelBaseMeters;
 
   // Front Right
-  private static final int frontRightDriveMotorId = 3; // TODO
-  private static final int frontRightTurnMotorId = 4; // TODO
-  private static final int frontRightTurnEncoderId = 2; // TODO
+  private static final int frontRightDriveMotorId = 3;
+  private static final int frontRightTurnMotorId = 4;
+  private static final int frontRightTurnEncoderId = 2;
 
   private static final double frontRightXPos = halfWheelBaseMeters;
   private static final double frontRightYPos = -halfWheelBaseMeters;
 
   // Back Left
-  private static final int backLeftDriveMotorId = 5; // TODO
-  private static final int backLeftTurnMotorId = 6; // TODO
-  private static final int backLeftTurnEncoderId = 3; // TODO
+  private static final int backLeftDriveMotorId = 5;
+  private static final int backLeftTurnMotorId = 6;
+  private static final int backLeftTurnEncoderId = 3;
 
   private static final double backLeftXPos = -halfWheelBaseMeters;
   private static final double backLeftYPos = halfWheelBaseMeters;
 
   // Back Right
-  private static final int backRightDriveMotorId = 7; // TODO
-  private static final int backRightTurnMotorId = 8; // TODO
-  private static final int backRightTurnEncoderId = 4; // TODO
+  private static final int backRightDriveMotorId = 7;
+  private static final int backRightTurnMotorId = 8;
+  private static final int backRightTurnEncoderId = 4;
 
   private static final double backRightXPos = -halfWheelBaseMeters;
   private static final double backRightYPos = -halfWheelBaseMeters;
@@ -101,7 +102,8 @@ public class DrivetrainConstants {
           .setPID(turnkP, 0, turnkD)
           .setMotionProfileAccelLimit(turnAccelerationLimit)
           .setMotionProfileDeaccelLimit(turnDeaccelerationLimit)
-          .setMotionProfileVelocityLimit(turnVelocityLimit);
+          .setMotionProfileVelocityLimit(turnVelocityLimit)
+          .setMinwrapConfig(new MinwrapConfig.Enabled());
 
   private static final SwerveModuleConstantsFactory moduleCreator =
       new SwerveModuleConstantsFactory()
