@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -30,7 +31,9 @@ public final class Constants {
   public static final long minFreeSpace = 1000000000; // 1 GB
 
   public static final int dioHomeButton = 0;
+  public static final int dioCoastButton = 0;
   public static final double homeButtonDelaySec = 1.0;
+  public static final double coastButtonDelaySec = 10.0;
 
   public static enum Mode {
     /** Running on a real robot. */
