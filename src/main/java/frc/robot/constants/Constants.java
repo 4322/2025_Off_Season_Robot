@@ -30,7 +30,7 @@ public final class Constants {
   public static final String logPath = "/home/lvuser/logs";
   public static final long minFreeSpace = 1000000000; // 1 GB
 
-  public static final int dioHomeButton = 0;
+  public static final int dioHomeButton = 1;
   public static final int dioCoastButton = 0;
   public static final double homeButtonDelaySec = 1.0;
   public static final double coastButtonDelaySec = 10.0;
