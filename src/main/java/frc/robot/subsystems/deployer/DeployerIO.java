@@ -1,7 +1,8 @@
 package frc.robot.subsystems.deployer;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
+
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 
 public interface DeployerIO {
 
@@ -15,8 +16,6 @@ public interface DeployerIO {
     public double speedRotationsPerSec = 0.0;
     public double appliedVolts = 0.0;
     public double angleDeg = 0.0;
-
-    public double deployerMotorMechanismPositionDegrees = 0.0;
 
     public double prevRequestedPositionDeg = 0.0;
   }
