@@ -2,6 +2,7 @@ package frc.robot.subsystems.deployer;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import org.littletonrobotics.junction.Logger;
 
@@ -29,6 +30,9 @@ public class Deployer extends SubsystemBase {
     Logger.processInputs("Deployer", inputs);
     Logger.recordOutput("Deployer/currentAction", currentAction.toString());
     Logger.recordOutput("Deployer/isHomed", isHomed);
+    if (Constants.Elevator.manualControl) {
+      io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
+    }
   }
 
   public void deploy() {

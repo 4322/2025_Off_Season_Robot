@@ -28,4 +28,6 @@ public interface DeployerIO {
   public default void stop(IdleMode idleMode) {}
 
   public default void setHome() {}
+
+  public default void setVoltage(double voltage) {}
 }

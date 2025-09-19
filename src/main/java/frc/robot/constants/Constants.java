@@ -250,12 +250,12 @@ public final class Constants {
     public static final int deployerMotorId = 40;
     public static final double deployVoltage = 3.0;
 
+    public static final boolean manualControl = false;
     public static final double statorCurrentLimit = 40;
     public static final double busCurrentLimitTime = 0;
     public static final double busCurrentLimit = 60;
     public static final IdleMode idleMode = IdleMode.kBrake;
-    public static final InvertMode invertMode =
-        InvertMode.kNotInverted; // positive is retracting
+    public static final InvertMode invertMode = InvertMode.kNotInverted; // positive is retracting
     public static final double deploykP = 1;
     public static final double deploykI = 0;
     public static final double deploykD = 0;
@@ -281,7 +281,6 @@ public final class Constants {
     public static final double accelerationLimit = 0;
     public static final double deaccelerationLimit = 0;
     public static final double velocityLimit = 0;
-  
   }
 
   public static class Indexer {
@@ -311,7 +310,8 @@ public final class Constants {
     public static final double busCurrentLimit = 40;
 
     public static final IdleMode idleMode = IdleMode.kCoast;
-    public static final InvertMode invert = InvertMode.kNotInverted; // positive is intaking, TODO: verify direction
+    public static final InvertMode invert =
+        InvertMode.kNotInverted; // positive is intaking, TODO: verify direction
 
     public static final double voltageFeed = 5;
     public static final double voltageFeedSlow = 3;

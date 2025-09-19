@@ -21,7 +21,7 @@ import frc.robot.constants.Constants;
  * 0 -> 145.353984 where 0 is fully deployed and 145.353984 is fully retracted against hardstop
  * Motor controller coordinate system:
  * -10? -> 0 -> 135.353984 where 135.353984 is fully retracted against hardstop, 0 is the the point where the deployer is the most affected by gravity, and -10? is fully deployed
- * 
+ *
  * code = motor + 10
  * motor = code - 10
  * 10 is used in place of offset
@@ -43,8 +43,7 @@ public class DeployerIONitrate implements DeployerIO {
   public DeployerIONitrate() {
     deployerMotor = new Nitrate(Constants.Deployer.deployerMotorId, MotorType.kCu60);
     initMotorConfig();
-    NitrateSettings deployerMotorConfigStatus =
-        deployerMotor.setSettings(motorConfig, 0.02, 5);
+    NitrateSettings deployerMotorConfigStatus = deployerMotor.setSettings(motorConfig, 0.02, 5);
     if (!deployerMotorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
@@ -65,10 +64,10 @@ public class DeployerIONitrate implements DeployerIO {
         .getOutputSettings()
         .setIdleMode(Constants.Deployer.idleMode)
         .setInvert(Constants.Deployer.invertMode);
-    
+
     motorConfig
-      .getFeedbackSensorSettings()
-      .setSensorToMechanismRatio(Constants.Deployer.motorGearRatio);
+        .getFeedbackSensorSettings()
+        .setSensorToMechanismRatio(Constants.Deployer.motorGearRatio);
 
     // Deploy PID in slot 0
     // Retract PID in slot 1
@@ -76,9 +75,7 @@ public class DeployerIONitrate implements DeployerIO {
     motorConfig
         .getPIDSettings(PIDConfigSlot.kSlot0)
         .setPID(
-            Constants.Deployer.deploykP,
-            Constants.Deployer.deploykI,
-            Constants.Deployer.deploykD)
+            Constants.Deployer.deploykP, Constants.Deployer.deploykI, Constants.Deployer.deploykD)
         .setGravitationalFeedforward(Constants.Deployer.deploykG)
         .setFeedforwardMode(Constants.Deployer.feedforwardMode)
         .setMinwrapConfig(new MinwrapConfig.Disabled())
@@ -121,8 +118,7 @@ public class DeployerIONitrate implements DeployerIO {
       // Requested position in code coordinate system
       previousRequestedPositionDeg = degrees;
 
-      if ((mechanismAngleDeg)
-          > degrees) {
+      if ((mechanismAngleDeg) > degrees) {
         deployerMotor.setRequest(
             deployerMotorDeployPIDRequest.setPosition(
                 Units.degreesToRotations(toMotorCoords(degrees))));
@@ -132,6 +128,12 @@ public class DeployerIONitrate implements DeployerIO {
                 Units.degreesToRotations(toMotorCoords(degrees))));
       }
     }
+  }
+
+  @Override
+  public void setVoltage(double voltage) {
+    previousRequestedPositionDeg = -999;
+    deployerMotor.setVoltage(voltage);
   }
 
   @Override
@@ -145,12 +147,11 @@ public class DeployerIONitrate implements DeployerIO {
     deployerMotor.setPosition(toMotorCoords(Constants.Deployer.maxRangeDegrees));
   }
 
-
   private double toCodeCoords(double position) {
     return position + Constants.Deployer.maxGravityDegrees;
   }
 
   private double toMotorCoords(double position) {
     return position - Constants.Deployer.maxGravityDegrees;
-  } 
+  }
 }
