@@ -28,6 +28,8 @@ public interface DeployerIO {
 
   public default void setPosition(double rotations) {}
 
+  public default void setPositionSlot0(double rotations) {}
+
   public default void stop(IdleMode idleMode) {}
 
   public default void setHome() {}

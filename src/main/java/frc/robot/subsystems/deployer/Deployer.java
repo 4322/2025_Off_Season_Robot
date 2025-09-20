@@ -39,7 +39,7 @@ public class Deployer extends SubsystemBase {
         case TUNING:
           Double newPos = BabyAlchemist.run(io.getNitrate());
           if (newPos != null) {
-            io.setPosition(newPos);
+            io.setPositionSlot0(newPos);
           }
           break;
         case DISABLED:

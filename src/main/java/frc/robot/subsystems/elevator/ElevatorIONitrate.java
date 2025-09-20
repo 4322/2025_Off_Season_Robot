@@ -13,7 +13,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.FollowMotorRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 
@@ -78,7 +77,7 @@ public class ElevatorIONitrate implements ElevatorIO {
         new ElectricalLimitSettings()
             .setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps));
-    
+
     frontConfig.setFramePeriodSettings(
         new FramePeriodSettings()
             .setEnabledPIDDebugFrames(
