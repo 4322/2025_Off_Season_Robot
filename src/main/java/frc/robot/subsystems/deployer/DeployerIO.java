@@ -17,6 +17,9 @@ public interface DeployerIO {
     public double appliedVolts = 0.0;
     public double angleDeg = 0.0;
     public double encoderRotations = 0.0;
+    public double kGeffort;
+    public double kPeffort;
+    public double totalEffort;
 
     public double prevRequestedPositionDeg = 0.0;
   }

@@ -4,8 +4,10 @@ import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
+import com.reduxrobotics.motorcontrol.nitrate.types.EnabledDebugFrames;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
@@ -106,6 +108,14 @@ public class DeployerIONitrate implements DeployerIO {
             .setISaturation(Constants.Deployer.errorUnit)
             .setIZone(Constants.Deployer.finalOutputDeg),
         PIDConfigSlot.kSlot1);
+
+    motorConfig.setFramePeriodSettings(
+        new FramePeriodSettings()
+            .setEnabledPIDDebugFrames(
+                new EnabledDebugFrames()
+                    .setKgControlEffort(true)
+                    .setKpControlEffort(true)
+                    .setTotalControlEffort(true)));
   }
 
   @Override
@@ -118,6 +128,9 @@ public class DeployerIONitrate implements DeployerIO {
     inputs.speedRotationsPerSec = deployerMotor.getVelocity();
     inputs.appliedVolts = deployerMotor.getAppliedVoltageFrame().getValue();
     inputs.encoderRotations = deployerMotor.getPosition();
+    inputs.kPeffort = deployerMotor.getPIDDebugFrames().kPControlEffortFrame.getValue();
+    inputs.kGeffort = deployerMotor.getPIDDebugFrames().kGControlEffortFrame.getValue();
+    inputs.totalEffort = deployerMotor.getPIDDebugFrames().totalControlEffortFrame.getValue();
 
     inputs.prevRequestedPositionDeg = previousRequestedPositionDeg;
 
