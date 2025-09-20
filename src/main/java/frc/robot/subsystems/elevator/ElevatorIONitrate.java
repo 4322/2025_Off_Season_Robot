@@ -20,9 +20,9 @@ public class ElevatorIONitrate implements ElevatorIO {
   private final Nitrate leaderMotor;
   private final Nitrate followerMotor;
   private double lastRequestedPosMeters;
-  private PIDPositionRequest elvSlowPositionRequest =
-      new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
   private PIDPositionRequest elvPositionRequest =
+      new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
+      private PIDPositionRequest elvSlowPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
   private FollowMotorRequest followerRequest;
 
@@ -121,9 +121,6 @@ public class ElevatorIONitrate implements ElevatorIO {
 
     inputs.leaderheightMeters = rotationsToMeters(leaderMotor.getPosition());
     inputs.followerHeightMeters = rotationsToMeters(followerMotor.getPosition());
-
-    inputs.leaderVoltage = leaderMotor.getBusVoltageFrame().getValue();
-    inputs.followerVoltage = followerMotor.getBusVoltageFrame().getValue();
 
     inputs.followerVelocityMetersPerSecond = followerMotor.getVelocity();
     inputs.leaderVelocityMetersPerSecond = leaderMotor.getVelocity();
