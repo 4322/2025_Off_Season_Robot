@@ -4,106 +4,95 @@ import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.RobotMode;
 
 public class BabyAlchemist {
   public static boolean init;
-  private static ShuffleboardTab tuningTab;
-  private static GenericEntry setpointEntry;
-  private static double setpoint;
-  private static GenericEntry kP_entry;
-  private static double kP;
-  private static GenericEntry kI_entry;
-  private static double kI;
-  private static GenericEntry kD_entry;
-  private static double kD;
-  private static GenericEntry kG_entry;
-  private static double kG;
-  private static GenericEntry accEntry;
-  private static double acc;
-  private static GenericEntry decEntry;
-  private static double dec;
-  private static GenericEntry velEntry;
-  private static double vel;
 
-  private static final LoggedTunableNumber kP2 = new LoggedTunableNumber("Tuning/kP");
+  private static final LoggedTunableNumber kP = new LoggedTunableNumber("kP");
+  private static final LoggedTunableNumber kI = new LoggedTunableNumber("kI");
+  private static final LoggedTunableNumber kD = new LoggedTunableNumber("kD");
+  private static final LoggedTunableNumber kG = new LoggedTunableNumber("kG");
+  private static final LoggedTunableNumber acc = new LoggedTunableNumber("acc");
+  private static final LoggedTunableNumber dec = new LoggedTunableNumber("dec");
+  private static final LoggedTunableNumber vel = new LoggedTunableNumber("velocity");
+  private static final LoggedTunableNumber setpoint = new LoggedTunableNumber("setpoint");
 
   public static Double run(Nitrate nitrate) {
     NitrateSettings settings;
     Double newPos = null;
+
     if (!init) {
-      settings = nitrate.getSettings();
-      kP = settings.getPIDSettings(PIDConfigSlot.kSlot0).getP().get();
-      kI = settings.getPIDSettings(PIDConfigSlot.kSlot0).getI().get();
-      kD = settings.getPIDSettings(PIDConfigSlot.kSlot0).getD().get();
-      kG = settings.getPIDSettings(PIDConfigSlot.kSlot0).getGravitationalFeedforward().get();
-      acc = settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileAccelLimit().get();
-      dec = settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileDeaccelLimit().get();
-      vel = settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileVelocityLimit().get();
-
-      kP2.initDefault(kP);
-      SmartDashboard.putNumber("Tuning2/kP", kP);
-
-      tuningTab = Shuffleboard.getTab("Tuning");
-      kP_entry = tuningTab.add("kP", kP).withPosition(0, 0).withSize(2, 1).getEntry();
-      kI_entry = tuningTab.add("kI", kI).withPosition(2, 0).withSize(2, 1).getEntry();
-      kD_entry = tuningTab.add("kD", kD).withPosition(4, 0).withSize(2, 1).getEntry();
-      kG_entry = tuningTab.add("kG", kG).withPosition(6, 0).withSize(2, 1).getEntry();
-      accEntry = tuningTab.add("Acc", acc).withPosition(0, 1).withSize(2, 1).getEntry();
-      decEntry = tuningTab.add("Dec", dec).withPosition(2, 1).withSize(2, 1).getEntry();
-      velEntry = tuningTab.add("Vel", vel).withPosition(4, 1).withSize(2, 1).getEntry();
-      setpointEntry =
-          tuningTab.add("Setpoint", setpoint).withPosition(0, 2).withSize(2, 1).getEntry();
+      if (Constants.currentMode == RobotMode.REAL) {
+        settings = nitrate.getSettings();
+      } else {
+        // for testing GUI in sim mode
+        settings = new NitrateSettings();
+        settings.setPIDSettings(new PIDSettings().setP(1), PIDConfigSlot.kSlot0);
+        settings.setPIDSettings(new PIDSettings().setI(2), PIDConfigSlot.kSlot0);
+        settings.setPIDSettings(new PIDSettings().setD(3), PIDConfigSlot.kSlot0);
+        settings.setPIDSettings(
+            new PIDSettings().setGravitationalFeedforward(4), PIDConfigSlot.kSlot0);
+        settings.setPIDSettings(
+            new PIDSettings().setMotionProfileAccelLimit(5), PIDConfigSlot.kSlot0);
+        settings.setPIDSettings(
+            new PIDSettings().setMotionProfileDeaccelLimit(6), PIDConfigSlot.kSlot0);
+        settings.setPIDSettings(
+            new PIDSettings().setMotionProfileVelocityLimit(7), PIDConfigSlot.kSlot0);
+      }
+      kP.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getP().get());
+      kI.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getI().get());
+      kD.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getD().get());
+      kG.initDefault(
+          settings.getPIDSettings(PIDConfigSlot.kSlot0).getGravitationalFeedforward().get());
+      acc.initDefault(
+          settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileAccelLimit().get());
+      dec.initDefault(
+          settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileDeaccelLimit().get());
+      vel.initDefault(
+          settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileVelocityLimit().get());
+      setpoint.initDefault(0);
       init = true;
     }
-    settings = new NitrateSettings();
 
-    double kPnew = kP_entry.getDouble(kP);
-    if (kPnew != kP) {
-      settings.setPIDSettings(new PIDSettings().setP(kPnew), PIDConfigSlot.kSlot0);
-      kP = kPnew;
+    settings = new NitrateSettings();
+    if (kP.hasChanged(1)) {
+      settings.setPIDSettings(new PIDSettings().setP(kP.get()), PIDConfigSlot.kSlot0);
     }
-    double kInew = kI_entry.getDouble(kI);
-    if (kInew != kI) {
-      settings.setPIDSettings(new PIDSettings().setI(kInew), PIDConfigSlot.kSlot0);
-      kI = kInew;
+    if (kI.hasChanged(1)) {
+      settings.setPIDSettings(new PIDSettings().setI(kI.get()), PIDConfigSlot.kSlot0);
     }
-    double kDnew = kD_entry.getDouble(kD);
-    if (kDnew != kD) {
-      settings.setPIDSettings(new PIDSettings().setI(kDnew), PIDConfigSlot.kSlot0);
-      kD = kDnew;
+    if (kD.hasChanged(1)) {
+      settings.setPIDSettings(new PIDSettings().setD(kD.get()), PIDConfigSlot.kSlot0);
     }
-    double kGnew = kG_entry.getDouble(kG);
-    if (kGnew != kG) {
+    if (kG.hasChanged(1)) {
       settings.setPIDSettings(
-          new PIDSettings().setGravitationalFeedforward(kGnew), PIDConfigSlot.kSlot0);
-      kG = kGnew;
+          new PIDSettings().setGravitationalFeedforward(kG.get()), PIDConfigSlot.kSlot0);
     }
-    double accNew = accEntry.getDouble(acc);
-    if (accNew != acc) {
+    if (acc.hasChanged(1)) {
       settings.setPIDSettings(
-          new PIDSettings().setMotionProfileAccelLimit(accNew), PIDConfigSlot.kSlot0);
-      acc = accNew;
+          new PIDSettings().setMotionProfileAccelLimit(acc.get()), PIDConfigSlot.kSlot0);
     }
-    double decNew = decEntry.getDouble(dec);
-    if (decNew != dec) {
+    if (dec.hasChanged(1)) {
       settings.setPIDSettings(
-          new PIDSettings().setMotionProfileAccelLimit(decNew), PIDConfigSlot.kSlot0);
-      dec = decNew;
+          new PIDSettings().setMotionProfileDeaccelLimit(dec.get()), PIDConfigSlot.kSlot0);
     }
-    double velNew = velEntry.getDouble(vel);
-    if (velNew != vel) {
+    if (vel.hasChanged(1)) {
       settings.setPIDSettings(
-          new PIDSettings().setMotionProfileAccelLimit(velNew), PIDConfigSlot.kSlot0);
-      vel = velNew;
+          new PIDSettings().setMotionProfileVelocityLimit(vel.get()), PIDConfigSlot.kSlot0);
     }
-    double setpointNew = setpointEntry.getDouble(setpoint);
-    if (setpointNew != setpoint) {
-      setpoint = setpointNew;
-      newPos = setpoint;
+    if (setpoint.hasChanged(1)) {
+      newPos = setpoint.get();
+    }
+
+    if (!settings.isEmpty() && (Constants.currentMode == RobotMode.REAL)) {
+      NitrateSettings status = nitrate.setSettings(settings, 0.02, 5);
+      if (!status.isEmpty()) {
+        DriverStation.reportError(
+            "Nitrate " + nitrate.getAddress().getDeviceId() + " did not receive settings", false);
+      }
     }
     return newPos;
   }

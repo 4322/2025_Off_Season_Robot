@@ -74,25 +74,25 @@ public class IndexerIONitrate implements IndexerIO {
   private void initMotorConfig() {
     motorLeftConfig.setElectricalLimitSettings(
         new ElectricalLimitSettings()
-        .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
-        .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
-        .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit));
+            .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
+            .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
+            .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit));
 
     motorRightConfig.setElectricalLimitSettings(
         new ElectricalLimitSettings()
-        .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
-        .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
-        .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit));
+            .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
+            .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
+            .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit));
 
     motorLeftConfig.setOutputSettings(
-      new OutputSettings()
-        .setIdleMode(Constants.Indexer.idleMode)
-        .setInvert(Constants.Indexer.leftInvert));
+        new OutputSettings()
+            .setIdleMode(Constants.Indexer.idleMode)
+            .setInvert(Constants.Indexer.leftInvert));
 
     motorRightConfig.setOutputSettings(
-      new OutputSettings()
-        .setIdleMode(Constants.Indexer.idleMode)
-        .setInvert(Constants.Indexer.rightInvert));
+        new OutputSettings()
+            .setIdleMode(Constants.Indexer.idleMode)
+            .setInvert(Constants.Indexer.rightInvert));
   }
 
   private void configSensor() {}

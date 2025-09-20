@@ -32,15 +32,15 @@ public class RollersIONitrate implements RollersIO {
 
   private void initMotorConfig() {
     motorConfig.setElectricalLimitSettings(
-      new ElectricalLimitSettings()
-        .setBusCurrentLimit(Constants.Rollers.busCurrentLimit)
-        .setBusCurrentLimitTime(Constants.Rollers.busCurrentLimitTime)
-        .setStatorCurrentLimit(Constants.Rollers.statorCurrentLimit));
+        new ElectricalLimitSettings()
+            .setBusCurrentLimit(Constants.Rollers.busCurrentLimit)
+            .setBusCurrentLimitTime(Constants.Rollers.busCurrentLimitTime)
+            .setStatorCurrentLimit(Constants.Rollers.statorCurrentLimit));
 
     motorConfig.setOutputSettings(
-      new OutputSettings()
-        .setIdleMode(Constants.Rollers.idleMode)
-        .setInvert(Constants.Rollers.invert));
+        new OutputSettings()
+            .setIdleMode(Constants.Rollers.idleMode)
+            .setInvert(Constants.Rollers.invert));
   }
 
   @Override
