@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -93,7 +94,7 @@ public final class Constants {
 
     public static final double sensorToArm = 85 / 10.0;
     public static final double motorShaftToSensorShaft = 56 / 16.0;
-    public static final double finalOutputDeg = 1000;
+
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0;
     public static final double coralHoldDeg = armIdleDeg;
@@ -112,7 +113,8 @@ public final class Constants {
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
     public static final double kG = 20;
-    public static final double errorUnit = 1000;
+    public static final double errorUnit = 1000; //TODO
+    public static final double finalOutputDeg = 1000; //TODO
 
     public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 5; // TODO
     public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20; // TODO
@@ -149,27 +151,37 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
     public static final InvertMode motorBackInvert = InvertMode.kInverted; // positive is up
+
     public static final double fast_kP = 1; // TODO: Set to actual value
     public static final double fast_kI = 0; // TODO: Set to actual value
     public static final double fast_kD = 0; // TODO: Set to actual value
+
     public static final double slow_kP = 1; // TODO: Set to actual value
     public static final double slow_kI = 0; // TODO: Set to actual value
     public static final double slow_kD = 0; // TODO: Set to actual value
+
     public static final double kG = 1; // TODO: Set to actual value
-    public static final double errorUnit = 1000;
-    public static final double finalOutputDeg = 1000;
+
+    public static final double errorUnit = 1000;//TODO
+    public static final double finalOutputDeg = 1000; //TODO
+
     public static final double maxElevatorHeightMeters = 1.3068401092;
     public static final double homeHeightMeters = 0.3917895136;
+
     public static final double minElevatorSafeHeightMeters = homeHeightMeters + 0.1;
     public static final double minElevatorSafeWithCoralMeters = homeHeightMeters + 0.3;
+
     public static final double elevatorHeightToleranceMeters = 0.01;
+
     public static final double algaeGroundHeightMeters = 0.2; // TODO: need actual value
     public static final double algaeReefL2HeightMeters = 0.5021688204;
     public static final double algaeReefL3HeightMeters = 0.8739758746;
+
     public static final double prescoreCoralL1HeightMeters = 0.5144884808;
     public static final double prescoreCoralL2HeightMeters = 0.012381357;
     public static final double prescoreCoralL3HeightMeters = 0.3703222972;
     public static final double prescoreCoralL4HeightMeters = maxElevatorHeightMeters - 0.00635;
+
     public static final double pickupCoralHeightMeters = homeHeightMeters + 0.01;
     public static final double intializationVoltage = 2.0;
     public static final double initializationTimerThresholdSecs = 5;
@@ -181,15 +193,18 @@ public final class Constants {
 
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
+
     public static final double fastAccelerationMetersPerSec2 = 4.0;
     public static final double fastDecelerationMetersPerSec2 = 4.0;
     public static final double fastVelocityMetersPerSec = 1.0;
+    
     public static final double slowAccelerationMetersPerSec2 = 0.8;
     public static final double slowDecelerationMetersPerSec2 = 0.8;
     public static final double slowVelocityMetersPerSec = 0.2;
 
     public static final double gearRatio = 6 / 1.0;
     public static final double beltPulleyPitchDiameterMeters = Units.inchesToMeters(1.504);
+
     public static final double scoreCoralL1HeightMeters = prescoreCoralL1HeightMeters;
     public static final double scoreCoralL2HeightMeters = prescoreCoralL2HeightMeters - 0.1;
     public static final double scoreCoralL3HeightMeters = prescoreCoralL3HeightMeters - 0.1;
@@ -274,8 +289,8 @@ public final class Constants {
     public static final double retractkI = 0;
     public static final double retractkD = 0;
 
-    public static final double errorUnit = 1000;
-    public static final double finalOutputDeg = 1000;
+    public static final double errorUnit = 1000; //TODO
+    public static final double finalOutputDeg = 1000; //TODO
 
     public static final int deployerMotorEncoderId = 0; // not currently installed
     public static final InvertMode motorEncoderInverted =
