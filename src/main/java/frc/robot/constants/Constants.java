@@ -153,13 +153,13 @@ public final class Constants {
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
     public static final InvertMode motorBackInvert = InvertMode.kInverted; // positive is up
 
-    public static final double fast_kP = 1; // TODO: Set to actual value
+    public static final double fast_kP = 2; // TODO: Set to actual value
     public static final double fast_kI = 0; // TODO: Set to actual value
-    public static final double fast_kD = 0; // TODO: Set to actual value
+    public static final double fast_kD = 0.4; // TODO: Set to actual value
 
-    public static final double slow_kP = 1; // TODO: Set to actual value
+    public static final double slow_kP = 2; // TODO: Set to actual value
     public static final double slow_kI = 0; // TODO: Set to actual value
-    public static final double slow_kD = 0; // TODO: Set to actual value
+    public static final double slow_kD = 0.4; // TODO: Set to actual value
 
     public static final double kG = 1; // TODO: Set to actual value
 

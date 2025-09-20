@@ -13,6 +13,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.FollowMotorRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 
@@ -34,6 +35,7 @@ public class ElevatorIONitrate implements ElevatorIO {
 
     // Setup config objects
     NitrateSettings frontConfig = new NitrateSettings();
+    NitrateSettings backConfig = new NitrateSettings();
 
     followerRequest = new FollowMotorRequest(leaderMotor);
 
@@ -86,11 +88,21 @@ public class ElevatorIONitrate implements ElevatorIO {
                     .setKgControlEffort(Constants.debugPIDModeEnabled)
                     .setKpControlEffort(Constants.debugPIDModeEnabled)
                     .setTotalControlEffort(Constants.debugPIDModeEnabled)));
+    
+    backConfig.setOutputSettings(
+        new OutputSettings()
+            .setIdleMode(Constants.Elevator.motorIdleMode)
+            .setInvert(Constants.Elevator.motorFrontInvert));
+
+    backConfig.setElectricalLimitSettings(
+        new ElectricalLimitSettings()
+            .setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps)
+            .setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps));
 
     followerRequest.setInverted(true);
 
     NitrateSettings leaderConfigStatus = leaderMotor.setSettings(frontConfig, 0.02, 5);
-    NitrateSettings followerConfigStatus = followerMotor.setSettings(frontConfig, 0.02, 5);
+    NitrateSettings followerConfigStatus = followerMotor.setSettings(backConfig, 0.02, 5);
     followerMotor.setRequest(followerRequest);
     // get position is an internal encoder, so we need to set it
     // 6 to 1 gear ratio for elevator first stage
