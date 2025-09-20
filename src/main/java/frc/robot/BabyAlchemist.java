@@ -71,10 +71,10 @@ public class BabyAlchemist {
       settings.setPIDSettings(new PIDSettings().setI(kI.get()), PIDConfigSlot.kSlot0);
     }
     if (iSat.hasChanged(1)) {
-      settings.setPIDSettings(new PIDSettings().setISaturation(kI.get()), PIDConfigSlot.kSlot0);
+      settings.setPIDSettings(new PIDSettings().setISaturation(iSat.get()), PIDConfigSlot.kSlot0);
     }
     if (iZone.hasChanged(1)) {
-      settings.setPIDSettings(new PIDSettings().setIZone(kI.get()), PIDConfigSlot.kSlot0);
+      settings.setPIDSettings(new PIDSettings().setIZone(iZone.get()), PIDConfigSlot.kSlot0);
     }
     if (kD.hasChanged(1)) {
       settings.setPIDSettings(new PIDSettings().setD(kD.get()), PIDConfigSlot.kSlot0);

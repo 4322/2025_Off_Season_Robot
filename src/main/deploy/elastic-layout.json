@@ -37,7 +37,7 @@
           },
           {
             "title": "kG",
-            "x": 384.0,
+            "x": 640.0,
             "y": 0.0,
             "width": 128.0,
             "height": 128.0,
@@ -51,7 +51,7 @@
           },
           {
             "title": "kD",
-            "x": 256.0,
+            "x": 512.0,
             "y": 0.0,
             "width": 128.0,
             "height": 128.0,
@@ -114,6 +114,34 @@
             "type": "Text Display",
             "properties": {
               "topic": "/Tuning/velocity",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "iSat",
+            "x": 256.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/Tuning/iSat",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "iZone",
+            "x": 384.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/Tuning/iZone",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
