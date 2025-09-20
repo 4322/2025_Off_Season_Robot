@@ -11,17 +11,12 @@ import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
   private ElevatorIO io;
-  ElevatorStates state = ElevatorStates.UNHOMED;
-  ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
+  private ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
   private double requestedHeightMeters = 0.0;
   private double prevHeightMeters = 0.0;
   private double newElevatorHeight;
   private boolean isSlow = false;
-
-  private enum ElevatorStates {
-    UNHOMED,
-    ELEVATOR_MOVEMENT
-  }
+  private boolean isHomed;
 
   public Elevator(ElevatorIO ELVIO) {
     this.io = ELVIO;
@@ -32,45 +27,41 @@ public class Elevator extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
     Logger.recordOutput("Elevator/atHeight", atSetpoint());
-    Logger.recordOutput("Elevator/ElevatorStates", state.toString());
     Logger.recordOutput("Elevator/TargetHeight", requestedHeightMeters);
 
-    switch (Constants.elevatorMode) {
-      case OPEN_LOOP:
-        io.setVoltage(-RobotContainer.driver.getLeftY() * 12.0);
-        break;
-      case TUNING:
-        Double newPos = BabyAlchemist.run(io.getNitrate());
-        if (newPos != null) {
-          io.requestHeightMeters(newPos);
-        }
-        break;
-      case DISABLED:
-        break;
-      case NORMAL:
-        switch (state) {
-          case UNHOMED:
-            break;
-          case ELEVATOR_MOVEMENT:
-            double armAngle = RobotContainer.getSuperstructure().getArmAngle();
-            // TODO: Safety logic unsafe when going from coral held to score L2, FIX
-            if (armAngle > Constants.Arm.bufferDeg
-                && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters
-                && armAngle < (Constants.Arm.minArmSafeDeg - Constants.Arm.bufferDeg)) {
-              newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
+    if (isHomed) {
+      switch (Constants.elevatorMode) {
+        case OPEN_LOOP:
+          io.setVoltage(-RobotContainer.driver.getLeftY() * 12.0);
+          break;
+        case TUNING:
+          Double newPos = BabyAlchemist.run(io.getNitrate());
+          if (newPos != null) {
+            io.requestHeightMeters(newPos);
+          }
+          break;
+        case DISABLED:
+          break;
+        case NORMAL:
+          double armAngle = RobotContainer.getSuperstructure().getArmAngle();
+          // TODO: Safety logic unsafe when going from coral held to score L2, FIX
+          if (armAngle > Constants.Arm.bufferDeg
+              && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters
+              && armAngle < (Constants.Arm.minArmSafeDeg - Constants.Arm.bufferDeg)) {
+            newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
+          } else {
+            newElevatorHeight = requestedHeightMeters;
+          }
+          if (prevHeightMeters != newElevatorHeight) {
+            if (isSlow) {
+              io.requestSlowHeightMeters(newElevatorHeight);
             } else {
-              newElevatorHeight = requestedHeightMeters;
+              io.requestHeightMeters(newElevatorHeight);
             }
-            if (prevHeightMeters != newElevatorHeight) {
-              if (isSlow) {
-                io.requestSlowHeightMeters(newElevatorHeight);
-              } else {
-                io.requestHeightMeters(newElevatorHeight);
-              }
-              prevHeightMeters = requestedHeightMeters;
-            }
-            break;
-        }
+            prevHeightMeters = requestedHeightMeters;
+          }
+          break;
+      }
     }
   }
 
@@ -171,7 +162,7 @@ public class Elevator extends SubsystemBase {
 
   public void setHomePosition() {
     io.setPosition(Constants.Elevator.homeHeightMeters);
-    state = ElevatorStates.ELEVATOR_MOVEMENT;
+    isHomed = true;
     isSlow = false;
   }
 

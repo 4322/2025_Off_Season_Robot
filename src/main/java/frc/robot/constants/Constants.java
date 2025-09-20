@@ -15,8 +15,8 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final SubsystemMode armMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode armMode = SubsystemMode.TUNING;
+  public static final SubsystemMode elevatorMode = SubsystemMode.NORMAL;
   public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
   public static final boolean indexerEnabled = false;
   public static final boolean rollersEnabled = false;

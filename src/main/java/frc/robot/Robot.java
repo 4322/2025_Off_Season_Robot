@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.RobotMode;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -175,7 +176,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {
 
-    if (!homeButton.get()) {
+    if (!homeButton.get() && Constants.currentMode != RobotMode.SIM) {
       homeButtonTimer.start();
       // button is pressed in
       if (homeButtonTimer.hasElapsed(Constants.homeButtonDelaySec)) {
@@ -188,7 +189,7 @@ public class Robot extends LoggedRobot {
       homeButtonTimer.reset();
     }
 
-    if (!coastButton.get()) {
+    if (!coastButton.get() && Constants.currentMode != RobotMode.SIM) {
       RobotContainer.getSuperstructure().CoastMotors();
       coastButtonTimer.start();
       // button is pressed in

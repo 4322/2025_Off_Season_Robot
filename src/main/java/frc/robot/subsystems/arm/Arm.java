@@ -32,20 +32,20 @@ public class Arm extends SubsystemBase {
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
     Logger.recordOutput("Arm/TargetAngle", requestedSetpoint);
 
-    switch (Constants.armMode) {
-      case OPEN_LOOP:
-        io.setVoltage(-RobotContainer.driver.getLeftX() * 4.0);
-        break;
-      case TUNING:
-        Double newPos = BabyAlchemist.run(io.getNitrate());
-        if (newPos != null) {
-          io.requestPosition(newPos);
-        }
-        break;
-      case DISABLED:
-        break;
-      case NORMAL:
-        if (isHomed) {
+    if (isHomed) {
+      switch (Constants.armMode) {
+        case OPEN_LOOP:
+          io.setVoltage(-RobotContainer.driver.getLeftX() * 4.0);
+          break;
+        case TUNING:
+          Double newPos = BabyAlchemist.run(io.getNitrate());
+          if (newPos != null) {
+            io.requestPosition(newPos);
+          }
+          break;
+        case DISABLED:
+          break;
+        case NORMAL:
           if (RobotContainer.getSuperstructure().isCoralHeld()) {
             minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
           } else {
@@ -80,7 +80,7 @@ public class Arm extends SubsystemBase {
               prevSetpoint = newSetpoint;
             }
           }
-        }
+      }
     }
   }
 
