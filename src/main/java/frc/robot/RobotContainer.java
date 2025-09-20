@@ -109,7 +109,7 @@ public class RobotContainer {
           elevator =
               new Elevator(new ElevatorIONitrate()); // Create the elevator subsystem if enabled
         }
-        if (Constants.driveEnabled) {
+        if (Constants.driveMode != SubsystemMode.DISABLED) {
           GyroIOBoron gyro = new GyroIOBoron();
           drive =
               new Drive(
