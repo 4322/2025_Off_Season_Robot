@@ -17,6 +17,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -27,9 +28,9 @@ public class ArmIONitrate implements ArmIO {
   private final Canandmag armEncoder;
   private double lastRequestedPosDeg;
 
-  private final PIDPositionRequest armPIDPositionRequest =
+  private final PIDPositionRequest PIDPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
-  private final PIDPositionRequest armSlowPIDPositionRequest =
+  private final PIDPositionRequest SlowPIDPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
   public ArmIONitrate() {
@@ -139,7 +140,7 @@ public class ArmIONitrate implements ArmIO {
   @Override
   public void requestPosition(double requestSetpoint) {
     armMotor.setRequest(
-        armPIDPositionRequest.setPosition(
+        PIDPositionRequest.setPosition(
             Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg)));
     lastRequestedPosDeg = requestSetpoint;
   }
@@ -147,7 +148,7 @@ public class ArmIONitrate implements ArmIO {
   @Override
   public void requestSlowPosition(double requestSetpoint) {
     armMotor.setRequest(
-        armSlowPIDPositionRequest.setPosition(
+        SlowPIDPositionRequest.setPosition(
             Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg)));
     lastRequestedPosDeg = requestSetpoint;
   }
