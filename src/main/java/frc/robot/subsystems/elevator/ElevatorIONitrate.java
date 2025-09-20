@@ -126,6 +126,12 @@ public class ElevatorIONitrate implements ElevatorIO {
 
     inputs.leadertempCelcius = leaderMotor.getMotorTemperatureFrame().getValue();
     inputs.followertempCelcius = followerMotor.getMotorTemperatureFrame().getValue();
+
+    inputs.leaderVoltage = leaderMotor.getAppliedVoltageFrame().getValue();
+    inputs.leaderEncoderRotations = leaderMotor.getPosition();
+
+    inputs.followerVoltage = followerMotor.getAppliedVoltageFrame().getValue();
+    inputs.followerEncoderRotations = followerMotor.getPosition();
   }
 
   @Override

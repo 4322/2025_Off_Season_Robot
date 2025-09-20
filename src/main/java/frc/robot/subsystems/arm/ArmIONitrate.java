@@ -109,6 +109,8 @@ public class ArmIONitrate implements ArmIO {
     armInputs.armStatorCurrentAmps = armMotor.getStatorCurrent();
     armInputs.armTempCelsius = armMotor.getMotorTemperatureFrame().getData();
     armInputs.armEncoderConnected = armEncoder.isConnected();
+    armInputs.voltage = armMotor.getAppliedVoltageFrame().getValue();
+    armInputs.encoderRotations = armMotor.getPosition();
   }
   // You need method in ArmIO as well to do Override Remember to check - Personal Note / Reminder
   //

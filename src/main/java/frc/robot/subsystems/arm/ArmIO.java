@@ -10,6 +10,7 @@ public interface ArmIO {
     public double requestedPosDeg;
     public double voltage = 0.0;
     public double velocityDegSec = 0.0;
+    public double encoderRotations = 0.0;
     public boolean armConnected = false;
     public boolean armEncoderConnected = false;
     public double armSupplyCurrentAmps = 0.0;
