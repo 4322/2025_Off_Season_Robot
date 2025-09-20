@@ -3,6 +3,10 @@ package frc.robot.subsystems.drive;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
+import frc.robot.BabyAlchemist;
+import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 import org.littletonrobotics.junction.Logger;
 
@@ -21,26 +25,37 @@ public class Module {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
+
+    if (Constants.deployerMode == SubsystemMode.TUNING && index == 0) {
+      Double newPos = BabyAlchemist.run(io.getTurnNitrate());
+      if (newPos != null) {
+        io.setTurnPosition(new Rotation2d(Units.degreesToRadians(newPos)));
+      }
+    }
   }
 
   public void runClosedLoopDrive(SwerveModuleState state) {
-    // Optimize velocity setpoint
-    state.optimize(getAngle());
-    state.cosineScale(inputs.turnPosition);
+    if (Constants.deployerMode == SubsystemMode.NORMAL) {
+      // Optimize velocity setpoint
+      state.optimize(getAngle());
+      state.cosineScale(inputs.turnPosition);
 
-    // Apply setpoints
-    io.setDriveVelocity(state.speedMetersPerSecond / constants.driveWheelRadius);
-    io.setTurnPosition(state.angle);
+      // Apply setpoints
+      io.setDriveVelocity(state.speedMetersPerSecond / constants.driveWheelRadius);
+      io.setTurnPosition(state.angle);
+    }
   }
 
   public void runOpenLoopDrive(SwerveModuleState state) {
-    // Optimize velocity setpoint
-    state.optimize(getAngle());
-    state.cosineScale(inputs.turnPosition);
+    if (Constants.deployerMode == SubsystemMode.NORMAL) {
+      // Optimize velocity setpoint
+      state.optimize(getAngle());
+      state.cosineScale(inputs.turnPosition);
 
-    // Apply setpoints
-    io.setDriveOpenLoop(state.speedMetersPerSecond / constants.driveWheelRadius);
-    io.setTurnPosition(state.angle);
+      // Apply setpoints
+      io.setDriveOpenLoop(state.speedMetersPerSecond / constants.driveWheelRadius);
+      io.setTurnPosition(state.angle);
+    }
   }
 
   /** Returns the current turn angle of the module. */

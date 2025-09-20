@@ -145,4 +145,9 @@ public class ModuleIONitrate implements ModuleIO {
   public void setTurnPosition(Rotation2d turnWheelPosition) {
     turnMotor.setRequest(turnPIDPositionRequest.setPosition(turnWheelPosition.getRotations()));
   }
+
+  @Override
+  public Nitrate getTurnNitrate() {
+    return turnMotor;
+  }
 }

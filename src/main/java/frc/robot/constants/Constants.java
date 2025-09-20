@@ -18,11 +18,11 @@ public final class Constants {
   public static final SubsystemMode armMode = SubsystemMode.DISABLED;
   public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
   public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
   public static final boolean indexerEnabled = false;
   public static final boolean rollersEnabled = false;
   public static final boolean endEffectorEnabled = false;
   public static final boolean visionEnabled = false;
-  public static final boolean driveEnabled = false;
   public static final boolean debugPIDModeEnabled = false;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
@@ -38,7 +38,8 @@ public final class Constants {
     DISABLED,
     NORMAL,
     OPEN_LOOP,
-    TUNING // only one susbsystem may be in this mode at a time
+    TUNING // only one susbsystem may be in this mode at a time, drive tuning is front left turning
+    // only
   }
 
   public static enum RobotMode {
