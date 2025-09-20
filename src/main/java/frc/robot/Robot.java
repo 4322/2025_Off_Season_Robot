@@ -194,7 +194,7 @@ public class Robot extends LoggedRobot {
       coastButtonTimer.start();
       // button is pressed in
     }
-    
+
     if (coastButtonTimer.hasElapsed(10)) {
       RobotContainer.getSuperstructure().BreakMotors();
       coastButtonTimer.stop();
