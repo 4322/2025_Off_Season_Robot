@@ -31,20 +31,22 @@ public class Deployer extends SubsystemBase {
     Logger.processInputs("Deployer", inputs);
     Logger.recordOutput("Deployer/currentAction", currentAction.toString());
     Logger.recordOutput("Deployer/isHomed", isHomed);
-    switch (Constants.deployerMode) {
-      case OPEN_LOOP:
-        io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
-        break;
-      case TUNING:
-        Double newPos = BabyAlchemist.run(io.getNitrate());
-        if (newPos != null) {
-          io.setPosition(newPos);
-        }
-        break;
-      case DISABLED:
-        break;
-      case NORMAL:
-        break;
+    if (isHomed) {
+      switch (Constants.deployerMode) {
+        case OPEN_LOOP:
+          io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
+          break;
+        case TUNING:
+          Double newPos = BabyAlchemist.run(io.getNitrate());
+          if (newPos != null) {
+            io.setPosition(newPos);
+          }
+          break;
+        case DISABLED:
+          break;
+        case NORMAL:
+          break;
+      }
     }
   }
 
