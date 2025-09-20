@@ -31,7 +31,7 @@ public class Deployer extends SubsystemBase {
     Logger.processInputs("Deployer", inputs);
     Logger.recordOutput("Deployer/currentAction", currentAction.toString());
     Logger.recordOutput("Deployer/isHomed", isHomed);
-    switch (Constants.armMode) {
+    switch (Constants.deployerMode) {
       case OPEN_LOOP:
         io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
         break;
