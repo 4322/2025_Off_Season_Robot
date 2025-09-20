@@ -13,6 +13,8 @@ public class BabyAlchemist {
 
   private static final LoggedTunableNumber kP = new LoggedTunableNumber("kP");
   private static final LoggedTunableNumber kI = new LoggedTunableNumber("kI");
+  private static final LoggedTunableNumber iSat = new LoggedTunableNumber("iSat");
+  private static final LoggedTunableNumber iZone = new LoggedTunableNumber("iZone");
   private static final LoggedTunableNumber kD = new LoggedTunableNumber("kD");
   private static final LoggedTunableNumber kG = new LoggedTunableNumber("kG");
   private static final LoggedTunableNumber acc = new LoggedTunableNumber("acc");
@@ -32,6 +34,8 @@ public class BabyAlchemist {
         settings = new NitrateSettings();
         settings.setPIDSettings(new PIDSettings().setP(1), PIDConfigSlot.kSlot0);
         settings.setPIDSettings(new PIDSettings().setI(2), PIDConfigSlot.kSlot0);
+        settings.setPIDSettings(new PIDSettings().setISaturation(2.5), PIDConfigSlot.kSlot0);
+        settings.setPIDSettings(new PIDSettings().setIZone(2.7), PIDConfigSlot.kSlot0);
         settings.setPIDSettings(new PIDSettings().setD(3), PIDConfigSlot.kSlot0);
         settings.setPIDSettings(
             new PIDSettings().setGravitationalFeedforward(4), PIDConfigSlot.kSlot0);
@@ -44,6 +48,8 @@ public class BabyAlchemist {
       }
       kP.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getP().get());
       kI.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getI().get());
+      iSat.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getISaturation().get());
+      iZone.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getIZone().get());
       kD.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getD().get());
       kG.initDefault(
           settings.getPIDSettings(PIDConfigSlot.kSlot0).getGravitationalFeedforward().get());
@@ -63,6 +69,12 @@ public class BabyAlchemist {
     }
     if (kI.hasChanged(1)) {
       settings.setPIDSettings(new PIDSettings().setI(kI.get()), PIDConfigSlot.kSlot0);
+    }
+    if (iSat.hasChanged(1)) {
+      settings.setPIDSettings(new PIDSettings().setISaturation(kI.get()), PIDConfigSlot.kSlot0);
+    }
+    if (iZone.hasChanged(1)) {
+      settings.setPIDSettings(new PIDSettings().setIZone(kI.get()), PIDConfigSlot.kSlot0);
     }
     if (kD.hasChanged(1)) {
       settings.setPIDSettings(new PIDSettings().setD(kD.get()), PIDConfigSlot.kSlot0);
