@@ -265,15 +265,14 @@ public final class Constants {
     public static final double busCurrentLimit = 60;
     public static final IdleMode idleMode = IdleMode.kBrake;
     public static final InvertMode invertMode = InvertMode.kInverted; // positive is retracting
-    public static final double deploykP = 1;
+    public static final double deploykP = 50;
     public static final double deploykI = 0;
     public static final double deploykD = 0;
-    public static final double deploykG = 0;
+    public static final double kG = 0.2;
 
-    public static final double retractkP = 1;
+    public static final double retractkP = 50;
     public static final double retractkI = 0;
     public static final double retractkD = 0;
-    public static final double retractkG = 0;
 
     public static final double errorUnit = 1000;
     public static final double finalOutputDeg = 1000;
@@ -290,9 +289,9 @@ public final class Constants {
     public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kArm;
     public static final double maxRangeDegrees = 145.353984;
     public static final double maxGravityDegrees = 40.0;
-    public static final double accelerationLimit = 0;
-    public static final double deaccelerationLimit = 0;
-    public static final double velocityLimit = 0;
+    public static final double accelerationLimit = 200;
+    public static final double deaccelerationLimit = 200;
+    public static final double velocityLimit = 200;
   }
 
   public static class Indexer {

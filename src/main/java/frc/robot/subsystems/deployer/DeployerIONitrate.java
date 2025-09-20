@@ -83,7 +83,7 @@ public class DeployerIONitrate implements DeployerIO {
                 Constants.Deployer.deploykP,
                 Constants.Deployer.deploykI,
                 Constants.Deployer.deploykD)
-            .setGravitationalFeedforward(Constants.Deployer.deploykG)
+            .setGravitationalFeedforward(Constants.Deployer.kG)
             .setFeedforwardMode(Constants.Deployer.feedforwardMode)
             .setMinwrapConfig(new MinwrapConfig.Disabled())
             .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
@@ -99,7 +99,7 @@ public class DeployerIONitrate implements DeployerIO {
                 Constants.Deployer.retractkP,
                 Constants.Deployer.retractkI,
                 Constants.Deployer.retractkD)
-            .setGravitationalFeedforward(Constants.Deployer.retractkG)
+            .setGravitationalFeedforward(Constants.Deployer.kG)
             .setFeedforwardMode(Constants.Deployer.feedforwardMode)
             .setMinwrapConfig(new MinwrapConfig.Disabled())
             .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
