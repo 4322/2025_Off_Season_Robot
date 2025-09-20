@@ -183,13 +183,24 @@ public final class Constants {
     public static final double prescoreCoralL3HeightMeters = 0.3703222972;
     public static final double prescoreCoralL4HeightMeters = maxElevatorHeightMeters - 0.00635;
 
+    
+    public static final double scoreCoralL1HeightMeters = prescoreCoralL1HeightMeters;
+    public static final double scoreCoralL2HeightMeters = prescoreCoralL2HeightMeters - 0.1;
+    public static final double scoreCoralL3HeightMeters = prescoreCoralL3HeightMeters - 0.1;
+    public static final double scoreCoralL4HeightMeters = prescoreCoralL4HeightMeters - 0.1;
+    public static final double scoreAlgaeHeightMeters = maxElevatorHeightMeters - 0.00635;
+
     public static final double pickupCoralHeightMeters = homeHeightMeters + 0.01;
+
     public static final double intializationVoltage = 2.0;
     public static final double initializationTimerThresholdSecs = 5;
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01;
+
     public static final double ejectHeightMeters = minElevatorSafeWithCoralMeters;
+    
     public static final double safeBargeRetractHeightMeters = 0.773472037;
     public static final double safeBargeRetractWithAlgaeHeightMeters = 0.3321799808;
+
     public static final double algaeHoldMeters = prescoreCoralL3HeightMeters;
 
     public static final double supplyCurrentLimitAmps = 40;
@@ -205,12 +216,6 @@ public final class Constants {
 
     public static final double gearRatio = 6 / 1.0;
     public static final double beltPulleyPitchDiameterMeters = Units.inchesToMeters(1.504);
-
-    public static final double scoreCoralL1HeightMeters = prescoreCoralL1HeightMeters;
-    public static final double scoreCoralL2HeightMeters = prescoreCoralL2HeightMeters - 0.1;
-    public static final double scoreCoralL3HeightMeters = prescoreCoralL3HeightMeters - 0.1;
-    public static final double scoreCoralL4HeightMeters = prescoreCoralL4HeightMeters - 0.1;
-    public static final double scoreAlgaeHeightMeters = maxElevatorHeightMeters - 0.00635;
 
     public static final double bufferHeightMeters = elevatorHeightToleranceMeters * 2;
   }

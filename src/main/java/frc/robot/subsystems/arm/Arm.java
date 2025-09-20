@@ -158,7 +158,7 @@ public class Arm extends SubsystemBase {
 
   public boolean atSetpoint() {
     return ClockUtil.atReference(
-        inputs.armPositionDegrees, requestedSetpoint, Constants.Arm.setpointToleranceDegrees, true);
+        inputs.PositionDegrees, requestedSetpoint, Constants.Arm.setpointToleranceDegrees, true);
   }
 
   public void safeBargeRetract() {
@@ -182,6 +182,6 @@ public class Arm extends SubsystemBase {
   }
 
   public double getAngleDegrees() {
-    return inputs.armPositionDegrees;
+    return inputs.PositionDegrees;
   }
 }

@@ -110,14 +110,14 @@ public class ArmIONitrate implements ArmIO {
   @Override
   public void updateInputs(ArmIOInputs inputs) {
     inputs.requestedPosDeg = lastRequestedPosDeg;
-    inputs.armPositionDegrees =
+    inputs.PositionDegrees =
         Units.rotationsToDegrees(armMotor.getPosition()) - Constants.Arm.OffsetEncoderDeg;
     inputs.armConnected = armMotor.isConnected();
     inputs.voltage = armMotor.getBusVoltageFrame().getValue();
     inputs.velocityDegSec = Units.rotationsToDegrees(armMotor.getVelocity());
-    inputs.armSupplyCurrentAmps = armMotor.getBusCurrent();
-    inputs.armStatorCurrentAmps = armMotor.getStatorCurrent();
-    inputs.armTempCelsius = armMotor.getMotorTemperatureFrame().getData();
+    inputs.SupplyCurrentAmps = armMotor.getBusCurrent();
+    inputs.StatorCurrentAmps = armMotor.getStatorCurrent();
+    inputs.TempCelsius = armMotor.getMotorTemperatureFrame().getData();
     inputs.armEncoderConnected = armEncoder.isConnected();
     inputs.voltage = armMotor.getAppliedVoltageFrame().getValue();
     inputs.encoderRotations = armMotor.getPosition();
