@@ -3,14 +3,17 @@ package frc.robot.subsystems.elevator;
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
+import com.reduxrobotics.motorcontrol.nitrate.types.EnabledDebugFrames;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.FollowMotorRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 
@@ -75,6 +78,14 @@ public class ElevatorIONitrate implements ElevatorIO {
         new ElectricalLimitSettings()
             .setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps));
+    
+    frontConfig.setFramePeriodSettings(
+        new FramePeriodSettings()
+            .setEnabledPIDDebugFrames(
+                new EnabledDebugFrames()
+                    .setKgControlEffort(Constants.debugPIDModeEnabled)
+                    .setKpControlEffort(Constants.debugPIDModeEnabled)
+                    .setTotalControlEffort(Constants.debugPIDModeEnabled)));
 
     followerRequest.setInverted(true);
 
@@ -132,6 +143,12 @@ public class ElevatorIONitrate implements ElevatorIO {
 
     inputs.followerVoltage = followerMotor.getAppliedVoltageFrame().getValue();
     inputs.followerEncoderRotations = followerMotor.getPosition();
+
+    if (Constants.debugPIDModeEnabled) {
+      inputs.kPeffort = leaderMotor.getPIDDebugFrames().kPControlEffortFrame.getValue();
+      inputs.kGeffort = leaderMotor.getPIDDebugFrames().kGControlEffortFrame.getValue();
+      inputs.totalEffort = leaderMotor.getPIDDebugFrames().totalControlEffortFrame.getValue();
+    }
   }
 
   @Override

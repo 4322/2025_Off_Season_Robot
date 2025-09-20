@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -23,7 +24,7 @@ public final class Constants {
   public static final boolean endEffectorEnabled = false;
   public static final boolean visionEnabled = false;
   public static final boolean driveEnabled = false;
-
+  public static final boolean debugPIDModeEnabled = false;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
   public static final String logPath = "/home/lvuser/logs";

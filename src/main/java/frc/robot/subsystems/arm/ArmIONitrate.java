@@ -4,8 +4,10 @@ import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
+import com.reduxrobotics.motorcontrol.nitrate.types.EnabledDebugFrames;
 import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
@@ -78,6 +80,14 @@ public class ArmIONitrate implements ArmIO {
             .setBusCurrentLimit(Constants.Arm.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Arm.statorCurrentLimitAmps));
 
+    armConfig.setFramePeriodSettings(
+        new FramePeriodSettings()
+            .setEnabledPIDDebugFrames(
+                new EnabledDebugFrames()
+                    .setKgControlEffort(Constants.debugPIDModeEnabled)
+                    .setKpControlEffort(Constants.debugPIDModeEnabled)
+                    .setTotalControlEffort(Constants.debugPIDModeEnabled)));
+
     CanandmagSettings settings = new CanandmagSettings();
     CanandmagSettings EncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
 
@@ -98,19 +108,24 @@ public class ArmIONitrate implements ArmIO {
   }
 
   @Override
-  public void updateInputs(ArmIOInputs armInputs) {
-    armInputs.requestedPosDeg = lastRequestedPosDeg;
-    armInputs.armPositionDegrees =
+  public void updateInputs(ArmIOInputs inputs) {
+    inputs.requestedPosDeg = lastRequestedPosDeg;
+    inputs.armPositionDegrees =
         Units.rotationsToDegrees(armMotor.getPosition()) - Constants.Arm.OffsetEncoderDeg;
-    armInputs.armConnected = armMotor.isConnected();
-    armInputs.voltage = armMotor.getBusVoltageFrame().getValue();
-    armInputs.velocityDegSec = Units.rotationsToDegrees(armMotor.getVelocity());
-    armInputs.armSupplyCurrentAmps = armMotor.getBusCurrent();
-    armInputs.armStatorCurrentAmps = armMotor.getStatorCurrent();
-    armInputs.armTempCelsius = armMotor.getMotorTemperatureFrame().getData();
-    armInputs.armEncoderConnected = armEncoder.isConnected();
-    armInputs.voltage = armMotor.getAppliedVoltageFrame().getValue();
-    armInputs.encoderRotations = armMotor.getPosition();
+    inputs.armConnected = armMotor.isConnected();
+    inputs.voltage = armMotor.getBusVoltageFrame().getValue();
+    inputs.velocityDegSec = Units.rotationsToDegrees(armMotor.getVelocity());
+    inputs.armSupplyCurrentAmps = armMotor.getBusCurrent();
+    inputs.armStatorCurrentAmps = armMotor.getStatorCurrent();
+    inputs.armTempCelsius = armMotor.getMotorTemperatureFrame().getData();
+    inputs.armEncoderConnected = armEncoder.isConnected();
+    inputs.voltage = armMotor.getAppliedVoltageFrame().getValue();
+    inputs.encoderRotations = armMotor.getPosition();
+    if (Constants.debugPIDModeEnabled) {
+      inputs.kPeffort = armMotor.getPIDDebugFrames().kPControlEffortFrame.getValue();
+      inputs.kGeffort = armMotor.getPIDDebugFrames().kGControlEffortFrame.getValue();
+      inputs.totalEffort = armMotor.getPIDDebugFrames().totalControlEffortFrame.getValue();
+    }
   }
   // You need method in ArmIO as well to do Override Remember to check - Personal Note / Reminder
   //

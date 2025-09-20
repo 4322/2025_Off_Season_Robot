@@ -1,8 +1,9 @@
 package frc.robot.subsystems.arm;
 
+import org.littletonrobotics.junction.AutoLog;
+
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
   @AutoLog
@@ -18,6 +19,9 @@ public interface ArmIO {
     public double armTempCelsius = 0.0;
     public double armPositionDegrees =
         0.0; // 0 is vertical to front of robot. Posititve clockwise looking from the left
+    public double kGeffort;
+    public double kPeffort;
+    public double totalEffort;
   }
 
   public default void setHomePosition() {}

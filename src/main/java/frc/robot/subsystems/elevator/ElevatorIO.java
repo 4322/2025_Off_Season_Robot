@@ -1,8 +1,9 @@
 package frc.robot.subsystems.elevator;
 
+import org.littletonrobotics.junction.AutoLog;
+
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import org.littletonrobotics.junction.AutoLog;
 
 public interface ElevatorIO {
   @AutoLog
@@ -18,6 +19,9 @@ public interface ElevatorIO {
     public double leaderStatorAmps = 0.0;
     public double leadertempCelcius = 0.0;
     public double leaderEncoderRotations = 0.0;
+    public double kGeffort;
+    public double kPeffort;
+    public double totalEffort;
 
     public double followerHeightMeters = 0.0;
     public double followerVoltage = 0.0;
