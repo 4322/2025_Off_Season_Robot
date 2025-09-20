@@ -16,6 +16,7 @@ public interface DeployerIO {
     public double speedRotationsPerSec = 0.0;
     public double appliedVolts = 0.0;
     public double angleDeg = 0.0;
+    public double encoderRotations = 0.0;
 
     public double prevRequestedPositionDeg = 0.0;
   }

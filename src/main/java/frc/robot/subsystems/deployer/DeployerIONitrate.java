@@ -116,7 +116,8 @@ public class DeployerIONitrate implements DeployerIO {
     inputs.tempCelcius = deployerMotor.getMotorTemperatureFrame().getValue();
     inputs.angleDeg = toCodeCoords(Units.rotationsToDegrees(deployerMotor.getPosition()));
     inputs.speedRotationsPerSec = deployerMotor.getVelocity();
-    inputs.appliedVolts = deployerMotor.getBusVoltageFrame().getValue();
+    inputs.appliedVolts = deployerMotor.getAppliedVoltageFrame().getValue();
+    inputs.encoderRotations = deployerMotor.getPosition();
 
     inputs.prevRequestedPositionDeg = previousRequestedPositionDeg;
 
