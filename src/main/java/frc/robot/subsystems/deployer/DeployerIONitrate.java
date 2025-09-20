@@ -162,6 +162,7 @@ public class DeployerIONitrate implements DeployerIO {
     deployerMotor.setRequest(
         deployerMotorDeployPIDRequest.setPosition(
             Units.degreesToRotations(toMotorCoords(degrees))));
+    previousRequestedPositionDeg = degrees;
   }
 
   @Override
