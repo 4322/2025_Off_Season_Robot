@@ -35,7 +35,8 @@ public class Arm extends SubsystemBase {
     if (isHomed) {
       switch (Constants.armMode) {
         case OPEN_LOOP:
-          io.setVoltage(-RobotContainer.driver.getLeftX() * 4.0);
+          double x = -RobotContainer.driver.getLeftX();
+          io.setVoltage(x * x * x * 12.0);
           break;
         case TUNING:
           Double newPos = BabyAlchemist.run(io.getNitrate());
