@@ -86,7 +86,9 @@ public class DeployerIONitrate implements DeployerIO {
             .setMinwrapConfig(new MinwrapConfig.Disabled())
             .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
             .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
-            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit),
+            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit)
+            .setISaturation(Constants.Deployer.errorUnit)
+            .setIZone(Constants.Deployer.finalOutputDeg),
         PIDConfigSlot.kSlot0);
 
     motorConfig.setPIDSettings(
@@ -100,7 +102,9 @@ public class DeployerIONitrate implements DeployerIO {
             .setMinwrapConfig(new MinwrapConfig.Disabled())
             .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
             .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
-            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit),
+            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit)
+            .setISaturation(Constants.Deployer.errorUnit)
+            .setIZone(Constants.Deployer.finalOutputDeg),
         PIDConfigSlot.kSlot1);
   }
 

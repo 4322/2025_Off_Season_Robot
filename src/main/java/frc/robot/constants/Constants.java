@@ -93,7 +93,7 @@ public final class Constants {
 
     public static final double sensorToArm = 85 / 10.0;
     public static final double motorShaftToSensorShaft = 56 / 16.0;
-
+    public static final double finalOutputDeg = 1000;
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0;
     public static final double coralHoldDeg = armIdleDeg;
@@ -112,6 +112,7 @@ public final class Constants {
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
     public static final double kG = 20;
+    public static final double errorUnit = 1000;
 
     public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 5; // TODO
     public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20; // TODO
@@ -155,6 +156,8 @@ public final class Constants {
     public static final double slow_kI = 0; // TODO: Set to actual value
     public static final double slow_kD = 0; // TODO: Set to actual value
     public static final double kG = 1; // TODO: Set to actual value
+    public static final double errorUnit = 1000;
+    public static final double finalOutputDeg = 1000;
     public static final double maxElevatorHeightMeters = 1.3068401092;
     public static final double homeHeightMeters = 0.3917895136;
     public static final double minElevatorSafeHeightMeters = homeHeightMeters + 0.1;
@@ -271,6 +274,9 @@ public final class Constants {
     public static final double retractkI = 0;
     public static final double retractkD = 0;
     public static final double retractkG = 0;
+
+    public static final double errorUnit = 1000;
+    public static final double finalOutputDeg = 1000;
 
     public static final int deployerMotorEncoderId = 0; // not currently installed
     public static final InvertMode motorEncoderInverted =

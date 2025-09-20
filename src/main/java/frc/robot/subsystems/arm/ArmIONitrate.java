@@ -43,7 +43,9 @@ public class ArmIONitrate implements ArmIO {
             .setMinwrapConfig(new MinwrapConfig.Disabled())
             .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
             .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
-            .setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit),
+            .setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit)
+            .setISaturation(Constants.Arm.errorUnit)
+            .setIZone(Constants.Arm.finalOutputDeg),
         PIDConfigSlot.kSlot0);
 
     armConfig.setPIDSettings(
@@ -54,7 +56,9 @@ public class ArmIONitrate implements ArmIO {
             .setMinwrapConfig(new MinwrapConfig.Disabled())
             .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
             .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
-            .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit),
+            .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit)
+            .setISaturation(Constants.Arm.errorUnit)
+            .setIZone(Constants.Arm.finalOutputDeg),
         PIDConfigSlot.kSlot1);
 
     armConfig.setFeedbackSensorSettings(
