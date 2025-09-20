@@ -20,9 +20,10 @@ public class ElevatorIONitrate implements ElevatorIO {
   private final Nitrate leaderMotor;
   private final Nitrate followerMotor;
   private double lastRequestedPosMeters;
+  private double lastRequestedPosRotations;
   private PIDPositionRequest elvPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
-      private PIDPositionRequest elvSlowPositionRequest =
+  private PIDPositionRequest elvSlowPositionRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
   private FollowMotorRequest followerRequest;
 
@@ -118,6 +119,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     inputs.followerConnected = followerMotor.isConnected();
 
     inputs.requestedPosMeters = lastRequestedPosMeters;
+    inputs.requestedPosRotations = lastRequestedPosRotations;
 
     inputs.leaderheightMeters = rotationsToMeters(leaderMotor.getPosition());
     inputs.followerHeightMeters = rotationsToMeters(followerMotor.getPosition());
@@ -150,22 +152,26 @@ public class ElevatorIONitrate implements ElevatorIO {
   @Override
   public void setPosition(double elevatorPositionMeters) {
     stop(IdleMode.kBrake);
-    leaderMotor.setPosition(metersToRotations(elevatorPositionMeters));
-    followerMotor.setPosition(metersToRotations(elevatorPositionMeters));
+    lastRequestedPosRotations = metersToRotations(elevatorPositionMeters);
+    leaderMotor.setPosition(lastRequestedPosRotations);
+    followerMotor.setPosition(lastRequestedPosRotations);
+    lastRequestedPosMeters = -1;
   }
 
   @Override
   public void requestSlowHeightMeters(double heightMeters) {
     followerMotor.setRequest(followerRequest); // temporary work-around for firmware issue
-    leaderMotor.setRequest(elvSlowPositionRequest.setPosition(metersToRotations(heightMeters)));
     lastRequestedPosMeters = heightMeters;
+    lastRequestedPosRotations = metersToRotations(heightMeters);
+    leaderMotor.setRequest(elvSlowPositionRequest.setPosition(lastRequestedPosRotations));
   }
 
   @Override
   public void requestHeightMeters(double heightMeters) {
     followerMotor.setRequest(followerRequest); // temporary work-around for firmware issue
-    leaderMotor.setRequest(elvPositionRequest.setPosition(metersToRotations(heightMeters)));
     lastRequestedPosMeters = heightMeters;
+    lastRequestedPosRotations = metersToRotations(heightMeters);
+    leaderMotor.setRequest(elvPositionRequest.setPosition(lastRequestedPosRotations));
   }
 
   @Override
@@ -173,6 +179,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     followerMotor.setRequest(followerRequest); // temporary work-around for firmware issue
     leaderMotor.setVoltage(voltage);
     lastRequestedPosMeters = -1;
+    lastRequestedPosRotations = -1;
   }
 
   @Override
@@ -180,6 +187,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     followerMotor.setRequest(followerRequest); // temporary work-around for firmware issue
     leaderMotor.stop(idleMode);
     lastRequestedPosMeters = -1;
+    lastRequestedPosRotations = -1;
   }
 
   @Override
