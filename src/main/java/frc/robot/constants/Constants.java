@@ -3,7 +3,6 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -16,15 +15,15 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final SubsystemMode armMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode armMode = SubsystemMode.TUNING;
+  public static final SubsystemMode elevatorMode = SubsystemMode.OPEN_LOOP;
   public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
   public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
   public static final boolean indexerEnabled = false;
   public static final boolean rollersEnabled = false;
   public static final boolean endEffectorEnabled = false;
   public static final boolean visionEnabled = false;
-  public static final boolean debugPIDModeEnabled = false;
+  public static final boolean debugPIDModeEnabled = true;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
   public static final String logPath = "/home/lvuser/logs";
@@ -114,8 +113,8 @@ public final class Constants {
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
     public static final double kG = 20;
-    public static final double errorUnit = 1000; //TODO
-    public static final double finalOutputDeg = 1000; //TODO
+    public static final double errorUnit = 1000; // TODO
+    public static final double finalOutputDeg = 1000; // TODO
 
     public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 5; // TODO
     public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20; // TODO
@@ -163,8 +162,8 @@ public final class Constants {
 
     public static final double kG = 1; // TODO: Set to actual value
 
-    public static final double errorUnit = 1000;//TODO
-    public static final double finalOutputDeg = 1000; //TODO
+    public static final double errorUnit = 1000; // TODO
+    public static final double finalOutputDeg = 1000; // TODO
 
     public static final double maxElevatorHeightMeters = 1.3068401092;
     public static final double homeHeightMeters = 0.3917895136;
@@ -183,7 +182,6 @@ public final class Constants {
     public static final double prescoreCoralL3HeightMeters = 0.3703222972;
     public static final double prescoreCoralL4HeightMeters = maxElevatorHeightMeters - 0.00635;
 
-    
     public static final double scoreCoralL1HeightMeters = prescoreCoralL1HeightMeters;
     public static final double scoreCoralL2HeightMeters = prescoreCoralL2HeightMeters - 0.1;
     public static final double scoreCoralL3HeightMeters = prescoreCoralL3HeightMeters - 0.1;
@@ -197,7 +195,7 @@ public final class Constants {
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01;
 
     public static final double ejectHeightMeters = minElevatorSafeWithCoralMeters;
-    
+
     public static final double safeBargeRetractHeightMeters = 0.773472037;
     public static final double safeBargeRetractWithAlgaeHeightMeters = 0.3321799808;
 
@@ -209,7 +207,7 @@ public final class Constants {
     public static final double fastAccelerationMetersPerSec2 = 4.0;
     public static final double fastDecelerationMetersPerSec2 = 4.0;
     public static final double fastVelocityMetersPerSec = 1.0;
-    
+
     public static final double slowAccelerationMetersPerSec2 = 0.8;
     public static final double slowDecelerationMetersPerSec2 = 0.8;
     public static final double slowVelocityMetersPerSec = 0.2;
@@ -295,8 +293,8 @@ public final class Constants {
     public static final double retractkI = 0;
     public static final double retractkD = 0;
 
-    public static final double errorUnit = 1000; //TODO
-    public static final double finalOutputDeg = 1000; //TODO
+    public static final double errorUnit = 1000; // TODO
+    public static final double finalOutputDeg = 1000; // TODO
 
     public static final int deployerMotorEncoderId = 0; // not currently installed
     public static final InvertMode motorEncoderInverted =
