@@ -9,6 +9,7 @@ public interface ElevatorIO {
   public static class ElevatorIOInputs {
 
     public double requestedPosMeters;
+    public double requestedPosRotations;
 
     public double leaderheightMeters = 0.0;
     public double leaderVoltage = 0.0;
