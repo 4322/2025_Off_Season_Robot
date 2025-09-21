@@ -46,8 +46,8 @@ public class ArmIONitrate implements ArmIO {
             .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
             .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
             .setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit)
-            .setISaturation(Constants.Arm.errorUnit)
-            .setIZone(Constants.Arm.finalOutputDeg),
+            .setISaturation(Constants.Arm.iSat)
+            .setIZone(Constants.Arm.iZone),
         PIDConfigSlot.kSlot0);
 
     armConfig.setPIDSettings(
@@ -59,8 +59,8 @@ public class ArmIONitrate implements ArmIO {
             .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
             .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
             .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit)
-            .setISaturation(Constants.Arm.errorUnit)
-            .setIZone(Constants.Arm.finalOutputDeg),
+            .setISaturation(Constants.Arm.iSat)
+            .setIZone(Constants.Arm.iZone),
         PIDConfigSlot.kSlot1);
 
     armConfig.setFeedbackSensorSettings(

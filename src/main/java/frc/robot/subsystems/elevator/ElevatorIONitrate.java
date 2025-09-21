@@ -50,8 +50,8 @@ public class ElevatorIONitrate implements ElevatorIO {
                 metersToRotations(Constants.Elevator.fastDecelerationMetersPerSec2))
             .setMotionProfileVelocityLimit(
                 metersToRotations(Constants.Elevator.fastVelocityMetersPerSec))
-            .setISaturation(Constants.Elevator.errorUnit)
-            .setIZone(Constants.Elevator.finalOutputDeg),
+            .setISaturation(Constants.Elevator.iSat)
+            .setIZone(Constants.Elevator.iZone),
         PIDConfigSlot.kSlot0);
 
     frontConfig.setPIDSettings(
@@ -66,8 +66,8 @@ public class ElevatorIONitrate implements ElevatorIO {
                 metersToRotations(Constants.Elevator.slowDecelerationMetersPerSec2))
             .setMotionProfileVelocityLimit(
                 metersToRotations(Constants.Elevator.slowVelocityMetersPerSec))
-            .setISaturation(Constants.Elevator.errorUnit)
-            .setIZone(Constants.Elevator.finalOutputDeg),
+            .setISaturation(Constants.Elevator.iSat)
+            .setIZone(Constants.Elevator.iZone),
         PIDConfigSlot.kSlot1);
 
     frontConfig.setOutputSettings(

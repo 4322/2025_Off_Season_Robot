@@ -89,8 +89,8 @@ public class DeployerIONitrate implements DeployerIO {
             .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
             .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
             .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit)
-            .setISaturation(Constants.Deployer.errorUnit)
-            .setIZone(Constants.Deployer.finalOutputDeg),
+            .setISaturation(Constants.Deployer.iSat)
+            .setIZone(Constants.Deployer.iZone),
         PIDConfigSlot.kSlot0);
 
     motorConfig.setPIDSettings(
@@ -105,8 +105,8 @@ public class DeployerIONitrate implements DeployerIO {
             .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
             .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
             .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit)
-            .setISaturation(Constants.Deployer.errorUnit)
-            .setIZone(Constants.Deployer.finalOutputDeg),
+            .setISaturation(Constants.Deployer.iSat)
+            .setIZone(Constants.Deployer.iZone),
         PIDConfigSlot.kSlot1);
 
     motorConfig.setFramePeriodSettings(

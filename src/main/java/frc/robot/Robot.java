@@ -191,13 +191,13 @@ public class Robot extends LoggedRobot {
 
     if (!coastButton.get() && Constants.currentMode != RobotMode.SIM) {
       RobotContainer.getSuperstructure().CoastMotors();
-      DriverStation.reportWarning("Coast Mode Trying To Activate", true);
+      DriverStation.reportWarning("Coast Mode Trying To Activate", false);
       coastButtonTimer.start();
       // button is pressed in
     }
 
     if (coastButtonTimer.hasElapsed(10)) {
-      DriverStation.reportWarning("Break Mode Trying To Activate", true);
+      DriverStation.reportWarning("Break Mode Trying To Activate", false);
       RobotContainer.getSuperstructure().BreakMotors();
       coastButtonTimer.stop();
       coastButtonTimer.reset();
