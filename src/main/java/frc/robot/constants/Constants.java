@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -136,12 +137,12 @@ public final class Constants {
     // To the encoder 0 is horizontal but to us its straight down
     public static final double OffsetEncoderDeg = -90;
 
-    public static final double kP = 1;
+    public static final double kP = 20;
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double AccelerationLimit = 10; // TODO
-    public static final double DeaccelerationLimit = 10; // TODO
+    public static final double AccelerationLimit = 2; // TODO
+    public static final double DeaccelerationLimit = 2; // TODO
     public static final double VelocityLimit = 10; // TODO
     public static final double slowVelocityLimit = 0.6; // TODO
   }

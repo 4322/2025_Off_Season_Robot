@@ -197,6 +197,7 @@ public class Robot extends LoggedRobot {
     }
 
     if (coastButtonTimer.hasElapsed(10)) {
+      DriverStation.reportWarning("Break Mode Trying To Activate", true);
       RobotContainer.getSuperstructure().BreakMotors();
       coastButtonTimer.stop();
       coastButtonTimer.reset();
