@@ -98,7 +98,7 @@ public class ElevatorIONitrate implements ElevatorIO {
             .setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps));
 
-    followerRequest.setInverted(true);
+    followerRequest.setInverted(false);
 
     NitrateSettings leaderConfigStatus = leaderMotor.setSettings(frontConfig, 0.02, 5);
     NitrateSettings followerConfigStatus = followerMotor.setSettings(backConfig, 0.02, 5);
