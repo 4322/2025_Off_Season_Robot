@@ -32,7 +32,7 @@ public final class Constants {
 
   public static final int dioHomeButton = 1;
   public static final int dioCoastButton = 0;
-  public static final double homeButtonDelaySec = 1.0;
+  public static final double homeButtonDelaySec = 2.0;
   public static final double coastButtonDelaySec = 10.0;
 
   public static enum SubsystemMode {
@@ -113,7 +113,9 @@ public final class Constants {
         setpointToleranceDegrees * 4; // Degrees of buffer zone for min safe angle
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
-    public static final double kG = 20;
+
+    public static final double kG = 0.5;
+
     public static final double errorUnit = 1000; //TODO
     public static final double finalOutputDeg = 1000; //TODO
 
@@ -139,9 +141,9 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double AccelerationLimit = 0.68; // TODO
-    public static final double DeaccelerationLimit = 0.68; // TODO
-    public static final double VelocityLimit = 1.7; // TODO
+    public static final double AccelerationLimit = 10; // TODO
+    public static final double DeaccelerationLimit = 10; // TODO
+    public static final double VelocityLimit = 10; // TODO
     public static final double slowVelocityLimit = 0.6; // TODO
   }
 
@@ -153,15 +155,15 @@ public final class Constants {
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
     public static final InvertMode motorBackInvert = InvertMode.kInverted; // positive is up
 
-    public static final double fast_kP = 2; // TODO: Set to actual value
+    public static final double fast_kP = 4; // TODO: Set to actual value
     public static final double fast_kI = 0; // TODO: Set to actual value
-    public static final double fast_kD = 0.4; // TODO: Set to actual value
+    public static final double fast_kD = 0; // TODO: Set to actual value
 
-    public static final double slow_kP = 2; // TODO: Set to actual value
+    public static final double slow_kP = 4; // TODO: Set to actual value
     public static final double slow_kI = 0; // TODO: Set to actual value
-    public static final double slow_kD = 0.4; // TODO: Set to actual value
+    public static final double slow_kD = 0; // TODO: Set to actual value
 
-    public static final double kG = 1; // TODO: Set to actual value
+    public static final double kG = 0.4; // TODO: Set to actual value
 
     public static final double errorUnit = 1000;//TODO
     public static final double finalOutputDeg = 1000; //TODO
@@ -206,13 +208,13 @@ public final class Constants {
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
 
-    public static final double fastAccelerationMetersPerSec2 = 4.0;
-    public static final double fastDecelerationMetersPerSec2 = 4.0;
-    public static final double fastVelocityMetersPerSec = 1.0;
+    public static final double fastAccelerationMetersPerSec2 = 150;
+    public static final double fastDecelerationMetersPerSec2 = 150;
+    public static final double fastVelocityMetersPerSec = 1000;
     
-    public static final double slowAccelerationMetersPerSec2 = 0.8;
-    public static final double slowDecelerationMetersPerSec2 = 0.8;
-    public static final double slowVelocityMetersPerSec = 0.2;
+    public static final double slowAccelerationMetersPerSec2 = 10;
+    public static final double slowDecelerationMetersPerSec2 = 10;
+    public static final double slowVelocityMetersPerSec = 10;
 
     public static final double gearRatio = 6 / 1.0;
     public static final double beltPulleyPitchDiameterMeters = Units.inchesToMeters(1.504);
