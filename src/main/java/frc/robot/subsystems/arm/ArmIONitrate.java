@@ -86,6 +86,8 @@ public class ArmIONitrate implements ArmIO {
                 new EnabledDebugFrames()
                     .setKgControlEffort(Constants.debugPIDModeEnabled)
                     .setKpControlEffort(Constants.debugPIDModeEnabled)
+                    .setKiControlEffort(Constants.debugPIDModeEnabled)
+                    .setFeedbackError((Constants.debugPIDModeEnabled))
                     .setTotalControlEffort(Constants.debugPIDModeEnabled)));
 
     CanandmagSettings settings = new CanandmagSettings();
@@ -124,8 +126,10 @@ public class ArmIONitrate implements ArmIO {
     inputs.encoderRotations = armMotor.getPosition();
     if (Constants.debugPIDModeEnabled) {
       inputs.kPeffort = armMotor.getPIDDebugFrames().kPControlEffortFrame.getValue();
+      inputs.kIeffort = armMotor.getPIDDebugFrames().kIControlEffortFrame.getValue();
       inputs.kGeffort = armMotor.getPIDDebugFrames().kGControlEffortFrame.getValue();
       inputs.totalEffort = armMotor.getPIDDebugFrames().totalControlEffortFrame.getValue();
+      inputs.feedbackError = armMotor.getPIDDebugFrames().feedbackErrorFrame.getValue();
     }
   }
   // You need method in ArmIO as well to do Override Remember to check - Personal Note / Reminder

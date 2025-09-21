@@ -20,7 +20,9 @@ public interface ArmIO {
         0.0; // 0 is vertical to front of robot. Posititve clockwise looking from the left
     public double kGeffort;
     public double kPeffort;
+    public double kIeffort;
     public double totalEffort;
+    public double feedbackError;
   }
 
   public default void setHomePosition() {}
