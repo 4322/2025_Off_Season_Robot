@@ -116,8 +116,8 @@ public final class Constants {
 
     public static final double kG = 0.5;
 
-    public static final double iSat = 3; // TODO
-    public static final double iZone = 0.042; // TODO
+    public static final double iSat = 0.002; // TODO
+    public static final double iZone = 0.0138; // TODO
 
     public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 5; // TODO
     public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20; // TODO
@@ -137,13 +137,13 @@ public final class Constants {
     // To the encoder 0 is horizontal but to us its straight down
     public static final double OffsetEncoderDeg = -90;
 
-    public static final double kP = 20;
-    public static final double kI = 0;
+    public static final double kP = 150;
+    public static final double kI = 1000;
     public static final double kD = 0;
 
-    public static final double AccelerationLimit = 2; // TODO
-    public static final double DeaccelerationLimit = 2; // TODO
-    public static final double VelocityLimit = 10; // TODO
+    public static final double AccelerationLimit = 3; // TODO
+    public static final double DeaccelerationLimit = 3; // TODO
+    public static final double VelocityLimit = 1; // TODO
     public static final double slowVelocityLimit = 0.6; // TODO
   }
 
