@@ -15,15 +15,15 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final SubsystemMode armMode = SubsystemMode.TUNING;
-  public static final SubsystemMode elevatorMode = SubsystemMode.OPEN_LOOP;
+  public static final SubsystemMode armMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
   public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
   public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
   public static final boolean indexerEnabled = false;
   public static final boolean rollersEnabled = false;
   public static final boolean endEffectorEnabled = false;
   public static final boolean visionEnabled = false;
-  public static final boolean debugPIDModeEnabled = true;
+  public static final boolean debugPIDModeEnabled = false;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
   public static final String logPath = "/home/lvuser/logs";
