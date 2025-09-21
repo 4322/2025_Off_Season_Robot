@@ -89,6 +89,7 @@ public class ArmIONitrate implements ArmIO {
                     .setTotalControlEffort(Constants.debugPIDModeEnabled)));
 
     CanandmagSettings settings = new CanandmagSettings();
+    settings.setInvertDirection(true);
     CanandmagSettings EncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
 
     NitrateSettings motorConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);

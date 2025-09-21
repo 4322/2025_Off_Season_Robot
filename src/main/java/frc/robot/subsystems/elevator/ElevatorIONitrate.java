@@ -13,7 +13,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.FollowMotorRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 
@@ -88,18 +87,18 @@ public class ElevatorIONitrate implements ElevatorIO {
                     .setKgControlEffort(Constants.debugPIDModeEnabled)
                     .setKpControlEffort(Constants.debugPIDModeEnabled)
                     .setTotalControlEffort(Constants.debugPIDModeEnabled)));
-    
+
     backConfig.setOutputSettings(
         new OutputSettings()
             .setIdleMode(Constants.Elevator.motorIdleMode)
-            .setInvert(Constants.Elevator.motorFrontInvert));
+            .setInvert(Constants.Elevator.motorBackInvert));
 
     backConfig.setElectricalLimitSettings(
         new ElectricalLimitSettings()
             .setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps));
 
-    followerRequest.setInverted(true);
+    followerRequest.setInverted(false);
 
     NitrateSettings leaderConfigStatus = leaderMotor.setSettings(frontConfig, 0.02, 5);
     NitrateSettings followerConfigStatus = followerMotor.setSettings(backConfig, 0.02, 5);
