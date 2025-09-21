@@ -206,13 +206,13 @@ public final class Constants {
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
 
-    public static final double fastAccelerationMetersPerSec2 = 150;
-    public static final double fastDecelerationMetersPerSec2 = 150;
-    public static final double fastVelocityMetersPerSec = 1000;
+    public static final double fastAccelerationMetersPerSec2 = 150/50.0;
+    public static final double fastDecelerationMetersPerSec2 = 150/50.0;
+    public static final double fastVelocityMetersPerSec = 1000/50.0;
     
-    public static final double slowAccelerationMetersPerSec2 = 10;
-    public static final double slowDecelerationMetersPerSec2 = 10;
-    public static final double slowVelocityMetersPerSec = 10;
+    public static final double slowAccelerationMetersPerSec2 = 10/50.0;
+    public static final double slowDecelerationMetersPerSec2 = 10/50.0;
+    public static final double slowVelocityMetersPerSec = 10/50.0;
 
     public static final double gearRatio = 6 / 1.0;
     public static final double beltPulleyPitchDiameterMeters = Units.inchesToMeters(1.504);
