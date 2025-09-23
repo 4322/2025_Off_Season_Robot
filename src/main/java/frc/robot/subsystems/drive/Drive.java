@@ -45,7 +45,20 @@ public class Drive extends SubsystemBase {
                   .get(),
               1),
           getModuleTranslations());
-
+/*
+ * 
+ * 
+ * 
+ *   /\_/\  (
+ *  ( ^.^ ) _)
+       \"/  (
+    ( | | )
+   (__d b__)
+ * 
+ * 
+ * 
+ * 
+ */
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
@@ -86,12 +99,350 @@ public class Drive extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {{{{{{{{{{{{{{{{{{{{{{{{{{{{
-        gyroIO.updateInputs(gyroInputs);
-    Logger.processInputs("Drive/Gyro", gyroInputs);
-    for (var module : modules) {
-      module.periodic();
-    }
+  public void periodic() {
+    {
+      {
+        {
+          {
+            {
+              {
+                {
+                  {
+                    {
+                      {
+                        {
+                          {
+                            {
+                              {
+                                {
+                                  {
+                                    {
+                                      {
+                                        {
+                                          {
+                                            {
+                                              {
+                                                {
+                                                  {
+                                                    {
+                                                      {
+                                                        {
+                                                          gyroIO.updateInputs(gyroInputs);
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          Logger.processInputs(
+                                                              "Drive/Gyro", gyroInputs);
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          ;
+                                                          for (var module : modules) {
+                                                            module.periodic();
+                                                          }
 
     if (DriverStation.isDisabled()) {
       Logger.recordOutput("Drive/SwerveStates/Setpoints", new SwerveModuleState[] {});
@@ -238,3 +589,40 @@ public class Drive extends SubsystemBase {
     };
   }
 }
+
+/*
+ * 
+                           !     !     !
+(          (    *         |V|   |V|   |V|        )   *   )       (
+ )   *      )             | |   | |   | |        (       (   *    )
+(          (           (*******************)    *       *    )    *
+(     (    (           (    *         *    )               )    (
+ )   * )    )          (   \|/       \|/   )         *    (      )
+(     (     *          (<<<<<<<<<*>>>>>>>>>)               )    (
+ )     )        ((*******************************))       (  *   )
+(     (   *     ((         HAPPY BIRTHDAY!!!!    ))      * )    (
+ ) *   )        ((   *    *   *    *    *    *   ))   *   (      )
+(     (         ((  \|/  \|/ \|/  \|/  \|/  \|/  ))        )    (
+*)     )        ((^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^))       (      )
+(     (   (**********************************************) )  * (
+
+ * 
+ * 
+ * 
+ * 
+ * 　　　 　　／＞　　フ
+　　　 　　| 　_　 _ l
+　 　　 　／` ミ＿xノ
+　　 　 /　　　 　 |
+　　　 /　 ヽ　　 ﾉ
+　 　 │　　|　|　|
+　／￣|　　 |　|　|
+　| (￣ヽ＿_ヽ_)__)
+　   二つ
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
