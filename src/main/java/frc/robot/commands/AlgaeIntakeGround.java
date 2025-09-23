@@ -1,8 +1,7 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
-
 import edu.wpi.first.wpilibj2.command.Command;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.subsystems.Superstructure;
 
 public class AlgaeIntakeGround extends Command {
@@ -15,11 +14,12 @@ public class AlgaeIntakeGround extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+  superstructure.requestIntakeAlgaeFloor();
+  }
 
   @Override
   public void execute() {
-    superstructure.requestIntakeAlgaeFloor();
   }
 
   @Override

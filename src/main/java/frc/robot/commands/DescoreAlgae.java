@@ -1,8 +1,7 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
-
 import edu.wpi.first.wpilibj2.command.Command;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.subsystems.Superstructure;
 
 public class DescoreAlgae extends Command {
@@ -19,13 +18,11 @@ public class DescoreAlgae extends Command {
 
   @Override
   public void initialize() {
-    superstructure.requestPrescoreCoral(Level);
+    superstructure.requestDescoreAlgae(Level);
   }
 
   @Override
   public void execute() {
-
-    superstructure.requestDescoreAlgae(Level);
   }
 
   @Override
