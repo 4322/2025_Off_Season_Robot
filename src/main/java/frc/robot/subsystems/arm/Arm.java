@@ -13,6 +13,7 @@ public class Arm extends SubsystemBase {
   private ArmIO io;
   private ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private double minSafeArmDegree;
+  private double minElevatorHeight;
 
   private double requestedSetpoint;
   private double prevSetpoint = -1000;
@@ -49,17 +50,20 @@ public class Arm extends SubsystemBase {
         case NORMAL:
           if (RobotContainer.getSuperstructure().isCoralHeld()) {
             minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
+            minElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralMeters;
           } else {
             minSafeArmDegree = Constants.Arm.minArmSafeDeg;
+            minElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
           }
 
           // Safety Logic
           // Checks the logic checking for if it is in a dangerous position
 
           elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
+          
           if (requestedSetpoint < minSafeArmDegree
               && elevatorHeight
-                  < (Constants.Elevator.minElevatorSafeHeightMeters
+                  < (minElevatorHeight
                       - Constants.Elevator.bufferHeightMeters)
               && getAngleDegrees()
                   > (minSafeArmDegree
