@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BabyAlchemist;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
+import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
 
@@ -17,7 +19,10 @@ public class Elevator extends SubsystemBase {
   private double newElevatorHeight;
   private boolean isSlow = false;
   private boolean isHomed;
-
+  Superstructure superstructure = RobotContainer.getSuperstructure();
+  private double minSafeArmDegree = 0.0;
+  private double minElevatorHeight = 0.0;
+  
   public Elevator(ElevatorIO ELVIO) {
     this.io = ELVIO;
   }
@@ -44,14 +49,23 @@ public class Elevator extends SubsystemBase {
           break;
         case NORMAL:
           double armAngle = RobotContainer.getSuperstructure().getArmAngle();
-          // TODO: Safety logic unsafe when going from coral held to score L2, FIX
-          if (armAngle > Constants.Arm.bufferDeg
-              && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters
-              && armAngle < (Constants.Arm.minArmSafeDeg - Constants.Arm.bufferDeg)) {
-            newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
+
+          if (RobotContainer.getSuperstructure().isCoralHeld()) {
+            minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
+            minElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralMeters;
+          } else {
+            minSafeArmDegree = Constants.Arm.minArmSafeDeg;
+            minElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
+          } 
+          
+          if (superstructure.getState() != Superstates.CORAL_HELD
+              && requestedHeightMeters < minElevatorHeight
+              && armAngle < (minSafeArmDegree - Constants.Arm.bufferDeg)) {
+            newElevatorHeight = minElevatorHeight;
           } else {
             newElevatorHeight = requestedHeightMeters;
           }
+
           if (prevHeightMeters != newElevatorHeight) {
             if (isSlow) {
               io.requestSlowHeightMeters(newElevatorHeight);
