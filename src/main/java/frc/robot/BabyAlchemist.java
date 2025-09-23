@@ -100,6 +100,7 @@ public class BabyAlchemist {
     }
 
     if (!settings.isEmpty() && (Constants.currentMode == RobotMode.REAL)) {
+      settings.setEphemeral(true); // avoid wear of the Nitrate flash
       NitrateSettings status = nitrate.setSettings(settings, 0.02, 5);
       if (!status.isEmpty()) {
         DriverStation.reportError(
