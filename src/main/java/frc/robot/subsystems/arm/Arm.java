@@ -13,6 +13,7 @@ public class Arm extends SubsystemBase {
   private ArmIO io;
   private ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private double minSafeArmDegree;
+  private double minElevatorHeight;
 
   private double requestedSetpoint;
   private double prevSetpoint = -1000;
@@ -32,34 +33,36 @@ public class Arm extends SubsystemBase {
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
     Logger.recordOutput("Arm/TargetAngle", requestedSetpoint);
 
-    switch (Constants.armMode) {
-      case OPEN_LOOP:
-        io.setVoltage(-RobotContainer.driver.getLeftX() * 4.0);
-        break;
-      case TUNING:
-        Double newPos = BabyAlchemist.run(io.getNitrate());
-        if (newPos != null) {
-          io.requestPosition(newPos);
-        }
-        break;
-      case DISABLED:
-        break;
-      case NORMAL:
-        if (isHomed) {
+    if (isHomed) {
+      switch (Constants.armMode) {
+        case OPEN_LOOP:
+          double x = -RobotContainer.driver.getLeftX();
+          io.setVoltage(x * x * x * 12.0);
+          break;
+        case TUNING:
+          Double newPos = BabyAlchemist.run(io.getNitrate());
+          if (newPos != null) {
+            io.requestPosition(newPos);
+          }
+          break;
+        case DISABLED:
+          break;
+        case NORMAL:
           if (RobotContainer.getSuperstructure().isCoralHeld()) {
             minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
+            minElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralMeters;
           } else {
             minSafeArmDegree = Constants.Arm.minArmSafeDeg;
+            minElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
           }
 
           // Safety Logic
           // Checks the logic checking for if it is in a dangerous position
 
           elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
+
           if (requestedSetpoint < minSafeArmDegree
-              && elevatorHeight
-                  < (Constants.Elevator.minElevatorSafeHeightMeters
-                      - Constants.Elevator.bufferHeightMeters)
+              && elevatorHeight < (minElevatorHeight - Constants.Elevator.bufferHeightMeters)
               && getAngleDegrees()
                   > (minSafeArmDegree
                       - Constants.Arm.bufferDeg)) { // So if the requested setpoint is under the min
@@ -80,7 +83,7 @@ public class Arm extends SubsystemBase {
               prevSetpoint = newSetpoint;
             }
           }
-        }
+      }
     }
   }
 
@@ -157,7 +160,7 @@ public class Arm extends SubsystemBase {
 
   public boolean atSetpoint() {
     return ClockUtil.atReference(
-        inputs.armPositionDegrees, requestedSetpoint, Constants.Arm.setpointToleranceDegrees, true);
+        inputs.PositionDegrees, requestedSetpoint, Constants.Arm.setpointToleranceDegrees, true);
   }
 
   public void safeBargeRetract() {
@@ -181,6 +184,6 @@ public class Arm extends SubsystemBase {
   }
 
   public double getAngleDegrees() {
-    return inputs.armPositionDegrees;
+    return inputs.PositionDegrees;
   }
 }

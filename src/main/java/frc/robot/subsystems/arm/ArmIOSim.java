@@ -27,7 +27,7 @@ public class ArmIOSim implements ArmIO {
     double velocity = (position - prevPos) * 50;
 
     inputs.requestedPosDeg = requestedPosition;
-    inputs.armPositionDegrees = position;
+    inputs.PositionDegrees = position;
     inputs.voltage = voltage;
     inputs.velocityDegSec = velocity;
   }

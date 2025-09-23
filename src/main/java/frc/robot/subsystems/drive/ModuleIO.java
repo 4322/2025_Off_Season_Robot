@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drive;
 
+import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -32,4 +33,8 @@ public interface ModuleIO {
   public default void setDriveVelocity(double driveWheelVelocityRadPerSec) {}
 
   public default void setTurnPosition(Rotation2d turnWheelPosition) {}
+
+  public default Nitrate getTurnNitrate() {
+    return null;
+  } // for tuning
 }

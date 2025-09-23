@@ -10,13 +10,19 @@ public interface ArmIO {
     public double requestedPosDeg;
     public double voltage = 0.0;
     public double velocityDegSec = 0.0;
+    public double encoderRotations = 0.0;
     public boolean armConnected = false;
     public boolean armEncoderConnected = false;
-    public double armSupplyCurrentAmps = 0.0;
-    public double armStatorCurrentAmps = 0.0;
-    public double armTempCelsius = 0.0;
-    public double armPositionDegrees =
+    public double SupplyCurrentAmps = 0.0;
+    public double StatorCurrentAmps = 0.0;
+    public double TempCelsius = 0.0;
+    public double PositionDegrees =
         0.0; // 0 is vertical to front of robot. Posititve clockwise looking from the left
+    public double kGeffort;
+    public double kPeffort;
+    public double kIeffort;
+    public double totalEffort;
+    public double feedbackError;
   }
 
   public default void setHomePosition() {}

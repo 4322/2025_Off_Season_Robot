@@ -4,8 +4,10 @@ import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
+import com.reduxrobotics.motorcontrol.nitrate.types.EnabledDebugFrames;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
@@ -81,12 +83,14 @@ public class DeployerIONitrate implements DeployerIO {
                 Constants.Deployer.deploykP,
                 Constants.Deployer.deploykI,
                 Constants.Deployer.deploykD)
-            .setGravitationalFeedforward(Constants.Deployer.deploykG)
+            .setGravitationalFeedforward(Constants.Deployer.kG)
             .setFeedforwardMode(Constants.Deployer.feedforwardMode)
             .setMinwrapConfig(new MinwrapConfig.Disabled())
             .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
             .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
-            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit),
+            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit)
+            .setISaturation(Constants.Deployer.iSat)
+            .setIZone(Constants.Deployer.iZone),
         PIDConfigSlot.kSlot0);
 
     motorConfig.setPIDSettings(
@@ -95,13 +99,23 @@ public class DeployerIONitrate implements DeployerIO {
                 Constants.Deployer.retractkP,
                 Constants.Deployer.retractkI,
                 Constants.Deployer.retractkD)
-            .setGravitationalFeedforward(Constants.Deployer.retractkG)
+            .setGravitationalFeedforward(Constants.Deployer.kG)
             .setFeedforwardMode(Constants.Deployer.feedforwardMode)
             .setMinwrapConfig(new MinwrapConfig.Disabled())
             .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
             .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
-            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit),
+            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit)
+            .setISaturation(Constants.Deployer.iSat)
+            .setIZone(Constants.Deployer.iZone),
         PIDConfigSlot.kSlot1);
+
+    motorConfig.setFramePeriodSettings(
+        new FramePeriodSettings()
+            .setEnabledPIDDebugFrames(
+                new EnabledDebugFrames()
+                    .setKgControlEffort(Constants.debugPIDModeEnabled)
+                    .setKpControlEffort(Constants.debugPIDModeEnabled)
+                    .setTotalControlEffort(Constants.debugPIDModeEnabled)));
   }
 
   @Override
@@ -112,7 +126,13 @@ public class DeployerIONitrate implements DeployerIO {
     inputs.tempCelcius = deployerMotor.getMotorTemperatureFrame().getValue();
     inputs.angleDeg = toCodeCoords(Units.rotationsToDegrees(deployerMotor.getPosition()));
     inputs.speedRotationsPerSec = deployerMotor.getVelocity();
-    inputs.appliedVolts = deployerMotor.getBusVoltageFrame().getValue();
+    inputs.appliedVolts = deployerMotor.getAppliedVoltageFrame().getValue();
+    inputs.encoderRotations = deployerMotor.getPosition();
+    if (Constants.debugPIDModeEnabled) {
+      inputs.kPeffort = deployerMotor.getPIDDebugFrames().kPControlEffortFrame.getValue();
+      inputs.kGeffort = deployerMotor.getPIDDebugFrames().kGControlEffortFrame.getValue();
+      inputs.totalEffort = deployerMotor.getPIDDebugFrames().totalControlEffortFrame.getValue();
+    }
 
     inputs.prevRequestedPositionDeg = previousRequestedPositionDeg;
 
@@ -135,6 +155,14 @@ public class DeployerIONitrate implements DeployerIO {
                 Units.degreesToRotations(toMotorCoords(degrees))));
       }
     }
+  }
+
+  @Override
+  public void setPositionSlot0(double degrees) {
+    deployerMotor.setRequest(
+        deployerMotorDeployPIDRequest.setPosition(
+            Units.degreesToRotations(toMotorCoords(degrees))));
+    previousRequestedPositionDeg = degrees;
   }
 
   @Override

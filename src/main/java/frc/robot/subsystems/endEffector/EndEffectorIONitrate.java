@@ -51,14 +51,14 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   private void initMotorConfig() {
     motorConfig.setElectricalLimitSettings(
         new ElectricalLimitSettings()
-        .setBusCurrentLimit(Constants.EndEffector.busCurrentLimit)
-        .setBusCurrentLimitTime(Constants.EndEffector.busCurrentLimitTime)
-        .setStatorCurrentLimit(Constants.EndEffector.statorCurrentLimit));
+            .setBusCurrentLimit(Constants.EndEffector.busCurrentLimit)
+            .setBusCurrentLimitTime(Constants.EndEffector.busCurrentLimitTime)
+            .setStatorCurrentLimit(Constants.EndEffector.statorCurrentLimit));
 
     motorConfig.setOutputSettings(
         new OutputSettings()
-        .setIdleMode(Constants.EndEffector.motorIdleMode)
-        .setInvert(Constants.EndEffector.motorInvert));
+            .setIdleMode(Constants.EndEffector.motorIdleMode)
+            .setInvert(Constants.EndEffector.motorInvert));
   }
 
   private void initSensorConfig() {}

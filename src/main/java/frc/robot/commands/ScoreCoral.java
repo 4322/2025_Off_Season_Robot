@@ -1,9 +1,8 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.subsystems.Superstructure;
 
 public class ScoreCoral extends Command {
@@ -24,6 +23,8 @@ public class ScoreCoral extends Command {
 
   @Override
   public void execute() {
+    double x = -RobotContainer.driver.getLeftY();
+    double y = -RobotContainer.driver.getLeftX();
     if (RobotContainer.isScoringTriggerHeld()) {
       superstructure.requestScoreCoral(Level);
     }

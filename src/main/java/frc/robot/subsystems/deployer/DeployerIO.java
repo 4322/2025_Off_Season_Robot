@@ -16,6 +16,10 @@ public interface DeployerIO {
     public double speedRotationsPerSec = 0.0;
     public double appliedVolts = 0.0;
     public double angleDeg = 0.0;
+    public double encoderRotations = 0.0;
+    public double kGeffort;
+    public double kPeffort;
+    public double totalEffort;
 
     public double prevRequestedPositionDeg = 0.0;
   }
@@ -23,6 +27,8 @@ public interface DeployerIO {
   public default void updateInputs(DeployerIOInputs inputs) {}
 
   public default void setPosition(double rotations) {}
+
+  public default void setPositionSlot0(double rotations) {}
 
   public default void stop(IdleMode idleMode) {}
 

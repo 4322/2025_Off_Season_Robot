@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AlgaeIntakeGround;
 import frc.robot.commands.AlgaeScoreCommand;
 import frc.robot.commands.CoastCommand;
 import frc.robot.commands.DescoreAlgae;
@@ -113,7 +114,7 @@ public class RobotContainer {
           elevator =
               new Elevator(new ElevatorIONitrate()); // Create the elevator subsystem if enabled
         }
-        if (Constants.driveEnabled) {
+        if (Constants.driveMode != SubsystemMode.DISABLED) {
           GyroIOBoron gyro = new GyroIOBoron();
           drive =
               new Drive(
@@ -202,8 +203,8 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    superstructure.requestIntakeAlgaeFloor();
+                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                    new AlgaeIntakeGround(superstructure).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new ScoreCoral(superstructure, Level.L1).schedule();
                   }
@@ -213,7 +214,7 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L2).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new ScoreCoral(superstructure, Level.L2).schedule();
@@ -224,7 +225,7 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L3).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new ScoreCoral(superstructure, Level.L3).schedule();
