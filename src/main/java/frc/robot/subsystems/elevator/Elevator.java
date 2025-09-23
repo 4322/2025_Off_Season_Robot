@@ -22,7 +22,7 @@ public class Elevator extends SubsystemBase {
   Superstructure superstructure = RobotContainer.getSuperstructure();
   private double minSafeArmDegree = 0.0;
   private double minElevatorHeight = 0.0;
-  
+
   public Elevator(ElevatorIO ELVIO) {
     this.io = ELVIO;
   }
@@ -56,9 +56,9 @@ public class Elevator extends SubsystemBase {
           } else {
             minSafeArmDegree = Constants.Arm.minArmSafeDeg;
             minElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
-          } 
-          
-          if (superstructure.getState() != Superstates.CORAL_HELD
+          }
+
+          if (RobotContainer.getSuperstructure().getState() != Superstates.CORAL_HELD
               && requestedHeightMeters < minElevatorHeight
               && armAngle < (minSafeArmDegree - Constants.Arm.bufferDeg)) {
             newElevatorHeight = minElevatorHeight;
