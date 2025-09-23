@@ -3,30 +3,28 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.ModuleConfig;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
-import frc.robot.constants.Constants;
-import frc.robot.constants.DrivetrainConstants;
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
+                                                                          import com.pathplanner.lib.config.ModuleConfig;
+                                            import com.pathplanner.lib.config.PIDConstants;
+                                  import com.pathplanner.lib.config.RobotConfig;
+                              import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+          import edu.wpi.first.math.Matrix;
+                                  import edu.wpi.first.math.geometry.Pose2d;        import edu.wpi.first.math.geometry.Rotation2d;
+                                                                              import edu.wpi.first.math.geometry.Translation2d;
+                                                                        import edu.wpi.first.math.kinematics.ChassisSpeeds;
+                                          import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+                                    import edu.wpi.first.math.kinematics.SwerveModulePosition;
+                                                              import edu.wpi.first.math.kinematics.SwerveModuleState;
+                                                                      import edu.wpi.first.math.numbers.N1;
+                                              import edu.wpi.first.math.numbers.N3; import edu.wpi.first.math.system.plant.DCMotor;
+                                              import edu.wpi.first.math.util.Units;
+                                                                  import edu.wpi.first.wpilibj.DriverStation;
+      import edu.wpi.first.wpilibj.DriverStation.Alliance;
+                                          import edu.wpi.first.wpilibj2.command.SubsystemBase;
+                                            import frc.robot.Robot;
+                                                        import frc.robot.constants.Constants;
+                                                            import frc.robot.constants.DrivetrainConstants;
+                                                                              import org.littletonrobotics.junction.AutoLogOutput;
+                                                                                        import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
   // Values for Cu60 DCMotor specs come from https://docs.reduxrobotics.com/cu60/specifications
@@ -47,7 +45,20 @@ public class Drive extends SubsystemBase {
                   .get(),
               1),
           getModuleTranslations());
-
+/*
+ * 
+ * 
+ * 
+ *   /\_/\  (
+ *  ( ^.^ ) _)
+       \"/  (
+    ( | | )
+   (__d b__)
+ * 
+ * 
+ * 
+ * 
+ */
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
@@ -433,42 +444,11 @@ public class Drive extends SubsystemBase {
                                                             module.periodic();
                                                           }
 
-                                                          if (DriverStation.isDisabled()) {
-                                                            Logger.recordOutput(
-                                                                "Drive/SwerveStates/Setpoints",
-                                                                new SwerveModuleState[] {});
-                                                            Logger.recordOutput(
-                                                                "Drive/SwerveStates/SetpointsOptimized",
-                                                                new SwerveModuleState[] {});
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+    if (DriverStation.isDisabled()) {
+      Logger.recordOutput("Drive/SwerveStates/Setpoints", new SwerveModuleState[] {});
+      Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
     }
-  }
+  }}}}}}}}}}}}}}}}}}}}}}}}}}}}
 
   /**
    * Only to be used in commands which directly control drive subsystem such as DriveManual or
@@ -609,3 +589,40 @@ public class Drive extends SubsystemBase {
     };
   }
 }
+
+/*
+ * 
+                           !     !     !
+(          (    *         |V|   |V|   |V|        )   *   )       (
+ )   *      )             | |   | |   | |        (       (   *    )
+(          (           (*******************)    *       *    )    *
+(     (    (           (    *         *    )               )    (
+ )   * )    )          (   \|/       \|/   )         *    (      )
+(     (     *          (<<<<<<<<<*>>>>>>>>>)               )    (
+ )     )        ((*******************************))       (  *   )
+(     (   *     ((         HAPPY BIRTHDAY!!!!    ))      * )    (
+ ) *   )        ((   *    *   *    *    *    *   ))   *   (      )
+(     (         ((  \|/  \|/ \|/  \|/  \|/  \|/  ))        )    (
+*)     )        ((^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^))       (      )
+(     (   (**********************************************) )  * (
+
+ * 
+ * 
+ * 
+ * 
+ * 　　　 　　／＞　　フ
+　　　 　　| 　_　 _ l
+　 　　 　／` ミ＿xノ
+　　 　 /　　　 　 |
+　　　 /　 ヽ　　 ﾉ
+　 　 │　　|　|　|
+　／￣|　　 |　|　|
+　| (￣ヽ＿_ヽ_)__)
+　   二つ
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
