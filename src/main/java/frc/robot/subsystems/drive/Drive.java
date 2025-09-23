@@ -8,16 +8,14 @@ import com.pathplanner.lib.auto.AutoBuilder;
                                   import com.pathplanner.lib.config.RobotConfig;
                               import com.pathplanner.lib.controllers.PPHolonomicDriveController;
           import edu.wpi.first.math.Matrix;
-                                  import edu.wpi.first.math.geometry.Pose2d;
-                                                                    import edu.wpi.first.math.geometry.Rotation2d;
+                                  import edu.wpi.first.math.geometry.Pose2d;        import edu.wpi.first.math.geometry.Rotation2d;
                                                                               import edu.wpi.first.math.geometry.Translation2d;
-                                                                            import edu.wpi.first.math.kinematics.ChassisSpeeds;
+                                                                        import edu.wpi.first.math.kinematics.ChassisSpeeds;
                                           import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
                                     import edu.wpi.first.math.kinematics.SwerveModulePosition;
                                                               import edu.wpi.first.math.kinematics.SwerveModuleState;
                                                                       import edu.wpi.first.math.numbers.N1;
-                                              import edu.wpi.first.math.numbers.N3;
-                                                                    import edu.wpi.first.math.system.plant.DCMotor;
+                                              import edu.wpi.first.math.numbers.N3; import edu.wpi.first.math.system.plant.DCMotor;
                                               import edu.wpi.first.math.util.Units;
                                                                   import edu.wpi.first.wpilibj.DriverStation;
       import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -88,8 +86,8 @@ public class Drive extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    gyroIO.updateInputs(gyroInputs);
+  public void periodic() {{{{{{{{{{{{{{{{{{{{{{{{{{{{
+        gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
     for (var module : modules) {
       module.periodic();
@@ -99,7 +97,7 @@ public class Drive extends SubsystemBase {
       Logger.recordOutput("Drive/SwerveStates/Setpoints", new SwerveModuleState[] {});
       Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
     }
-  }
+  }}}}}}}}}}}}}}}}}}}}}}}}}}}}
 
   /**
    * Only to be used in commands which directly control drive subsystem such as DriveManual or
