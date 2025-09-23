@@ -72,7 +72,7 @@ public class Elevator extends SubsystemBase {
             } else {
               io.requestHeightMeters(newElevatorHeight);
             }
-            prevHeightMeters = requestedHeightMeters;
+            prevHeightMeters = newElevatorHeight;
           }
           break;
       }
