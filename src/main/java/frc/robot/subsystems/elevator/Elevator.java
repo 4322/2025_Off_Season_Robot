@@ -58,7 +58,7 @@ public class Elevator extends SubsystemBase {
             minElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
           }
 
-          if (RobotContainer.getSuperstructure().getState() != Superstates.CORAL_HELD
+          if (RobotContainer.getSuperstructure().getState() != Superstates.END_EFFECTOR_CORAL_PICKUP
               && requestedHeightMeters < minElevatorHeight
               && armAngle < (minSafeArmDegree - Constants.Arm.bufferDeg)) {
             newElevatorHeight = minElevatorHeight;
