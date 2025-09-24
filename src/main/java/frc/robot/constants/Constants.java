@@ -104,8 +104,8 @@ public final class Constants {
     public static final double ejectDeg = 45.0;
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
-    public static final double minArmSafeDeg = 34.789447; // TODO: Set to actual angle
-    public static final double minArmSafeWithCoralDeg = 35; // TODO: Set to actual angle
+    public static final double minArmSafeDeg = 35.789447; // TODO: Set to actual angle
+    public static final double minArmSafeWithCoralDeg = 36; // TODO: Set to actual angle
     public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = 0.5;
