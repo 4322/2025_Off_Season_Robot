@@ -208,6 +208,10 @@ public class Drive extends SubsystemBase {
     return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotRelativeSpeeds(), getRotation());
   }
 
+  public double getYawVelocity() {
+    return gyroInputs.yawVelocityRadPerSec;
+  }
+
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
     return poseEstimator.getEstimatedPosition();

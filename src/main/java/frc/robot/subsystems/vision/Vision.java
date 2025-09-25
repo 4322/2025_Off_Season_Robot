@@ -14,6 +14,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -203,18 +204,21 @@ public class Vision extends SubsystemBase {
   }
 
   public void enableGlobalPose() {
-    observationMode = ObservationMode.GLOBAL_POSE;
+    for (VisionIO cameraIO : io) {
+      cameraIO.enableGlobalPose();
+    }
   }
 
   public void enableSingleTagSingleCam(int tagID, SingleTagCamera side) {
-    observationMode = ObservationMode.SINGLE_TAG_SINGLE_CAM;
-    singleTagFiducialID = tagID;
-    singleTagCamToUse = side;
+    for (VisionIO cameraIO : io) {
+      cameraIO.enableSingleTagSingleCam(tagID, side);
+    }
   }
 
   public void enableSingleTagMultiCam(int tagID) {
-    observationMode = ObservationMode.SINGLE_TAG_MULTI_CAM;
-    singleTagFiducialID = tagID;
+    for (VisionIO cameraIO : io) {
+      cameraIO.enableSingleTagMultiCam(tagID);
+    }
   }
 
   @FunctionalInterface
