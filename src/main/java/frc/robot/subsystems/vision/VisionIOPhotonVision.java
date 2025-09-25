@@ -16,6 +16,10 @@ public class VisionIOPhotonVision implements VisionIO {
   protected final PhotonCamera camera;
   protected final Transform3d robotToCamera;
 
+  private ObservationMode observationMode = ObservationMode.GLOBAL_POSE;
+  private SingleTagCamera singleTagCamToUse = SingleTagCamera.LEFT;
+  private int singleTagFiducialID = 1;
+
   /**
    * Creates a new VisionIOPhotonVision.
    *
@@ -30,6 +34,9 @@ public class VisionIOPhotonVision implements VisionIO {
   @Override
   public void updateInputs(VisionIOInputs inputs) {
     inputs.connected = camera.isConnected();
+    inputs.observationMode = observationMode;
+    inputs.singleTagCamToUse = singleTagCamToUse;
+    inputs.singleTagFiducialID = singleTagFiducialID;
 
     // Read new camera observations
     Set<Short> tagIds = new HashSet<>();
@@ -112,5 +119,23 @@ public class VisionIOPhotonVision implements VisionIO {
     for (int id : tagIds) {
       inputs.tagIds[i++] = id;
     }
+  }
+
+  @Override
+  public void enableGlobalPose() {
+    observationMode = ObservationMode.GLOBAL_POSE;
+  }
+
+  @Override
+  public void enableSingleTagSingleCam(int tagID, SingleTagCamera side) {
+    observationMode = ObservationMode.SINGLE_TAG_SINGLE_CAM;
+    singleTagFiducialID = tagID;
+    singleTagCamToUse = side;
+  }
+
+  @Override
+  public void enableSingleTagMultiCam(int tagID) {
+    observationMode = ObservationMode.SINGLE_TAG_MULTI_CAM;
+    singleTagFiducialID = tagID;
   }
 }

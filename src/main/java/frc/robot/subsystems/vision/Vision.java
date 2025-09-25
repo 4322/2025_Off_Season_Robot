@@ -12,6 +12,8 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
+
 import java.util.LinkedList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
@@ -21,21 +23,6 @@ public class Vision extends SubsystemBase {
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
   private final Alert[] disconnectedAlerts;
-
-  private ObservationMode observationMode = ObservationMode.GLOBAL_POSE;
-  private SingleTagCamera singleTagCamToUse = SingleTagCamera.LEFT;
-  private int singleTagFiducialID = 1;
-
-  private enum ObservationMode {
-    GLOBAL_POSE,
-    SINGLE_TAG_SINGLE_CAM,
-    SINGLE_TAG_MULTI_CAM
-  }
-
-  private enum SingleTagCamera {
-    LEFT,
-    RIGHT
-  }
 
   public Vision(VisionConsumer consumer, VisionIO... io) {
     this.consumer = consumer;
@@ -176,18 +163,21 @@ public class Vision extends SubsystemBase {
   }
 
   public void enableGlobalPose() {
-    observationMode = ObservationMode.GLOBAL_POSE;
+    for (VisionIO cameraIO : io) {
+      cameraIO.enableGlobalPose();
+    }
   }
 
   public void enableSingleTagSingleCam(int tagID, SingleTagCamera side) {
-    observationMode = ObservationMode.SINGLE_TAG_SINGLE_CAM;
-    singleTagFiducialID = tagID;
-    singleTagCamToUse = side;
+    for (VisionIO cameraIO : io) {
+      cameraIO.enableSingleTagSingleCam(tagID, side);
+    }
   }
 
   public void enableSingleTagMultiCam(int tagID) {
-    observationMode = ObservationMode.SINGLE_TAG_MULTI_CAM;
-    singleTagFiducialID = tagID;
+    for (VisionIO cameraIO : io) {
+      cameraIO.enableSingleTagMultiCam(tagID);
+    }
   }
 
   @FunctionalInterface
