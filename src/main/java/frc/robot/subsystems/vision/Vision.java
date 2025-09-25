@@ -1,5 +1,7 @@
 package frc.robot.subsystems.vision;
 
+import java.security.spec.ECField;
+
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import edu.wpi.first.math.Matrix;
@@ -12,15 +14,40 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import java.util.LinkedList;
 import java.util.List;
+
 import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.ReefStatus;
 
 public class Vision extends SubsystemBase {
   private final VisionConsumer consumer;
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
   private final Alert[] disconnectedAlerts;
+  public boolean ReefFaceAmbiguity;
+  public boolean ReefPipeAmbiguity;
+  public Drive drive;
+  public Translation2d ReefCenterPoint;
+  public Pose2d robotPose = drive.getPose();
+  public enum ClosestReefPipe { // TODO
+    LEFT,
+    RIGHT
+  }
+  ClosestReefPipe closestReefPipe;
+
+  public enum L1Zone {
+    MIDDLE,
+    LEFT,
+    RIGHT
+  }
+  ClosestReefPipe reefPipe;
+  public double reefToRobotDeg;
+
 
   private ObservationMode observationMode = ObservationMode.GLOBAL_POSE;
   private SingleTagCamera singleTagCamToUse = SingleTagCamera.LEFT;
@@ -197,4 +224,39 @@ public class Vision extends SubsystemBase {
         double timestampSeconds,
         Matrix<N3, N1> visionMeasurementStdDevs);
   }
+
+  public void ReefStatus (){ 
+    Translation2d robotTranslation = robotPose.getTranslation();
+    Rotation2d reefCenterToRobotDeg = ReefCenterPoint.minus(robotTranslation).getAngle();
+    reefToRobotDeg = reefCenterToRobotDeg.getRadians();
+    if ( -27.747 <= reefToRobotDeg || reefToRobotDeg <= 27.747){ 
+      drive.requestAutoRotateMode(0.0);
+  } else if ( 27.747 <= reefToRobotDeg || reefToRobotDeg <= 55.494){ 
+    drive.requestAutoRotateMode(0.0);
+} 
+
+else if ( -55.494 <= reefToRobotDeg || reefToRobotDeg <= -27.747){ 
+  drive.requestAutoRotateMode(0.0);
+}
+else if ( 55.494 <= reefToRobotDeg || reefToRobotDeg <= 83.241){ 
+  drive.requestAutoRotateMode(0.0);
+} else if ( -83.241 <= reefToRobotDeg || reefToRobotDeg <= -55.494){
+  drive.requestAutoRotateMode(0.0);
+}
+else if ( 83.241 <= reefToRobotDeg || reefToRobotDeg <= 110.988){ 
+  drive.requestAutoRotateMode(0.0);
+} else if ( -110.988 <= reefToRobotDeg || reefToRobotDeg <= -83.241){ 
+  drive.requestAutoRotateMode(0.0);
+}else if ( 110.988 <= reefToRobotDeg || reefToRobotDeg <= 138.735){ 
+  drive.requestAutoRotateMode(0.0);
+}else if ( -138.735 <= reefToRobotDeg || reefToRobotDeg <= -110.988){ 
+  drive.requestAutoRotateMode(0.0);
+}
+else if ( 138.735 <= reefToRobotDeg || reefToRobotDeg <= 166.482){ 
+  drive.requestAutoRotateMode(0.0);
+}
+else if ( -166.482 <= reefToRobotDeg || reefToRobotDeg <= -138.735){
+  drive.requestAutoRotateMode(0.0);
+}
+}
 }

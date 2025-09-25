@@ -1,7 +1,5 @@
 package frc.robot.util;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-
 public class ReefStatus {
 
   /*
@@ -15,24 +13,21 @@ public class ReefStatus {
   Middle, Left, Right
    */
 
-  public boolean ReefFaceAmbiguity(double Angle) {
-    if (Angle == 0 || Angle == 60 || Angle == 120 || Angle == 180 || Angle == 240 || Angle == 300) {
-      return false;
-    } else {
+  public boolean getReefFaceAmbiguity() {
       return true;
-    }
+    
   }
   // TODO
 
-  public boolean ReefPipeAmbiguity(double Angle) {
+  public boolean getReefPipeAmbiguity() {
     return true; // TODO
   }
 
-  public Object ClosestReefFace(Rotation2d Angle) {
-    return Angle; // TODO
+  public Object getClosestReefFace() {
+    return null; // TODO
   }
 
-  public enum ReefPipe { // TODO
+  public enum ClosestReefPipe { // TODO
     LEFT,
     RIGHT
   }
@@ -41,9 +36,5 @@ public class ReefStatus {
     MIDDLE,
     LEFT,
     RIGHT
-  }
-
-  public double ReefFaceAngle() {
-    return 0; // TODO
   }
 }
