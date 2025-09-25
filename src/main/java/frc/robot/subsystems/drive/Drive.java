@@ -1,13 +1,12 @@
 package frc.robot.subsystems.drive;
 
-import static edu.wpi.first.units.Units.*;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,6 +19,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -52,6 +52,9 @@ public class Drive extends SubsystemBase {
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
+  private SwerveDrivePoseEstimator poseEstimator =
+      new SwerveDrivePoseEstimator(kinematics, Rotation2d.kZero, new SwerveModulePosition[4], Pose2d.kZero);
+
   private ManualDriveMode manualDriveMode = ManualDriveMode.FIELD_RELATIVE;
   private double targetAutoRotateAngleRad = 0.0;
 
@@ -94,6 +97,8 @@ public class Drive extends SubsystemBase {
     for (var module : modules) {
       module.periodic();
     }
+
+    poseEstimator.updateWithTime(RobotController.getFPGATime() / 1e6, gyroInputs.yawAngle, getModulePositions());
 
     if (DriverStation.isDisabled()) {
       Logger.recordOutput("Drive/SwerveStates/Setpoints", new SwerveModuleState[] {});
@@ -205,7 +210,7 @@ public class Drive extends SubsystemBase {
 
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
-    return new Pose2d(); // TODO
+    return poseEstimator.getEstimatedPosition();
   }
 
   public Rotation2d getRotation() {
@@ -213,14 +218,15 @@ public class Drive extends SubsystemBase {
   }
 
   public void resetPose(Pose2d pose) {
-    // TODO
+    poseEstimator.resetPosition(gyroInputs.yawAngle, getModulePositions(), pose);
   }
 
   public void addVisionMeasurement(
       Pose2d visionRobotPoseMeters,
       double timestampSeconds,
       Matrix<N3, N1> visionMeasurementStdDevs) {
-    // TODO
+    poseEstimator.addVisionMeasurement(
+      visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
   }
 
   public static Translation2d[] getModuleTranslations() {
