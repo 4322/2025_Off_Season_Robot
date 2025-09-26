@@ -93,7 +93,7 @@ public class RobotContainer {
             new ModuleIO() {},
             new ModuleIO() {},
             new ModuleIO() {});
-    vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+    vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
     elevator = new Elevator(new ElevatorIO() {});
     endEffector = new EndEffector(new EndEffectorIO() {});
     indexer = new Indexer(new IndexerIO() {});
@@ -123,7 +123,7 @@ public class RobotContainer {
         if (Constants.visionEnabled) {
           vision =
               new Vision(
-                  drive::addVisionMeasurement,
+                  drive,
                   new VisionIOPhotonVision(camera0Name, robotToCamera0),
                   new VisionIOPhotonVision(camera1Name, robotToCamera1));
         }
@@ -139,9 +139,6 @@ public class RobotContainer {
         if (Constants.deployerMode != SubsystemMode.DISABLED) {
           deployer = new Deployer(new DeployerIONitrate());
         }
-        if (vision == null) {
-          vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-        }
         break;
 
       case SIM:
@@ -152,7 +149,7 @@ public class RobotContainer {
         indexer = new Indexer(new IndexerIOSim());
         vision =
             new Vision(
-                drive::addVisionMeasurement,
+                drive,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         sim1 = new CommandXboxController(1);

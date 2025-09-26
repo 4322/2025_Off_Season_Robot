@@ -52,9 +52,7 @@ public class Drive extends SubsystemBase {
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
-  private SwerveDrivePoseEstimator poseEstimator =
-      new SwerveDrivePoseEstimator(
-          kinematics, Rotation2d.kZero, new SwerveModulePosition[4], Pose2d.kZero);
+  private SwerveDrivePoseEstimator poseEstimator;
 
   private ManualDriveMode manualDriveMode = ManualDriveMode.FIELD_RELATIVE;
   private double targetAutoRotateAngleRad = 0.0;
@@ -75,6 +73,18 @@ public class Drive extends SubsystemBase {
     modules[1] = new Module(frModuleIO, 1, DrivetrainConstants.frontRight);
     modules[2] = new Module(blModuleIO, 2, DrivetrainConstants.backLeft);
     modules[3] = new Module(brModuleIO, 3, DrivetrainConstants.backRight);
+
+    poseEstimator =
+        new SwerveDrivePoseEstimator(
+            kinematics,
+            Rotation2d.kZero,
+            new SwerveModulePosition[] {
+              modules[0].getPosition(),
+              modules[1].getPosition(),
+              modules[2].getPosition(),
+              modules[3].getPosition()
+            },
+            Pose2d.kZero);
 
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configure(

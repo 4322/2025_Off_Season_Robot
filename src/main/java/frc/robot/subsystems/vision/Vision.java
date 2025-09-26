@@ -29,7 +29,6 @@ public class Vision extends SubsystemBase {
   public boolean ReefPipeAmbiguity;
   private Drive drive;
   public Translation2d ReefCenterPoint;
-  public Pose2d robotPose = drive.getPose();
   private double convertedRobotTrans;
   private double reefFace;
 
@@ -53,8 +52,9 @@ public class Vision extends SubsystemBase {
   private SingleTagCamera singleTagCamToUse = SingleTagCamera.LEFT;
   private int singleTagFiducialID = 1;
 
-  public Vision(VisionConsumer consumer, VisionIO... io) {
-    this.consumer = consumer;
+  public Vision(Drive drive, VisionIO... io) {
+    this.drive = drive;
+    this.consumer = drive::addVisionMeasurement;
     this.io = io;
 
     // Initialize inputs
@@ -218,7 +218,7 @@ public class Vision extends SubsystemBase {
   }
 
   public void ReefStatus() {
-    Translation2d robotTranslation = robotPose.getTranslation();
+    Translation2d robotTranslation = drive.getPose().getTranslation();
     Rotation2d reefCenterToRobotDeg = ReefCenterPoint.minus(robotTranslation).getAngle();
     reefToRobotDeg = reefCenterToRobotDeg.getRadians();
     if (-30 <= reefToRobotDeg || reefToRobotDeg <= 30) {
