@@ -32,9 +32,11 @@ public class Vision extends SubsystemBase {
   private final Alert[] disconnectedAlerts;
   public boolean ReefFaceAmbiguity;
   public boolean ReefPipeAmbiguity;
-  public Drive drive;
+ private Drive drive;
   public Translation2d ReefCenterPoint;
   public Pose2d robotPose = drive.getPose();
+  private  double convertedRobotTrans;
+  private double reefFace;
   public enum ClosestReefPipe { // TODO
     LEFT,
     RIGHT
@@ -233,34 +235,43 @@ public class Vision extends SubsystemBase {
     Translation2d robotTranslation = robotPose.getTranslation();
     Rotation2d reefCenterToRobotDeg = ReefCenterPoint.minus(robotTranslation).getAngle();
     reefToRobotDeg = reefCenterToRobotDeg.getRadians();
-    if ( -27.747 <= reefToRobotDeg || reefToRobotDeg <= 27.747){ 
-      drive.requestAutoRotateMode(0.0);
-  } else if ( 27.747 <= reefToRobotDeg || reefToRobotDeg <= 55.494){ 
-    drive.requestAutoRotateMode(0.0);
+    if ( -30 <= reefToRobotDeg || reefToRobotDeg <= 30){ 
+    reefFace = 0;
+  } else if (30 < reefToRobotDeg && reefToRobotDeg <= 90
+  ){ 
+    reefFace = -60;
+  } else if (-90  < reefToRobotDeg && reefToRobotDeg <= -30){ 
+    reefFace = 60;
+  } else if (90 < reefToRobotDeg || reefToRobotDeg <= 150){ 
+    reefFace = -120;
+  } else if (-150 < reefToRobotDeg && reefToRobotDeg <= -90){ 
+    reefFace = 120;
+  } else if (-210 < reefToRobotDeg && reefToRobotDeg < -210){ 
+    reefFace = 180;
+  }
+
+  drive.requestAutoRotateMode(reefFace);
+
+  //convertedRobotTrans = robotTranslation.rotateAround(ReefCenterPoint, );
+
+  if ( -30 <= reefToRobotDeg || reefToRobotDeg <= 0){ 
+  closestReefPipe = ClosestReefPipe.LEFT;
+} else if ( 0 <= reefToRobotDeg || reefToRobotDeg <= 30){ 
+  closestReefPipe = ClosestReefPipe.RIGHT;
 } 
 
-else if ( -55.494 <= reefToRobotDeg || reefToRobotDeg <= -27.747){ 
-  drive.requestAutoRotateMode(0.0);
+if (-30 < reefToRobotDeg || reefToRobotDeg < -10)  {
+
+  L1Zone l1Zone = L1Zone.LEFT; // TODO
+
 }
-else if ( 55.494 <= reefToRobotDeg || reefToRobotDeg <= 83.241){ 
-  drive.requestAutoRotateMode(0.0);
-} else if ( -83.241 <= reefToRobotDeg || reefToRobotDeg <= -55.494){
-  drive.requestAutoRotateMode(0.0);
+else if (-10 < reefToRobotDeg || reefToRobotDeg < 10)  {
+
+ L1Zone l1Zone = L1Zone.MIDDLE; // TODO
+
 }
-else if ( 83.241 <= reefToRobotDeg || reefToRobotDeg <= 110.988){ 
-  drive.requestAutoRotateMode(0.0);
-} else if ( -110.988 <= reefToRobotDeg || reefToRobotDeg <= -83.241){ 
-  drive.requestAutoRotateMode(0.0);
-}else if ( 110.988 <= reefToRobotDeg || reefToRobotDeg <= 138.735){ 
-  drive.requestAutoRotateMode(0.0);
-}else if ( -138.735 <= reefToRobotDeg || reefToRobotDeg <= -110.988){ 
-  drive.requestAutoRotateMode(0.0);
-}
-else if ( 138.735 <= reefToRobotDeg || reefToRobotDeg <= 166.482){ 
-  drive.requestAutoRotateMode(0.0);
-}
-else if ( -166.482 <= reefToRobotDeg || reefToRobotDeg <= -138.735){
-  drive.requestAutoRotateMode(0.0);
+else if (10 < reefToRobotDeg || reefToRobotDeg < 30){
+  L1Zone l1Zone = L1Zone.RIGHT;
 }
 }
 }
