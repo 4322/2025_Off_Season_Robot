@@ -86,6 +86,8 @@ public class ElevatorIONitrate implements ElevatorIO {
                 new EnabledDebugFrames()
                     .setKgControlEffort(Constants.debugPIDModeEnabled)
                     .setKpControlEffort(Constants.debugPIDModeEnabled)
+                    .setKiControlEffort(Constants.debugPIDModeEnabled)
+                    .setFeedbackError((Constants.debugPIDModeEnabled))
                     .setTotalControlEffort(Constants.debugPIDModeEnabled)));
 
     backConfig.setOutputSettings(
@@ -155,8 +157,10 @@ public class ElevatorIONitrate implements ElevatorIO {
 
     if (Constants.debugPIDModeEnabled) {
       inputs.kPeffort = leaderMotor.getPIDDebugFrames().kPControlEffortFrame.getValue();
+      inputs.kIeffort = leaderMotor.getPIDDebugFrames().kIControlEffortFrame.getValue();
       inputs.kGeffort = leaderMotor.getPIDDebugFrames().kGControlEffortFrame.getValue();
       inputs.totalEffort = leaderMotor.getPIDDebugFrames().totalControlEffortFrame.getValue();
+      inputs.feedbackError = leaderMotor.getPIDDebugFrames().feedbackErrorFrame.getValue();
     }
   }
 

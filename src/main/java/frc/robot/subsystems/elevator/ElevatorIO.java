@@ -21,7 +21,9 @@ public interface ElevatorIO {
     public double leaderEncoderRotations = 0.0;
     public double kGeffort;
     public double kPeffort;
+    public double kIeffort;
     public double totalEffort;
+    public double feedbackError;
 
     public double followerHeightMeters = 0.0;
     public double followerVoltage = 0.0;
