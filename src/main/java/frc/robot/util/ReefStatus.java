@@ -14,8 +14,7 @@ public class ReefStatus {
    */
 
   public boolean getReefFaceAmbiguity() {
-      return true;
-    
+    return true;
   }
   // TODO
 

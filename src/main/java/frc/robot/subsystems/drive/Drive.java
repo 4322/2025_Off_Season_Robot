@@ -19,8 +19,8 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
@@ -53,7 +53,8 @@ public class Drive extends SubsystemBase {
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private SwerveDrivePoseEstimator poseEstimator =
-      new SwerveDrivePoseEstimator(kinematics, Rotation2d.kZero, new SwerveModulePosition[4], Pose2d.kZero);
+      new SwerveDrivePoseEstimator(
+          kinematics, Rotation2d.kZero, new SwerveModulePosition[4], Pose2d.kZero);
 
   private ManualDriveMode manualDriveMode = ManualDriveMode.FIELD_RELATIVE;
   private double targetAutoRotateAngleRad = 0.0;
@@ -98,7 +99,8 @@ public class Drive extends SubsystemBase {
       module.periodic();
     }
 
-    poseEstimator.updateWithTime(RobotController.getFPGATime() / 1e6, gyroInputs.yawAngle, getModulePositions());
+    poseEstimator.updateWithTime(
+        RobotController.getFPGATime() / 1e6, gyroInputs.yawAngle, getModulePositions());
 
     if (DriverStation.isDisabled()) {
       Logger.recordOutput("Drive/SwerveStates/Setpoints", new SwerveModuleState[] {});
@@ -230,7 +232,7 @@ public class Drive extends SubsystemBase {
       double timestampSeconds,
       Matrix<N3, N1> visionMeasurementStdDevs) {
     poseEstimator.addVisionMeasurement(
-      visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+        visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
   }
 
   public static Translation2d[] getModuleTranslations() {
