@@ -1,7 +1,5 @@
 package frc.robot.subsystems.vision;
 
-import java.security.spec.ECField;
-
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import edu.wpi.first.math.Matrix;
@@ -9,21 +7,18 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.vision.VisionIO.ObservationMode;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
-
 import java.util.LinkedList;
 import java.util.List;
-
 import org.littletonrobotics.junction.Logger;
-
-import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.util.ReefStatus;
 
 public class Vision extends SubsystemBase {
   private final VisionConsumer consumer;
@@ -32,15 +27,17 @@ public class Vision extends SubsystemBase {
   private final Alert[] disconnectedAlerts;
   public boolean ReefFaceAmbiguity;
   public boolean ReefPipeAmbiguity;
- private Drive drive;
+  private Drive drive;
   public Translation2d ReefCenterPoint;
   public Pose2d robotPose = drive.getPose();
-  private  double convertedRobotTrans;
+  private double convertedRobotTrans;
   private double reefFace;
+
   public enum ClosestReefPipe { // TODO
     LEFT,
     RIGHT
   }
+
   ClosestReefPipe closestReefPipe;
 
   public enum L1Zone {
@@ -48,24 +45,13 @@ public class Vision extends SubsystemBase {
     LEFT,
     RIGHT
   }
+
   ClosestReefPipe reefPipe;
   public double reefToRobotDeg;
-
 
   private ObservationMode observationMode = ObservationMode.GLOBAL_POSE;
   private SingleTagCamera singleTagCamToUse = SingleTagCamera.LEFT;
   private int singleTagFiducialID = 1;
-
-  private enum ObservationMode {
-    GLOBAL_POSE,
-    SINGLE_TAG_SINGLE_CAM,
-    SINGLE_TAG_MULTI_CAM
-  }
-
-  private enum SingleTagCamera {
-    LEFT,
-    RIGHT
-  }
 
   public Vision(VisionConsumer consumer, VisionIO... io) {
     this.consumer = consumer;
@@ -231,47 +217,44 @@ public class Vision extends SubsystemBase {
         Matrix<N3, N1> visionMeasurementStdDevs);
   }
 
-  public void ReefStatus (){ 
+  public void ReefStatus() {
     Translation2d robotTranslation = robotPose.getTranslation();
     Rotation2d reefCenterToRobotDeg = ReefCenterPoint.minus(robotTranslation).getAngle();
     reefToRobotDeg = reefCenterToRobotDeg.getRadians();
-    if ( -30 <= reefToRobotDeg || reefToRobotDeg <= 30){ 
-    reefFace = 0;
-  } else if (30 < reefToRobotDeg && reefToRobotDeg <= 90
-  ){ 
-    reefFace = -60;
-  } else if (-90  < reefToRobotDeg && reefToRobotDeg <= -30){ 
-    reefFace = 60;
-  } else if (90 < reefToRobotDeg || reefToRobotDeg <= 150){ 
-    reefFace = -120;
-  } else if (-150 < reefToRobotDeg && reefToRobotDeg <= -90){ 
-    reefFace = 120;
-  } else if (-210 < reefToRobotDeg && reefToRobotDeg < -210){ 
-    reefFace = 180;
+    if (-30 <= reefToRobotDeg || reefToRobotDeg <= 30) {
+      reefFace = 0;
+    } else if (30 < reefToRobotDeg && reefToRobotDeg <= 90) {
+      reefFace = -60;
+    } else if (-90 < reefToRobotDeg && reefToRobotDeg <= -30) {
+      reefFace = 60;
+    } else if (90 < reefToRobotDeg || reefToRobotDeg <= 150) {
+      reefFace = -120;
+    } else if (-150 < reefToRobotDeg && reefToRobotDeg <= -90) {
+      reefFace = 120;
+    } else if (-210 < reefToRobotDeg && reefToRobotDeg < -210) {
+      reefFace = 180;
+    }
+
+    drive.requestAutoRotateMode(reefFace);
+
+    // convertedRobotTrans = robotTranslation.rotateAround(ReefCenterPoint, );
+
+    if (-30 <= reefToRobotDeg || reefToRobotDeg <= 0) {
+      closestReefPipe = ClosestReefPipe.LEFT;
+    } else if (0 <= reefToRobotDeg || reefToRobotDeg <= 30) {
+      closestReefPipe = ClosestReefPipe.RIGHT;
+    }
+
+    if (-30 < reefToRobotDeg || reefToRobotDeg < -10) {
+
+      L1Zone l1Zone = L1Zone.LEFT; // TODO
+
+    } else if (-10 < reefToRobotDeg || reefToRobotDeg < 10) {
+
+      L1Zone l1Zone = L1Zone.MIDDLE; // TODO
+
+    } else if (10 < reefToRobotDeg || reefToRobotDeg < 30) {
+      L1Zone l1Zone = L1Zone.RIGHT;
+    }
   }
-
-  drive.requestAutoRotateMode(reefFace);
-
-  //convertedRobotTrans = robotTranslation.rotateAround(ReefCenterPoint, );
-
-  if ( -30 <= reefToRobotDeg || reefToRobotDeg <= 0){ 
-  closestReefPipe = ClosestReefPipe.LEFT;
-} else if ( 0 <= reefToRobotDeg || reefToRobotDeg <= 30){ 
-  closestReefPipe = ClosestReefPipe.RIGHT;
-} 
-
-if (-30 < reefToRobotDeg || reefToRobotDeg < -10)  {
-
-  L1Zone l1Zone = L1Zone.LEFT; // TODO
-
-}
-else if (-10 < reefToRobotDeg || reefToRobotDeg < 10)  {
-
- L1Zone l1Zone = L1Zone.MIDDLE; // TODO
-
-}
-else if (10 < reefToRobotDeg || reefToRobotDeg < 30){
-  L1Zone l1Zone = L1Zone.RIGHT;
-}
-}
 }
