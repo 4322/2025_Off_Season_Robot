@@ -1,8 +1,9 @@
 package frc.robot.commands;
 
+import static frc.robot.RobotContainer.driver;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
-import static frc.robot.RobotContainer.driver;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.vision.Vision;
 
@@ -28,20 +29,16 @@ public class ScoreCoral extends Command {
   public void execute() {
     double x = -RobotContainer.driver.getLeftY();
     double y = -RobotContainer.driver.getLeftX();
-    if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30 )
-    {
-      
-    }
-    else if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30 ){
+    if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30) {
+
+    } else if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30) {
+
+    } else if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30) {
+
+    } else if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30) {
 
     }
-    else if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30 ){
-      
-    }
-    else if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30 ){
-      
-    }
-    
+
     if (RobotContainer.isScoringTriggerHeld()) {
       superstructure.requestScoreCoral(Level);
     }

@@ -186,7 +186,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new AlgaeIntakeGround(superstructure).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L1).schedule();
+                    new ScoreCoral(superstructure, Level.L1, vision).schedule();
                   }
                 }));
     driver
@@ -197,7 +197,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L2).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L2).schedule();
+                    new ScoreCoral(superstructure, Level.L2, vision).schedule();
                   }
                 }));
     driver
@@ -208,7 +208,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L3).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L3).schedule();
+                    new ScoreCoral(superstructure, Level.L3, vision).schedule();
                   }
                 }));
     driver
