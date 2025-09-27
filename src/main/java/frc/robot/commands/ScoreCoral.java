@@ -29,8 +29,18 @@ public class ScoreCoral extends Command {
     double x = -RobotContainer.driver.getLeftY();
     double y = -RobotContainer.driver.getLeftX();
     if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30 )
-    {}
-    else if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30 )
+    {
+      
+    }
+    else if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30 ){
+
+    }
+    else if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30 ){
+      
+    }
+    else if (Math.abs(Math.toDegrees(Math.atan2(y, x))) == 30 ){
+      
+    }
     
     if (RobotContainer.isScoringTriggerHeld()) {
       superstructure.requestScoreCoral(Level);
