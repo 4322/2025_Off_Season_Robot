@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,6 +17,10 @@ import frc.robot.util.GeomUtil;
 import frc.robot.LoggedTunableNumber;
 import frc.robot.RobotContainer;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
+import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
+
+
 import org.littletonrobotics.junction.Logger;
 
 public class DriveToPose extends Command {
@@ -26,9 +29,8 @@ public class DriveToPose extends Command {
   private final Supplier<Pose2d> poseSupplier;
 
   private boolean running = false;
-  private final ProfiledPIDController driveController =
-      new ProfiledPIDController(
-          0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0), Constants.loopPeriodSecs);
+  private final PIDPositionRequest driveController =
+      new PIDPositionRequest(PIDConfigSlot.kSlot0, new TrapezoidProfile.Constraints(0.0, 0.0), Constants.loopPeriodSecs);
   private final ProfiledPIDController thetaController =
       new ProfiledPIDController(
           0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0), Constants.loopPeriodSecs);
