@@ -219,7 +219,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L4).schedule();
+                    new ScoreCoral(superstructure, Level.L4, vision).schedule();
                   }
                 }));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
