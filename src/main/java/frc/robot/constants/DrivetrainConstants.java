@@ -75,7 +75,7 @@ public class DrivetrainConstants {
   // Back Right
   private static final int backRightDriveMotorId = 14; // Done
   private static final int backRightTurnMotorId = 8; // Done
-  private static final int backRightTurnEncoderId = 3;
+  private static final int backRightTurnEncoderId = 1;
 
   private static final double backRightXPos = -halfWheelBaseMeters;
   private static final double backRightYPos = -halfWheelBaseMeters;
