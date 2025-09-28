@@ -113,7 +113,7 @@ public class ElevatorIONitrate implements ElevatorIO {
           false);
     }
     PIDSettings slot1Settings =
-        PIDSettings.defaultSettings()
+        new PIDSettings()
             .setPID(Constants.Elevator.slow_kP, 0, 0)
             .setGravitationalFeedforward(Constants.Elevator.kG)
             .setMinwrapConfig(new MinwrapConfig.Disabled())
