@@ -49,34 +49,34 @@ public class DrivetrainConstants {
 
   // Specific module constants:
   // Front Left
-  private static final int frontLeftDriveMotorId = 16; //Done
-  private static final int frontLeftTurnMotorId = 12; //Done
-  private static final int frontLeftTurnEncoderId = 1;
+  private static final int frontLeftDriveMotorId = 4; //Done
+  private static final int frontLeftTurnMotorId = 6; //Done
+  private static final int frontLeftTurnEncoderId = 3;
   private static final double halfWheelBaseMeters = 0.57785;
 
   private static final double frontLeftXPos = halfWheelBaseMeters;
   private static final double frontLeftYPos = halfWheelBaseMeters;
 
   // Front Right
-  private static final int frontRightDriveMotorId = 4; //Done
-  private static final int frontRightTurnMotorId =  6; //Done
-  private static final int frontRightTurnEncoderId = 2;
+  private static final int frontRightDriveMotorId = 9; //Done
+  private static final int frontRightTurnMotorId =  1; //Done
+  private static final int frontRightTurnEncoderId = 4;
 
   private static final double frontRightXPos = halfWheelBaseMeters;
   private static final double frontRightYPos = -halfWheelBaseMeters;
 
   // Back Left
-  private static final int backLeftDriveMotorId = 15; //Done
-  private static final int backLeftTurnMotorId = 14; 
-  private static final int backLeftTurnEncoderId = 3;
+  private static final int backLeftDriveMotorId = 16; //Done
+  private static final int backLeftTurnMotorId = 12; 
+  private static final int backLeftTurnEncoderId = 2;
 
   private static final double backLeftXPos = -halfWheelBaseMeters;
   private static final double backLeftYPos = halfWheelBaseMeters;
 
   // Back Right
-  private static final int backRightDriveMotorId = 9; //Done
-  private static final int backRightTurnMotorId = 1; //Done
-  private static final int backRightTurnEncoderId = 4;
+  private static final int backRightDriveMotorId = 15; //Done
+  private static final int backRightTurnMotorId = 14; //Done
+  private static final int backRightTurnEncoderId = 3;
 
   private static final double backRightXPos = -halfWheelBaseMeters;
   private static final double backRightYPos = -halfWheelBaseMeters;
