@@ -86,8 +86,8 @@ public final class Constants {
   }
 
   public static class Arm {
-    public static final int armMotorId = 10; //Done
-    public static final int armEncoderId = 10; //Done
+    public static final int armMotorId = 10; // Done
+    public static final int armEncoderId = 10; // Done
 
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // positive is up toward scoring side
@@ -148,8 +148,8 @@ public final class Constants {
   }
 
   public static class Elevator {
-    public static final int frontMotorID = 3;//Done
-    public static final int backMotorID = 5; //Done
+    public static final int frontMotorID = 3; // Done
+    public static final int backMotorID = 5; // Done
 
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
@@ -223,8 +223,8 @@ public final class Constants {
 
   // TODO all of these are placeholder values
   public static class EndEffector {
-    public static final int motorId = 13;//Done
-    public static final int sensorId = 30;
+    public static final int motorId = 13; // Done
+    public static final int sensorId = 2;
 
     public static final double algaeHoldVolts = 1.0;
     public static final double coralHoldVolts = 1.0;
@@ -279,7 +279,7 @@ public final class Constants {
   }
 
   public static class Deployer {
-    public static final int deployerMotorId = 8; //Done
+    public static final int deployerMotorId = 8; // Done
     public static final double deployVoltage = 3.0;
 
     public static final double statorCurrentLimit = 40;
@@ -317,8 +317,8 @@ public final class Constants {
   }
 
   public static class Indexer {
-    public static final int rightId = 7; //Done
-    public static final int leftId = 2; //Done
+    public static final int rightId = 7; // Done
+    public static final int leftId = 2; // Done
     public static final double busCurrentLimit = 40;
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 60;
@@ -327,8 +327,8 @@ public final class Constants {
     public static final InvertMode leftInvert = InvertMode.kNotInverted; // positive is intaking
     public static final double indexerSensorMax = 5; // TODO tune these
     public static final double pickupAreaSensorMax = 5;
-    public static final int indexerSensorId = 0;
-    public static final int pickupAreaSensorId = 0;
+    public static final int indexerSensorId = 3;
+    public static final int pickupAreaSensorId = 1;
     public static final double voltageFeed = 5;
     public static final double voltageRejectSlow = -3;
     public static final double voltageFeedSlow = 3;
@@ -336,7 +336,7 @@ public final class Constants {
   }
 
   public static class Rollers {
-    public static final int motorId = 11; //Done
+    public static final int motorId = 11; // Done
 
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 60;
