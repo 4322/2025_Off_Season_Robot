@@ -50,7 +50,6 @@ public class ArmIONitrate implements ArmIO {
             .setIZone(Constants.Arm.iZone),
         PIDConfigSlot.kSlot0);
 
-
     armConfig.setFeedbackSensorSettings(
         FeedbackSensorSettings.defaultSettings()
             .setSensorToMechanismRatio(Constants.Arm.sensorToArm)
@@ -96,25 +95,25 @@ public class ArmIONitrate implements ArmIO {
               + " (Arm encoder) failed to configure",
           false);
     }
-    PIDSettings settingsSlot1 = 
-    PIDSettings.defaultSettings()
-        .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
-        .setFeedforwardMode(PIDFeedforwardMode.kArm)
-        .setGravitationalFeedforward(Constants.Arm.kG)
-        .setMinwrapConfig(new MinwrapConfig.Disabled())
-        .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
-        .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
-        .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit)
-        .setISaturation(Constants.Arm.iSat)
-        .setIZone(Constants.Arm.iZone);
-
-PIDSettings motorConfigStatus2 = armMotor.setPIDSettings(settingsSlot1, PIDConfigSlot.kSlot1);
-
-if (!motorConfigStatus2.isEmpty()) {
-  DriverStation.reportError(
-      "Nitrate " + armMotor.getAddress().getDeviceId() + " (Arm motor) failed to configure PID Slot 1",
-      false);
-}
+    PIDSettings settingsSlot1 =
+        new PIDSettings()
+            .setPID(Constants.Arm.kP, Constants.Arm.kI, 0)
+            .setFeedforwardMode(PIDFeedforwardMode.kArm)
+            .setGravitationalFeedforward(Constants.Arm.kG)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
+            .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
+            .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit)
+            .setISaturation(Constants.Arm.iSat)
+            .setIZone(Constants.Arm.iZone);
+    PIDSettings armSlot1ConfigStatus = armMotor.setPIDSettings(settingsSlot1, PIDConfigSlot.kSlot1);
+    if (!armSlot1ConfigStatus.isEmpty()) {
+      DriverStation.reportError(
+          "Nitrate "
+              + armMotor.getAddress().getDeviceId()
+              + " (Arm motor) failed to configure PID Slot 1",
+          false);
+    }
   }
 
   @Override

@@ -57,6 +57,26 @@ public class DeployerIONitrate implements DeployerIO {
               + " error (Deployer Motor); Did not receive settings",
           false);
     }
+    PIDSettings settingsSlot1 =
+        new PIDSettings()
+            .setPID(Constants.Deployer.retractkP, 0, 0)
+            .setGravitationalFeedforward(Constants.Deployer.kG)
+            .setFeedforwardMode(Constants.Deployer.feedforwardMode)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
+            .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
+            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit)
+            .setISaturation(Constants.Deployer.iSat)
+            .setIZone(Constants.Deployer.iZone);
+    PIDSettings deployerSlot1ConfigStatus =
+        deployerMotor.setPIDSettings(settingsSlot1, PIDConfigSlot.kSlot1);
+    if (!deployerSlot1ConfigStatus.isEmpty()) {
+      DriverStation.reportError(
+          "Nitrate "
+              + deployerMotor.getAddress().getDeviceId()
+              + " (deployer motor) failed to configure PID Slot 1",
+          false);
+    }
   }
 
   private void initMotorConfig() {
@@ -93,22 +113,6 @@ public class DeployerIONitrate implements DeployerIO {
             .setISaturation(Constants.Deployer.iSat)
             .setIZone(Constants.Deployer.iZone),
         PIDConfigSlot.kSlot0);
-
-    motorConfig.setPIDSettings(
-        PIDSettings.defaultSettings()
-            .setPID(
-                Constants.Deployer.retractkP,
-                Constants.Deployer.retractkI,
-                Constants.Deployer.retractkD)
-            .setGravitationalFeedforward(Constants.Deployer.kG)
-            .setFeedforwardMode(Constants.Deployer.feedforwardMode)
-            .setMinwrapConfig(new MinwrapConfig.Disabled())
-            .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
-            .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
-            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit)
-            .setISaturation(Constants.Deployer.iSat)
-            .setIZone(Constants.Deployer.iZone),
-        PIDConfigSlot.kSlot1);
 
     motorConfig.setFramePeriodSettings(
         FramePeriodSettings.defaultSettings()
