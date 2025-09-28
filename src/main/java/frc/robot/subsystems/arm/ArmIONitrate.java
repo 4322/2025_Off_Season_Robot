@@ -38,7 +38,7 @@ public class ArmIONitrate implements ArmIO {
     NitrateSettings armConfig = new NitrateSettings();
 
     armConfig.setPIDSettings(
-        new PIDSettings()
+        PIDSettings.defaultSettings()
             .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
             .setFeedforwardMode(PIDFeedforwardMode.kArm)
             .setGravitationalFeedforward(Constants.Arm.kG)
@@ -51,7 +51,7 @@ public class ArmIONitrate implements ArmIO {
         PIDConfigSlot.kSlot0);
 
     armConfig.setPIDSettings(
-        new PIDSettings()
+        PIDSettings.defaultSettings()
             .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
             .setFeedforwardMode(PIDFeedforwardMode.kArm)
             .setGravitationalFeedforward(Constants.Arm.kG)
@@ -71,17 +71,17 @@ public class ArmIONitrate implements ArmIO {
                     Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft)));
 
     armConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.Arm.motorIdleMode)
             .setInvert(Constants.Arm.motorInvert));
 
     armConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.Arm.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Arm.statorCurrentLimitAmps));
 
     armConfig.setFramePeriodSettings(
-        new FramePeriodSettings()
+        FramePeriodSettings.defaultSettings()
             .setEnabledPIDDebugFrames(
                 new EnabledDebugFrames()
                     .setKgControlEffort(Constants.debugPIDModeEnabled)

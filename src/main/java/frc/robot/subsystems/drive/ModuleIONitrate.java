@@ -4,6 +4,7 @@ import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.AtomicBondSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.AtomicBondMode;
@@ -63,6 +64,7 @@ public class ModuleIONitrate implements ModuleIO {
             .setStaticFeedforward(constants.driveMotorGains.getStaticFeedforward().get())
             .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get()),
         PIDConfigSlot.kSlot1);
+    driveConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
 
     NitrateSettings turnConfig = new NitrateSettings();
@@ -80,6 +82,7 @@ public class ModuleIONitrate implements ModuleIO {
                     constants.turnEncoderId, constants.turnMotorGearRatio)));
     turnConfig.setElectricalLimitSettings(constants.turnElectricalLimitSettings);
     turnConfig.setPIDSettings(constants.turnMotorGains, PIDConfigSlot.kSlot0);
+    turnConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
     NitrateSettings turnConfigStatus = turnMotor.setSettings(turnConfig, 0.02, 5);
 
     CanandmagSettings settings = new CanandmagSettings();

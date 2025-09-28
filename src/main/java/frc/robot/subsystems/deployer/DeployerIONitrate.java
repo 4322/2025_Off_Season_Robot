@@ -61,13 +61,13 @@ public class DeployerIONitrate implements DeployerIO {
 
   private void initMotorConfig() {
     motorConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.Deployer.busCurrentLimit)
             .setBusCurrentLimitTime(Constants.Deployer.busCurrentLimitTime)
             .setStatorCurrentLimit(Constants.Deployer.statorCurrentLimit));
 
     motorConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.Deployer.idleMode)
             .setInvert(Constants.Deployer.invertMode));
 
@@ -79,7 +79,7 @@ public class DeployerIONitrate implements DeployerIO {
     // Retract PID in slot 1
 
     motorConfig.setPIDSettings(
-        new PIDSettings()
+        PIDSettings.defaultSettings()
             .setPID(
                 Constants.Deployer.deploykP,
                 Constants.Deployer.deploykI,
@@ -95,7 +95,7 @@ public class DeployerIONitrate implements DeployerIO {
         PIDConfigSlot.kSlot0);
 
     motorConfig.setPIDSettings(
-        new PIDSettings()
+        PIDSettings.defaultSettings()
             .setPID(
                 Constants.Deployer.retractkP,
                 Constants.Deployer.retractkI,
@@ -111,7 +111,7 @@ public class DeployerIONitrate implements DeployerIO {
         PIDConfigSlot.kSlot1);
 
     motorConfig.setFramePeriodSettings(
-        new FramePeriodSettings()
+        FramePeriodSettings.defaultSettings()
             .setEnabledPIDDebugFrames(
                 new EnabledDebugFrames()
                     .setKgControlEffort(Constants.debugPIDModeEnabled)
