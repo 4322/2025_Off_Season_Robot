@@ -35,7 +35,7 @@ public class Module {
   }
 
   public void runClosedLoopDrive(SwerveModuleState state) {
-    if (Constants.deployerMode == SubsystemMode.NORMAL) {
+    if (Constants.driveMode == SubsystemMode.NORMAL) {
       // Optimize velocity setpoint
       state.optimize(getAngle());
       state.cosineScale(inputs.turnPosition);
@@ -47,7 +47,7 @@ public class Module {
   }
 
   public void runOpenLoopDrive(SwerveModuleState state) {
-    if (Constants.deployerMode == SubsystemMode.NORMAL) {
+    if (Constants.driveMode == SubsystemMode.NORMAL) {
       // Optimize velocity setpoint
       state.optimize(getAngle());
       state.cosineScale(inputs.turnPosition);

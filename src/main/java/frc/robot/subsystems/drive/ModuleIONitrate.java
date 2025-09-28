@@ -5,6 +5,7 @@ import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.AtomicBondSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.AtomicBondMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
@@ -13,13 +14,11 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDVelocityRequest;
-import com.reduxrobotics.motorcontrol.requests.VoltageRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.constants.DrivetrainConstants;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 
 public class ModuleIONitrate implements ModuleIO {
@@ -27,7 +26,7 @@ public class ModuleIONitrate implements ModuleIO {
   private final Nitrate turnMotor;
   private final Canandmag turnEncoder;
 
-  private final VoltageRequest driveVoltageRequest = new VoltageRequest(0);
+  private final PIDVelocityRequest drivePIDOpenLoopRequest = new PIDVelocityRequest(PIDConfigSlot.kSlot1, 0);
   private final PIDVelocityRequest drivePIDVelocityRequest =
       new PIDVelocityRequest(PIDConfigSlot.kSlot0, 0);
   private final PIDPositionRequest turnPIDPositionRequest =
@@ -40,7 +39,7 @@ public class ModuleIONitrate implements ModuleIO {
 
     NitrateSettings driveConfig = new NitrateSettings();
     driveConfig.setAtomicBondSettings(
-        new AtomicBondSettings()
+        AtomicBondSettings.defaultSettings()
             .setAtomicBondMode(AtomicBondMode.kSwerveModule)
             .setAtomicSwerveConstants(
                 turnMotor,
@@ -49,7 +48,7 @@ public class ModuleIONitrate implements ModuleIO {
                 constants.driveMotorGearRatio,
                 constants.turnCouplingRatio));
     driveConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(IdleMode.kBrake)
             .setInvert(
                 constants.driveMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted));
@@ -58,13 +57,17 @@ public class ModuleIONitrate implements ModuleIO {
         FeedbackSensorSettings.defaultSettings()
             .setSensorToMechanismRatio(constants.driveMotorGearRatio));
     driveConfig.setPIDSettings(constants.driveMotorGains, PIDConfigSlot.kSlot0);
+    driveConfig.setPIDSettings(PIDSettings
+        .defaultSettings()
+        .setStaticFeedforward(constants.driveMotorGains.getStaticFeedforward().get())
+        .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get()), PIDConfigSlot.kSlot1);
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
 
     NitrateSettings turnConfig = new NitrateSettings();
     turnConfig.setAtomicBondSettings(
-        new AtomicBondSettings().setAtomicBondMode(AtomicBondMode.kSwerveModule));
+        AtomicBondSettings.defaultSettings().setAtomicBondMode(AtomicBondMode.kSwerveModule));
     turnConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(IdleMode.kBrake)
             .setInvert(
                 constants.turnMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted));
@@ -128,12 +131,7 @@ public class ModuleIONitrate implements ModuleIO {
 
   @Override
   public void setDriveOpenLoop(double velocityRadPerSec) {
-    driveMotor.setRequest(
-        driveVoltageRequest.setVoltage(
-            Units.radiansToRotations(
-                velocityRadPerSec
-                    / Units.rotationsPerMinuteToRadiansPerSecond(
-                        DrivetrainConstants.driveMotorKv))));
+    driveMotor.setRequest(drivePIDOpenLoopRequest.setVelocity(Units.radiansToRotations(velocityRadPerSec)));
   }
 
   @Override

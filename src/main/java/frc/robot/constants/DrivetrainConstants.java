@@ -35,7 +35,7 @@ public class DrivetrainConstants {
   private static final double drivekP = 0; // TODO
   private static final double drivekD = 0; // TODO
   private static final double drivekS = 0; // TODO
-  private static final double drivekV = 0; // TODO
+  private static final double drivekV = driveMotorKv / driveGearRatio; // TODO
 
   private static final double turnkP = 0; // TODO
   private static final double turnkD = 0; // TODO
@@ -82,23 +82,23 @@ public class DrivetrainConstants {
 
   // Auto-configured objects below
   public static final ElectricalLimitSettings driveElectricalLimitSettings =
-      new ElectricalLimitSettings()
+      ElectricalLimitSettings.defaultSettings()
           .setBusCurrentLimit(driveSupplyCurrentLimit)
           .setBusCurrentLimitTime(driveSupplyCurrentTime)
           .setStatorCurrentLimit(driveStatorCurrentLimit);
   public static final ElectricalLimitSettings turnElectricalLimitSettings =
-      new ElectricalLimitSettings()
+      ElectricalLimitSettings.defaultSettings()
           .setBusCurrentLimit(turnSupplyCurrentLimit)
           .setBusCurrentLimitTime(turnSupplyCurrentTime)
           .setStatorCurrentLimit(turnStatorCurrentLimit);
 
   private static final PIDSettings drivePIDSettings =
-      new PIDSettings()
+      PIDSettings.defaultSettings()
           .setPID(drivekP, 0, drivekD)
           .setStaticFeedforward(drivekS)
           .setVelocityFeedforward(drivekV);
   private static final PIDSettings turnPIDSettings =
-      new PIDSettings()
+      PIDSettings.defaultSettings()
           .setPID(turnkP, 0, turnkD)
           .setMotionProfileAccelLimit(turnAccelerationLimit)
           .setMotionProfileDeaccelLimit(turnDeaccelerationLimit)
