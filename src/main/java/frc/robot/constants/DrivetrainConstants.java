@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
+
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 import frc.robot.util.SwerveUtil.SwerveModuleConstantsFactory;
@@ -48,8 +49,8 @@ public class DrivetrainConstants {
 
   // Specific module constants:
   // Front Left
-  private static final int frontLeftDriveMotorId = 4; // Done
-  private static final int frontLeftTurnMotorId = 6; // Done
+  private static final int frontLeftDriveMotorId = 6;
+  private static final int frontLeftTurnMotorId = 4;
   private static final int frontLeftTurnEncoderId = 3;
   private static final double halfWheelBaseMeters = 0.57785;
 
@@ -57,15 +58,15 @@ public class DrivetrainConstants {
   private static final double frontLeftYPos = halfWheelBaseMeters;
 
   // Front Right
-  private static final int frontRightDriveMotorId = 9; // Done
-  private static final int frontRightTurnMotorId = 1; // Done
+  private static final int frontRightDriveMotorId = 9; //
+  private static final int frontRightTurnMotorId = 3; // Done
   private static final int frontRightTurnEncoderId = 4;
 
   private static final double frontRightXPos = halfWheelBaseMeters;
   private static final double frontRightYPos = -halfWheelBaseMeters;
 
   // Back Left
-  private static final int backLeftDriveMotorId = 16; // Done
+  private static final int backLeftDriveMotorId = 16; 
   private static final int backLeftTurnMotorId = 12;
   private static final int backLeftTurnEncoderId = 2;
 
@@ -73,9 +74,9 @@ public class DrivetrainConstants {
   private static final double backLeftYPos = halfWheelBaseMeters;
 
   // Back Right
-  private static final int backRightDriveMotorId = 15; // Done
-  private static final int backRightTurnMotorId = 14; // Done
-  private static final int backRightTurnEncoderId = 3;
+  private static final int backRightDriveMotorId = 14; // Done
+  private static final int backRightTurnMotorId = 8; // Done
+  private static final int backRightTurnEncoderId = 1;
 
   private static final double backRightXPos = -halfWheelBaseMeters;
   private static final double backRightYPos = -halfWheelBaseMeters;
