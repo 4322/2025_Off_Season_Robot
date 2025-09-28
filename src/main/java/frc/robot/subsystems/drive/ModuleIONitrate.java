@@ -58,11 +58,6 @@ public class ModuleIONitrate implements ModuleIO {
         FeedbackSensorSettings.defaultSettings()
             .setSensorToMechanismRatio(constants.driveMotorGearRatio));
     driveConfig.setPIDSettings(constants.driveMotorGains, PIDConfigSlot.kSlot0);
-    driveConfig.setPIDSettings(
-        PIDSettings.defaultSettings()
-            .setStaticFeedforward(constants.driveMotorGains.getStaticFeedforward().get())
-            .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get()),
-        PIDConfigSlot.kSlot1);
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
 
     NitrateSettings turnConfig = new NitrateSettings();
@@ -107,6 +102,21 @@ public class ModuleIONitrate implements ModuleIO {
               + " (Swerve turn encoder) failed to configure",
           false);
     }
+
+    PIDSettings slot1Settings = 
+        PIDSettings.defaultSettings()
+            .setStaticFeedforward(constants.driveMotorGains.getStaticFeedforward().get())
+            .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get());
+
+    PIDSettings driveSlot1ConfigStatus = turnMotor.setPIDSettings(slot1Settings, PIDConfigSlot.kSlot1);
+
+    if (!driveSlot1ConfigStatus.isEmpty()) {
+        DriverStation.reportError(
+            "Nitrate "
+                + driveMotor.getAddress().getDeviceId()
+                + " (Swerve drive motor) PID Slot 1 failed to configure",
+            false);
+      }
   }
 
   @Override
