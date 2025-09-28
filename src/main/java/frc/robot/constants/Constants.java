@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -15,15 +16,15 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final SubsystemMode armMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
-  public static final boolean indexerEnabled = false;
-  public static final boolean rollersEnabled = false;
-  public static final boolean endEffectorEnabled = false;
-  public static final boolean visionEnabled = false;
-  public static final boolean debugPIDModeEnabled = false;
+  public static final SubsystemMode armMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode elevatorMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode deployerMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode driveMode = SubsystemMode.NORMAL;
+  public static final boolean indexerEnabled = true;
+  public static final boolean rollersEnabled = true;
+  public static final boolean endEffectorEnabled = true;
+  public static final boolean visionEnabled = true;
+  public static final boolean debugPIDModeEnabled = true;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
   public static final String logPath = "/home/lvuser/logs";
@@ -85,8 +86,8 @@ public final class Constants {
   }
 
   public static class Arm {
-    public static final int armMotorId = 10;
-    public static final int armEncoderId = 10;
+    public static final int armMotorId = 10; //Done
+    public static final int armEncoderId = 10; //Done
 
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // positive is up toward scoring side
@@ -147,8 +148,8 @@ public final class Constants {
   }
 
   public static class Elevator {
-    public static final int frontMotorID = 20;
-    public static final int backMotorID = 21;
+    public static final int frontMotorID = 3;//Done
+    public static final int backMotorID = 5; //Done
 
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
@@ -222,7 +223,7 @@ public final class Constants {
 
   // TODO all of these are placeholder values
   public static class EndEffector {
-    public static final int motorId = 30;
+    public static final int motorId = 13;//Done
     public static final int sensorId = 30;
 
     public static final double algaeHoldVolts = 1.0;
@@ -278,7 +279,7 @@ public final class Constants {
   }
 
   public static class Deployer {
-    public static final int deployerMotorId = 40;
+    public static final int deployerMotorId = 8; //Done
     public static final double deployVoltage = 3.0;
 
     public static final double statorCurrentLimit = 40;
@@ -316,8 +317,8 @@ public final class Constants {
   }
 
   public static class Indexer {
-    public static final int rightId = 50;
-    public static final int leftId = 51;
+    public static final int rightId = 7; //Done
+    public static final int leftId = 2; //Done
     public static final double busCurrentLimit = 40;
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 60;
@@ -335,7 +336,7 @@ public final class Constants {
   }
 
   public static class Rollers {
-    public static final int motorId = 60;
+    public static final int motorId = 11; //Done
 
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 60;
