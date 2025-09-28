@@ -35,7 +35,7 @@ public class DrivetrainConstants {
   private static final double drivekP = 0; // TODO
   private static final double drivekD = 0; // TODO
   private static final double drivekS = 0; // TODO
-  private static final double drivekV = driveMotorKv / driveGearRatio; // TODO
+  private static final double drivekV = driveMotorKv / 60.0 / driveGearRatio; // TODO
 
   private static final double turnkP = 0; // TODO
   private static final double turnkD = 0; // TODO
