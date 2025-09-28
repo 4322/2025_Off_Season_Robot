@@ -7,8 +7,6 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Superstructure;
 
 public class AlgaeScoreCommand extends Command {
-
-  private Superstructure.Level level;
   private Superstructure superstructure;
 
   public AlgaeScoreCommand(Superstructure superstructure) {
@@ -30,8 +28,7 @@ public class AlgaeScoreCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return (!driver.b().getAsBoolean() && !superstructure.isAutoOperationMode())
-        || (!superstructure.isAlgaeHeld() && superstructure.isAutoOperationMode());
+    return !driver.b().getAsBoolean() || (!superstructure.isAlgaeHeld() && superstructure.isAutoOperationMode());
   }
 
   @Override
