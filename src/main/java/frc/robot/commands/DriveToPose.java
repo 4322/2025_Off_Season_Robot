@@ -17,7 +17,7 @@ import frc.robot.util.GeomUtil;
 import frc.robot.LoggedTunableNumber;
 import frc.robot.RobotContainer;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 
 
@@ -29,8 +29,8 @@ public class DriveToPose extends Command {
   private final Supplier<Pose2d> poseSupplier;
 
   private boolean running = false;
-  private final PIDPositionRequest driveController =
-      new PIDPositionRequest(PIDConfigSlot.kSlot0, new TrapezoidProfile.Constraints(0.0, 0.0), Constants.loopPeriodSecs);
+  private final ProfiledPIDController driveController =
+      new ProfiledPIDController(0,0,0 , new TrapezoidProfile.Constraints(0.0, 0.0), Constants.loopPeriodSecs);
   private final ProfiledPIDController thetaController =
       new ProfiledPIDController(
           0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0), Constants.loopPeriodSecs);
@@ -67,32 +67,6 @@ public class DriveToPose extends Command {
   private static final LoggedTunableNumber ffMaxRadius =
       new LoggedTunableNumber("DriveToPose/FFMinRadius");
 
-  static {
-    switch (Constants.getRobot()) {
-      case ROBOT_2023C:
-      case ROBOT_2023P:
-      case ROBOT_SIMBOT:
-        driveKp.initDefault(2.0);
-        driveKd.initDefault(0.0);
-        thetaKp.initDefault(5.0);
-        thetaKd.initDefault(0.0);
-        driveMaxVelocity.initDefault(Units.inchesToMeters(150.0));
-        driveMaxVelocitySlow.initDefault(Units.inchesToMeters(50.0));
-        driveMaxAcceleration.initDefault(Units.inchesToMeters(95.0));
-        thetaMaxVelocity.initDefault(Units.degreesToRadians(360.0));
-        thetaMaxVelocitySlow.initDefault(Units.degreesToRadians(90.0));
-        thetaMaxAcceleration.initDefault(Units.degreesToRadians(720.0));
-        driveTolerance.initDefault(0.01);
-        driveToleranceSlow.initDefault(0.06);
-        thetaTolerance.initDefault(Units.degreesToRadians(1.0));
-        thetaToleranceSlow.initDefault(Units.degreesToRadians(3.0));
-        ffMinRadius.initDefault(0.2);
-        ffMaxRadius.initDefault(0.8);
-      default:
-        break;
-    }
-  }
-
   /** Drives to the specified pose under full software control. */
   public DriveToPose(Drive drive, Pose2d pose) {
     this(drive, false, pose);
@@ -120,12 +94,28 @@ public class DriveToPose extends Command {
   @Override
   public void initialize() {
     // Reset all controllers
+    driveKp.initDefault(2.0);
+    driveKd.initDefault(0.0);
+    thetaKp.initDefault(5.0);
+    thetaKd.initDefault(0.0);
+    driveMaxVelocity.initDefault(Units.inchesToMeters(150.0));
+    driveMaxVelocitySlow.initDefault(Units.inchesToMeters(50.0));
+    driveMaxAcceleration.initDefault(Units.inchesToMeters(95.0));
+    thetaMaxVelocity.initDefault(Units.degreesToRadians(360.0));
+    thetaMaxVelocitySlow.initDefault(Units.degreesToRadians(90.0));
+    thetaMaxAcceleration.initDefault(Units.degreesToRadians(720.0));
+    driveTolerance.initDefault(0.01);
+    driveToleranceSlow.initDefault(0.06);
+    thetaTolerance.initDefault(Units.degreesToRadians(1.0));
+    thetaToleranceSlow.initDefault(Units.degreesToRadians(3.0));
+    ffMinRadius.initDefault(0.2);
+    ffMaxRadius.initDefault(0.8);
     var currentPose = drive.getPose();
     driveController.reset(
         currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation()),
         Math.min(
             0.0,
-            -new Translation2d(drive.getFieldRelativeSpeeds(). , drive.run.dy)
+            -new Translation2d(drive.getFieldRelativeSpeeds().vxMetersPerSecond , drive.getFieldRelativeSpeeds().vyMetersPerSecond)
                 .rotateBy(
                     poseSupplier
                         .get()
@@ -219,7 +209,7 @@ public class DriveToPose extends Command {
             .getTranslation();
     drive.runVelocity(
         ChassisSpeeds.fromFieldRelativeSpeeds(
-            driveVelocity.getX(), driveVelocity.getY(), thetaVelocity, currentPose.getRotation()));
+            driveVelocity.getX(), driveVelocity.getY(), thetaVelocity, currentPose.getRotation()), true);
 
     // Log data
     Logger.recordOutput("DriveToPose/DistanceMeasured", currentDistance);
