@@ -28,7 +28,8 @@ public class AlgaeScoreCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return !driver.b().getAsBoolean() || (!superstructure.isAlgaeHeld() && superstructure.isAutoOperationMode());
+    return !driver.b().getAsBoolean()
+        || (!superstructure.isAlgaeHeld() && superstructure.isAutoOperationMode());
   }
 
   @Override
