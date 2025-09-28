@@ -26,7 +26,7 @@ public class Module {
     io.updateInputs(inputs);
     Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
 
-    if (Constants.deployerMode == SubsystemMode.TUNING && index == 0) {
+    if (Constants.driveMode == SubsystemMode.TUNING && index == 0) {
       Double newPos = BabyAlchemist.run(io.getTurnNitrate());
       if (newPos != null) {
         io.setTurnPosition(new Rotation2d(Units.degreesToRadians(newPos)));
