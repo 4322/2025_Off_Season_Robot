@@ -106,20 +106,26 @@ public class ModuleIONitrate implements ModuleIO {
           false);
     }
 
-    PIDSettings slot1Settings = 
-        PIDSettings.defaultSettings()
+    PIDSettings slot1Settings =
+        new PIDSettings()
             .setStaticFeedforward(constants.driveMotorGains.getStaticFeedforward().get())
-            .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get());
+            .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get())
+            .setPID(0, 0, 0)
+            .setGravitationalFeedforward(0)
+            .setMotionProfileVelocityLimit(0)
+            .setMotionProfileAccelLimit(0)
+            .setMotionProfileDeaccelLimit(0);
 
-    PIDSettings driveSlot1ConfigStatus = driveMotor.setPIDSettings(slot1Settings, PIDConfigSlot.kSlot1);
+    PIDSettings driveSlot1ConfigStatus =
+        driveMotor.setPIDSettings(slot1Settings, PIDConfigSlot.kSlot1);
 
     if (!driveSlot1ConfigStatus.isEmpty()) {
-        DriverStation.reportError(
-            "Nitrate "
-                + driveMotor.getAddress().getDeviceId()
-                + " (Swerve drive motor) PID Slot 1 failed to configure",
-            false);
-      }
+      DriverStation.reportError(
+          "Nitrate "
+              + driveMotor.getAddress().getDeviceId()
+              + " (Swerve drive motor) PID Slot 1 failed to configure",
+          false);
+    }
   }
 
   @Override
