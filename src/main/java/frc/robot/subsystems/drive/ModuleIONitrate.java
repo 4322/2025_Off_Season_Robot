@@ -111,7 +111,7 @@ public class ModuleIONitrate implements ModuleIO {
             .setStaticFeedforward(constants.driveMotorGains.getStaticFeedforward().get())
             .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get());
 
-    PIDSettings driveSlot1ConfigStatus = turnMotor.setPIDSettings(slot1Settings, PIDConfigSlot.kSlot1);
+    PIDSettings driveSlot1ConfigStatus = driveMotor.setPIDSettings(slot1Settings, PIDConfigSlot.kSlot1);
 
     if (!driveSlot1ConfigStatus.isEmpty()) {
         DriverStation.reportError(
