@@ -26,7 +26,8 @@ public class ModuleIONitrate implements ModuleIO {
   private final Nitrate turnMotor;
   private final Canandmag turnEncoder;
 
-  private final PIDVelocityRequest drivePIDOpenLoopRequest = new PIDVelocityRequest(PIDConfigSlot.kSlot1, 0);
+  private final PIDVelocityRequest drivePIDOpenLoopRequest =
+      new PIDVelocityRequest(PIDConfigSlot.kSlot1, 0);
   private final PIDVelocityRequest drivePIDVelocityRequest =
       new PIDVelocityRequest(PIDConfigSlot.kSlot0, 0);
   private final PIDPositionRequest turnPIDPositionRequest =
@@ -57,10 +58,11 @@ public class ModuleIONitrate implements ModuleIO {
         FeedbackSensorSettings.defaultSettings()
             .setSensorToMechanismRatio(constants.driveMotorGearRatio));
     driveConfig.setPIDSettings(constants.driveMotorGains, PIDConfigSlot.kSlot0);
-    driveConfig.setPIDSettings(PIDSettings
-        .defaultSettings()
-        .setStaticFeedforward(constants.driveMotorGains.getStaticFeedforward().get())
-        .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get()), PIDConfigSlot.kSlot1);
+    driveConfig.setPIDSettings(
+        PIDSettings.defaultSettings()
+            .setStaticFeedforward(constants.driveMotorGains.getStaticFeedforward().get())
+            .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get()),
+        PIDConfigSlot.kSlot1);
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
 
     NitrateSettings turnConfig = new NitrateSettings();
@@ -131,7 +133,8 @@ public class ModuleIONitrate implements ModuleIO {
 
   @Override
   public void setDriveOpenLoop(double velocityRadPerSec) {
-    driveMotor.setRequest(drivePIDOpenLoopRequest.setVelocity(Units.radiansToRotations(velocityRadPerSec)));
+    driveMotor.setRequest(
+        drivePIDOpenLoopRequest.setVelocity(Units.radiansToRotations(velocityRadPerSec)));
   }
 
   @Override

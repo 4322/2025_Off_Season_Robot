@@ -40,7 +40,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     followerRequest = new FollowMotorRequest(leaderMotor);
 
     frontConfig.setPIDSettings(
-        new PIDSettings()
+        PIDSettings.defaultSettings()
             .setPID(
                 Constants.Elevator.fast_kP, Constants.Elevator.fast_kI, Constants.Elevator.fast_kD)
             .setGravitationalFeedforward(Constants.Elevator.kG)
@@ -56,7 +56,7 @@ public class ElevatorIONitrate implements ElevatorIO {
         PIDConfigSlot.kSlot0);
 
     frontConfig.setPIDSettings(
-        new PIDSettings()
+        PIDSettings.defaultSettings()
             .setPID(
                 Constants.Elevator.slow_kP, Constants.Elevator.slow_kI, Constants.Elevator.slow_kD)
             .setGravitationalFeedforward(Constants.Elevator.kG)
@@ -72,19 +72,19 @@ public class ElevatorIONitrate implements ElevatorIO {
         PIDConfigSlot.kSlot1);
 
     frontConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.Elevator.motorIdleMode)
             .setInvert(Constants.Elevator.motorFrontInvert));
 
     frontConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps));
 
     frontConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
 
     frontConfig.setFramePeriodSettings(
-        new FramePeriodSettings()
+        FramePeriodSettings.defaultSettings()
             .setEnabledPIDDebugFrames(
                 new EnabledDebugFrames()
                     .setKgControlEffort(Constants.debugPIDModeEnabled)
@@ -94,12 +94,12 @@ public class ElevatorIONitrate implements ElevatorIO {
                     .setTotalControlEffort(Constants.debugPIDModeEnabled)));
 
     backConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.Elevator.motorIdleMode)
             .setInvert(Constants.Elevator.motorBackInvert));
 
     backConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps));
 

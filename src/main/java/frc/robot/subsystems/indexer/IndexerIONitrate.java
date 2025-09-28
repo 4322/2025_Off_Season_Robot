@@ -4,6 +4,7 @@ import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
@@ -74,30 +75,34 @@ public class IndexerIONitrate implements IndexerIO {
 
   private void initMotorConfig() {
     motorLeftConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
             .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
             .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit));
 
     motorRightConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
             .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
             .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit));
 
     motorLeftConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.Indexer.idleMode)
             .setInvert(Constants.Indexer.leftInvert));
 
     motorRightConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.Indexer.idleMode)
             .setInvert(Constants.Indexer.rightInvert));
 
     motorLeftConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
 
     motorRightConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
+
+    motorLeftConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
+
+    motorRightConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
   }
 
   private void configSensor() {}

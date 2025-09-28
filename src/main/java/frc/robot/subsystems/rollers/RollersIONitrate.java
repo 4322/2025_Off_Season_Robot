@@ -4,6 +4,7 @@ import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
@@ -33,17 +34,18 @@ public class RollersIONitrate implements RollersIO {
 
   private void initMotorConfig() {
     motorConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.Rollers.busCurrentLimit)
             .setBusCurrentLimitTime(Constants.Rollers.busCurrentLimitTime)
             .setStatorCurrentLimit(Constants.Rollers.statorCurrentLimit));
 
     motorConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.Rollers.idleMode)
             .setInvert(Constants.Rollers.invert));
 
     motorConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
+    motorConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
   }
 
   @Override

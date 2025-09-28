@@ -4,6 +4,7 @@ import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
@@ -51,17 +52,18 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
   private void initMotorConfig() {
     motorConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.EndEffector.busCurrentLimit)
             .setBusCurrentLimitTime(Constants.EndEffector.busCurrentLimitTime)
             .setStatorCurrentLimit(Constants.EndEffector.statorCurrentLimit));
 
     motorConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.EndEffector.motorIdleMode)
             .setInvert(Constants.EndEffector.motorInvert));
 
     motorConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
+    motorConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
   }
 
   private void initSensorConfig() {}
