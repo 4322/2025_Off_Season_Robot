@@ -48,8 +48,8 @@ public class DrivetrainConstants {
 
   // Specific module constants:
   // Front Left
-  private static final int frontLeftDriveMotorId = 4; // Done
-  private static final int frontLeftTurnMotorId = 6; // Done
+  private static final int frontLeftDriveMotorId = 6;
+  private static final int frontLeftTurnMotorId = 4;
   private static final int frontLeftTurnEncoderId = 3;
   private static final double halfWheelBaseMeters = 0.57785;
 
@@ -57,8 +57,8 @@ public class DrivetrainConstants {
   private static final double frontLeftYPos = halfWheelBaseMeters;
 
   // Front Right
-  private static final int frontRightDriveMotorId = 9; // Done
-  private static final int frontRightTurnMotorId = 1; // Done
+  private static final int frontRightDriveMotorId = 9; //
+  private static final int frontRightTurnMotorId = 3; // Done
   private static final int frontRightTurnEncoderId = 4;
 
   private static final double frontRightXPos = halfWheelBaseMeters;
@@ -73,7 +73,7 @@ public class DrivetrainConstants {
   private static final double backLeftYPos = halfWheelBaseMeters;
 
   // Back Right
-  private static final int backRightDriveMotorId = 15; // Done
+  private static final int backRightDriveMotorId = 8; // Done
   private static final int backRightTurnMotorId = 14; // Done
   private static final int backRightTurnEncoderId = 3;
 

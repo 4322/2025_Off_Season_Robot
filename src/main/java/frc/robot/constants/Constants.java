@@ -3,7 +3,6 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -148,7 +147,7 @@ public final class Constants {
   }
 
   public static class Elevator {
-    public static final int frontMotorID = 3; // Done
+    public static final int frontMotorID = 1; // Done
     public static final int backMotorID = 5; // Done
 
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
@@ -279,7 +278,7 @@ public final class Constants {
   }
 
   public static class Deployer {
-    public static final int deployerMotorId = 8; // Done
+    public static final int deployerMotorId = 15; // Done
     public static final double deployVoltage = 3.0;
 
     public static final double statorCurrentLimit = 40;
