@@ -55,7 +55,8 @@ public class ModuleIONitrate implements ModuleIO {
                 constants.driveMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted));
     driveConfig.setElectricalLimitSettings(constants.driveElectricalLimitSettings);
     driveConfig.setFeedbackSensorSettings(
-        new FeedbackSensorSettings().setSensorToMechanismRatio(constants.driveMotorGearRatio));
+        FeedbackSensorSettings.defaultSettings()
+            .setSensorToMechanismRatio(constants.driveMotorGearRatio));
     driveConfig.setPIDSettings(constants.driveMotorGains, PIDConfigSlot.kSlot0);
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
 
@@ -68,7 +69,7 @@ public class ModuleIONitrate implements ModuleIO {
             .setInvert(
                 constants.turnMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted));
     turnConfig.setFeedbackSensorSettings(
-        new FeedbackSensorSettings()
+        FeedbackSensorSettings.defaultSettings()
             .setFeedbackSensor(
                 new FeedbackSensor.CanandmagAbsolute(
                     constants.turnEncoderId, constants.turnMotorGearRatio)));

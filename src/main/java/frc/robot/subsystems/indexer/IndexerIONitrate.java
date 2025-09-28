@@ -3,6 +3,7 @@ package frc.robot.subsystems.indexer;
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
@@ -93,6 +94,10 @@ public class IndexerIONitrate implements IndexerIO {
         new OutputSettings()
             .setIdleMode(Constants.Indexer.idleMode)
             .setInvert(Constants.Indexer.rightInvert));
+
+    motorLeftConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
+
+    motorRightConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
   }
 
   private void configSensor() {}

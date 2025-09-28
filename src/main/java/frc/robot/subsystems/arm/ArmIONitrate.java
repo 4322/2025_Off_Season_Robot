@@ -64,7 +64,7 @@ public class ArmIONitrate implements ArmIO {
         PIDConfigSlot.kSlot1);
 
     armConfig.setFeedbackSensorSettings(
-        new FeedbackSensorSettings()
+        FeedbackSensorSettings.defaultSettings()
             .setSensorToMechanismRatio(Constants.Arm.sensorToArm)
             .setFeedbackSensor(
                 new FeedbackSensor.CanandmagRelative(

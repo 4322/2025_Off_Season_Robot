@@ -72,7 +72,8 @@ public class DeployerIONitrate implements DeployerIO {
             .setInvert(Constants.Deployer.invertMode));
 
     motorConfig.setFeedbackSensorSettings(
-        new FeedbackSensorSettings().setSensorToMechanismRatio(Constants.Deployer.motorGearRatio));
+        FeedbackSensorSettings.defaultSettings()
+            .setSensorToMechanismRatio(Constants.Deployer.motorGearRatio));
 
     // Deploy PID in slot 0
     // Retract PID in slot 1

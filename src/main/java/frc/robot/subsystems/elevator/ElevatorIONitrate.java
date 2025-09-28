@@ -3,6 +3,7 @@ package frc.robot.subsystems.elevator;
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
@@ -80,6 +81,8 @@ public class ElevatorIONitrate implements ElevatorIO {
             .setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps));
 
+    frontConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
+
     frontConfig.setFramePeriodSettings(
         new FramePeriodSettings()
             .setEnabledPIDDebugFrames(
@@ -99,6 +102,8 @@ public class ElevatorIONitrate implements ElevatorIO {
         new ElectricalLimitSettings()
             .setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps));
+
+    backConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
 
     followerRequest.setInverted(false);
 
