@@ -3,7 +3,6 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
-
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 import frc.robot.util.SwerveUtil.SwerveModuleConstantsFactory;
@@ -66,7 +65,7 @@ public class DrivetrainConstants {
   private static final double frontRightYPos = -halfWheelBaseMeters;
 
   // Back Left
-  private static final int backLeftDriveMotorId = 16; 
+  private static final int backLeftDriveMotorId = 16; // Done
   private static final int backLeftTurnMotorId = 12;
   private static final int backLeftTurnEncoderId = 2;
 
@@ -74,9 +73,9 @@ public class DrivetrainConstants {
   private static final double backLeftYPos = halfWheelBaseMeters;
 
   // Back Right
-  private static final int backRightDriveMotorId = 14; // Done
-  private static final int backRightTurnMotorId = 8; // Done
-  private static final int backRightTurnEncoderId = 1;
+  private static final int backRightDriveMotorId = 8; // Done
+  private static final int backRightTurnMotorId = 14; // Done
+  private static final int backRightTurnEncoderId = 3;
 
   private static final double backRightXPos = -halfWheelBaseMeters;
   private static final double backRightYPos = -halfWheelBaseMeters;
