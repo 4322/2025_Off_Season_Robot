@@ -168,7 +168,7 @@ public final class Constants {
     public static final double iZone = 1000; // TODO
 
     public static final double maxElevatorHeightMeters = 1.3068401092;
-    public static final double homeHeightMeters = 0.3917895136;
+    public static final double homeHeightMeters = 0.37926;
 
     public static final double minElevatorSafeHeightMeters = homeHeightMeters + 0.1;
     public static final double minElevatorSafeWithCoralMeters = homeHeightMeters + 0.3;
