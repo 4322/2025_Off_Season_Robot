@@ -139,4 +139,9 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     previousRequestedVoltage = -999;
     endEffectorMotor.stop(idleMode);
   }
+
+  @Override
+  public Nitrate getNitrate() {
+    return endEffectorMotor;
+  }
 }

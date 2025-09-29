@@ -71,4 +71,9 @@ public class RollersIONitrate implements RollersIO {
     prevRequestedVoltage = -999;
     rollersMotor.stop(mode);
   }
+
+  @Override
+  public Nitrate getNitrate() {
+    return rollersMotor;
+  }
 }

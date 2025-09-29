@@ -17,18 +17,22 @@ public class BabyAlchemist {
   private static final LoggedTunableNumber iZone = new LoggedTunableNumber("iZone");
   private static final LoggedTunableNumber kD = new LoggedTunableNumber("kD");
   private static final LoggedTunableNumber kG = new LoggedTunableNumber("kG");
-  private static final LoggedTunableNumber acc = new LoggedTunableNumber("acc");
-  private static final LoggedTunableNumber dec = new LoggedTunableNumber("dec");
-  private static final LoggedTunableNumber vel = new LoggedTunableNumber("velocity");
-  private static final LoggedTunableNumber setpoint = new LoggedTunableNumber("setpoint");
+  private static final LoggedTunableNumber acc = new LoggedTunableNumber("max acc");
+  private static final LoggedTunableNumber dec = new LoggedTunableNumber("max dec");
+  private static final LoggedTunableNumber vel = new LoggedTunableNumber("max vel");
+  private static final LoggedTunableNumber setpoint = new LoggedTunableNumber("PID setpoint");
+  private static final LoggedTunableNumber voltage1 =
+      new LoggedTunableNumber("Set voltage motor 1");
+  private static final LoggedTunableNumber voltage2 =
+      new LoggedTunableNumber("Set voltage motor 2");
 
-  public static Double run(Nitrate nitrate) {
+  public static Double run(Nitrate... nitrate) {
     NitrateSettings settings;
     Double newPos = null;
 
     if (!init) {
       if (Constants.currentMode == RobotMode.REAL) {
-        settings = nitrate.getSettings();
+        settings = nitrate[0].getSettings();
       } else {
         // for testing GUI in sim mode
         settings = new NitrateSettings();
@@ -60,6 +64,10 @@ public class BabyAlchemist {
       vel.initDefault(
           settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileVelocityLimit().get());
       setpoint.initDefault(0);
+      voltage1.initDefault(0);
+      if (nitrate.length > 1) {
+        voltage2.initDefault(0);
+      }
       init = true;
     }
 
@@ -98,13 +106,21 @@ public class BabyAlchemist {
     if (setpoint.hasChanged(1)) {
       newPos = setpoint.get();
     }
+    if (voltage1.hasChanged(1) && nitrate[0] != null) {
+      nitrate[0].setVoltage(voltage1.get());
+    }
+
+    if (voltage2.hasChanged(1) && nitrate.length > 1 && nitrate[1] != null) {
+      nitrate[1].setVoltage(voltage2.get());
+    }
 
     if (!settings.isEmpty() && (Constants.currentMode == RobotMode.REAL)) {
       settings.setEphemeral(true); // avoid wear of the Nitrate flash
-      NitrateSettings status = nitrate.setSettings(settings, 0.02, 5);
+      NitrateSettings status = nitrate[0].setSettings(settings, 0.02, 5);
       if (!status.isEmpty()) {
         DriverStation.reportError(
-            "Nitrate " + nitrate.getAddress().getDeviceId() + " did not receive settings", false);
+            "Nitrate " + nitrate[0].getAddress().getDeviceId() + " did not receive settings",
+            false);
       }
     }
     return newPos;

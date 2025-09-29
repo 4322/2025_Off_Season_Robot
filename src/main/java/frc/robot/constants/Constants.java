@@ -19,10 +19,10 @@ public final class Constants {
   public static final SubsystemMode elevatorMode = SubsystemMode.NORMAL;
   public static final SubsystemMode deployerMode = SubsystemMode.NORMAL;
   public static final SubsystemMode driveMode = SubsystemMode.NORMAL;
-  public static final boolean indexerEnabled = true;
-  public static final boolean rollersEnabled = true;
-  public static final boolean endEffectorEnabled = true;
-  public static final boolean visionEnabled = true;
+  public static final SubsystemMode indexerMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
+  public static final boolean visionEnabled = false;
   public static final boolean debugPIDModeEnabled = true;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 

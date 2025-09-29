@@ -1,5 +1,6 @@
 package frc.robot.subsystems.rollers;
 
+import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -19,4 +20,9 @@ public interface RollersIO {
   public default void setVoltage(double voltage) {}
 
   public default void stop(IdleMode mode) {}
+
+  // for tuning
+  public default Nitrate getNitrate() {
+    return null;
+  }
 }

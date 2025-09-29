@@ -150,4 +150,14 @@ public class IndexerIONitrate implements IndexerIO {
     indexerMotorRight.stop(mode);
     indexerMotorLeft.stop(mode);
   }
+
+  @Override
+  public Nitrate getRightNitrate() {
+    return indexerMotorRight;
+  }
+
+  @Override
+  public Nitrate getLeftNitrate() {
+    return indexerMotorLeft;
+  }
 }

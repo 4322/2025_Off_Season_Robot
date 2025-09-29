@@ -1,5 +1,6 @@
 package frc.robot.subsystems.endEffector;
 
+import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -38,4 +39,9 @@ public interface EndEffectorIO {
   public default void setVoltage(double voltage) {}
 
   public default void stop(IdleMode idleMode) {}
+
+  // for tuning
+  public default Nitrate getNitrate() {
+    return null;
+  }
 }

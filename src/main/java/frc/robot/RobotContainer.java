@@ -127,13 +127,13 @@ public class RobotContainer {
                   new VisionIOPhotonVision(camera0Name, robotToCamera0),
                   new VisionIOPhotonVision(camera1Name, robotToCamera1));
         }
-        if (Constants.endEffectorEnabled) {
+        if (Constants.endEffectorMode != SubsystemMode.DISABLED) {
           endEffector = new EndEffector(new EndEffectorIONitrate());
         }
-        if (Constants.indexerEnabled) {
+        if (Constants.indexerMode != SubsystemMode.DISABLED) {
           indexer = new Indexer(new IndexerIONitrate());
         }
-        if (Constants.rollersEnabled) {
+        if (Constants.rollersMode != SubsystemMode.DISABLED) {
           rollers = new Rollers(new RollersIONitrate());
         }
         if (Constants.deployerMode != SubsystemMode.DISABLED) {
