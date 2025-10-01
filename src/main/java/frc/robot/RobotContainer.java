@@ -203,13 +203,18 @@ public class RobotContainer {
     drive.setDefaultCommand(new DriveManual(drive));
     // The commands deal with the on False logic if the button is no longer held
 
-    driver.start().onTrue(new InstantCommand(() -> {
-      if (Robot.alliance == Alliance.Blue) {
-        drive.resetPose(new Pose2d());
-      } else {
-        drive.resetPose(new Pose2d(new Translation2d(), new Rotation2d(Math.PI)));
-      }
-    }).ignoringDisable(true));
+    driver
+        .start()
+        .onTrue(
+            new InstantCommand(
+                    () -> {
+                      if (Robot.alliance == Alliance.Blue) {
+                        drive.resetPose(new Pose2d());
+                      } else {
+                        drive.resetPose(new Pose2d(new Translation2d(), new Rotation2d(Math.PI)));
+                      }
+                    })
+                .ignoringDisable(true));
 
     driver.povUp().whileTrue(new Eject(intakeSuperstructure, superstructure));
     // Prescore/Descore Levels
