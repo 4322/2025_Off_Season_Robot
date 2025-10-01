@@ -165,8 +165,7 @@ public class ModuleIONitrate implements ModuleIO {
 
   @Override
   public void setTurnPosition(Rotation2d turnWheelPosition) {
-    turnMotor.setRequest(
-        turnPIDPositionRequest.setPosition(turnWheelPosition.getRotations() + 0.5));
+    turnMotor.setRequest(turnPIDPositionRequest.setPosition(turnWheelPosition.getRotations() + 0.5));
   }
 
   @Override
