@@ -41,7 +41,7 @@ public class Module {
     if (Constants.driveMode == SubsystemMode.NORMAL) {
       // Optimize velocity setpoint
       state.optimize(getAngle());
-      state.cosineScale(inputs.turnPosition);
+      state.cosineScale(inputs.turnAbsolutePosition);
 
       // Apply setpoints
       io.setDriveVelocity(state.speedMetersPerSecond / constants.driveWheelRadius);
@@ -53,7 +53,7 @@ public class Module {
     if (Constants.driveMode == SubsystemMode.NORMAL) {
       // Optimize velocity setpoint
       state.optimize(getAngle());
-      state.cosineScale(inputs.turnPosition);
+      state.cosineScale(inputs.turnAbsolutePosition);
 
       // Apply setpoints
       io.setDriveOpenLoop(state.speedMetersPerSecond / constants.driveWheelRadius);
@@ -63,7 +63,7 @@ public class Module {
 
   /** Returns the current turn angle of the module. */
   public Rotation2d getAngle() {
-    return inputs.turnPosition;
+    return inputs.turnAbsolutePosition;
   }
 
   /** Returns the current drive position of the module in meters. */
