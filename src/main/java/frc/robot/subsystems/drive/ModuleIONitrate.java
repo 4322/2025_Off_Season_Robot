@@ -139,6 +139,7 @@ public class ModuleIONitrate implements ModuleIO {
     inputs.driveTempCelsius = driveMotor.getMotorTemperatureFrame().getData();
 
     inputs.turnConnected = turnMotor.isConnected();
+    inputs.turnPosition = Rotation2d.fromRotations(turnMotor.getPosition());
     inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnMotor.getVelocity());
     inputs.turnAppliedVolts = driveMotor.getBusVoltageFrame().getData();
     inputs.turnSupplyCurrentAmps = turnMotor.getBusCurrent();
@@ -146,8 +147,8 @@ public class ModuleIONitrate implements ModuleIO {
     inputs.turnTempCelsius = turnMotor.getMotorTemperatureFrame().getData();
 
     inputs.turnEncoderConnected = turnEncoder.isConnected();
-    inputs.turnAbsolutePosition = Rotation2d.fromRotations(turnEncoder.getAbsPosition());
-    inputs.turnPosition = Rotation2d.fromRotations(turnEncoder.getPosition());
+    inputs.turnEncoderAbsPosition = turnEncoder.getAbsPosition();
+    inputs.turnEncoderPosition = turnEncoder.getPosition();
   }
 
   @Override
