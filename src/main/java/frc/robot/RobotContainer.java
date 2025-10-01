@@ -86,17 +86,17 @@ public class RobotContainer {
 
     if (Constants.currentMode == Constants.RobotMode.SIM) {
       drive =
-      new Drive(
-          new GyroIO() {},
-          new ModuleIO() {},
-          new ModuleIO() {},
-          new ModuleIO() {},
-          new ModuleIO() {});
+          new Drive(
+              new GyroIO() {},
+              new ModuleIO() {},
+              new ModuleIO() {},
+              new ModuleIO() {},
+              new ModuleIO() {});
       vision =
-      new Vision(
-        drive,
-        new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
-        new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+          new Vision(
+              drive,
+              new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
+              new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
       sim1 = new CommandXboxController(1);
 
       elevator = new Elevator(new ElevatorIOSim());
@@ -107,10 +107,10 @@ public class RobotContainer {
       rollers = new Rollers(new RollersIO() {});
       deployer = new Deployer(new DeployerIO() {});
 
-
     } else {
 
-      if (Constants.driveMode != SubsystemMode.DISABLED && Constants.currentMode == Constants.RobotMode.REAL) {
+      if (Constants.driveMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
         GyroIOBoron gyro = new GyroIOBoron();
         drive =
             new Drive(
@@ -139,44 +139,48 @@ public class RobotContainer {
         vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
       }
 
-      if (Constants.armMode != SubsystemMode.DISABLED && Constants.currentMode == Constants.RobotMode.REAL) {
+      if (Constants.armMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
         arm = new Arm(new ArmIONitrate());
       } else {
         arm = new Arm(new ArmIO() {});
       }
 
-      if (Constants.elevatorMode != SubsystemMode.DISABLED && Constants.currentMode == Constants.RobotMode.REAL) {
+      if (Constants.elevatorMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
         elevator = new Elevator(new ElevatorIONitrate());
       } else {
         elevator = new Elevator(new ElevatorIO() {});
       }
 
-      if (Constants.indexerMode != SubsystemMode.DISABLED && Constants.currentMode == Constants.RobotMode.REAL) {
+      if (Constants.indexerMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
         indexer = new Indexer(new IndexerIONitrate());
       } else {
         indexer = new Indexer(new IndexerIO() {});
       }
 
-      if (Constants.rollersMode != SubsystemMode.DISABLED && Constants.currentMode == Constants.RobotMode.REAL) {
+      if (Constants.rollersMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
         rollers = new Rollers(new RollersIONitrate());
       } else {
         rollers = new Rollers(new RollersIO() {});
       }
 
-      if (Constants.endEffectorMode != SubsystemMode.DISABLED && Constants.currentMode == Constants.RobotMode.REAL) {
+      if (Constants.endEffectorMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
         endEffector = new EndEffector(new EndEffectorIONitrate());
       } else {
         endEffector = new EndEffector(new EndEffectorIO() {});
       }
 
-      if (Constants.deployerMode != SubsystemMode.DISABLED && Constants.currentMode == Constants.RobotMode.REAL) {
+      if (Constants.deployerMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
         deployer = new Deployer(new DeployerIONitrate());
       } else {
         deployer = new Deployer(new DeployerIO() {});
       }
     }
-
-    
 
     intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
     superstructure = new Superstructure(endEffector, arm, elevator, intakeSuperstructure);
