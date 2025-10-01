@@ -65,7 +65,8 @@ public class ClockUtil {
 
   /**
    * Returns modulus of input with inclusive minimumInput and exclusive maximumInput.
-   * <p> Ex: [minimumInput, maximumInput)
+   *
+   * <p>Ex: [minimumInput, maximumInput)
    */
   public static double inputModulus(double input, double minimumInput, double maximumInput) {
     if (input == minimumInput || input == maximumInput) {
