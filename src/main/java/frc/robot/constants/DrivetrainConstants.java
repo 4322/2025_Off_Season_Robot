@@ -37,11 +37,11 @@ public class DrivetrainConstants {
   private static final double drivekS = 0; // TODO
   private static final double drivekV = driveMotorKv / 60.0 / driveGearRatio; // TODO
 
-  private static final double turnkP = 0; // TODO
-  private static final double turnkD = 0; // TODO
-  private static final double turnAccelerationLimit = 0; // TODO
-  private static final double turnDeaccelerationLimit = 0; // TODO
-  private static final double turnVelocityLimit = 0; // TODO
+  private static final double turnkP = 150; // TODO still needs to be tuned
+  private static final double turnkD = 0.2; // TODO
+  private static final double turnAccelerationLimit = 1000; // TODO
+  private static final double turnDeaccelerationLimit = 1000; // TODO
+  private static final double turnVelocityLimit = 1000; // TODO
 
   private static final double simTurnInertia = 0.00001;
   private static final double simDriveInertia = 0.001;

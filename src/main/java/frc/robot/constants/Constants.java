@@ -210,7 +210,7 @@ public final class Constants {
     public static final double fastDecelerationMetersPerSec2 = 300 / 50.0;
     public static final double fastVelocityMetersPerSec = 100 / 50.0;
 
-    public static final double slowAccelerationMetersPerSec2 = 10 / 50.0;
+    public static final double slowAccelerationMetersPerSec2 = 10 / 50.0; // TODO tune these
     public static final double slowDecelerationMetersPerSec2 = 10 / 50.0;
     public static final double slowVelocityMetersPerSec = 10 / 50.0;
 
