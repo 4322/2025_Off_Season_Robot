@@ -244,55 +244,55 @@ public class Vision extends SubsystemBase {
       leftL1Split = blueLeftL1Split;
       rightL1Split = blueRightL1Split;
     }
-    // Translation2d robotTranslation = robotPose.getTranslation();
-    // Rotation2d reefCenterToRobotDeg = ReefCenterPoint.minus(robotTranslation).getAngle();
-    // reefToRobotRad = reefCenterToRobotDeg.getRadians();
-    // Translation2d convertedRobotTrans;
+    Translation2d robotTranslation = drive.getPose().getTranslation();
+    Rotation2d reefCenterToRobotDeg = ReefCenterPoint.minus(robotTranslation).getAngle();
+    double reefToRobotRad = reefCenterToRobotDeg.getRadians();
+    Translation2d convertedRobotTrans;
 
-    // if (-30 <= reefToRobotRad && reefToRobotRad <= 30) {
-    //   reefFace = 0;
-    //   reefFaceAmbiguity = false;
-    // } else if (30 < reefToRobotRad && reefToRobotRad <= 90) {
-    //   reefFace = -60;
-    //   reefFaceAmbiguity = false;
-    // } else if (-90 < reefToRobotRad && reefToRobotRad <= -30) {
-    //   reefFace = 60;
-    //   reefFaceAmbiguity = false;
-    // } else if (90 < reefToRobotRad && reefToRobotRad <= 150) {
-    //   reefFace = -120;
-    //   reefFaceAmbiguity = false;
-    // } else if (-150 < reefToRobotRad && reefToRobotRad <= -90) {
-    //   reefFace = 120;
-    //   reefFaceAmbiguity = false;
-    // } else if (-210 < reefToRobotRad && reefToRobotRad < -210) {
-    //   reefFace = 180;
-    //   reefFaceAmbiguity = false;
-    // } else {
-    //   reefFaceAmbiguity = true;
-    // }
-
+    if (-30 <= reefToRobotRad && reefToRobotRad <= 30) {
+      reefFace = 0;
+      reefFaceAmbiguity = false;
+    } else if (30 < reefToRobotRad && reefToRobotRad <= 90) {
+      reefFace = -60;
+      reefFaceAmbiguity = false;
+    } else if (-90 < reefToRobotRad && reefToRobotRad <= -30) {
+      reefFace = 60;
+      reefFaceAmbiguity = false;
+    } else if (90 < reefToRobotRad && reefToRobotRad <= 150) {
+      reefFace = -120;
+      reefFaceAmbiguity = false;
+    } else if (-150 < reefToRobotRad && reefToRobotRad <= -90) {
+      reefFace = 120;
+      reefFaceAmbiguity = false;
+    } else if (-210 < reefToRobotRad && reefToRobotRad < -210) {
+      reefFace = 180;
+      reefFaceAmbiguity = false;
+    } else {
+      reefFaceAmbiguity = true;
+    }
+    L1Zone l1Zone;
     // // Provide a valid Rotation2d argument, for example Rotation2d.fromRadians(reefToRobotDeg)
-    // convertedRobotTrans =
-    //     robotTranslation.rotateAround(ReefCenterPoint, Rotation2d.fromRadians(reefToRobotRad));
+    convertedRobotTrans =
+        robotTranslation.rotateAround(ReefCenterPoint, Rotation2d.fromRadians(reefToRobotRad));
 
-    // if (-30 <= convertedRobotTrans.getAngle().getRadians()
-    //     && convertedRobotTrans.getAngle().getRadians() <= 0) { // Make sure it is for each face
-    //   closestReefPipe = ClosestReefPipe.LEFT;
-    // } else {
-    //   closestReefPipe = ClosestReefPipe.RIGHT;
-    // }
+    if (-30 <= convertedRobotTrans.getAngle().getRadians()
+        && convertedRobotTrans.getAngle().getRadians() <= 0) { // Make sure it is for each face
+      closestReefPipe = ClosestReefPipe.LEFT;
+    } else {
+      closestReefPipe = ClosestReefPipe.RIGHT;
+    }
 
-    // if (-30 < convertedRobotTrans.getAngle().getRadians()
-    //     || convertedRobotTrans.getAngle().getRadians()
-    //         < -10) { // TODO: MAke it so its for indiviual faces
+    if (-30 < convertedRobotTrans.getAngle().getRadians()
+        || convertedRobotTrans.getAngle().getRadians()
+            < -10) { // TODO: MAke it so its for indiviual faces
 
-    //   L1Zone l1Zone = L1Zone.LEFT; // TODO
+      l1Zone = L1Zone.LEFT; // TODO
 
-    // } else if (10 < convertedRobotTrans.getAngle().getRadians()
-    //     || convertedRobotTrans.getAngle().getRadians() < 30) {
-    //   L1Zone l1Zone = L1Zone.RIGHT;
-    // } else {
-    //   L1Zone l1Zone = L1Zone.MIDDLE;
-    // }
+    } else if (10 < convertedRobotTrans.getAngle().getRadians()
+        || convertedRobotTrans.getAngle().getRadians() < 30) {
+      l1Zone = L1Zone.RIGHT;
+    } else {
+      l1Zone = L1Zone.MIDDLE;
+    }
   }
 }
