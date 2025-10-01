@@ -140,6 +140,7 @@ public class ModuleIONitrate implements ModuleIO {
 
     inputs.turnConnected = turnMotor.isConnected();
     inputs.turnPosition = Rotation2d.fromRotations(turnMotor.getPosition());
+    inputs.turnOnboardRotorPos = turnMotor.getOnboardPositionFrame().getData();
     inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnMotor.getVelocity());
     inputs.turnAppliedVolts = driveMotor.getBusVoltageFrame().getData();
     inputs.turnSupplyCurrentAmps = turnMotor.getBusCurrent();
