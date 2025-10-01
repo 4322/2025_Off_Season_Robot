@@ -5,7 +5,11 @@ import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -198,6 +202,14 @@ public class RobotContainer {
   private void configureButtonBindings() {
     drive.setDefaultCommand(new DriveManual(drive));
     // The commands deal with the on False logic if the button is no longer held
+
+    driver.start().onTrue(new InstantCommand(() -> {
+      if (Robot.alliance == Alliance.Blue) {
+        drive.resetPose(new Pose2d());
+      } else {
+        drive.resetPose(new Pose2d(new Translation2d(), new Rotation2d(Math.PI)));
+      }
+    }).ignoringDisable(true));
 
     driver.povUp().whileTrue(new Eject(intakeSuperstructure, superstructure));
     // Prescore/Descore Levels
