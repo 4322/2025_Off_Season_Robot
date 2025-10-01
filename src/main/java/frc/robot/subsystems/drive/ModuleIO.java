@@ -18,7 +18,6 @@ public interface ModuleIO {
     public boolean turnConnected = false;
     public boolean turnEncoderConnected = false;
     public Rotation2d turnPosition = new Rotation2d();
-    public double turnOnboardRotorPos = 0.0;
     public double turnVelocityRadPerSec = 0.0;
     public double turnAppliedVolts = 0.0;
     public double turnSupplyCurrentAmps = 0.0;

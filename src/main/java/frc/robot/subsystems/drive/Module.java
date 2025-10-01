@@ -41,7 +41,7 @@ public class Module {
     if (Constants.driveMode == SubsystemMode.NORMAL) {
       // Optimize velocity setpoint
       state.optimize(getAngle());
-      state.cosineScale(inputs.turnPosition);
+      state.cosineScale(getAngle());
 
       // Apply setpoints
       io.setDriveVelocity(state.speedMetersPerSecond / constants.driveWheelRadius);
