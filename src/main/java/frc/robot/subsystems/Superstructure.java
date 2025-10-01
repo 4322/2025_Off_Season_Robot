@@ -172,13 +172,13 @@ public class Superstructure extends SubsystemBase {
         arm.algaeGround();
         endEffector.intakeAlgae();
 
-       if (requestIdle){
-        if (endEffector.hasAlgae()) {
-          state = Superstates.ALGAE_IDLE;
-        } else {
-          state = Superstates.IDLE;
+        if (requestIdle) {
+          if (endEffector.hasAlgae()) {
+            state = Superstates.ALGAE_IDLE;
+          } else {
+            state = Superstates.IDLE;
+          }
         }
-      }
 
         break;
       case DESCORE_ALGAE:
@@ -242,7 +242,10 @@ public class Superstructure extends SubsystemBase {
         if (!endEffector.hasCoral() && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.IDLE;
 
-        } else if (endEffector.hasCoral() && arm.atSetpoint() && elevator.atSetpoint() && requestIdle) {
+        } else if (endEffector.hasCoral()
+            && arm.atSetpoint()
+            && elevator.atSetpoint()
+            && requestIdle) {
           state = Superstates.CORAL_HELD;
         }
         break;
