@@ -68,11 +68,7 @@ public class ClockUtil {
    * <p> Ex: [minimumInput, maximumInput)
    */
   public static double inputModulus(double input, double minimumInput, double maximumInput) {
-    if (input == minimumInput) {
-      return input;
-    }
-
-    if (input == maximumInput) {
+    if (input == minimumInput && input == maximumInput) {
       return minimumInput;
     }
 
