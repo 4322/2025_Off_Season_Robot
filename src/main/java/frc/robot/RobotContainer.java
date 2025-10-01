@@ -84,34 +84,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, IO devices, and commands. */
   public RobotContainer() {
 
-    // create default non-existant subsystems
-    arm = new Arm(new ArmIO() {});
-    drive =
-        new Drive(
-            new GyroIO() {},
-            new ModuleIO() {},
-            new ModuleIO() {},
-            new ModuleIO() {},
-            new ModuleIO() {});
-    vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
-    elevator = new Elevator(new ElevatorIO() {});
-    endEffector = new EndEffector(new EndEffectorIO() {});
-    indexer = new Indexer(new IndexerIO() {});
-    rollers = new Rollers(new RollersIO() {});
-    deployer = new Deployer(new DeployerIO() {});
-
-    switch (Constants.currentMode) {
-      case REAL:
-        // Real robot, instantiate hardware IO implementations
-        if (Constants.armMode != SubsystemMode.DISABLED) {
-          arm = new Arm(new ArmIONitrate()); // Create the arm subsystem if enabled
-        }
-        if (Constants.elevatorMode != SubsystemMode.DISABLED) {
-          elevator =
-              new Elevator(new ElevatorIONitrate()); // Create the elevator subsystem if enabled
-        }
-        if (Constants.driveMode != SubsystemMode.DISABLED) {
-          GyroIOBoron gyro = new GyroIOBoron();
+    if (Constants.currentMode == Constants.RobotMode.SIM) {
+      GyroIOBoron gyro = new GyroIOBoron();
           drive =
               new Drive(
                   gyro,
@@ -119,45 +93,85 @@ public class RobotContainer {
                   new ModuleIONitrate(DrivetrainConstants.frontRight, gyro),
                   new ModuleIONitrate(DrivetrainConstants.backLeft, gyro),
                   new ModuleIONitrate(DrivetrainConstants.backRight, gyro));
-        }
-        if (Constants.visionEnabled) {
-          vision =
-              new Vision(
-                  drive,
-                  new VisionIOPhotonVision(camera0Name, robotToCamera0),
-                  new VisionIOPhotonVision(camera1Name, robotToCamera1));
-        }
-        if (Constants.endEffectorMode != SubsystemMode.DISABLED) {
-          endEffector = new EndEffector(new EndEffectorIONitrate());
-        }
-        if (Constants.indexerMode != SubsystemMode.DISABLED) {
-          indexer = new Indexer(new IndexerIONitrate());
-        }
-        if (Constants.rollersMode != SubsystemMode.DISABLED) {
-          rollers = new Rollers(new RollersIONitrate());
-        }
-        if (Constants.deployerMode != SubsystemMode.DISABLED) {
-          deployer = new Deployer(new DeployerIONitrate());
-        }
-        break;
+      vision =
+      new Vision(
+        drive,
+        new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
+        new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+      sim1 = new CommandXboxController(1);
 
-      case SIM:
-        // Sim robot, instantiate physics sim IO implementations
-        elevator = new Elevator(new ElevatorIOSim());
-        arm = new Arm(new ArmIOSim());
-        endEffector = new EndEffector(new EndEffectorIOSim());
-        indexer = new Indexer(new IndexerIOSim());
+      elevator = new Elevator(new ElevatorIOSim());
+      arm = new Arm(new ArmIOSim());
+      endEffector = new EndEffector(new EndEffectorIOSim());
+      indexer = new Indexer(new IndexerIOSim());
+    } else {
+      if (Constants.driveMode != SubsystemMode.DISABLED) {
+        GyroIOBoron gyro = new GyroIOBoron();
+        drive =
+            new Drive(
+                gyro,
+                new ModuleIONitrate(DrivetrainConstants.frontLeft, gyro),
+                new ModuleIONitrate(DrivetrainConstants.frontRight, gyro),
+                new ModuleIONitrate(DrivetrainConstants.backLeft, gyro),
+                new ModuleIONitrate(DrivetrainConstants.backRight, gyro));
+      } else {
+        drive =
+            new Drive(
+                new GyroIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {});
+      }
+
+      if (Constants.visionEnabled) {
         vision =
             new Vision(
                 drive,
-                new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
-                new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
-        sim1 = new CommandXboxController(1);
-        break;
+                new VisionIOPhotonVision(camera0Name, robotToCamera0),
+                new VisionIOPhotonVision(camera1Name, robotToCamera1));
+      } else {
+        vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
+      }
 
-      case REPLAY:
-        break;
+      if (Constants.armMode != SubsystemMode.DISABLED) {
+        arm = new Arm(new ArmIONitrate());
+      } else {
+        arm = new Arm(new ArmIO() {});
+      }
+
+      if (Constants.elevatorMode != SubsystemMode.DISABLED) {
+        elevator = new Elevator(new ElevatorIONitrate());
+      } else {
+        elevator = new Elevator(new ElevatorIO() {});
+      }
+
+      if (Constants.indexerMode != SubsystemMode.DISABLED) {
+        indexer = new Indexer(new IndexerIONitrate());
+      } else {
+        indexer = new Indexer(new IndexerIO() {});
+      }
+
+      if (Constants.rollersMode != SubsystemMode.DISABLED) {
+        rollers = new Rollers(new RollersIONitrate());
+      } else {
+        rollers = new Rollers(new RollersIO() {});
+      }
+
+      if (Constants.endEffectorMode != SubsystemMode.DISABLED) {
+        endEffector = new EndEffector(new EndEffectorIONitrate());
+      } else {
+        endEffector = new EndEffector(new EndEffectorIO() {});
+      }
+
+      if (Constants.deployerMode != SubsystemMode.DISABLED) {
+        deployer = new Deployer(new DeployerIONitrate());
+      } else {
+        deployer = new Deployer(new DeployerIO() {});
+      }
     }
+
+    
 
     intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
     superstructure = new Superstructure(endEffector, arm, elevator, intakeSuperstructure);
