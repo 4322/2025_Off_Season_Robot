@@ -7,6 +7,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.RobotMode;
+import java.util.Optional;
 
 public class BabyAlchemist {
   public static boolean init;
@@ -50,24 +51,46 @@ public class BabyAlchemist {
         settings.setPIDSettings(
             new PIDSettings().setMotionProfileVelocityLimit(7), PIDConfigSlot.kSlot0);
       }
-      kP.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getP().get());
-      kI.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getI().get());
-      iSat.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getISaturation().get());
-      iZone.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getIZone().get());
-      kD.initDefault(settings.getPIDSettings(PIDConfigSlot.kSlot0).getD().get());
-      kG.initDefault(
-          settings.getPIDSettings(PIDConfigSlot.kSlot0).getGravitationalFeedforward().get());
-      acc.initDefault(
-          settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileAccelLimit().get());
-      dec.initDefault(
-          settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileDeaccelLimit().get());
-      vel.initDefault(
-          settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileVelocityLimit().get());
+
+      Optional<Double> val = settings.getPIDSettings(PIDConfigSlot.kSlot0).getP();
+      if (val.isPresent()) {
+        kP.initDefault(val.get());
+      }
+      val = settings.getPIDSettings(PIDConfigSlot.kSlot0).getI();
+      if (val.isPresent()) {
+        kI.initDefault(val.get());
+      }
+      val = settings.getPIDSettings(PIDConfigSlot.kSlot0).getISaturation();
+      if (val.isPresent()) {
+        iSat.initDefault(val.get());
+      }
+      val = settings.getPIDSettings(PIDConfigSlot.kSlot0).getIZone();
+      if (val.isPresent()) {
+        iZone.initDefault(val.get());
+      }
+      val = settings.getPIDSettings(PIDConfigSlot.kSlot0).getD();
+      if (val.isPresent()) {
+        kD.initDefault(val.get());
+      }
+      val = settings.getPIDSettings(PIDConfigSlot.kSlot0).getGravitationalFeedforward();
+      if (val.isPresent()) {
+        kG.initDefault(val.get());
+      }
+      val = settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileAccelLimit();
+      if (val.isPresent()) {
+        acc.initDefault(val.get());
+      }
+      val = settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileDeaccelLimit();
+      if (val.isPresent()) {
+        dec.initDefault(val.get());
+      }
+      val = settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileVelocityLimit();
+      if (val.isPresent()) {
+        vel.initDefault(val.get());
+      }
       setpoint.initDefault(0);
       voltage1.initDefault(0);
-      if (nitrate.length > 1) {
-        voltage2.initDefault(0);
-      }
+      voltage2.initDefault(0);
       init = true;
     }
 
