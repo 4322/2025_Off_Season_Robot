@@ -166,6 +166,8 @@ public class ModuleIONitrate implements ModuleIO {
 
   @Override
   public void setTurnPosition(Rotation2d turnWheelPosition) {
+    // Convert back to motor rotations and apply input modulus to handle double variable precision
+    // edge case
     turnMotor.setRequest(
         turnPIDPositionRequest.setPosition(
             ClockUtil.inputModulus(turnWheelPosition.getRotations() + 0.5, 0, 1)));
