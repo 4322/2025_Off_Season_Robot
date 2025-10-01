@@ -104,7 +104,13 @@ public class RobotContainer {
       arm = new Arm(new ArmIOSim());
       endEffector = new EndEffector(new EndEffectorIOSim());
       indexer = new Indexer(new IndexerIOSim());
+
+      rollers = new Rollers(new RollersIO() {});
+      deployer = new Deployer(new DeployerIO() {});
+      
+
     } else {
+
       if (Constants.driveMode != SubsystemMode.DISABLED) {
         GyroIOBoron gyro = new GyroIOBoron();
         drive =
