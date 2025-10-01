@@ -20,6 +20,7 @@ import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.util.ClockUtil;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 
 public class ModuleIONitrate implements ModuleIO {
@@ -165,7 +166,7 @@ public class ModuleIONitrate implements ModuleIO {
 
   @Override
   public void setTurnPosition(Rotation2d turnWheelPosition) {
-    turnMotor.setRequest(turnPIDPositionRequest.setPosition(turnWheelPosition.getRotations() + 0.5));
+    turnMotor.setRequest(turnPIDPositionRequest.setPosition(ClockUtil.inputModulus(turnWheelPosition.getRotations() + 0.5, 0, 1)));
   }
 
   @Override
