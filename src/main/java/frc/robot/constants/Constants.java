@@ -38,7 +38,7 @@ public final class Constants {
     DISABLED,
     NORMAL,
     OPEN_LOOP,
-    TUNING // only one susbsystem may be in this mode at a time, drive tuning is front left turning
+    TUNING // only one subsystem may be in this mode at a time, drive tuning is front left turning
     // only
   }
 
