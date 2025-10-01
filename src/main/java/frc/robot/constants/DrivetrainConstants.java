@@ -19,8 +19,8 @@ public class DrivetrainConstants {
 
   private static final double wheelRadius = Units.inchesToMeters(2.0);
 
-  private static final boolean turnMotorInverted = true;
-  private static final boolean turnEncoderInverted = false;
+  private static final boolean turnMotorInverted = false;
+  private static final boolean turnEncoderInverted = true;
   private static final boolean invertLeftSideDrive = true;
   private static final boolean invertRightSideDrive = false;
 
