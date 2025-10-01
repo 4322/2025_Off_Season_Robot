@@ -15,13 +15,13 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final SubsystemMode armMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode armMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode elevatorMode = SubsystemMode.NORMAL;
   public static final SubsystemMode deployerMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode indexerMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode rollersMode = SubsystemMode.TUNING;
-  public static final SubsystemMode endEffectorMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode driveMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode indexerMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = false;
   public static final boolean debugPIDModeEnabled = true;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
