@@ -21,8 +21,8 @@ public class DrivetrainConstants {
 
   private static final boolean turnMotorInverted = true;
   private static final boolean turnEncoderInverted = false;
-  private static final boolean invertLeftSideDrive = false;
-  private static final boolean invertRightSideDrive = true;
+  private static final boolean invertLeftSideDrive = true;
+  private static final boolean invertRightSideDrive = false;
 
   public static final double driveSupplyCurrentLimit = 40.0; // TODO
   public static final double driveSupplyCurrentTime = 0.0; // TODO
