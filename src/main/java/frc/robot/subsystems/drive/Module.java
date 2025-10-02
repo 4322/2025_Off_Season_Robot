@@ -38,7 +38,7 @@ public class Module {
       } else {
         Double newVel =
             BabyAlchemist.run(
-                index, io.getTurnNitrate(), "Driving", inputs.driveVelocityRadPerSec, "rad/sec");
+                index, io.getDriveNitrate(), "Driving", inputs.driveVelocityRadPerSec, "rad/sec");
         if (newVel != null) {
           io.setDriveVelocity(newVel);
         }

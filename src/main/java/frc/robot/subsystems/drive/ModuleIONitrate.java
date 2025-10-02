@@ -177,4 +177,9 @@ public class ModuleIONitrate implements ModuleIO {
   public Nitrate getTurnNitrate() {
     return turnMotor;
   }
+
+  @Override
+  public Nitrate getDriveNitrate() {
+    return driveMotor;
+  }
 }
