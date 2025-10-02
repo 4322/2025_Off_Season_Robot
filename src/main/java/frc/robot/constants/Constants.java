@@ -15,7 +15,7 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final SubsystemMode armMode = SubsystemMode.TUNING;
+  public static final SubsystemMode armMode = SubsystemMode.NORMAL;
   public static final SubsystemMode elevatorMode = SubsystemMode.NORMAL;
   public static final SubsystemMode deployerMode = SubsystemMode.NORMAL;
   public static final SubsystemMode driveMode = SubsystemMode.NORMAL;
