@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.BabyAlchemist;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.SubsystemMode;
@@ -16,20 +15,18 @@ public class Module {
   private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
   private final int index;
   private final SwerveModuleConstants constants;
-  private final Timer initTimer = new Timer();
 
   public Module(ModuleIO io, int index, SwerveModuleConstants constants) {
     this.io = io;
     this.index = index;
     this.constants = constants;
-    initTimer.start();
   }
 
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
 
-    if (Constants.driveMode == SubsystemMode.TUNING && initTimer.hasElapsed(5)) {
+    if (Constants.driveMode == SubsystemMode.TUNING) {
       Double newPos =
           BabyAlchemist.run(
               index, io.getTurnNitrate(), "Turning", inputs.turnPosition.getDegrees(), "degrees");

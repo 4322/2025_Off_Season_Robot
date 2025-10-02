@@ -1,7 +1,6 @@
 package frc.robot.subsystems.rollers;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BabyAlchemist;
 import frc.robot.constants.Constants;
@@ -16,7 +15,6 @@ public class Rollers extends SubsystemBase {
   private boolean isCoralPickupDetected = false;
   private boolean currentDetectionTriggered = false;
   private boolean velocityDetectionTriggered = false;
-  private final Timer initTimer = new Timer();
 
   // Current goes from low -> high and velocity goes from high -> low on piece pickup
   private DeltaDebouncer currentDetectionDebouncer =
@@ -47,7 +45,6 @@ public class Rollers extends SubsystemBase {
 
   public Rollers(RollersIO io) {
     this.io = io;
-    initTimer.start();
   }
 
   @Override
@@ -64,7 +61,7 @@ public class Rollers extends SubsystemBase {
     Logger.recordOutput("Rollers/currentDetectionTriggered", currentDetectionTriggered);
     Logger.recordOutput("Rollers/velocityDetectionTriggered", velocityDetectionTriggered);
 
-    if (Constants.rollersMode == SubsystemMode.TUNING && initTimer.hasElapsed(5)) {
+    if (Constants.rollersMode == SubsystemMode.TUNING) {
       BabyAlchemist.run(0, io.getNitrate(), "Rollers", inputs.speedRotationsPerSec, "rot/sec");
     }
   }
