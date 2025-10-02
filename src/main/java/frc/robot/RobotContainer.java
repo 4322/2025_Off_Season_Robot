@@ -1,5 +1,10 @@
 package frc.robot;
 
+import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
+import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -8,7 +13,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.autonomous.AutonomousSelector;
@@ -54,10 +58,6 @@ import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
-import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
-import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
@@ -191,11 +191,7 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
-
-    
   }
-
-  
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -274,17 +270,16 @@ public class RobotContainer {
                 .onlyIf(() -> DriverStation.isDisabled())
                 .ignoringDisable(true));
     driver
-    .back()
-    .onTrue(
-     new InstantCommand(
-      () -> {
-        if (deployer.isDeployed()) {
-          deployer.retract();
-        } else {
-          deployer.deploy();
-        }
-      }
-    ));
+        .back()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  if (deployer.isDeployed()) {
+                    deployer.retract();
+                  } else {
+                    deployer.deploy();
+                  }
+                }));
   }
 
   public static boolean isScoringTriggerHeld() {
@@ -311,6 +306,4 @@ public class RobotContainer {
   public void configureAutonomousSelector() {
     autonomousSelector = new AutonomousSelector(drive, superstructure, intakeSuperstructure);
   }
-
-
 }

@@ -1,9 +1,8 @@
 package frc.robot.subsystems.endEffector;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface EndEffectorIO {
 

@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -10,6 +8,7 @@ import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.rollers.Rollers;
+import org.littletonrobotics.junction.Logger;
 
 public class IntakeSuperstructure extends SubsystemBase {
 
@@ -67,11 +66,11 @@ public class IntakeSuperstructure extends SubsystemBase {
       case UNHOMED:
         break;
       case RETRACT_IDLE:
-      if (deployer.isDeployed()){
-        deployer.deploy();
-      }
-      else {
-        deployer.retract();}
+        if (deployer.isDeployed()) {
+          deployer.deploy();
+        } else {
+          deployer.retract();
+        }
         if (isCoralDetectedIndexer()
             || isCoralDetectedPickupArea()
             || RobotContainer.getSuperstructure().isCoralHeld()) {

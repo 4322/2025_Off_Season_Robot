@@ -9,16 +9,17 @@ import frc.robot.subsystems.drive.Drive;
 
 public class AutonomousSelector {
 
-    private SendableChooser<SequentialCommandGroup> autonomousSelector = 
-        new SendableChooser<SequentialCommandGroup>();
+  private SendableChooser<SequentialCommandGroup> autonomousSelector =
+      new SendableChooser<SequentialCommandGroup>();
 
-    public AutonomousSelector(Drive drive, Superstructure superstructure, IntakeSuperstructure intakeSuperstructure ) {
-        autonomousSelector.setDefaultOption("DO_NOTHING", new SequentialCommandGroup());
+  public AutonomousSelector(
+      Drive drive, Superstructure superstructure, IntakeSuperstructure intakeSuperstructure) {
+    autonomousSelector.setDefaultOption("DO_NOTHING", new SequentialCommandGroup());
 
-        SmartDashboard.putData("Autonomous Selector", autonomousSelector);
-    }
+    SmartDashboard.putData("Autonomous Selector", autonomousSelector);
+  }
 
-    public SequentialCommandGroup get() {
-        return autonomousSelector.getSelected();
-    }
+  public SequentialCommandGroup get() {
+    return autonomousSelector.getSelected();
+  }
 }

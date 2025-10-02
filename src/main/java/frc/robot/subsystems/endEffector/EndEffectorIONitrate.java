@@ -10,7 +10,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 import com.reduxrobotics.sensors.canandcolor.CanandcolorSettings;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.endEffector.EndEffectorIO.EndEffectorIOInputs.gamePiece;

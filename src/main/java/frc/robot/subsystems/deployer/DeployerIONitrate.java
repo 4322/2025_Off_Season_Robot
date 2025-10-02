@@ -13,7 +13,6 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
