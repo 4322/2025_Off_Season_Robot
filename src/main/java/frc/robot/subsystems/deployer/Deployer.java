@@ -94,4 +94,8 @@ public class Deployer extends SubsystemBase {
   public void stop(IdleMode mode) {
     io.stop(mode);
   }
+
+  public boolean isDeployed(){
+    return currentAction == DeployerStatus.DEPLOY;
+  }
 }

@@ -1,10 +1,5 @@
 package frc.robot;
 
-import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
-import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
-import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -58,6 +53,10 @@ import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
+import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
+import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
@@ -269,6 +268,18 @@ public class RobotContainer {
             new CoastCommand(arm, elevator, deployer, superstructure)
                 .onlyIf(() -> DriverStation.isDisabled())
                 .ignoringDisable(true));
+    driver
+    .back()
+    .onTrue(
+     new InstantCommand(
+      () -> {
+        if (deployer.isDeployed()) {
+          deployer.retract();
+        } else {
+          deployer.deploy();
+        }
+      }
+    ));
   }
 
   public static boolean isScoringTriggerHeld() {
