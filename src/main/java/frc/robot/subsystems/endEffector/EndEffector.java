@@ -30,6 +30,7 @@ public class EndEffector extends SubsystemBase {
   private boolean isPiecePickupDetected = false;
 
   private Timer intakingTimer = new Timer();
+  private Timer releasingTimer = new Timer();
 
   private enum EndEffectorStates {
     IDLE,
@@ -67,6 +68,8 @@ public class EndEffector extends SubsystemBase {
     this.io = io;
     intakingTimer.stop();
     intakingTimer.reset();
+    releasingTimer.stop();
+    releasingTimer.reset();
   }
 
   @Override
@@ -168,36 +171,50 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case RELEASE_ALGAE:
+        if (!releasingTimer.isRunning()) {
+          releasingTimer.reset();
+          releasingTimer.start();
+        }
         io.setVoltage(Constants.EndEffector.algaeReleaseVolts);
         if (holdAlgae) {
           state = EndEffectorStates.HOLD_ALGAE;
-        } else if (!inputs.isAlgaeProximityDetected) {
+        } else if (!inputs.isAlgaeProximityDetected && releasingTimer.hasElapsed(Constants.EndEffector.algaeReleasingDelaySeconds)) {
           state = EndEffectorStates.IDLE;
           algaeHeld = false;
+          releasingTimer.stop();
+          releasingTimer.reset();
         } else if (inputs.isAlgaeProximityDetected) {
           state = EndEffectorStates.HOLD_ALGAE;
         }
         break;
       case RELEASE_CORAL_NORMAL:
+        if (!releasingTimer.isRunning()) {
+          releasingTimer.reset();
+          releasingTimer.start();
+        }
         io.setVoltage(Constants.EndEffector.coralReleaseVolts);
         if (holdCoral) {
           state = EndEffectorStates.HOLD_CORAL;
-        } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+        } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected && releasingTimer.hasElapsed(Constants.EndEffector.coralReleasingDelaySeconds))) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
-        } else if (inputs.isCoralProximityDetected) {
-          state = EndEffectorStates.HOLD_CORAL;
+          releasingTimer.stop();
+          releasingTimer.reset();
         }
         break;
       case RELEASE_CORAL_L1:
+        if (!releasingTimer.isRunning()) {
+          releasingTimer.reset();
+          releasingTimer.start();
+        }
         io.setVoltage(Constants.EndEffector.coralReleaseVoltsL1);
         if (holdCoral) {
           state = EndEffectorStates.HOLD_CORAL;
-        } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+        } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected && releasingTimer.hasElapsed(Constants.EndEffector.coralReleasingDelaySeconds))) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
-        } else if (inputs.isCoralProximityDetected) {
-          state = EndEffectorStates.HOLD_CORAL;
+          releasingTimer.stop();
+          releasingTimer.reset();
         }
         break;
       case EJECT:
