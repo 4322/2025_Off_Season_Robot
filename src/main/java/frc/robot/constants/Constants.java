@@ -346,10 +346,10 @@ public final class Constants {
     public static final InvertMode invert =
         InvertMode.kNotInverted; // positive is intaking, TODO: verify direction
 
-    public static final double voltageFeed = 9;
-    public static final double voltageFeedSlow = 0;
-    public static final double voltageReject = -2;
-    public static final double voltageRejectSlow = 0;
+    public static final double voltageFeed = 5;
+    public static final double voltageFeedSlow = 3;
+    public static final double voltageReject = -5;
+    public static final double voltageRejectSlow = -3;
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
         0.25; // Time for the delta of the current to spike and stay there before detection is
