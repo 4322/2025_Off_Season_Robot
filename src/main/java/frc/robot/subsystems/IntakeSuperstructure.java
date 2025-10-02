@@ -67,6 +67,11 @@ public class IntakeSuperstructure extends SubsystemBase {
       case UNHOMED:
         break;
       case RETRACT_IDLE:
+      if (deployer.isDeployed()){
+        deployer.deploy();
+      }
+      else {
+        deployer.retract();}
         if (isCoralDetectedIndexer()
             || isCoralDetectedPickupArea()
             || RobotContainer.getSuperstructure().isCoralHeld()) {
