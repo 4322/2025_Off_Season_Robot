@@ -17,6 +17,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -126,7 +127,8 @@ public class ArmIONitrate implements ArmIO {
     inputs.velocityDegSec = Units.rotationsToDegrees(armMotor.getVelocity());
     inputs.SupplyCurrentAmps = armMotor.getBusCurrent();
     inputs.StatorCurrentAmps = armMotor.getStatorCurrent();
-    inputs.TempCelsius = armMotor.getMotorTemperatureFrame().getData();
+    inputs.motorTempCelsius = armMotor.getMotorTemperatureFrame().getData();
+    inputs.controllerTempCelsius = armMotor.getControllerTemperatureFrame().getData();
     inputs.armEncoderConnected = armEncoder.isConnected();
     inputs.voltage = armMotor.getAppliedVoltageFrame().getValue();
     inputs.encoderRotations = armMotor.getPosition();

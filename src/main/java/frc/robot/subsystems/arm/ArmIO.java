@@ -1,8 +1,9 @@
 package frc.robot.subsystems.arm;
 
+import org.littletonrobotics.junction.AutoLog;
+
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
   @AutoLog
@@ -15,7 +16,8 @@ public interface ArmIO {
     public boolean armEncoderConnected = false;
     public double SupplyCurrentAmps = 0.0;
     public double StatorCurrentAmps = 0.0;
-    public double TempCelsius = 0.0;
+    public double motorTempCelsius = 0.0;
+    public double controllerTempCelsius = 0.0;
     public double PositionDegrees =
         0.0; // 0 is vertical to front of robot. Posititve clockwise looking from the left
     public double kGeffort;
