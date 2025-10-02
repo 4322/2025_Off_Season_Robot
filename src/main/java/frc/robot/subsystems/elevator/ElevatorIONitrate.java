@@ -14,6 +14,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.FollowMotorRequest;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 
@@ -168,6 +169,9 @@ public class ElevatorIONitrate implements ElevatorIO {
 
     inputs.leadertempCelcius = leaderMotor.getMotorTemperatureFrame().getValue();
     inputs.followertempCelcius = followerMotor.getMotorTemperatureFrame().getValue();
+
+    inputs.leaderControllerTempCelcius = leaderMotor.getControllerTemperatureFrame().getValue();
+    inputs.followerControllerTempCelcius = followerMotor.getControllerTemperatureFrame().getValue();
 
     inputs.leaderVoltage = leaderMotor.getAppliedVoltageFrame().getValue();
     inputs.leaderEncoderRotations = leaderMotor.getPosition();

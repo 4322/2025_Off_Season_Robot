@@ -13,6 +13,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -128,7 +129,8 @@ public class DeployerIONitrate implements DeployerIO {
     inputs.connected = deployerMotor.isConnected();
     inputs.statorCurrentAmps = deployerMotor.getStatorCurrent();
     inputs.busCurrentAmps = deployerMotor.getBusCurrent();
-    inputs.tempCelcius = deployerMotor.getMotorTemperatureFrame().getValue();
+    inputs.motorTempCelcius = deployerMotor.getMotorTemperatureFrame().getValue();
+    inputs.controllerTempCelcius = deployerMotor.getControllerTemperatureFrame().getValue();
     inputs.angleDeg = toCodeCoords(Units.rotationsToDegrees(deployerMotor.getPosition()));
     inputs.speedRotationsPerSec = deployerMotor.getVelocity();
     inputs.appliedVolts = deployerMotor.getAppliedVoltageFrame().getValue();
