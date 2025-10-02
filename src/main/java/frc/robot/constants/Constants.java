@@ -23,6 +23,7 @@ public final class Constants {
   public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = false;
+  public static final DriveTuningMode driveTuningMode = DriveTuningMode.TURNING;
   public static final boolean debugPIDModeEnabled = true;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
@@ -40,6 +41,11 @@ public final class Constants {
     OPEN_LOOP,
     TUNING // only one subsystem may be in this mode at a time, drive tuning is front left turning
     // only
+  }
+
+  public static enum DriveTuningMode {
+    DRIVING,
+    TURNING
   }
 
   public static enum RobotMode {

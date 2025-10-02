@@ -7,6 +7,7 @@ import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.RobotMode;
 import java.util.Optional;
@@ -14,6 +15,8 @@ import java.util.Optional;
 public class BabyAlchemist {
   private static boolean init;
   private static String subsystemName;
+  private static Timer initTimer = new Timer();
+  private static boolean pidMode = true;
 
   private static final LoggedTunableNumber kP = new LoggedTunableNumber("kP");
   private static final LoggedTunableNumber kI = new LoggedTunableNumber("kI");
@@ -48,7 +51,12 @@ public class BabyAlchemist {
       int motorIdx, Nitrate nitrate, String subsystemName, double currentValue, String unitString) {
     NitrateSettings settings;
     Double newPos = null;
+    initTimer.start();
 
+    // wait for settings to be received from the nitrate
+    if (!initTimer.hasElapsed(1.0)) {
+      return newPos;
+    }
     if (!init) {
       BabyAlchemist.subsystemName = subsystemName;
       if (Constants.currentMode == RobotMode.REAL) {
@@ -71,29 +79,43 @@ public class BabyAlchemist {
             new PIDSettings().setMotionProfileVelocityLimit(7), PIDConfigSlot.kSlot0);
       }
 
-      setDefault(kP, settings.getPIDSettings(PIDConfigSlot.kSlot0).getP());
-      setDefault(kI, settings.getPIDSettings(PIDConfigSlot.kSlot0).getI());
-      setDefault(iSat, settings.getPIDSettings(PIDConfigSlot.kSlot0).getISaturation());
-      setDefault(iZone, settings.getPIDSettings(PIDConfigSlot.kSlot0).getIZone());
-      setDefault(kD, settings.getPIDSettings(PIDConfigSlot.kSlot0).getD());
-      setDefault(kG, settings.getPIDSettings(PIDConfigSlot.kSlot0).getGravitationalFeedforward());
-      setDefault(kV, settings.getPIDSettings(PIDConfigSlot.kSlot0).getVelocityFeedforward());
-      setDefault(kS, settings.getPIDSettings(PIDConfigSlot.kSlot0).getStaticFeedforward());
-      setDefault(acc, settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileAccelLimit());
-      setDefault(dec, settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileDeaccelLimit());
+      setDefault(motorIdx, kP, settings.getPIDSettings(PIDConfigSlot.kSlot0).getP());
+      setDefault(motorIdx, kI, settings.getPIDSettings(PIDConfigSlot.kSlot0).getI());
+      setDefault(motorIdx, iSat, settings.getPIDSettings(PIDConfigSlot.kSlot0).getISaturation());
+      setDefault(motorIdx, iZone, settings.getPIDSettings(PIDConfigSlot.kSlot0).getIZone());
+      setDefault(motorIdx, kD, settings.getPIDSettings(PIDConfigSlot.kSlot0).getD());
       setDefault(
-          vel, settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileVelocityLimit());
-
-      setpoint.initDefault(currentValue);
-      voltage1.initDefault(0);
-      voltage2.initDefault(0);
+          motorIdx,
+          kG,
+          settings.getPIDSettings(PIDConfigSlot.kSlot0).getGravitationalFeedforward());
+      setDefault(
+          motorIdx, kV, settings.getPIDSettings(PIDConfigSlot.kSlot0).getVelocityFeedforward());
+      setDefault(
+          motorIdx, kS, settings.getPIDSettings(PIDConfigSlot.kSlot0).getStaticFeedforward());
+      setDefault(
+          motorIdx,
+          acc,
+          settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileAccelLimit());
+      setDefault(
+          motorIdx,
+          dec,
+          settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileDeaccelLimit());
+      setDefault(
+          motorIdx,
+          vel,
+          settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileVelocityLimit());
+      setDefault(motorIdx, setpoint, Optional.of(currentValue));
+      setDefault(motorIdx, voltage1, Optional.of(0.0));
+      setDefault(motorIdx, voltage2, Optional.of(0.0));
 
       subsystemEntry.setString(subsystemName);
-      currentValueEntry.setDouble(currentValue);
-      feedbackErrorEntry.setDouble(0);
+      currentValueEntry.setString("");
+      feedbackErrorEntry.setString("");
       unitsEntry.setString(unitString);
 
       init = true;
+      // can't continue because all settings will still show as changed in the current time tick
+      return newPos;
     }
 
     if (BabyAlchemist.subsystemName != subsystemName) {
@@ -102,8 +124,13 @@ public class BabyAlchemist {
     }
 
     if (motorIdx == 0) {
-      currentValueEntry.setDouble(currentValue);
-      feedbackErrorEntry.setDouble(setpoint.get() - currentValue);
+      if (pidMode) {
+        currentValueEntry.setString(String.format("%.4f", currentValue));
+        feedbackErrorEntry.setString(String.format("%.4f", setpoint.get() - currentValue));
+      } else {
+        currentValueEntry.setString("");
+        feedbackErrorEntry.setString("");
+      }
     }
 
     settings = new NitrateSettings();
@@ -148,13 +175,19 @@ public class BabyAlchemist {
     }
     if (setpoint.hasChanged(motorIdx)) {
       newPos = setpoint.get();
+      pidMode = true;
     }
-    if (motorIdx == 0 && voltage1.hasChanged(motorIdx) && nitrate != null) {
-      nitrate.setVoltage(voltage1.get());
+    if (motorIdx == 0 && voltage1.hasChanged(motorIdx)) {
+      if (nitrate != null) {
+        nitrate.setVoltage(voltage1.get());
+      }
+      pidMode = false;
     }
-
-    if (motorIdx == 1 && voltage2.hasChanged(motorIdx) && nitrate != null) {
-      nitrate.setVoltage(voltage2.get());
+    if (motorIdx == 1 && voltage2.hasChanged(motorIdx)) {
+      if (nitrate != null) {
+        nitrate.setVoltage(voltage2.get());
+      }
+      pidMode = false;
     }
 
     if (!settings.isEmpty() && (Constants.currentMode == RobotMode.REAL)) {
@@ -168,9 +201,13 @@ public class BabyAlchemist {
     return newPos;
   }
 
-  private static void setDefault(LoggedTunableNumber tunable, Optional<Double> val) {
+  private static void setDefault(int motorIdx, LoggedTunableNumber tunable, Optional<Double> val) {
     if (val.isPresent()) {
       tunable.initDefault(val.get());
+      // throw away initial settings change
+      if (!tunable.hasChanged(motorIdx)) {
+        System.exit(0); // will never happen
+      }
     }
   }
 }

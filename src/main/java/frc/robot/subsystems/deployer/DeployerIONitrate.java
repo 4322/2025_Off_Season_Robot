@@ -16,21 +16,15 @@ import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
-// TODO add constant for offset pid
-// Fully deployed is 0
-// Home is what fully deployed used to be
-// Idle retract is home position - before
-// Verify that all constants are being used
-// Enable GravitationalFeedForward mode
 
 /* Code coordinate system:
  * 0 -> 145.353984 where 0 is fully deployed and 145.353984 is fully retracted against hardstop
  * Motor controller coordinate system:
- * -10? -> 0 -> 135.353984 where 135.353984 is fully retracted against hardstop, 0 is the the point where the deployer is the most affected by gravity, and -10? is fully deployed
+ * -40 -> 0 -> 135.353984 where 135.353984 is fully retracted against hardstop,
+ * 0 is the the point where the deployer is the most affected by gravity, and -40 is fully deployed
  *
- * code = motor + 10
- * motor = code - 10
- * 10 is used in place of offset
+ * code = motor + 40
+ * motor = code - 40
  */
 
 public class DeployerIONitrate implements DeployerIO {

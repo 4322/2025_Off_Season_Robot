@@ -35,7 +35,12 @@ public interface ModuleIO {
 
   public default void setTurnPosition(Rotation2d turnWheelPosition) {}
 
+  // for tuning
   public default Nitrate getTurnNitrate() {
     return null;
-  } // for tuning
+  }
+
+  public default Nitrate getDriveNitrate() {
+    return null;
+  }
 }
