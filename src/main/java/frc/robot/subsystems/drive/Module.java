@@ -6,6 +6,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import frc.robot.BabyAlchemist;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.DriveTuningMode;
 import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 import org.littletonrobotics.junction.Logger;
@@ -27,11 +28,20 @@ public class Module {
     Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
 
     if (Constants.driveMode == SubsystemMode.TUNING) {
-      Double newPos =
-          BabyAlchemist.run(
-              index, io.getTurnNitrate(), "Turning", inputs.turnPosition.getDegrees(), "degrees");
-      if (newPos != null) {
-        io.setTurnPosition(new Rotation2d(Units.degreesToRadians(newPos)));
+      if (Constants.driveTuningMode == DriveTuningMode.TURNING) {
+        Double newPos =
+            BabyAlchemist.run(
+                index, io.getTurnNitrate(), "Turning", inputs.turnPosition.getDegrees(), "degrees");
+        if (newPos != null) {
+          io.setTurnPosition(new Rotation2d(Units.degreesToRadians(newPos)));
+        }
+      } else {
+        Double newVel =
+            BabyAlchemist.run(
+                index, io.getTurnNitrate(), "Driving", inputs.driveVelocityRadPerSec, "rad/sec");
+        if (newVel != null) {
+          io.setDriveVelocity(newVel);
+        }
       }
     }
   }
