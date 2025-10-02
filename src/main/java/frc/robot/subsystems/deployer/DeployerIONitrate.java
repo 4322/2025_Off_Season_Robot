@@ -20,7 +20,7 @@ import frc.robot.constants.Constants;
 /* Code coordinate system:
  * 0 -> 145.353984 where 0 is fully deployed and 145.353984 is fully retracted against hardstop
  * Motor controller coordinate system:
- * -40 -> 0 -> 135.353984 where 135.353984 is fully retracted against hardstop, 
+ * -40 -> 0 -> 135.353984 where 135.353984 is fully retracted against hardstop,
  * 0 is the the point where the deployer is the most affected by gravity, and -40 is fully deployed
  *
  * code = motor + 40

@@ -274,8 +274,10 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (intakeSuperstructure.getIntakeSuperstate() != IntakeSuperstructure.IntakeSuperstates.UNHOMED
-                  && intakeSuperstructure.getIntakeSuperstate() != IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE) {
+                  if (intakeSuperstructure.getIntakeSuperstate()
+                          != IntakeSuperstructure.IntakeSuperstates.UNHOMED
+                      && intakeSuperstructure.getIntakeSuperstate()
+                          != IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE) {
                     intakeSuperstructure.requestRetractIdle();
                   } else {
                     intakeSuperstructure.requestIntake();
