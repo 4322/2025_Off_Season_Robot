@@ -96,6 +96,7 @@ public class IntakeSuperstructure extends SubsystemBase {
           case FALSE:
               if (rollers.isCoralPickupDetected()) {
                 retractLockedOutState = RetractLockedOutStates.INDEXER;
+                retractTimeOutIndexerTimer.stop();
                 retractTimeOutIndexerTimer.reset();
                 retractTimeOutIndexerTimer.start();
               }
@@ -115,6 +116,8 @@ public class IntakeSuperstructure extends SubsystemBase {
             }
             break;
           case PICKUP:
+            retractTimeOutIndexerTimer.stop();
+            retractTimeOutIndexerTimer.reset();
             // If coral is detected in pickup area/end effector or x time has passed, clear lockout
             if ((isCoralDetectedPickupArea()
                     || RobotContainer.getSuperstructure().isCoralHeld())

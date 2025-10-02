@@ -195,7 +195,7 @@ public class EndEffector extends SubsystemBase {
         io.setVoltage(Constants.EndEffector.coralReleaseVolts);
         if (holdCoral) {
           state = EndEffectorStates.HOLD_CORAL;
-        } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected && releasingTimer.hasElapsed(Constants.EndEffector.coralReleasingDelaySeconds))) {
+        } else if ((!inputs.isCoralProximityDetected && releasingTimer.hasElapsed(Constants.EndEffector.coralReleasingDelaySeconds))) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
           releasingTimer.stop();
@@ -210,7 +210,7 @@ public class EndEffector extends SubsystemBase {
         io.setVoltage(Constants.EndEffector.coralReleaseVoltsL1);
         if (holdCoral) {
           state = EndEffectorStates.HOLD_CORAL;
-        } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected && releasingTimer.hasElapsed(Constants.EndEffector.coralReleasingDelaySeconds))) {
+        } else if ((!inputs.isCoralProximityDetected && releasingTimer.hasElapsed(Constants.EndEffector.coralReleasingDelaySeconds))) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
           releasingTimer.stop();

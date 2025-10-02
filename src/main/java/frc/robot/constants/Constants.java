@@ -281,8 +281,8 @@ public final class Constants {
         0.05; // Time to wait after algae is detected in End Effector before reducing voltage
     public static final double coralIntakingDelaySeconds =
         0.05; // Time to wait after coral is detected in End Effector before reducing voltage
-    public static final double algaeReleasingDelaySeconds = 1; // Time to wait when releasing before going back to non-holding voltage
-    public static final double coralReleasingDelaySeconds = 1;
+    public static final double algaeReleasingDelaySeconds = 0.5; // Time to wait when releasing before going back to non-holding voltage
+    public static final double coralReleasingDelaySeconds = 0.5;
     
   }
 
