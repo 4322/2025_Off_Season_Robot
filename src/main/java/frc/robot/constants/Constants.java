@@ -305,11 +305,11 @@ public final class Constants {
 
     // Range of motion of deployer is about 0-140 degrees
     public static final double motorGearRatio = 61.25;
-    public static final double ejectPositionDegrees = 94.931222;
-    public static final double retractPositionDegrees = 4.931222;
-    public static final double deployPositionDegrees = 145.353984;
+    public static final double ejectPositionDegrees = 125;
+    public static final double retractPositionDegrees = 125;
+    public static final double deployPositionDegrees = 0;
     public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kArm;
-    public static final double maxRangeDegrees = 145.353984;
+    public static final double maxRangeDegrees = 144.556;
     public static final double maxGravityDegrees = 40.0;
     public static final double accelerationLimit = 200;
     public static final double deaccelerationLimit = 200;
