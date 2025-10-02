@@ -34,7 +34,10 @@ public class Indexer extends SubsystemBase {
     Logger.recordOutput("Indexer/currentAction", currentAction.toString());
 
     if (Constants.indexerMode == SubsystemMode.TUNING) {
-      BabyAlchemist.run(io.getLeftNitrate(), io.getRightNitrate());
+      BabyAlchemist.run(
+          0, io.getLeftNitrate(), "Indexer", inputs.leftSpeedRotationsPerSec, "rot/sec");
+      BabyAlchemist.run(
+          1, io.getRightNitrate(), "Indexer", inputs.leftSpeedRotationsPerSec, "rot/sec");
     }
   }
 

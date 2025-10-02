@@ -85,7 +85,7 @@ public class EndEffector extends SubsystemBase {
     Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
 
     if (Constants.endEffectorMode == SubsystemMode.TUNING) {
-      BabyAlchemist.run(io.getNitrate());
+      BabyAlchemist.run(0, io.getNitrate(), "End-Effector", inputs.speedRotationsPerSec, "rot/sec");
       return;
     }
 

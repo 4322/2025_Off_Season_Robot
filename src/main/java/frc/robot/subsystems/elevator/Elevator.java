@@ -40,7 +40,9 @@ public class Elevator extends SubsystemBase {
           io.setVoltage(-RobotContainer.driver.getLeftY() * 12.0);
           break;
         case TUNING:
-          Double newPos = BabyAlchemist.run(io.getNitrate());
+          Double newPos =
+              BabyAlchemist.run(
+                  0, io.getNitrate(), "Elevator", inputs.leaderheightMeters, "meters");
           if (newPos != null) {
             io.requestHeightMeters(newPos);
           }

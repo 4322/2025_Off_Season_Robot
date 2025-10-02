@@ -65,7 +65,7 @@ public class Rollers extends SubsystemBase {
     Logger.recordOutput("Rollers/velocityDetectionTriggered", velocityDetectionTriggered);
 
     if (Constants.rollersMode == SubsystemMode.TUNING && initTimer.hasElapsed(5)) {
-      BabyAlchemist.run(io.getNitrate());
+      BabyAlchemist.run(0, io.getNitrate(), "Rollers", inputs.speedRotationsPerSec, "rot/sec");
     }
   }
 

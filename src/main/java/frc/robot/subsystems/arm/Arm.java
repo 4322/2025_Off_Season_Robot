@@ -40,7 +40,8 @@ public class Arm extends SubsystemBase {
           io.setVoltage(x * x * x * 12.0);
           break;
         case TUNING:
-          Double newPos = BabyAlchemist.run(io.getNitrate());
+          Double newPos =
+              BabyAlchemist.run(0, io.getNitrate(), "Arm", inputs.PositionDegrees, "degrees");
           if (newPos != null) {
             io.requestPosition(newPos);
           }
