@@ -8,8 +8,8 @@ public interface ModuleIO {
   @AutoLog
   public static class ModuleIOInputs {
     public boolean driveConnected = false;
-    public double drivePositionRad = 0.0;
-    public double driveVelocityRadPerSec = 0.0;
+    public double drivePositionMeters = 0.0;
+    public double driveVelocityMetersPerSec = 0.0;
     public double driveAppliedVolts = 0.0;
     public double driveSupplyCurrentAmps = 0.0;
     public double driveStatorCurrentAmps = 0.0;

@@ -27,6 +27,7 @@ public class ModuleIONitrate implements ModuleIO {
   private final Nitrate driveMotor;
   private final Nitrate turnMotor;
   private final Canandmag turnEncoder;
+  private final SwerveModuleConstants constants;
 
   private final PIDVelocityRequest drivePIDOpenLoopRequest =
       new PIDVelocityRequest(PIDConfigSlot.kSlot1, 0);
@@ -39,6 +40,7 @@ public class ModuleIONitrate implements ModuleIO {
     driveMotor = new Nitrate(constants.driveMotorId, MotorType.kCu60);
     turnMotor = new Nitrate(constants.turnMotorId, MotorType.kCu60);
     turnEncoder = new Canandmag(constants.turnEncoderId);
+    this.constants = constants;
 
     NitrateSettings driveConfig = new NitrateSettings();
     driveConfig.setAtomicBondSettings(
@@ -132,8 +134,10 @@ public class ModuleIONitrate implements ModuleIO {
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
     inputs.driveConnected = driveMotor.isConnected();
-    inputs.drivePositionRad = Units.rotationsToRadians(driveMotor.getPosition());
-    inputs.driveVelocityRadPerSec = Units.rotationsToRadians(driveMotor.getVelocity());
+    inputs.drivePositionMeters =
+        driveMotor.getPosition() * (2 * Math.PI) * constants.driveWheelRadius;
+    inputs.driveVelocityMetersPerSec =
+        driveMotor.getVelocity() * (2 * Math.PI) * constants.driveWheelRadius;
     inputs.driveAppliedVolts = driveMotor.getBusVoltageFrame().getData();
     inputs.driveSupplyCurrentAmps = driveMotor.getBusCurrent();
     inputs.driveStatorCurrentAmps = driveMotor.getStatorCurrent();

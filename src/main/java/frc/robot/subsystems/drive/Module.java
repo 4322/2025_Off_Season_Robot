@@ -70,12 +70,12 @@ public class Module {
 
   /** Returns the current drive position of the module in meters. */
   public double getPositionMeters() {
-    return inputs.drivePositionRad * constants.driveWheelRadius;
+    return inputs.drivePositionMeters;
   }
 
   /** Returns the current drive velocity of the module in meters per second. */
   public double getVelocityMetersPerSec() {
-    return inputs.driveVelocityRadPerSec * constants.driveWheelRadius;
+    return inputs.driveVelocityMetersPerSec;
   }
 
   /** Returns the module position (turn angle and drive position). */

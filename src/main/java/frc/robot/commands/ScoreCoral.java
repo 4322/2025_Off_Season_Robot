@@ -47,9 +47,9 @@ public class ScoreCoral extends Command {
   @Override
   public boolean isFinished() {
     return !driver.a().getAsBoolean()
-            && !driver.x().getAsBoolean()
-            && !driver.y().getAsBoolean()
-            && !driver.b().getAsBoolean();
+        && !driver.x().getAsBoolean()
+        && !driver.y().getAsBoolean()
+        && !driver.b().getAsBoolean();
   }
 
   @Override
