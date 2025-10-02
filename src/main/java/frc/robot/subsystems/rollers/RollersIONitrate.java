@@ -54,7 +54,8 @@ public class RollersIONitrate implements RollersIO {
     inputs.appliedVoltage = rollersMotor.getBusVoltageFrame().getValue();
     inputs.busCurrentAmps = rollersMotor.getBusCurrent();
     inputs.statorCurrentAmps = rollersMotor.getStatorCurrent();
-    inputs.tempCelcius = rollersMotor.getMotorTemperatureFrame().getValue();
+    inputs.motorTempCelcius = rollersMotor.getMotorTemperatureFrame().getValue();
+    inputs.controllerTempCelcius = rollersMotor.getControllerTemperatureFrame().getValue();
     inputs.speedRotationsPerSec = rollersMotor.getVelocity();
   }
 
