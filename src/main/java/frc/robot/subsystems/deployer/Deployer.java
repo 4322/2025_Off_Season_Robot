@@ -95,7 +95,4 @@ public class Deployer extends SubsystemBase {
     io.stop(mode);
   }
 
-  public boolean isDeploying() {
-    return currentAction == DeployerStatus.DEPLOY;
-  }
 }

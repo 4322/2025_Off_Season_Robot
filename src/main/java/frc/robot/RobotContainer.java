@@ -282,7 +282,9 @@ public class RobotContainer {
                   } else {
                     intakeSuperstructure.requestIntake();
                   }
-                }));
+                })
+                .onlyIf(() -> intakeSuperstructure.getIntakeSuperstate()
+                    != IntakeSuperstructure.IntakeSuperstates.UNHOMED));
   }
 
   public static boolean isScoringTriggerHeld() {
