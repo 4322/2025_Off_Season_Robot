@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.autonomous.AutonomousSelector;
 import frc.robot.commands.AlgaeIntakeGround;
 import frc.robot.commands.AlgaeScoreCommand;
 import frc.robot.commands.CoastCommand;
@@ -73,9 +74,7 @@ public class RobotContainer {
 
   private static Vision vision;
   private static Drive drive;
-  private static Arm arm; // IO for the arm subsystem, null if not enabled
-  // Declare Arm variable
-
+  private static Arm arm;
   private static EndEffector endEffector;
   private static Indexer indexer;
   private static Rollers rollers;
@@ -83,6 +82,8 @@ public class RobotContainer {
   private static IntakeSuperstructure intakeSuperstructure;
   private static Superstructure superstructure;
   private static Elevator elevator;
+
+  public static AutonomousSelector autonomousSelector;
 
   /** The container for the robot. Contains subsystems, IO devices, and commands. */
   public RobotContainer() {
@@ -190,7 +191,11 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
+
+    
   }
+
+  
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -300,6 +305,12 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return Commands.none();
+    return autonomousSelector.get();
   }
+
+  public void configureAutonomousSelector() {
+    autonomousSelector = new AutonomousSelector(drive, superstructure, intakeSuperstructure);
+  }
+
+
 }
