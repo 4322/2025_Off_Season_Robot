@@ -239,14 +239,12 @@ public class Superstructure extends SubsystemBase {
           endEffector.releaseCoralNormal();
         }
 
-        if (!endEffector.hasCoral() && arm.atSetpoint() && elevator.atSetpoint()) {
-          state = Superstates.IDLE;
-
-        } else if (endEffector.hasCoral()
-            && arm.atSetpoint()
-            && elevator.atSetpoint()
-            && requestIdle) {
-          state = Superstates.CORAL_HELD;
+        if (requestIdle) {
+          if (endEffector.hasCoral()) {
+            state = Superstates.CORAL_HELD;
+          } else {
+            state = Superstates.IDLE;
+          }
         }
         break;
       case SAFE_SCORE_ALGAE_RETRACT:
