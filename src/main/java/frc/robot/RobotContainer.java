@@ -274,10 +274,11 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (deployer.isDeployed()) {
-                    deployer.retract();
+                  if (intakeSuperstructure.getIntakeSuperstate() != IntakeSuperstructure.IntakeSuperstates.UNHOMED
+                  && intakeSuperstructure.getIntakeSuperstate() != IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE) {
+                    intakeSuperstructure.requestRetractIdle();
                   } else {
-                    deployer.deploy();
+                    intakeSuperstructure.requestIntake();
                   }
                 }));
   }

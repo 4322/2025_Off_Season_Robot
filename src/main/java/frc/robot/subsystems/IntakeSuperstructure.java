@@ -66,7 +66,7 @@ public class IntakeSuperstructure extends SubsystemBase {
       case UNHOMED:
         break;
       case RETRACT_IDLE:
-        if (deployer.isDeployed()) {
+        if (deployer.isDeploying()) {
           deployer.deploy();
         } else {
           deployer.retract();
@@ -215,6 +215,10 @@ public class IntakeSuperstructure extends SubsystemBase {
     return rollers.isCoralPickupDetected()
         || indexer.isCoralDetectedPickupArea()
         || indexer.isCoralDetectedIndexer();
+  }
+
+  public IntakeSuperstates getIntakeSuperstate() {
+    return state;
   }
 } // TODO check usage of reject vs. reject slow and eject vs eject slow
   // TODO add manual homing procedure
