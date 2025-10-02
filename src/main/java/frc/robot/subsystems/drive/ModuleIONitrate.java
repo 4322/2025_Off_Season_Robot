@@ -157,9 +157,9 @@ public class ModuleIONitrate implements ModuleIO {
   }
 
   @Override
-  public void setDriveOpenLoop(double velocityRadPerSec) {
+  public void setDriveOpenLoop(double driveWheelVelocityRadPerSec) {
     driveMotor.setRequest(
-        drivePIDOpenLoopRequest.setVelocity(Units.radiansToRotations(velocityRadPerSec)));
+        drivePIDOpenLoopRequest.setVelocity(Units.radiansToRotations(driveWheelVelocityRadPerSec)));
   }
 
   @Override
