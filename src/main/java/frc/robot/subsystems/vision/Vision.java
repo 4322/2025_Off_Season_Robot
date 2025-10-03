@@ -23,6 +23,10 @@ import frc.robot.Robot;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.VisionIO.ObservationMode;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
+import frc.robot.util.ReefStatus;
+import frc.robot.util.ReefStatus.ClosestReefPipe;
+import frc.robot.util.ReefStatus.L1Zone;
+
 import java.util.LinkedList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
@@ -32,12 +36,7 @@ public class Vision extends SubsystemBase {
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
   private final Alert[] disconnectedAlerts;
-  public boolean ReefFaceAmbiguity;
-  public boolean ReefPipeAmbiguity;
   private Drive drive;
-  public Translation2d ReefCenterPoint;
-  private double convertedRobotTrans;
-  private double reefFace;
   private static Translation2d redReefCenterPoint;
   private static Translation2d blueReefCenterPoint;
   private static Translation2d redLeftL1Split;
@@ -45,21 +44,9 @@ public class Vision extends SubsystemBase {
   private static Translation2d blueLeftL1Split;
   private static Translation2d blueRightL1Split;
   public boolean reefFaceAmbiguity;
-
-  public enum ClosestReefPipe { // TODO
-    LEFT,
-    RIGHT
-  }
-
-  ClosestReefPipe closestReefPipe;
-
-  public enum L1Zone {
-    MIDDLE,
-    LEFT,
-    RIGHT
-  }
-
-  ClosestReefPipe reefPipe;
+  public boolean reefPipeAmbiguity;
+  private double reefFace;
+  public ClosestReefPipe closestReefPipe;
   public double reefToRobotDeg;
 
   private ObservationMode observationMode = ObservationMode.GLOBAL_POSE;
@@ -231,7 +218,7 @@ public class Vision extends SubsystemBase {
         Matrix<N3, N1> visionMeasurementStdDevs);
   }
 
-  public void ReefStatus() {
+  public ReefStatus getReefStatus() {
     Translation2d ReefCenterPoint;
     Translation2d leftL1Split;
     Translation2d rightL1Split;
@@ -294,5 +281,7 @@ public class Vision extends SubsystemBase {
     } else {
       l1Zone = L1Zone.MIDDLE;
     }
+
+    return new ReefStatus(reefFaceAmbiguity, reefPipeAmbiguity, Rotation2d.fromDegrees(reefFace), closestReefPipe, l1Zone);
   }
 }
