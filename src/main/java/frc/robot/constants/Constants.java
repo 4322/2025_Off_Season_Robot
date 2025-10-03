@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -104,13 +105,13 @@ public final class Constants {
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0;
     public static final double coralHoldDeg = armIdleDeg;
-    public static final double algaeGroundDeg = 55.0; // TODO: Set to actual angle
+    public static final double algaeGroundDeg = 69.0; // TODO: Set to actual angle
 
     public static final double ejectDeg = 51.0;
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
-    public static final double minArmSafeDeg = 45; // TODO: Set to actual angle
-    public static final double minArmSafeWithCoralDeg = 50; // TODO: Set to actual angle
+    public static final double minArmSafeDeg = 53; // TODO: Set to actual angle
+    public static final double minArmSafeWithCoralDeg = 55; // TODO: Set to actual angle
     public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = 0.5;
@@ -181,7 +182,7 @@ public final class Constants {
 
     public static final double elevatorHeightToleranceMeters = 0.01;
 
-    public static final double algaeGroundHeightMeters = 0.2; // TODO: need actual value
+    public static final double algaeGroundHeightMeters = 0.00635; 
     public static final double algaeReefL2HeightMeters = 0.5021688204;
     public static final double algaeReefL3HeightMeters = 0.8739758746;
 
@@ -234,7 +235,7 @@ public final class Constants {
     public static final double algaeHoldVolts = 1.0;
     public static final double coralHoldVolts = 0.45;
 
-    public static final double algaeIntakeVolts = 3.0;
+    public static final double algaeIntakeVolts = 6;
     public static final double coralIntakeVolts = 2;
 
     public static final double algaeReleaseVolts = -3.0;
@@ -244,12 +245,14 @@ public final class Constants {
 
     public static final double ejectVolts = -4.0;
 
+    
     public static final double busCurrentLimit = 40;
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 100;
 
-    public static final double coralProximityThreshold = 1.2;
-    public static final double algaeProximityThreshold = 0;
+    public static final double coralProximityThreshold = 0.25;
+    public static final double algaeProximityThresholdRelease = 0.17; //TODO Need To have something for held and not held losing it should be 0.25 this value is for getting it
+    public static final double algaeProximityThresholdIntake = 0.25;
 
     public static final boolean useSensorColor = false; // TODO change this when we get color tuned
     // TODO tune these
