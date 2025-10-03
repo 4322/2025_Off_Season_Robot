@@ -44,7 +44,7 @@ public class Module {
                 inputs.driveVelocityMetersPerSec,
                 "meters/sec");
         if (newVel != null) {
-          io.setDriveVelocity(newVel);
+          io.setDriveVelocity(newVel * Math.PI / constants.driveWheelRadius);
         }
       }
     }
