@@ -143,14 +143,14 @@ public final class Constants {
     // To the encoder 0 is horizontal but to us its straight down
     public static final double OffsetEncoderDeg = -90;
 
-    public static final double kP = 150;
-    public static final double kI = 1000;
+    public static final double kP = 200;
+    public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double AccelerationLimit = 3; // TODO
-    public static final double DeaccelerationLimit = 3; // TODO
+    public static final double AccelerationLimit = 2.5; // TODO
+    public static final double DeaccelerationLimit = 1.5; // TODO
     public static final double VelocityLimit = 1; // TODO
-    public static final double slowVelocityLimit = 0.6; // TODO
+    public static final double slowVelocityLimit = 0.1; // TODO
   }
 
   public static class Elevator {
@@ -282,9 +282,9 @@ public final class Constants {
         0.05; // Time to wait after algae is detected in End Effector before reducing voltage
     public static final double coralIntakingDelaySeconds =
         0.05; // Time to wait after coral is detected in End Effector before reducing voltage
-    public static final double algaeReleasingDelaySeconds = 0.5; // Time to wait when releasing before going back to non-holding voltage
+    public static final double algaeReleasingDelaySeconds =
+        0.5; // Time to wait when releasing before going back to non-holding voltage
     public static final double coralReleasingDelaySeconds = 0.5;
-    
   }
 
   public static class Deployer {
