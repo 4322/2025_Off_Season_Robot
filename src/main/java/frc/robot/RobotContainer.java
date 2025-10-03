@@ -273,18 +273,20 @@ public class RobotContainer {
         .back()
         .onTrue(
             new InstantCommand(
-                () -> {
-                  if (intakeSuperstructure.getIntakeSuperstate()
-                          != IntakeSuperstructure.IntakeSuperstates.UNHOMED
-                      && intakeSuperstructure.getIntakeSuperstate()
-                          != IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE) {
-                    intakeSuperstructure.requestRetractIdle();
-                  } else {
-                    intakeSuperstructure.requestIntake();
-                  }
-                })
-                .onlyIf(() -> intakeSuperstructure.getIntakeSuperstate()
-                    != IntakeSuperstructure.IntakeSuperstates.UNHOMED));
+                    () -> {
+                      if (intakeSuperstructure.getIntakeSuperstate()
+                              != IntakeSuperstructure.IntakeSuperstates.UNHOMED
+                          && intakeSuperstructure.getIntakeSuperstate()
+                              != IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE) {
+                        intakeSuperstructure.requestRetractIdle();
+                      } else {
+                        intakeSuperstructure.requestIntake();
+                      }
+                    })
+                .onlyIf(
+                    () ->
+                        intakeSuperstructure.getIntakeSuperstate()
+                            != IntakeSuperstructure.IntakeSuperstates.UNHOMED));
   }
 
   public static boolean isScoringTriggerHeld() {

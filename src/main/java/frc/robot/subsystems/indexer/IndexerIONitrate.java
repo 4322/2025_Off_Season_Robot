@@ -115,6 +115,7 @@ public class IndexerIONitrate implements IndexerIO {
     inputs.leftBusCurrentAmps = indexerMotorLeft.getBusCurrent();
     inputs.leftStatorCurrentAmps = indexerMotorLeft.getStatorCurrent();
     inputs.leftTempCelcius = indexerMotorLeft.getMotorTemperatureFrame().getValue();
+    inputs.leftControllerTempCelcius = indexerMotorLeft.getControllerTemperatureFrame().getValue();
     inputs.leftSpeedRotationsPerSec = indexerMotorLeft.getVelocity();
 
     inputs.rightConnected = indexerMotorRight.isConnected();
@@ -122,6 +123,8 @@ public class IndexerIONitrate implements IndexerIO {
     inputs.rightBusCurrentAmps = indexerMotorRight.getBusCurrent();
     inputs.rightStatorCurrentAmps = indexerMotorRight.getStatorCurrent();
     inputs.rightTempCelcius = indexerMotorRight.getMotorTemperatureFrame().getValue();
+    inputs.rightControllerTempCelcius =
+        indexerMotorRight.getControllerTemperatureFrame().getValue();
     inputs.rightSpeedRotationsPerSec = indexerMotorRight.getVelocity();
 
     inputs.indexerSensorConnected = indexerSensor.isConnected();

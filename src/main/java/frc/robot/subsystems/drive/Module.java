@@ -38,7 +38,11 @@ public class Module {
       } else {
         Double newVel =
             BabyAlchemist.run(
-                index, io.getDriveNitrate(), "Driving", inputs.driveVelocityMetersPerSec, "meters/sec");
+                index,
+                io.getDriveNitrate(),
+                "Driving",
+                inputs.driveVelocityMetersPerSec,
+                "meters/sec");
         if (newVel != null) {
           io.setDriveVelocity(newVel);
         }

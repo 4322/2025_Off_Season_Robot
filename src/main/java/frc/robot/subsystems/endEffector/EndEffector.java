@@ -1,6 +1,9 @@
 package frc.robot.subsystems.endEffector;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BabyAlchemist;
@@ -9,7 +12,6 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.util.ClockUtil;
 import frc.robot.util.DeltaDebouncer;
-import org.littletonrobotics.junction.Logger;
 
 public class EndEffector extends SubsystemBase {
   private EndEffectorIO io;

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BabyAlchemist;
 import frc.robot.RobotContainer;
@@ -32,58 +33,62 @@ public class Arm extends SubsystemBase {
     Logger.processInputs("Arm", inputs);
     Logger.recordOutput("Arm/atSetpoint", atSetpoint());
     Logger.recordOutput("Arm/TargetAngle", requestedSetpoint);
+    if (DriverStation.isDisabled()) {
 
-    if (isHomed) {
-      switch (Constants.armMode) {
-        case OPEN_LOOP:
-          double x = -RobotContainer.driver.getLeftX();
-          io.setVoltage(x * x * x * 12.0);
-          break;
-        case TUNING:
-          Double newPos =
-              BabyAlchemist.run(0, io.getNitrate(), "Arm", inputs.PositionDegrees, "degrees");
-          if (newPos != null) {
-            io.requestPosition(newPos);
-          }
-          break;
-        case DISABLED:
-          break;
-        case NORMAL:
-          if (RobotContainer.getSuperstructure().isCoralHeld()) {
-            minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
-            minElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralMeters;
-          } else {
-            minSafeArmDegree = Constants.Arm.minArmSafeDeg;
-            minElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
-          }
-
-          // Safety Logic
-          // Checks the logic checking for if it is in a dangerous position
-
-          elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
-
-          if (requestedSetpoint < minSafeArmDegree
-              && elevatorHeight < (minElevatorHeight - Constants.Elevator.bufferHeightMeters)
-              && getAngleDegrees()
-                  > (minSafeArmDegree
-                      - Constants.Arm.bufferDeg)) { // So if the requested setpoint is under the min
-            // safe angle and the elevator is too low the arm
-            // will go to min safe angle
-            newSetpoint = minSafeArmDegree;
-          } else {
-            newSetpoint =
-                requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
-          }
-
-          if (prevSetpoint != newSetpoint) {
-            if (isSlow) {
-              io.requestSlowPosition(newSetpoint);
-              prevSetpoint = newSetpoint;
-            } else {
-              io.requestPosition(newSetpoint);
-              prevSetpoint = newSetpoint;
+    } else {
+      if (isHomed) {
+        switch (Constants.armMode) {
+          case OPEN_LOOP:
+            double x = -RobotContainer.driver.getLeftX();
+            io.setVoltage(x * x * x * 12.0);
+            break;
+          case TUNING:
+            Double newPos =
+                BabyAlchemist.run(0, io.getNitrate(), "Arm", inputs.PositionDegrees, "degrees");
+            if (newPos != null) {
+              io.requestPosition(newPos);
             }
-          }
+            break;
+          case DISABLED:
+            break;
+          case NORMAL:
+            if (RobotContainer.getSuperstructure().isCoralHeld()) {
+              minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
+              minElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralMeters;
+            } else {
+              minSafeArmDegree = Constants.Arm.minArmSafeDeg;
+              minElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
+            }
+
+            // Safety Logic
+            // Checks the logic checking for if it is in a dangerous position
+
+            elevatorHeight = RobotContainer.getSuperstructure().getElevatorHeight();
+
+            if (requestedSetpoint < minSafeArmDegree
+                && elevatorHeight < (minElevatorHeight - Constants.Elevator.bufferHeightMeters)
+                && getAngleDegrees()
+                    > (minSafeArmDegree
+                        - Constants.Arm
+                            .bufferDeg)) { // So if the requested setpoint is under the min
+              // safe angle and the elevator is too low the arm
+              // will go to min safe angle
+              newSetpoint = minSafeArmDegree;
+            } else {
+              newSetpoint =
+                  requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
+            }
+
+            if (prevSetpoint != newSetpoint) {
+              if (isSlow) {
+                io.requestSlowPosition(newSetpoint);
+                prevSetpoint = newSetpoint;
+              } else {
+                io.requestPosition(newSetpoint);
+                prevSetpoint = newSetpoint;
+              }
+            }
+        }
       }
     }
   }

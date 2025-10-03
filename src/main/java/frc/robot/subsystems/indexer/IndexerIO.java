@@ -14,6 +14,7 @@ public interface IndexerIO {
     public double leftStatorCurrentAmps = 0.0;
     public double leftTempCelcius = 0.0;
     public double leftSpeedRotationsPerSec = 0.0;
+    public double leftControllerTempCelcius = 0.0;
 
     public boolean rightConnected = false;
     public double rightAppliedVoltage = 0.0;
@@ -21,6 +22,7 @@ public interface IndexerIO {
     public double rightStatorCurrentAmps = 0.0;
     public double rightTempCelcius = 0.0;
     public double rightSpeedRotationsPerSec = 0.0;
+    public double rightControllerTempCelcius = 0.0;
 
     public boolean indexerSensorConnected = false;
     public boolean indexerSensorTriggered = false;
