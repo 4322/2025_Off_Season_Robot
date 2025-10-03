@@ -19,8 +19,8 @@ public class DrivetrainConstants {
 
   private static final double wheelRadius = Units.inchesToMeters(2.0);
 
-  private static final boolean turnMotorInverted = true;
-  private static final boolean turnEncoderInverted = false;
+  private static final boolean turnMotorInverted = false;
+  private static final boolean turnEncoderInverted = true;
   private static final boolean invertLeftSideDrive = false;
   private static final boolean invertRightSideDrive = true;
 
@@ -35,70 +35,70 @@ public class DrivetrainConstants {
   private static final double drivekP = 0; // TODO
   private static final double drivekD = 0; // TODO
   private static final double drivekS = 0; // TODO
-  private static final double drivekV = 0; // TODO
+  private static final double drivekV = driveMotorKv / 60.0 / driveGearRatio; // TODO
 
-  private static final double turnkP = 0; // TODO
-  private static final double turnkD = 0; // TODO
-  private static final double turnAccelerationLimit = 0; // TODO
-  private static final double turnDeaccelerationLimit = 0; // TODO
-  private static final double turnVelocityLimit = 0; // TODO
+  private static final double turnkP = 150; // TODO still needs to be tuned
+  private static final double turnkD = 0.2; // TODO
+  private static final double turnAccelerationLimit = 1000; // TODO
+  private static final double turnDeaccelerationLimit = 1000; // TODO
+  private static final double turnVelocityLimit = 1000; // TODO
 
   private static final double simTurnInertia = 0.00001;
   private static final double simDriveInertia = 0.001;
 
   // Specific module constants:
   // Front Left
-  private static final int frontLeftDriveMotorId = 1;
-  private static final int frontLeftTurnMotorId = 2;
-  private static final int frontLeftTurnEncoderId = 1;
+  private static final int frontLeftDriveMotorId = 6;
+  private static final int frontLeftTurnMotorId = 4;
+  private static final int frontLeftTurnEncoderId = 3;
   private static final double halfWheelBaseMeters = 0.57785;
 
   private static final double frontLeftXPos = halfWheelBaseMeters;
   private static final double frontLeftYPos = halfWheelBaseMeters;
 
   // Front Right
-  private static final int frontRightDriveMotorId = 3;
-  private static final int frontRightTurnMotorId = 4;
-  private static final int frontRightTurnEncoderId = 2;
+  private static final int frontRightDriveMotorId = 9; //
+  private static final int frontRightTurnMotorId = 3; // Done
+  private static final int frontRightTurnEncoderId = 4;
 
   private static final double frontRightXPos = halfWheelBaseMeters;
   private static final double frontRightYPos = -halfWheelBaseMeters;
 
   // Back Left
-  private static final int backLeftDriveMotorId = 5;
-  private static final int backLeftTurnMotorId = 6;
-  private static final int backLeftTurnEncoderId = 3;
+  private static final int backLeftDriveMotorId = 16; // Done
+  private static final int backLeftTurnMotorId = 12;
+  private static final int backLeftTurnEncoderId = 2;
 
   private static final double backLeftXPos = -halfWheelBaseMeters;
   private static final double backLeftYPos = halfWheelBaseMeters;
 
   // Back Right
-  private static final int backRightDriveMotorId = 7;
-  private static final int backRightTurnMotorId = 8;
-  private static final int backRightTurnEncoderId = 4;
+  private static final int backRightDriveMotorId = 14; // Done
+  private static final int backRightTurnMotorId = 8; // Done
+  private static final int backRightTurnEncoderId = 1;
 
   private static final double backRightXPos = -halfWheelBaseMeters;
   private static final double backRightYPos = -halfWheelBaseMeters;
 
   // Auto-configured objects below
   public static final ElectricalLimitSettings driveElectricalLimitSettings =
-      new ElectricalLimitSettings()
+      ElectricalLimitSettings.defaultSettings()
           .setBusCurrentLimit(driveSupplyCurrentLimit)
           .setBusCurrentLimitTime(driveSupplyCurrentTime)
           .setStatorCurrentLimit(driveStatorCurrentLimit);
   public static final ElectricalLimitSettings turnElectricalLimitSettings =
-      new ElectricalLimitSettings()
+      ElectricalLimitSettings.defaultSettings()
           .setBusCurrentLimit(turnSupplyCurrentLimit)
           .setBusCurrentLimitTime(turnSupplyCurrentTime)
           .setStatorCurrentLimit(turnStatorCurrentLimit);
 
   private static final PIDSettings drivePIDSettings =
-      new PIDSettings()
+      PIDSettings.defaultSettings()
           .setPID(drivekP, 0, drivekD)
           .setStaticFeedforward(drivekS)
           .setVelocityFeedforward(drivekV);
   private static final PIDSettings turnPIDSettings =
-      new PIDSettings()
+      PIDSettings.defaultSettings()
           .setPID(turnkP, 0, turnkD)
           .setMotionProfileAccelLimit(turnAccelerationLimit)
           .setMotionProfileDeaccelLimit(turnDeaccelerationLimit)

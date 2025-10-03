@@ -2,7 +2,9 @@ package frc.robot.subsystems.indexer;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BabyAlchemist;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.SubsystemMode;
 import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
@@ -30,6 +32,13 @@ public class Indexer extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Indexer", inputs);
     Logger.recordOutput("Indexer/currentAction", currentAction.toString());
+
+    if (Constants.indexerMode == SubsystemMode.TUNING) {
+      BabyAlchemist.run(
+          0, io.getLeftNitrate(), "Indexer", inputs.leftSpeedRotationsPerSec, "rot/sec");
+      BabyAlchemist.run(
+          1, io.getRightNitrate(), "Indexer", inputs.leftSpeedRotationsPerSec, "rot/sec");
+    }
   }
 
   public void feed() {

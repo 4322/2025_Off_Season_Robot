@@ -134,6 +134,7 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+    robotContainer.configureAutonomousSelector();
     allianceUpdateTimer.start();
 
     if (Constants.currentMode == Constants.RobotMode.SIM) {
@@ -194,6 +195,10 @@ public class Robot extends LoggedRobot {
       DriverStation.reportWarning("Coast Mode Trying To Activate", false);
       coastButtonTimer.start();
       // button is pressed in
+    }
+
+    if (coastButtonTimer.hasElapsed(0.1)) {
+      RobotContainer.getSuperstructure().CoastMotors();
     }
 
     if (coastButtonTimer.hasElapsed(10)) {

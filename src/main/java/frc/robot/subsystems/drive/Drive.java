@@ -233,6 +233,18 @@ public class Drive extends SubsystemBase {
     return getPose().getRotation();
   }
 
+  public boolean atAngularSetpoint(double setpointRad, double tolerance) {
+    return Math.abs(getRotation().getRadians() - setpointRad) < tolerance;
+  }
+
+  public boolean atAngularSetpoint(double setpointRad) {
+    return atAngularSetpoint(setpointRad, Constants.Drive.angularErrorToleranceRad);
+  }
+
+  public boolean atAutoRotateSetpoint() {
+    return atAngularSetpoint(targetAutoRotateAngleRad);
+  }
+
   public void resetPose(Pose2d pose) {
     poseEstimator.resetPosition(gyroInputs.yawAngle, getModulePositions(), pose);
   }

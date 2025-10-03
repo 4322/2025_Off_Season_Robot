@@ -5,13 +5,17 @@ import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.autonomous.AutonomousSelector;
 import frc.robot.commands.AlgaeIntakeGround;
 import frc.robot.commands.AlgaeScoreCommand;
 import frc.robot.commands.CoastCommand;
@@ -57,6 +61,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.util.ReefStatus;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -69,10 +74,9 @@ public class RobotContainer {
   private static CommandXboxController sim1;
 
   private static Vision vision;
+  private static ReefStatus reefStatus;
   private static Drive drive;
-  private static Arm arm; // IO for the arm subsystem, null if not enabled
-  // Declare Arm variable
-
+  private static Arm arm;
   private static EndEffector endEffector;
   private static Indexer indexer;
   private static Rollers rollers;
@@ -81,82 +85,107 @@ public class RobotContainer {
   private static Superstructure superstructure;
   private static Elevator elevator;
 
+  public static AutonomousSelector autonomousSelector;
+
   /** The container for the robot. Contains subsystems, IO devices, and commands. */
   public RobotContainer() {
 
-    // create default non-existant subsystems
-    arm = new Arm(new ArmIO() {});
-    drive =
-        new Drive(
-            new GyroIO() {},
-            new ModuleIO() {},
-            new ModuleIO() {},
-            new ModuleIO() {},
-            new ModuleIO() {});
-    vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
-    elevator = new Elevator(new ElevatorIO() {});
-    endEffector = new EndEffector(new EndEffectorIO() {});
-    indexer = new Indexer(new IndexerIO() {});
-    rollers = new Rollers(new RollersIO() {});
-    deployer = new Deployer(new DeployerIO() {});
+    if (Constants.currentMode == Constants.RobotMode.SIM) {
+      drive =
+          new Drive(
+              new GyroIO() {},
+              new ModuleIO() {},
+              new ModuleIO() {},
+              new ModuleIO() {},
+              new ModuleIO() {});
+      vision =
+          new Vision(
+              drive,
+              new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
+              new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+      sim1 = new CommandXboxController(1);
 
-    switch (Constants.currentMode) {
-      case REAL:
-        // Real robot, instantiate hardware IO implementations
-        if (Constants.armMode != SubsystemMode.DISABLED) {
-          arm = new Arm(new ArmIONitrate()); // Create the arm subsystem if enabled
-        }
-        if (Constants.elevatorMode != SubsystemMode.DISABLED) {
-          elevator =
-              new Elevator(new ElevatorIONitrate()); // Create the elevator subsystem if enabled
-        }
-        if (Constants.driveMode != SubsystemMode.DISABLED) {
-          GyroIOBoron gyro = new GyroIOBoron();
-          drive =
-              new Drive(
-                  gyro,
-                  new ModuleIONitrate(DrivetrainConstants.frontLeft, gyro),
-                  new ModuleIONitrate(DrivetrainConstants.frontRight, gyro),
-                  new ModuleIONitrate(DrivetrainConstants.backLeft, gyro),
-                  new ModuleIONitrate(DrivetrainConstants.backRight, gyro));
-        }
-        if (Constants.visionEnabled) {
-          vision =
-              new Vision(
-                  drive,
-                  new VisionIOPhotonVision(camera0Name, robotToCamera0),
-                  new VisionIOPhotonVision(camera1Name, robotToCamera1));
-        }
-        if (Constants.endEffectorEnabled) {
-          endEffector = new EndEffector(new EndEffectorIONitrate());
-        }
-        if (Constants.indexerEnabled) {
-          indexer = new Indexer(new IndexerIONitrate());
-        }
-        if (Constants.rollersEnabled) {
-          rollers = new Rollers(new RollersIONitrate());
-        }
-        if (Constants.deployerMode != SubsystemMode.DISABLED) {
-          deployer = new Deployer(new DeployerIONitrate());
-        }
-        break;
+      elevator = new Elevator(new ElevatorIOSim());
+      arm = new Arm(new ArmIOSim());
+      endEffector = new EndEffector(new EndEffectorIOSim());
+      indexer = new Indexer(new IndexerIOSim());
 
-      case SIM:
-        // Sim robot, instantiate physics sim IO implementations
-        elevator = new Elevator(new ElevatorIOSim());
-        arm = new Arm(new ArmIOSim());
-        endEffector = new EndEffector(new EndEffectorIOSim());
-        indexer = new Indexer(new IndexerIOSim());
+      rollers = new Rollers(new RollersIO() {});
+      deployer = new Deployer(new DeployerIO() {});
+
+    } else {
+
+      if (Constants.driveMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
+        GyroIOBoron gyro = new GyroIOBoron();
+        drive =
+            new Drive(
+                gyro,
+                new ModuleIONitrate(DrivetrainConstants.frontLeft, gyro),
+                new ModuleIONitrate(DrivetrainConstants.frontRight, gyro),
+                new ModuleIONitrate(DrivetrainConstants.backLeft, gyro),
+                new ModuleIONitrate(DrivetrainConstants.backRight, gyro));
+      } else {
+        drive =
+            new Drive(
+                new GyroIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {});
+      }
+
+      if (Constants.visionEnabled && Constants.currentMode == Constants.RobotMode.REAL) {
         vision =
             new Vision(
                 drive,
-                new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
-                new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
-        sim1 = new CommandXboxController(1);
-        break;
+                new VisionIOPhotonVision(camera0Name, robotToCamera0),
+                new VisionIOPhotonVision(camera1Name, robotToCamera1));
+      } else {
+        vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
+      }
 
-      case REPLAY:
-        break;
+      if (Constants.armMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
+        arm = new Arm(new ArmIONitrate());
+      } else {
+        arm = new Arm(new ArmIO() {});
+      }
+
+      if (Constants.elevatorMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
+        elevator = new Elevator(new ElevatorIONitrate());
+      } else {
+        elevator = new Elevator(new ElevatorIO() {});
+      }
+
+      if (Constants.indexerMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
+        indexer = new Indexer(new IndexerIONitrate());
+      } else {
+        indexer = new Indexer(new IndexerIO() {});
+      }
+
+      if (Constants.rollersMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
+        rollers = new Rollers(new RollersIONitrate());
+      } else {
+        rollers = new Rollers(new RollersIO() {});
+      }
+
+      if (Constants.endEffectorMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
+        endEffector = new EndEffector(new EndEffectorIONitrate());
+      } else {
+        endEffector = new EndEffector(new EndEffectorIO() {});
+      }
+
+      if (Constants.deployerMode != SubsystemMode.DISABLED
+          && Constants.currentMode == Constants.RobotMode.REAL) {
+        deployer = new Deployer(new DeployerIONitrate());
+      } else {
+        deployer = new Deployer(new DeployerIO() {});
+      }
     }
 
     intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
@@ -176,6 +205,19 @@ public class RobotContainer {
     drive.setDefaultCommand(new DriveManual(drive));
     // The commands deal with the on False logic if the button is no longer held
 
+    driver
+        .start()
+        .onTrue(
+            new InstantCommand(
+                    () -> {
+                      if (Robot.alliance == Alliance.Blue) {
+                        drive.resetPose(new Pose2d());
+                      } else {
+                        drive.resetPose(new Pose2d(new Translation2d(), new Rotation2d(Math.PI)));
+                      }
+                    })
+                .ignoringDisable(true));
+
     driver.povUp().whileTrue(new Eject(intakeSuperstructure, superstructure));
     // Prescore/Descore Levels
     driver
@@ -186,7 +228,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new AlgaeIntakeGround(superstructure).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L1, vision).schedule();
+                    new ScoreCoral(superstructure, Level.L1, vision, reefStatus).schedule();
                   }
                 }));
     driver
@@ -197,7 +239,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L2).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L2, vision).schedule();
+                    new ScoreCoral(superstructure, Level.L2, vision, reefStatus).schedule();
                   }
                 }));
     driver
@@ -208,7 +250,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L3).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L3, vision).schedule();
+                    new ScoreCoral(superstructure, Level.L3, vision, reefStatus).schedule();
                   }
                 }));
     driver
@@ -219,7 +261,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L4, vision).schedule();
+                    new ScoreCoral(superstructure, Level.L4, vision, reefStatus).schedule();
                   }
                 }));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
@@ -229,6 +271,24 @@ public class RobotContainer {
             new CoastCommand(arm, elevator, deployer, superstructure)
                 .onlyIf(() -> DriverStation.isDisabled())
                 .ignoringDisable(true));
+    driver
+        .back()
+        .onTrue(
+            new InstantCommand(
+                    () -> {
+                      if (intakeSuperstructure.getIntakeSuperstate()
+                              != IntakeSuperstructure.IntakeSuperstates.UNHOMED
+                          && intakeSuperstructure.getIntakeSuperstate()
+                              != IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE) {
+                        intakeSuperstructure.requestRetractIdle();
+                      } else {
+                        intakeSuperstructure.requestIntake();
+                      }
+                    })
+                .onlyIf(
+                    () ->
+                        intakeSuperstructure.getIntakeSuperstate()
+                            != IntakeSuperstructure.IntakeSuperstates.UNHOMED));
   }
 
   public static boolean isScoringTriggerHeld() {
@@ -249,6 +309,10 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return Commands.none();
+    return autonomousSelector.get();
+  }
+
+  public void configureAutonomousSelector() {
+    autonomousSelector = new AutonomousSelector(drive, superstructure, intakeSuperstructure);
   }
 }

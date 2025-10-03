@@ -3,6 +3,7 @@ package frc.robot.subsystems.elevator;
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
@@ -39,7 +40,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     followerRequest = new FollowMotorRequest(leaderMotor);
 
     frontConfig.setPIDSettings(
-        new PIDSettings()
+        PIDSettings.defaultSettings()
             .setPID(
                 Constants.Elevator.fast_kP, Constants.Elevator.fast_kI, Constants.Elevator.fast_kD)
             .setGravitationalFeedforward(Constants.Elevator.kG)
@@ -54,34 +55,20 @@ public class ElevatorIONitrate implements ElevatorIO {
             .setIZone(Constants.Elevator.iZone),
         PIDConfigSlot.kSlot0);
 
-    frontConfig.setPIDSettings(
-        new PIDSettings()
-            .setPID(
-                Constants.Elevator.slow_kP, Constants.Elevator.slow_kI, Constants.Elevator.slow_kD)
-            .setGravitationalFeedforward(Constants.Elevator.kG)
-            .setMinwrapConfig(new MinwrapConfig.Disabled())
-            .setMotionProfileAccelLimit(
-                metersToRotations(Constants.Elevator.slowAccelerationMetersPerSec2))
-            .setMotionProfileDeaccelLimit(
-                metersToRotations(Constants.Elevator.slowDecelerationMetersPerSec2))
-            .setMotionProfileVelocityLimit(
-                metersToRotations(Constants.Elevator.slowVelocityMetersPerSec))
-            .setISaturation(Constants.Elevator.iSat)
-            .setIZone(Constants.Elevator.iZone),
-        PIDConfigSlot.kSlot1);
-
     frontConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.Elevator.motorIdleMode)
             .setInvert(Constants.Elevator.motorFrontInvert));
 
     frontConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps));
 
+    frontConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
+
     frontConfig.setFramePeriodSettings(
-        new FramePeriodSettings()
+        FramePeriodSettings.defaultSettings()
             .setEnabledPIDDebugFrames(
                 new EnabledDebugFrames()
                     .setKgControlEffort(Constants.debugPIDModeEnabled)
@@ -91,14 +78,16 @@ public class ElevatorIONitrate implements ElevatorIO {
                     .setTotalControlEffort(Constants.debugPIDModeEnabled)));
 
     backConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.Elevator.motorIdleMode)
             .setInvert(Constants.Elevator.motorBackInvert));
 
     backConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.Elevator.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Elevator.statorCurrentLimitAmps));
+
+    backConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
 
     followerRequest.setInverted(false);
 
@@ -121,6 +110,37 @@ public class ElevatorIONitrate implements ElevatorIO {
           "Nitrate "
               + followerMotor.getAddress().getDeviceId()
               + " (follower motor) failed to configure",
+          false);
+    }
+    PIDSettings slot1Settings =
+        new PIDSettings()
+            .setPID(Constants.Elevator.slow_kP, 0, 0)
+            .setGravitationalFeedforward(Constants.Elevator.kG)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(
+                metersToRotations(Constants.Elevator.slowAccelerationMetersPerSec2))
+            .setMotionProfileDeaccelLimit(
+                metersToRotations(Constants.Elevator.slowDecelerationMetersPerSec2))
+            .setMotionProfileVelocityLimit(
+                metersToRotations(Constants.Elevator.slowVelocityMetersPerSec))
+            .setISaturation(Constants.Elevator.iSat)
+            .setIZone(Constants.Elevator.iZone);
+    PIDSettings leaderSlot1ConfigStatus =
+        leaderMotor.setPIDSettings(slot1Settings, PIDConfigSlot.kSlot1);
+    PIDSettings followerSlot1ConfigStatus =
+        followerMotor.setPIDSettings(slot1Settings, PIDConfigSlot.kSlot1);
+    if (!leaderSlot1ConfigStatus.isEmpty()) {
+      DriverStation.reportError(
+          "Nitrate "
+              + leaderMotor.getAddress().getDeviceId()
+              + " (leader motor) failed to configure PID Slot 1",
+          false);
+    }
+    if (!followerSlot1ConfigStatus.isEmpty()) {
+      DriverStation.reportError(
+          "Nitrate "
+              + followerMotor.getAddress().getDeviceId()
+              + " (leader motor) failed to configure PID Slot 1",
           false);
     }
   }
@@ -148,6 +168,9 @@ public class ElevatorIONitrate implements ElevatorIO {
 
     inputs.leadertempCelcius = leaderMotor.getMotorTemperatureFrame().getValue();
     inputs.followertempCelcius = followerMotor.getMotorTemperatureFrame().getValue();
+
+    inputs.leaderControllerTempCelcius = leaderMotor.getControllerTemperatureFrame().getValue();
+    inputs.followerControllerTempCelcius = followerMotor.getControllerTemperatureFrame().getValue();
 
     inputs.leaderVoltage = leaderMotor.getAppliedVoltageFrame().getValue();
     inputs.leaderEncoderRotations = leaderMotor.getPosition();

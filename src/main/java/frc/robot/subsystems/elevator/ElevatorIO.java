@@ -24,6 +24,8 @@ public interface ElevatorIO {
     public double kIeffort;
     public double totalEffort;
     public double feedbackError;
+    public double leaderControllerTempCelcius = 0.0;
+    public double followerControllerTempCelcius = 0.0;
 
     public double followerHeightMeters = 0.0;
     public double followerVoltage = 0.0;

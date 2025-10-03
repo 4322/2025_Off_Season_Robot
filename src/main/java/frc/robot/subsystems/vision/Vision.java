@@ -23,6 +23,9 @@ import frc.robot.Robot;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.VisionIO.ObservationMode;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
+import frc.robot.util.ReefStatus;
+import frc.robot.util.ReefStatus.ClosestReefPipe;
+import frc.robot.util.ReefStatus.L1Zone;
 import java.util.LinkedList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
@@ -32,12 +35,7 @@ public class Vision extends SubsystemBase {
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
   private final Alert[] disconnectedAlerts;
-  public boolean ReefFaceAmbiguity;
-  public boolean ReefPipeAmbiguity;
   private Drive drive;
-  public Translation2d ReefCenterPoint;
-  private double convertedRobotTrans;
-  private double reefFace;
   private static Translation2d redReefCenterPoint;
   private static Translation2d blueReefCenterPoint;
   private static Translation2d redLeftL1Split;
@@ -45,21 +43,9 @@ public class Vision extends SubsystemBase {
   private static Translation2d blueLeftL1Split;
   private static Translation2d blueRightL1Split;
   public boolean reefFaceAmbiguity;
-
-  public enum ClosestReefPipe { // TODO
-    LEFT,
-    RIGHT
-  }
-
-  ClosestReefPipe closestReefPipe;
-
-  public enum L1Zone {
-    MIDDLE,
-    LEFT,
-    RIGHT
-  }
-
-  ClosestReefPipe reefPipe;
+  public boolean reefPipeAmbiguity;
+  public double reefFace;
+  public ClosestReefPipe closestReefPipe;
   public double reefToRobotDeg;
 
   private ObservationMode observationMode = ObservationMode.GLOBAL_POSE;
@@ -231,7 +217,7 @@ public class Vision extends SubsystemBase {
         Matrix<N3, N1> visionMeasurementStdDevs);
   }
 
-  public void ReefStatus() {
+  public ReefStatus getReefStatus() {
     Translation2d ReefCenterPoint;
     Translation2d leftL1Split;
     Translation2d rightL1Split;
@@ -244,55 +230,62 @@ public class Vision extends SubsystemBase {
       leftL1Split = blueLeftL1Split;
       rightL1Split = blueRightL1Split;
     }
-    // Translation2d robotTranslation = robotPose.getTranslation();
-    // Rotation2d reefCenterToRobotDeg = ReefCenterPoint.minus(robotTranslation).getAngle();
-    // reefToRobotRad = reefCenterToRobotDeg.getRadians();
-    // Translation2d convertedRobotTrans;
+    Translation2d robotTranslation = drive.getPose().getTranslation();
+    Rotation2d reefCenterToRobotDeg = ReefCenterPoint.minus(robotTranslation).getAngle();
+    double reefToRobotRad = reefCenterToRobotDeg.getRadians();
+    Translation2d convertedRobotTrans;
 
-    // if (-30 <= reefToRobotRad && reefToRobotRad <= 30) {
-    //   reefFace = 0;
-    //   reefFaceAmbiguity = false;
-    // } else if (30 < reefToRobotRad && reefToRobotRad <= 90) {
-    //   reefFace = -60;
-    //   reefFaceAmbiguity = false;
-    // } else if (-90 < reefToRobotRad && reefToRobotRad <= -30) {
-    //   reefFace = 60;
-    //   reefFaceAmbiguity = false;
-    // } else if (90 < reefToRobotRad && reefToRobotRad <= 150) {
-    //   reefFace = -120;
-    //   reefFaceAmbiguity = false;
-    // } else if (-150 < reefToRobotRad && reefToRobotRad <= -90) {
-    //   reefFace = 120;
-    //   reefFaceAmbiguity = false;
-    // } else if (-210 < reefToRobotRad && reefToRobotRad < -210) {
-    //   reefFace = 180;
-    //   reefFaceAmbiguity = false;
-    // } else {
-    //   reefFaceAmbiguity = true;
-    // }
-
+    if (-30 < reefToRobotRad && reefToRobotRad < 30) {
+      reefFace = 0;
+      reefFaceAmbiguity = false;
+    } else if (30 < reefToRobotRad && reefToRobotRad < 90) {
+      reefFace = -60;
+      reefFaceAmbiguity = false;
+    } else if (-90 < reefToRobotRad && reefToRobotRad < -30) {
+      reefFace = 60;
+      reefFaceAmbiguity = false;
+    } else if (90 < reefToRobotRad && reefToRobotRad < 150) {
+      reefFace = -120;
+      reefFaceAmbiguity = false;
+    } else if (-150 < reefToRobotRad && reefToRobotRad <= -90) {
+      reefFace = 120;
+      reefFaceAmbiguity = false;
+    } else if (-210 < reefToRobotRad && reefToRobotRad < -210) {
+      reefFace = 180;
+      reefFaceAmbiguity = false;
+    } else {
+      reefFaceAmbiguity = true;
+    }
+    L1Zone l1Zone;
     // // Provide a valid Rotation2d argument, for example Rotation2d.fromRadians(reefToRobotDeg)
-    // convertedRobotTrans =
-    //     robotTranslation.rotateAround(ReefCenterPoint, Rotation2d.fromRadians(reefToRobotRad));
+    convertedRobotTrans =
+        robotTranslation.rotateAround(ReefCenterPoint, Rotation2d.fromRadians(reefToRobotRad));
 
-    // if (-30 <= convertedRobotTrans.getAngle().getRadians()
-    //     && convertedRobotTrans.getAngle().getRadians() <= 0) { // Make sure it is for each face
-    //   closestReefPipe = ClosestReefPipe.LEFT;
-    // } else {
-    //   closestReefPipe = ClosestReefPipe.RIGHT;
-    // }
+    if (-30 <= convertedRobotTrans.getAngle().getRadians()
+        && convertedRobotTrans.getAngle().getRadians() <= 0) { // Make sure it is for each face
+      closestReefPipe = ClosestReefPipe.LEFT;
+    } else {
+      closestReefPipe = ClosestReefPipe.RIGHT;
+    }
 
-    // if (-30 < convertedRobotTrans.getAngle().getRadians()
-    //     || convertedRobotTrans.getAngle().getRadians()
-    //         < -10) { // TODO: MAke it so its for indiviual faces
+    if (-30 < convertedRobotTrans.getAngle().getRadians()
+        || convertedRobotTrans.getAngle().getRadians()
+            < -10) { // TODO: MAke it so its for indiviual faces
 
-    //   L1Zone l1Zone = L1Zone.LEFT; // TODO
+      l1Zone = L1Zone.LEFT; // TODO
 
-    // } else if (10 < convertedRobotTrans.getAngle().getRadians()
-    //     || convertedRobotTrans.getAngle().getRadians() < 30) {
-    //   L1Zone l1Zone = L1Zone.RIGHT;
-    // } else {
-    //   L1Zone l1Zone = L1Zone.MIDDLE;
-    // }
+    } else if (10 < convertedRobotTrans.getAngle().getRadians()
+        || convertedRobotTrans.getAngle().getRadians() < 30) {
+      l1Zone = L1Zone.RIGHT;
+    } else {
+      l1Zone = L1Zone.MIDDLE;
+    }
+
+    return new ReefStatus(
+        reefFaceAmbiguity,
+        reefPipeAmbiguity,
+        Rotation2d.fromDegrees(reefFace),
+        closestReefPipe,
+        l1Zone);
   }
 }

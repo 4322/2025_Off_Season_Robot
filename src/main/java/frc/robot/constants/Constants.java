@@ -15,15 +15,16 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final SubsystemMode armMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode armMode = SubsystemMode.OPEN_LOOP;
   public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
   public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
   public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
-  public static final boolean indexerEnabled = false;
-  public static final boolean rollersEnabled = false;
-  public static final boolean endEffectorEnabled = false;
+  public static final SubsystemMode indexerMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode rollersMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode endEffectorMode = SubsystemMode.TUNING;
   public static final boolean visionEnabled = false;
-  public static final boolean debugPIDModeEnabled = false;
+  public static final DriveTuningMode driveTuningMode = DriveTuningMode.TURNING;
+  public static final boolean debugPIDModeEnabled = true;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
   public static final String logPath = "/home/lvuser/logs";
@@ -40,8 +41,13 @@ public final class Constants {
     DISABLED,
     NORMAL,
     OPEN_LOOP,
-    TUNING // only one susbsystem may be in this mode at a time, drive tuning is front left turning
+    TUNING // only one subsystem may be in this mode at a time, drive tuning is front left turning
     // only
+  }
+
+  public static enum DriveTuningMode {
+    DRIVING,
+    TURNING
   }
 
   public static enum RobotMode {
@@ -87,8 +93,8 @@ public final class Constants {
   }
 
   public static class Arm {
-    public static final int armMotorId = 10;
-    public static final int armEncoderId = 10;
+    public static final int armMotorId = 10; // Done
+    public static final int armEncoderId = 10; // Done
 
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // positive is up toward scoring side
@@ -100,13 +106,13 @@ public final class Constants {
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0;
     public static final double coralHoldDeg = armIdleDeg;
-    public static final double algaeGroundDeg = 55.0; // TODO: Set to actual angle
+    public static final double algaeGroundDeg = 69.0; // TODO: Set to actual angle
 
-    public static final double ejectDeg = 45.0;
+    public static final double ejectDeg = 51.0;
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
-    public static final double minArmSafeDeg = 35.789447; // TODO: Set to actual angle
-    public static final double minArmSafeWithCoralDeg = 36; // TODO: Set to actual angle
+    public static final double minArmSafeDeg = 53; // TODO: Set to actual angle
+    public static final double minArmSafeWithCoralDeg = 55; // TODO: Set to actual angle
     public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = 0.5;
@@ -126,7 +132,7 @@ public final class Constants {
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 30; // TODO
 
     // Prescore Degrees Arm
-    public static final double prescoringL1CoralDeg = 50.686373;
+    public static final double prescoringL1CoralDeg = 51.686373;
     public static final double prescoringL2CoralDeg = 130.751475;
     public static final double prescoringL3CoralDeg = 125.970093;
     public static final double prescoringL4CoralDeg = 121.294978;
@@ -138,19 +144,19 @@ public final class Constants {
     // To the encoder 0 is horizontal but to us its straight down
     public static final double OffsetEncoderDeg = -90;
 
-    public static final double kP = 150;
-    public static final double kI = 1000;
+    public static final double kP = 200;
+    public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double AccelerationLimit = 3; // TODO
-    public static final double DeaccelerationLimit = 3; // TODO
+    public static final double AccelerationLimit = 2.5; // TODO
+    public static final double DeaccelerationLimit = 1.5; // TODO
     public static final double VelocityLimit = 1; // TODO
-    public static final double slowVelocityLimit = 0.6; // TODO
+    public static final double slowVelocityLimit = 0.1; // TODO
   }
 
   public static class Elevator {
-    public static final int frontMotorID = 20;
-    public static final int backMotorID = 21;
+    public static final int frontMotorID = 1; // Done
+    public static final int backMotorID = 5; // Done
 
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
@@ -170,14 +176,14 @@ public final class Constants {
     public static final double iZone = 1000; // TODO
 
     public static final double maxElevatorHeightMeters = 1.3068401092;
-    public static final double homeHeightMeters = 0.3917895136;
+    public static final double homeHeightMeters = 0.37926;
 
     public static final double minElevatorSafeHeightMeters = homeHeightMeters + 0.1;
     public static final double minElevatorSafeWithCoralMeters = homeHeightMeters + 0.3;
 
     public static final double elevatorHeightToleranceMeters = 0.01;
 
-    public static final double algaeGroundHeightMeters = 0.2; // TODO: need actual value
+    public static final double algaeGroundHeightMeters = 0.00635;
     public static final double algaeReefL2HeightMeters = 0.5021688204;
     public static final double algaeReefL3HeightMeters = 0.8739758746;
 
@@ -208,11 +214,11 @@ public final class Constants {
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
 
-    public static final double fastAccelerationMetersPerSec2 = 150 / 50.0;
-    public static final double fastDecelerationMetersPerSec2 = 150 / 50.0;
-    public static final double fastVelocityMetersPerSec = 1000 / 50.0;
+    public static final double fastAccelerationMetersPerSec2 = 700 / 50.0;
+    public static final double fastDecelerationMetersPerSec2 = 300 / 50.0;
+    public static final double fastVelocityMetersPerSec = 100 / 50.0;
 
-    public static final double slowAccelerationMetersPerSec2 = 10 / 50.0;
+    public static final double slowAccelerationMetersPerSec2 = 10 / 50.0; // TODO tune these
     public static final double slowDecelerationMetersPerSec2 = 10 / 50.0;
     public static final double slowVelocityMetersPerSec = 10 / 50.0;
 
@@ -224,28 +230,31 @@ public final class Constants {
 
   // TODO all of these are placeholder values
   public static class EndEffector {
-    public static final int motorId = 30;
-    public static final int sensorId = 30;
+    public static final int motorId = 13; // Done
+    public static final int sensorId = 2;
 
     public static final double algaeHoldVolts = 1.0;
-    public static final double coralHoldVolts = 1.0;
+    public static final double coralHoldVolts = 0.45;
 
-    public static final double algaeIntakeVolts = 3.0;
-    public static final double coralIntakeVolts = 3.0;
+    public static final double algaeIntakeVolts = 6;
+    public static final double coralIntakeVolts = 2;
 
     public static final double algaeReleaseVolts = -3.0;
     public static final double coralReleaseVolts =
         -3.0; // TODO make sure this is slow enough for scoring coral.
     public static final double coralReleaseVoltsL1 = -2.0;
 
-    public static final double ejectVolts = -3.0;
+    public static final double ejectVolts = -4.0;
 
     public static final double busCurrentLimit = 40;
     public static final double busCurrentLimitTime = 0;
-    public static final double statorCurrentLimit = 60;
+    public static final double statorCurrentLimit = 100;
 
-    public static final double coralProximityThreshold = 0;
-    public static final double algaeProximityThreshold = 0;
+    public static final double coralProximityThreshold = 0.25;
+    public static final double algaeProximityThresholdRelease =
+        0.17; // TODO Need To have something for held and not held losing it should be 0.25 this
+    // value is for getting it
+    public static final double algaeProximityThreshold = 0.25;
 
     public static final boolean useSensorColor = false; // TODO change this when we get color tuned
     // TODO tune these
@@ -277,10 +286,13 @@ public final class Constants {
         0.05; // Time to wait after algae is detected in End Effector before reducing voltage
     public static final double coralIntakingDelaySeconds =
         0.05; // Time to wait after coral is detected in End Effector before reducing voltage
+    public static final double algaeReleasingDelaySeconds =
+        0.5; // Time to wait when releasing before going back to non-holding voltage
+    public static final double coralReleasingDelaySeconds = 0.5;
   }
 
   public static class Deployer {
-    public static final int deployerMotorId = 40;
+    public static final int deployerMotorId = 15; // Done
     public static final double deployVoltage = 3.0;
 
     public static final double statorCurrentLimit = 40;
@@ -306,11 +318,11 @@ public final class Constants {
 
     // Range of motion of deployer is about 0-140 degrees
     public static final double motorGearRatio = 61.25;
-    public static final double ejectPositionDegrees = 94.931222;
-    public static final double retractPositionDegrees = 4.931222;
-    public static final double deployPositionDegrees = 145.353984;
+    public static final double ejectPositionDegrees = 125;
+    public static final double retractPositionDegrees = 125;
+    public static final double deployPositionDegrees = 0;
     public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kArm;
-    public static final double maxRangeDegrees = 145.353984;
+    public static final double maxRangeDegrees = 144.556;
     public static final double maxGravityDegrees = 40.0;
     public static final double accelerationLimit = 200;
     public static final double deaccelerationLimit = 200;
@@ -318,8 +330,8 @@ public final class Constants {
   }
 
   public static class Indexer {
-    public static final int rightId = 50;
-    public static final int leftId = 51;
+    public static final int rightId = 7; // Done
+    public static final int leftId = 2; // Done
     public static final double busCurrentLimit = 40;
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 60;
@@ -328,8 +340,8 @@ public final class Constants {
     public static final InvertMode leftInvert = InvertMode.kNotInverted; // positive is intaking
     public static final double indexerSensorMax = 5; // TODO tune these
     public static final double pickupAreaSensorMax = 5;
-    public static final int indexerSensorId = 0;
-    public static final int pickupAreaSensorId = 0;
+    public static final int indexerSensorId = 3;
+    public static final int pickupAreaSensorId = 1;
     public static final double voltageFeed = 5;
     public static final double voltageRejectSlow = -3;
     public static final double voltageFeedSlow = 3;
@@ -337,7 +349,7 @@ public final class Constants {
   }
 
   public static class Rollers {
-    public static final int motorId = 60;
+    public static final int motorId = 11; // Done
 
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 60;

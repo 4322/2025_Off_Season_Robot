@@ -38,7 +38,8 @@ public class Deployer extends SubsystemBase {
           io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
           break;
         case TUNING:
-          Double newPos = BabyAlchemist.run(io.getNitrate());
+          Double newPos =
+              BabyAlchemist.run(0, io.getNitrate(), "Deployer", inputs.angleDeg, "degrees");
           if (newPos != null) {
             io.setPositionSlot0(newPos);
           }

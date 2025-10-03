@@ -3,8 +3,10 @@ package frc.robot.subsystems.endEffector;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BabyAlchemist;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.util.ClockUtil;
 import frc.robot.util.DeltaDebouncer;
 import org.littletonrobotics.junction.Logger;
@@ -28,6 +30,7 @@ public class EndEffector extends SubsystemBase {
   private boolean isPiecePickupDetected = false;
 
   private Timer intakingTimer = new Timer();
+  private Timer releasingTimer = new Timer();
 
   private enum EndEffectorStates {
     IDLE,
@@ -65,6 +68,8 @@ public class EndEffector extends SubsystemBase {
     this.io = io;
     intakingTimer.stop();
     intakingTimer.reset();
+    releasingTimer.stop();
+    releasingTimer.reset();
   }
 
   @Override
@@ -81,6 +86,11 @@ public class EndEffector extends SubsystemBase {
             && velocityDetectionDebouncer.calculate(inputs.speedRotationsPerSec);
 
     Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
+
+    if (Constants.endEffectorMode == SubsystemMode.TUNING) {
+      BabyAlchemist.run(0, io.getNitrate(), "End-Effector", inputs.speedRotationsPerSec, "rot/sec");
+      return;
+    }
 
     switch (state) {
       case IDLE:
@@ -161,36 +171,57 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case RELEASE_ALGAE:
+        if (!releasingTimer.isRunning()) {
+          releasingTimer.reset();
+          releasingTimer.start();
+        }
         io.setVoltage(Constants.EndEffector.algaeReleaseVolts);
         if (holdAlgae) {
           state = EndEffectorStates.HOLD_ALGAE;
-        } else if (!inputs.isAlgaeProximityDetected) {
+        } else if (!inputs.isAlgaeProximityDetected
+            && releasingTimer.hasElapsed(Constants.EndEffector.algaeReleasingDelaySeconds)) {
           state = EndEffectorStates.IDLE;
           algaeHeld = false;
+          releasingTimer.stop();
+          releasingTimer.reset();
         } else if (inputs.isAlgaeProximityDetected) {
           state = EndEffectorStates.HOLD_ALGAE;
         }
         break;
       case RELEASE_CORAL_NORMAL:
+        if (!releasingTimer.isRunning()) {
+          releasingTimer.reset();
+          releasingTimer.start();
+        }
         io.setVoltage(Constants.EndEffector.coralReleaseVolts);
         if (holdCoral) {
           state = EndEffectorStates.HOLD_CORAL;
-        } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+          releasingTimer.stop();
+          releasingTimer.reset();
+        } else if ((!inputs.isCoralProximityDetected
+            && releasingTimer.hasElapsed(Constants.EndEffector.coralReleasingDelaySeconds))) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
-        } else if (inputs.isCoralProximityDetected) {
-          state = EndEffectorStates.HOLD_CORAL;
+          releasingTimer.stop();
+          releasingTimer.reset();
         }
         break;
       case RELEASE_CORAL_L1:
+        if (!releasingTimer.isRunning()) {
+          releasingTimer.reset();
+          releasingTimer.start();
+        }
         io.setVoltage(Constants.EndEffector.coralReleaseVoltsL1);
         if (holdCoral) {
           state = EndEffectorStates.HOLD_CORAL;
-        } else if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+          releasingTimer.stop();
+          releasingTimer.reset();
+        } else if ((!inputs.isCoralProximityDetected
+            && releasingTimer.hasElapsed(Constants.EndEffector.coralReleasingDelaySeconds))) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
-        } else if (inputs.isCoralProximityDetected) {
-          state = EndEffectorStates.HOLD_CORAL;
+          releasingTimer.stop();
+          releasingTimer.reset();
         }
         break;
       case EJECT:

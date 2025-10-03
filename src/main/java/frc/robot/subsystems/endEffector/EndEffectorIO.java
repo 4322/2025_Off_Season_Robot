@@ -1,5 +1,6 @@
 package frc.robot.subsystems.endEffector;
 
+import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -10,9 +11,10 @@ public interface EndEffectorIO {
     public boolean motorConnected = false;
     public double statorCurrentAmps = 0.0;
     public double busCurrentAmps = 0.0;
-    public double tempCelcius = 0.0;
+    public double MotortempCelcius = 0.0;
     public double speedRotationsPerSec = 0.0;
     public double appliedVolts = 0.0;
+    public double controllerTempCelcius = 0.0;
 
     public boolean sensorConnected = false;
     public double sensorProximity = 0.0;
@@ -38,4 +40,9 @@ public interface EndEffectorIO {
   public default void setVoltage(double voltage) {}
 
   public default void stop(IdleMode idleMode) {}
+
+  // for tuning
+  public default Nitrate getNitrate() {
+    return null;
+  }
 }

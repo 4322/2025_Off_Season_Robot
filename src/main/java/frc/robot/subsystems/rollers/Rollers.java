@@ -2,7 +2,9 @@ package frc.robot.subsystems.rollers;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BabyAlchemist;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.util.DeltaDebouncer;
 import org.littletonrobotics.junction.Logger;
 
@@ -50,7 +52,7 @@ public class Rollers extends SubsystemBase {
 
     io.updateInputs(inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
-
+    Logger.processInputs("Rollers", inputs);
     currentDetectionTriggered = currentDetectionDebouncer.calculate(inputs.statorCurrentAmps);
     velocityDetectionTriggered = velocityDetectionDebouncer.calculate(inputs.speedRotationsPerSec);
     isCoralPickupDetected = currentDetectionTriggered && velocityDetectionTriggered;
@@ -58,6 +60,10 @@ public class Rollers extends SubsystemBase {
     Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected);
     Logger.recordOutput("Rollers/currentDetectionTriggered", currentDetectionTriggered);
     Logger.recordOutput("Rollers/velocityDetectionTriggered", velocityDetectionTriggered);
+
+    if (Constants.rollersMode == SubsystemMode.TUNING) {
+      BabyAlchemist.run(0, io.getNitrate(), "Rollers", inputs.speedRotationsPerSec, "rot/sec");
+    }
   }
 
   public void feed() {

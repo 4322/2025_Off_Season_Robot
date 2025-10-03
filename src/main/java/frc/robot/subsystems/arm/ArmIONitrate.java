@@ -38,7 +38,7 @@ public class ArmIONitrate implements ArmIO {
     NitrateSettings armConfig = new NitrateSettings();
 
     armConfig.setPIDSettings(
-        new PIDSettings()
+        PIDSettings.defaultSettings()
             .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
             .setFeedforwardMode(PIDFeedforwardMode.kArm)
             .setGravitationalFeedforward(Constants.Arm.kG)
@@ -50,38 +50,25 @@ public class ArmIONitrate implements ArmIO {
             .setIZone(Constants.Arm.iZone),
         PIDConfigSlot.kSlot0);
 
-    armConfig.setPIDSettings(
-        new PIDSettings()
-            .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
-            .setFeedforwardMode(PIDFeedforwardMode.kArm)
-            .setGravitationalFeedforward(Constants.Arm.kG)
-            .setMinwrapConfig(new MinwrapConfig.Disabled())
-            .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
-            .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
-            .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit)
-            .setISaturation(Constants.Arm.iSat)
-            .setIZone(Constants.Arm.iZone),
-        PIDConfigSlot.kSlot1);
-
     armConfig.setFeedbackSensorSettings(
-        new FeedbackSensorSettings()
+        FeedbackSensorSettings.defaultSettings()
             .setSensorToMechanismRatio(Constants.Arm.sensorToArm)
             .setFeedbackSensor(
                 new FeedbackSensor.CanandmagRelative(
                     Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft)));
 
     armConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.Arm.motorIdleMode)
             .setInvert(Constants.Arm.motorInvert));
 
     armConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.Arm.supplyCurrentLimitAmps)
             .setStatorCurrentLimit(Constants.Arm.statorCurrentLimitAmps));
 
     armConfig.setFramePeriodSettings(
-        new FramePeriodSettings()
+        FramePeriodSettings.defaultSettings()
             .setEnabledPIDDebugFrames(
                 new EnabledDebugFrames()
                     .setKgControlEffort(Constants.debugPIDModeEnabled)
@@ -108,6 +95,25 @@ public class ArmIONitrate implements ArmIO {
               + " (Arm encoder) failed to configure",
           false);
     }
+    PIDSettings settingsSlot1 =
+        new PIDSettings()
+            .setPID(Constants.Arm.kP, Constants.Arm.kI, 0)
+            .setFeedforwardMode(PIDFeedforwardMode.kArm)
+            .setGravitationalFeedforward(Constants.Arm.kG)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
+            .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
+            .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit)
+            .setISaturation(Constants.Arm.iSat)
+            .setIZone(Constants.Arm.iZone);
+    PIDSettings armSlot1ConfigStatus = armMotor.setPIDSettings(settingsSlot1, PIDConfigSlot.kSlot1);
+    if (!armSlot1ConfigStatus.isEmpty()) {
+      DriverStation.reportError(
+          "Nitrate "
+              + armMotor.getAddress().getDeviceId()
+              + " (Arm motor) failed to configure PID Slot 1",
+          false);
+    }
   }
 
   @Override
@@ -120,7 +126,8 @@ public class ArmIONitrate implements ArmIO {
     inputs.velocityDegSec = Units.rotationsToDegrees(armMotor.getVelocity());
     inputs.SupplyCurrentAmps = armMotor.getBusCurrent();
     inputs.StatorCurrentAmps = armMotor.getStatorCurrent();
-    inputs.TempCelsius = armMotor.getMotorTemperatureFrame().getData();
+    inputs.motorTempCelsius = armMotor.getMotorTemperatureFrame().getData();
+    inputs.controllerTempCelsius = armMotor.getControllerTemperatureFrame().getData();
     inputs.armEncoderConnected = armEncoder.isConnected();
     inputs.voltage = armMotor.getAppliedVoltageFrame().getValue();
     inputs.encoderRotations = armMotor.getPosition();

@@ -3,6 +3,8 @@ package frc.robot.subsystems.endEffector;
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
@@ -50,15 +52,18 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
   private void initMotorConfig() {
     motorConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.EndEffector.busCurrentLimit)
             .setBusCurrentLimitTime(Constants.EndEffector.busCurrentLimitTime)
             .setStatorCurrentLimit(Constants.EndEffector.statorCurrentLimit));
 
     motorConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.EndEffector.motorIdleMode)
             .setInvert(Constants.EndEffector.motorInvert));
+
+    motorConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
+    motorConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
   }
 
   private void initSensorConfig() {}
@@ -68,7 +73,8 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.motorConnected = endEffectorMotor.isConnected();
     inputs.speedRotationsPerSec = endEffectorMotor.getVelocity();
     inputs.statorCurrentAmps = endEffectorMotor.getStatorCurrent();
-    inputs.tempCelcius = endEffectorMotor.getMotorTemperatureFrame().getValue();
+    inputs.MotortempCelcius = endEffectorMotor.getMotorTemperatureFrame().getValue();
+    inputs.controllerTempCelcius = endEffectorMotor.getControllerTemperatureFrame().getValue();
     inputs.busCurrentAmps = endEffectorMotor.getBusCurrent();
     inputs.appliedVolts = endEffectorMotor.getBusVoltageFrame().getValue();
 
@@ -133,5 +139,10 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   public void stop(IdleMode idleMode) {
     previousRequestedVoltage = -999;
     endEffectorMotor.stop(idleMode);
+  }
+
+  @Override
+  public Nitrate getNitrate() {
+    return endEffectorMotor;
   }
 }
