@@ -252,7 +252,7 @@ public final class Constants {
     public static final double algaeProximityThresholdRelease =
         0.17; // TODO Need To have something for held and not held losing it should be 0.25 this
     // value is for getting it
-    public static final double algaeProximityThresholdIntake = 0.25;
+    public static final double algaeProximityThreshold = 0.25;
 
     public static final boolean useSensorColor = false; // TODO change this when we get color tuned
     // TODO tune these
