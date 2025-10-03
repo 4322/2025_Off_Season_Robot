@@ -3,7 +3,6 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -16,13 +15,13 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final SubsystemMode armMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode elevatorMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode deployerMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode driveMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode indexerMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode armMode = SubsystemMode.OPEN_LOOP;
+  public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode indexerMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode rollersMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode endEffectorMode = SubsystemMode.TUNING;
   public static final boolean visionEnabled = false;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.TURNING;
   public static final boolean debugPIDModeEnabled = true;
@@ -107,11 +106,11 @@ public final class Constants {
     public static final double coralHoldDeg = armIdleDeg;
     public static final double algaeGroundDeg = 55.0; // TODO: Set to actual angle
 
-    public static final double ejectDeg = 45.0;
+    public static final double ejectDeg = 51.0;
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
-    public static final double minArmSafeDeg = 35.789447; // TODO: Set to actual angle
-    public static final double minArmSafeWithCoralDeg = 36; // TODO: Set to actual angle
+    public static final double minArmSafeDeg = 45; // TODO: Set to actual angle
+    public static final double minArmSafeWithCoralDeg = 50; // TODO: Set to actual angle
     public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = 0.5;
@@ -131,7 +130,7 @@ public final class Constants {
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 30; // TODO
 
     // Prescore Degrees Arm
-    public static final double prescoringL1CoralDeg = 50.686373;
+    public static final double prescoringL1CoralDeg = 51.686373;
     public static final double prescoringL2CoralDeg = 130.751475;
     public static final double prescoringL3CoralDeg = 125.970093;
     public static final double prescoringL4CoralDeg = 121.294978;
@@ -233,23 +232,23 @@ public final class Constants {
     public static final int sensorId = 2;
 
     public static final double algaeHoldVolts = 1.0;
-    public static final double coralHoldVolts = 1.0;
+    public static final double coralHoldVolts = 0.45;
 
     public static final double algaeIntakeVolts = 3.0;
-    public static final double coralIntakeVolts = 3.0;
+    public static final double coralIntakeVolts = 2;
 
     public static final double algaeReleaseVolts = -3.0;
     public static final double coralReleaseVolts =
         -3.0; // TODO make sure this is slow enough for scoring coral.
     public static final double coralReleaseVoltsL1 = -2.0;
 
-    public static final double ejectVolts = -3.0;
+    public static final double ejectVolts = -4.0;
 
     public static final double busCurrentLimit = 40;
     public static final double busCurrentLimitTime = 0;
-    public static final double statorCurrentLimit = 60;
+    public static final double statorCurrentLimit = 100;
 
-    public static final double coralProximityThreshold = 0;
+    public static final double coralProximityThreshold = 1.2;
     public static final double algaeProximityThreshold = 0;
 
     public static final boolean useSensorColor = false; // TODO change this when we get color tuned

@@ -45,6 +45,7 @@ public class Module {
                 "meters/sec");
         if (newVel != null) {
           io.setDriveVelocity(newVel / constants.driveWheelRadius);
+          io.setTurnPosition(new Rotation2d(0)); // drive straight
         }
       }
     }
