@@ -3,7 +3,6 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -182,7 +181,7 @@ public final class Constants {
 
     public static final double elevatorHeightToleranceMeters = 0.01;
 
-    public static final double algaeGroundHeightMeters = 0.00635; 
+    public static final double algaeGroundHeightMeters = 0.00635;
     public static final double algaeReefL2HeightMeters = 0.5021688204;
     public static final double algaeReefL3HeightMeters = 0.8739758746;
 
@@ -245,13 +244,14 @@ public final class Constants {
 
     public static final double ejectVolts = -4.0;
 
-    
     public static final double busCurrentLimit = 40;
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 100;
 
     public static final double coralProximityThreshold = 0.25;
-    public static final double algaeProximityThresholdRelease = 0.17; //TODO Need To have something for held and not held losing it should be 0.25 this value is for getting it
+    public static final double algaeProximityThresholdRelease =
+        0.17; // TODO Need To have something for held and not held losing it should be 0.25 this
+    // value is for getting it
     public static final double algaeProximityThresholdIntake = 0.25;
 
     public static final boolean useSensorColor = false; // TODO change this when we get color tuned

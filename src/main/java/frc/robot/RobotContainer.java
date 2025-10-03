@@ -61,6 +61,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.util.ReefStatus;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -73,6 +74,7 @@ public class RobotContainer {
   private static CommandXboxController sim1;
 
   private static Vision vision;
+  private static ReefStatus reefStatus;
   private static Drive drive;
   private static Arm arm;
   private static EndEffector endEffector;
@@ -226,7 +228,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new AlgaeIntakeGround(superstructure).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L1, vision).schedule();
+                    new ScoreCoral(superstructure, Level.L1, vision, reefStatus).schedule();
                   }
                 }));
     driver
@@ -237,7 +239,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L2).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L2, vision).schedule();
+                    new ScoreCoral(superstructure, Level.L2, vision, reefStatus).schedule();
                   }
                 }));
     driver
@@ -248,7 +250,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L3).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L3, vision).schedule();
+                    new ScoreCoral(superstructure, Level.L3, vision, reefStatus).schedule();
                   }
                 }));
     driver
@@ -259,7 +261,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L4, vision).schedule();
+                    new ScoreCoral(superstructure, Level.L4, vision, reefStatus).schedule();
                   }
                 }));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));

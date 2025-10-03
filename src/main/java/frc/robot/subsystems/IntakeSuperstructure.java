@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -10,6 +8,7 @@ import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.rollers.Rollers;
+import org.littletonrobotics.junction.Logger;
 
 public class IntakeSuperstructure extends SubsystemBase {
 
@@ -93,12 +92,12 @@ public class IntakeSuperstructure extends SubsystemBase {
         switch (retractLockedOutState) {
             // Default case, starts lockout timer when coral is detected in rollers
           case FALSE:
-              if (rollers.isCoralPickupDetected()) {
-                retractLockedOutState = RetractLockedOutStates.INDEXER;
-                retractTimeOutIndexerTimer.stop();
-                retractTimeOutIndexerTimer.reset();
-                retractTimeOutIndexerTimer.start();
-              }
+            if (rollers.isCoralPickupDetected()) {
+              retractLockedOutState = RetractLockedOutStates.INDEXER;
+              retractTimeOutIndexerTimer.stop();
+              retractTimeOutIndexerTimer.reset();
+              retractTimeOutIndexerTimer.start();
+            }
             break;
           case INDEXER:
             // If coral isn't detected in indexer after x time, clear lockout; Otherwise start

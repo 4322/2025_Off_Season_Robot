@@ -26,7 +26,6 @@ import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
 import frc.robot.util.ReefStatus.ClosestReefPipe;
 import frc.robot.util.ReefStatus.L1Zone;
-
 import java.util.LinkedList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
@@ -45,7 +44,7 @@ public class Vision extends SubsystemBase {
   private static Translation2d blueRightL1Split;
   public boolean reefFaceAmbiguity;
   public boolean reefPipeAmbiguity;
-  private double reefFace;
+  public double reefFace;
   public ClosestReefPipe closestReefPipe;
   public double reefToRobotDeg;
 
@@ -236,16 +235,16 @@ public class Vision extends SubsystemBase {
     double reefToRobotRad = reefCenterToRobotDeg.getRadians();
     Translation2d convertedRobotTrans;
 
-    if (-30 <= reefToRobotRad && reefToRobotRad <= 30) {
+    if (-30 < reefToRobotRad && reefToRobotRad < 30) {
       reefFace = 0;
       reefFaceAmbiguity = false;
-    } else if (30 < reefToRobotRad && reefToRobotRad <= 90) {
+    } else if (30 < reefToRobotRad && reefToRobotRad < 90) {
       reefFace = -60;
       reefFaceAmbiguity = false;
-    } else if (-90 < reefToRobotRad && reefToRobotRad <= -30) {
+    } else if (-90 < reefToRobotRad && reefToRobotRad < -30) {
       reefFace = 60;
       reefFaceAmbiguity = false;
-    } else if (90 < reefToRobotRad && reefToRobotRad <= 150) {
+    } else if (90 < reefToRobotRad && reefToRobotRad < 150) {
       reefFace = -120;
       reefFaceAmbiguity = false;
     } else if (-150 < reefToRobotRad && reefToRobotRad <= -90) {
@@ -282,6 +281,11 @@ public class Vision extends SubsystemBase {
       l1Zone = L1Zone.MIDDLE;
     }
 
-    return new ReefStatus(reefFaceAmbiguity, reefPipeAmbiguity, Rotation2d.fromDegrees(reefFace), closestReefPipe, l1Zone);
+    return new ReefStatus(
+        reefFaceAmbiguity,
+        reefPipeAmbiguity,
+        Rotation2d.fromDegrees(reefFace),
+        closestReefPipe,
+        l1Zone);
   }
 }

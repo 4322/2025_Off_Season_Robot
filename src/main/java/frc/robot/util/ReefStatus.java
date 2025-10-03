@@ -20,7 +20,12 @@ public class ReefStatus {
     RIGHT
   }
 
-  public ReefStatus(boolean reefFaceAmbiguity, boolean reefPipeAmbiguity, Rotation2d closestReefFaceAngle, ClosestReefPipe closestReefPipe, L1Zone closestL1Zone) {
+  public ReefStatus(
+      boolean reefFaceAmbiguity,
+      boolean reefPipeAmbiguity,
+      Rotation2d closestReefFaceAngle,
+      ClosestReefPipe closestReefPipe,
+      L1Zone closestL1Zone) {
     this.reefFaceAmbiguity = reefFaceAmbiguity;
     this.reefPipeAmbiguity = reefPipeAmbiguity;
     this.closestReefFaceAngle = closestReefFaceAngle;
