@@ -87,9 +87,8 @@ public final class Constants {
     public static final double rotkP = 0.0;
     public static final double rotkD = 0.0;
 
-    public static final double robotMassKg = 74.088; // TODO: Weigh robot
-    public static final double robotMOI =
-        Units.lbsToKilograms(Units.inchesToMeters(402.462753)); // -Lxy
+    public static final double robotMassKg = Units.lbsToKilograms(141.06); // TODO: Weigh robot
+    public static final double robotMOI = 6.546; // Lzz from CAD
     public static final double wheelCOF = 1.2;
   }
 
