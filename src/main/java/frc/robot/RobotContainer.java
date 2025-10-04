@@ -278,7 +278,7 @@ public class RobotContainer {
                 .onlyIf(() -> DriverStation.isDisabled())
                 .ignoringDisable(true));
     driver
-        .back()
+        .leftTrigger()
         .onTrue(
             new InstantCommand(
                     () -> {

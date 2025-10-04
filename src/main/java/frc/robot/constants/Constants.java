@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -178,7 +179,7 @@ public final class Constants {
     public static final double maxElevatorHeightMeters = 1.3068401092;
     public static final double homeHeightMeters = 0.37926;
 
-    public static final double minElevatorSafeHeightMeters = 0.46;
+    public static final double minElevatorSafeHeightMeters = 0.459;
     public static final double minElevatorSafeWithCoralMeters = 0.46;
 
     public static final double elevatorHeightToleranceMeters = 0.01;
