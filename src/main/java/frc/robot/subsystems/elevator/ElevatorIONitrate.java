@@ -193,7 +193,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     lastRequestedPosRotations = metersToRotations(elevatorPositionMeters);
     leaderMotor.setPosition(lastRequestedPosRotations);
     followerMotor.setPosition(lastRequestedPosRotations);
-    lastRequestedPosMeters = elevatorPositionMeters;
+    lastRequestedPosMeters = -1;
   }
 
   @Override
