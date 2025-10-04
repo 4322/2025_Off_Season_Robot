@@ -338,14 +338,14 @@ public final class Constants {
     public static final IdleMode idleMode = IdleMode.kCoast;
     public static final InvertMode rightInvert = InvertMode.kNotInverted; // positive is intaking
     public static final InvertMode leftInvert = InvertMode.kInverted; // positive is intaking
-    public static final double indexerSensorMax = 0.035; // TODO tune these
-    public static final double pickupAreaSensorMax = 0.05;
+    public static final double indexerSensorMax = 0.035; // .28 normally
+    public static final double pickupAreaSensorMax = 0.05; // .30 normally
     public static final int indexerSensorId = 3;
     public static final int pickupAreaSensorId = 1;
-    public static final double voltageFeed = 5;
-    public static final double voltageRejectSlow = -3;
-    public static final double voltageFeedSlow = 3;
-    public static final double voltageReject = -5;
+    public static final double voltageFeed = 4;
+    public static final double voltageRejectSlow = -0.5;
+    public static final double voltageFeedSlow = 0.5;
+    public static final double voltageReject = -8;
   }
 
   public static class Rollers {
