@@ -83,6 +83,8 @@ public class Superstructure extends SubsystemBase {
 
     if (DriverStation.isDisabled() && !requestHomed) {
       state = Superstates.DISABLED;
+      elevator.reset();
+      arm.reset();
     }
 
     // The home button can only be activated when the robot is disabled, so accept it from any state
@@ -99,9 +101,13 @@ public class Superstructure extends SubsystemBase {
 
     switch (state) {
       case UNHOMED:
+        elevator.reset();
+        arm.reset();
         break;
 
       case DISABLED:
+        elevator.reset();
+        arm.reset();
         if (DriverStation.isEnabled()) {
           state = Superstates.IDLE;
         }

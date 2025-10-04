@@ -102,6 +102,11 @@ public class Elevator extends SubsystemBase {
     isSlow = false;
   }
 
+  public void reset() {
+    isSlow = false;
+    requestedHeightMeters = -1;
+  }
+
   public void algaeReef(Level level) {
     switch (level) {
       case L2:

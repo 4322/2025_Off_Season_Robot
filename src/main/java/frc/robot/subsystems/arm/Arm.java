@@ -128,6 +128,11 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = Constants.Arm.scoringAlgaeDeg;
   }
 
+  public void reset() {
+    isSlow = false;
+    requestedSetpoint = -1;
+  }
+
   public void prescoreCoral(Level level) {
     isSlow = false;
     switch (level) {
