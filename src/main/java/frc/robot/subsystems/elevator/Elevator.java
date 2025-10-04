@@ -65,7 +65,7 @@ public class Elevator extends SubsystemBase {
               && armAngle < (minSafeArmDegree - Constants.Arm.bufferDeg)) {
             newElevatorHeight = minElevatorHeight;
           } else {
-            requestedHeightMeters = newElevatorHeight;
+            newElevatorHeight = requestedHeightMeters;
           }
 
           if (prevHeightMeters != newElevatorHeight) {
