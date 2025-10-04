@@ -14,8 +14,8 @@ import org.littletonrobotics.junction.Logger;
 public class Elevator extends SubsystemBase {
   private ElevatorIO io;
   private ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
-  private double requestedHeightMeters;
-  private double prevHeightMeters;
+  private double requestedHeightMeters = 0.0;
+  private double prevHeightMeters = 0.0;
   private double newElevatorHeight;
   private boolean isSlow = false;
   private boolean isHomed;
@@ -65,7 +65,7 @@ public class Elevator extends SubsystemBase {
               && armAngle < (minSafeArmDegree - Constants.Arm.bufferDeg)) {
             newElevatorHeight = minElevatorHeight;
           } else {
-            requestedHeightMeters = newElevatorHeight;
+            newElevatorHeight = requestedHeightMeters;
           }
 
           if (prevHeightMeters != newElevatorHeight) {
