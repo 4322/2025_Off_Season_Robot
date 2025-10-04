@@ -359,7 +359,7 @@ public final class Constants {
 
     public static final IdleMode idleMode = IdleMode.kCoast;
     public static final InvertMode invert =
-        InvertMode.kNotInverted; // positive is intaking, TODO: verify direction
+        InvertMode.kNotInverted;
 
     public static final double voltageFeed = 9;
     public static final double voltageFeedSlow = 0;
@@ -370,12 +370,12 @@ public final class Constants {
         0.25; // Time for the delta of the current to spike and stay there before detection is
     // triggered
     public static final double velocityDetectionDebounceTimeSeconds =
-        0.25; // Time for delta of the velocity to spike and stay there before detection is
+        0.1; // Time for delta of the velocity to spike and stay there before detection is
     // triggered
 
     public static final double currentDetectionDeltaThresholdAmps = 40;
     public static final double currentDetectionMaxAccumulationSeconds = 1;
-    public static final double velocityDetectionDeltaThresholdRotationsPerSecond = 8;
+    public static final double velocityDetectionDeltaThresholdRotationsPerSecond = 6;
     public static final double velocityDetectionMaxAccumulationSeconds = 1;
   }
 
