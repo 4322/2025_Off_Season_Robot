@@ -66,16 +66,14 @@ public class IntakeSuperstructure extends SubsystemBase {
         break;
       case RETRACT_IDLE:
         deployer.retract();
-        if (isCoralDetectedPickupArea()
-            || RobotContainer.getSuperstructure().isCoralHeld()
-            || RobotContainer.getSuperstructure().getState()
-                == Superstructure.Superstates.END_EFFECTOR_CORAL_PICKUP) {
+        if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {
           rollers.rejectSlow();
           indexer.rejectSlow();
         } else {
           rollers.feedSlow();
           indexer.feedSlow();
         }
+
         if (requestIntakeEject) {
           state = IntakeSuperstates.INTAKE_EJECT;
         } else if (requestDeploy) {
@@ -92,6 +90,9 @@ public class IntakeSuperstructure extends SubsystemBase {
         rollers.feed();
         indexer.feed();
         deployer.deploy();
+        if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {
+          state = IntakeSuperstates.SLOW_REJECT;
+        }
 
         switch (retractLockedOutState) {
             // Default case, starts lockout timer when coral is detected in rollers
@@ -143,8 +144,8 @@ public class IntakeSuperstructure extends SubsystemBase {
         break;
       case SLOW_REJECT:
         deployer.deploy();
-        rollers.reject();
-        indexer.reject();
+        rollers.rejectSlow();
+        indexer.rejectSlow();
 
         if (requestIntakeEject) {
           state = IntakeSuperstates.INTAKE_EJECT;
@@ -159,7 +160,7 @@ public class IntakeSuperstructure extends SubsystemBase {
         break;
       case INTAKE_EJECT:
         deployer.eject();
-        rollers.reject();
+        rollers.eject();
         indexer.reject();
         if (requestRetractIdle) {
           state = IntakeSuperstates.RETRACT_IDLE;

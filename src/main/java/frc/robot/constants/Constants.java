@@ -106,7 +106,7 @@ public final class Constants {
 
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0;
-    public static final double coralHoldDeg = armIdleDeg;
+    public static final double coralHoldDeg = 0.5;
     public static final double algaeGroundDeg = 69.0; // TODO: Set to actual angle
 
     public static final double ejectDeg = 51.0;
@@ -253,8 +253,7 @@ public final class Constants {
     public static final double statorCurrentLimit = 100;
 
     public static final double coralProximityThreshold = 0.25;
-    public static final double algaeProximityThresholdIntake =
-        0.17;
+    public static final double algaeProximityThresholdIntake = 0.17;
     public static final double algaeProximityThreshold = 0.25;
 
     public static final boolean useSensorColor = false; // TODO change this when we get color tuned

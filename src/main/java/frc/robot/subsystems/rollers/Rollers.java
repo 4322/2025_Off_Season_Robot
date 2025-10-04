@@ -36,7 +36,6 @@ public class Rollers extends SubsystemBase {
     IDLE,
     FEED,
     FEED_SLOW,
-    REJECT,
     REJECT_SLOW,
     EJECT
   }
@@ -76,8 +75,8 @@ public class Rollers extends SubsystemBase {
     io.setVoltage(Constants.Rollers.voltageFeedSlow);
   }
 
-  public void reject() {
-    currentAction = RollersStatus.REJECT;
+  public void eject() {
+    currentAction = RollersStatus.EJECT;
     io.setVoltage(Constants.Rollers.voltageEject);
   }
 

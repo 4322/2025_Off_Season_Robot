@@ -117,7 +117,10 @@ public class EndEffector extends SubsystemBase {
         break;
       case INTAKE_CORAL:
         io.setVoltage(Constants.EndEffector.coralIntakeVolts);
-        if (inputs.isCoralProximityDetected /*|| isPiecePickupDetected*/) { // TODO until we have current detection tuned (if we end up doing)
+        if (inputs
+            .isCoralProximityDetected /*|| isPiecePickupDetected*/) { // TODO until we have current
+          // detection tuned (if we end
+          // up doing)
           state = EndEffectorStates.INTAKING_CORAL;
           coralHeld = true;
         }
@@ -132,7 +135,8 @@ public class EndEffector extends SubsystemBase {
             if (inputs.sensorProximity > Constants.EndEffector.algaeProximityThresholdIntake) {
               algaeHeld = false;
               state = EndEffectorStates.IDLE;
-            } else if (inputs.sensorProximity < Constants.EndEffector.algaeProximityThresholdIntake) {
+            } else if (inputs.sensorProximity
+                < Constants.EndEffector.algaeProximityThresholdIntake) {
               state = EndEffectorStates.HOLD_ALGAE;
               algaeHeld = true;
             }
