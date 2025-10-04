@@ -371,10 +371,10 @@ public final class Constants {
         0.25; // Time for delta of the velocity to spike and stay there before detection is
     // triggered
 
-    public static final double currentDetectionDeltaThresholdAmps = 0;
-    public static final double currentDetectionMaxAccumulationSeconds = 0.25;
+    public static final double currentDetectionDeltaThresholdAmps = 40;
+    public static final double currentDetectionMaxAccumulationSeconds = 1;
     public static final double velocityDetectionDeltaThresholdRotationsPerSecond = 13;
-    public static final double velocityDetectionMaxAccumulationSeconds = 0.25;
+    public static final double velocityDetectionMaxAccumulationSeconds = 1;
   }
 
   public static class IntakeSuperstructure {
