@@ -1,13 +1,15 @@
 package frc.robot.commands;
 
+import static frc.robot.RobotContainer.driver;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
-import static frc.robot.RobotContainer.driver;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.ReefStatus;
 import frc.robot.util.ReefStatus.ClosestReefPipe;
@@ -19,6 +21,7 @@ public class ScoreCoral extends Command {
   private final Superstructure superstructure;
   private final Vision vision;
   private final DriveToPose driveToPose;
+  private final Drive drive;
   private Timer L1OverrideTimer = new Timer();
 
   private enum ScoringState {
@@ -30,16 +33,17 @@ public class ScoreCoral extends Command {
 
   ScoringState scoringState;
 
-  
   public ScoreCoral(
       Superstructure superstructure,
       Superstructure.Level Level,
       Vision vision,
-      DriveToPose driveToPose) {
+      DriveToPose driveToPose,
+      Drive drive) {
     this.driveToPose = driveToPose;
     this.superstructure = superstructure;
     this.Level = Level;
     this.vision = vision;
+    this.drive = drive;
     addRequirements(superstructure);
   }
 
@@ -95,19 +99,15 @@ public class ScoreCoral extends Command {
 
     switch (scoringState) {
       case DRIVE_BACK:
-      new DriveToPose(null, new Pose2d(new Translation2d(), Rotation2d.fromDegrees(vision.reefFace)));
+        new DriveToPose(
+            drive, new Pose2d(new Translation2d(), Rotation2d.fromDegrees(vision.reefFace)));
         if (driveToPose.atGoal()) {
           scoringState = ScoringState.SAFE_AREA;
         }
         break;
     }
 
-    //new DriveToPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(vision.reefFace)));
-
-
-   
-  
-
+    // new DriveToPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(vision.reefFace)));
 
     if (RobotContainer.isScoringTriggerHeld() && !superstructure.isAutoOperationMode()) {
       superstructure.requestScoreCoral(Level);
