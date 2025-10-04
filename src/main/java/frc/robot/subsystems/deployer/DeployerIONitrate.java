@@ -37,7 +37,7 @@ public class DeployerIONitrate implements DeployerIO {
   private final PIDPositionRequest deployerMotorRetractPIDRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
-  private double previousRequestedPositionDeg = -999;
+  private double previousRequestedPositionDeg = -1;
   private double mechanismAngleDeg;
 
   public DeployerIONitrate() {

@@ -17,9 +17,9 @@ public final class Constants {
 
   public static final SubsystemMode armMode = SubsystemMode.DISABLED;
   public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode deployerMode = SubsystemMode.TUNING;
   public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode indexerMode = SubsystemMode.TUNING;
+  public static final SubsystemMode indexerMode = SubsystemMode.DISABLED;
   public static final SubsystemMode rollersMode = SubsystemMode.DISABLED;
   public static final SubsystemMode endEffectorMode = SubsystemMode.DISABLED;
   public static final boolean visionEnabled = false;
@@ -295,7 +295,7 @@ public final class Constants {
     public static final int deployerMotorId = 15; // Done
     public static final double deployVoltage = 3.0;
 
-    public static final double statorCurrentLimit = 40;
+    public static final double statorCurrentLimit = 80;
     public static final double busCurrentLimitTime = 0;
     public static final double busCurrentLimit = 60;
     public static final IdleMode idleMode = IdleMode.kBrake;
@@ -324,9 +324,9 @@ public final class Constants {
     public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kArm;
     public static final double maxRangeDegrees = 144.556;
     public static final double maxGravityDegrees = 40.0;
-    public static final double accelerationLimit = 200;
-    public static final double deaccelerationLimit = 200;
-    public static final double velocityLimit = 200;
+    public static final double accelerationLimit = 140;
+    public static final double deaccelerationLimit = 140;
+    public static final double velocityLimit = 35;
   }
 
   public static class Indexer {
