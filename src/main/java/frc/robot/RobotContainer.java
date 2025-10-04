@@ -277,6 +277,7 @@ public class RobotContainer {
             new CoastCommand(arm, elevator, deployer, superstructure)
                 .onlyIf(() -> DriverStation.isDisabled())
                 .ignoringDisable(true));
+
     driver
         .leftTrigger()
         .onTrue(
