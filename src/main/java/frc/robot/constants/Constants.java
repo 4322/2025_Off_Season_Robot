@@ -43,7 +43,7 @@ public final class Constants {
   public static enum SubsystemMode {
     DISABLED,
     NORMAL,
-    OPEN_LOOP,
+    OPEN_LOOP, // deployer and elevator cannot be in open loop at the same time
     TUNING // only one subsystem may be in this mode at a time, drive tuning is front left turning
     // only
   }
@@ -358,8 +358,7 @@ public final class Constants {
     public static final double busCurrentLimit = 40;
 
     public static final IdleMode idleMode = IdleMode.kCoast;
-    public static final InvertMode invert =
-        InvertMode.kNotInverted;
+    public static final InvertMode invert = InvertMode.kNotInverted;
 
     public static final double voltageFeed = 9;
     public static final double voltageFeedSlow = 0;
