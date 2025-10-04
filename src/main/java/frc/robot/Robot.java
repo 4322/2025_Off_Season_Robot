@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -148,9 +149,33 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
+
+    /* roboRIO settings to optimize Java memory use:
+      echo "vm.overcommit_memory=1" >> /etc/sysctl.conf
+      echo "vm.vfs_cache_pressure=1000" >> /etc/sysctl.conf
+      echo "vm.swappiness=100" >> /etc/sysctl.conf
+      sync
+      power cycle the RIO
+
+      To restiore default settings, edit /etc/sysctl.conf to set the
+      following values:
+        vm.overcommit_memory=2
+        vm.vfs_cache_pressure=100
+        vm.swappiness=60
+        power cycle the RIO
+
+      To stop the web server to save memory:
+      /etc/init.d/systemWebServer stop; update-rc.d -f systemWebServer remove; sync
+      chmod a-x /usr/local/natinst/etc/init.d/systemWebServer; sync
+
+      To restart the web server in order to image the RIO:
+      chmod a+x /usr/local/natinst/etc/init.d/systemWebServer; sync
+      power cycle the RIO
+    */
+
     // Optionally switch the thread to high priority to improve loop
     // timing (see the template project documentation for details)
-    // Threads.setCurrentThreadPriority(true, 99);
+    Threads.setCurrentThreadPriority(true, 99);
 
     // Runs the Scheduler. This is responsible for polling buttons, adding
     // newly-scheduled commands, running already-scheduled commands, removing
