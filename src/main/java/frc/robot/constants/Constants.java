@@ -17,11 +17,11 @@ public final class Constants {
 
   public static final SubsystemMode armMode = SubsystemMode.DISABLED;
   public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode deployerMode = SubsystemMode.TUNING;
+  public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
   public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
   public static final SubsystemMode indexerMode = SubsystemMode.DISABLED;
   public static final SubsystemMode rollersMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode endEffectorMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode endEffectorMode = SubsystemMode.TUNING;
   public static final boolean visionEnabled = false;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.TURNING;
   public static final boolean debugPIDModeEnabled = true;
@@ -361,8 +361,8 @@ public final class Constants {
 
     public static final double voltageFeed = 9;
     public static final double voltageFeedSlow = 0;
-    public static final double voltageEject = -2;
-    public static final double voltageRejectSlow = 0;
+    public static final double voltageEject = -5;
+    public static final double voltageRejectSlow = -1;
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
         0.25; // Time for the delta of the current to spike and stay there before detection is
