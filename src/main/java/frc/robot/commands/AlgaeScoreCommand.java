@@ -17,6 +17,7 @@ public class AlgaeScoreCommand extends Command {
   @Override
   public void initialize() {
     superstructure.requestAlgaePrescore();
+    
   }
 
   @Override
