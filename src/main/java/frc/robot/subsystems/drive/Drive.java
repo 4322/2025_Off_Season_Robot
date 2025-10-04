@@ -55,7 +55,7 @@ public class Drive extends SubsystemBase {
   private SwerveDrivePoseEstimator poseEstimator;
 
   private ManualDriveMode manualDriveMode = ManualDriveMode.FIELD_RELATIVE;
-  private double targetAutoRotateAngleRad = 0.0;
+  private Rotation2d targetAutoRotateAngle = Rotation2d.kZero;
 
   public enum ManualDriveMode {
     FIELD_RELATIVE,
@@ -181,17 +181,17 @@ public class Drive extends SubsystemBase {
     manualDriveMode = ManualDriveMode.FIELD_RELATIVE;
   }
 
-  public void requestAutoRotateMode(double fieldTargetAngleRad) {
+  public void requestAutoRotateMode(Rotation2d fieldTargetAngle) {
     manualDriveMode = ManualDriveMode.AUTO_ROTATE;
-    targetAutoRotateAngleRad = fieldTargetAngleRad;
+    targetAutoRotateAngle = fieldTargetAngle;
   }
 
   public ManualDriveMode getManualDriveMode() {
     return manualDriveMode;
   }
 
-  public double getTargetAngleRad() {
-    return targetAutoRotateAngleRad;
+  public Rotation2d getTargetAngle() {
+    return targetAutoRotateAngle;
   }
 
   @AutoLogOutput(key = "Drive/SwerveStates/Measured")
@@ -242,7 +242,7 @@ public class Drive extends SubsystemBase {
   }
 
   public boolean atAutoRotateSetpoint() {
-    return atAngularSetpoint(targetAutoRotateAngleRad);
+    return atAngularSetpoint(targetAutoRotateAngle.getRadians());
   }
 
   public void resetPose(Pose2d pose) {

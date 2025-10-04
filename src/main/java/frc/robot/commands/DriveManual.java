@@ -64,7 +64,7 @@ public class DriveManual extends Command {
       case AUTO_ROTATE:
         rot =
             autoRotateController.calculate(
-                drive.getRotation().getRadians(), drive.getTargetAngleRad());
+                drive.getRotation().getRadians(), drive.getTargetAngle().getRadians());
         drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
         break;
     }
