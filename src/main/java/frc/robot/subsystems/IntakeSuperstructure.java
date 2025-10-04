@@ -90,7 +90,9 @@ public class IntakeSuperstructure extends SubsystemBase {
         rollers.feed();
         indexer.feed();
         deployer.deploy();
-        if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {
+        if (isCoralDetectedPickupArea()
+            || RobotContainer.getSuperstructure().isCoralHeld()
+            || isCoralDetectedIndexer()) {
           state = IntakeSuperstates.SLOW_REJECT;
         }
 
