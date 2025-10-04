@@ -39,7 +39,7 @@ public class Arm extends SubsystemBase {
       if (isHomed) {
         switch (Constants.armMode) {
           case OPEN_LOOP:
-            double x = -RobotContainer.driver.getLeftX();
+            double x = -RobotContainer.driver.getRightX();
             io.setVoltage(x * x * x * 12.0);
             break;
           case TUNING:

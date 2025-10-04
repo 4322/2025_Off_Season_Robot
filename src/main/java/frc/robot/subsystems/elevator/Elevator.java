@@ -37,7 +37,7 @@ public class Elevator extends SubsystemBase {
     if (isHomed) {
       switch (Constants.elevatorMode) {
         case OPEN_LOOP:
-          io.setVoltage(-RobotContainer.driver.getLeftY() * 12.0);
+          io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
           break;
         case TUNING:
           Double newPos =

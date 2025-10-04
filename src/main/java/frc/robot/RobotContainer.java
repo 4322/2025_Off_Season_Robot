@@ -230,7 +230,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new AlgaeIntakeGround(superstructure).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L1).schedule();
+                    new ScoreCoral(superstructure, Level.L1, drive, vision).schedule();
                   }
                 }));
     driver
@@ -239,9 +239,9 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new DescoreAlgae(superstructure, Level.L2).schedule();
+                    new DescoreAlgae(superstructure, Level.L2, drive, vision).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L2).schedule();
+                    new ScoreCoral(superstructure, Level.L2, drive, vision).schedule();
                   }
                 }));
     driver
@@ -250,9 +250,9 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new DescoreAlgae(superstructure, Level.L3).schedule();
+                    new DescoreAlgae(superstructure, Level.L3, drive, vision).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L3).schedule();
+                    new ScoreCoral(superstructure, Level.L3, drive, vision).schedule();
                   }
                 }));
     driver
@@ -261,9 +261,9 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    new AlgaeScoreCommand(superstructure).schedule();
+                    new AlgaeScoreCommand(superstructure, drive).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L4).schedule();
+                    new ScoreCoral(superstructure, Level.L4, drive, vision).schedule();
                   }
                 }));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));

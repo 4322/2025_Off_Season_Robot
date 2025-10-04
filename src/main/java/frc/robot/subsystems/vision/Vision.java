@@ -41,7 +41,7 @@ public class Vision extends SubsystemBase {
   private static Translation2d blueRightL1Split;
   public boolean reefFaceAmbiguity;
   public boolean reefPipeAmbiguity;
-  public double reefFace;
+  private double reefFace;
   public ClosestReefPipe closestReefPipe;
   public double reefToRobotDeg;
 
@@ -339,26 +339,25 @@ public class Vision extends SubsystemBase {
       rightL1Split = blueRightL1Split;
     }
     Translation2d robotTranslation = drive.getPose().getTranslation();
-    Rotation2d reefCenterToRobotDeg = ReefCenterPoint.minus(robotTranslation).getAngle();
-    double reefToRobotRad = reefCenterToRobotDeg.getRadians();
+    double reefCenterToRobotDeg = (ReefCenterPoint.minus(robotTranslation).getAngle()).getDegrees();
     Translation2d convertedRobotTrans;
 
-    if (-30 < reefToRobotRad && reefToRobotRad < 30) {
+    if (-30 < reefCenterToRobotDeg && reefCenterToRobotDeg < 30) {
       reefFace = 0;
       reefFaceAmbiguity = false;
-    } else if (30 < reefToRobotRad && reefToRobotRad < 90) {
+    } else if (30 < reefCenterToRobotDeg && reefCenterToRobotDeg < 90) {
       reefFace = -60;
       reefFaceAmbiguity = false;
-    } else if (-90 < reefToRobotRad && reefToRobotRad < -30) {
+    } else if (-90 < reefCenterToRobotDeg && reefCenterToRobotDeg < -30) {
       reefFace = 60;
       reefFaceAmbiguity = false;
-    } else if (90 < reefToRobotRad && reefToRobotRad < 150) {
+    } else if (90 < reefCenterToRobotDeg && reefCenterToRobotDeg < 150) {
       reefFace = -120;
       reefFaceAmbiguity = false;
-    } else if (-150 < reefToRobotRad && reefToRobotRad <= -90) {
+    } else if (-150 < reefToRobotDeg && reefToRobotDeg <= -90) {
       reefFace = 120;
       reefFaceAmbiguity = false;
-    } else if (-210 < reefToRobotRad && reefToRobotRad < -210) {
+    } else if (-210 < reefToRobotDeg && reefToRobotDeg < -210) {
       reefFace = 180;
       reefFaceAmbiguity = false;
     } else {
@@ -367,7 +366,7 @@ public class Vision extends SubsystemBase {
     L1Zone l1Zone;
     // // Provide a valid Rotation2d argument, for example Rotation2d.fromRadians(reefToRobotDeg)
     convertedRobotTrans =
-        robotTranslation.rotateAround(ReefCenterPoint, Rotation2d.fromRadians(reefToRobotRad));
+        robotTranslation.rotateAround(ReefCenterPoint, Rotation2d.fromRadians(reefToRobotDeg));
 
     if (-30 <= convertedRobotTrans.getAngle().getRadians()
         && convertedRobotTrans.getAngle().getRadians() <= 0) { // Make sure it is for each face

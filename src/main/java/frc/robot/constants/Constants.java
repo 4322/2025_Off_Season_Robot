@@ -18,7 +18,7 @@ public final class Constants {
   public static final SubsystemMode armMode = SubsystemMode.NORMAL;
   public static final SubsystemMode elevatorMode = SubsystemMode.NORMAL;
   public static final SubsystemMode deployerMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode driveMode = SubsystemMode.NORMAL;
   public static final SubsystemMode indexerMode = SubsystemMode.NORMAL;
   public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
@@ -36,14 +36,16 @@ public final class Constants {
   public static final double homeButtonDelaySec = 2.0;
   public static final double coastButtonDelaySec = 10.0;
 
-  public static final double loopPeriodSecs = 0.1;
+  public static final double brownoutVoltage = 5.75;
+
+  public static final double loopPeriodSecs = 0.02;
 
   public static enum SubsystemMode {
     DISABLED,
     NORMAL,
-    OPEN_LOOP,
-    TUNING // only one subsystem may be in this mode at a time, drive tuning is front left turning
-    // only
+    OPEN_LOOP, // deployer and elevator cannot be in open loop at the same time, can't rotate when
+    // arm is open loop
+    TUNING // only one subsystem may be in this mode at a time
   }
 
   public static enum DriveTuningMode {
@@ -198,7 +200,7 @@ public final class Constants {
     public static final double scoreCoralL4HeightMeters = prescoreCoralL4HeightMeters - 0.1;
     public static final double scoreAlgaeHeightMeters = maxElevatorHeightMeters - 0.00635;
 
-    public static final double pickupCoralHeightMeters = 0.39;
+    public static final double pickupCoralHeightMeters = 0.387;
 
     public static final double intializationVoltage = 2.0;
     public static final double initializationTimerThresholdSecs = 5;
@@ -245,7 +247,7 @@ public final class Constants {
         -3.0; // TODO make sure this is slow enough for scoring coral.
     public static final double coralReleaseVoltsL1 = -2.0;
 
-    public static final double ejectVolts = -4.0;
+    public static final double ejectVolts = -6.0;
 
     public static final double busCurrentLimit = 40;
     public static final double busCurrentLimitTime = 0;
@@ -317,7 +319,7 @@ public final class Constants {
 
     // Range of motion of deployer is about 0-140 degrees
     public static final double motorGearRatio = 61.25;
-    public static final double ejectPositionDegrees = 125;
+    public static final double ejectPositionDegrees = 100;
     public static final double retractPositionDegrees = 125;
     public static final double deployPositionDegrees = 0;
     public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kArm;
@@ -355,8 +357,7 @@ public final class Constants {
     public static final double busCurrentLimit = 40;
 
     public static final IdleMode idleMode = IdleMode.kCoast;
-    public static final InvertMode invert =
-        InvertMode.kNotInverted; // positive is intaking, TODO: verify direction
+    public static final InvertMode invert = InvertMode.kNotInverted;
 
     public static final double voltageFeed = 9;
     public static final double voltageFeedSlow = 0;
@@ -367,13 +368,12 @@ public final class Constants {
         0.25; // Time for the delta of the current to spike and stay there before detection is
     // triggered
     public static final double velocityDetectionDebounceTimeSeconds =
-        0.25; // Time for delta of the velocity to spike and stay there before detection is
+        0.1; // Time for delta of the velocity to spike and stay there before detection is
     // triggered
 
-    public static final double currentDetectionDeltaThresholdAmps = 0;
-    public static final double velocityDetectionStallDeltaRotationsPerSec = 0;
+    public static final double currentDetectionDeltaThresholdAmps = 40;
     public static final double currentDetectionMaxAccumulationSeconds = 1;
-    public static final double velocityDetectionDeltaThresholdRotationsPerSecond = 0;
+    public static final double velocityDetectionDeltaThresholdRotationsPerSecond = 6;
     public static final double velocityDetectionMaxAccumulationSeconds = 1;
   }
 

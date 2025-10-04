@@ -26,11 +26,11 @@ public class DrivetrainConstants {
 
   public static final double driveSupplyCurrentLimit = 40.0; // TODO
   public static final double driveSupplyCurrentTime = 0.0; // TODO
-  public static final double driveStatorCurrentLimit = 80; // TODO
+  public static final double driveStatorCurrentLimit = 50; // TODO
 
   public static final double turnSupplyCurrentLimit = 20.0; // TODO
   public static final double turnSupplyCurrentTime = 0.0; // TODO
-  public static final double turnStatorCurrentLimit = 60; // TODO
+  public static final double turnStatorCurrentLimit = 35; // TODO
 
   private static final double drivekP = 0; // TODO
   private static final double drivekD = 0; // TODO

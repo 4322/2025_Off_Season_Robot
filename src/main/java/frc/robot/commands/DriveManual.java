@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ClockUtil;
@@ -30,6 +31,10 @@ public class DriveManual extends Command {
     double omega =
         ClockUtil.cartesianDeadband(
             -RobotContainer.driver.getRightX(), Constants.Drive.rotDeadband);
+
+    if (Constants.armMode == SubsystemMode.OPEN_LOOP) {
+      omega = 0;
+    }
 
     // Apply polar deadband
     double[] polarDriveCoord = ClockUtil.polarDeadband(x, y, Constants.Drive.driveDeadband);
@@ -64,7 +69,7 @@ public class DriveManual extends Command {
       case AUTO_ROTATE:
         rot =
             autoRotateController.calculate(
-                drive.getRotation().getRadians(), drive.getTargetAngleRad());
+                drive.getRotation().getRadians(), drive.getTargetAngle().getRadians());
         drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
         break;
     }

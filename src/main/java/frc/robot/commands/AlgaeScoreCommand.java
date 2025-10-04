@@ -2,20 +2,32 @@ package frc.robot.commands;
 
 import static frc.robot.RobotContainer.driver;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.drive.Drive;
 
 public class AlgaeScoreCommand extends Command {
   private Superstructure superstructure;
+  private final Drive drive;
 
-  public AlgaeScoreCommand(Superstructure superstructure) {
+  public AlgaeScoreCommand(Superstructure superstructure, Drive drive) {
     this.superstructure = superstructure;
+    this.drive = drive;
     addRequirements(superstructure);
   }
 
   @Override
   public void initialize() {
+    if (Robot.alliance == DriverStation.Alliance.Blue) {
+      drive.requestAutoRotateMode(Rotation2d.fromDegrees(0));
+    } else {
+      drive.requestAutoRotateMode(Rotation2d.fromDegrees(180));
+      ;
+    }
     superstructure.requestAlgaePrescore();
   }
 
