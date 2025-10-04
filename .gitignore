@@ -16,7 +16,7 @@
 *.pch
 
 # Avoid ignoring Jama jar file (.jar files are usually ignored)
-!Jama-1.0.3.jar
+!jama-1.0.3.jar
 
 # Compiled Dynamic libraries
 *.so
