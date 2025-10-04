@@ -15,13 +15,13 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final SubsystemMode armMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode elevatorMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode deployerMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode driveMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode indexerMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode armMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode indexerMode = SubsystemMode.TUNING;
+  public static final SubsystemMode rollersMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode endEffectorMode = SubsystemMode.DISABLED;
   public static final boolean visionEnabled = false;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.TURNING;
   public static final boolean debugPIDModeEnabled = true;
@@ -111,8 +111,8 @@ public final class Constants {
     public static final double ejectDeg = 51.0;
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
-    public static final double minArmSafeDeg = 53; // TODO: Set to actual angle
-    public static final double minArmSafeWithCoralDeg = 55; // TODO: Set to actual angle
+    public static final double minArmSafeDeg = 47; // TODO: Set to actual angle
+    public static final double minArmSafeWithCoralDeg = 54; // TODO: Set to actual angle
     public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = 0.5;
@@ -132,7 +132,7 @@ public final class Constants {
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 30; // TODO
 
     // Prescore Degrees Arm
-    public static final double prescoringL1CoralDeg = 51.686373;
+    public static final double prescoringL1CoralDeg = 58.686373;
     public static final double prescoringL2CoralDeg = 130.751475;
     public static final double prescoringL3CoralDeg = 125.970093;
     public static final double prescoringL4CoralDeg = 121.294978;
