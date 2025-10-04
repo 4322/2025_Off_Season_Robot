@@ -15,8 +15,8 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final SubsystemMode armMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode armMode = SubsystemMode.OPEN_LOOP;
+  public static final SubsystemMode elevatorMode = SubsystemMode.OPEN_LOOP;
   public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
   public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
   public static final SubsystemMode indexerMode = SubsystemMode.DISABLED;
@@ -234,6 +234,7 @@ public final class Constants {
     public static final int sensorId = 2;
 
     public static final double algaeHoldVolts = 1.0;
+    // Change for 0.8 and 2 for 180 and 90
     public static final double coralHoldVolts = 0.45;
 
     public static final double algaeIntakeVolts = 6;
@@ -339,7 +340,7 @@ public final class Constants {
     public static final InvertMode rightInvert = InvertMode.kNotInverted; // positive is intaking
     public static final InvertMode leftInvert = InvertMode.kInverted; // positive is intaking
     public static final double indexerSensorMax = 0.035; // .28 normally
-    public static final double pickupAreaSensorMax = 0.05; // .30 normally
+    public static final double pickupAreaSensorMax = 0.06; // .30 normally
     public static final int indexerSensorId = 3;
     public static final int pickupAreaSensorId = 1;
     public static final double voltageFeed = 4;
