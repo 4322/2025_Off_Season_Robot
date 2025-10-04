@@ -43,9 +43,9 @@ public final class Constants {
   public static enum SubsystemMode {
     DISABLED,
     NORMAL,
-    OPEN_LOOP, // deployer and elevator cannot be in open loop at the same time
-    TUNING // only one subsystem may be in this mode at a time, drive tuning is front left turning
-    // only
+    OPEN_LOOP, // deployer and elevator cannot be in open loop at the same time, can't rotate when
+    // arm is open loop
+    TUNING // only one subsystem may be in this mode at a time
   }
 
   public static enum DriveTuningMode {
