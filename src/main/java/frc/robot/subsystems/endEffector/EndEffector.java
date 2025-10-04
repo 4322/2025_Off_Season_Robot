@@ -105,24 +105,19 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case INTAKE_ALGAE:
-        if (inputs.sensorProximity > 0.15) {
-          io.setVoltage(Constants.EndEffector.algaeIntakeVolts);
-          intakingTimer.start();
-          state = EndEffectorStates.INTAKING_ALGAE;
-        }
-        if (inputs.isAlgaeProximityDetected || isPiecePickupDetected) {
-          state = EndEffectorStates.INTAKING_ALGAE;
-          algaeHeld = true;
-        }
         if (requestIdle) {
           state = EndEffectorStates.IDLE;
           algaeHeld = false;
+        } else {
+          io.setVoltage(Constants.EndEffector.algaeIntakeVolts);
+          intakingTimer.start();
+          state = EndEffectorStates.INTAKING_ALGAE;
         }
 
         break;
       case INTAKE_CORAL:
         io.setVoltage(Constants.EndEffector.coralIntakeVolts);
-        if (inputs.isCoralProximityDetected || isPiecePickupDetected) {
+        if (inputs.isCoralProximityDetected /*|| isPiecePickupDetected*/) { // TODO until we have current detection tuned (if we end up doing)
           state = EndEffectorStates.INTAKING_CORAL;
           coralHeld = true;
         }
@@ -134,10 +129,10 @@ public class EndEffector extends SubsystemBase {
       case INTAKING_ALGAE:
         if (intakingTimer.isRunning()) {
           if (intakingTimer.hasElapsed(Constants.EndEffector.algaeIntakingDelaySeconds)) {
-            if (inputs.sensorProximity > 0.29) {
+            if (inputs.sensorProximity > Constants.EndEffector.algaeProximityThresholdIntake) {
               algaeHeld = false;
               state = EndEffectorStates.IDLE;
-            } else if (inputs.sensorProximity > 0.125) {
+            } else if (inputs.sensorProximity < Constants.EndEffector.algaeProximityThresholdIntake) {
               state = EndEffectorStates.HOLD_ALGAE;
               algaeHeld = true;
             }
@@ -178,10 +173,9 @@ public class EndEffector extends SubsystemBase {
           state = EndEffectorStates.RELEASE_ALGAE;
         } else if (requestEject) {
           state = EndEffectorStates.EJECT;
-        }
-
-        if (!algaeHeld) {
+        } else if (inputs.sensorProximity > Constants.EndEffector.algaeProximityThreshold) {
           state = EndEffectorStates.IDLE;
+          algaeHeld = false;
         }
         break;
       case HOLD_CORAL:
@@ -194,8 +188,9 @@ public class EndEffector extends SubsystemBase {
           state = EndEffectorStates.EJECT;
         }
 
-        if (!coralHeld) {
+        if (inputs.sensorProximity > Constants.EndEffector.coralProximityThreshold) {
           state = EndEffectorStates.IDLE;
+          coralHeld = false;
         }
         break;
       case RELEASE_ALGAE:

@@ -87,8 +87,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.isCoralProximityDetected =
         endEffectorSensor.getProximity() < Constants.EndEffector.coralProximityThreshold;
     inputs.isAlgaeProximityDetected =
-        endEffectorSensor.getProximity() < Constants.EndEffector.algaeProximityThreshold
-            && !inputs.isCoralProximityDetected; // TODO Assuming algae is farther from sensor
+        endEffectorSensor.getProximity() < Constants.EndEffector.algaeProximityThreshold;
     // than coral is
 
     // Enable color detection based on Constant setting
