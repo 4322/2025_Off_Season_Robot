@@ -365,10 +365,10 @@ public final class Constants {
     public static final double voltageRejectSlow = -1;
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
-        0.25; // Time for the delta of the current to spike and stay there before detection is
+        2; // Time for the delta of the current to spike and stay there before detection is
     // triggered
     public static final double velocityDetectionDebounceTimeSeconds =
-        0.25; // Time for delta of the velocity to spike and stay there before detection is
+        1; // Time for delta of the velocity to spike and stay there before detection is
     // triggered
 
     public static final double currentDetectionDeltaThresholdAmps = 40;
