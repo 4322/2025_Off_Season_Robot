@@ -1,6 +1,7 @@
 package frc.robot.subsystems.endEffector;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BabyAlchemist;
@@ -164,12 +165,14 @@ public class EndEffector extends SubsystemBase {
           intakingTimer.reset();
         }
 
-        if (arm.getAngleDegrees() > 180) {
-          io.setVoltage(1);
-        } else if (arm.getAngleDegrees() > 135) {
-          io.setVoltage(1.5);
-        } else if (arm.getAngleDegrees() > 90) {
-          io.setVoltage(2);
+        if (arm.getAngleDegrees() <= 90) {
+          io.setVoltage(Constants.EndEffector.maxAlgaeHoldVolts);
+        } else {
+          io.setVoltage(
+              Math.abs(Math.sin(Units.degreesToRadians(arm.getAngleDegrees())))
+                      * (Constants.EndEffector.maxAlgaeHoldVolts
+                          - Constants.EndEffector.minAlgaeHoldVolts)
+                  + Constants.EndEffector.minAlgaeHoldVolts);
         }
         if (requestReleaseAlgae) {
           state = EndEffectorStates.RELEASE_ALGAE;

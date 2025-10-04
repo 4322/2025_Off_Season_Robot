@@ -231,11 +231,11 @@ public final class Constants {
 
   // TODO all of these are placeholder values
   public static class EndEffector {
-    public static final int motorId = 13; // Done
+    public static final int motorId = 13;
     public static final int sensorId = 2;
 
-    public static final double algaeHoldVolts = 1.0;
-    // Change for 0.8 and 2 for 180 and 90
+    public static final double maxAlgaeHoldVolts = 1.0;
+    public static final double minAlgaeHoldVolts = 0.75;
     public static final double coralHoldVolts = 0.45;
 
     public static final double algaeIntakeVolts = 6;
