@@ -1,9 +1,6 @@
 package frc.robot.subsystems.endEffector;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BabyAlchemist;
@@ -13,6 +10,7 @@ import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.util.ClockUtil;
 import frc.robot.util.DeltaDebouncer;
+import org.littletonrobotics.junction.Logger;
 
 public class EndEffector extends SubsystemBase {
   private EndEffectorIO io;
@@ -106,11 +104,11 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case INTAKE_ALGAE:
-      if (inputs.sensorProximity > 0.15){
-        io.setVoltage(Constants.EndEffector.algaeIntakeVolts);
-        intakingTimer.start();
-        state = EndEffectorStates.INTAKING_ALGAE;
-      }
+        if (inputs.sensorProximity > 0.15) {
+          io.setVoltage(Constants.EndEffector.algaeIntakeVolts);
+          intakingTimer.start();
+          state = EndEffectorStates.INTAKING_ALGAE;
+        }
         if (inputs.isAlgaeProximityDetected || isPiecePickupDetected) {
           state = EndEffectorStates.INTAKING_ALGAE;
           algaeHeld = true;
@@ -135,18 +133,17 @@ public class EndEffector extends SubsystemBase {
       case INTAKING_ALGAE:
         if (intakingTimer.isRunning()) {
           if (intakingTimer.hasElapsed(Constants.EndEffector.algaeIntakingDelaySeconds)) {
-            if (inputs.sensorProximity > 0.29){
-            algaeHeld = false;
-            state = EndEffectorStates.IDLE;
-            }
-            else if(inputs.sensorProximity > 0.125){
-            state = EndEffectorStates.HOLD_ALGAE;
-            algaeHeld = true;
+            if (inputs.sensorProximity > 0.29) {
+              algaeHeld = false;
+              state = EndEffectorStates.IDLE;
+            } else if (inputs.sensorProximity > 0.125) {
+              state = EndEffectorStates.HOLD_ALGAE;
+              algaeHeld = true;
             }
             intakingTimer.stop();
             intakingTimer.reset();
           }
-          
+
         } else {
           intakingTimer.start();
         }
@@ -162,19 +159,18 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case HOLD_ALGAE:
-      if (intakingTimer.isRunning()){
-      intakingTimer.stop();
-      intakingTimer.reset();}
+        if (intakingTimer.isRunning()) {
+          intakingTimer.stop();
+          intakingTimer.reset();
+        }
 
-    if (arm.getAngleDegrees() > 180){
-      io.setVoltage(1);
-    }
-    else if (arm.getAngleDegrees() > 135){
-      io.setVoltage(1.5);
-    }
-    else if (arm.getAngleDegrees() > 90){
-      io.setVoltage(2);
-    }
+        if (arm.getAngleDegrees() > 180) {
+          io.setVoltage(1);
+        } else if (arm.getAngleDegrees() > 135) {
+          io.setVoltage(1.5);
+        } else if (arm.getAngleDegrees() > 90) {
+          io.setVoltage(2);
+        }
         if (requestReleaseAlgae) {
           state = EndEffectorStates.RELEASE_ALGAE;
         } else if (requestEject) {

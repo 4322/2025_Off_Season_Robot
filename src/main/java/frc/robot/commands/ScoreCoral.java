@@ -17,13 +17,16 @@ public class ScoreCoral extends Command {
   private final Superstructure superstructure;
   private final ReefStatus reefStatus;
   private final Vision vision;
+  private final DriveToPose driveToPose;
   private Timer L1OverrideTimer = new Timer();
 
   public ScoreCoral(
       Superstructure superstructure,
       Superstructure.Level Level,
       Vision vision,
-      ReefStatus reefStatus) {
+      ReefStatus reefStatus,
+      DriveToPose driveToPose) {
+    this.driveToPose = driveToPose;
     this.superstructure = superstructure;
     this.Level = Level;
     this.vision = vision;
@@ -80,7 +83,9 @@ public class ScoreCoral extends Command {
       }
     }
 
-    if (RobotContainer.isScoringTriggerHeld()) {
+    if (RobotContainer.isScoringTriggerHeld() && !superstructure.isAutoOperationMode()) {
+      superstructure.requestScoreCoral(Level);
+    } else if (driveToPose.atGoal()) {
       superstructure.requestScoreCoral(Level);
     }
   }

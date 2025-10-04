@@ -240,7 +240,7 @@ public class DriveToPose extends Command {
 
   /** Checks if the robot is stopped at the final pose. */
   public boolean atGoal() {
-    return running && driveController.atGoal() && thetaController.atGoal();
+    return !running && driveController.atGoal() && thetaController.atGoal();
   }
 
   /** Checks if the robot pose is within the allowed drive and theta tolerances. */
