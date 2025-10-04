@@ -19,9 +19,9 @@ public final class Constants {
   public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
   public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
   public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode indexerMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode indexerMode = SubsystemMode.TUNING;
   public static final SubsystemMode rollersMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode endEffectorMode = SubsystemMode.TUNING;
+  public static final SubsystemMode endEffectorMode = SubsystemMode.DISABLED;
   public static final boolean visionEnabled = false;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.TURNING;
   public static final boolean debugPIDModeEnabled = true;
@@ -178,8 +178,8 @@ public final class Constants {
     public static final double maxElevatorHeightMeters = 1.3068401092;
     public static final double homeHeightMeters = 0.37926;
 
-    public static final double minElevatorSafeHeightMeters = homeHeightMeters + 0.1;
-    public static final double minElevatorSafeWithCoralMeters = homeHeightMeters + 0.3;
+    public static final double minElevatorSafeHeightMeters = 0.46;
+    public static final double minElevatorSafeWithCoralMeters = 0.46;
 
     public static final double elevatorHeightToleranceMeters = 0.01;
 
@@ -198,7 +198,7 @@ public final class Constants {
     public static final double scoreCoralL4HeightMeters = prescoreCoralL4HeightMeters - 0.1;
     public static final double scoreAlgaeHeightMeters = maxElevatorHeightMeters - 0.00635;
 
-    public static final double pickupCoralHeightMeters = homeHeightMeters + 0.01;
+    public static final double pickupCoralHeightMeters = 0.39;
 
     public static final double intializationVoltage = 2.0;
     public static final double initializationTimerThresholdSecs = 5;
