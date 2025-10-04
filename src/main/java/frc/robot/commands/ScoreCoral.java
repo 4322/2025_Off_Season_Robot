@@ -2,12 +2,16 @@ package frc.robot.commands;
 
 import static frc.robot.RobotContainer.driver;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.util.ReefStatus;
 
 public class ScoreCoral extends Command {
 
@@ -31,12 +35,12 @@ public class ScoreCoral extends Command {
     L1OverrideTimer.stop();
     L1OverrideTimer.reset();
     superstructure.requestPrescoreCoral(Level);
-    drive.requestAutoRotateMode(vision.reefFace);
+    ReefStatus reefStatus = vision.getReefStatus();
+    new DriveToPose(drive, new Pose2d(new Translation2d(), reefStatus.getClosestReefFaceAngle()));
   }
 
   @Override
   public void execute() {
-
     if (RobotContainer.isScoringTriggerHeld()) {
       superstructure.requestScoreCoral(Level);
     }
