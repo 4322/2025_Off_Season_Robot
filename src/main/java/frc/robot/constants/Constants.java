@@ -375,7 +375,7 @@ public final class Constants {
 
     public static final double currentDetectionDeltaThresholdAmps = 40;
     public static final double currentDetectionMaxAccumulationSeconds = 1;
-    public static final double velocityDetectionDeltaThresholdRotationsPerSecond = 8;
+    public static final double velocityDetectionDeltaThresholdRotationsPerSecond = 13;
     public static final double velocityDetectionMaxAccumulationSeconds = 1;
   }
 
