@@ -18,7 +18,7 @@ public final class Constants {
   public static final SubsystemMode armMode = SubsystemMode.NORMAL;
   public static final SubsystemMode elevatorMode = SubsystemMode.NORMAL;
   public static final SubsystemMode deployerMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
+  public static final SubsystemMode driveMode = SubsystemMode.NORMAL;
   public static final SubsystemMode indexerMode = SubsystemMode.NORMAL;
   public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
@@ -318,7 +318,7 @@ public final class Constants {
 
     // Range of motion of deployer is about 0-140 degrees
     public static final double motorGearRatio = 61.25;
-    public static final double ejectPositionDegrees = 125;
+    public static final double ejectPositionDegrees = 100;
     public static final double retractPositionDegrees = 125;
     public static final double deployPositionDegrees = 0;
     public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kArm;
@@ -372,10 +372,9 @@ public final class Constants {
     // triggered
 
     public static final double currentDetectionDeltaThresholdAmps = 0;
-    public static final double velocityDetectionStallDeltaRotationsPerSec = 0;
-    public static final double currentDetectionMaxAccumulationSeconds = 1;
-    public static final double velocityDetectionDeltaThresholdRotationsPerSecond = 0;
-    public static final double velocityDetectionMaxAccumulationSeconds = 1;
+    public static final double currentDetectionMaxAccumulationSeconds = 0.25;
+    public static final double velocityDetectionDeltaThresholdRotationsPerSecond = 13;
+    public static final double velocityDetectionMaxAccumulationSeconds = 0.25;
   }
 
   public static class IntakeSuperstructure {
