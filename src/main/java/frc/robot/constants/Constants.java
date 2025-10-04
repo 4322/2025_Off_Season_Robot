@@ -36,6 +36,8 @@ public final class Constants {
   public static final double homeButtonDelaySec = 2.0;
   public static final double coastButtonDelaySec = 10.0;
 
+  public static final double brownoutVoltage = 5.75;
+
   public static final double loopPeriodSecs = 0.02;
 
   public static enum SubsystemMode {
