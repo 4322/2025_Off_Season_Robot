@@ -140,7 +140,7 @@ public class IntakeSuperstructure extends SubsystemBase {
       case SLOW_REJECT:
         deployer.deploy();
         rollers.reject();
-        indexer.reject();
+        indexer.feedSlow();
 
         if (requestIntakeEject) {
           state = IntakeSuperstates.INTAKE_EJECT;
