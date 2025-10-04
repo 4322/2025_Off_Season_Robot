@@ -201,7 +201,7 @@ public final class Constants {
     public static final double scoreCoralL4HeightMeters = prescoreCoralL4HeightMeters - 0.1;
     public static final double scoreAlgaeHeightMeters = maxElevatorHeightMeters - 0.00635;
 
-    public static final double pickupCoralHeightMeters = 0.39;
+    public static final double pickupCoralHeightMeters = 0.387;
 
     public static final double intializationVoltage = 2.0;
     public static final double initializationTimerThresholdSecs = 5;
@@ -248,7 +248,7 @@ public final class Constants {
         -3.0; // TODO make sure this is slow enough for scoring coral.
     public static final double coralReleaseVoltsL1 = -2.0;
 
-    public static final double ejectVolts = -4.0;
+    public static final double ejectVolts = -6.0;
 
     public static final double busCurrentLimit = 40;
     public static final double busCurrentLimitTime = 0;
@@ -367,10 +367,10 @@ public final class Constants {
     public static final double voltageRejectSlow = -1;
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
-        2; // Time for the delta of the current to spike and stay there before detection is
+        0.25; // Time for the delta of the current to spike and stay there before detection is
     // triggered
     public static final double velocityDetectionDebounceTimeSeconds =
-        1; // Time for delta of the velocity to spike and stay there before detection is
+        0.25; // Time for delta of the velocity to spike and stay there before detection is
     // triggered
 
     public static final double currentDetectionDeltaThresholdAmps = 40;
