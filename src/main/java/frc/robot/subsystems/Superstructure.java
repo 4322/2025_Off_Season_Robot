@@ -1,17 +1,13 @@
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
-import org.littletonrobotics.junction.Logger;
-
-
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
+import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -85,6 +81,10 @@ public class Superstructure extends SubsystemBase {
   @Override
   public void periodic() {
 
+    if (DriverStation.isDisabled() && !requestHomed) {
+      state = Superstates.DISABLED;
+    }
+
     // The home button can only be activated when the robot is disabled, so accept it from any state
     if (requestHomed) {
       elevator.setHomePosition();
@@ -102,10 +102,7 @@ public class Superstructure extends SubsystemBase {
         break;
 
       case DISABLED:
-      if (DriverStation.isEnabled()){
-        state = Superstates.IDLE;
-      }
-      break;
+        break;
       case IDLE:
         endEffector.idle();
         elevator.idle();
