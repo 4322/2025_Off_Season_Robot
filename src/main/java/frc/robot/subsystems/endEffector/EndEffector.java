@@ -147,6 +147,7 @@ public class EndEffector extends SubsystemBase {
         } else {
           intakingTimer.start();
         }
+        break;
       case INTAKING_CORAL:
         if (intakingTimer.isRunning()) {
           if (intakingTimer.hasElapsed(Constants.EndEffector.coralIntakingDelaySeconds)) {
