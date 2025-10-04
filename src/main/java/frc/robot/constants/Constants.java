@@ -22,7 +22,7 @@ public final class Constants {
   public static final SubsystemMode indexerMode = SubsystemMode.NORMAL;
   public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
-  public static final boolean visionEnabled = false;
+  public static final boolean visionEnabled = true;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.TURNING;
   public static final boolean continuousNitrateRequestsEnabled = true;
   public static final boolean debugPIDModeEnabled = true;
