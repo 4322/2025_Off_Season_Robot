@@ -4,22 +4,30 @@ import static frc.robot.RobotContainer.driver;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.vision.Vision;
 
 public class DescoreAlgae extends Command {
 
   private Superstructure.Level Level;
   private final Superstructure superstructure;
+  private final Vision vision;
+  private final Drive drive;
   public boolean isSlow = false;
 
-  public DescoreAlgae(Superstructure superstructure, Superstructure.Level Level) {
+  public DescoreAlgae(
+      Superstructure superstructure, Superstructure.Level Level, Drive drive, Vision vision) {
     this.superstructure = superstructure;
     this.Level = Level;
-    addRequirements(superstructure);
+    this.vision = vision;
+    this.drive = drive;
+    addRequirements(superstructure, drive, vision);
   }
 
   @Override
   public void initialize() {
     superstructure.requestDescoreAlgae(Level);
+    drive.requestAutoRotateMode(vision.reefFace);
   }
 
   @Override
