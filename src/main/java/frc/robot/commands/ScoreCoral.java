@@ -18,7 +18,7 @@ public class ScoreCoral extends Command {
   private final Drive drive;
 
   public ScoreCoral(
-    Superstructure superstructure, Superstructure.Level Level, Drive drive, Vision vision) {
+      Superstructure superstructure, Superstructure.Level Level, Drive drive, Vision vision) {
     this.superstructure = superstructure;
     this.Level = Level;
     this.drive = drive;
