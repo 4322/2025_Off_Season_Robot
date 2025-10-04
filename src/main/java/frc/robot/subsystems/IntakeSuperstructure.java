@@ -208,7 +208,7 @@ public class IntakeSuperstructure extends SubsystemBase {
     return indexer.isCoralDetectedIndexer();
   }
 
-  public void homeButtonActivated() {
+  public void setHome() {
     requestHomed = true;
   }
 
