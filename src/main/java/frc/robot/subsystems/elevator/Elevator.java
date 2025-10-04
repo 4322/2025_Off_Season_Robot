@@ -1,7 +1,9 @@
 package frc.robot.subsystems.elevator;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import edu.wpi.first.wpilibj.DriverStation;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BabyAlchemist;
 import frc.robot.RobotContainer;
@@ -10,7 +12,6 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.util.ClockUtil;
-import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
   private ElevatorIO io;
@@ -69,7 +70,7 @@ public class Elevator extends SubsystemBase {
             newElevatorHeight = requestedHeightMeters;
           }
 
-          if (prevHeightMeters != newElevatorHeight && DriverStation.isEnabled()) {
+          if (prevHeightMeters != newElevatorHeight) {
             if (isSlow) {
               io.requestSlowHeightMeters(newElevatorHeight);
             } else {
