@@ -336,8 +336,8 @@ public final class Constants {
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 60;
     public static final IdleMode idleMode = IdleMode.kCoast;
-    public static final InvertMode rightInvert = InvertMode.kInverted; // positive is intaking
-    public static final InvertMode leftInvert = InvertMode.kNotInverted; // positive is intaking
+    public static final InvertMode rightInvert = InvertMode.kNotInverted; // positive is intaking
+    public static final InvertMode leftInvert = InvertMode.kInverted; // positive is intaking
     public static final double indexerSensorMax = 5; // TODO tune these
     public static final double pickupAreaSensorMax = 5;
     public static final int indexerSensorId = 3;
