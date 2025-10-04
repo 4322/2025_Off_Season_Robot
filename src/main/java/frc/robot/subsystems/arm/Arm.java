@@ -79,7 +79,7 @@ public class Arm extends SubsystemBase {
                   requestedSetpoint; // Makes it to the requested setpoint if no dangers detected
             }
 
-            if (prevSetpoint != newSetpoint) {
+            if (prevSetpoint != newSetpoint && DriverStation.isEnabled()) {
               if (isSlow) {
                 io.requestSlowPosition(newSetpoint);
                 prevSetpoint = newSetpoint;

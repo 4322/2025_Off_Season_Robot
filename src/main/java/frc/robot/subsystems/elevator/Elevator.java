@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BabyAlchemist;
 import frc.robot.RobotContainer;
@@ -68,7 +69,7 @@ public class Elevator extends SubsystemBase {
             newElevatorHeight = requestedHeightMeters;
           }
 
-          if (prevHeightMeters != newElevatorHeight) {
+          if (prevHeightMeters != newElevatorHeight && DriverStation.isEnabled()) {
             if (isSlow) {
               io.requestSlowHeightMeters(newElevatorHeight);
             } else {
