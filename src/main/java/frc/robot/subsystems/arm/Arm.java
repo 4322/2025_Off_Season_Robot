@@ -130,7 +130,7 @@ public class Arm extends SubsystemBase {
 
   public void reset() {
     isSlow = false;
-    requestedSetpoint = -1;
+    prevSetpoint = -1;
   }
 
   public void prescoreCoral(Level level) {
