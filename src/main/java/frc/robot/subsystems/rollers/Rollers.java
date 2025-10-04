@@ -78,7 +78,7 @@ public class Rollers extends SubsystemBase {
 
   public void reject() {
     currentAction = RollersStatus.REJECT;
-    io.setVoltage(Constants.Rollers.voltageReject);
+    io.setVoltage(Constants.Rollers.voltageEject);
   }
 
   public void rejectSlow() {
