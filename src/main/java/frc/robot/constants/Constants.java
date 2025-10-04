@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -15,13 +16,13 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final SubsystemMode armMode = SubsystemMode.OPEN_LOOP;
-  public static final SubsystemMode elevatorMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode deployerMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode driveMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode indexerMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode rollersMode = SubsystemMode.DISABLED;
-  public static final SubsystemMode endEffectorMode = SubsystemMode.TUNING;
+  public static final SubsystemMode armMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode elevatorMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode deployerMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode driveMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode indexerMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = false;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.TURNING;
   public static final boolean debugPIDModeEnabled = true;
@@ -254,7 +255,7 @@ public final class Constants {
     public static final double algaeProximityThresholdRelease =
         0.17; // TODO Need To have something for held and not held losing it should be 0.25 this
     // value is for getting it
-    public static final double algaeProximityThreshold = 0.25;
+    public static final double algaeProximityThreshold = 0.15;
 
     public static final boolean useSensorColor = false; // TODO change this when we get color tuned
     // TODO tune these
@@ -283,7 +284,7 @@ public final class Constants {
     public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
 
     public static final double algaeIntakingDelaySeconds =
-        0.05; // Time to wait after algae is detected in End Effector before reducing voltage
+        0.25; // Time to wait after algae is detected in End Effector before reducing voltage
     public static final double coralIntakingDelaySeconds =
         0.05; // Time to wait after coral is detected in End Effector before reducing voltage
     public static final double algaeReleasingDelaySeconds =
