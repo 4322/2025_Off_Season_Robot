@@ -84,7 +84,7 @@ public class Superstructure extends SubsystemBase {
     if (requestHomed) {
       elevator.setHomePosition();
       arm.setHomePosition();
-      intakeSuperstructure.setHomePosition();
+      intakeSuperstructure.homeButtonActivated();
       requestHomed = false;
       state = Superstates.IDLE;
     }
