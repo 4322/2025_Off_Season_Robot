@@ -61,7 +61,7 @@ public class RollersIONitrate implements RollersIO {
 
   @Override
   public void setVoltage(double voltage) {
-    if (voltage != prevRequestedVoltage) {
+    if (voltage != prevRequestedVoltage || Constants.continuousNitrateRequestsEnabled) {
       rollersMotor.setVoltage(voltage);
       prevRequestedVoltage = voltage;
     }

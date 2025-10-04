@@ -128,7 +128,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
   @Override
   public void setVoltage(double voltage) {
-    if (voltage != previousRequestedVoltage) {
+    if (voltage != previousRequestedVoltage || Constants.continuousNitrateRequestsEnabled) {
       previousRequestedVoltage = voltage;
       endEffectorMotor.setVoltage(voltage);
     }

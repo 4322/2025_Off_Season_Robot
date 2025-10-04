@@ -24,6 +24,7 @@ public final class Constants {
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = false;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.TURNING;
+  public static final boolean continuousNitrateRequestsEnabled = true;
   public static final boolean debugPIDModeEnabled = true;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 

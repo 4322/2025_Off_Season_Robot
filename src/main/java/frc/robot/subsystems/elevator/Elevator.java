@@ -68,7 +68,7 @@ public class Elevator extends SubsystemBase {
             newElevatorHeight = requestedHeightMeters;
           }
 
-          if (prevHeightMeters != newElevatorHeight) {
+          if (prevHeightMeters != newElevatorHeight || Constants.continuousNitrateRequestsEnabled) {
             if (isSlow) {
               io.requestSlowHeightMeters(newElevatorHeight);
             } else {

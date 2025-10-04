@@ -140,7 +140,7 @@ public class IndexerIONitrate implements IndexerIO {
 
   @Override
   public void setVoltage(double voltage) {
-    if (voltage != prevRequestedVoltage) {
+    if (voltage != prevRequestedVoltage || Constants.continuousNitrateRequestsEnabled) {
       indexerMotorRight.setVoltage(voltage);
       indexerMotorLeft.setVoltage(voltage);
       prevRequestedVoltage = voltage;

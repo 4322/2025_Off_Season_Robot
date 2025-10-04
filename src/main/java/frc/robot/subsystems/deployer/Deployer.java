@@ -55,7 +55,8 @@ public class Deployer extends SubsystemBase {
   public void deploy() {
     if (!isHomed
         || Constants.deployerMode != SubsystemMode.NORMAL
-        || currentAction == DeployerStatus.DEPLOY) {
+        || (currentAction == DeployerStatus.DEPLOY
+            && !Constants.continuousNitrateRequestsEnabled)) {
       return;
     }
     currentAction = DeployerStatus.DEPLOY;
@@ -65,7 +66,8 @@ public class Deployer extends SubsystemBase {
   public void retract() {
     if (!isHomed
         || Constants.deployerMode != SubsystemMode.NORMAL
-        || currentAction == DeployerStatus.RETRACT) {
+        || (currentAction == DeployerStatus.RETRACT
+            && !Constants.continuousNitrateRequestsEnabled)) {
       return;
     }
     currentAction = DeployerStatus.RETRACT;
@@ -75,7 +77,7 @@ public class Deployer extends SubsystemBase {
   public void eject() {
     if (!isHomed
         || Constants.deployerMode != SubsystemMode.NORMAL
-        || currentAction == DeployerStatus.EJECT) {
+        || (currentAction == DeployerStatus.EJECT && !Constants.continuousNitrateRequestsEnabled)) {
       return;
     }
     currentAction = DeployerStatus.EJECT;
