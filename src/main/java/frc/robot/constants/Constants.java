@@ -142,7 +142,7 @@ public final class Constants {
     public static final double prescoringL2CoralDeg = 118.546;
     public static final double prescoringL3CoralDeg = 128.139;
     public static final double prescoringL4CoralDeg = 125.955;
-    public static final double scoringAlgaeDeg = -219.442;
+    public static final double scoringAlgaeDeg = 141;
 
     public static final double descoringAlgaeDeg = 75.682;
     public static final double safeBargeRetractDeg = 180;
@@ -157,7 +157,7 @@ public final class Constants {
     public static final double AccelerationLimit = 2.5; // TODO
     public static final double DeaccelerationLimit = 1.5; // TODO
     public static final double VelocityLimit = 1; // TODO
-    public static final double slowVelocityLimit = 0.1; // TODO
+    public static final double slowVelocityLimit = .1; // TODO
   }
 
   public static class Elevator {
@@ -190,8 +190,8 @@ public final class Constants {
     public static final double elevatorHeightToleranceMeters = 0.01;
 
     public static final double algaeGroundHeightMeters = 0.00635;
-    public static final double algaeReefL2HeightMeters = 0.5283249 + 0.0254;
-    public static final double algaeReefL3HeightMeters = 0.8739758746 + 0.0254;
+    public static final double algaeReefL2HeightMeters = 0.5283249 + (2 * (0.0254));
+    public static final double algaeReefL3HeightMeters = 0.8739758746 + (2 * (0.0254));
 
     public static final double prescoreCoralL1HeightMeters = 0.4811766;
     public static final double prescoreCoralL2HeightMeters = 0.10647135;
