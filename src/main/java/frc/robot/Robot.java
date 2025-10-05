@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -10,9 +12,7 @@ import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.Constants;
-import frc.robot.constants.Constants.PathPlanner;
 import frc.robot.constants.Constants.RobotMode;
 import java.io.File;
 import java.io.IOException;
@@ -25,9 +25,6 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-
-import com.pathplanner.lib.commands.FollowPathCommand;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -163,10 +160,7 @@ public class Robot extends LoggedRobot {
     robotContainer = new RobotContainer();
     robotContainer.configureAutonomousSelector();
 
-    CommandScheduler.getInstance()
-      .schedule(
-        FollowPathCommand.warmupCommand()
-      );
+    CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
 
     allianceUpdateTimer.start();
 
