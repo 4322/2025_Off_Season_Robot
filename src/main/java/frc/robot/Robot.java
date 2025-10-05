@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.reduxrobotics.canand.MessageLogger;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -122,7 +123,11 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(
             new WPILOGWriter(Constants.logPath)); // Log to a USB stick is ("/U/logs")
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+
         new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+        RobotController.setBrownoutVoltage(Constants.brownoutVoltage);
+        MessageLogger.openLog(Constants.logPath);
+
         break;
       case SIM:
         // Running a physics simulator, log to NT
@@ -168,7 +173,6 @@ public class Robot extends LoggedRobot {
       // enable subsystems in sim mode
       RobotContainer.getSuperstructure().homeButtonActivated();
     }
-    RobotController.setBrownoutVoltage(Constants.brownoutVoltage);
   }
 
   /** This function is called periodically during all modes. */
@@ -223,7 +227,10 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    // close previous Redux log and open a new unique one
+    MessageLogger.openLog(Constants.logPath);
+  }
 
   /** This function is called periodically when disabled. */
   @Override
