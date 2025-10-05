@@ -128,19 +128,19 @@ public final class Constants {
     public static final double iSat = 0.002; // TODO
     public static final double iZone = 0.0138; // TODO
 
-    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 2; // TODO
-    public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20; // TODO
-    public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20; // TODO
-    public static final double scoringL4CoralDeg = Constants.Arm.prescoringL3CoralDeg - 30; // TODO
+    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 2;
+    public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 35;
+    public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 30;
+    public static final double scoringL4CoralDeg = Constants.Arm.prescoringL4CoralDeg - 12;
 
     // Prescore Degrees Arm
-    public static final double prescoringL1CoralDeg = 58.686373;
-    public static final double prescoringL2CoralDeg = 130.751475;
-    public static final double prescoringL3CoralDeg = 125.970093;
-    public static final double prescoringL4CoralDeg = 121.294978;
-    public static final double scoringAlgaeDeg = 139.326425;
+    public static final double prescoringL1CoralDeg = 57.773;
+    public static final double prescoringL2CoralDeg = 118.546;
+    public static final double prescoringL3CoralDeg = 128.139;
+    public static final double prescoringL4CoralDeg = 125.955;
+    public static final double scoringAlgaeDeg = -219.442;
 
-    public static final double descoringAlgaeDeg = 81.946341;
+    public static final double descoringAlgaeDeg = 75.682;
     public static final double safeBargeRetractDeg = 180;
 
     // To the encoder 0 is horizontal but to us its straight down
@@ -186,19 +186,19 @@ public final class Constants {
     public static final double elevatorHeightToleranceMeters = 0.01;
 
     public static final double algaeGroundHeightMeters = 0.00635;
-    public static final double algaeReefL2HeightMeters = 0.5021688204;
+    public static final double algaeReefL2HeightMeters = 0.5283249;
     public static final double algaeReefL3HeightMeters = 0.8739758746;
 
-    public static final double prescoreCoralL1HeightMeters = 0.5144884808;
-    public static final double prescoreCoralL2HeightMeters = 0.012381357;
-    public static final double prescoreCoralL3HeightMeters = 0.3703222972;
-    public static final double prescoreCoralL4HeightMeters = maxElevatorHeightMeters - 0.00635;
+    public static final double prescoreCoralL1HeightMeters = 0.4811766;
+    public static final double prescoreCoralL2HeightMeters = 0.10647135;
+    public static final double prescoreCoralL3HeightMeters = 0.97551935;
+    public static final double prescoreCoralL4HeightMeters = 1.08791332;
 
     public static final double scoreCoralL1HeightMeters = prescoreCoralL1HeightMeters;
-    public static final double scoreCoralL2HeightMeters = prescoreCoralL2HeightMeters - 0.1;
-    public static final double scoreCoralL3HeightMeters = prescoreCoralL3HeightMeters - 0.1;
-    public static final double scoreCoralL4HeightMeters = prescoreCoralL4HeightMeters - 0.1;
-    public static final double scoreAlgaeHeightMeters = maxElevatorHeightMeters - 0.00635;
+    public static final double scoreCoralL2HeightMeters = prescoreCoralL2HeightMeters - 0.002;
+    public static final double scoreCoralL3HeightMeters = prescoreCoralL3HeightMeters - 0.5;
+    public static final double scoreCoralL4HeightMeters = 0.932657;
+    public static final double scoreAlgaeHeightMeters = 1.3026999;
 
     public static final double pickupCoralHeightMeters = 0.387;
 
