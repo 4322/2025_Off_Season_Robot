@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import java.util.function.Supplier;
+import static frc.robot.RobotContainer.driver;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,13 +10,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
+import java.util.function.Supplier;
 
 public class ScoreCoral extends Command {
 
@@ -176,15 +176,15 @@ public class ScoreCoral extends Command {
       double y = -RobotContainer.driver.getLeftX();
       Rotation2d joystickAngle = Rotation2d.fromRadians(Math.atan2(y, x));
       double joystickMag = Math.hypot(x, y);
-      if (Robot.alliance == DriverStation.Alliance.Red){
-        joystickAngle = joystickAngle.rotateBy(Rotation2d.k180deg); //Convert joystick to feild relative
+      if (Robot.alliance == DriverStation.Alliance.Red) {
+        joystickAngle =
+            joystickAngle.rotateBy(Rotation2d.k180deg); // Convert joystick to feild relative
       }
       // Solve for the angle that the drive stick is at here
-      joystickAngle =
-      joystickAngle.rotateBy(robotReefAngle.unaryMinus());
+      joystickAngle = joystickAngle.rotateBy(robotReefAngle.unaryMinus());
 
       if (level == Level.L1) {
-        
+
         if (joystickMag > 0.75) {
           if (joystickAngle.getDegrees() > 30) {
             targetScoringPose = leftTroughScoringPose;
@@ -192,8 +192,7 @@ public class ScoreCoral extends Command {
           } else if (joystickAngle.minus(robotReefAngle).getDegrees() < -30) {
             targetScoringPose = rightTroughScoringPose;
             superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
-          }
-          else {
+          } else {
             targetScoringPose = middleTroughScoringPose;
             superstructure.enableGlobalPose();
           }
