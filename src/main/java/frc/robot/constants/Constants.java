@@ -3,7 +3,6 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
-
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
@@ -409,6 +408,5 @@ public final class Constants {
 
     public static double stdDevBaseline = 0.2;
     public static double thetaStdDevBaseline = 0.075;
-
   }
 }

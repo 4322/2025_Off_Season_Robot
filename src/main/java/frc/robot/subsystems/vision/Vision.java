@@ -134,7 +134,8 @@ public class Vision extends SubsystemBase {
             boolean rejectPose =
                 observation.tagCount() == 0 // Must have at least one tag
                     || (observation.tagCount() == 1
-                        && observation.ambiguity() > Constants.Vision.maxAmbiguity) // Cannot be high ambiguity
+                        && observation.ambiguity()
+                            > Constants.Vision.maxAmbiguity) // Cannot be high ambiguity
                     || Math.abs(disambiguatedRobotPose.getZ())
                         > Constants.Vision.maxZError // Must have realistic Z coordinate
 
@@ -240,7 +241,8 @@ public class Vision extends SubsystemBase {
             boolean rejectPose =
                 observation.ambiguity() > Constants.Vision.maxAmbiguity // Cannot be high ambiguity
                     || Math.abs(disambiguatedRobotPose.getZ())
-                        > Constants.Vision.maxZError // Use Z coordinate of disambiguated robot pose due to vision
+                        > Constants.Vision
+                            .maxZError // Use Z coordinate of disambiguated robot pose due to vision
                     // pose math being done in 2d
 
                     // Must be within the field boundaries

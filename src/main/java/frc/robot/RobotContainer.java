@@ -1,10 +1,5 @@
 package frc.robot;
 
-import static frc.robot.subsystems.vision.VisionConstants.leftCamName;
-import static frc.robot.subsystems.vision.VisionConstants.leftCameraTransform;
-import static frc.robot.subsystems.vision.VisionConstants.rightCamName;
-import static frc.robot.subsystems.vision.VisionConstants.rightCameraTransform;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -103,8 +98,14 @@ public class RobotContainer {
       vision =
           new Vision(
               drive,
-              new VisionIOPhotonVisionSim(leftCamName, leftCameraTransform, drive::getPose),
-              new VisionIOPhotonVisionSim(rightCamName, rightCameraTransform, drive::getPose));
+              new VisionIOPhotonVisionSim(
+                  Constants.Vision.leftCamName,
+                  Constants.Vision.leftCameraTransform,
+                  drive::getPose),
+              new VisionIOPhotonVisionSim(
+                  Constants.Vision.rightCamName,
+                  Constants.Vision.rightCameraTransform,
+                  drive::getPose));
       sim1 = new CommandXboxController(1);
 
       elevator = new Elevator(new ElevatorIOSim());
@@ -141,8 +142,10 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive,
-                new VisionIOPhotonVision(leftCamName, leftCameraTransform),
-                new VisionIOPhotonVision(rightCamName, rightCameraTransform));
+                new VisionIOPhotonVision(
+                    Constants.Vision.leftCamName, Constants.Vision.leftCameraTransform),
+                new VisionIOPhotonVision(
+                    Constants.Vision.rightCamName, Constants.Vision.rightCameraTransform));
       } else {
         vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
       }
