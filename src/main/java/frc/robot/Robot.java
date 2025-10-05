@@ -46,6 +46,8 @@ public class Robot extends LoggedRobot {
   private DigitalInput coastButton = new DigitalInput(Constants.dioCoastButton);
   private Timer coastButtonTimer = new Timer();
 
+  public static PathPlannerPath Leave;
+
   public static PathPlannerPath FourCoralStartToJuliet;
   public static PathPlannerPath FeedToLima;
   public static PathPlannerPath LimaToFeed;
@@ -145,6 +147,8 @@ public class Robot extends LoggedRobot {
     Logger.disableConsoleCapture();
 
     try {
+      Leave = PathPlannerPath.fromPathFile("Leave");
+
       FourCoralStartToJuliet = PathPlannerPath.fromPathFile("Four Coral Start To Juliet");
       FeedToLima = PathPlannerPath.fromPathFile("Feed To Lima");
       LimaToFeed = PathPlannerPath.fromPathFile("Lima To Feed");
