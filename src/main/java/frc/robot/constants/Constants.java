@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -189,8 +190,8 @@ public final class Constants {
     public static final double elevatorHeightToleranceMeters = 0.01;
 
     public static final double algaeGroundHeightMeters = 0.00635;
-    public static final double algaeReefL2HeightMeters = 0.5283249;
-    public static final double algaeReefL3HeightMeters = 0.8739758746;
+    public static final double algaeReefL2HeightMeters = 0.5283249 + 0.0254;
+    public static final double algaeReefL3HeightMeters = 0.8739758746 + 0.0254;
 
     public static final double prescoreCoralL1HeightMeters = 0.4811766;
     public static final double prescoreCoralL2HeightMeters = 0.10647135;
