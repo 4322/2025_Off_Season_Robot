@@ -195,7 +195,7 @@ public final class Constants {
 
     public static final double prescoreCoralL1HeightMeters = 0.4811766;
     public static final double prescoreCoralL2HeightMeters = 0.10647135;
-    public static final double prescoreCoralL3HeightMeters = 0.97551935;
+    public static final double prescoreCoralL3HeightMeters = 0.47551935;
     public static final double prescoreCoralL4HeightMeters = 1.08791332;
 
     public static final double scoreCoralL1HeightMeters = prescoreCoralL1HeightMeters;
