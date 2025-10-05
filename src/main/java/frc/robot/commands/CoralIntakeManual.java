@@ -40,7 +40,8 @@ public class CoralIntakeManual extends Command {
 
   @Override
   public boolean isFinished() {
-    return !(driver.getLeftTriggerAxis() > 0.5) || (autoEnd && intakeSuperstructure.isCoralDetectedIndexer());
+    return !(driver.getLeftTriggerAxis() > 0.5)
+        || (autoEnd && intakeSuperstructure.isCoralDetectedIndexer());
   }
 
   @Override
