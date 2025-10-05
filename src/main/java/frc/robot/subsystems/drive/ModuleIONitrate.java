@@ -56,6 +56,11 @@ public class ModuleIONitrate implements ModuleIO {
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
 
     NitrateSettings turnConfig = new NitrateSettings();
+    turnConfig.setOutputSettings(
+        OutputSettings.defaultSettings()
+            .setIdleMode(IdleMode.kBrake)
+            .setInvert(
+                constants.turnMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted));
     turnConfig.setFeedbackSensorSettings(
         FeedbackSensorSettings.defaultSettings()
             .setFeedbackSensor(
