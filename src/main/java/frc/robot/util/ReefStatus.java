@@ -8,6 +8,7 @@ public class ReefStatus {
   private Rotation2d closestRobotToReefFaceAngle;
   private ClosestReefPipe closestReefPipe;
   private L1Zone closestL1Zone;
+  private int tagId;
 
   public enum L1Zone {
     MIDDLE,
@@ -25,12 +26,14 @@ public class ReefStatus {
       boolean reefPipeAmbiguity,
       Rotation2d closestReefFaceAngle,
       ClosestReefPipe closestReefPipe,
-      L1Zone closestL1Zone) {
+      L1Zone closestL1Zone,
+      int tagId) {
     this.reefFaceAmbiguity = reefFaceAmbiguity;
     this.reefPipeAmbiguity = reefPipeAmbiguity;
     this.closestRobotToReefFaceAngle = closestReefFaceAngle;
     this.closestReefPipe = closestReefPipe;
     this.closestL1Zone = closestL1Zone;
+    this.tagId = tagId;
   }
 
   public boolean getReefFaceAmbiguity() {
@@ -41,7 +44,7 @@ public class ReefStatus {
     return reefPipeAmbiguity;
   }
 
-  public Rotation2d getClosestRobotToReefFaceAngle() {
+  public Rotation2d getClosestRobotAngle() {
     return closestRobotToReefFaceAngle;
   }
 
@@ -51,5 +54,9 @@ public class ReefStatus {
 
   public L1Zone getClosestL1Zone() {
     return closestL1Zone;
+  }
+
+  public int getFaceTagId() {
+    return tagId;
   }
 }

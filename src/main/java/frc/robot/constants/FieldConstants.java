@@ -4,7 +4,6 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
-
 import java.util.*;
 
 /**
@@ -171,6 +170,23 @@ public class FieldConstants {
 
     public final double height;
     public final double pitch;
+  }
+
+  public static enum ReefFaceTag {
+    AB(18, 7),
+    CD(17, 8),
+    EF(22, 9),
+    GH(21, 10),
+    IJ(20, 11),
+    KL(19, 6);
+
+    ReefFaceTag(int idBlue, int idRed) {
+      this.idBlue = idBlue;
+      this.idRed = idRed;
+    }
+
+    public final int idBlue;
+    public final int idRed;
   }
 
   public static final double aprilTagWidth = Units.inchesToMeters(6.50);
@@ -360,19 +376,64 @@ public class FieldConstants {
                           new Quaternion(-0.8660254037844387, -0.0, 0.0, 0.49999999999999994))))),
           fieldLength,
           fieldWidth);
-    public static class KeypointPoses {
-        public static final Translation2d blueReefCenter = Reef.center;
-        public static final Translation2d redReefCenter = new Translation2d(fieldLength - Reef.center.getX(), Reef.center.getY());
 
-        // Points in front of field relative 0 degree reef face (G,H) that are in line with branches
-        // Original blue branch coords before 180 degree transform correspond to face closest to blue DS (A,B)
-        public static final Translation2d leftReefBranchFaceBlue = new Translation2d(3.6576254, 4.1902634).rotateAround(blueReefCenter, Rotation2d.k180deg);
-        public static final Translation2d rightReefBranchFaceBlue = new Translation2d(3.6576254, 3.8615874).rotateAround(blueReefCenter, Rotation2d.k180deg);
+  public static class KeypointPoses {
+    // Private variables are reference values, do not modify
+    private static final double scoringDistanceFromReef = Units.inchesToMeters(12);
+    private static final double sideTroughDistanceFromBranch = 0.153035;
+    private static final double robotCenterToBumper = Units.inchesToMeters(16.97687);
 
-        // Points in front of field relative 0 degree reef face (A,B) that are in line with branches
-        public static final Translation2d leftReefBranchFaceRed = new Translation2d(fieldLength - 3.6576254, 4.1902634);
-        public static final Translation2d rightReefBranchFaceRed = new Translation2d(fieldLength - 3.6576254, 3.8615874);
+    public static final double reefSafeDistance = Units.inchesToMeters(24);
 
+    public static final Translation2d blueReefCenter = Reef.center;
+    public static final Translation2d redReefCenter =
+        new Translation2d(fieldLength - Reef.center.getX(), Reef.center.getY());
 
-    }
+    // Points in front of field relative 0 degree reef face (G,H) that are in line with branches
+    // Original blue branch coords before 180 degree transform correspond to face closest to blue DS
+    // (A,B)
+    public static final Translation2d leftReefBranchFaceBlue =
+        new Translation2d(3.6576254, 4.1902634).rotateAround(blueReefCenter, Rotation2d.k180deg);
+    public static final Translation2d rightReefBranchFaceBlue =
+        new Translation2d(3.6576254, 3.8615874).rotateAround(blueReefCenter, Rotation2d.k180deg);
+
+    // Points in front of field relative 0 degree reef face (A,B) that are in line with branches
+    public static final Translation2d leftReefBranchFaceRed =
+        new Translation2d(fieldLength - 3.6576254, 4.1902634);
+    public static final Translation2d rightReefBranchFaceRed =
+        new Translation2d(fieldLength - 3.6576254, 3.8615874);
+
+    // Scoring positions of center of robot drivebase
+    public static final Translation2d leftReefBranchScoringBlue =
+        leftReefBranchFaceBlue.plus(
+            new Translation2d(scoringDistanceFromReef + robotCenterToBumper, 0));
+    public static final Translation2d rightReefBranchScoringBlue =
+        rightReefBranchFaceBlue.plus(
+            new Translation2d(scoringDistanceFromReef + robotCenterToBumper, 0));
+
+    public static final Translation2d leftReefBranchScoringRed =
+        leftReefBranchFaceRed.plus(
+            new Translation2d(scoringDistanceFromReef + robotCenterToBumper, 0));
+    public static final Translation2d rightReefBranchScoringRed =
+        rightReefBranchFaceRed.plus(
+            new Translation2d(scoringDistanceFromReef + robotCenterToBumper, 0));
+
+    public static final Translation2d leftTroughScoringBlue =
+        leftReefBranchFaceBlue.plus(
+            new Translation2d(robotCenterToBumper, -sideTroughDistanceFromBranch));
+    public static final Translation2d middleTroughScoringBlue =
+        leftReefBranchFaceBlue.plus(new Translation2d(robotCenterToBumper, 0.164338));
+    public static final Translation2d rightTroughScoringBlue =
+        rightReefBranchFaceBlue.plus(
+            new Translation2d(robotCenterToBumper, sideTroughDistanceFromBranch));
+
+    public static final Translation2d leftTroughScoringRed =
+        leftReefBranchFaceRed.plus(
+            new Translation2d(robotCenterToBumper, -sideTroughDistanceFromBranch));
+    public static final Translation2d middleTroughScoringRed =
+        leftReefBranchFaceRed.plus(new Translation2d(robotCenterToBumper, 0.164338));
+    public static final Translation2d rightTroughScoringRed =
+        rightReefBranchFaceRed.plus(
+            new Translation2d(robotCenterToBumper, sideTroughDistanceFromBranch));
+  }
 }

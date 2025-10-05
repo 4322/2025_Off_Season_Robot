@@ -9,6 +9,7 @@ import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
 import org.littletonrobotics.junction.Logger;
 
@@ -425,5 +426,11 @@ public class Superstructure extends SubsystemBase {
     intakeSuperstructure.deployer.stop(IdleMode.kBrake);
   }
 
-  // Other Methods are related to Vision Pose Estimation
+  public void enableGlobalPose() {
+    vision.enableGlobalPose();
+  }
+
+  public void enableSingleTag(int tagID, SingleTagCamera cameraToUse) {
+    vision.enableSingleTagSingleCam(tagID, cameraToUse);
+  }
 }

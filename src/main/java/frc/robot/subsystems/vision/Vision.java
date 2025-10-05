@@ -36,6 +36,7 @@ public class Vision extends SubsystemBase {
   private double robotToReefFace;
   public ClosestReefPipe closestReefPipe;
   public L1Zone l1Zone;
+  public int tagId;
 
   private PolynomialRegression xyStdDevModel =
       new PolynomialRegression(
@@ -338,26 +339,50 @@ public class Vision extends SubsystemBase {
     if (-30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 30) {
       robotToReefFace = 180;
       reefFaceAmbiguity = false;
+      tagId =
+          Robot.alliance == DriverStation.Alliance.Red
+              ? FieldConstants.ReefFaceTag.AB.idRed
+              : FieldConstants.ReefFaceTag.GH.idBlue;
     } else if (30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 90) {
       robotToReefFace = -120;
       reefFaceAmbiguity = false;
+      tagId =
+          Robot.alliance == DriverStation.Alliance.Red
+              ? FieldConstants.ReefFaceTag.CD.idRed
+              : FieldConstants.ReefFaceTag.IJ.idBlue;
     } else if (90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 150) {
       robotToReefFace = -60;
       reefFaceAmbiguity = false;
+      tagId =
+          Robot.alliance == DriverStation.Alliance.Red
+              ? FieldConstants.ReefFaceTag.EF.idRed
+              : FieldConstants.ReefFaceTag.KL.idBlue;
     } else if ((150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 180)
         || (-150 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -180)) {
       robotToReefFace = 0;
       reefFaceAmbiguity = false;
+      tagId =
+          Robot.alliance == DriverStation.Alliance.Red
+              ? FieldConstants.ReefFaceTag.GH.idRed
+              : FieldConstants.ReefFaceTag.AB.idBlue;
     } else if (-150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -90) {
       robotToReefFace = 60;
       reefFaceAmbiguity = false;
+      tagId =
+          Robot.alliance == DriverStation.Alliance.Red
+              ? FieldConstants.ReefFaceTag.IJ.idRed
+              : FieldConstants.ReefFaceTag.CD.idBlue;
     } else if (-90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -30) {
       robotToReefFace = 120;
       reefFaceAmbiguity = false;
+      tagId =
+          Robot.alliance == DriverStation.Alliance.Red
+              ? FieldConstants.ReefFaceTag.KL.idRed
+              : FieldConstants.ReefFaceTag.EF.idBlue;
     } else {
       reefFaceAmbiguity = true;
     }
-    
+
     Translation2d convertedRobotTrans =
         robotTranslation.rotateAround(
             reefCenterPoint, Rotation2d.fromDegrees(-reefCenterToRobotDeg));
@@ -368,8 +393,7 @@ public class Vision extends SubsystemBase {
       closestReefPipe = ClosestReefPipe.LEFT;
     }
 
-    if (convertedRobotTrans.minus(leftL1Split).getAngle().getDegrees()
-        < 0) {
+    if (convertedRobotTrans.minus(leftL1Split).getAngle().getDegrees() < 0) {
       l1Zone = L1Zone.LEFT;
     } else if (convertedRobotTrans.minus(rightL1Split).getAngle().getDegrees() > 0) {
       l1Zone = L1Zone.RIGHT;
@@ -381,6 +405,7 @@ public class Vision extends SubsystemBase {
         reefPipeAmbiguity,
         Rotation2d.fromDegrees(robotToReefFace),
         closestReefPipe,
-        l1Zone);
+        l1Zone,
+        tagId);
   }
 }
