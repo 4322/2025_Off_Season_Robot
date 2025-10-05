@@ -9,7 +9,6 @@ import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.constants.DrivetrainConstants;
-import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.Drive.ManualDriveMode;
 import frc.robot.util.ClockUtil;
@@ -65,9 +64,9 @@ public class DriveManual extends Command {
     double rot = omega * omega * omega * 12.0;
     ManualDriveMode driveMode = drive.getManualDriveMode();
 
-    if (RobotContainer.getSuperstructure().getState() == Superstates.CORAL_HELD) {
-      driveMode = ManualDriveMode.REEF_LOCK;
-    }
+    // if (RobotContainer.getSuperstructure().getState() == Superstates.CORAL_HELD) {
+    //   driveMode = ManualDriveMode.REEF_LOCK;
+    // }
     switch (driveMode) {
       case FIELD_RELATIVE:
         break;
