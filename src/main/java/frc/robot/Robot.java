@@ -45,9 +45,9 @@ public class Robot extends LoggedRobot {
 
   public static PathPlannerPath Leave;
 
-  public static PathPlannerPath FourCoralStartToJuliet;
+  public static PathPlannerPath ThreeCoralStartToJuliet;
   public static PathPlannerPath FeedToLima;
-  public static PathPlannerPath LimaToFeed;
+  public static PathPlannerPath KiloToFeed;
   public static PathPlannerPath FeedToKilo;
   public static PathPlannerPath JulietToFeed;
 
@@ -146,9 +146,9 @@ public class Robot extends LoggedRobot {
     try {
       Leave = PathPlannerPath.fromPathFile("Leave");
 
-      FourCoralStartToJuliet = PathPlannerPath.fromPathFile("Four Coral Start To Juliet");
+      ThreeCoralStartToJuliet = PathPlannerPath.fromPathFile("Three Coral Start To Juliet");
       FeedToLima = PathPlannerPath.fromPathFile("Feed To Lima");
-      LimaToFeed = PathPlannerPath.fromPathFile("Lima To Feed");
+      KiloToFeed = PathPlannerPath.fromPathFile("Kilo To Feed");
       FeedToKilo = PathPlannerPath.fromPathFile("Feed To Kilo");
       JulietToFeed = PathPlannerPath.fromPathFile("Juliet To Feed");
     } catch (Exception e) {

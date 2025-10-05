@@ -10,12 +10,14 @@ import frc.robot.subsystems.IntakeSuperstructure;
 public class CoralIntakeManual extends Command {
   private IntakeSuperstructure intakeSuperstructure;
   private Timer rumbleTimer = new Timer();
+  private boolean autoEnd;
 
-  public CoralIntakeManual(IntakeSuperstructure intakeSuperstructure) {
+  public CoralIntakeManual(IntakeSuperstructure intakeSuperstructure, boolean autoEnd) {
     this.intakeSuperstructure = intakeSuperstructure;
     addRequirements(intakeSuperstructure);
     rumbleTimer.reset();
     rumbleTimer.stop();
+    this.autoEnd = autoEnd;
   }
 
   @Override
@@ -38,7 +40,7 @@ public class CoralIntakeManual extends Command {
 
   @Override
   public boolean isFinished() {
-    return !(driver.getLeftTriggerAxis() > 0.5);
+    return !(driver.getLeftTriggerAxis() > 0.5) || (autoEnd && intakeSuperstructure.isCoralDetectedIndexer());
   }
 
   @Override
