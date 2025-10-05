@@ -43,15 +43,7 @@ public class ModuleIONitrate implements ModuleIO {
     this.constants = constants;
 
     NitrateSettings driveConfig = new NitrateSettings();
-    driveConfig.setAtomicBondSettings(
-        AtomicBondSettings.defaultSettings()
-            .setAtomicBondMode(AtomicBondMode.kSwerveModule)
-            .setAtomicSwerveConstants(
-                turnMotor,
-                turnEncoder,
-                gyro.getGyro(),
-                constants.driveMotorGearRatio,
-                constants.turnCouplingRatio));
+      
     driveConfig.setOutputSettings(
         OutputSettings.defaultSettings()
             .setIdleMode(IdleMode.kBrake)
@@ -66,13 +58,6 @@ public class ModuleIONitrate implements ModuleIO {
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
 
     NitrateSettings turnConfig = new NitrateSettings();
-    turnConfig.setAtomicBondSettings(
-        AtomicBondSettings.defaultSettings().setAtomicBondMode(AtomicBondMode.kSwerveModule));
-    turnConfig.setOutputSettings(
-        OutputSettings.defaultSettings()
-            .setIdleMode(IdleMode.kBrake)
-            .setInvert(
-                constants.turnMotorInverted ? InvertMode.kInverted : InvertMode.kNotInverted));
     turnConfig.setFeedbackSensorSettings(
         FeedbackSensorSettings.defaultSettings()
             .setFeedbackSensor(
