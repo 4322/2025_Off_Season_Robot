@@ -3,6 +3,7 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class VisionIOPhotonVision implements VisionIO {
     camera = new PhotonCamera(name);
     this.robotToCamera = robotToCamera;
 
-    if (name == VisionConstants.leftCamName) {
+    if (name == Constants.Vision.leftCamName) {
       currentCam = SingleTagCamera.LEFT;
     } else {
       currentCam = SingleTagCamera.RIGHT;

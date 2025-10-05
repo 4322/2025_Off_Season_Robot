@@ -1,8 +1,5 @@
 package frc.robot.subsystems.vision;
 
-import static frc.robot.subsystems.vision.VisionConstants.maxAmbiguity;
-import static frc.robot.subsystems.vision.VisionConstants.maxZError;
-
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,6 +11,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.VisionIO.GlobalPoseObservation;
@@ -110,7 +108,7 @@ public class Vision extends SubsystemBase {
             if (observation.useMultiTag()) {
               disambiguatedRobotPose = observation.pose();
             } else {
-              if (observation.ambiguity() < VisionConstants.maxAmbiguity) {
+              if (observation.ambiguity() < Constants.Vision.maxAmbiguity) {
                 disambiguatedRobotPose = observation.pose();
               } else if (Math.abs(
                       observation
@@ -136,9 +134,9 @@ public class Vision extends SubsystemBase {
             boolean rejectPose =
                 observation.tagCount() == 0 // Must have at least one tag
                     || (observation.tagCount() == 1
-                        && observation.ambiguity() > maxAmbiguity) // Cannot be high ambiguity
+                        && observation.ambiguity() > Constants.Vision.maxAmbiguity) // Cannot be high ambiguity
                     || Math.abs(disambiguatedRobotPose.getZ())
-                        > maxZError // Must have realistic Z coordinate
+                        > Constants.Vision.maxZError // Must have realistic Z coordinate
 
                     // Must be within the field boundaries
                     || disambiguatedRobotPose.getX() < -0.5
@@ -172,14 +170,14 @@ public class Vision extends SubsystemBase {
                   disambiguatedRobotPose.toPose2d(),
                   observation.timestamp(),
                   VecBuilder.fill(
-                      VisionConstants.stdDevBaseline
-                          * VisionConstants.thetaStdDevBaseline
+                      Constants.Vision.stdDevBaseline
+                          * Constants.Vision.thetaStdDevBaseline
                           * xyStdDev,
-                      VisionConstants.stdDevBaseline
-                          * VisionConstants.thetaStdDevBaseline
+                      Constants.Vision.stdDevBaseline
+                          * Constants.Vision.thetaStdDevBaseline
                           * xyStdDev,
-                      VisionConstants.stdDevBaseline
-                          * VisionConstants.thetaStdDevBaseline
+                      Constants.Vision.stdDevBaseline
+                          * Constants.Vision.thetaStdDevBaseline
                           * thetaStdDev));
             } else {
               xyStdDev =
@@ -191,9 +189,9 @@ public class Vision extends SubsystemBase {
                   disambiguatedRobotPose.toPose2d(),
                   observation.timestamp(),
                   VecBuilder.fill(
-                      VisionConstants.stdDevBaseline * xyStdDev,
-                      VisionConstants.stdDevBaseline * xyStdDev,
-                      VisionConstants.stdDevBaseline * thetaStdDev));
+                      Constants.Vision.stdDevBaseline * xyStdDev,
+                      Constants.Vision.stdDevBaseline * xyStdDev,
+                      Constants.Vision.stdDevBaseline * thetaStdDev));
             }
           }
           break;
@@ -203,7 +201,7 @@ public class Vision extends SubsystemBase {
             Pose3d disambiguatedRobotPose; // Robot pose chosen after disambiguation
 
             // Disambiguate to select a single robot pose
-            if (observation.ambiguity() < VisionConstants.maxAmbiguity) {
+            if (observation.ambiguity() < Constants.Vision.maxAmbiguity) {
               disambiguatedRobotPose = observation.pose();
             } else if (Math.abs(
                     observation
@@ -240,9 +238,9 @@ public class Vision extends SubsystemBase {
 
             // Check whether to reject pose
             boolean rejectPose =
-                observation.ambiguity() > maxAmbiguity // Cannot be high ambiguity
+                observation.ambiguity() > Constants.Vision.maxAmbiguity // Cannot be high ambiguity
                     || Math.abs(disambiguatedRobotPose.getZ())
-                        > maxZError // Use Z coordinate of disambiguated robot pose due to vision
+                        > Constants.Vision.maxZError // Use Z coordinate of disambiguated robot pose due to vision
                     // pose math being done in 2d
 
                     // Must be within the field boundaries
@@ -274,8 +272,8 @@ public class Vision extends SubsystemBase {
                 visionRobotPose,
                 observation.timestamp(),
                 VecBuilder.fill(
-                    VisionConstants.stdDevBaseline * xyStdDev,
-                    VisionConstants.stdDevBaseline * xyStdDev,
+                    Constants.Vision.stdDevBaseline * xyStdDev,
+                    Constants.Vision.stdDevBaseline * xyStdDev,
                     4322.0));
           }
           break;
