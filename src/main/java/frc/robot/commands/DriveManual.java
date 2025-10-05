@@ -10,7 +10,6 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.Drive.ManualDriveMode;
 import frc.robot.util.ClockUtil;
 
 public class DriveManual extends Command {
@@ -62,13 +61,19 @@ public class DriveManual extends Command {
       dy *= -DrivetrainConstants.maxSpeedAt12Volts;
     }
     double rot = omega * omega * omega * 12.0;
-    
+
     switch (drive.getManualDriveMode()) {
       case FIELD_RELATIVE:
-        if (Constants.enableReefLock && RobotContainer.getSuperstructure().isCoralHeld() && Math.abs(rot) < 0.01) {
+        if (Constants.enableReefLock
+            && RobotContainer.getSuperstructure().isCoralHeld()
+            && Math.abs(rot) < 0.01) {
           rot =
               autoRotateController.calculate(
-                  drive.getRotation().getRadians(), RobotContainer.getSuperstructure().getReefStatus().getClosestReefFaceAngle().getRadians());
+                  drive.getRotation().getRadians(),
+                  RobotContainer.getSuperstructure()
+                      .getReefStatus()
+                      .getClosestReefFaceAngle()
+                      .getRadians());
         }
         break;
       case AUTO_ROTATE:

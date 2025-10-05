@@ -5,27 +5,23 @@ import static frc.robot.RobotContainer.driver;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.vision.Vision;
 
 public class DescoreAlgae extends Command {
 
   private Superstructure.Level Level;
   private final Superstructure superstructure;
-  private final Vision vision;
   private final Drive drive;
 
-  public DescoreAlgae(
-      Superstructure superstructure, Superstructure.Level Level, Drive drive, Vision vision) {
+  public DescoreAlgae(Superstructure superstructure, Superstructure.Level level, Drive drive) {
     this.superstructure = superstructure;
-    this.Level = Level;
-    this.vision = vision;
+    this.Level = level;
     this.drive = drive;
     addRequirements(superstructure);
   }
 
   @Override
   public void initialize() {
-    // ReefStatus reefStatus = vision.getReefStatus();
+    // ReefStatus reefStatus = superstructure.getReefStatus();
     // new DriveToPose(drive, new Pose2d(new Translation2d(),
     // reefStatus.getClosestReefFaceAngle()));
     superstructure.requestDescoreAlgae(Level);

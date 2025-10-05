@@ -7,22 +7,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.vision.Vision;
 
 public class ScoreCoral extends Command {
 
   private Superstructure.Level Level;
   private final Superstructure superstructure;
   private Timer L1OverrideTimer = new Timer();
-  private final Vision vision;
   private final Drive drive;
 
-  public ScoreCoral(
-      Superstructure superstructure, Superstructure.Level Level, Drive drive, Vision vision) {
+  public ScoreCoral(Superstructure superstructure, Superstructure.Level level, Drive drive) {
     this.superstructure = superstructure;
-    this.Level = Level;
+    this.Level = level;
     this.drive = drive;
-    this.vision = vision;
     addRequirements(superstructure);
   }
 
@@ -36,7 +32,7 @@ public class ScoreCoral extends Command {
   @Override
   public void execute() {
 
-    // ReefStatus reefStatus = vision.getReefStatus();
+    // ReefStatus reefStatus = superstructure.getReefStatus();
     // drive.requestAutoRotateMode(reefStatus.getClosestReefFaceAngle());
 
     // Above works
@@ -44,8 +40,8 @@ public class ScoreCoral extends Command {
     // reefStatus.getClosestReefFaceAngle()));
     // double x = -RobotContainer.driver.getLeftY();
     // double y = -RobotContainer.driver.getLeftX();
-    // ClosestReefPipe closestReefPipe = vision.getReefStatus().getClosestReefPipe();
-    // L1Zone closestL1Pipe = vision.getReefStatus().getClosestL1Zone();
+    // ClosestReefPipe closestReefPipe = superstructure.getReefStatus().getClosestReefPipe();
+    // L1Zone closestL1Pipe = superstructure.getReefStatus().getClosestL1Zone();
 
     // if ((Math.abs(Math.toDegrees(Math.atan2(y, x))) == -90
     //     || Math.abs(Math.toDegrees(Math.atan2(y, x))) == -30

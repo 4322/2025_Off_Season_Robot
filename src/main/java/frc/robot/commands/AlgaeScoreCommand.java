@@ -9,7 +9,7 @@ import frc.robot.subsystems.drive.Drive;
 
 public class AlgaeScoreCommand extends Command {
   private Superstructure superstructure;
-  private final Drive drive;
+  private Drive drive;
 
   public AlgaeScoreCommand(Superstructure superstructure, Drive drive) {
     this.superstructure = superstructure;
@@ -42,5 +42,6 @@ public class AlgaeScoreCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     superstructure.requestIdle();
+    drive.requestFieldRelativeMode();
   }
 }

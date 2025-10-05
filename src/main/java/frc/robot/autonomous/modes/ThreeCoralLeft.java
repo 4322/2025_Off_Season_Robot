@@ -25,18 +25,18 @@ public class ThreeCoralLeft extends SequentialCommandGroup {
         // new AutoPoseReset(drive,
         // ThreeCoralStartToJuliet.getStartingHolonomicPose().get().getTranslation()),
         AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
-        new ScoreCoral(superstructure, Superstructure.Level.L4, drive, vision),
+        new ScoreCoral(superstructure, Superstructure.Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManual(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.JulietToFeed)),
         AutoBuilder.followPath(Robot.FeedToKilo),
-        new ScoreCoral(superstructure, Superstructure.Level.L4, drive, vision),
+        new ScoreCoral(superstructure, Superstructure.Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManual(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.KiloToFeed)),
         AutoBuilder.followPath(Robot.FeedToLima),
-        new ScoreCoral(superstructure, Superstructure.Level.L4, drive, vision));
+        new ScoreCoral(superstructure, Superstructure.Level.L4, drive));
   }
 }

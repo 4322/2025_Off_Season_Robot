@@ -23,12 +23,12 @@ public class AlgaeIntakeGround extends Command {
   public void execute() {}
 
   @Override
-  public void end(boolean interrupted) {
-    superstructure.requestIdle();
-  } // Superstructure automatically handles the transition back to algae idle
-
-  @Override
   public boolean isFinished() {
     return !driver.a().getAsBoolean() || superstructure.isAlgaeHeld();
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    superstructure.requestIdle();
   }
 }
