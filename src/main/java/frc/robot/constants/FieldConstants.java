@@ -4,6 +4,7 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
+
 import java.util.*;
 
 /**
@@ -359,4 +360,19 @@ public class FieldConstants {
                           new Quaternion(-0.8660254037844387, -0.0, 0.0, 0.49999999999999994))))),
           fieldLength,
           fieldWidth);
+    public static class KeypointPoses {
+        public static final Translation2d blueReefCenter = Reef.center;
+        public static final Translation2d redReefCenter = new Translation2d(fieldLength - Reef.center.getX(), Reef.center.getY());
+
+        // Points in front of field relative 0 degree reef face (G,H) that are in line with branches
+        // Original blue branch coords before 180 degree transform correspond to face closest to blue DS (A,B)
+        public static final Translation2d leftReefBranchFaceBlue = new Translation2d(3.6576254, 4.1902634).rotateAround(blueReefCenter, Rotation2d.k180deg);
+        public static final Translation2d rightReefBranchFaceBlue = new Translation2d(3.6576254, 3.8615874).rotateAround(blueReefCenter, Rotation2d.k180deg);
+
+        // Points in front of field relative 0 degree reef face (A,B) that are in line with branches
+        public static final Translation2d leftReefBranchFaceRed = new Translation2d(fieldLength - 3.6576254, 4.1902634);
+        public static final Translation2d rightReefBranchFaceRed = new Translation2d(fieldLength - 3.6576254, 3.8615874);
+
+
+    }
 }

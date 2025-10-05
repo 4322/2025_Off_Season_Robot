@@ -72,7 +72,7 @@ public class DriveManual extends Command {
                   drive.getRotation().getRadians(),
                   RobotContainer.getSuperstructure()
                       .getReefStatus()
-                      .getClosestReefFaceAngle()
+                      .getClosestRobotToReefFaceAngle()
                       .getRadians());
         }
         break;

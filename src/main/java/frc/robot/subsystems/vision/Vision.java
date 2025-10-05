@@ -31,16 +31,11 @@ public class Vision extends SubsystemBase {
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
   private final Drive drive;
-  private static Translation2d redReefCenterPoint;
-  private static Translation2d blueReefCenterPoint;
-  private static Translation2d redLeftL1Split;
-  private static Translation2d redRightL1Split;
-  private static Translation2d blueLeftL1Split;
-  private static Translation2d blueRightL1Split;
   public boolean reefFaceAmbiguity;
   public boolean reefPipeAmbiguity;
-  private double reefFace;
+  private double robotToReefFace;
   public ClosestReefPipe closestReefPipe;
+  public L1Zone l1Zone;
 
   private PolynomialRegression xyStdDevModel =
       new PolynomialRegression(
@@ -329,57 +324,54 @@ public class Vision extends SubsystemBase {
     Translation2d leftL1Split;
     Translation2d rightL1Split;
     if (Robot.alliance == DriverStation.Alliance.Red) {
-      reefCenterPoint = redReefCenterPoint;
-      leftL1Split = redLeftL1Split;
-      rightL1Split = redRightL1Split;
+      reefCenterPoint = FieldConstants.KeypointPoses.redReefCenter;
+      leftL1Split = FieldConstants.KeypointPoses.leftReefBranchFaceRed;
+      rightL1Split = FieldConstants.KeypointPoses.rightReefBranchFaceRed;
     } else {
-      reefCenterPoint = blueReefCenterPoint;
-      leftL1Split = blueLeftL1Split;
-      rightL1Split = blueRightL1Split;
+      reefCenterPoint = FieldConstants.KeypointPoses.blueReefCenter;
+      leftL1Split = FieldConstants.KeypointPoses.leftReefBranchFaceBlue;
+      rightL1Split = FieldConstants.KeypointPoses.rightReefBranchFaceBlue;
     }
     Translation2d robotTranslation = drive.getPose().getTranslation();
-    double reefCenterToRobotDeg = reefCenterPoint.minus(robotTranslation).getAngle().getDegrees();
-    Translation2d convertedRobotTrans;
+    double reefCenterToRobotDeg = robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
 
     if (-30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 30) {
-      reefFace = -180;
+      robotToReefFace = 180;
       reefFaceAmbiguity = false;
     } else if (30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 90) {
-      reefFace = -120;
+      robotToReefFace = -120;
       reefFaceAmbiguity = false;
     } else if (90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 150) {
-      reefFace = -60;
+      robotToReefFace = -60;
       reefFaceAmbiguity = false;
     } else if ((150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 180)
-        || (-150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -180)) {
-      reefFace = 0;
+        || (-150 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -180)) {
+      robotToReefFace = 0;
       reefFaceAmbiguity = false;
     } else if (-150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -90) {
-      reefFace = 60;
+      robotToReefFace = 60;
       reefFaceAmbiguity = false;
     } else if (-90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -30) {
-      reefFace = 120;
+      robotToReefFace = 120;
       reefFaceAmbiguity = false;
     } else {
       reefFaceAmbiguity = true;
     }
-    L1Zone l1Zone;
-    // // Provide a valid Rotation2d argument, for example Rotation2d.fromRadians(reefToRobotDeg)
-    convertedRobotTrans =
+    
+    Translation2d convertedRobotTrans =
         robotTranslation.rotateAround(
             reefCenterPoint, Rotation2d.fromDegrees(-reefCenterToRobotDeg));
 
-    if (reefCenterPoint.minus(convertedRobotTrans).getAngle().getDegrees()
-        >= 0) { // Make sure it is for each face
-      closestReefPipe = ClosestReefPipe.LEFT;
-    } else {
+    if (convertedRobotTrans.minus(reefCenterPoint).getAngle().getDegrees() >= 0) {
       closestReefPipe = ClosestReefPipe.RIGHT;
+    } else {
+      closestReefPipe = ClosestReefPipe.LEFT;
     }
 
-    if (leftL1Split.minus(convertedRobotTrans).getAngle().getDegrees()
-        >= 0) { // TODO: MAke it so its for indiviual faces
-      l1Zone = L1Zone.LEFT; // TODO
-    } else if (rightL1Split.minus(convertedRobotTrans).getAngle().getDegrees() <= 0) {
+    if (convertedRobotTrans.minus(leftL1Split).getAngle().getDegrees()
+        < 0) {
+      l1Zone = L1Zone.LEFT;
+    } else if (convertedRobotTrans.minus(rightL1Split).getAngle().getDegrees() > 0) {
       l1Zone = L1Zone.RIGHT;
     } else {
       l1Zone = L1Zone.MIDDLE;
@@ -387,7 +379,7 @@ public class Vision extends SubsystemBase {
     return new ReefStatus(
         reefFaceAmbiguity,
         reefPipeAmbiguity,
-        Rotation2d.fromDegrees(reefFace),
+        Rotation2d.fromDegrees(robotToReefFace),
         closestReefPipe,
         l1Zone);
   }

@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public class ReefStatus {
   private boolean reefFaceAmbiguity;
   private boolean reefPipeAmbiguity;
-  private Rotation2d closestReefFaceAngle;
+  private Rotation2d closestRobotToReefFaceAngle;
   private ClosestReefPipe closestReefPipe;
   private L1Zone closestL1Zone;
 
@@ -28,7 +28,7 @@ public class ReefStatus {
       L1Zone closestL1Zone) {
     this.reefFaceAmbiguity = reefFaceAmbiguity;
     this.reefPipeAmbiguity = reefPipeAmbiguity;
-    this.closestReefFaceAngle = closestReefFaceAngle;
+    this.closestRobotToReefFaceAngle = closestReefFaceAngle;
     this.closestReefPipe = closestReefPipe;
     this.closestL1Zone = closestL1Zone;
   }
@@ -41,8 +41,8 @@ public class ReefStatus {
     return reefPipeAmbiguity;
   }
 
-  public Rotation2d getClosestReefFaceAngle() {
-    return closestReefFaceAngle;
+  public Rotation2d getClosestRobotToReefFaceAngle() {
+    return closestRobotToReefFaceAngle;
   }
 
   public ClosestReefPipe getClosestReefPipe() {
