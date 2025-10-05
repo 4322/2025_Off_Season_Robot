@@ -191,6 +191,7 @@ public class EndEffector extends SubsystemBase {
         } else if (requestReleaseCoralL1) {
           state = EndEffectorStates.RELEASE_CORAL_L1;
         } else if (requestEject) {
+          unsetAllRequests();
           state = EndEffectorStates.EJECT;
         }
 
