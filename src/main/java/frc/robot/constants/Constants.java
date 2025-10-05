@@ -239,8 +239,8 @@ public final class Constants {
     public static final int motorId = 13;
     public static final int sensorId = 2;
 
-    public static final double maxAlgaeHoldVolts = 1.0;
-    public static final double minAlgaeHoldVolts = 0.75;
+    public static final double maxAlgaeHoldVolts = 1.2;
+    public static final double minAlgaeHoldVolts = 0.9;
     public static final double coralHoldVolts = 0.45;
 
     public static final double algaeIntakeVolts = 6;
