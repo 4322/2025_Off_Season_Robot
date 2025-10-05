@@ -40,7 +40,7 @@ public class ElevatorIONitrate implements ElevatorIO {
     followerRequest = new FollowMotorRequest(leaderMotor);
 
     frontConfig.setPIDSettings(
-        PIDSettings.defaultSettings()
+        PIDSettings.defaultSettings(PIDConfigSlot.kSlot0)
             .setPID(
                 Constants.Elevator.fast_kP, Constants.Elevator.fast_kI, Constants.Elevator.fast_kD)
             .setGravitationalFeedforward(Constants.Elevator.kG)

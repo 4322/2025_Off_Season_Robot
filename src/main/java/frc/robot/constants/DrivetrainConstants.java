@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
+import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 import frc.robot.util.SwerveUtil.SwerveModuleConstantsFactory;
@@ -93,12 +94,12 @@ public class DrivetrainConstants {
           .setStatorCurrentLimit(turnStatorCurrentLimit);
 
   private static final PIDSettings drivePIDSettings =
-      PIDSettings.defaultSettings()
+      PIDSettings.defaultSettings(PIDConfigSlot.kSlot0)
           .setPID(drivekP, 0, drivekD)
           .setStaticFeedforward(drivekS)
           .setVelocityFeedforward(drivekV);
   private static final PIDSettings turnPIDSettings =
-      PIDSettings.defaultSettings()
+      PIDSettings.defaultSettings(PIDConfigSlot.kSlot0)
           .setPID(turnkP, 0, turnkD)
           .setMotionProfileAccelLimit(turnAccelerationLimit)
           .setMotionProfileDeaccelLimit(turnDeaccelerationLimit)

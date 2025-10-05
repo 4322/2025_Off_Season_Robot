@@ -93,7 +93,7 @@ public class DeployerIONitrate implements DeployerIO {
     // Retract PID in slot 1
 
     motorConfig.setPIDSettings(
-        PIDSettings.defaultSettings()
+        PIDSettings.defaultSettings(PIDConfigSlot.kSlot0)
             .setPID(
                 Constants.Deployer.deploykP,
                 Constants.Deployer.deploykI,

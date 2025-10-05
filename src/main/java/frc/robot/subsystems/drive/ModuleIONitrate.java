@@ -2,12 +2,10 @@ package frc.robot.subsystems.drive;
 
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.AtomicBondSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
-import com.reduxrobotics.motorcontrol.nitrate.types.AtomicBondMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
@@ -43,7 +41,7 @@ public class ModuleIONitrate implements ModuleIO {
     this.constants = constants;
 
     NitrateSettings driveConfig = new NitrateSettings();
-      
+
     driveConfig.setOutputSettings(
         OutputSettings.defaultSettings()
             .setIdleMode(IdleMode.kBrake)
