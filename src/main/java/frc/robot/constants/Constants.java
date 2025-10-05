@@ -191,7 +191,7 @@ public final class Constants {
 
     public static final double algaeGroundHeightMeters = 0.00635;
     public static final double algaeReefL2HeightMeters = 0.5283249 + (2 * (0.0254));
-    public static final double algaeReefL3HeightMeters = 0.8739758746 + (2 * (0.0254));
+    public static final double algaeReefL3HeightMeters = 0.8739758746 + (3 * (0.0254));
 
     public static final double prescoreCoralL1HeightMeters = 0.4811766;
     public static final double prescoreCoralL2HeightMeters = 0.10647135;
