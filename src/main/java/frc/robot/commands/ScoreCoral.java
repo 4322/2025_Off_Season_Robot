@@ -59,6 +59,7 @@ public class ScoreCoral extends Command {
     reefStatus = superstructure.getReefStatus();
     robotReefAngle = reefStatus.getClosestRobotAngle();
 
+    
     if (level == Level.L1) {
       if (Robot.alliance == DriverStation.Alliance.Blue) {
         leftTroughScoringPose =
