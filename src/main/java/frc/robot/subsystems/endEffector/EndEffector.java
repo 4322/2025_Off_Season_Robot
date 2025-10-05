@@ -8,8 +8,6 @@ import frc.robot.BabyAlchemist;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.SubsystemMode;
-import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.arm.Arm;
 import frc.robot.util.ClockUtil;
 import frc.robot.util.DeltaDebouncer;
 import org.littletonrobotics.junction.Logger;
@@ -169,7 +167,10 @@ public class EndEffector extends SubsystemBase {
           io.setVoltage(Constants.EndEffector.maxAlgaeHoldVolts);
         } else {
           io.setVoltage(
-              Math.abs(Math.sin(Units.degreesToRadians(RobotContainer.getSuperstructure().getArmAngle())))
+              Math.abs(
+                          Math.sin(
+                              Units.degreesToRadians(
+                                  RobotContainer.getSuperstructure().getArmAngle())))
                       * (Constants.EndEffector.maxAlgaeHoldVolts
                           - Constants.EndEffector.minAlgaeHoldVolts)
                   + Constants.EndEffector.minAlgaeHoldVolts);
