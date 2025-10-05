@@ -11,6 +11,8 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.util.ReefStatus;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -67,6 +69,7 @@ public class Superstructure extends SubsystemBase {
   private Arm arm;
   private Elevator elevator;
   private IntakeSuperstructure intakeSuperstructure;
+  private Vision vision;
 
   // Add this variable to track the previous state of the home button
 
@@ -74,11 +77,13 @@ public class Superstructure extends SubsystemBase {
       EndEffector endEffector,
       Arm arm,
       Elevator elevator,
-      IntakeSuperstructure intakeSuperstructure) {
+      IntakeSuperstructure intakeSuperstructure,
+      Vision vision) {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
     this.intakeSuperstructure = intakeSuperstructure;
+    this.vision = vision;
   }
 
   @Override
@@ -394,9 +399,8 @@ public class Superstructure extends SubsystemBase {
     return state;
   }
 
-  public void getReefStatus() {
-    // TODO when get vision working
-    // return visionPoseEstimation.getReefStatus()
+  public ReefStatus getReefStatus() {
+    return vision.getReefStatus();
   }
 
   public IntakeSuperstructure getIntakeSuperstructure() {

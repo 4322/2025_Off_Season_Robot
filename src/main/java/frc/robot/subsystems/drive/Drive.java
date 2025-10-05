@@ -59,8 +59,7 @@ public class Drive extends SubsystemBase {
 
   public enum ManualDriveMode {
     FIELD_RELATIVE,
-    AUTO_ROTATE,
-    REEF_LOCK,
+    AUTO_ROTATE
   }
 
   public Drive(
