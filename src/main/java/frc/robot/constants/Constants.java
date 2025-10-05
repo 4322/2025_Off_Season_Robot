@@ -157,7 +157,7 @@ public final class Constants {
     public static final double AccelerationLimit = 2.5; // TODO
     public static final double DeaccelerationLimit = 1.5; // TODO
     public static final double VelocityLimit = 1; // TODO
-    public static final double slowVelocityLimit = .1; // TODO
+    public static final double slowVelocityLimit = 0.1; // TODO
   }
 
   public static class Elevator {
