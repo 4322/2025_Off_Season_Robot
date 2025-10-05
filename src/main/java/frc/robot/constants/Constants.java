@@ -214,7 +214,7 @@ public final class Constants {
     public static final double safeBargeRetractHeightMeters = 0.773472037;
     public static final double safeBargeRetractWithAlgaeHeightMeters = 0.3321799808;
 
-    public static final double algaeHoldMeters = prescoreCoralL3HeightMeters;
+    public static final double algaeHoldMeters = 0;
 
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
