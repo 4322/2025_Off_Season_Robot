@@ -80,6 +80,9 @@ public final class Constants {
     public static final double inhibitPseudoAutoRotateRadPerSec = Units.degreesToRadians(4);
     public static final double pseudoAutoRotateMinMetersPerSec =
         0.6; // disable below this speed for fine adjustments
+
+    public static final double L234DistanceFromReefInches = 7;
+    public static final double L1DistanceFromReefInches = 2;
   }
 
   public static class PathPlanner {
