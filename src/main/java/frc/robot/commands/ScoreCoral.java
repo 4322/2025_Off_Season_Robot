@@ -23,7 +23,7 @@ public class ScoreCoral extends Command {
     this.Level = Level;
     this.drive = drive;
     this.vision = vision;
-    addRequirements(superstructure, drive, vision);
+    addRequirements(superstructure);
   }
 
   @Override

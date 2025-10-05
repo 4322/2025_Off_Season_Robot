@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -141,7 +142,7 @@ public final class Constants {
     public static final double prescoringL2CoralDeg = 118.546;
     public static final double prescoringL3CoralDeg = 128.139;
     public static final double prescoringL4CoralDeg = 125.955;
-    public static final double scoringAlgaeDeg = -219.442;
+    public static final double scoringAlgaeDeg = 141;
 
     public static final double descoringAlgaeDeg = 75.682;
     public static final double safeBargeRetractDeg = 180;
@@ -189,12 +190,12 @@ public final class Constants {
     public static final double elevatorHeightToleranceMeters = 0.01;
 
     public static final double algaeGroundHeightMeters = 0.00635;
-    public static final double algaeReefL2HeightMeters = 0.5283249;
-    public static final double algaeReefL3HeightMeters = 0.8739758746;
+    public static final double algaeReefL2HeightMeters = 0.5283249 + (2 * (0.0254));
+    public static final double algaeReefL3HeightMeters = 0.8739758746 + (3 * (0.0254));
 
     public static final double prescoreCoralL1HeightMeters = 0.4811766;
     public static final double prescoreCoralL2HeightMeters = 0.10647135;
-    public static final double prescoreCoralL3HeightMeters = 0.97551935;
+    public static final double prescoreCoralL3HeightMeters = 0.47551935;
     public static final double prescoreCoralL4HeightMeters = 1.08791332;
 
     public static final double scoreCoralL1HeightMeters = prescoreCoralL1HeightMeters;
@@ -238,8 +239,8 @@ public final class Constants {
     public static final int motorId = 13;
     public static final int sensorId = 2;
 
-    public static final double maxAlgaeHoldVolts = 1.0;
-    public static final double minAlgaeHoldVolts = 0.75;
+    public static final double maxAlgaeHoldVolts = 1.2;
+    public static final double minAlgaeHoldVolts = 0.9;
     public static final double coralHoldVolts = 0.45;
 
     public static final double algaeIntakeVolts = 6;

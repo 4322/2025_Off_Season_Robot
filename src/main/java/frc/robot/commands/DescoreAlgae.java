@@ -20,7 +20,7 @@ public class DescoreAlgae extends Command {
     this.Level = Level;
     this.vision = vision;
     this.drive = drive;
-    addRequirements(superstructure, drive, vision);
+    addRequirements(superstructure);
   }
 
   @Override
