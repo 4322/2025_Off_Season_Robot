@@ -98,8 +98,40 @@ public class Robot extends LoggedRobot {
 
             long bytesToDelete = Constants.minFreeSpace - directory.getFreeSpace();
 
+            // delete advantage kit logs
             for (File file : files) {
               if (file.getName().endsWith(".wpilog")) {
+                try {
+                  bytesToDelete -= Files.size(file.toPath());
+                } catch (IOException e) {
+                  DriverStation.reportError("Failed to get size of file " + file.getName(), false);
+                  continue;
+                }
+                if (file.delete()) {
+                  DriverStation.reportWarning(
+                      "Deleted " + file.getName() + " to free up space", false);
+                } else {
+                  DriverStation.reportError("Failed to delete " + file.getName(), false);
+                }
+                if (bytesToDelete <= 0) {
+                  break;
+                }
+              }
+            }
+          }
+        }
+
+        // delete Redux logs if we still don't have enough space
+        if (directory.getFreeSpace() < Constants.minFreeSpace) {
+          files = directory.listFiles();
+          if (files != null) {
+            // Sorting the files by name will ensure that the oldest files are deleted first
+            files = Arrays.stream(files).sorted().toArray(File[]::new);
+
+            long bytesToDelete = Constants.minFreeSpace - directory.getFreeSpace();
+
+            for (File file : files) {
+              if (file.getName().endsWith(".rdxlog")) {
                 try {
                   bytesToDelete -= Files.size(file.toPath());
                 } catch (IOException e) {
