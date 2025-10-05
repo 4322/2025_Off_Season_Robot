@@ -24,10 +24,8 @@ public class AlgaeIntakeGround extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    if (!superstructure.isAlgaeHeld()) {
-      superstructure.requestIdle();
-    } // Superstructure automatically handles the transition back to algae idle
-  }
+    superstructure.requestIdle();
+  } // Superstructure automatically handles the transition back to algae idle
 
   @Override
   public boolean isFinished() {

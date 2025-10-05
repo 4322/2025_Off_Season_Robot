@@ -2,13 +2,10 @@ package frc.robot.commands;
 
 import static frc.robot.RobotContainer.driver;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.util.ReefStatus;
 
 public class DescoreAlgae extends Command {
 
@@ -16,7 +13,6 @@ public class DescoreAlgae extends Command {
   private final Superstructure superstructure;
   private final Vision vision;
   private final Drive drive;
-  public boolean isSlow = false;
 
   public DescoreAlgae(
       Superstructure superstructure, Superstructure.Level Level, Drive drive, Vision vision) {
@@ -29,8 +25,9 @@ public class DescoreAlgae extends Command {
 
   @Override
   public void initialize() {
-    ReefStatus reefStatus = vision.getReefStatus();
-    new DriveToPose(drive, new Pose2d(new Translation2d(), reefStatus.getClosestReefFaceAngle()));
+    // ReefStatus reefStatus = vision.getReefStatus();
+    // new DriveToPose(drive, new Pose2d(new Translation2d(),
+    // reefStatus.getClosestReefFaceAngle()));
     superstructure.requestDescoreAlgae(Level);
   }
 
@@ -39,17 +36,11 @@ public class DescoreAlgae extends Command {
 
   @Override
   public boolean isFinished() {
-    return (!driver.x().getAsBoolean()
-            && !driver.y().getAsBoolean()
-            && superstructure.isAlgaeHeld()
-            && !superstructure.isAutoOperationMode())
-        || (superstructure.isAutoOperationMode()
-            && superstructure.isAlgaeHeld() /*Add drive safeback */);
+    return (!driver.x().getAsBoolean() && !driver.y().getAsBoolean());
   }
 
   @Override
   public void end(boolean interrupted) {
     superstructure.requestIdle();
-    isSlow = false;
   }
 }
