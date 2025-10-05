@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.PathPlanner;
 import frc.robot.constants.Constants.RobotMode;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +25,9 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -40,6 +45,12 @@ public class Robot extends LoggedRobot {
   private Timer homeButtonTimer = new Timer();
   private DigitalInput coastButton = new DigitalInput(Constants.dioCoastButton);
   private Timer coastButtonTimer = new Timer();
+
+  public static PathPlannerPath FourCoralStartToJuliet;
+  public static PathPlannerPath FeedToLima;
+  public static PathPlannerPath LimaToFeed;
+  public static PathPlannerPath FeedToKilo;
+  public static PathPlannerPath JulietToFeed;
 
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
@@ -133,10 +144,26 @@ public class Robot extends LoggedRobot {
     Logger.start();
     Logger.disableConsoleCapture();
 
+    try {
+      FourCoralStartToJuliet = PathPlannerPath.fromPathFile("Four Coral Start To Juliet");
+      FeedToLima = PathPlannerPath.fromPathFile("Feed To Lima");
+      LimaToFeed = PathPlannerPath.fromPathFile("Lima To Feed");
+      FeedToKilo = PathPlannerPath.fromPathFile("Feed To Kilo");
+      JulietToFeed = PathPlannerPath.fromPathFile("Juliet To Feed");
+    } catch (Exception e) {
+      DriverStation.reportError("Failed to load PathPlanner paths", true);
+    }
+
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
     robotContainer.configureAutonomousSelector();
+
+    CommandScheduler.getInstance()
+      .schedule(
+        FollowPathCommand.warmupCommand()
+      );
+
     allianceUpdateTimer.start();
 
     if (Constants.currentMode == Constants.RobotMode.SIM) {
