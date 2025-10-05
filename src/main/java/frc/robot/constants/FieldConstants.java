@@ -379,11 +379,11 @@ public class FieldConstants {
 
   public static class KeypointPoses {
     // Private variables are reference values, do not modify
-    private static final double scoringDistanceFromReef = Units.inchesToMeters(12);
+    private static final double scoringDistanceFromReef = Units.inchesToMeters(7);
     private static final double sideTroughDistanceFromBranch = 0.153035;
     private static final double robotCenterToBumper = Units.inchesToMeters(16.97687);
 
-    public static final double reefSafeDistance = Units.inchesToMeters(24);
+    public static final double reefSafeDistance = Units.inchesToMeters(15);
 
     public static final Translation2d blueReefCenter = Reef.center;
     public static final Translation2d redReefCenter =
