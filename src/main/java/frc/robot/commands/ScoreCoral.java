@@ -7,7 +7,6 @@ import static frc.robot.RobotContainer.driver;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.util.ReefStatus;
 
 public class ScoreCoral extends Command {
 
@@ -31,15 +30,14 @@ public class ScoreCoral extends Command {
     L1OverrideTimer.stop();
     L1OverrideTimer.reset();
     superstructure.requestPrescoreCoral(Level);
-    
   }
 
   @Override
   public void execute() {
-    
-    ReefStatus reefStatus = vision.getReefStatus();
-    drive.requestAutoRotateMode(reefStatus.getClosestReefFaceAngle());
-    
+
+    // ReefStatus reefStatus = vision.getReefStatus();
+    // drive.requestAutoRotateMode(reefStatus.getClosestReefFaceAngle());
+
     // Above works
     // new DriveToPose(drive, new Pose2d(new Translation2d(),
     // reefStatus.getClosestReefFaceAngle()));

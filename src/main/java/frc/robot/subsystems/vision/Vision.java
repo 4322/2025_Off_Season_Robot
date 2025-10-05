@@ -43,7 +43,6 @@ public class Vision extends SubsystemBase {
   public boolean reefPipeAmbiguity;
   private double reefFace;
   public ClosestReefPipe closestReefPipe;
-  public double reefToRobotDeg;
 
   private PolynomialRegression xyStdDevModel =
       new PolynomialRegression(
@@ -326,39 +325,40 @@ public class Vision extends SubsystemBase {
   }
 
   public ReefStatus getReefStatus() {
-    Translation2d ReefCenterPoint;
+    Translation2d reefCenterPoint;
     Translation2d leftL1Split;
     Translation2d rightL1Split;
     if (Robot.alliance == DriverStation.Alliance.Red) {
-      ReefCenterPoint = redReefCenterPoint;
+      reefCenterPoint = redReefCenterPoint;
       leftL1Split = redLeftL1Split;
       rightL1Split = redRightL1Split;
     } else {
-      ReefCenterPoint = blueReefCenterPoint;
+      reefCenterPoint = blueReefCenterPoint;
       leftL1Split = blueLeftL1Split;
       rightL1Split = blueRightL1Split;
     }
     Translation2d robotTranslation = drive.getPose().getTranslation();
-    double reefCenterToRobotDeg = (ReefCenterPoint.minus(robotTranslation).getAngle()).getDegrees();
+    double reefCenterToRobotDeg = reefCenterPoint.minus(robotTranslation).getAngle().getDegrees();
     Translation2d convertedRobotTrans;
 
-    if (-30 < reefCenterToRobotDeg && reefCenterToRobotDeg < 30) {
-      reefFace = 0;
+    if (-30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 30) {
+      reefFace = -180;
       reefFaceAmbiguity = false;
-    } else if (30 < reefCenterToRobotDeg && reefCenterToRobotDeg < 90) {
-      reefFace = -60;
-      reefFaceAmbiguity = false;
-    } else if (-90 < reefCenterToRobotDeg && reefCenterToRobotDeg < -30) {
-      reefFace = 60;
-      reefFaceAmbiguity = false;
-    } else if (90 < reefCenterToRobotDeg && reefCenterToRobotDeg < 150) {
+    } else if (30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 90) {
       reefFace = -120;
       reefFaceAmbiguity = false;
-    } else if (-150 < reefToRobotDeg && reefToRobotDeg <= -90) {
-      reefFace = 120;
+    } else if (90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 150) {
+      reefFace = -60;
       reefFaceAmbiguity = false;
-    } else if (-210 < reefToRobotDeg && reefToRobotDeg < -210) {
-      reefFace = 180;
+    } else if ((150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 180)
+        || (-150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -180)) {
+      reefFace = 0;
+      reefFaceAmbiguity = false;
+    } else if (-150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -90) {
+      reefFace = 60;
+      reefFaceAmbiguity = false;
+    } else if (-90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -30) {
+      reefFace = 120;
       reefFaceAmbiguity = false;
     } else {
       reefFaceAmbiguity = true;
@@ -366,28 +366,24 @@ public class Vision extends SubsystemBase {
     L1Zone l1Zone;
     // // Provide a valid Rotation2d argument, for example Rotation2d.fromRadians(reefToRobotDeg)
     convertedRobotTrans =
-        robotTranslation.rotateAround(ReefCenterPoint, Rotation2d.fromRadians(reefToRobotDeg));
+        robotTranslation.rotateAround(
+            reefCenterPoint, Rotation2d.fromDegrees(-reefCenterToRobotDeg));
 
-    if (-30 <= convertedRobotTrans.getAngle().getRadians()
-        && convertedRobotTrans.getAngle().getRadians() <= 0) { // Make sure it is for each face
+    if (reefCenterPoint.minus(convertedRobotTrans).getAngle().getDegrees()
+        >= 0) { // Make sure it is for each face
       closestReefPipe = ClosestReefPipe.LEFT;
     } else {
       closestReefPipe = ClosestReefPipe.RIGHT;
     }
 
-    if (-30 < convertedRobotTrans.getAngle().getRadians()
-        || convertedRobotTrans.getAngle().getRadians()
-            < -10) { // TODO: MAke it so its for indiviual faces
-
+    if (leftL1Split.minus(convertedRobotTrans).getAngle().getDegrees()
+        >= 0) { // TODO: MAke it so its for indiviual faces
       l1Zone = L1Zone.LEFT; // TODO
-
-    } else if (10 < convertedRobotTrans.getAngle().getRadians()
-        || convertedRobotTrans.getAngle().getRadians() < 30) {
+    } else if (rightL1Split.minus(convertedRobotTrans).getAngle().getDegrees() <= 0) {
       l1Zone = L1Zone.RIGHT;
     } else {
       l1Zone = L1Zone.MIDDLE;
     }
-
     return new ReefStatus(
         reefFaceAmbiguity,
         reefPipeAmbiguity,

@@ -65,9 +65,9 @@ public class DriveManual extends Command {
     double rot = omega * omega * omega * 12.0;
     ManualDriveMode driveMode = drive.getManualDriveMode();
 
-if (RobotContainer.getSuperstructure().getState() == Superstates.CORAL_HELD){
-  driveMode = ManualDriveMode.REEF_LOCK;
-}
+    if (RobotContainer.getSuperstructure().getState() == Superstates.CORAL_HELD) {
+      driveMode = ManualDriveMode.REEF_LOCK;
+    }
     switch (driveMode) {
       case FIELD_RELATIVE:
         break;
@@ -75,16 +75,16 @@ if (RobotContainer.getSuperstructure().getState() == Superstates.CORAL_HELD){
         rot =
             autoRotateController.calculate(
                 drive.getRotation().getRadians(), drive.getTargetAngle().getRadians());
-       
+
         break;
       case REEF_LOCK:
-      if (Math.abs(rot) < .01){
-        rot =
-        autoRotateController.calculate(
-            drive.getRotation().getRadians(), drive.getTargetAngle().getRadians());
-      }
-      
-      break;
+        if (Math.abs(rot) < .01) {
+          rot =
+              autoRotateController.calculate(
+                  drive.getRotation().getRadians(), drive.getTargetAngle().getRadians());
+        }
+
+        break;
     }
     drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
   }
