@@ -25,6 +25,7 @@ public class Superstructure extends SubsystemBase {
   private boolean requestScoreCoral = false;
   private boolean requestPreClimb = false;
   private boolean requestClimb = false;
+  private boolean ishomed = true;
 
   public enum Superstates {
     UNHOMED,
@@ -84,7 +85,7 @@ public class Superstructure extends SubsystemBase {
   @Override
   public void periodic() {
 
-    if (DriverStation.isDisabled() && !requestHomed) {
+    if (DriverStation.isDisabled() && ishomed) {
       state = Superstates.DISABLED;
     }
 
@@ -94,6 +95,7 @@ public class Superstructure extends SubsystemBase {
       arm.setHomePosition();
       intakeSuperstructure.setHome();
       requestHomed = false;
+      ishomed = true;
       state = Superstates.DISABLED;
     }
 
@@ -132,6 +134,8 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.DESCORE_ALGAE;
         } else if (requestPreClimb && DriverStation.getMatchTime() < 30.0) {
           state = Superstates.PRECLIMB;
+        } else if (endEffector.hasCoral()) {
+          state = Superstates.CORAL_HELD;
         }
 
         break;
