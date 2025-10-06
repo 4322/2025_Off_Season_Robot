@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
@@ -168,67 +167,67 @@ public class ScoreCoral extends Command {
   public void execute() {
 
     if (superstructure.isAutoOperationMode()) {
-     if (state == ScoreState.SAFE_DISTANCE) {
+      if (state == ScoreState.SAFE_DISTANCE) {
 
-      double x = -RobotContainer.driver.getLeftY();
-      double y = -RobotContainer.driver.getLeftX();
-      Rotation2d joystickAngle = Rotation2d.fromRadians(Math.atan2(y, x));
-      double joystickMag = Math.hypot(x, y);
-      if (Robot.alliance == DriverStation.Alliance.Red) {
-        joystickAngle = joystickAngle.rotateBy(Rotation2d.k180deg); // Convert joystick to field relative
-      }
-      
-      // Rotate joystick to be relative to robot 0 degrees
-      joystickAngle = joystickAngle.rotateBy(robotReefAngle.unaryMinus());
-
-      if (level == Level.L1) {
-
-        if (joystickMag > 0.75) {
-          if (joystickAngle.getDegrees() > 30) {
-            targetScoringPose = leftTroughScoringPose;
-            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
-          } else if (joystickAngle.minus(robotReefAngle).getDegrees() < -30) {
-            targetScoringPose = rightTroughScoringPose;
-            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
-          } else {
-            targetScoringPose = middleTroughScoringPose;
-            superstructure.enableGlobalPose();
-          }
+        double x = -RobotContainer.driver.getLeftY();
+        double y = -RobotContainer.driver.getLeftX();
+        Rotation2d joystickAngle = Rotation2d.fromRadians(Math.atan2(y, x));
+        double joystickMag = Math.hypot(x, y);
+        if (Robot.alliance == DriverStation.Alliance.Red) {
+          joystickAngle =
+              joystickAngle.rotateBy(Rotation2d.k180deg); // Convert joystick to field relative
         }
 
-      } else {
+        // Rotate joystick to be relative to robot 0 degrees
+        joystickAngle = joystickAngle.rotateBy(robotReefAngle.unaryMinus());
 
-        if (joystickMag > 0.75) {
-          if (joystickAngle.getDegrees() > 0) {
-            targetScoringPose = leftBranchScoringPos;
-            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
-          } else if (joystickAngle.getDegrees() < 0) {
-            targetScoringPose = rightBranchScoringPose;
-            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+        if (level == Level.L1) {
+
+          if (joystickMag > 0.75) {
+            if (joystickAngle.getDegrees() > 30) {
+              targetScoringPose = leftTroughScoringPose;
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+            } else if (joystickAngle.minus(robotReefAngle).getDegrees() < -30) {
+              targetScoringPose = rightTroughScoringPose;
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+            } else {
+              targetScoringPose = middleTroughScoringPose;
+              superstructure.enableGlobalPose();
+            }
+          }
+
+        } else {
+
+          if (joystickMag > 0.75) {
+            if (joystickAngle.getDegrees() > 0) {
+              targetScoringPose = leftBranchScoringPos;
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+            } else if (joystickAngle.getDegrees() < 0) {
+              targetScoringPose = rightBranchScoringPose;
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+            }
           }
         }
-
       }
-      }
-    Pose2d safeDistPose = targetScoringPose.transformBy(
-      new Transform2d(
-          FieldConstants.KeypointPoses.reefSafeDistance
-              - Math.abs(targetScoringPose.getX()),
-          0,
-          robotReefAngle.rotateBy(Rotation2d.k180deg)));
+      Pose2d safeDistPose =
+          targetScoringPose.transformBy(
+              new Transform2d(
+                  FieldConstants.KeypointPoses.reefSafeDistance
+                      - Math.abs(targetScoringPose.getX()),
+                  0,
+                  robotReefAngle.rotateBy(Rotation2d.k180deg)));
 
       switch (state) {
         case SAFE_DISTANCE:
           currentPoseRequest = () -> safeDistPose;
-          if (!driveToPose.isScheduled()){
+          if (!driveToPose.isScheduled()) {
             driveToPose.schedule();
           }
-          if (isInSafeArea() || driveToPose.atGoal()){
+          if (isInSafeArea() || driveToPose.atGoal()) {
             superstructure.requestPrescoreCoral(level);
           }
 
-
-          if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()){ 
+          if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
             state = ScoreState.DRIVE_IN;
           }
           break;
@@ -237,29 +236,28 @@ public class ScoreCoral extends Command {
 
           if (scoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
-          }
-          else if (driveToPose.atGoal()){
+          } else if (driveToPose.atGoal()) {
             superstructure.requestScoreCoral(level);
-            if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()){
+            if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
               state = ScoreState.DRIVEBACK;
             }
           }
           break;
         case DRIVEBACK:
           currentPoseRequest = () -> safeDistPose;
-          if (scoreButtonReleased()){
+          if (scoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
           }
-          if (driveToPose.atGoal()){
+          if (driveToPose.atGoal()) {
             running = false;
           }
 
           break;
         case HOLD_POSITION:
-          if (driveToPose.isScheduled()){
+          if (driveToPose.isScheduled()) {
             driveToPose.cancel();
           }
-          if (!superstructure.isAutoOperationMode() || isInSafeArea()){
+          if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
             state = ScoreState.SAFE_DISTANCE;
             running = false;
           }
@@ -271,22 +269,18 @@ public class ScoreCoral extends Command {
         driveToPose.cancel();
       }
 
-      superstructure.requestPrescoreCoral(level); 
+      superstructure.requestPrescoreCoral(level);
 
       if (RobotContainer.isScoringTriggerHeld()) {
         superstructure.requestScoreCoral(level);
       }
-
     }
-    
-
-   
   }
-  
 
   @Override
   public boolean isFinished() {
-    return (scoreButtonReleased() && !superstructure.isAutoOperationMode()) || (superstructure.isAutoOperationMode() && !running);
+    return (scoreButtonReleased() && !superstructure.isAutoOperationMode())
+        || (superstructure.isAutoOperationMode() && !running);
   }
 
   @Override
@@ -302,26 +296,35 @@ public class ScoreCoral extends Command {
 
   public boolean scoreButtonReleased() {
     return !driver.a().getAsBoolean()
-    && !driver.x().getAsBoolean()
-    && !driver.y().getAsBoolean()
-    && !driver.b().getAsBoolean();
+        && !driver.x().getAsBoolean()
+        && !driver.y().getAsBoolean()
+        && !driver.b().getAsBoolean();
   }
 
-  public boolean isInSafeArea(){
-  Translation2d convertedRobotTrans;
-  if (Robot.alliance == DriverStation.Alliance.Red){
-convertedRobotTrans =
-    drive.getPose().getTranslation().rotateAround(
-      FieldConstants.KeypointPoses.redReefCenter, robotReefAngle.rotateBy(Rotation2d.k180deg).unaryMinus());
-      return (convertedRobotTrans.getX()- FieldConstants.KeypointPoses.leftReefBranchFaceRed.getX())  > FieldConstants.KeypointPoses.reefSafeDistance;
+  public boolean isInSafeArea() {
+    Translation2d convertedRobotTrans;
+    if (Robot.alliance == DriverStation.Alliance.Red) {
+      convertedRobotTrans =
+          drive
+              .getPose()
+              .getTranslation()
+              .rotateAround(
+                  FieldConstants.KeypointPoses.redReefCenter,
+                  robotReefAngle.rotateBy(Rotation2d.k180deg).unaryMinus());
+      return (convertedRobotTrans.getX()
+              - FieldConstants.KeypointPoses.leftReefBranchFaceRed.getX())
+          > FieldConstants.KeypointPoses.reefSafeDistance;
+    } else {
+      convertedRobotTrans =
+          drive
+              .getPose()
+              .getTranslation()
+              .rotateAround(
+                  FieldConstants.KeypointPoses.blueReefCenter,
+                  robotReefAngle.rotateBy(Rotation2d.k180deg).unaryMinus());
+      return (convertedRobotTrans.getX()
+              - FieldConstants.KeypointPoses.leftReefBranchFaceBlue.getX())
+          > FieldConstants.KeypointPoses.reefSafeDistance;
+    }
   }
-  else {
-    convertedRobotTrans =
-    drive.getPose().getTranslation().rotateAround(
-      FieldConstants.KeypointPoses.blueReefCenter, robotReefAngle.rotateBy(Rotation2d.k180deg).unaryMinus());
-      return (convertedRobotTrans.getX() - FieldConstants.KeypointPoses.leftReefBranchFaceBlue.getX()) > FieldConstants.KeypointPoses.reefSafeDistance;
-  }
-  
-  }
-  
 }

@@ -9,8 +9,6 @@ public class Leave extends SequentialCommandGroup {
   public Leave(Drive drive) {
     setName("LEAVE");
     addRequirements(drive);
-    addCommands(
-      PathPlanner.followPath(Robot.Leave)
-    );
+    addCommands(PathPlanner.followPath(Robot.Leave));
   }
 }

@@ -100,9 +100,10 @@ public final class Constants {
     public static final double robotMassKg = Units.lbsToKilograms(141.06); // TODO: Weigh robot
     public static final double robotMOI = 6.546; // Lzz from CAD
     public static final double wheelCOF = 1.2;
+
     public static Command followPath(PathPlannerPath leave) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'followPath'");
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'followPath'");
     }
   }
 
