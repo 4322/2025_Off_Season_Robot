@@ -20,13 +20,13 @@ public final class Constants {
   public static final SubsystemMode armMode = SubsystemMode.NORMAL;
   public static final SubsystemMode elevatorMode = SubsystemMode.NORMAL;
   public static final SubsystemMode deployerMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode driveMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode driveMode = SubsystemMode.TUNING;
   public static final SubsystemMode indexerMode = SubsystemMode.NORMAL;
   public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = true;
   public static final boolean enableArmSensor = false;
-  public static final DriveTuningMode driveTuningMode = DriveTuningMode.TURNING;
+  public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING;
   public static final boolean continuousNitrateRequestsEnabled = true;
   public static final boolean enableReefLock = false;
   public static final boolean debugPIDModeEnabled = true;

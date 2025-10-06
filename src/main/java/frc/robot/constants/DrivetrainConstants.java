@@ -11,9 +11,8 @@ import frc.robot.util.SwerveUtil.SwerveModuleConstantsFactory;
 public class DrivetrainConstants {
   // Shared drivetrain constants
   public static final int gyroId = 0;
-  public static final double maxSpeedAt12Volts = 4.0; // TODO
+  public static final double maxSpeedAt12Volts = 3.3;
 
-  public static final double driveMotorKv = 800; // RPM/v
   private static final double driveGearRatio = 6.75; // SDS MK4i L2 drive gear ratio
   private static final double turnGearRatio = 150.0 / 7.0;
   private static final double turnCoupleRatio = 3.8181818181818183; // TODO
@@ -33,16 +32,16 @@ public class DrivetrainConstants {
   public static final double turnSupplyCurrentTime = 0.0;
   public static final double turnStatorCurrentLimit = 35;
 
-  private static final double drivekP = 0; // TODO
-  private static final double drivekD = 0; // TODO
-  private static final double drivekS = 0; // TODO
-  private static final double drivekV = driveMotorKv / 60.0 / driveGearRatio; // TODO
+  private static final double drivekP = 2.0;
+  private static final double drivekD = 0;
+  private static final double drivekS = 0.2;
+  private static final double drivekV = 0.95;
 
-  private static final double turnkP = 150; // TODO still needs to be tuned
-  private static final double turnkD = 0.2; // TODO
-  private static final double turnAccelerationLimit = 1000; // TODO
-  private static final double turnDeaccelerationLimit = 1000; // TODO
-  private static final double turnVelocityLimit = 1000; // TODO
+  private static final double turnkP = 150;
+  private static final double turnkD = 0.2;
+  private static final double turnAccelerationLimit = 1000; 
+  private static final double turnDeaccelerationLimit = 1000;
+  private static final double turnVelocityLimit = 1000; 
 
   private static final double simTurnInertia = 0.00001;
   private static final double simDriveInertia = 0.001;
