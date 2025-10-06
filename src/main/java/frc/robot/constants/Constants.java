@@ -409,4 +409,26 @@ public final class Constants {
     public static double stdDevBaseline = 0.2;
     public static double thetaStdDevBaseline = 0.075;
   }
+
+  public static class AutoScoring {
+    public static final double drivekP = 2.0;
+    public static final double drivekD = 0.0;
+    
+    public static final double driveMaxVelocity = 3.0;
+    public static final double driveMaxVelocitySlow = Units.inchesToMeters(50.0);
+    public static final double driveMaxAcceleration = 4;
+
+    public static final double thetaMaxVelocity = Units.degreesToRadians(360.0);
+    public static final double thetaMaxVelocitySlow = Units.degreesToRadians(90.0);
+    public static final double thetaMaxAcceleration = Units.degreesToRadians(720.0);
+
+    public static final double driveTolerance = 0.06;
+    public static final double driveToleranceSlow = 0.06;
+
+    public static final double thetaTolerance = Units.degreesToRadians(1.0);
+    public static final double thetaToleranceSlow = Units.degreesToRadians(3.0);
+    
+    public static final double ffMinRadius = 0.1;
+    public static final double ffMaxRadius = 0.8;
+  }
 }

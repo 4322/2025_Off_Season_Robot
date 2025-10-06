@@ -14,7 +14,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LoggedTunableNumber;
 import frc.robot.constants.Constants;
@@ -69,22 +68,28 @@ public class DriveToPose extends Command {
       new LoggedTunableNumber("DriveToPose/FFMinRadius");
 
   static {
-    driveKp.initDefault(2.0);
+    driveKp.initDefault(Constants.AutoScoring.drivekP);
     driveKd.initDefault(0.0);
-    thetaKp.initDefault(5.0);
-    thetaKd.initDefault(0.0);
-    driveMaxVelocity.initDefault(Units.inchesToMeters(150.0));
-    driveMaxVelocitySlow.initDefault(Units.inchesToMeters(50.0));
-    driveMaxAcceleration.initDefault(Units.inchesToMeters(95.0));
-    thetaMaxVelocity.initDefault(Units.degreesToRadians(360.0));
-    thetaMaxVelocitySlow.initDefault(Units.degreesToRadians(90.0));
-    thetaMaxAcceleration.initDefault(Units.degreesToRadians(720.0));
-    driveTolerance.initDefault(0.01);
-    driveToleranceSlow.initDefault(0.06);
-    thetaTolerance.initDefault(Units.degreesToRadians(1.0));
-    thetaToleranceSlow.initDefault(Units.degreesToRadians(3.0));
-    ffMinRadius.initDefault(0.2);
-    ffMaxRadius.initDefault(0.8);
+    driveKd.initDefault(Constants.AutoScoring.drivekD);
+    thetaKp.initDefault(Constants.Drive.autoRotatekP);
+    thetaKd.initDefault(Constants.Drive.autoRotatekD);
+
+    driveMaxVelocity.initDefault(Constants.AutoScoring.driveMaxVelocity);
+    driveMaxVelocitySlow.initDefault(Constants.AutoScoring.driveMaxVelocitySlow);
+    driveMaxAcceleration.initDefault(Constants.AutoScoring.driveMaxAcceleration);
+
+    thetaMaxVelocity.initDefault(Constants.AutoScoring.thetaMaxVelocity);
+    thetaMaxVelocitySlow.initDefault(Constants.AutoScoring.thetaMaxVelocitySlow);
+    thetaMaxAcceleration.initDefault(Constants.AutoScoring.thetaMaxAcceleration);
+
+    driveTolerance.initDefault(Constants.AutoScoring.driveTolerance);
+    driveToleranceSlow.initDefault(Constants.AutoScoring.driveToleranceSlow);
+
+    thetaTolerance.initDefault(Constants.AutoScoring.thetaTolerance);
+    thetaToleranceSlow.initDefault(Constants.AutoScoring.thetaToleranceSlow);
+
+    ffMinRadius.initDefault(Constants.AutoScoring.ffMinRadius);
+    ffMaxRadius.initDefault(Constants.AutoScoring.ffMaxRadius);
   }
 
   /** Drives to the specified pose under full software control. */
@@ -114,7 +119,7 @@ public class DriveToPose extends Command {
   @Override
   public void initialize() {
     // Reset all controllers
-    var currentPose = drive.getPose();
+    Pose2d currentPose = drive.getPose();
     driveController.reset(
         currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation()),
         Math.min(
@@ -170,8 +175,8 @@ public class DriveToPose extends Command {
     }
 
     // Get current and target pose
-    var currentPose = drive.getPose();
-    var targetPose = poseSupplier.get();
+    Pose2d currentPose = drive.getPose();
+    Pose2d targetPose = poseSupplier.get();
 
     // Calculate drive speed
     double currentDistance =
@@ -207,7 +212,7 @@ public class DriveToPose extends Command {
     if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity = 0.0;
 
     // Command speeds
-    var driveVelocity =
+    Translation2d driveVelocity =
         new Pose2d(
                 new Translation2d(),
                 currentPose.getTranslation().minus(targetPose.getTranslation()).getAngle())
@@ -238,9 +243,9 @@ public class DriveToPose extends Command {
     Logger.recordOutput("Odometry/DriveToPoseGoal", new double[] {});
   }
 
-  /** Checks if the robot is stopped at the final pose. */
+  /** Checks if the robot is at the final pose. */
   public boolean atGoal() {
-    return !running && driveController.atGoal() && thetaController.atGoal();
+    return driveController.atGoal() && thetaController.atGoal();
   }
 
   /** Checks if the robot pose is within the allowed drive and theta tolerances. */
