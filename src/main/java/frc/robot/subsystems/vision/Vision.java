@@ -99,6 +99,7 @@ public class Vision extends SubsystemBase {
         case GLOBAL_POSE:
           for (GlobalPoseObservation observation : inputs[cameraIndex].globalPoseObservations) {
             Pose3d disambiguatedRobotPose; // Robot pose chosen after disambiguation
+            double avgTagDistance = observation.averageTagDistance();
 
             // Disambiguate to select a single robot pose
             if (observation.useMultiTag()) {
@@ -123,6 +124,7 @@ public class Vision extends SubsystemBase {
                 disambiguatedRobotPose = observation.pose();
               } else {
                 disambiguatedRobotPose = observation.altPose();
+                avgTagDistance = observation.averageTagDistanceAlt();
               }
             }
 
@@ -159,9 +161,9 @@ public class Vision extends SubsystemBase {
             double thetaStdDev = 0.0;
 
             if (observation.useMultiTag()) {
-              xyStdDev = Math.pow(observation.averageTagDistance(), 2.0) / observation.tagCount();
+              xyStdDev = Math.pow(avgTagDistance, 2.0) / observation.tagCount();
               thetaStdDev =
-                  Math.pow(observation.averageTagDistance(), 2.0) / observation.tagCount();
+                  Math.pow(avgTagDistance, 2.0) / observation.tagCount();
 
               consumer.accept(
                   disambiguatedRobotPose.toPose2d(),
@@ -178,9 +180,9 @@ public class Vision extends SubsystemBase {
                           * thetaStdDev));
             } else {
               xyStdDev =
-                  Math.max(xyStdDevModel.predict(observation.averageTagDistance()), 0.000001);
+                  Math.max(xyStdDevModel.predict(avgTagDistance), 0.000001);
               thetaStdDev =
-                  Math.max(thetaStdDevModel.predict(observation.averageTagDistance()), 0.000001);
+                  Math.max(thetaStdDevModel.predict(avgTagDistance), 0.000001);
 
               consumer.accept(
                   disambiguatedRobotPose.toPose2d(),
@@ -196,6 +198,7 @@ public class Vision extends SubsystemBase {
           for (SingleTagPoseObservation observation :
               inputs[cameraIndex].singleTagPoseObservations) {
             Pose3d disambiguatedRobotPose; // Robot pose chosen after disambiguation
+            double avgTagDistance = observation.averageTagDistance();
 
             // Disambiguate to select a single robot pose
             if (observation.ambiguity() < Constants.Vision.maxAmbiguity) {
@@ -217,6 +220,7 @@ public class Vision extends SubsystemBase {
               disambiguatedRobotPose = observation.pose();
             } else {
               disambiguatedRobotPose = observation.altPose();
+              avgTagDistance = observation.averageTagDistanceAlt();
             }
 
             Pose2d visionRobotPose = disambiguatedRobotPose.toPose2d();
@@ -264,7 +268,7 @@ public class Vision extends SubsystemBase {
 
             // Calculate standard deviations
             double xyStdDev =
-                Math.max(xyStdDevModel.predict(observation.averageTagDistance()), 0.000001);
+                Math.max(xyStdDevModel.predict(avgTagDistance), 0.000001);
 
             consumer.accept(
                 visionRobotPose,
