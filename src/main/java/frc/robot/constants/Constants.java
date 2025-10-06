@@ -26,8 +26,8 @@ public final class Constants {
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = true;
   public static final boolean enableArmSensor = false;
-  public static final DriveTuningMode driveTuningMode = DriveTuningMode.TURNING;
-  public static final boolean continuousNitrateRequestsEnabled = true;
+  public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING;
+  public static final boolean continuousNitrateRequestsEnabled = false;
   public static final boolean enableReefLock = false;
   public static final boolean debugPIDModeEnabled = true;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
@@ -69,7 +69,7 @@ public final class Constants {
   }
 
   public static class Drive {
-    public static final double autoRotatekP = 5;
+    public static final double autoRotatekP = 3;
     public static final double autoRotatekD = 0;
 
     public static final double angularErrorToleranceRad = Units.degreesToRadians(7);

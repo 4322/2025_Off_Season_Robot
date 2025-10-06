@@ -44,23 +44,21 @@ public class Module {
                 inputs.driveVelocityMetersPerSec,
                 "meters/sec");
         if (newVel != null) {
-          io.setDriveVelocity(newVel / constants.driveWheelRadius);
-          io.setTurnPosition(new Rotation2d(0)); // drive straight
+          // io.setDriveVelocity(newVel / constants.driveWheelRadius);
+          // io.setTurnPosition(new Rotation2d(0)); // drive straight
         }
       }
     }
   }
 
   public void runClosedLoopDrive(SwerveModuleState state) {
-    if (Constants.driveMode == SubsystemMode.NORMAL) {
-      // Optimize velocity setpoint
-      state.optimize(getAngle());
-      state.cosineScale(getAngle());
+    // Optimize velocity setpoint
+    state.optimize(getAngle());
+    state.cosineScale(getAngle());
 
-      // Apply setpoints
-      io.setDriveVelocity(state.speedMetersPerSecond / constants.driveWheelRadius);
-      io.setTurnPosition(state.angle);
-    }
+    // Apply setpoints
+    io.setDriveVelocity(state.speedMetersPerSecond / constants.driveWheelRadius);
+    io.setTurnPosition(state.angle);
   }
 
   public void runOpenLoopDrive(SwerveModuleState state) {

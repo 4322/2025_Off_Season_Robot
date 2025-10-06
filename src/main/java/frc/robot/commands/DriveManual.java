@@ -82,6 +82,6 @@ public class DriveManual extends Command {
                 drive.getRotation().getRadians(), drive.getTargetAngle().getRadians());
         break;
     }
-    drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
+    drive.runVelocity(new ChassisSpeeds(dx, dy, rot), true);
   }
 }
