@@ -14,30 +14,30 @@ import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
 
-public class ThreeCoralLeft extends SequentialCommandGroup {
-  public ThreeCoralLeft(
+public class ThreeCoralRight extends SequentialCommandGroup {
+  public ThreeCoralRight(
       Drive drive,
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,
       Vision vision) {
-    setName("THREE_CORAL_LEFT");
+    setName("THREE_CORAL_RIGHT");
     addRequirements(drive, superstructure, intakeSuperstructure);
     addCommands(
         new AutoPoseReset(drive,
-        Robot.ThreeCoralStartToJuliet.getStartingHolonomicPose().get().getTranslation()),
-        AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
+        Robot.ThreeCoralStartToEcho.getStartingHolonomicPose().get().getTranslation()),
+        AutoBuilder.followPath(Robot.ThreeCoralStartToEcho),
         new ScoreCoral(superstructure, Superstructure.Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManual(intakeSuperstructure, true),
-            AutoBuilder.followPath(Robot.JulietToFeed)),
-        AutoBuilder.followPath(Robot.FeedToKilo),
+            AutoBuilder.followPath(Robot.EchoToFeed)),
+        AutoBuilder.followPath(Robot.FeedToDelta),
         new ScoreCoral(superstructure, Superstructure.Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManual(intakeSuperstructure, true),
-            AutoBuilder.followPath(Robot.KiloToFeed)),
-        AutoBuilder.followPath(Robot.FeedToLima),
+            AutoBuilder.followPath(Robot.DeltaToFeed)),
+        AutoBuilder.followPath(Robot.FeedToCharlie),
         new ScoreCoral(superstructure, Superstructure.Level.L4, drive));
   }
 }

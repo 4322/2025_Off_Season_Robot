@@ -47,10 +47,18 @@ public class Robot extends LoggedRobot {
   public static PathPlannerPath Leave;
 
   public static PathPlannerPath ThreeCoralStartToJuliet;
-  public static PathPlannerPath FeedToLima;
+  public static PathPlannerPath JulietToFeed;
   public static PathPlannerPath KiloToFeed;
   public static PathPlannerPath FeedToKilo;
-  public static PathPlannerPath JulietToFeed;
+  public static PathPlannerPath FeedToLima;
+  
+
+  // Mirrors of the above
+  public static PathPlannerPath ThreeCoralStartToEcho;
+  public static PathPlannerPath EchoToFeed;
+  public static PathPlannerPath FeedToDelta;
+  public static PathPlannerPath DeltaToFeed;
+  public static PathPlannerPath FeedToCharlie;
 
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
@@ -184,10 +192,17 @@ public class Robot extends LoggedRobot {
       Leave = PathPlannerPath.fromPathFile("Leave");
 
       ThreeCoralStartToJuliet = PathPlannerPath.fromPathFile("Three Coral Start To Juliet");
-      FeedToLima = PathPlannerPath.fromPathFile("Feed To Lima");
-      KiloToFeed = PathPlannerPath.fromPathFile("Kilo To Feed");
-      FeedToKilo = PathPlannerPath.fromPathFile("Feed To Kilo");
       JulietToFeed = PathPlannerPath.fromPathFile("Juliet To Feed");
+      FeedToKilo = PathPlannerPath.fromPathFile("Feed To Kilo");
+      KiloToFeed = PathPlannerPath.fromPathFile("Kilo To Feed");
+      FeedToLima = PathPlannerPath.fromPathFile("Feed To Lima");
+      
+
+      ThreeCoralStartToEcho = PathPlannerPath.fromPathFile("Three Coral Start To Juliet").mirrorPath();
+      EchoToFeed = PathPlannerPath.fromPathFile("Juliet To Feed").mirrorPath();
+      FeedToDelta = PathPlannerPath.fromPathFile("Feed To Kilo").mirrorPath();
+      DeltaToFeed = PathPlannerPath.fromPathFile("Kilo To Feed").mirrorPath();
+      FeedToCharlie = PathPlannerPath.fromPathFile("Feed To Lima").mirrorPath();
     } catch (Exception e) {
       DriverStation.reportError("Failed to load PathPlanner paths", true);
     }
