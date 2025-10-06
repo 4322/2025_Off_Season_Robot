@@ -26,7 +26,7 @@ public class Superstructure extends SubsystemBase {
   private boolean requestScoreCoral = false;
   private boolean requestPreClimb = false;
   private boolean requestClimb = false;
-  private boolean ishomed = true;
+  private boolean ishomed = false;
 
   public enum Superstates {
     UNHOMED,

@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
@@ -7,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -98,6 +100,10 @@ public final class Constants {
     public static final double robotMassKg = Units.lbsToKilograms(141.06); // TODO: Weigh robot
     public static final double robotMOI = 6.546; // Lzz from CAD
     public static final double wheelCOF = 1.2;
+    public static Command followPath(PathPlannerPath leave) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'followPath'");
+    }
   }
 
   public static class Arm {
