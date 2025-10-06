@@ -173,7 +173,7 @@ public class ScoreCoral extends Command {
         double y = -RobotContainer.driver.getLeftX();
         Rotation2d joystickAngle = Rotation2d.fromRadians(Math.atan2(y, x));
         double joystickMag = Math.hypot(x, y);
-        
+
         if (Robot.alliance == DriverStation.Alliance.Red) {
           joystickAngle =
               joystickAngle.rotateBy(Rotation2d.k180deg); // Convert joystick to field relative
