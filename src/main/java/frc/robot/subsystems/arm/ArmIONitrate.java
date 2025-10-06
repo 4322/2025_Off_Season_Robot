@@ -50,12 +50,18 @@ public class ArmIONitrate implements ArmIO {
             .setIZone(Constants.Arm.iZone),
         PIDConfigSlot.kSlot0);
 
-    armConfig.setFeedbackSensorSettings(
+    if (Constants.enableArmSensor) {
+        armConfig.setFeedbackSensorSettings(
         FeedbackSensorSettings.defaultSettings()
             .setSensorToMechanismRatio(Constants.Arm.sensorToArm)
             .setFeedbackSensor(
                 new FeedbackSensor.CanandmagRelative(
-                    Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft)));
+                    Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft)));}
+    else {
+      armConfig.setFeedbackSensorSettings(
+          FeedbackSensorSettings.defaultSettings()
+              .setSensorToMechanismRatio(Constants.Arm.motorGearRatio));
+    }
 
     armConfig.setOutputSettings(
         OutputSettings.defaultSettings()
