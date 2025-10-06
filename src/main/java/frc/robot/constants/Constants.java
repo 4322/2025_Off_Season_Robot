@@ -28,7 +28,7 @@ public final class Constants {
   public static final boolean enableArmSensor = false;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING;
   public static final boolean continuousNitrateRequestsEnabled = false;
-  public static final boolean enableReefLock = true;
+  public static final boolean enableReefLock = false;
   public static final boolean debugPIDModeEnabled = true;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
