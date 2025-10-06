@@ -384,6 +384,8 @@ public class FieldConstants {
     private static final double robotCenterToBumper = Units.inchesToMeters(16.97687);
 
     public static final double reefSafeDistance = Units.inchesToMeters(15) + robotCenterToBumper;
+    public static final double descoreAlgaeSafeDistance =
+        Units.inchesToMeters(7) + robotCenterToBumper;
 
     public static final Translation2d blueReefCenter = Reef.center;
     public static final Translation2d redReefCenter =
@@ -435,5 +437,15 @@ public class FieldConstants {
     public static final Translation2d rightTroughScoringRed =
         rightReefBranchFaceRed.plus(
             new Translation2d(robotCenterToBumper, sideTroughDistanceFromBranch));
+
+    public static final Translation2d descoreAlgaeBlue =
+        leftReefBranchFaceBlue.plus(new Translation2d(reefSafeDistance, 0.164338));
+    public static final Translation2d descoreAlgaeRed =
+        leftReefBranchFaceRed.plus(new Translation2d(reefSafeDistance, 0.164338));
+
+    public static final Translation2d descoreAlgaeDriveInBlue =
+        leftReefBranchFaceBlue.plus(new Translation2d(descoreAlgaeSafeDistance, 0.164338));
+    public static final Translation2d descoreAlgaeDriveInRed =
+        leftReefBranchFaceRed.plus(new Translation2d(descoreAlgaeSafeDistance, 0.164338));
   }
 }

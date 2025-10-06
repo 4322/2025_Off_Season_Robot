@@ -35,24 +35,33 @@ public class Module {
         if (newPos != null) {
           io.setTurnPosition(new Rotation2d(Units.degreesToRadians(newPos)));
         }
-      } else {
+      } else if (Constants.driveTuningMode == DriveTuningMode.DRIVING_FIXED_VELOCITY) {
         Double newVel =
             BabyAlchemist.run(
                 index,
                 io.getDriveNitrate(),
-                "Driving",
+                "Drive Fixed",
                 inputs.driveVelocityMetersPerSec,
                 "meters/sec");
         if (newVel != null) {
           io.setDriveVelocity(newVel / constants.driveWheelRadius);
           io.setTurnPosition(new Rotation2d(0)); // drive straight
         }
+      } else {
+        BabyAlchemist.run(
+            index,
+            io.getDriveNitrate(),
+            "Drive XBox",
+            inputs.driveVelocityMetersPerSec,
+            "meters/sec");
       }
     }
   }
 
   public void runClosedLoopDrive(SwerveModuleState state) {
-    if (Constants.driveMode == SubsystemMode.NORMAL) {
+    if (Constants.driveMode == SubsystemMode.NORMAL
+        || (Constants.driveMode == SubsystemMode.TUNING
+            && Constants.driveTuningMode == DriveTuningMode.DRIVING_WITH_DRIVER)) {
       // Optimize velocity setpoint
       state.optimize(getAngle());
       state.cosineScale(getAngle());
@@ -64,7 +73,9 @@ public class Module {
   }
 
   public void runOpenLoopDrive(SwerveModuleState state) {
-    if (Constants.driveMode == SubsystemMode.NORMAL) {
+    if (Constants.driveMode == SubsystemMode.NORMAL
+        || (Constants.driveMode == SubsystemMode.TUNING
+            && Constants.driveTuningMode == DriveTuningMode.DRIVING_WITH_DRIVER)) {
       // Optimize velocity setpoint
       state.optimize(getAngle());
       state.cosineScale(getAngle());

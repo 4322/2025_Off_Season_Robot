@@ -28,10 +28,16 @@ public interface VisionIO {
       double ambiguity,
       int tagCount,
       double averageTagDistance,
+      double averageTagDistanceAlt,
       boolean useMultiTag) {}
 
   public static record SingleTagPoseObservation(
-      double timestamp, Pose3d pose, Pose3d altPose, double ambiguity, double averageTagDistance) {}
+      double timestamp,
+      Pose3d pose,
+      Pose3d altPose,
+      double ambiguity,
+      double averageTagDistance,
+      double averageTagDistanceAlt) {}
 
   public enum ObservationMode {
     GLOBAL_POSE,

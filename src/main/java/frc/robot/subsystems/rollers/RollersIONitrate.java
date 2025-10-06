@@ -22,7 +22,7 @@ public class RollersIONitrate implements RollersIO {
     rollersMotor = new Nitrate(Constants.Rollers.motorId, MotorType.kCu60);
 
     initMotorConfig();
-    NitrateSettings motorConfigStatus = rollersMotor.setSettings(motorConfig, 0.02, 5);
+    NitrateSettings motorConfigStatus = rollersMotor.setSettings(motorConfig, 0.1, 5);
     if (!motorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "

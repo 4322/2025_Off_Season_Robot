@@ -21,8 +21,8 @@ public class DescoreAlgae extends Command {
   private DriveToPose driveToPose;
   public boolean running;
 
-  private Pose2d targetScoringPose;
-  private Rotation2d robotReefAngle;
+  private Pose2d targetScoringPose = new Pose2d();
+  private Rotation2d robotReefAngle = new Rotation2d();
   private ReefStatus reefStatus;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
 

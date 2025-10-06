@@ -29,7 +29,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
     initMotorConfig();
     NitrateSettings endEffectorMotorConfigStatus =
-        endEffectorMotor.setSettings(motorConfig, 0.02, 5);
+        endEffectorMotor.setSettings(motorConfig, 0.1, 5);
     if (!endEffectorMotorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
@@ -40,7 +40,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
     initSensorConfig();
     CanandcolorSettings endEffectorSensorConfigStatus =
-        endEffectorSensor.setSettings(sensorConfig, 0.02, 5);
+        endEffectorSensor.setSettings(sensorConfig, 0.1, 5);
     if (!endEffectorSensorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandcolor "
