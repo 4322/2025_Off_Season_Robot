@@ -198,8 +198,8 @@ public class Robot extends LoggedRobot {
       Leave = PathPlannerPath.fromPathFile("Leave");
 
       CenterStartToGulf = PathPlannerPath.fromPathFile("Center Start to Gulf");
-      GulfToGulfHotel = PathPlannerPath.fromPathFile("Gulf to Gulf/Hotel");
-      GulfHotelToCenterBarge = PathPlannerPath.fromPathFile("Gulf/Hotel to Center Barge");
+      GulfToGulfHotel = PathPlannerPath.fromPathFile("Gulf to Gulf-Hotel");
+      GulfHotelToCenterBarge = PathPlannerPath.fromPathFile("Gulf-Hotel to Center Barge");
       CenterBargeToCenterAlgaeScore = PathPlannerPath.fromPathFile("Center Barge to Center Algae Score");
       CenterAlgaeScoreToLeave = PathPlannerPath.fromPathFile("Center Algae Score to Leave");
 
