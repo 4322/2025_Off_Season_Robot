@@ -2,8 +2,6 @@ package frc.robot.commands;
 
 import static frc.robot.RobotContainer.driver;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -15,23 +13,26 @@ import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ReefStatus;
+import java.util.function.Supplier;
 
 public class DescoreAlgae extends Command {
   private final Superstructure superstructure;
   private final Drive drive;
-   private DriveToPose driveToPose;
+  private DriveToPose driveToPose;
   public boolean running;
 
   private Pose2d targetScoringPose;
   private Rotation2d robotReefAngle;
   private ReefStatus reefStatus;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
+
   public enum ScoreState {
     SAFE_DISTANCE,
     DRIVE_IN,
     DRIVEBACK,
     HOLD_POSITION
   }
+
   private Superstructure.Level level;
   private ScoreState state = ScoreState.SAFE_DISTANCE;
 
@@ -41,28 +42,25 @@ public class DescoreAlgae extends Command {
     this.drive = drive;
     addRequirements(superstructure);
   }
-  
 
   @Override
   public void initialize() {
     driveToPose = new DriveToPose(drive, currentPoseRequest);
     addRequirements(superstructure);
     running = true;
-   
   }
 
   @Override
   public void execute() {
-    //TODO: Make sure its the same for Algae as it is for coral
+    // TODO: Make sure its the same for Algae as it is for coral
     Pose2d safeDistPose =
-          targetScoringPose.transformBy(
-              new Transform2d(
-                  FieldConstants.KeypointPoses.reefSafeDistance
-                      - Math.abs(targetScoringPose.getX()),
-                  0,
-                  robotReefAngle.rotateBy(Rotation2d.k180deg)));
+        targetScoringPose.transformBy(
+            new Transform2d(
+                FieldConstants.KeypointPoses.reefSafeDistance - Math.abs(targetScoringPose.getX()),
+                0,
+                robotReefAngle.rotateBy(Rotation2d.k180deg)));
 
-    if (superstructure.isAutoOperationMode()){
+    if (superstructure.isAutoOperationMode()) {
       switch (state) {
         case SAFE_DISTANCE:
           currentPoseRequest = () -> safeDistPose;
@@ -83,9 +81,9 @@ public class DescoreAlgae extends Command {
           if (descoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
           }
-            if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
-              state = ScoreState.DRIVEBACK;
-            }
+          if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
+            state = ScoreState.DRIVEBACK;
+          }
           break;
         case DRIVEBACK:
           currentPoseRequest = () -> safeDistPose;
@@ -106,23 +104,23 @@ public class DescoreAlgae extends Command {
             running = false;
           }
           break;
-    }
-  }
-    else {
+      }
+    } else {
       superstructure.requestDescoreAlgae(level);
     }
   }
 
   public boolean descoreButtonReleased() {
-    return ( !driver.y().getAsBoolean()
-    && !driver.x().getAsBoolean()&& !superstructure.isAutoOperationMode())
-    || (superstructure.isAutoOperationMode() && !running);
+    return (!driver.y().getAsBoolean()
+            && !driver.x().getAsBoolean()
+            && !superstructure.isAutoOperationMode())
+        || (superstructure.isAutoOperationMode() && !running);
   }
 
   @Override
   public boolean isFinished() {
     return ((descoreButtonReleased() && !superstructure.isAutoOperationMode())
-    || (superstructure.isAutoOperationMode() && !running));
+        || (superstructure.isAutoOperationMode() && !running));
   }
 
   @Override
@@ -131,7 +129,8 @@ public class DescoreAlgae extends Command {
     drive.requestFieldRelativeMode();
     running = false;
   }
-   public boolean isInSafeArea() {
+
+  public boolean isInSafeArea() {
     Translation2d convertedRobotTrans;
     if (Robot.alliance == DriverStation.Alliance.Red) {
       convertedRobotTrans =
@@ -158,4 +157,3 @@ public class DescoreAlgae extends Command {
     }
   }
 }
-
