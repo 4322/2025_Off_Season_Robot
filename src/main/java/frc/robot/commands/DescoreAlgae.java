@@ -122,7 +122,7 @@ public class DescoreAlgae extends Command {
   @Override
   public boolean isFinished() {
     return ((descoreButtonReleased() && !superstructure.isAutoOperationMode())
-    || (superstructure.isAutoOperationMode() && !running;))
+    || (superstructure.isAutoOperationMode() && !running));
   }
 
   @Override
