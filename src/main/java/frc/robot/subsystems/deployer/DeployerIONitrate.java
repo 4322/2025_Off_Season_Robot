@@ -43,32 +43,12 @@ public class DeployerIONitrate implements DeployerIO {
   public DeployerIONitrate() {
     deployerMotor = new Nitrate(Constants.Deployer.deployerMotorId, MotorType.kCu60);
     initMotorConfig();
-    NitrateSettings deployerMotorConfigStatus = deployerMotor.setSettings(motorConfig, 0.02, 5);
+    NitrateSettings deployerMotorConfigStatus = deployerMotor.setSettings(motorConfig, 0.1, 5);
     if (!deployerMotorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
               + deployerMotor.getAddress().getDeviceId()
               + " error (Deployer Motor); Did not receive settings",
-          false);
-    }
-    PIDSettings settingsSlot1 =
-        new PIDSettings()
-            .setPID(Constants.Deployer.retractkP, 0, 0)
-            .setGravitationalFeedforward(Constants.Deployer.kG)
-            .setFeedforwardMode(Constants.Deployer.feedforwardMode)
-            .setMinwrapConfig(new MinwrapConfig.Disabled())
-            .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
-            .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
-            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit)
-            .setISaturation(Constants.Deployer.iSat)
-            .setIZone(Constants.Deployer.iZone);
-    PIDSettings deployerSlot1ConfigStatus =
-        deployerMotor.setPIDSettings(settingsSlot1, PIDConfigSlot.kSlot1);
-    if (!deployerSlot1ConfigStatus.isEmpty()) {
-      DriverStation.reportError(
-          "Nitrate "
-              + deployerMotor.getAddress().getDeviceId()
-              + " (deployer motor) failed to configure PID Slot 1",
           false);
     }
   }
@@ -105,8 +85,23 @@ public class DeployerIONitrate implements DeployerIO {
             .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
             .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit)
             .setISaturation(Constants.Deployer.iSat)
-            .setIZone(Constants.Deployer.iZone),
+            .setIZone(Constants.Deployer.iZone)
+            .setRampLimit(240),
         PIDConfigSlot.kSlot0);
+
+    motorConfig.setPIDSettings(
+        PIDSettings.defaultSettings(PIDConfigSlot.kSlot1)
+            .setPID(Constants.Deployer.retractkP, 0, 0)
+            .setGravitationalFeedforward(Constants.Deployer.kG)
+            .setFeedforwardMode(Constants.Deployer.feedforwardMode)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(Constants.Deployer.accelerationLimit)
+            .setMotionProfileDeaccelLimit(Constants.Deployer.deaccelerationLimit)
+            .setMotionProfileVelocityLimit(Constants.Deployer.velocityLimit)
+            .setISaturation(Constants.Deployer.iSat)
+            .setIZone(Constants.Deployer.iZone)
+            .setRampLimit(240),
+        PIDConfigSlot.kSlot1);
 
     motorConfig.setFramePeriodSettings(
         FramePeriodSettings.defaultSettings()

@@ -34,7 +34,7 @@ public class IndexerIONitrate implements IndexerIO {
 
     initMotorConfig();
     NitrateSettings motorRightConfigStatus =
-        indexerMotorRight.setSettings(motorRightConfig, 0.02, 5);
+        indexerMotorRight.setSettings(motorRightConfig, 0.1, 5);
     if (!motorRightConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
@@ -42,7 +42,7 @@ public class IndexerIONitrate implements IndexerIO {
               + " error (Indexer Motor); Did not receive settings",
           false);
     }
-    NitrateSettings motorLeftConfigStatus = indexerMotorLeft.setSettings(motorLeftConfig, 0.02, 5);
+    NitrateSettings motorLeftConfigStatus = indexerMotorLeft.setSettings(motorLeftConfig, 0.1, 5);
     if (!motorLeftConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
@@ -53,7 +53,7 @@ public class IndexerIONitrate implements IndexerIO {
 
     configSensor();
     CanandcolorSettings indexerSensorConfigStatus =
-        indexerSensor.setSettings(indexerSensorConfig, 0.02, 5);
+        indexerSensor.setSettings(indexerSensorConfig, 0.1, 5);
     if (!indexerSensorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandcolor "
@@ -63,7 +63,7 @@ public class IndexerIONitrate implements IndexerIO {
     }
 
     CanandcolorSettings pickupAreaSensorConfigStatus =
-        pickupAreaSensor.setSettings(pickupAreaSensorConfig, 0.02, 5);
+        pickupAreaSensor.setSettings(pickupAreaSensorConfig, 0.1, 5);
     if (!pickupAreaSensorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandcolor "

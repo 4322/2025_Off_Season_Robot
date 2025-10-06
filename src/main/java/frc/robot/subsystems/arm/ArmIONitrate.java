@@ -46,10 +46,24 @@ public class ArmIONitrate implements ArmIO {
             .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
             .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
             .setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit)
-            .setRampLimit(240)
             .setISaturation(Constants.Arm.iSat)
-            .setIZone(Constants.Arm.iZone),
+            .setIZone(Constants.Arm.iZone)
+            .setRampLimit(240),
         PIDConfigSlot.kSlot0);
+
+    armConfig.setPIDSettings(
+        PIDSettings.defaultSettings(PIDConfigSlot.kSlot1)
+            .setPID(Constants.Arm.kP, Constants.Arm.kI, 0)
+            .setFeedforwardMode(PIDFeedforwardMode.kArm)
+            .setGravitationalFeedforward(Constants.Arm.kG)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
+            .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
+            .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit)
+            .setISaturation(Constants.Arm.iSat)
+            .setIZone(Constants.Arm.iZone)
+            .setRampLimit(240),
+        PIDConfigSlot.kSlot1);
 
     if (Constants.enableArmSensor) {
       armConfig.setFeedbackSensorSettings(
@@ -86,9 +100,9 @@ public class ArmIONitrate implements ArmIO {
 
     CanandmagSettings settings = new CanandmagSettings();
     settings.setInvertDirection(true);
-    CanandmagSettings EncoderConfigStatus = armEncoder.setSettings(settings, 0.02, 5);
+    CanandmagSettings EncoderConfigStatus = armEncoder.setSettings(settings, 0.1, 5);
 
-    NitrateSettings motorConfigStatus = armMotor.setSettings(armConfig, 0.02, 5);
+    NitrateSettings motorConfigStatus = armMotor.setSettings(armConfig, 0.1, 5);
 
     if (!motorConfigStatus.isEmpty()) {
       DriverStation.reportError(
@@ -100,25 +114,6 @@ public class ArmIONitrate implements ArmIO {
           "Canandmag "
               + armEncoder.getAddress().getDeviceId()
               + " (Arm encoder) failed to configure",
-          false);
-    }
-    PIDSettings settingsSlot1 =
-        new PIDSettings()
-            .setPID(Constants.Arm.kP, Constants.Arm.kI, 0)
-            .setFeedforwardMode(PIDFeedforwardMode.kArm)
-            .setGravitationalFeedforward(Constants.Arm.kG)
-            .setMinwrapConfig(new MinwrapConfig.Disabled())
-            .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
-            .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
-            .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit)
-            .setISaturation(Constants.Arm.iSat)
-            .setIZone(Constants.Arm.iZone);
-    PIDSettings armSlot1ConfigStatus = armMotor.setPIDSettings(settingsSlot1, PIDConfigSlot.kSlot1);
-    if (!armSlot1ConfigStatus.isEmpty()) {
-      DriverStation.reportError(
-          "Nitrate "
-              + armMotor.getAddress().getDeviceId()
-              + " (Arm motor) failed to configure PID Slot 1",
           false);
     }
   }

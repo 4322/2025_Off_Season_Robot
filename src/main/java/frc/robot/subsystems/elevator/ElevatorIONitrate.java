@@ -52,8 +52,25 @@ public class ElevatorIONitrate implements ElevatorIO {
             .setMotionProfileVelocityLimit(
                 metersToRotations(Constants.Elevator.fastVelocityMetersPerSec))
             .setISaturation(Constants.Elevator.iSat)
-            .setIZone(Constants.Elevator.iZone),
+            .setIZone(Constants.Elevator.iZone)
+            .setRampLimit(240),
         PIDConfigSlot.kSlot0);
+
+    frontConfig.setPIDSettings(
+        PIDSettings.defaultSettings(PIDConfigSlot.kSlot1)
+            .setPID(Constants.Elevator.slow_kP, 0, 0)
+            .setGravitationalFeedforward(Constants.Elevator.kG)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(
+                metersToRotations(Constants.Elevator.slowAccelerationMetersPerSec2))
+            .setMotionProfileDeaccelLimit(
+                metersToRotations(Constants.Elevator.slowDecelerationMetersPerSec2))
+            .setMotionProfileVelocityLimit(
+                metersToRotations(Constants.Elevator.slowVelocityMetersPerSec))
+            .setISaturation(Constants.Elevator.iSat)
+            .setIZone(Constants.Elevator.iZone)
+            .setRampLimit(240),
+        PIDConfigSlot.kSlot1);
 
     frontConfig.setOutputSettings(
         OutputSettings.defaultSettings()
@@ -91,8 +108,8 @@ public class ElevatorIONitrate implements ElevatorIO {
 
     followerRequest.setInverted(false);
 
-    NitrateSettings leaderConfigStatus = leaderMotor.setSettings(frontConfig, 0.02, 5);
-    NitrateSettings followerConfigStatus = followerMotor.setSettings(backConfig, 0.02, 5);
+    NitrateSettings leaderConfigStatus = leaderMotor.setSettings(frontConfig, 0.1, 5);
+    NitrateSettings followerConfigStatus = followerMotor.setSettings(backConfig, 0.1, 5);
     followerMotor.setRequest(followerRequest);
     // get position is an internal encoder, so we need to set it
     // 6 to 1 gear ratio for elevator first stage
@@ -110,37 +127,6 @@ public class ElevatorIONitrate implements ElevatorIO {
           "Nitrate "
               + followerMotor.getAddress().getDeviceId()
               + " (follower motor) failed to configure",
-          false);
-    }
-    PIDSettings slot1Settings =
-        new PIDSettings()
-            .setPID(Constants.Elevator.slow_kP, 0, 0)
-            .setGravitationalFeedforward(Constants.Elevator.kG)
-            .setMinwrapConfig(new MinwrapConfig.Disabled())
-            .setMotionProfileAccelLimit(
-                metersToRotations(Constants.Elevator.slowAccelerationMetersPerSec2))
-            .setMotionProfileDeaccelLimit(
-                metersToRotations(Constants.Elevator.slowDecelerationMetersPerSec2))
-            .setMotionProfileVelocityLimit(
-                metersToRotations(Constants.Elevator.slowVelocityMetersPerSec))
-            .setISaturation(Constants.Elevator.iSat)
-            .setIZone(Constants.Elevator.iZone);
-    PIDSettings leaderSlot1ConfigStatus =
-        leaderMotor.setPIDSettings(slot1Settings, PIDConfigSlot.kSlot1);
-    PIDSettings followerSlot1ConfigStatus =
-        followerMotor.setPIDSettings(slot1Settings, PIDConfigSlot.kSlot1);
-    if (!leaderSlot1ConfigStatus.isEmpty()) {
-      DriverStation.reportError(
-          "Nitrate "
-              + leaderMotor.getAddress().getDeviceId()
-              + " (leader motor) failed to configure PID Slot 1",
-          false);
-    }
-    if (!followerSlot1ConfigStatus.isEmpty()) {
-      DriverStation.reportError(
-          "Nitrate "
-              + followerMotor.getAddress().getDeviceId()
-              + " (leader motor) failed to configure PID Slot 1",
           false);
     }
   }
