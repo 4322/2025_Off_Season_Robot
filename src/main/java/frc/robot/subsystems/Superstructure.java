@@ -61,7 +61,7 @@ public class Superstructure extends SubsystemBase {
     MANUAL,
   }
 
-  OperationMode mode = OperationMode.AUTO;
+  OperationMode mode = OperationMode.MANUAL;
 
   Superstates state = Superstates.UNHOMED;
 
@@ -323,6 +323,14 @@ public class Superstructure extends SubsystemBase {
 
   public void requestOperationMode(OperationMode mode) {
     this.mode = mode;
+  }
+
+  public boolean armAtSetpoint() {
+    return arm.atSetpoint();
+  }
+
+  public boolean elevatorAtSetpoint() {
+    return elevator.atSetpoint();
   }
 
   public boolean isAutoOperationMode() {

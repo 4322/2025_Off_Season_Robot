@@ -385,7 +385,8 @@ public class Vision extends SubsystemBase {
 
     Translation2d convertedRobotTrans =
         robotTranslation.rotateAround(
-            reefCenterPoint, Rotation2d.fromDegrees(-reefCenterToRobotDeg));
+            reefCenterPoint,
+            Rotation2d.fromDegrees(robotToReefFace).rotateBy(Rotation2d.k180deg).unaryMinus());
 
     if (convertedRobotTrans.minus(reefCenterPoint).getAngle().getDegrees() >= 0) {
       closestReefPipe = ClosestReefPipe.RIGHT;

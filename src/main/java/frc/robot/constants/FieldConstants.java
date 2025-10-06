@@ -383,7 +383,7 @@ public class FieldConstants {
     private static final double sideTroughDistanceFromBranch = 0.153035;
     private static final double robotCenterToBumper = Units.inchesToMeters(16.97687);
 
-    public static final double reefSafeDistance = Units.inchesToMeters(15);
+    public static final double reefSafeDistance = Units.inchesToMeters(15) + robotCenterToBumper;
 
     public static final Translation2d blueReefCenter = Reef.center;
     public static final Translation2d redReefCenter =
