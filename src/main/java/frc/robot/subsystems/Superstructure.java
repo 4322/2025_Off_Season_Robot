@@ -61,7 +61,7 @@ public class Superstructure extends SubsystemBase {
     MANUAL,
   }
 
-  OperationMode mode = OperationMode.AUTO;
+  OperationMode mode = OperationMode.MANUAL;
 
   Superstates state = Superstates.UNHOMED;
 
