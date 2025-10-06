@@ -336,45 +336,40 @@ public class Vision extends SubsystemBase {
     Translation2d robotTranslation = drive.getPose().getTranslation();
     double reefCenterToRobotDeg = robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
 
-    if (-30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 30) {
+    if (-27 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 27) {
       robotToReefFace = 180;
-      reefFaceAmbiguity = false;
       tagId =
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.AB.idRed
               : FieldConstants.ReefFaceTag.GH.idBlue;
-    } else if (30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 90) {
+    } else if (33 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 87) {
       robotToReefFace = -120;
-      reefFaceAmbiguity = false;
       tagId =
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.CD.idRed
               : FieldConstants.ReefFaceTag.IJ.idBlue;
-    } else if (90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 150) {
+    } else if (93 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 147) {
       robotToReefFace = -60;
-      reefFaceAmbiguity = false;
       tagId =
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.EF.idRed
               : FieldConstants.ReefFaceTag.KL.idBlue;
-    } else if ((150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 180)
-        || (-150 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -180)) {
+    } else if ((153 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 177)
+        || (-153 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -177)) {
       robotToReefFace = 0;
-      reefFaceAmbiguity = false;
       tagId =
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.GH.idRed
               : FieldConstants.ReefFaceTag.AB.idBlue;
-    } else if (-150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -90) {
+    } else if (-153 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -87) {
       robotToReefFace = 60;
       reefFaceAmbiguity = false;
       tagId =
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.IJ.idRed
               : FieldConstants.ReefFaceTag.CD.idBlue;
-    } else if (-90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -30) {
+    } else if (-93 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -27) {
       robotToReefFace = 120;
-      reefFaceAmbiguity = false;
       tagId =
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.KL.idRed
