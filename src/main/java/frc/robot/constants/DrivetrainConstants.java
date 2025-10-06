@@ -39,9 +39,9 @@ public class DrivetrainConstants {
 
   private static final double turnkP = 150;
   private static final double turnkD = 0.2;
-  private static final double turnAccelerationLimit = 1000; 
+  private static final double turnAccelerationLimit = 1000;
   private static final double turnDeaccelerationLimit = 1000;
-  private static final double turnVelocityLimit = 1000; 
+  private static final double turnVelocityLimit = 1000;
 
   private static final double simTurnInertia = 0.00001;
   private static final double simDriveInertia = 0.001;
