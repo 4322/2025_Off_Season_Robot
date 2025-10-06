@@ -46,6 +46,7 @@ public class ArmIONitrate implements ArmIO {
             .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
             .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
             .setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit)
+            .setRampLimit(240)
             .setISaturation(Constants.Arm.iSat)
             .setIZone(Constants.Arm.iZone),
         PIDConfigSlot.kSlot0);
