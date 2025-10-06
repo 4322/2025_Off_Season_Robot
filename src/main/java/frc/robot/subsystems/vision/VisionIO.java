@@ -32,7 +32,12 @@ public interface VisionIO {
       boolean useMultiTag) {}
 
   public static record SingleTagPoseObservation(
-      double timestamp, Pose3d pose, Pose3d altPose, double ambiguity, double averageTagDistance, double averageTagDistanceAlt) {}
+      double timestamp,
+      Pose3d pose,
+      Pose3d altPose,
+      double ambiguity,
+      double averageTagDistance,
+      double averageTagDistanceAlt) {}
 
   public enum ObservationMode {
     GLOBAL_POSE,

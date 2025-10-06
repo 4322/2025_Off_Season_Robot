@@ -11,11 +11,14 @@ import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ClockUtil;
+import frc.robot.util.ReefStatus;
 
 public class DriveManual extends Command {
   private Drive drive;
   private PIDController autoRotateController =
       new PIDController(Constants.Drive.autoRotatekP, 0, Constants.Drive.autoRotatekD);
+  private boolean firstReefLock;
+  private double currentReefLockRad;
 
   public DriveManual(Drive drive) {
     this.drive = drive;
@@ -67,16 +70,31 @@ public class DriveManual extends Command {
         if (Constants.enableReefLock
             && RobotContainer.getSuperstructure().isCoralHeld()
             && Math.abs(rot) < 0.01) {
+          ReefStatus reefStatus = RobotContainer.getSuperstructure().getReefStatus();
+          double newReefLockRad = reefStatus.getClosestRobotAngle().getRadians();
+
+          // Lock heading to reef face first time we engage mode
+          if (!firstReefLock) {
+            firstReefLock = true;
+            currentReefLockRad = newReefLockRad;
+          }
+
+          if (currentReefLockRad != newReefLockRad && !reefStatus.getReefFaceAmbiguity()) {
+            currentReefLockRad = newReefLockRad;
+          }
+
           rot =
-              autoRotateController.calculate(
-                  drive.getRotation().getRadians(),
-                  RobotContainer.getSuperstructure()
-                      .getReefStatus()
-                      .getClosestRobotAngle()
-                      .getRadians());
+              autoRotateController.calculate(drive.getRotation().getRadians(), currentReefLockRad);
+        } else if (firstReefLock) {
+          firstReefLock = false;
         }
         break;
       case AUTO_ROTATE:
+        // Clear first reef lock if we exited field relative state while in reef lock mode
+        if (firstReefLock) {
+          firstReefLock = false;
+        }
+
         rot =
             autoRotateController.calculate(
                 drive.getRotation().getRadians(), drive.getTargetAngle().getRadians());

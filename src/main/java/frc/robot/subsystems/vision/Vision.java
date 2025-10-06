@@ -162,8 +162,7 @@ public class Vision extends SubsystemBase {
 
             if (observation.useMultiTag()) {
               xyStdDev = Math.pow(avgTagDistance, 2.0) / observation.tagCount();
-              thetaStdDev =
-                  Math.pow(avgTagDistance, 2.0) / observation.tagCount();
+              thetaStdDev = Math.pow(avgTagDistance, 2.0) / observation.tagCount();
 
               consumer.accept(
                   disambiguatedRobotPose.toPose2d(),
@@ -179,10 +178,8 @@ public class Vision extends SubsystemBase {
                           * Constants.Vision.thetaStdDevBaseline
                           * thetaStdDev));
             } else {
-              xyStdDev =
-                  Math.max(xyStdDevModel.predict(avgTagDistance), 0.000001);
-              thetaStdDev =
-                  Math.max(thetaStdDevModel.predict(avgTagDistance), 0.000001);
+              xyStdDev = Math.max(xyStdDevModel.predict(avgTagDistance), 0.000001);
+              thetaStdDev = Math.max(thetaStdDevModel.predict(avgTagDistance), 0.000001);
 
               consumer.accept(
                   disambiguatedRobotPose.toPose2d(),
@@ -267,8 +264,7 @@ public class Vision extends SubsystemBase {
             }
 
             // Calculate standard deviations
-            double xyStdDev =
-                Math.max(xyStdDevModel.predict(avgTagDistance), 0.000001);
+            double xyStdDev = Math.max(xyStdDevModel.predict(avgTagDistance), 0.000001);
 
             consumer.accept(
                 visionRobotPose,
