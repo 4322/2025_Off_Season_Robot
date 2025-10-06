@@ -22,7 +22,7 @@ public class DescoreAlgae extends Command {
   public boolean running;
 
   private Pose2d targetScoringPose = new Pose2d();
-  private Rotation2d robotReefAngle;
+  private Rotation2d robotReefAngle = new Rotation2d();
   private ReefStatus reefStatus;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
 
