@@ -52,8 +52,13 @@ public class ModuleIONitrate implements ModuleIO {
         FeedbackSensorSettings.defaultSettings()
             .setSensorToMechanismRatio(constants.driveMotorGearRatio));
     driveConfig.setPIDSettings(constants.driveMotorGains, PIDConfigSlot.kSlot0);
+    driveConfig.setPIDSettings(
+        PIDSettings.defaultSettings(PIDConfigSlot.kSlot1)
+            .setStaticFeedforward(constants.driveMotorGains.getStaticFeedforward().get())
+            .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get()), 
+                PIDConfigSlot.kSlot1);
     driveConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
-    NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.02, 5);
+    NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.1, 5);
 
     NitrateSettings turnConfig = new NitrateSettings();
     turnConfig.setOutputSettings(
@@ -69,11 +74,11 @@ public class ModuleIONitrate implements ModuleIO {
     turnConfig.setElectricalLimitSettings(constants.turnElectricalLimitSettings);
     turnConfig.setPIDSettings(constants.turnMotorGains, PIDConfigSlot.kSlot0);
     turnConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
-    NitrateSettings turnConfigStatus = turnMotor.setSettings(turnConfig, 0.02, 5);
+    NitrateSettings turnConfigStatus = turnMotor.setSettings(turnConfig, 0.1, 5);
 
     CanandmagSettings settings = new CanandmagSettings();
     settings.setInvertDirection(constants.turnEncoderInverted);
-    CanandmagSettings turnEncoderConfigStatus = turnEncoder.setSettings(settings, 0.02, 5);
+    CanandmagSettings turnEncoderConfigStatus = turnEncoder.setSettings(settings, 0.1, 5);
 
     if (!driveConfigStatus.isEmpty()) {
       DriverStation.reportError(
@@ -94,27 +99,6 @@ public class ModuleIONitrate implements ModuleIO {
           "Canandmag "
               + turnEncoder.getAddress().getDeviceId()
               + " (Swerve turn encoder) failed to configure",
-          false);
-    }
-
-    PIDSettings slot1Settings =
-        new PIDSettings()
-            .setStaticFeedforward(constants.driveMotorGains.getStaticFeedforward().get())
-            .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get())
-            .setPID(0, 0, 0)
-            .setGravitationalFeedforward(0)
-            .setMotionProfileVelocityLimit(0)
-            .setMotionProfileAccelLimit(0)
-            .setMotionProfileDeaccelLimit(0);
-
-    PIDSettings driveSlot1ConfigStatus =
-        driveMotor.setPIDSettings(slot1Settings, PIDConfigSlot.kSlot1);
-
-    if (!driveSlot1ConfigStatus.isEmpty()) {
-      DriverStation.reportError(
-          "Nitrate "
-              + driveMotor.getAddress().getDeviceId()
-              + " (Swerve drive motor) PID Slot 1 failed to configure",
           false);
     }
   }
