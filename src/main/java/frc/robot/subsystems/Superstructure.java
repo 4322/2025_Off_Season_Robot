@@ -325,6 +325,14 @@ public class Superstructure extends SubsystemBase {
     this.mode = mode;
   }
 
+  public boolean armAtSetpoint() {
+    return arm.atSetpoint();
+  }
+
+  public boolean elevatorAtSetpoint() {
+    return elevator.atSetpoint();
+  }
+
   public boolean isAutoOperationMode() {
     return mode == OperationMode.AUTO;
   }
