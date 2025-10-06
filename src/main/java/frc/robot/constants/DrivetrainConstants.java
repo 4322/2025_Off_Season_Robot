@@ -25,13 +25,13 @@ public class DrivetrainConstants {
   private static final boolean invertLeftSideDrive = false;
   private static final boolean invertRightSideDrive = true;
 
-  public static final double driveSupplyCurrentLimit = 40.0; // TODO
-  public static final double driveSupplyCurrentTime = 0.0; // TODO
-  public static final double driveStatorCurrentLimit = 50; // TODO
+  public static final double driveSupplyCurrentLimit = 40.0; 
+  public static final double driveSupplyCurrentTime = 0.0; 
+  public static final double driveStatorCurrentLimit = 75; 
 
-  public static final double turnSupplyCurrentLimit = 20.0; // TODO
-  public static final double turnSupplyCurrentTime = 0.0; // TODO
-  public static final double turnStatorCurrentLimit = 35; // TODO
+  public static final double turnSupplyCurrentLimit = 20.0; 
+  public static final double turnSupplyCurrentTime = 0.0; 
+  public static final double turnStatorCurrentLimit = 35; 
 
   private static final double drivekP = 0; // TODO
   private static final double drivekD = 0; // TODO
