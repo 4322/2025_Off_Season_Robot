@@ -1,6 +1,5 @@
 package frc.robot.constants;
 
-import com.pathplanner.lib.path.PathPlannerPath;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
@@ -8,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj2.command.Command;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -100,11 +98,6 @@ public final class Constants {
     public static final double robotMassKg = Units.lbsToKilograms(141.06); // TODO: Weigh robot
     public static final double robotMOI = 6.546; // Lzz from CAD
     public static final double wheelCOF = 1.2;
-
-    public static Command followPath(PathPlannerPath leave) {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'followPath'");
-    }
   }
 
   public static class Arm {
@@ -420,7 +413,7 @@ public final class Constants {
   public static class AutoScoring {
     public static final double drivekP = 2.0;
     public static final double drivekD = 0.0;
-    
+
     public static final double driveMaxVelocity = 3.0;
     public static final double driveMaxVelocitySlow = Units.inchesToMeters(50.0);
     public static final double driveMaxAcceleration = 4;
@@ -434,7 +427,7 @@ public final class Constants {
 
     public static final double thetaTolerance = Units.degreesToRadians(1.0);
     public static final double thetaToleranceSlow = Units.degreesToRadians(3.0);
-    
+
     public static final double ffMinRadius = 0.1;
     public static final double ffMaxRadius = 0.8;
   }
