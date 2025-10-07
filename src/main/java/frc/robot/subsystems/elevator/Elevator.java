@@ -159,7 +159,7 @@ public class Elevator extends SubsystemBase {
         requestedHeightMeters = Constants.Elevator.scoreCoralL4HeightMeters;
         break;
     }
-    isSlow = true;
+    isSlow = false;
   }
 
   public void pickupCoral() {

@@ -139,13 +139,13 @@ public final class Constants {
     public static final double iZone = 0.0138; // TODO
 
     public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 2;
-    public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 35;
+    public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 31;
     public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 30;
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL4CoralDeg - 14;
 
     // Prescore Degrees Arm
     public static final double prescoringL1CoralDeg = 57.773;
-    public static final double prescoringL2CoralDeg = 118.546;
+    public static final double prescoringL2CoralDeg = 120.546;
     public static final double prescoringL3CoralDeg = 128.139;
     public static final double prescoringL4CoralDeg = 125.955;
     public static final double scoringAlgaeDeg = 141;
@@ -196,8 +196,8 @@ public final class Constants {
     public static final double elevatorHeightToleranceMeters = 0.01;
 
     public static final double algaeGroundHeightMeters = 0.00635;
-    public static final double algaeReefL2HeightMeters = 0.5283249 + (2 * (0.0254));
-    public static final double algaeReefL3HeightMeters = 0.8739758746 + (3 * (0.0254));
+    public static final double algaeReefL2HeightMeters = 0.5283249 + (3 * (0.0254));
+    public static final double algaeReefL3HeightMeters = 0.8739758746 + (4 * (0.0254));
 
     public static final double prescoreCoralL1HeightMeters = 0.4811766;
     public static final double prescoreCoralL2HeightMeters = 0.10647135;
