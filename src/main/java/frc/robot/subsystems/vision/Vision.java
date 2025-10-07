@@ -168,7 +168,8 @@ public class Vision extends SubsystemBase {
                     || disambiguatedRobotPose.getX() < -0.5
                     || disambiguatedRobotPose.getX() > FieldConstants.fieldLength + 0.5
                     || disambiguatedRobotPose.getY() < -0.5
-                    || disambiguatedRobotPose.getY() > FieldConstants.fieldWidth + 0.5;
+                    || disambiguatedRobotPose.getY() > FieldConstants.fieldWidth + 0.5
+                    || avgTagDistance > Constants.Vision.maxAvgTagDistance;
 
             // Add pose to log
             robotPoses.add(disambiguatedRobotPose.toPose2d());
@@ -272,10 +273,11 @@ public class Vision extends SubsystemBase {
                     // Must be within the field boundaries
                     || visionRobotPose.getX() < -0.5
                     || visionRobotPose.getX()
-                        > FieldConstants.aprilTagFieldLayout.getFieldLength() + 0.5
+                        > FieldConstants.fieldLength + 0.5
                     || visionRobotPose.getY() < -0.5
                     || visionRobotPose.getY()
-                        > FieldConstants.aprilTagFieldLayout.getFieldWidth() + 0.5;
+                        > FieldConstants.fieldWidth + 0.5
+                    || avgTagDistance > Constants.Vision.maxAvgTagDistance;
 
             // Add pose to log
             robotPoses.add(visionRobotPose);
