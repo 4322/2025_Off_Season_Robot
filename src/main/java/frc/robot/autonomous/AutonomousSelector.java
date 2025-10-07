@@ -18,21 +18,21 @@ public class AutonomousSelector {
       new SendableChooser<SequentialCommandGroup>();
 
   public AutonomousSelector(
-      Drive drive, Superstructure superstructure, IntakeSuperstructure intakeSuperstructure, Vision vision) {
+      Drive drive,
+      Superstructure superstructure,
+      IntakeSuperstructure intakeSuperstructure,
+      Vision vision) {
     autonomousSelector.setDefaultOption("DO_NOTHING", new SequentialCommandGroup());
     autonomousSelector.addOption("LEAVE", new Leave(drive));
     autonomousSelector.addOption(
         "THREE_CORAL_LEFT",
-        new ThreeCoralLeft(
-            drive, superstructure, intakeSuperstructure, vision));
+        new ThreeCoralLeft(drive, superstructure, intakeSuperstructure, vision));
     autonomousSelector.addOption(
         "THREE_CORAL_RIGHT",
-        new ThreeCoralRight(
-            drive, superstructure, intakeSuperstructure, vision));
+        new ThreeCoralRight(drive, superstructure, intakeSuperstructure, vision));
     autonomousSelector.addOption(
-      "ONE_CORAL_ONE_ALGAE_CENTER", 
-      new OneCoralOneAlgaeCenter(drive, superstructure, intakeSuperstructure, vision));
-
+        "ONE_CORAL_ONE_ALGAE_CENTER",
+        new OneCoralOneAlgaeCenter(drive, superstructure, intakeSuperstructure, vision));
 
     SmartDashboard.putData("Autonomous Selector", autonomousSelector);
   }

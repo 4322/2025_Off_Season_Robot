@@ -319,6 +319,7 @@ public class RobotContainer {
   }
 
   public void configureAutonomousSelector() {
-    autonomousSelector = new AutonomousSelector(drive, superstructure, intakeSuperstructure, vision);
+    autonomousSelector =
+        new AutonomousSelector(drive, superstructure, intakeSuperstructure, vision);
   }
 }
