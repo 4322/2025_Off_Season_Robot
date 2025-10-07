@@ -455,6 +455,13 @@ public class Vision extends SubsystemBase {
     } else {
       l1Zone = L1Zone.MIDDLE;
     }
+
+    Logger.recordOutput("ReefStatus/ReefFaceAmbiguity", reefFaceAmbiguity);
+    Logger.recordOutput("ReefStatus/RobotFaceAngle", robotToReefFace);
+    Logger.recordOutput("ReefStatus/ClosestReefPipe", closestReefPipe.toString());
+    Logger.recordOutput("ReefStatus/ClosestL1Zone", l1Zone.toString());
+    Logger.recordOutput("ReefStatus/TagID", tagId);
+
     return new ReefStatus(
         reefFaceAmbiguity,
         reefPipeAmbiguity,
