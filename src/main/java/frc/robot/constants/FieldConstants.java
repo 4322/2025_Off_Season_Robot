@@ -378,14 +378,16 @@ public class FieldConstants {
           fieldWidth);
 
   public static class KeypointPoses {
-    // Private variables are reference values, do not modify
-    private static final double scoringDistanceFromReef = Units.inchesToMeters(7);
-    private static final double sideTroughDistanceFromBranch = 0.153035;
-    private static final double robotCenterToBumper = Units.inchesToMeters(16.97687);
+    // Private values used in scoring position transforms, do not use in any other file
+    private static final double sideTroughDistanceFromBranch = 0.153035; // Field CAD
+    private static final double robotBumperToCenter = Units.inchesToMeters(16.97687); // Robot CAD
 
-    public static final double reefSafeDistance = Units.inchesToMeters(15) + robotCenterToBumper;
-    public static final double descoreAlgaeSafeDistance =
-        Units.inchesToMeters(7) + robotCenterToBumper;
+    private static final double scoringDistanceFromReef = Units.inchesToMeters(7) + robotBumperToCenter;
+    private static final double descoreAlgaeDriveInDist = Units.inchesToMeters(7) + robotBumperToCenter;
+    
+    public static final double reefSafeDistance = Units.inchesToMeters(15) + robotBumperToCenter;
+    public static final double safeDistFromCoralScoringPos = reefSafeDistance - scoringDistanceFromReef;
+    public static final double safeDistFromAlgaeDescorePos = reefSafeDistance - descoreAlgaeDriveInDist;
 
     public static final Translation2d blueReefCenter = Reef.center;
     public static final Translation2d redReefCenter =
@@ -408,35 +410,35 @@ public class FieldConstants {
     // Scoring positions of center of robot drivebase
     public static final Translation2d leftReefBranchScoringBlue =
         leftReefBranchFaceBlue.plus(
-            new Translation2d(scoringDistanceFromReef + robotCenterToBumper, 0));
+            new Translation2d(scoringDistanceFromReef, 0));
     public static final Translation2d rightReefBranchScoringBlue =
         rightReefBranchFaceBlue.plus(
-            new Translation2d(scoringDistanceFromReef + robotCenterToBumper, 0));
+            new Translation2d(scoringDistanceFromReef, 0));
 
     public static final Translation2d leftReefBranchScoringRed =
         leftReefBranchFaceRed.plus(
-            new Translation2d(scoringDistanceFromReef + robotCenterToBumper, 0));
+            new Translation2d(scoringDistanceFromReef, 0));
     public static final Translation2d rightReefBranchScoringRed =
         rightReefBranchFaceRed.plus(
-            new Translation2d(scoringDistanceFromReef + robotCenterToBumper, 0));
+            new Translation2d(scoringDistanceFromReef, 0));
 
     public static final Translation2d leftTroughScoringBlue =
         leftReefBranchFaceBlue.plus(
-            new Translation2d(robotCenterToBumper, -sideTroughDistanceFromBranch));
+            new Translation2d(robotBumperToCenter, -sideTroughDistanceFromBranch));
     public static final Translation2d middleTroughScoringBlue =
-        leftReefBranchFaceBlue.plus(new Translation2d(robotCenterToBumper, 0.164338));
+        leftReefBranchFaceBlue.plus(new Translation2d(robotBumperToCenter, 0.164338));
     public static final Translation2d rightTroughScoringBlue =
         rightReefBranchFaceBlue.plus(
-            new Translation2d(robotCenterToBumper, sideTroughDistanceFromBranch));
+            new Translation2d(robotBumperToCenter, sideTroughDistanceFromBranch));
 
     public static final Translation2d leftTroughScoringRed =
         leftReefBranchFaceRed.plus(
-            new Translation2d(robotCenterToBumper, -sideTroughDistanceFromBranch));
+            new Translation2d(robotBumperToCenter, -sideTroughDistanceFromBranch));
     public static final Translation2d middleTroughScoringRed =
-        leftReefBranchFaceRed.plus(new Translation2d(robotCenterToBumper, 0.164338));
+        leftReefBranchFaceRed.plus(new Translation2d(robotBumperToCenter, 0.164338));
     public static final Translation2d rightTroughScoringRed =
         rightReefBranchFaceRed.plus(
-            new Translation2d(robotCenterToBumper, sideTroughDistanceFromBranch));
+            new Translation2d(robotBumperToCenter, sideTroughDistanceFromBranch));
 
     public static final Translation2d descoreAlgaeBlue =
         leftReefBranchFaceBlue.plus(new Translation2d(reefSafeDistance, 0.164338));
@@ -444,8 +446,8 @@ public class FieldConstants {
         leftReefBranchFaceRed.plus(new Translation2d(reefSafeDistance, 0.164338));
 
     public static final Translation2d descoreAlgaeDriveInBlue =
-        leftReefBranchFaceBlue.plus(new Translation2d(descoreAlgaeSafeDistance, 0.164338));
+        leftReefBranchFaceBlue.plus(new Translation2d(descoreAlgaeDriveInDist, 0.164338));
     public static final Translation2d descoreAlgaeDriveInRed =
-        leftReefBranchFaceRed.plus(new Translation2d(descoreAlgaeSafeDistance, 0.164338));
+        leftReefBranchFaceRed.plus(new Translation2d(descoreAlgaeDriveInDist, 0.164338));
   }
 }

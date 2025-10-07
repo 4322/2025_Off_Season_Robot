@@ -46,6 +46,12 @@ public class Robot extends LoggedRobot {
 
   public static PathPlannerPath Leave;
 
+  public static PathPlannerPath CenterStartToGulf;
+  public static PathPlannerPath GulfToGulfHotel;
+  public static PathPlannerPath GulfHotelToCenterBarge;
+  public static PathPlannerPath CenterBargeToCenterAlgaeScore;
+  public static PathPlannerPath CenterAlgaeScoreToLeave;
+
   public static PathPlannerPath ThreeCoralStartToJuliet;
   public static PathPlannerPath JulietToFeed;
   public static PathPlannerPath KiloToFeed;
@@ -190,18 +196,24 @@ public class Robot extends LoggedRobot {
     try {
       Leave = PathPlannerPath.fromPathFile("Leave");
 
-      ThreeCoralStartToJuliet = PathPlannerPath.fromPathFile("Three Coral Start To Juliet");
-      JulietToFeed = PathPlannerPath.fromPathFile("Juliet To Feed");
-      FeedToKilo = PathPlannerPath.fromPathFile("Feed To Kilo");
-      KiloToFeed = PathPlannerPath.fromPathFile("Kilo To Feed");
-      FeedToLima = PathPlannerPath.fromPathFile("Feed To Lima");
+      CenterStartToGulf = PathPlannerPath.fromPathFile("Center Start to Gulf");
+      GulfToGulfHotel = PathPlannerPath.fromPathFile("Gulf to Gulf-Hotel");
+      GulfHotelToCenterBarge = PathPlannerPath.fromPathFile("Gulf-Hotel to Center Barge");
+      CenterBargeToCenterAlgaeScore = PathPlannerPath.fromPathFile("Center Barge to Center Algae Score");
+      CenterAlgaeScoreToLeave = PathPlannerPath.fromPathFile("Center Algae Score to Leave");
 
-      ThreeCoralStartToEcho =
-          PathPlannerPath.fromPathFile("Three Coral Start To Juliet").mirrorPath();
-      EchoToFeed = PathPlannerPath.fromPathFile("Juliet To Feed").mirrorPath();
-      FeedToDelta = PathPlannerPath.fromPathFile("Feed To Kilo").mirrorPath();
-      DeltaToFeed = PathPlannerPath.fromPathFile("Kilo To Feed").mirrorPath();
-      FeedToCharlie = PathPlannerPath.fromPathFile("Feed To Lima").mirrorPath();
+      ThreeCoralStartToJuliet = PathPlannerPath.fromPathFile("Three Coral Start to Juliet");
+      JulietToFeed = PathPlannerPath.fromPathFile("Juliet To Feed");
+      FeedToKilo = PathPlannerPath.fromPathFile("Feed to Kilo");
+      KiloToFeed = PathPlannerPath.fromPathFile("Kilo to Feed");
+      FeedToLima = PathPlannerPath.fromPathFile("Feed to Lima");
+      
+
+      ThreeCoralStartToEcho = PathPlannerPath.fromPathFile("Three Coral Start to Juliet").mirrorPath();
+      EchoToFeed = PathPlannerPath.fromPathFile("Juliet to Feed").mirrorPath();
+      FeedToDelta = PathPlannerPath.fromPathFile("Feed to Kilo").mirrorPath();
+      DeltaToFeed = PathPlannerPath.fromPathFile("Kilo to Feed").mirrorPath();
+      FeedToCharlie = PathPlannerPath.fromPathFile("Feed to Lima").mirrorPath();
     } catch (Exception e) {
       DriverStation.reportError("Failed to load PathPlanner paths", true);
     }

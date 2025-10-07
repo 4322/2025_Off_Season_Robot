@@ -52,6 +52,7 @@ public class ScoreCoral extends Command {
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
+    
     driveToPose = new DriveToPose(drive, currentPoseRequest);
     addRequirements(superstructure);
   }
@@ -89,19 +90,19 @@ public class ScoreCoral extends Command {
         leftTroughScoringPose =
             new Pose2d(
                 FieldConstants.KeypointPoses.leftTroughScoringRed.rotateAround(
-                    FieldConstants.KeypointPoses.blueReefCenter,
+                    FieldConstants.KeypointPoses.redReefCenter,
                     robotReefAngle.rotateBy(Rotation2d.k180deg)),
                 robotReefAngle);
         middleTroughScoringPose =
             new Pose2d(
                 FieldConstants.KeypointPoses.middleTroughScoringRed.rotateAround(
-                    FieldConstants.KeypointPoses.blueReefCenter,
+                    FieldConstants.KeypointPoses.redReefCenter,
                     robotReefAngle.rotateBy(Rotation2d.k180deg)),
                 robotReefAngle);
         rightTroughScoringPose =
             new Pose2d(
                 FieldConstants.KeypointPoses.rightTroughScoringRed.rotateAround(
-                    FieldConstants.KeypointPoses.blueReefCenter,
+                    FieldConstants.KeypointPoses.redReefCenter,
                     robotReefAngle.rotateBy(Rotation2d.k180deg)),
                 robotReefAngle);
       }
@@ -139,13 +140,13 @@ public class ScoreCoral extends Command {
         leftBranchScoringPos =
             new Pose2d(
                 FieldConstants.KeypointPoses.leftReefBranchScoringRed.rotateAround(
-                    FieldConstants.KeypointPoses.blueReefCenter,
+                    FieldConstants.KeypointPoses.redReefCenter,
                     robotReefAngle.rotateBy(Rotation2d.k180deg)),
                 robotReefAngle);
         rightBranchScoringPose =
             new Pose2d(
                 FieldConstants.KeypointPoses.rightReefBranchScoringRed.rotateAround(
-                    FieldConstants.KeypointPoses.blueReefCenter,
+                    FieldConstants.KeypointPoses.redReefCenter,
                     robotReefAngle.rotateBy(Rotation2d.k180deg)),
                 robotReefAngle);
       }
@@ -213,8 +214,7 @@ public class ScoreCoral extends Command {
       Pose2d safeDistPose =
           targetScoringPose.transformBy(
               new Transform2d(
-                  FieldConstants.KeypointPoses.reefSafeDistance
-                      - Math.abs(targetScoringPose.getX()),
+                  FieldConstants.KeypointPoses.safeDistFromCoralScoringPos,
                   0,
                   robotReefAngle.rotateBy(Rotation2d.k180deg)));
 
