@@ -26,12 +26,13 @@ public final class Constants {
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = true;
   public static final boolean enableArmSensor = false;
-  public static final boolean enableDriveToPoseTesting = false;
+  public static final boolean enableDriveToPoseTestingScoreCoral = false;
   public static final boolean enableDriveToPoseOverride = false;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING_FIXED_VELOCITY;
   public static final boolean continuousNitrateRequestsEnabled = true;
   public static final boolean enableReefLock = false;
   public static final boolean enableGlobalPoseTrigEstimation = false;
+  public static final boolean enableDriveToPoseTuning = false;
   public static final boolean debugPIDModeEnabled = true;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 

@@ -174,7 +174,7 @@ public class ScoreCoral extends Command {
   @Override
   public void execute() {
 
-    if (Constants.enableDriveToPoseTesting){
+    if (Constants.enableDriveToPoseTestingScoreCoral){
     Pose2d safeDistPose =
     targetScoringPose.transformBy(
         new Transform2d(
@@ -195,6 +195,7 @@ public class ScoreCoral extends Command {
       }
       break;
    }
+   
    if (driver.povLeft().getAsBoolean()){
     running = false;
    }
@@ -238,7 +239,7 @@ public class ScoreCoral extends Command {
       }
     }
 
-    else if (superstructure.isAutoOperationMode() && !Constants.enableDriveToPoseTesting) {
+    else if (superstructure.isAutoOperationMode() && !Constants.enableDriveToPoseTestingScoreCoral) {
       if (state == ScoreState.SAFE_DISTANCE) {
 
         double x = -RobotContainer.driver.getLeftY();
@@ -351,8 +352,8 @@ public class ScoreCoral extends Command {
 
   @Override
   public boolean isFinished() {
-    return (scoreButtonReleased() && !superstructure.isAutoOperationMode() && !Constants.enableDriveToPoseTesting)
-        || (superstructure.isAutoOperationMode() && !running && !Constants.enableDriveToPoseTesting) || (Constants.enableDriveToPoseTesting && !running);
+    return (scoreButtonReleased() && !superstructure.isAutoOperationMode() && !Constants.enableDriveToPoseTestingScoreCoral)
+        || (superstructure.isAutoOperationMode() && !running && !Constants.enableDriveToPoseTestingScoreCoral) || (Constants.enableDriveToPoseTestingScoreCoral && !running);
   }
 
   @Override
