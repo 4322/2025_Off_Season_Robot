@@ -5,7 +5,9 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -125,6 +127,24 @@ public class Vision extends SubsystemBase {
               } else {
                 disambiguatedRobotPose = observation.altPose();
                 avgTagDistance = observation.averageTagDistanceAlt();
+              }
+
+              if (Constants.enableGlobalPoseTrigEstimation) {
+                Pose2d visionRobotPose = disambiguatedRobotPose.toPose2d();
+                Pose2d tagPos =
+                    FieldConstants.aprilTagFieldLayout
+                        .getTagPose(inputs[cameraIndex].singleTagFiducialID)
+                        .get()
+                        .toPose2d();
+                // Use gyro to correct for vision errors
+                Rotation2d robotThetaError = drive.getRotation().minus(visionRobotPose.getRotation());
+                Pose2d tagToRobotPose = drive.getPose().relativeTo(tagPos);
+
+                visionRobotPose =
+                    tagPos.transformBy(
+                        GeomUtil.poseToTransform(tagToRobotPose.rotateBy(robotThetaError)));
+
+                disambiguatedRobotPose = new Pose3d(new Translation3d(visionRobotPose.getX(), visionRobotPose.getY(), disambiguatedRobotPose.getZ()), new Rotation3d(visionRobotPose.getRotation()));
               }
             }
 

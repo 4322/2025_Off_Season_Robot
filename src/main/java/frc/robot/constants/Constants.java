@@ -29,6 +29,7 @@ public final class Constants {
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING_FIXED_VELOCITY;
   public static final boolean continuousNitrateRequestsEnabled = false;
   public static final boolean enableReefLock = false;
+  public static final boolean enableGlobalPoseTrigEstimation = false;
   public static final boolean debugPIDModeEnabled = true;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
