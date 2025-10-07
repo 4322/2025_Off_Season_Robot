@@ -250,11 +250,10 @@ public final class Constants {
     public static final double coralHoldVolts = 0.45;
 
     public static final double algaeIntakeVolts = 6;
-    public static final double coralIntakeVolts = 2;
+    public static final double coralIntakeVolts = 3;
 
     public static final double algaeReleaseVolts = -3.0;
-    public static final double coralReleaseVolts =
-        -3.0; // TODO make sure this is slow enough for scoring coral.
+    public static final double coralReleaseVolts = -3.0;
     public static final double coralReleaseVoltsL1 = -2.0;
 
     public static final double ejectVolts = -6.0;
@@ -293,6 +292,8 @@ public final class Constants {
     public static final double VelocityDetectionMaxAccumulationSeconds = 1;
     public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
 
+    public static final double coralGrabDelaySeconds =
+        0.1; // Time to wait before lowering elevator after coral is detected in End Effector
     public static final double algaeIntakingDelaySeconds =
         0.25; // Time to wait after algae is detected in End Effector before reducing voltage
     public static final double coralIntakingDelaySeconds =
