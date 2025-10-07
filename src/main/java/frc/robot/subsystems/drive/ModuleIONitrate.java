@@ -55,8 +55,7 @@ public class ModuleIONitrate implements ModuleIO {
     driveConfig.setPIDSettings(
         PIDSettings.defaultSettings(PIDConfigSlot.kSlot1)
             .setStaticFeedforward(constants.driveMotorGains.getStaticFeedforward().get())
-            .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get())
-            .setRampLimit(constants.driveMotorGains.getRampLimit().get()),
+            .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get()),
         PIDConfigSlot.kSlot1);
     driveConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.1, 5);
