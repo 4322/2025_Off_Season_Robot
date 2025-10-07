@@ -57,7 +57,6 @@ public class Robot extends LoggedRobot {
   public static PathPlannerPath KiloToFeed;
   public static PathPlannerPath FeedToKilo;
   public static PathPlannerPath FeedToLima;
-  
 
   // Mirrors of the above
   public static PathPlannerPath ThreeCoralStartToEcho;

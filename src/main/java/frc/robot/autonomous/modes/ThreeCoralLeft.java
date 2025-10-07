@@ -23,8 +23,8 @@ public class ThreeCoralLeft extends SequentialCommandGroup {
     setName("THREE_CORAL_LEFT");
     addRequirements(drive, superstructure, intakeSuperstructure);
     addCommands(
-        new AutoPoseReset(drive,
-        Robot.ThreeCoralStartToJuliet.getStartingHolonomicPose().get().getTranslation()),
+        new AutoPoseReset(
+            drive, Robot.ThreeCoralStartToJuliet.getStartingHolonomicPose().get().getTranslation()),
         AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
         new ScoreCoral(superstructure, Superstructure.Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),

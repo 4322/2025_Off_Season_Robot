@@ -21,11 +21,11 @@ public class DescoreAlgae extends Command {
   private DriveToPose driveToPose;
   public boolean running;
 
-  private Pose2d targetScoringPose = new Pose2d();
-  private Pose2d safeDistPose = new Pose2d();
-  private Rotation2d robotReefAngle = new Rotation2d();
+  private Pose2d targetScoringPose;
+  private Rotation2d robotReefAngle;
   private ReefStatus reefStatus;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
+  private Pose2d safeDescorePose;
 
   public enum ScoreState {
     SAFE_DISTANCE,
@@ -79,10 +79,47 @@ public class DescoreAlgae extends Command {
 
   @Override
   public void execute() {
+    drive.requestAutoRotateMode(Rotation2d.fromDegrees(reefStatus.getClosestRobotAngle().getDegrees()));
+
     if (superstructure.isAutoOperationMode()) {
+      safeDescorePose =
+      targetScoringPose.transformBy(
+          new Transform2d(
+              FieldConstants.KeypointPoses.reefSafeDistance - Math.abs(targetScoringPose.getX()),
+              0,
+              robotReefAngle.rotateBy(Rotation2d.k180deg)));
+      if (Robot.alliance == DriverStation.Alliance.Blue) {
+        safeDescorePose =
+            new Pose2d(
+                FieldConstants.KeypointPoses.descoreAlgaeBlue.rotateAround(
+                    FieldConstants.KeypointPoses.blueReefCenter,
+                    robotReefAngle.rotateBy(Rotation2d.k180deg)),
+                robotReefAngle);
+
+        targetScoringPose = 
+          new Pose2d(
+                  FieldConstants.KeypointPoses.descoreAlgaeDriveInBlue.rotateAround(
+                      FieldConstants.KeypointPoses.blueReefCenter,
+                      robotReefAngle.rotateBy(Rotation2d.k180deg)),
+                  robotReefAngle);
+      } else {
+        safeDescorePose =
+            new Pose2d(
+                FieldConstants.KeypointPoses.descoreAlgaeRed.rotateAround(
+                    FieldConstants.KeypointPoses.blueReefCenter,
+                    robotReefAngle.rotateBy(Rotation2d.k180deg)),
+                robotReefAngle);
+        targetScoringPose = 
+          new Pose2d(
+                  FieldConstants.KeypointPoses.descoreAlgaeDriveInRed.rotateAround(
+                      FieldConstants.KeypointPoses.blueReefCenter,
+                      robotReefAngle.rotateBy(Rotation2d.k180deg)),
+                  robotReefAngle);
+      }
+
       switch (state) {
         case SAFE_DISTANCE:
-          currentPoseRequest = () -> safeDistPose;
+          currentPoseRequest = () -> safeDescorePose;
           if (!driveToPose.isScheduled()) {
             driveToPose.schedule();
           }
@@ -105,7 +142,7 @@ public class DescoreAlgae extends Command {
           }
           break;
         case DRIVEBACK:
-          currentPoseRequest = () -> safeDistPose;
+          currentPoseRequest = () -> safeDescorePose;
           if (descoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
           }
