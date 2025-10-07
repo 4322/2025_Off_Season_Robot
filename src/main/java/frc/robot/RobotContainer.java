@@ -307,22 +307,28 @@ public class RobotContainer {
                     () ->
                         intakeSuperstructure.getIntakeSuperstate()
                             != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
-      
-      if (Constants.enableDriveToPoseTuning) {
-        driver.povRight().onTrue(new InstantCommand(() -> {
-          Translation2d scoringPos;
-          Rotation2d rotation;
-          if (Robot.alliance == Alliance.Blue) {
-            scoringPos = FieldConstants.KeypointPoses.rightReefBranchScoringBlue;
-            scoringPos = scoringPos.rotateAround(FieldConstants.KeypointPoses.blueReefCenter, Rotation2d.k180deg);
-            rotation = Rotation2d.kZero;
-          } else {
-            scoringPos = FieldConstants.KeypointPoses.rightReefBranchScoringRed;
-            rotation = Rotation2d.k180deg;
-          }
-          new DriveToPose(drive, new Pose2d(scoringPos, rotation)).schedule();
-        }));
-      }
+
+    if (Constants.enableDriveToPoseTuning) {
+      driver
+          .povRight()
+          .onTrue(
+              new InstantCommand(
+                  () -> {
+                    Translation2d scoringPos;
+                    Rotation2d rotation;
+                    if (Robot.alliance == Alliance.Blue) {
+                      scoringPos = FieldConstants.KeypointPoses.rightReefBranchScoringBlue;
+                      scoringPos =
+                          scoringPos.rotateAround(
+                              FieldConstants.KeypointPoses.blueReefCenter, Rotation2d.k180deg);
+                      rotation = Rotation2d.kZero;
+                    } else {
+                      scoringPos = FieldConstants.KeypointPoses.rightReefBranchScoringRed;
+                      rotation = Rotation2d.k180deg;
+                    }
+                    new DriveToPose(drive, new Pose2d(scoringPos, rotation)).schedule();
+                  }));
+    }
   }
 
   public static boolean isScoringTriggerHeld() {
