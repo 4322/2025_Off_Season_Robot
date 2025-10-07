@@ -52,7 +52,7 @@ public class ScoreCoral extends Command {
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
-    
+
     driveToPose = new DriveToPose(drive, currentPoseRequest);
     addRequirements(superstructure);
   }

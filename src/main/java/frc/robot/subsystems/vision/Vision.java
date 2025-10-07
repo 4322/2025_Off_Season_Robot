@@ -137,14 +137,21 @@ public class Vision extends SubsystemBase {
                         .get()
                         .toPose2d();
                 // Use gyro to correct for vision errors
-                Rotation2d robotThetaError = drive.getRotation().minus(visionRobotPose.getRotation());
+                Rotation2d robotThetaError =
+                    drive.getRotation().minus(visionRobotPose.getRotation());
                 Pose2d tagToRobotPose = drive.getPose().relativeTo(tagPos);
 
                 visionRobotPose =
                     tagPos.transformBy(
                         GeomUtil.poseToTransform(tagToRobotPose.rotateBy(robotThetaError)));
 
-                disambiguatedRobotPose = new Pose3d(new Translation3d(visionRobotPose.getX(), visionRobotPose.getY(), disambiguatedRobotPose.getZ()), new Rotation3d(visionRobotPose.getRotation()));
+                disambiguatedRobotPose =
+                    new Pose3d(
+                        new Translation3d(
+                            visionRobotPose.getX(),
+                            visionRobotPose.getY(),
+                            disambiguatedRobotPose.getZ()),
+                        new Rotation3d(visionRobotPose.getRotation()));
               }
             }
 
@@ -358,10 +365,9 @@ public class Vision extends SubsystemBase {
 
     if (-30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 30) {
       robotToReefFace = 180;
-      if (-27 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 27){
+      if (-27 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 27) {
         reefFaceAmbiguity = true;
-      }
-      else {
+      } else {
         reefFaceAmbiguity = false;
       }
       tagId =
@@ -370,10 +376,9 @@ public class Vision extends SubsystemBase {
               : FieldConstants.ReefFaceTag.GH.idBlue;
     } else if (30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 90) {
       robotToReefFace = -120;
-      if (33 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 87){
+      if (33 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 87) {
         reefFaceAmbiguity = true;
-      }
-      else {
+      } else {
         reefFaceAmbiguity = false;
       }
       tagId =
@@ -382,10 +387,9 @@ public class Vision extends SubsystemBase {
               : FieldConstants.ReefFaceTag.IJ.idBlue;
     } else if (90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 150) {
       robotToReefFace = -60;
-      if (93 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 147){
+      if (93 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 147) {
         reefFaceAmbiguity = true;
-      }
-      else {
+      } else {
         reefFaceAmbiguity = false;
       }
       tagId =
@@ -396,10 +400,9 @@ public class Vision extends SubsystemBase {
         || (-150 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -180)) {
       robotToReefFace = 0;
       if ((153 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 177)
-      || (-153 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -177)){
+          || (-153 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -177)) {
         reefFaceAmbiguity = true;
-      }
-      else {
+      } else {
         reefFaceAmbiguity = false;
       }
       tagId =
@@ -408,10 +411,9 @@ public class Vision extends SubsystemBase {
               : FieldConstants.ReefFaceTag.AB.idBlue;
     } else if (-150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -90) {
       robotToReefFace = 60;
-      if (-153 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -87){
+      if (-153 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -87) {
         reefFaceAmbiguity = true;
-      }
-      else {
+      } else {
         reefFaceAmbiguity = false;
       }
       tagId =
@@ -420,10 +422,9 @@ public class Vision extends SubsystemBase {
               : FieldConstants.ReefFaceTag.CD.idBlue;
     } else if (-90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -30) {
       robotToReefFace = 120;
-      if (-93 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -27){
+      if (-93 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -27) {
         reefFaceAmbiguity = true;
-      }
-      else {
+      } else {
         reefFaceAmbiguity = false;
       }
       tagId =
