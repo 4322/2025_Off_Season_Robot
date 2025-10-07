@@ -69,7 +69,6 @@ public class DriveToPose extends Command {
 
   static {
     driveKp.initDefault(Constants.AutoScoring.drivekP);
-    driveKd.initDefault(0.0);
     driveKd.initDefault(Constants.AutoScoring.drivekD);
     thetaKp.initDefault(Constants.Drive.autoRotatekP);
     thetaKd.initDefault(Constants.Drive.autoRotatekD);
