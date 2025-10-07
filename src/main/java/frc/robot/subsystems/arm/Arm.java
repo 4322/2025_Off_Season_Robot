@@ -20,7 +20,6 @@ public class Arm extends SubsystemBase {
   private double prevSetpoint = -1000;
   private double newSetpoint;
   private double elevatorHeight;
-  private boolean isSlow = false;
   private boolean isHomed;
 
   public Arm(ArmIO io) {
@@ -80,13 +79,8 @@ public class Arm extends SubsystemBase {
             }
 
             if (prevSetpoint != newSetpoint || Constants.continuousNitrateRequestsEnabled) {
-              if (isSlow) {
-                io.requestSlowPosition(newSetpoint);
-                prevSetpoint = newSetpoint;
-              } else {
                 io.requestPosition(newSetpoint);
                 prevSetpoint = newSetpoint;
-              }
             }
         }
       }
@@ -99,42 +93,34 @@ public class Arm extends SubsystemBase {
   }
 
   public void idle() {
-    isSlow = false;
     requestedSetpoint = Constants.Arm.armIdleDeg;
   }
 
   public void algaeHold() {
-    isSlow = false;
     requestedSetpoint = Constants.Arm.algaeHoldDeg;
   }
 
   public void coralHold() {
-    isSlow = false;
     requestedSetpoint = Constants.Arm.coralHoldDeg;
   }
 
   public void algaeGround() {
-    isSlow = false;
     requestedSetpoint = Constants.Arm.algaeGroundDeg;
   }
 
   public void algaeReef() {
-    isSlow = false;
     requestedSetpoint = Constants.Arm.descoringAlgaeDeg;
   }
 
   public void scoreAlgae(/*Side scoringSide*/ ) {
-    isSlow = false;
     requestedSetpoint = Constants.Arm.scoringAlgaeDeg;
   }
 
   public void reset() {
-    isSlow = false;
     prevSetpoint = -1;
   }
 
   public void prescoreCoral(Level level) {
-    isSlow = false;
     switch (level) {
       case L1:
         requestedSetpoint = Constants.Arm.prescoringL1CoralDeg;
@@ -152,7 +138,6 @@ public class Arm extends SubsystemBase {
   }
 
   public void scoreCoral(Level level) {
-    isSlow = false;
     switch (level) {
       case L1:
         requestedSetpoint = Constants.Arm.scoringL1CoralDeg;
@@ -175,7 +160,6 @@ public class Arm extends SubsystemBase {
   }
 
   public void safeBargeRetract() {
-    isSlow = false;
     requestedSetpoint = Constants.Arm.safeBargeRetractDeg;
   }
 
@@ -185,12 +169,10 @@ public class Arm extends SubsystemBase {
   }
 
   public void climbing() {
-    isSlow = false;
     requestedSetpoint = Constants.Arm.climbingDeg;
   }
 
   public void eject() {
-    isSlow = false;
     requestedSetpoint = Constants.Arm.ejectDeg;
   }
 

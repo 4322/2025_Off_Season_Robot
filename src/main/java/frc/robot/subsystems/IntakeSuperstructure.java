@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -17,6 +18,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   private boolean requestDeploy;
   private boolean requestIntakeEject;
   private boolean requestUnhome;
+  private boolean isHomed = false;
 
   private enum RetractLockedOutStates {
     FALSE,
@@ -28,14 +30,15 @@ public class IntakeSuperstructure extends SubsystemBase {
   private Timer retractTimeOutPickupAreaTimer = new Timer();
   private RetractLockedOutStates retractLockedOutState = RetractLockedOutStates.FALSE;
 
-  private IntakeSuperstates state = IntakeSuperstates.UNHOMED;
+  private IntakeSuperstates state = IntakeSuperstates.HOMELESS;
 
   public Deployer deployer;
   private Rollers rollers;
   private Indexer indexer;
 
   public static enum IntakeSuperstates {
-    UNHOMED,
+    HOMELESS,
+    DISABLED,
     RETRACT_IDLE,
     FEED,
     SLOW_REJECT,
@@ -56,14 +59,24 @@ public class IntakeSuperstructure extends SubsystemBase {
     if (requestHomed) {
       deployer.setHome();
       requestHomed = false;
-      state = IntakeSuperstates.RETRACT_IDLE;
+      isHomed = true;
+      state = IntakeSuperstates.DISABLED;
+    }
+
+    if (DriverStation.isDisabled() && isHomed){
+      state = IntakeSuperstates.DISABLED;
     }
 
     Logger.recordOutput("IntakeSuperstructure/State", state.toString());
 
     switch (state) {
-      case UNHOMED:
+      case HOMELESS:
         break;
+      case DISABLED:
+      if (DriverStation.isEnabled()) {
+        state = IntakeSuperstates.RETRACT_IDLE;
+        }
+      break;
       case RETRACT_IDLE:
         deployer.retract();
         if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {
@@ -200,7 +213,7 @@ public class IntakeSuperstructure extends SubsystemBase {
     deployer.clearHome();
     rollers.idle();
     indexer.idle();
-    state = IntakeSuperstates.UNHOMED;
+    state = IntakeSuperstates.HOMELESS;
     unsetAllRequests();
     requestUnhome = true;
   }

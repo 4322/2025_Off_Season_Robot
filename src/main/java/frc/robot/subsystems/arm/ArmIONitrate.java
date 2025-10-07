@@ -51,20 +51,6 @@ public class ArmIONitrate implements ArmIO {
             .setRampLimit(240),
         PIDConfigSlot.kSlot0);
 
-    armConfig.setPIDSettings(
-        PIDSettings.defaultSettings(PIDConfigSlot.kSlot1)
-            .setPID(Constants.Arm.kP, Constants.Arm.kI, 0)
-            .setFeedforwardMode(PIDFeedforwardMode.kArm)
-            .setGravitationalFeedforward(Constants.Arm.kG)
-            .setMinwrapConfig(new MinwrapConfig.Disabled())
-            .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
-            .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
-            .setMotionProfileVelocityLimit(Constants.Arm.slowVelocityLimit)
-            .setISaturation(Constants.Arm.iSat)
-            .setIZone(Constants.Arm.iZone)
-            .setRampLimit(240),
-        PIDConfigSlot.kSlot1);
-
     if (Constants.enableArmSensor) {
       armConfig.setFeedbackSensorSettings(
           FeedbackSensorSettings.defaultSettings()
@@ -154,14 +140,6 @@ public class ArmIONitrate implements ArmIO {
   public void requestPosition(double requestSetpoint) {
     armMotor.setRequest(
         PIDPositionRequest.setPosition(
-            Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg)));
-    lastRequestedPosDeg = requestSetpoint;
-  }
-
-  @Override
-  public void requestSlowPosition(double requestSetpoint) {
-    armMotor.setRequest(
-        SlowPIDPositionRequest.setPosition(
             Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg)));
     lastRequestedPosDeg = requestSetpoint;
   }
