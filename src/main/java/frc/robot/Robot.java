@@ -199,7 +199,8 @@ public class Robot extends LoggedRobot {
       CenterStartToGulf = PathPlannerPath.fromPathFile("Center Start to Gulf");
       GulfToGulfHotel = PathPlannerPath.fromPathFile("Gulf to Gulf-Hotel");
       GulfHotelToCenterBarge = PathPlannerPath.fromPathFile("Gulf-Hotel to Center Barge");
-      CenterBargeToCenterAlgaeScore = PathPlannerPath.fromPathFile("Center Barge to Center Algae Score");
+      CenterBargeToCenterAlgaeScore =
+          PathPlannerPath.fromPathFile("Center Barge to Center Algae Score");
       CenterAlgaeScoreToLeave = PathPlannerPath.fromPathFile("Center Algae Score to Leave");
 
       ThreeCoralStartToJuliet = PathPlannerPath.fromPathFile("Three Coral Start to Juliet");
@@ -207,9 +208,9 @@ public class Robot extends LoggedRobot {
       FeedToKilo = PathPlannerPath.fromPathFile("Feed to Kilo");
       KiloToFeed = PathPlannerPath.fromPathFile("Kilo to Feed");
       FeedToLima = PathPlannerPath.fromPathFile("Feed to Lima");
-      
 
-      ThreeCoralStartToEcho = PathPlannerPath.fromPathFile("Three Coral Start to Juliet").mirrorPath();
+      ThreeCoralStartToEcho =
+          PathPlannerPath.fromPathFile("Three Coral Start to Juliet").mirrorPath();
       EchoToFeed = PathPlannerPath.fromPathFile("Juliet to Feed").mirrorPath();
       FeedToDelta = PathPlannerPath.fromPathFile("Feed to Kilo").mirrorPath();
       DeltaToFeed = PathPlannerPath.fromPathFile("Kilo to Feed").mirrorPath();
