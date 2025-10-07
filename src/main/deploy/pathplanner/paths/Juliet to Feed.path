@@ -12,20 +12,20 @@
         "y": 5.858
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "JulietIn"
     },
     {
       "anchor": {
-        "x": 1.989,
-        "y": 6.54
+        "x": 2.0,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 2.2229997039189953,
-        "y": 5.467499935400551
+        "x": 2.5738750136135917,
+        "y": 5.926124986386408
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "FeedLeft"
     }
   ],
   "rotationTargets": [

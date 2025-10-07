@@ -12,20 +12,20 @@
         "y": 5.585
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "KiloIn"
     },
     {
       "anchor": {
-        "x": 1.989,
-        "y": 6.54
+        "x": 2.0,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 3.1005000000000003,
-        "y": 4.960999999999999
+        "x": 3.1115000000000004,
+        "y": 4.920999999999999
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "FeedLeft"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -54.45368864478661
+    "rotation": -53.13010235415597
   },
   "reversed": false,
   "folder": null,

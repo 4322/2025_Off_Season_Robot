@@ -1,14 +1,14 @@
-package frc.robot.commands;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 
-public class AlgaeScoreAuto extends Command {
+public class AlgaePrescoreAuto extends Command {
   private Superstructure superstructure;
   private Drive drive;
 
-  public AlgaeScoreAuto(Superstructure superstructure, Drive drive) {
+  public AlgaePrescoreAuto(Superstructure superstructure, Drive drive) {
     this.superstructure = superstructure;
     this.drive = drive;
     addRequirements(superstructure);
@@ -16,7 +16,7 @@ public class AlgaeScoreAuto extends Command {
 
   @Override
   public void initialize() {
-    superstructure.requestAlgaeScore();
+    superstructure.requestAlgaePrescore();
   }
 
   @Override
@@ -24,7 +24,7 @@ public class AlgaeScoreAuto extends Command {
 
   @Override
   public boolean isFinished() {
-    return !superstructure.isAlgaeHeld();
+    return superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint();
   }
 
   @Override

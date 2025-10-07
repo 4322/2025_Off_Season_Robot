@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.78175,
-        "y": 3.8397499999999996
+        "x": 5.29425,
+        "y": 5.38025
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.137154131721137,
-        "y": 3.8970200157518486
+        "x": 6.115977775282622,
+        "y": 5.9119539874970615
       },
       "isLocked": false,
-      "linkedName": "GulfIn"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.54225,
-        "y": 4.0055
+        "x": 7.5,
+        "y": 7.4
       },
       "prevControl": {
-        "x": 6.292681676520946,
-        "y": 3.990814908381144
+        "x": 7.28083511013849,
+        "y": 7.183062626136552
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Gulf-HotelOut"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -123.04812486997523
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -123.04812486997523
   },
   "useDefaultConstraints": true
 }
