@@ -96,14 +96,16 @@ public class DrivetrainConstants {
       PIDSettings.defaultSettings(PIDConfigSlot.kSlot0)
           .setPID(drivekP, 0, drivekD)
           .setStaticFeedforward(drivekS)
-          .setVelocityFeedforward(drivekV);
+          .setVelocityFeedforward(drivekV)
+          .setRampLimit(240);
   private static final PIDSettings turnPIDSettings =
       PIDSettings.defaultSettings(PIDConfigSlot.kSlot0)
           .setPID(turnkP, 0, turnkD)
           .setMotionProfileAccelLimit(turnAccelerationLimit)
           .setMotionProfileDeaccelLimit(turnDeaccelerationLimit)
           .setMotionProfileVelocityLimit(turnVelocityLimit)
-          .setMinwrapConfig(new MinwrapConfig.Enabled());
+          .setMinwrapConfig(new MinwrapConfig.Enabled())
+          .setRampLimit(240);
 
   private static final SwerveModuleConstantsFactory moduleCreator =
       new SwerveModuleConstantsFactory()
