@@ -29,7 +29,7 @@ public class Superstructure extends SubsystemBase {
   private boolean ishomed = false;
 
   public enum Superstates {
-    UNHOMED,
+    HOMELESS,
     DISABLED,
     IDLE,
     EJECT,
@@ -63,7 +63,7 @@ public class Superstructure extends SubsystemBase {
 
   OperationMode mode = OperationMode.MANUAL;
 
-  Superstates state = Superstates.UNHOMED;
+  Superstates state = Superstates.HOMELESS;
 
   private EndEffector endEffector;
   private Arm arm;
@@ -107,7 +107,7 @@ public class Superstructure extends SubsystemBase {
     Logger.recordOutput("Superstructure/requestedLevel", level);
 
     switch (state) {
-      case UNHOMED:
+      case HOMELESS:
         elevator.reset();
         arm.reset();
         break;
@@ -272,7 +272,9 @@ public class Superstructure extends SubsystemBase {
             endEffector.releaseCoralL1();
           }
         } else {
-          endEffector.releaseCoralNormal();
+          if (arm.atSetpoint() && elevator.atSetpoint()) {
+            endEffector.releaseCoralNormal();
+          }
         }
 
         if (requestIdle) {

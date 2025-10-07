@@ -22,13 +22,16 @@ public class Eject extends Command {
 
   @Override
   public void execute() {
-    superstructure.requestEject();
-    intakeSuperstructure.requestEject();
+    if (driver.povUp().getAsBoolean()) {
+      intakeSuperstructure.requestEject();
+    } else if (driver.povDown().getAsBoolean()) {
+      superstructure.requestEject();
+    }
   }
 
   @Override
   public boolean isFinished() {
-    return !driver.povUp().getAsBoolean();
+    return !driver.povUp().getAsBoolean() && !driver.povDown().getAsBoolean();
   }
 
   @Override

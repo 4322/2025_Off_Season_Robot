@@ -152,7 +152,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void scoreCoral(Level level) {
-    isSlow = true;
+    isSlow = false;
     switch (level) {
       case L1:
         requestedSetpoint = Constants.Arm.scoringL1CoralDeg;
