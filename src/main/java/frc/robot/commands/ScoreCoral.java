@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.drive.Drive;
@@ -45,8 +46,14 @@ public class ScoreCoral extends Command {
     DRIVEBACK,
     HOLD_POSITION
   }
-
+  private enum DriveToPoseTesting {
+    SAFE_DISTANCE,
+    DRIVE_IN,
+    DRIVEBACK,
+  }
   ScoreState state = ScoreState.SAFE_DISTANCE;
+
+  DriveToPoseTesting driveToPoseState = DriveToPoseTesting.SAFE_DISTANCE;
 
   public ScoreCoral(Superstructure superstructure, Superstructure.Level level, Drive drive) {
     this.superstructure = superstructure;
@@ -167,7 +174,71 @@ public class ScoreCoral extends Command {
   @Override
   public void execute() {
 
-    if (superstructure.isAutoOperationMode()) {
+    if (Constants.enableDriveToPoseTesting){
+    Pose2d safeDistPose =
+    targetScoringPose.transformBy(
+        new Transform2d(
+            FieldConstants.KeypointPoses.safeDistFromCoralScoringPos,
+            0,
+            robotReefAngle.rotateBy(Rotation2d.k180deg)));
+  switch(driveToPoseState){
+      case SAFE_DISTANCE: 
+      currentPoseRequest = () -> safeDistPose;
+      if ((isInSafeArea() || driveToPose.atGoal()) && RobotContainer.isScoringTriggerHeld()) {
+        driveToPoseState = DriveToPoseTesting.DRIVE_IN;
+      }
+      break;
+      case DRIVE_IN:
+      currentPoseRequest = () -> leftBranchScoringPos;
+      if (driver.povRight().getAsBoolean() && driveToPose.atGoal()){
+        driveToPoseState = DriveToPoseTesting.SAFE_DISTANCE;
+      }
+      break;
+   }
+   if (driver.povLeft().getAsBoolean()){
+    running = false;
+   }
+
+
+      
+  if (Constants.enableDriveToPoseOverride &&  driveToPoseState == DriveToPoseTesting.SAFE_DISTANCE){
+
+        double x = -RobotContainer.driver.getLeftY();
+        double y = -RobotContainer.driver.getLeftX();
+        Rotation2d joystickAngle = Rotation2d.fromRadians(Math.atan2(y, x));
+        double joystickMag = Math.hypot(x, y);
+
+        if (level == Level.L1) {
+
+          if (joystickMag > 0.75) {
+            if (joystickAngle.getDegrees() > 30) {
+              targetScoringPose = leftTroughScoringPose;
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+            } else if (joystickAngle.minus(robotReefAngle).getDegrees() < -30) {
+              targetScoringPose = rightTroughScoringPose;
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+            } else {
+              targetScoringPose = middleTroughScoringPose;
+              superstructure.enableGlobalPose();
+            }
+          }
+
+        } else {
+
+          if (joystickMag > 0.75) {
+            if (joystickAngle.getDegrees() > 0) {
+              targetScoringPose = leftBranchScoringPos;
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+            } else if (joystickAngle.getDegrees() < 0) {
+              targetScoringPose = rightBranchScoringPose;
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+            }
+          }
+        }
+      }
+    }
+
+    else if (superstructure.isAutoOperationMode() && !Constants.enableDriveToPoseTesting) {
       if (state == ScoreState.SAFE_DISTANCE) {
 
         double x = -RobotContainer.driver.getLeftY();
@@ -228,7 +299,7 @@ public class ScoreCoral extends Command {
             superstructure.requestPrescoreCoral(level);
           }
 
-          if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
+          if ((superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) && RobotContainer.isScoringTriggerHeld()) {
             state = ScoreState.DRIVE_IN;
           }
           break;
@@ -280,8 +351,8 @@ public class ScoreCoral extends Command {
 
   @Override
   public boolean isFinished() {
-    return (scoreButtonReleased() && !superstructure.isAutoOperationMode())
-        || (superstructure.isAutoOperationMode() && !running);
+    return (scoreButtonReleased() && !superstructure.isAutoOperationMode() && !Constants.enableDriveToPoseTesting)
+        || (superstructure.isAutoOperationMode() && !running && !Constants.enableDriveToPoseTesting) || (Constants.enableDriveToPoseTesting && !running);
   }
 
   @Override
