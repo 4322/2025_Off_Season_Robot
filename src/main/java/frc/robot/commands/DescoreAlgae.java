@@ -70,7 +70,7 @@ public class DescoreAlgae extends Command {
     }
 
     // TODO: Make sure safe dist is the same for Algae as it is for coral
-    safeDistPose = targetScoringPose.transformBy(
+    safeDescorePose = targetScoringPose.transformBy(
         new Transform2d(
             FieldConstants.KeypointPoses.safeDistFromAlgaeDescorePos,
             0,
