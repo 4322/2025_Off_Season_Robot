@@ -21,9 +21,9 @@ import frc.robot.commands.Eject;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.SwitchOperationModeCommand;
 import frc.robot.constants.Constants;
-import frc.robot.constants.FieldConstants;
 import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.constants.DrivetrainConstants;
+import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
@@ -226,7 +226,7 @@ public class RobotContainer {
 
     driver.povUp().whileTrue(new Eject(intakeSuperstructure, superstructure)); // Intake Eject
 
-    driver.povDown().whileTrue(new Eject(intakeSuperstructure, superstructure)); //Score Eject
+    driver.povDown().whileTrue(new Eject(intakeSuperstructure, superstructure)); // Score Eject
 
     // Prescore/Descore Levels
     driver
@@ -234,7 +234,9 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && !endEffector.hasAlgae() && !Constants.enableDriveToPoseTestingScoreCoral) {
+                  if (!endEffector.hasCoral()
+                      && !endEffector.hasAlgae()
+                      && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new AlgaeIntakeGround(superstructure).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new ScoreCoral(superstructure, Level.L1, drive).schedule();
@@ -245,7 +247,9 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && !endEffector.hasAlgae() && !Constants.enableDriveToPoseTestingScoreCoral) {
+                  if (!endEffector.hasCoral()
+                      && !endEffector.hasAlgae()
+                      && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new DescoreAlgae(superstructure, Level.L2, drive).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new ScoreCoral(superstructure, Level.L2, drive).schedule();
@@ -256,7 +260,9 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && !endEffector.hasAlgae() && !Constants.enableDriveToPoseTestingScoreCoral) {
+                  if (!endEffector.hasCoral()
+                      && !endEffector.hasAlgae()
+                      && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new DescoreAlgae(superstructure, Level.L3, drive).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new ScoreCoral(superstructure, Level.L3, drive).schedule();
@@ -267,7 +273,9 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && endEffector.hasAlgae() && !Constants.enableDriveToPoseTestingScoreCoral) {
+                  if (!endEffector.hasCoral()
+                      && endEffector.hasAlgae()
+                      && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new ScoreCoral(superstructure, Level.L4, drive).schedule();

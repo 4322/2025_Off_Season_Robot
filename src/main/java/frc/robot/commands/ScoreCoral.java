@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.constants.FieldConstants;
 import frc.robot.constants.Constants;
+import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.drive.Drive;
@@ -46,11 +46,13 @@ public class ScoreCoral extends Command {
     DRIVEBACK,
     HOLD_POSITION
   }
+
   private enum DriveToPoseTesting {
     SAFE_DISTANCE,
     DRIVE_IN,
     DRIVEBACK,
   }
+
   ScoreState state = ScoreState.SAFE_DISTANCE;
 
   DriveToPoseTesting driveToPoseState = DriveToPoseTesting.SAFE_DISTANCE;
@@ -174,35 +176,34 @@ public class ScoreCoral extends Command {
   @Override
   public void execute() {
 
-    if (Constants.enableDriveToPoseTestingScoreCoral){
-    Pose2d safeDistPose =
-    targetScoringPose.transformBy(
-        new Transform2d(
-            FieldConstants.KeypointPoses.safeDistFromCoralScoringPos,
-            0,
-            robotReefAngle.rotateBy(Rotation2d.k180deg)));
-  switch(driveToPoseState){
-      case SAFE_DISTANCE: 
-      currentPoseRequest = () -> safeDistPose;
-      if ((isInSafeArea() || driveToPose.atGoal()) && RobotContainer.isScoringTriggerHeld()) {
-        driveToPoseState = DriveToPoseTesting.DRIVE_IN;
+    if (Constants.enableDriveToPoseTestingScoreCoral) {
+      Pose2d safeDistPose =
+          targetScoringPose.transformBy(
+              new Transform2d(
+                  FieldConstants.KeypointPoses.safeDistFromCoralScoringPos,
+                  0,
+                  robotReefAngle.rotateBy(Rotation2d.k180deg)));
+      switch (driveToPoseState) {
+        case SAFE_DISTANCE:
+          currentPoseRequest = () -> safeDistPose;
+          if ((isInSafeArea() || driveToPose.atGoal()) && RobotContainer.isScoringTriggerHeld()) {
+            driveToPoseState = DriveToPoseTesting.DRIVE_IN;
+          }
+          break;
+        case DRIVE_IN:
+          currentPoseRequest = () -> leftBranchScoringPos;
+          if (driver.povRight().getAsBoolean() && driveToPose.atGoal()) {
+            driveToPoseState = DriveToPoseTesting.SAFE_DISTANCE;
+          }
+          break;
       }
-      break;
-      case DRIVE_IN:
-      currentPoseRequest = () -> leftBranchScoringPos;
-      if (driver.povRight().getAsBoolean() && driveToPose.atGoal()){
-        driveToPoseState = DriveToPoseTesting.SAFE_DISTANCE;
+
+      if (driver.povLeft().getAsBoolean()) {
+        running = false;
       }
-      break;
-   }
-   
-   if (driver.povLeft().getAsBoolean()){
-    running = false;
-   }
 
-
-      
-  if (Constants.enableDriveToPoseOverride &&  driveToPoseState == DriveToPoseTesting.SAFE_DISTANCE){
+      if (Constants.enableDriveToPoseOverride
+          && driveToPoseState == DriveToPoseTesting.SAFE_DISTANCE) {
 
         double x = -RobotContainer.driver.getLeftY();
         double y = -RobotContainer.driver.getLeftX();
@@ -237,9 +238,8 @@ public class ScoreCoral extends Command {
           }
         }
       }
-    }
-
-    else if (superstructure.isAutoOperationMode() && !Constants.enableDriveToPoseTestingScoreCoral) {
+    } else if (superstructure.isAutoOperationMode()
+        && !Constants.enableDriveToPoseTestingScoreCoral) {
       if (state == ScoreState.SAFE_DISTANCE) {
 
         double x = -RobotContainer.driver.getLeftY();
@@ -300,7 +300,8 @@ public class ScoreCoral extends Command {
             superstructure.requestPrescoreCoral(level);
           }
 
-          if ((superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) && RobotContainer.isScoringTriggerHeld()) {
+          if ((superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint())
+              && RobotContainer.isScoringTriggerHeld()) {
             state = ScoreState.DRIVE_IN;
           }
           break;
@@ -352,8 +353,13 @@ public class ScoreCoral extends Command {
 
   @Override
   public boolean isFinished() {
-    return (scoreButtonReleased() && !superstructure.isAutoOperationMode() && !Constants.enableDriveToPoseTestingScoreCoral)
-        || (superstructure.isAutoOperationMode() && !running && !Constants.enableDriveToPoseTestingScoreCoral) || (Constants.enableDriveToPoseTestingScoreCoral && !running);
+    return (scoreButtonReleased()
+            && !superstructure.isAutoOperationMode()
+            && !Constants.enableDriveToPoseTestingScoreCoral)
+        || (superstructure.isAutoOperationMode()
+            && !running
+            && !Constants.enableDriveToPoseTestingScoreCoral)
+        || (Constants.enableDriveToPoseTestingScoreCoral && !running);
   }
 
   @Override
