@@ -63,7 +63,7 @@ public class IntakeSuperstructure extends SubsystemBase {
       state = IntakeSuperstates.DISABLED;
     }
 
-    if (DriverStation.isDisabled() && isHomed){
+    if (DriverStation.isDisabled() && isHomed) {
       state = IntakeSuperstates.DISABLED;
     }
 
@@ -73,10 +73,10 @@ public class IntakeSuperstructure extends SubsystemBase {
       case HOMELESS:
         break;
       case DISABLED:
-      if (DriverStation.isEnabled()) {
-        state = IntakeSuperstates.RETRACT_IDLE;
+        if (DriverStation.isEnabled()) {
+          state = IntakeSuperstates.RETRACT_IDLE;
         }
-      break;
+        break;
       case RETRACT_IDLE:
         deployer.retract();
         if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {

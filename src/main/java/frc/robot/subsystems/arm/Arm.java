@@ -79,8 +79,8 @@ public class Arm extends SubsystemBase {
             }
 
             if (prevSetpoint != newSetpoint || Constants.continuousNitrateRequestsEnabled) {
-                io.requestPosition(newSetpoint);
-                prevSetpoint = newSetpoint;
+              io.requestPosition(newSetpoint);
+              prevSetpoint = newSetpoint;
             }
         }
       }
