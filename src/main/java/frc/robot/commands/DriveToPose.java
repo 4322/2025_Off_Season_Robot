@@ -229,18 +229,18 @@ public class DriveToPose extends Command {
     Logger.recordOutput("DriveToPose/ThetaMeasured", currentPose.getRotation().getRadians());
     Logger.recordOutput("DriveToPose/ThetaSetpoint", thetaController.getSetpoint().position);
     Logger.recordOutput(
-        "Odometry/DriveToPoseSetpoint",
+        "DriveToPose/DriveToPoseSetpoint",
         new Pose2d(
             lastSetpointTranslation, new Rotation2d(thetaController.getSetpoint().position)));
-    Logger.recordOutput("Odometry/DriveToPoseGoal", targetPose);
+    Logger.recordOutput("DriveToPose/DriveToPoseGoal", targetPose);
   }
 
   @Override
   public void end(boolean interrupted) {
     running = false;
     drive.runVelocity(new ChassisSpeeds(), true);
-    Logger.recordOutput("Odometry/DriveToPoseSetpoint", new double[] {});
-    Logger.recordOutput("Odometry/DriveToPoseGoal", new double[] {});
+    Logger.recordOutput("DriveToPose/DriveToPoseSetpoint", new double[] {});
+    Logger.recordOutput("DriveToPose/DriveToPoseGoal", new double[] {});
   }
 
   /** Checks if the robot is at the final pose. */
