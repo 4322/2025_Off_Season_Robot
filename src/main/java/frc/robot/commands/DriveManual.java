@@ -13,7 +13,6 @@ import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ClockUtil;
 import frc.robot.util.ReefStatus;
-import org.littletonrobotics.junction.Logger;
 
 public class DriveManual extends Command {
   private Drive drive;
