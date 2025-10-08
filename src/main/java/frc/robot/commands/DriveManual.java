@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -15,6 +13,7 @@ import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ClockUtil;
 import frc.robot.util.ReefStatus;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveManual extends Command {
   private Drive drive;
@@ -31,8 +30,8 @@ public class DriveManual extends Command {
   public DriveManual(Drive drive) {
     this.drive = drive;
 
-    autoRotateController.enableContinuousInput(-Math.PI, Math.PI);
-    autoRotateController.setTolerance(Constants.Drive.angularErrorToleranceRad);
+    autoRotateController.enableContinuousInput(-180, 180);
+    autoRotateController.setTolerance(Constants.Drive.angularErrorToleranceDeg);
     addRequirements(drive);
   }
 
@@ -104,7 +103,7 @@ public class DriveManual extends Command {
           autoRotateController.setD(rotKd.get());
         }
         Logger.recordOutput("AutoRotate/PIDVelocity", autoRotateController.atSetpoint());
-        
+
         // Clear first reef lock if we exited field relative state while in reef lock mode
         if (firstReefLock) {
           firstReefLock = false;
@@ -112,7 +111,7 @@ public class DriveManual extends Command {
 
         rot =
             autoRotateController.calculate(
-                drive.getRotation().getRadians(), drive.getTargetAngle().getRadians());
+                drive.getRotation().getDegrees(), drive.getTargetAngle().getDegrees());
         break;
     }
     drive.runVelocity(new ChassisSpeeds(dx, dy, rot), true);
