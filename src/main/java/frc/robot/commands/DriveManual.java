@@ -13,14 +13,13 @@ import frc.robot.constants.DrivetrainConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ClockUtil;
 import frc.robot.util.ReefStatus;
-import org.littletonrobotics.junction.Logger;
 
 public class DriveManual extends Command {
   private Drive drive;
   private PIDController autoRotateController =
       new PIDController(Constants.Drive.autoRotatekP, 0, Constants.Drive.autoRotatekD);
   private boolean firstReefLock;
-  private double currentReefLockRad;
+  private double currentReefLockDeg;
 
   private static final LoggedTunableNumber rotKp =
       new LoggedTunableNumber("AutoRotate/RotateKp", Constants.Drive.autoRotatekP);
@@ -79,20 +78,20 @@ public class DriveManual extends Command {
             && RobotContainer.getSuperstructure().isCoralHeld()
             && Math.abs(rot) < 0.01) {
           ReefStatus reefStatus = RobotContainer.getSuperstructure().getReefStatus();
-          double newReefLockRad = reefStatus.getClosestRobotAngle().getRadians();
+          double newReefLockDeg = reefStatus.getClosestRobotAngle().getDegrees();
 
           // Lock heading to reef face first time we engage mode
           if (!firstReefLock) {
             firstReefLock = true;
-            currentReefLockRad = newReefLockRad;
+            currentReefLockDeg = newReefLockDeg;
           }
 
-          if (currentReefLockRad != newReefLockRad && !reefStatus.getReefFaceAmbiguity()) {
-            currentReefLockRad = newReefLockRad;
+          if (currentReefLockDeg != newReefLockDeg && !reefStatus.getReefFaceAmbiguity()) {
+            currentReefLockDeg = newReefLockDeg;
           }
 
           rot =
-              autoRotateController.calculate(drive.getRotation().getRadians(), currentReefLockRad);
+              autoRotateController.calculate(drive.getRotation().getDegrees(), currentReefLockDeg);
           if (autoRotateController.atSetpoint()) {
             rot = 0;
           }
