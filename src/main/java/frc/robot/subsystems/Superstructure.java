@@ -232,26 +232,22 @@ public class Superstructure extends SubsystemBase {
         endEffector.intakeCoral();
         coralPickupTimer.start();
 
-        if (coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
+        if (!coralElevatorPickUp && coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
           elevator.pickupCoral();
-        }
-
-        if (coralPickupTimer.hasElapsed(Constants.Elevator.coralDetectionHeightThresholdSecs)) {
           coralPickupTimer.stop();
           coralPickupTimer.reset();
           coralElevatorPickUp = true;
         }
 
-        if (coralElevatorPickUp) {
+        if (endEffector.hasCoral()) {
+          state = Superstates.CORAL_HELD;
           coralElevatorPickUp = false;
-          if (endEffector.hasCoral()) {
-            state = Superstates.CORAL_HELD;
-          } else if (!endEffector.hasCoral()
-              && !intakeSuperstructure.isCoralDetectedPickupArea()
-              && arm.atSetpoint()
-              && getElevatorHeight() >= Constants.Elevator.minElevatorSafeHeightMeters) {
-            state = Superstates.IDLE;
-          }
+        } else if (!endEffector.hasCoral()
+            && !intakeSuperstructure.isCoralDetectedPickupArea()
+            && arm.atSetpoint()
+            && getElevatorHeight() >= Constants.Elevator.minElevatorSafeHeightMeters) {
+          state = Superstates.IDLE;
+          coralElevatorPickUp = false;
         }
 
         break;
