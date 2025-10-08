@@ -300,8 +300,7 @@ public class ScoreCoral extends Command {
             superstructure.requestPrescoreCoral(level);
           }
 
-          if ((superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint())
-              && RobotContainer.isScoringTriggerHeld()) {
+          if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
             state = ScoreState.DRIVE_IN;
           }
           break;

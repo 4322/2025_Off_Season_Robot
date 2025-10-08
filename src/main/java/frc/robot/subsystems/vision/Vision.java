@@ -272,11 +272,9 @@ public class Vision extends SubsystemBase {
 
                     // Must be within the field boundaries
                     || visionRobotPose.getX() < -0.5
-                    || visionRobotPose.getX()
-                        > FieldConstants.fieldLength + 0.5
+                    || visionRobotPose.getX() > FieldConstants.fieldLength + 0.5
                     || visionRobotPose.getY() < -0.5
-                    || visionRobotPose.getY()
-                        > FieldConstants.fieldWidth + 0.5
+                    || visionRobotPose.getY() > FieldConstants.fieldWidth + 0.5
                     || avgTagDistance > Constants.Vision.maxAvgTagDistance;
 
             // Add pose to log
