@@ -58,6 +58,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
 
 /**
@@ -322,9 +323,11 @@ public class RobotContainer {
                           scoringPos.rotateAround(
                               FieldConstants.KeypointPoses.blueReefCenter, Rotation2d.k180deg);
                       rotation = Rotation2d.kZero;
+                      vision.enableSingleTagSingleCam(FieldConstants.ReefFaceTag.AB.idBlue, SingleTagCamera.RIGHT);
                     } else {
                       scoringPos = FieldConstants.KeypointPoses.rightReefBranchScoringRed;
                       rotation = Rotation2d.k180deg;
+                      vision.enableSingleTagSingleCam(FieldConstants.ReefFaceTag.AB.idRed, SingleTagCamera.RIGHT);
                     }
                     new DriveToPose(drive, new Pose2d(scoringPos, rotation)).schedule();
                   }));
