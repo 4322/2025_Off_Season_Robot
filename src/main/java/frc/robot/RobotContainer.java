@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.autonomous.AutonomousSelector;
 import frc.robot.commands.AlgaeIntakeGround;
@@ -341,12 +340,15 @@ public class RobotContainer {
                   }));
 
       driver
-        .povRight()
-        .onFalse(
-            new InstantCommand(() -> {
-              if (drivetopose.isScheduled()) {
-                drivetopose.cancel();}
-              ;}));
+          .povRight()
+          .onFalse(
+              new InstantCommand(
+                  () -> {
+                    if (drivetopose.isScheduled()) {
+                      drivetopose.cancel();
+                    }
+                    ;
+                  }));
     }
     if (Constants.tuneAutoRotate) {
       driver
