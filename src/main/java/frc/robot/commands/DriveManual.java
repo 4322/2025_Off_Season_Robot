@@ -30,8 +30,8 @@ public class DriveManual extends Command {
   public DriveManual(Drive drive) {
     this.drive = drive;
 
-    autoRotateController.enableContinuousInput(-Math.PI, Math.PI);
-    autoRotateController.setTolerance(Constants.Drive.angularErrorToleranceRad);
+    autoRotateController.enableContinuousInput(-180, 180);
+    autoRotateController.setTolerance(Constants.Drive.angularErrorToleranceDeg);
     addRequirements(drive);
   }
 
@@ -111,7 +111,7 @@ public class DriveManual extends Command {
 
         rot =
             autoRotateController.calculate(
-                drive.getRotation().getRadians(), drive.getTargetAngle().getRadians());
+                drive.getRotation().getDegrees(), drive.getTargetAngle().getDegrees());
         break;
     }
     drive.runVelocity(new ChassisSpeeds(dx, dy, rot), true);

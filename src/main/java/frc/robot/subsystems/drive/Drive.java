@@ -238,7 +238,7 @@ public class Drive extends SubsystemBase {
   }
 
   public boolean atAngularSetpoint(double setpointRad) {
-    return atAngularSetpoint(setpointRad, Constants.Drive.angularErrorToleranceRad);
+    return atAngularSetpoint(setpointRad, Constants.Drive.angularErrorToleranceDeg);
   }
 
   public boolean atAutoRotateSetpoint() {
