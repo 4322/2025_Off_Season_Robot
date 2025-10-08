@@ -217,7 +217,8 @@ public class DriveToPose extends Command {
                 currentPose.getTranslation().minus(targetPose.getTranslation()).getAngle())
             .transformBy(GeomUtil.translationToTransform(driveVelocityScalar, 0.0))
             .getTranslation();
-    drive.runVelocity(new ChassisSpeeds(driveVelocity.getX(), driveVelocity.getY(), thetaVelocity), true);
+    drive.runVelocity(
+        new ChassisSpeeds(driveVelocity.getX(), driveVelocity.getY(), thetaVelocity), true);
 
     // Log data
     Logger.recordOutput("DriveToPose/DistanceMeasured", currentDistance);
