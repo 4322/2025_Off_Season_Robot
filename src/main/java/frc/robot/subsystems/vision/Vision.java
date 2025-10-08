@@ -415,10 +415,10 @@ public class Vision extends SubsystemBase {
               ? FieldConstants.ReefFaceTag.EF.idRed
               : FieldConstants.ReefFaceTag.KL.idBlue;
     } else if ((150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 180)
-        || (-150 <= reefCenterToRobotDeg && reefCenterToRobotDeg <= -180)) {
+        || (-150 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -180)) {
       robotToReefFace = 0;
       if ((153 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 177)
-          || (-153 <= reefCenterToRobotDeg && reefCenterToRobotDeg <= -177)) {
+          || (-153 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -177)) {
         reefFaceAmbiguity = false;
       } else {
         reefFaceAmbiguity = true;
@@ -449,7 +449,9 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.KL.idRed
               : FieldConstants.ReefFaceTag.EF.idBlue;
-    } 
+    } else {
+      reefFaceAmbiguity = true;
+    }
 
     Translation2d convertedRobotTrans =
         robotTranslation.rotateAround(
