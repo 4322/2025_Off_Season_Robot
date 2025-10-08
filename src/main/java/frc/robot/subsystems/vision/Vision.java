@@ -256,6 +256,14 @@ public class Vision extends SubsystemBase {
                     .toPose2d();
             // Use gyro to correct for vision errors
             Rotation2d robotThetaError = drive.getRotation().minus(visionRobotPose.getRotation());
+
+            // Account for rotation discontinuity from bound (-179,180]
+            if (Math.abs(robotThetaError.getRadians()) > Math.PI) {
+              double minThetaError =
+                  robotThetaError.getDegrees() + (Math.signum(robotThetaError.getDegrees()) * -360);
+              robotThetaError = Rotation2d.fromDegrees(minThetaError);
+            }
+            
             Pose2d tagToRobotPose = drive.getPose().relativeTo(tagPos);
 
             visionRobotPose =
