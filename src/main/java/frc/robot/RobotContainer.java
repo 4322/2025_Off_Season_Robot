@@ -328,12 +328,12 @@ public class RobotContainer {
                               FieldConstants.KeypointPoses.blueReefCenter, Rotation2d.k180deg);
                       rotation = Rotation2d.kZero;
                       vision.enableSingleTagSingleCam(
-                          FieldConstants.ReefFaceTag.AB.idBlue, SingleTagCamera.RIGHT);
+                          FieldConstants.ReefFaceTag.AB.idBlue, SingleTagCamera.LEFT);
                     } else {
                       scoringPos = FieldConstants.KeypointPoses.rightReefBranchScoringRed;
                       rotation = Rotation2d.k180deg;
                       vision.enableSingleTagSingleCam(
-                          FieldConstants.ReefFaceTag.AB.idRed, SingleTagCamera.RIGHT);
+                          FieldConstants.ReefFaceTag.AB.idRed, SingleTagCamera.LEFT);
                     }
                     drivetopose = new DriveToPose(drive, new Pose2d(scoringPos, rotation));
                     drivetopose.schedule();
@@ -347,6 +347,7 @@ public class RobotContainer {
                     if (drivetopose.isScheduled()) {
                       drivetopose.cancel();
                     }
+                    vision.enableGlobalPose();
                     ;
                   }));
     }
