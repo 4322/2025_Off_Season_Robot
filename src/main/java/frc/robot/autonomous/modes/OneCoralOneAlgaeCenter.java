@@ -43,7 +43,7 @@ public class OneCoralOneAlgaeCenter extends SequentialCommandGroup {
         AutoBuilder.followPath(Robot.CenterBargeToCenterAlgaeScore),
         new AlgaeScoreAuto(superstructure, drive),
         new WaitCommand(0.2),
-        new WaitUntilCommand(() -> superstructure.isAlgaeHeld()),
+        new WaitUntilCommand(() -> !superstructure.isAlgaeHeld()),
         AutoBuilder.followPath(Robot.CenterAlgaeScoreToLeave),
         new InstantCommand(() -> superstructure.requestIdle()));
   }
