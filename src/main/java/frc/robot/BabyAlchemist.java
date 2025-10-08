@@ -206,7 +206,8 @@ public class BabyAlchemist {
       tunable.initDefault(val.get());
       // throw away initial settings change
       if (!tunable.hasChanged(motorIdx)) {
-        System.exit(0); // will never happen
+        DriverStation.reportError("This should never happen", true);
+        System.exit(0);
       }
     }
   }
