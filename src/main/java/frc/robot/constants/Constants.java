@@ -78,7 +78,7 @@ public final class Constants {
     public static final double autoRotatekP = 3;
     public static final double autoRotatekD = 0;
 
-    public static final double angularErrorToleranceRad = Units.degreesToRadians(2);
+    public static final double angularErrorToleranceRad = Units.degreesToRadians(5);
     public static final double angularErrorToleranceRadPerSec = Units.degreesToRadians(20.0);
     public static final double driveDeadband = 0.1;
     public static final double rotDeadband = 0.1;

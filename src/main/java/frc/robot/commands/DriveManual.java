@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -101,6 +103,8 @@ public class DriveManual extends Command {
           autoRotateController.setP(rotKp.get());
           autoRotateController.setD(rotKd.get());
         }
+        Logger.recordOutput("AutoRotate/PIDVelocity", autoRotateController.atSetpoint());
+        
         // Clear first reef lock if we exited field relative state while in reef lock mode
         if (firstReefLock) {
           firstReefLock = false;
