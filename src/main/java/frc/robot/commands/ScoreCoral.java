@@ -202,8 +202,7 @@ public class ScoreCoral extends Command {
         running = false;
       }
 
-      if (Constants.enableDriveToPoseOverride
-          && driveToPoseState == DriveToPoseTesting.SAFE_DISTANCE) {
+      if (driveToPoseState == DriveToPoseTesting.SAFE_DISTANCE) {
 
         double x = -RobotContainer.driver.getLeftY();
         double y = -RobotContainer.driver.getLeftX();

@@ -230,7 +230,6 @@ public class Superstructure extends SubsystemBase {
         break;
       case END_EFFECTOR_CORAL_PICKUP:
         endEffector.intakeCoral();
-
         coralPickupTimer.start();
 
         if (coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
