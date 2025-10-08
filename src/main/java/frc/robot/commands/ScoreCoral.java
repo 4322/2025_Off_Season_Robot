@@ -185,11 +185,11 @@ public class ScoreCoral extends Command {
                   robotReefAngle.rotateBy(Rotation2d.k180deg)));
       switch (driveToPoseState) {
         case SAFE_DISTANCE:
-        if (!driveToPose.isScheduled()) {
+          if (!driveToPose.isScheduled()) {
             driveToPose.schedule();
           }
           currentPoseRequest = () -> safeDistPose;
-          if (Constants.enableDriveToPoseWithPrescore){
+          if (Constants.enableDriveToPoseWithPrescore) {
             superstructure.requestPrescoreCoral(level);
           }
           if ((isInSafeArea() || driveToPose.atGoal()) && RobotContainer.isScoringTriggerHeld()) {
