@@ -258,7 +258,7 @@ public final class Constants {
     public static final double coralIntakeVolts = 3;
 
     public static final double algaeReleaseVolts = -3.0;
-    public static final double coralReleaseVolts = -3.0;
+    public static final double coralReleaseVolts = -4.0;
     public static final double coralReleaseVoltsL1 = -2.0;
 
     public static final double ejectVolts = -6.0;
