@@ -217,6 +217,7 @@ public final class Constants {
 
     public static final double intializationVoltage = 2.0;
     public static final double initializationTimerThresholdSecs = 5;
+    public static final double coralDetectionHeightThresholdSecs = 0.2;
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01;
 
     public static final double ejectHeightMeters = minElevatorSafeWithCoralMeters;
