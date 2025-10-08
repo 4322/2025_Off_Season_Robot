@@ -30,6 +30,7 @@ public class DriveManual extends Command {
     this.drive = drive;
 
     autoRotateController.enableContinuousInput(-Math.PI, Math.PI);
+    autoRotateController.setTolerance(Constants.Drive.angularErrorToleranceRad);
     addRequirements(drive);
   }
 
