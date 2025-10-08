@@ -1,5 +1,7 @@
 package frc.robot.autonomous;
 
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -14,15 +16,15 @@ import frc.robot.subsystems.vision.Vision;
 
 public class AutonomousSelector {
 
-  private SendableChooser<SequentialCommandGroup> autonomousSelector =
-      new SendableChooser<SequentialCommandGroup>();
+  private LoggedDashboardChooser<SequentialCommandGroup> autonomousSelector =
+      new LoggedDashboardChooser<SequentialCommandGroup>("Autonomous");
 
   public AutonomousSelector(
       Drive drive,
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,
       Vision vision) {
-    autonomousSelector.setDefaultOption("DO_NOTHING", new SequentialCommandGroup());
+    autonomousSelector.addDefaultOption("DO_NOTHING", new SequentialCommandGroup());
     autonomousSelector.addOption("LEAVE", new Leave(drive));
     autonomousSelector.addOption(
         "THREE_CORAL_LEFT",
@@ -34,10 +36,9 @@ public class AutonomousSelector {
         "ONE_CORAL_ONE_ALGAE_CENTER",
         new OneCoralOneAlgaeCenter(drive, superstructure, intakeSuperstructure, vision));
 
-    SmartDashboard.putData("Autonomous Selector", autonomousSelector);
   }
 
   public SequentialCommandGroup get() {
-    return autonomousSelector.getSelected();
+    return autonomousSelector.get();
   }
 }

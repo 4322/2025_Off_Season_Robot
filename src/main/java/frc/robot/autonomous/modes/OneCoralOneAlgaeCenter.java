@@ -28,8 +28,7 @@ public class OneCoralOneAlgaeCenter extends SequentialCommandGroup {
     setName("ONE_CORAL_ONE_ALGAE_CENTER");
     addRequirements(drive, superstructure, intakeSuperstructure);
     addCommands(
-        new AutoPoseReset(
-            drive, Robot.CenterStartToGulf.getStartingHolonomicPose().get().getTranslation()),
+        new InstantCommand(() -> drive.resetPose(Robot.CenterStartToGulf.getStartingHolonomicPose().get())),
         AutoBuilder.followPath(Robot.CenterStartToGulf),
         new ScoreCoral(superstructure, Superstructure.Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
