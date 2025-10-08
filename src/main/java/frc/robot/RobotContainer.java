@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.autonomous.AutonomousSelector;
 import frc.robot.commands.AlgaeIntakeGround;
@@ -335,8 +336,17 @@ public class RobotContainer {
                       vision.enableSingleTagSingleCam(
                           FieldConstants.ReefFaceTag.AB.idRed, SingleTagCamera.RIGHT);
                     }
-                    new DriveToPose(drive, new Pose2d(scoringPos, rotation)).schedule();
+                    drivetopose = new DriveToPose(drive, new Pose2d(scoringPos, rotation));
+                    drivetopose.schedule();
                   }));
+
+      driver
+        .povRight()
+        .onFalse(
+            new InstantCommand(() -> {
+              if (drivetopose.isScheduled()) {
+                drivetopose.cancel();}
+              ;}));
     }
     if (Constants.tuneAutoRotate) {
       driver
