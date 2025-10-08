@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.LoggedTunableNumber;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
@@ -19,6 +20,9 @@ public class DriveManual extends Command {
       new PIDController(Constants.Drive.autoRotatekP, 0, Constants.Drive.autoRotatekD);
   private boolean firstReefLock;
   private double currentReefLockRad;
+
+  private static final LoggedTunableNumber rotKp = new LoggedTunableNumber("AutoRotate/DriveKp", Constants.Drive.autoRotatekP);
+  private static final LoggedTunableNumber rotKd = new LoggedTunableNumber("AutoRotate/DriveKd", Constants.Drive.autoRotatekD);
 
   public DriveManual(Drive drive) {
     this.drive = drive;
@@ -90,6 +94,10 @@ public class DriveManual extends Command {
         }
         break;
       case AUTO_ROTATE:
+        if (rotKp.hasChanged(0) || rotKd.hasChanged(0)) {
+          autoRotateController.setP(rotKp.get());
+          autoRotateController.setD(rotKd.get());
+        }
         // Clear first reef lock if we exited field relative state while in reef lock mode
         if (firstReefLock) {
           firstReefLock = false;
