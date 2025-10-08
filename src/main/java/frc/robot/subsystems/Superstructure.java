@@ -232,7 +232,8 @@ public class Superstructure extends SubsystemBase {
         endEffector.intakeCoral();
         coralPickupTimer.start();
 
-        if (!coralElevatorPickUp && coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
+        if (!coralElevatorPickUp
+            && coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
           elevator.pickupCoral();
           coralPickupTimer.stop();
           coralPickupTimer.reset();

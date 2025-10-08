@@ -56,9 +56,9 @@ import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
 
 /**
@@ -239,7 +239,8 @@ public class RobotContainer {
                       && !endEffector.hasAlgae()
                       && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new AlgaeIntakeGround(superstructure).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae()) || Constants.enableDriveToPoseTestingScoreCoral) {
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
+                      || Constants.enableDriveToPoseTestingScoreCoral) {
                     new ScoreCoral(superstructure, Level.L1, drive).schedule();
                   }
                 }));
@@ -252,7 +253,8 @@ public class RobotContainer {
                       && !endEffector.hasAlgae()
                       && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new DescoreAlgae(superstructure, Level.L2, drive).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae()) || Constants.enableDriveToPoseTestingScoreCoral) {
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
+                      || Constants.enableDriveToPoseTestingScoreCoral) {
                     new ScoreCoral(superstructure, Level.L2, drive).schedule();
                   }
                 }));
@@ -265,7 +267,8 @@ public class RobotContainer {
                       && !endEffector.hasAlgae()
                       && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new DescoreAlgae(superstructure, Level.L3, drive).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae()) || Constants.enableDriveToPoseTestingScoreCoral) {
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
+                      || Constants.enableDriveToPoseTestingScoreCoral) {
                     new ScoreCoral(superstructure, Level.L3, drive).schedule();
                   }
                 }));
@@ -278,7 +281,8 @@ public class RobotContainer {
                       && endEffector.hasAlgae()
                       && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
-                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae() || Constants.enableDriveToPoseTestingScoreCoral) {
+                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()
+                      || Constants.enableDriveToPoseTestingScoreCoral) {
                     new ScoreCoral(superstructure, Level.L4, drive).schedule();
                   }
                 }));
@@ -323,11 +327,13 @@ public class RobotContainer {
                           scoringPos.rotateAround(
                               FieldConstants.KeypointPoses.blueReefCenter, Rotation2d.k180deg);
                       rotation = Rotation2d.kZero;
-                      vision.enableSingleTagSingleCam(FieldConstants.ReefFaceTag.AB.idBlue, SingleTagCamera.RIGHT);
+                      vision.enableSingleTagSingleCam(
+                          FieldConstants.ReefFaceTag.AB.idBlue, SingleTagCamera.RIGHT);
                     } else {
                       scoringPos = FieldConstants.KeypointPoses.rightReefBranchScoringRed;
                       rotation = Rotation2d.k180deg;
-                      vision.enableSingleTagSingleCam(FieldConstants.ReefFaceTag.AB.idRed, SingleTagCamera.RIGHT);
+                      vision.enableSingleTagSingleCam(
+                          FieldConstants.ReefFaceTag.AB.idRed, SingleTagCamera.RIGHT);
                     }
                     new DriveToPose(drive, new Pose2d(scoringPos, rotation)).schedule();
                   }));
