@@ -341,10 +341,17 @@ public class RobotContainer {
     if (Constants.tuneAutoRotate) {
       driver
           .leftBumper()
-          .whileTrue(
+          .onTrue(
               new InstantCommand(
                   () -> {
                     drive.requestAutoRotateMode(Rotation2d.kZero);
+                  }));
+      driver
+          .leftBumper()
+          .onFalse(
+              new InstantCommand(
+                  () -> {
+                    drive.requestFieldRelativeMode();
                   }));
     }
   }
