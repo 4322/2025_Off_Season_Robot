@@ -1,6 +1,9 @@
 package frc.robot.autonomous.modes;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -28,7 +31,13 @@ public class OneCoralOneAlgaeCenter extends SequentialCommandGroup {
     setName("ONE_CORAL_ONE_ALGAE_CENTER");
     addRequirements(drive, superstructure, intakeSuperstructure);
     addCommands(
-        new InstantCommand(() -> drive.resetPose(Robot.CenterStartToGulf.getStartingHolonomicPose().get())),
+        new InstantCommand(() -> {
+          PathPlannerPath path = Robot.CenterStartToGulf;
+          if (Robot.alliance == Alliance.Red) {
+            path = path.flipPath();
+          }
+          drive.resetPose(path.getStartingHolonomicPose().get());
+        }),
         AutoBuilder.followPath(Robot.CenterStartToGulf),
         new ScoreCoral(superstructure, Superstructure.Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
