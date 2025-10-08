@@ -33,8 +33,8 @@ public final class Constants {
   public static final boolean continuousNitrateRequestsEnabled = true;
   public static final boolean enableReefLock = false;
   public static final boolean enableGlobalPoseTrigEstimation = false;
-  public static final boolean enableDriveToPoseTuning = false;
-  public static final boolean debugPIDModeEnabled = true;
+  public static final boolean enableDriveToPoseTuning = true;
+  public static final boolean debugPIDModeEnabled = false;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
   public static final String logPath = "/home/lvuser/logs";
@@ -75,10 +75,10 @@ public final class Constants {
   }
 
   public static class Drive {
-    public static final double autoRotatekP = 0.017;
-    public static final double autoRotatekD = 0;
+    public static final double autoRotatekP = 0.03;
+    public static final double autoRotatekD = 0.0015;
 
-    public static final double angularErrorToleranceDeg = 2;
+    public static final double angularErrorToleranceDeg = 1.25;
     public static final double angularErrorToleranceDegPerSec = 20.0;
     public static final double driveDeadband = 0.1;
     public static final double rotDeadband = 0.1;
