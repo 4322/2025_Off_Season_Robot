@@ -263,7 +263,7 @@ public class Vision extends SubsystemBase {
                   robotThetaError.getDegrees() + (Math.signum(robotThetaError.getDegrees()) * -360);
               robotThetaError = Rotation2d.fromDegrees(minThetaError);
             }
-            
+
             Pose2d tagToRobotPose = drive.getPose().relativeTo(tagPos);
 
             visionRobotPose =
