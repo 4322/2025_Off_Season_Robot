@@ -277,7 +277,7 @@ public class RobotContainer {
                       && endEffector.hasAlgae()
                       && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
-                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae() || Constants.enableDriveToPoseTestingScoreCoral) {
                     new ScoreCoral(superstructure, Level.L4, drive).schedule();
                   }
                 }));
