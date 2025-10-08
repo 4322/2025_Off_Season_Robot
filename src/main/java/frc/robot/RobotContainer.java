@@ -338,6 +338,15 @@ public class RobotContainer {
                     new DriveToPose(drive, new Pose2d(scoringPos, rotation)).schedule();
                   }));
     }
+    if (Constants.robotAutoRotate) {
+      driver
+          .leftBumper()
+          .whileTrue(
+              new InstantCommand(
+                  () -> {
+                    drive.requestAutoRotateMode(Rotation2d.kZero);
+                  }));
+    }
   }
 
   public static boolean isScoringTriggerHeld() {
