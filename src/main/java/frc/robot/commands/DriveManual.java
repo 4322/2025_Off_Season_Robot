@@ -21,8 +21,10 @@ public class DriveManual extends Command {
   private boolean firstReefLock;
   private double currentReefLockRad;
 
-  private static final LoggedTunableNumber rotKp = new LoggedTunableNumber("AutoRotate/DriveKp", Constants.Drive.autoRotatekP);
-  private static final LoggedTunableNumber rotKd = new LoggedTunableNumber("AutoRotate/DriveKd", Constants.Drive.autoRotatekD);
+  private static final LoggedTunableNumber rotKp =
+      new LoggedTunableNumber("AutoRotate/DriveKp", Constants.Drive.autoRotatekP);
+  private static final LoggedTunableNumber rotKd =
+      new LoggedTunableNumber("AutoRotate/DriveKd", Constants.Drive.autoRotatekD);
 
   public DriveManual(Drive drive) {
     this.drive = drive;

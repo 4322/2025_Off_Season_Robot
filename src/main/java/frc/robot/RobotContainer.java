@@ -338,7 +338,7 @@ public class RobotContainer {
                     new DriveToPose(drive, new Pose2d(scoringPos, rotation)).schedule();
                   }));
     }
-    if (Constants.robotAutoRotate) {
+    if (Constants.tuneAutoRotate) {
       driver
           .leftBumper()
           .whileTrue(

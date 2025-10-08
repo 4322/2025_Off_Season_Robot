@@ -29,6 +29,7 @@ public final class Constants {
   public static final boolean enableDriveToPoseTestingScoreCoral = false;
   public static final boolean enableDriveToPoseWithPrescore = false;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING_FIXED_VELOCITY;
+  public static final boolean tuneAutoRotate = false;
   public static final boolean continuousNitrateRequestsEnabled = true;
   public static final boolean enableReefLock = false;
   public static final boolean enableGlobalPoseTrigEstimation = false;
