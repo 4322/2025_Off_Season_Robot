@@ -27,6 +27,8 @@ public class Superstructure extends SubsystemBase {
   private boolean requestPreClimb = false;
   private boolean requestClimb = false;
   private boolean ishomed = false;
+  private Timer coralPickupTimer = new Timer();
+  private boolean coralElevatorPickUp = false;
 
   public enum Superstates {
     HOMELESS,
@@ -227,16 +229,29 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case END_EFFECTOR_CORAL_PICKUP:
-        elevator.pickupCoral();
         endEffector.intakeCoral();
+        coralPickupTimer.start();
 
-        if (endEffector.hasCoral()) {
-          state = Superstates.CORAL_HELD;
-        } else if (!endEffector.hasCoral()
-            && !intakeSuperstructure.isCoralDetectedPickupArea()
-            && arm.atSetpoint()
-            && getElevatorHeight() >= Constants.Elevator.minElevatorSafeHeightMeters) {
-          state = Superstates.IDLE;
+        if (coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
+          elevator.pickupCoral();
+        }
+
+        if (coralPickupTimer.hasElapsed(Constants.Elevator.coralDetectionHeightThresholdSecs)) {
+          coralPickupTimer.stop();
+          coralPickupTimer.reset();
+          coralElevatorPickUp = true;
+        }
+
+        if (coralElevatorPickUp) {
+          coralElevatorPickUp = false;
+          if (endEffector.hasCoral()) {
+            state = Superstates.CORAL_HELD;
+          } else if (!endEffector.hasCoral()
+              && !intakeSuperstructure.isCoralDetectedPickupArea()
+              && arm.atSetpoint()
+              && getElevatorHeight() >= Constants.Elevator.minElevatorSafeHeightMeters) {
+            state = Superstates.IDLE;
+          }
         }
 
         break;

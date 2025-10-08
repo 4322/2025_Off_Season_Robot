@@ -27,7 +27,7 @@ public final class Constants {
   public static final boolean visionEnabled = true;
   public static final boolean enableArmSensor = false;
   public static final boolean enableDriveToPoseTestingScoreCoral = false;
-  public static final boolean enableDriveToPoseOverride = false;
+  public static final boolean enableDriveToPoseWithPrescore = false;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING_FIXED_VELOCITY;
   public static final boolean continuousNitrateRequestsEnabled = true;
   public static final boolean enableReefLock = false;
@@ -217,6 +217,7 @@ public final class Constants {
 
     public static final double intializationVoltage = 2.0;
     public static final double initializationTimerThresholdSecs = 5;
+    public static final double coralDetectionHeightThresholdSecs = 0.2;
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01;
 
     public static final double ejectHeightMeters = minElevatorSafeWithCoralMeters;

@@ -239,7 +239,7 @@ public class RobotContainer {
                       && !endEffector.hasAlgae()
                       && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new AlgaeIntakeGround(superstructure).schedule();
-                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae()) || Constants.enableDriveToPoseTestingScoreCoral) {
                     new ScoreCoral(superstructure, Level.L1, drive).schedule();
                   }
                 }));
@@ -252,7 +252,7 @@ public class RobotContainer {
                       && !endEffector.hasAlgae()
                       && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new DescoreAlgae(superstructure, Level.L2, drive).schedule();
-                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae()) || Constants.enableDriveToPoseTestingScoreCoral) {
                     new ScoreCoral(superstructure, Level.L2, drive).schedule();
                   }
                 }));
@@ -265,7 +265,7 @@ public class RobotContainer {
                       && !endEffector.hasAlgae()
                       && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new DescoreAlgae(superstructure, Level.L3, drive).schedule();
-                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae()) || Constants.enableDriveToPoseTestingScoreCoral) {
                     new ScoreCoral(superstructure, Level.L3, drive).schedule();
                   }
                 }));
@@ -278,7 +278,7 @@ public class RobotContainer {
                       && endEffector.hasAlgae()
                       && !Constants.enableDriveToPoseTestingScoreCoral) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
-                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae() || Constants.enableDriveToPoseTestingScoreCoral) {
                     new ScoreCoral(superstructure, Level.L4, drive).schedule();
                   }
                 }));
