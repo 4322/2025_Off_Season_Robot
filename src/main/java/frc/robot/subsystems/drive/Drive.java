@@ -221,7 +221,7 @@ public class Drive extends SubsystemBase {
   }
 
   public double getYawVelocity() {
-    return gyroInputs.yawVelocityRadPerSec;
+    return gyroInputs.yawVelocityDegPerSec;
   }
 
   @AutoLogOutput(key = "Odometry/Robot")

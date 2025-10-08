@@ -84,8 +84,8 @@ public class DriveToPose extends Command {
     driveTolerance.initDefault(Constants.AutoScoring.driveTolerance);
     driveToleranceSlow.initDefault(Constants.AutoScoring.driveToleranceSlow);
 
-    thetaTolerance.initDefault(Constants.AutoScoring.thetaTolerance);
-    thetaToleranceSlow.initDefault(Constants.AutoScoring.thetaToleranceSlow);
+    thetaTolerance.initDefault(Constants.Drive.angularErrorToleranceDeg);
+    thetaToleranceSlow.initDefault(Constants.Drive.angularErrorToleranceDeg);
 
     ffMinRadius.initDefault(Constants.AutoScoring.ffMinRadius);
     ffMaxRadius.initDefault(Constants.AutoScoring.ffMaxRadius);
@@ -112,7 +112,7 @@ public class DriveToPose extends Command {
     this.slowMode = slowMode;
     this.poseSupplier = poseSupplier;
     addRequirements(drive);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    thetaController.enableContinuousInput(-180, 180);
   }
 
   @Override
@@ -134,7 +134,7 @@ public class DriveToPose extends Command {
                         .getAngle()
                         .unaryMinus())
                 .getX()));
-    thetaController.reset(currentPose.getRotation().getRadians(), drive.getYawVelocity());
+    thetaController.reset(currentPose.getRotation().getDegrees(), drive.getYawVelocity());
     lastSetpointTranslation = drive.getPose().getTranslation();
   }
 
@@ -205,9 +205,9 @@ public class DriveToPose extends Command {
     double thetaVelocity =
         thetaController.getSetpoint().velocity * ffScaler
             + thetaController.calculate(
-                currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
+                currentPose.getRotation().getDegrees(), targetPose.getRotation().getDegrees());
     thetaErrorAbs =
-        Math.abs(currentPose.getRotation().minus(targetPose.getRotation()).getRadians());
+        Math.abs(currentPose.getRotation().minus(targetPose.getRotation()).getDegrees());
     if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity = 0.0;
 
     // Command speeds
@@ -223,7 +223,7 @@ public class DriveToPose extends Command {
     // Log data
     Logger.recordOutput("DriveToPose/DistanceMeasured", currentDistance);
     Logger.recordOutput("DriveToPose/DistanceSetpoint", driveController.getSetpoint().position);
-    Logger.recordOutput("DriveToPose/ThetaMeasured", currentPose.getRotation().getRadians());
+    Logger.recordOutput("DriveToPose/ThetaMeasured", currentPose.getRotation().getDegrees());
     Logger.recordOutput("DriveToPose/ThetaSetpoint", thetaController.getSetpoint().position);
     Logger.recordOutput(
         "DriveToPose/DriveToPoseSetpoint",
@@ -246,10 +246,10 @@ public class DriveToPose extends Command {
   }
 
   /** Checks if the robot pose is within the allowed drive and theta tolerances. */
-  public boolean withinTolerance(double driveTolerance, Rotation2d thetaTolerance) {
+  public boolean withinTolerance(double driveTolerance, Rotation2d thetaToleranceDeg) {
     return running
         && Math.abs(driveErrorAbs) < driveTolerance
-        && Math.abs(thetaErrorAbs) < thetaTolerance.getRadians();
+        && Math.abs(thetaErrorAbs) < thetaToleranceDeg.getDegrees();
   }
 
   /** Returns whether the command is actively running. */

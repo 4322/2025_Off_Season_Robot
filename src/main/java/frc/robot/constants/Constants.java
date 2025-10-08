@@ -436,9 +436,6 @@ public final class Constants {
     public static final double driveTolerance = 0.06;
     public static final double driveToleranceSlow = 0.06;
 
-    public static final double thetaTolerance = Units.degreesToRadians(1.0);
-    public static final double thetaToleranceSlow = Units.degreesToRadians(3.0);
-
     public static final double ffMinRadius = 0.1;
     public static final double ffMaxRadius = 0.8;
   }
