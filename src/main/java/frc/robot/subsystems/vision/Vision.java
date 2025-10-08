@@ -270,6 +270,8 @@ public class Vision extends SubsystemBase {
                 tagPos.transformBy(
                     GeomUtil.poseToTransform(tagToRobotPose.rotateBy(robotThetaError)));
 
+            Logger.recordOutput("Vision/SingleTagEstimate", visionRobotPose);
+            
             // Check whether to reject pose
             boolean rejectPose =
                 observation.ambiguity() > Constants.Vision.maxAmbiguity // Cannot be high ambiguity
