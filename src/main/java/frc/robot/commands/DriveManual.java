@@ -93,6 +93,9 @@ public class DriveManual extends Command {
 
           rot =
               autoRotateController.calculate(drive.getRotation().getRadians(), currentReefLockRad);
+          if (autoRotateController.atSetpoint()) {
+            rot = 0;
+          }
         } else if (firstReefLock) {
           firstReefLock = false;
         }
@@ -112,6 +115,9 @@ public class DriveManual extends Command {
         rot =
             autoRotateController.calculate(
                 drive.getRotation().getDegrees(), drive.getTargetAngle().getDegrees());
+        if (autoRotateController.atSetpoint()) {
+          rot = 0;
+        }
         break;
     }
     drive.runVelocity(new ChassisSpeeds(dx, dy, rot), true);
