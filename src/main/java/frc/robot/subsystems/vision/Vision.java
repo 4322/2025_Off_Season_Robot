@@ -449,8 +449,6 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.KL.idRed
               : FieldConstants.ReefFaceTag.EF.idBlue;
-    } else {
-      reefFaceAmbiguity = true;
     }
 
     Translation2d convertedRobotTrans =

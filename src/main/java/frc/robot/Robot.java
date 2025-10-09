@@ -103,17 +103,16 @@ public class Robot extends LoggedRobot {
         }
 
         // ensure that there is enough space on the roboRIO to log data
+        // delete Redux logs first
         if (directory.getFreeSpace() < Constants.minFreeSpace) {
           files = directory.listFiles();
           if (files != null) {
             // Sorting the files by name will ensure that the oldest files are deleted first
             files = Arrays.stream(files).sorted().toArray(File[]::new);
-
             long bytesToDelete = Constants.minFreeSpace - directory.getFreeSpace();
 
-            // delete advantage kit logs
             for (File file : files) {
-              if (file.getName().endsWith(".wpilog")) {
+              if (file.getName().endsWith(".rdxlog")) {
                 try {
                   bytesToDelete -= Files.size(file.toPath());
                 } catch (IOException e) {
@@ -134,17 +133,16 @@ public class Robot extends LoggedRobot {
           }
         }
 
-        // delete Redux logs if we still don't have enough space
+        // delete akit logs if we still don't have enough space
         if (directory.getFreeSpace() < Constants.minFreeSpace) {
           files = directory.listFiles();
           if (files != null) {
             // Sorting the files by name will ensure that the oldest files are deleted first
             files = Arrays.stream(files).sorted().toArray(File[]::new);
-
             long bytesToDelete = Constants.minFreeSpace - directory.getFreeSpace();
 
             for (File file : files) {
-              if (file.getName().endsWith(".rdxlog")) {
+              if (file.getName().endsWith(".wpilog")) {
                 try {
                   bytesToDelete -= Files.size(file.toPath());
                 } catch (IOException e) {
@@ -335,6 +333,7 @@ public class Robot extends LoggedRobot {
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
+      Logger.recordOutput("AutoName", autonomousCommand.getName());
     }
   }
 

@@ -1,6 +1,10 @@
 package frc.robot.autonomous.modes;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -23,8 +27,13 @@ public class ThreeCoralLeft extends SequentialCommandGroup {
     setName("THREE_CORAL_LEFT");
     addRequirements(drive, superstructure, intakeSuperstructure);
     addCommands(
-        new AutoPoseReset(
-            drive, Robot.ThreeCoralStartToJuliet.getStartingHolonomicPose().get().getTranslation()),
+        new InstantCommand(() -> {
+          PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
+          if (Robot.alliance == Alliance.Red) {
+            path = path.flipPath();
+          }
+          drive.resetPose(path.getStartingHolonomicPose().get());
+        }),
         AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
         new ScoreCoral(superstructure, Superstructure.Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
