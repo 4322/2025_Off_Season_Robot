@@ -31,7 +31,7 @@ public final class Constants {
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING_FIXED_VELOCITY;
   public static final boolean tuneAutoRotate = false;
   public static final boolean continuousNitrateRequestsEnabled = true;
-  public static final boolean enableReefLock = false;
+  public static final boolean enableReefLock = true;
   public static final boolean enableGlobalPoseTrigEstimation = false;
   public static final boolean enableDriveToPoseTuning = false;
   public static final boolean debugPIDModeEnabled = false;
@@ -121,7 +121,7 @@ public final class Constants {
 
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0;
-    public static final double coralHoldDeg = 0.5;
+    public static final double coralHoldDeg = 3;
     public static final double algaeGroundDeg = 69.0; // TODO: Set to actual angle
 
     public static final double ejectDeg = 51.0;
@@ -337,7 +337,8 @@ public final class Constants {
     public static final double motorGearRatio = 61.25;
     public static final double ejectPositionDegrees = 100;
     public static final double retractPositionDegrees = 125;
-    public static final double deployPositionDegrees = 0;
+
+    public static final double deployPositionDegrees = 3;
     public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kArm;
     public static final double maxRangeDegrees = 144.556;
     public static final double maxGravityDegrees = 40.0;
