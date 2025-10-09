@@ -8,6 +8,7 @@ package frc.robot.commands;
 // the root directory of this project.
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -31,9 +32,7 @@ public class DriveToPose extends Command {
   private final ProfiledPIDController driveController =
       new ProfiledPIDController(
           0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0), Constants.loopPeriodSecs);
-  private final ProfiledPIDController thetaController =
-      new ProfiledPIDController(
-          0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(0.0, 0.0), Constants.loopPeriodSecs);
+  private final PIDController thetaController = new PIDController(0.0, 0.0, 0.0);
   private double driveErrorAbs;
   private double thetaErrorAbs;
   private Translation2d lastSetpointTranslation;
@@ -134,7 +133,6 @@ public class DriveToPose extends Command {
                         .getAngle()
                         .unaryMinus())
                 .getX()));
-    thetaController.reset(currentPose.getRotation().getDegrees(), drive.getYawVelocity());
     lastSetpointTranslation = drive.getPose().getTranslation();
   }
 
@@ -166,10 +164,6 @@ public class DriveToPose extends Command {
       driveController.setTolerance(slowMode ? driveToleranceSlow.get() : driveTolerance.get());
       thetaController.setP(thetaKp.get());
       thetaController.setD(thetaKd.get());
-      thetaController.setConstraints(
-          new TrapezoidProfile.Constraints(
-              slowMode ? thetaMaxVelocitySlow.get() : thetaMaxVelocity.get(),
-              thetaMaxAcceleration.get()));
       thetaController.setTolerance(slowMode ? thetaToleranceSlow.get() : thetaTolerance.get());
     }
 
@@ -203,13 +197,13 @@ public class DriveToPose extends Command {
 
     // Calculate theta speed
     double thetaVelocity =
-        thetaController.getSetpoint().velocity * ffScaler
-            + thetaController.calculate(
+        thetaController.calculate(
                 currentPose.getRotation().getDegrees(), targetPose.getRotation().getDegrees());
     thetaErrorAbs =
         Math.abs(currentPose.getRotation().minus(targetPose.getRotation()).getDegrees());
-    if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity = 0.0;
-
+    if (thetaController.atSetpoint()) {
+        thetaVelocity = 0.0;
+    }
     // Command speeds
     Translation2d driveVelocity =
         new Pose2d(
@@ -224,11 +218,11 @@ public class DriveToPose extends Command {
     Logger.recordOutput("DriveToPose/DistanceMeasured", currentDistance);
     Logger.recordOutput("DriveToPose/DistanceSetpoint", driveController.getSetpoint().position);
     Logger.recordOutput("DriveToPose/ThetaMeasured", currentPose.getRotation().getDegrees());
-    Logger.recordOutput("DriveToPose/ThetaSetpoint", thetaController.getSetpoint().position);
+    Logger.recordOutput("DriveToPose/ThetaSetpoint", thetaController.getSetpoint());
     Logger.recordOutput(
         "DriveToPose/DriveToPoseSetpoint",
         new Pose2d(
-            lastSetpointTranslation, new Rotation2d(thetaController.getSetpoint().position)));
+            lastSetpointTranslation, new Rotation2d(thetaController.getSetpoint())));
     Logger.recordOutput("DriveToPose/DriveToPoseGoal", targetPose);
   }
 
@@ -242,7 +236,7 @@ public class DriveToPose extends Command {
 
   /** Checks if the robot is at the final pose. */
   public boolean atGoal() {
-    return driveController.atGoal() && thetaController.atGoal();
+    return driveController.atGoal() && thetaController.atSetpoint();
   }
 
   /** Checks if the robot pose is within the allowed drive and theta tolerances. */
