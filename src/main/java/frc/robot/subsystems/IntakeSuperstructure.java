@@ -19,6 +19,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   private boolean requestIntakeEject;
   private boolean requestUnhome;
   private boolean isHomed = false;
+  private boolean requestIndexerEject;
 
   private enum RetractLockedOutStates {
     FALSE,
@@ -42,7 +43,8 @@ public class IntakeSuperstructure extends SubsystemBase {
     RETRACT_IDLE,
     FEED,
     SLOW_REJECT,
-    INTAKE_EJECT
+    INTAKE_EJECT,
+    INDEXER_EJECT
   }
 
   public IntakeSuperstructure(
@@ -105,6 +107,9 @@ public class IntakeSuperstructure extends SubsystemBase {
         deployer.deploy();
         if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {
           state = IntakeSuperstates.SLOW_REJECT;
+        }
+        if (requestIndexerEject){
+          state = IntakeSuperstates.INDEXER_EJECT;
         }
 
         switch (retractLockedOutState) {
@@ -172,12 +177,28 @@ public class IntakeSuperstructure extends SubsystemBase {
 
         break;
       case INTAKE_EJECT:
+
         deployer.eject();
         rollers.eject();
         indexer.reject();
         if (requestRetractIdle) {
           state = IntakeSuperstates.RETRACT_IDLE;
         }
+        break;
+      case INDEXER_EJECT:
+      if (RobotContainer.driver.rightBumper().getAsBoolean()){
+        indexer.ejectRight();
+      }
+      else if (RobotContainer.driver.leftBumper().getAsBoolean()) {
+        indexer.ejectLeft();
+      }
+      
+      if (requestRetractIdle){
+        state = IntakeSuperstates.RETRACT_IDLE;
+      }
+      else if (requestDeploy){
+        state = IntakeSuperstates.FEED;
+      }
         break;
     }
   }
@@ -187,6 +208,7 @@ public class IntakeSuperstructure extends SubsystemBase {
     requestRetractIdle = false;
     requestIntakeEject = false;
     requestDeploy = false;
+    requestIndexerEject = false;
   }
 
   public IntakeSuperstates getState() {
@@ -207,6 +229,11 @@ public class IntakeSuperstructure extends SubsystemBase {
   public void requestEject() {
     unsetAllRequests();
     requestIntakeEject = true;
+  }
+
+  public void requestIdexerEject() {
+    unsetAllRequests();
+    requestIndexerEject = true;
   }
 
   public void requestUnhome() {
