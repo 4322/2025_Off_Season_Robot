@@ -218,7 +218,7 @@ public final class Constants {
 
     public static final double intializationVoltage = 2.0;
     public static final double initializationTimerThresholdSecs = 5;
-    public static final double coralDetectionHeightThresholdSecs = 0.2;
+    public static final double coralDetectionHeightThresholdSecs = 0.4;
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01;
 
     public static final double ejectHeightMeters = minElevatorSafeWithCoralMeters;
@@ -255,7 +255,7 @@ public final class Constants {
     public static final double coralHoldVolts = 0.45;
 
     public static final double algaeIntakeVolts = 6;
-    public static final double coralIntakeVolts = 3;
+    public static final double coralIntakeVolts = 4;
 
     public static final double algaeReleaseVolts = -3.0;
     public static final double coralReleaseVolts = -4.0;
@@ -267,9 +267,9 @@ public final class Constants {
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 100;
 
-    public static final double coralProximityThreshold = 0.25;
-    public static final double algaeProximityThresholdIntake = 0.17;
-    public static final double algaeProximityThreshold = 0.25;
+    public static final double coralProximityThreshold = 0.2;
+    public static final double algaeProximityThresholdIntake = 0.15;
+    public static final double algaeProximityThreshold = 0.2;
 
     public static final boolean useSensorColor = false; // TODO change this when we get color tuned
     // TODO tune these
@@ -298,11 +298,11 @@ public final class Constants {
     public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
 
     public static final double coralGrabDelaySeconds =
-        0.1; // Time to wait before lowering elevator after coral is detected in End Effector
+        0.2; // Time to wait before lowering elevator after coral is detected in End Effector
     public static final double algaeIntakingDelaySeconds =
         0.25; // Time to wait after algae is detected in End Effector before reducing voltage
     public static final double coralIntakingDelaySeconds =
-        0.05; // Time to wait after coral is detected in End Effector before reducing voltage
+        0.2; // Time to wait after coral is detected in End Effector before reducing voltage
     public static final double algaeReleasingDelaySeconds =
         0.5; // Time to wait when releasing before going back to non-holding voltage
     public static final double coralReleasingDelaySeconds = 0.5;

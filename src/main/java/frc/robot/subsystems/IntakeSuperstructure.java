@@ -108,7 +108,7 @@ public class IntakeSuperstructure extends SubsystemBase {
         if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {
           state = IntakeSuperstates.SLOW_REJECT;
         }
-        if (requestIndexerEject){
+        if (requestIndexerEject) {
           state = IntakeSuperstates.INDEXER_EJECT;
         }
 
@@ -177,7 +177,6 @@ public class IntakeSuperstructure extends SubsystemBase {
 
         break;
       case INTAKE_EJECT:
-
         deployer.eject();
         rollers.eject();
         indexer.reject();
@@ -186,19 +185,23 @@ public class IntakeSuperstructure extends SubsystemBase {
         }
         break;
       case INDEXER_EJECT:
-      if (RobotContainer.driver.rightBumper().getAsBoolean()){
-        indexer.ejectRight();
-      }
-      else if (RobotContainer.driver.leftBumper().getAsBoolean()) {
-        indexer.ejectLeft();
-      }
-      
-      if (requestRetractIdle){
-        state = IntakeSuperstates.RETRACT_IDLE;
-      }
-      else if (requestDeploy){
-        state = IntakeSuperstates.FEED;
-      }
+        deployer.eject();
+        rollers.eject();
+
+        if (RobotContainer.driver.rightBumper().getAsBoolean()) {
+          indexer.ejectRight();
+        } else if (RobotContainer.driver.leftBumper().getAsBoolean()) {
+          indexer.ejectLeft();
+        } else {
+          requestIndexerEject = false;
+        }
+        if (!requestIndexerEject) {
+          if (requestRetractIdle) {
+            state = IntakeSuperstates.RETRACT_IDLE;
+          } else if (requestDeploy) {
+            state = IntakeSuperstates.FEED;
+          }
+        }
         break;
     }
   }
@@ -232,7 +235,6 @@ public class IntakeSuperstructure extends SubsystemBase {
   }
 
   public void requestIdexerEject() {
-    unsetAllRequests();
     requestIndexerEject = true;
   }
 
