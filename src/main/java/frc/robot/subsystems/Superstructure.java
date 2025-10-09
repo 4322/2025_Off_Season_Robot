@@ -106,6 +106,7 @@ public class Superstructure extends SubsystemBase {
     }
 
     Logger.recordOutput("Superstructure/currentState", state.toString());
+    Logger.recordOutput("Superstructure/currentAutoState", mode.toString());
     Logger.recordOutput("Superstructure/requestedLevel", level);
 
     switch (state) {

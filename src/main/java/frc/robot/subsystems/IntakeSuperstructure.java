@@ -88,8 +88,9 @@ public class IntakeSuperstructure extends SubsystemBase {
           rollers.feedSlow();
           indexer.feedSlow();
         }
-
-        if (requestIntakeEject) {
+        if (requestIndexerEject) {
+          state = IntakeSuperstates.INDEXER_EJECT;
+        } else if (requestIntakeEject) {
           state = IntakeSuperstates.INTAKE_EJECT;
         } else if (requestDeploy) {
           if (isCoralDetectedIndexer()
@@ -105,6 +106,7 @@ public class IntakeSuperstructure extends SubsystemBase {
         rollers.feed();
         indexer.feed();
         deployer.deploy();
+
         if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {
           state = IntakeSuperstates.SLOW_REJECT;
         }
@@ -185,7 +187,7 @@ public class IntakeSuperstructure extends SubsystemBase {
         }
         break;
       case INDEXER_EJECT:
-        deployer.eject();
+        deployer.deploy();
         rollers.eject();
 
         if (RobotContainer.driver.rightBumper().getAsBoolean()) {
