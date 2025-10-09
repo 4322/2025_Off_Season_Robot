@@ -33,7 +33,7 @@ public final class Constants {
   public static final boolean continuousNitrateRequestsEnabled = true;
   public static final boolean enableReefLock = true;
   public static final boolean enableGlobalPoseTrigEstimation = false;
-  public static final boolean enableDriveToPoseTuning = true;
+  public static final boolean enableDriveToPoseTuning = false;
   public static final boolean debugPIDModeEnabled = false;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
@@ -430,9 +430,9 @@ public final class Constants {
     public static final double driveMaxVelocitySlow = Units.inchesToMeters(50.0);
     public static final double driveMaxAcceleration = 4;
 
-    public static final double thetaMaxVelocity = Units.degreesToRadians(360.0);
-    public static final double thetaMaxVelocitySlow = Units.degreesToRadians(90.0);
-    public static final double thetaMaxAcceleration = Units.degreesToRadians(720.0);
+    public static final double thetaMaxVelocity = 360;
+    public static final double thetaMaxVelocitySlow = 90;
+    public static final double thetaMaxAcceleration = 1440;
 
     public static final double driveTolerance = 0.06;
     public static final double driveToleranceSlow = 0.06;
