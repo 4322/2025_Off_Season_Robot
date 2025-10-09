@@ -25,7 +25,7 @@ public final class Constants {
   public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = true;
-  public static final boolean enableArmSensor = false;
+  public static final boolean enableArmSensor = true;
   public static final boolean enableDriveToPoseTestingScoreCoral = false;
   public static final boolean enableDriveToPoseWithPrescore = false;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING_FIXED_VELOCITY;
