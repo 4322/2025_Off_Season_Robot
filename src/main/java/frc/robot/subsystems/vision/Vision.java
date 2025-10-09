@@ -418,7 +418,7 @@ public class Vision extends SubsystemBase {
         || (-150 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -180)) {
       robotToReefFace = 0;
       if ((153 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 177)
-          || (-153 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -177)) {
+          || (-147 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -183)) {
         reefFaceAmbiguity = false;
       } else {
         reefFaceAmbiguity = true;
