@@ -202,8 +202,9 @@ public class DriveToPose extends Command {
             .getTranslation();
 
     // Calculate theta speed
-    double thetaVelocity = thetaController.calculate(
-                currentPose.getRotation().getDegrees(), targetPose.getRotation().getDegrees());
+    double thetaVelocity =
+        thetaController.calculate(
+            currentPose.getRotation().getDegrees(), targetPose.getRotation().getDegrees());
     thetaErrorAbs =
         Math.abs(currentPose.getRotation().minus(targetPose.getRotation()).getDegrees());
     if (thetaErrorAbs < thetaController.getPositionTolerance()) thetaVelocity = 0.0;
