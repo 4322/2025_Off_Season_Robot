@@ -180,12 +180,15 @@ public class ScoreCoral extends Command {
       Pose2d safeDistPose =
           targetScoringPose.transformBy(
               new Transform2d(
-                  FieldConstants.KeypointPoses.safeDistFromCoralScoringPos,
+                  level == Level.L1
+                      ? -FieldConstants.KeypointPoses.safeDistFromTroughScoringPos
+                      : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
                   0,
-                  robotReefAngle.rotateBy(Rotation2d.k180deg)));
+                  new Rotation2d()));
+
       switch (driveToPoseState) {
         case SAFE_DISTANCE:
-        currentPoseRequest = () -> safeDistPose;
+          currentPoseRequest = () -> safeDistPose;
           if (!driveToPose.isScheduled()) {
             driveToPose.schedule();
           }
@@ -294,9 +297,11 @@ public class ScoreCoral extends Command {
       Pose2d safeDistPose =
           targetScoringPose.transformBy(
               new Transform2d(
-                  FieldConstants.KeypointPoses.safeDistFromCoralScoringPos,
+                  level == Level.L1
+                      ? -FieldConstants.KeypointPoses.safeDistFromTroughScoringPos
+                      : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
                   0,
-                  robotReefAngle.rotateBy(Rotation2d.k180deg)));
+                  new Rotation2d()));
 
       switch (state) {
         case SAFE_DISTANCE:
@@ -386,6 +391,7 @@ public class ScoreCoral extends Command {
   }
 
   public boolean isInSafeArea() {
+    // Convert robot translation to reef face 0 degrees and compare x coordinates
     Translation2d convertedRobotTrans;
     if (Robot.alliance == DriverStation.Alliance.Red) {
       convertedRobotTrans =

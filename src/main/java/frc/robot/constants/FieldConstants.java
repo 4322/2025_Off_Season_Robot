@@ -382,14 +382,27 @@ public class FieldConstants {
     private static final double sideTroughDistanceFromBranch = 0.153035; // Field CAD
     private static final double robotBumperToCenter = Units.inchesToMeters(16.97687); // Robot CAD
 
+    // Distance robot has to be from reef to score/descore
     private static final double scoringDistanceFromReef =
-        Units.inchesToMeters(7) + robotBumperToCenter;
+        Units.inchesToMeters(7)
+            + robotBumperToCenter; // TODO: Only change the number which represents distance between
+    // face of reef and front of robot bumper
     private static final double descoreAlgaeDriveInDist =
-        Units.inchesToMeters(7) + robotBumperToCenter;
+        Units.inchesToMeters(7)
+            + robotBumperToCenter; // TODO: Only change the number which represents distance between
+    // face of reef and front of robot bumper
 
-    public static final double reefSafeDistance = Units.inchesToMeters(15) + robotBumperToCenter;
-    public static final double safeDistFromCoralScoringPos =
+    // Minimum distance from robot front bumper to reef face where arm can swing all the way out
+    // without hitting reef
+    public static final double reefSafeDistance =
+        Units.inchesToMeters(15)
+            + robotBumperToCenter; // TODO: Only change the number which represents distance between
+    // face of reef and front of robot bumper
+
+    public static final double safeDistFromBranchScoringPos =
         reefSafeDistance - scoringDistanceFromReef;
+    public static final double safeDistFromTroughScoringPos =
+        reefSafeDistance - robotBumperToCenter;
     public static final double safeDistFromAlgaeDescorePos =
         reefSafeDistance - descoreAlgaeDriveInDist;
 
@@ -407,9 +420,9 @@ public class FieldConstants {
 
     // Points in front of field relative 0 degree reef face (A,B) that are in line with branches
     public static final Translation2d leftReefBranchFaceRed =
-        new Translation2d(fieldLength - 3.6576254, 4.1902634);
-    public static final Translation2d rightReefBranchFaceRed =
         new Translation2d(fieldLength - 3.6576254, 3.8615874);
+    public static final Translation2d rightReefBranchFaceRed =
+        new Translation2d(fieldLength - 3.6576254, 4.1902634);
 
     // Scoring positions of center of robot drivebase
     public static final Translation2d leftReefBranchScoringBlue =

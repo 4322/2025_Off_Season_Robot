@@ -74,9 +74,7 @@ public class DescoreAlgae extends Command {
     safeDescorePose =
         targetScoringPose.transformBy(
             new Transform2d(
-                FieldConstants.KeypointPoses.safeDistFromAlgaeDescorePos,
-                0,
-                robotReefAngle.rotateBy(Rotation2d.k180deg)));
+                -FieldConstants.KeypointPoses.safeDistFromAlgaeDescorePos, 0, new Rotation2d()));
   }
 
   @Override
@@ -152,6 +150,7 @@ public class DescoreAlgae extends Command {
   }
 
   public boolean isInSafeArea() {
+    // Convert robot translation to reef face 0 degrees and compare x coordinates
     Translation2d convertedRobotTrans;
     if (Robot.alliance == DriverStation.Alliance.Red) {
       convertedRobotTrans =
