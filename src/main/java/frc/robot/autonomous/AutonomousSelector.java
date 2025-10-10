@@ -3,6 +3,7 @@ package frc.robot.autonomous;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.autonomous.modes.Leave;
 import frc.robot.autonomous.modes.OneCoralOneAlgaeCenter;
+import frc.robot.autonomous.modes.OneCoralOneAlgaeEjectCenter;
 import frc.robot.autonomous.modes.ThreeCoralLeft;
 import frc.robot.autonomous.modes.ThreeCoralRight;
 import frc.robot.autonomous.modes.TwoCoralOneAlgaeLeft;
@@ -37,6 +38,8 @@ public class AutonomousSelector {
       "TWO_CORAL_ONE_ALGAE_LEFT",
       new TwoCoralOneAlgaeLeft(drive, superstructure, intakeSuperstructure, vision)
     );
+    autonomousSelector.addOption("ONE_CORAL_ONE_ALGAE_EJECT_CENTER", 
+    new OneCoralOneAlgaeEjectCenter(drive, superstructure, intakeSuperstructure, vision));
   }
 
   public SequentialCommandGroup get() {

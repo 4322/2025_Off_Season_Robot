@@ -22,8 +22,8 @@ import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
 
-public class OneCoralOneAlgaeCenter extends SequentialCommandGroup {
-  public OneCoralOneAlgaeCenter(
+public class OneCoralOneAlgaeEjectCenter extends SequentialCommandGroup {
+  public OneCoralOneAlgaeEjectCenter(
       Drive drive,
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,

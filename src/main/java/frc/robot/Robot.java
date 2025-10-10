@@ -44,13 +44,7 @@ public class Robot extends LoggedRobot {
   private DigitalInput coastButton = new DigitalInput(Constants.dioCoastButton);
   private Timer coastButtonTimer = new Timer();
 
-  public static PathPlannerPath Leave;
-
-  public static PathPlannerPath CenterStartToGulf;
-  public static PathPlannerPath GulfToGulfHotel;
-  public static PathPlannerPath GulfHotelToCenterBarge;
-  public static PathPlannerPath CenterBargeToCenterAlgaeScore;
-  public static PathPlannerPath CenterAlgaeScoreToLeave;
+  // Mirrored paths
 
   public static PathPlannerPath ThreeCoralStartToJuliet;
   public static PathPlannerPath JulietToFeed;
@@ -65,10 +59,21 @@ public class Robot extends LoggedRobot {
   public static PathPlannerPath DeltaToFeed;
   public static PathPlannerPath FeedToCharlie;
 
+  // Non mirrored paths
+  public static PathPlannerPath Leave;
+
+  public static PathPlannerPath CenterStartToGulf;
+  public static PathPlannerPath GulfToGulfHotel;
+  public static PathPlannerPath GulfHotelToCenterBarge;
+  public static PathPlannerPath CenterBargeToCenterAlgaeScore;
+  public static PathPlannerPath CenterAlgaeScoreToLeave;
+  
   public static PathPlannerPath JulietToIndiaJuliet;
   public static PathPlannerPath IndiaJulietToLeftBarge;
   public static PathPlannerPath LeftBargeToLeftAlgaeScore;
   public static PathPlannerPath LeftAlgaeScoreToFeed;
+
+  public static PathPlannerPath GulfHotelToCenterEject;
 
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
@@ -223,6 +228,8 @@ public class Robot extends LoggedRobot {
       IndiaJulietToLeftBarge = PathPlannerPath.fromPathFile("India-Juliet to Left Barge");
       LeftBargeToLeftAlgaeScore = PathPlannerPath.fromPathFile("Left Barge to Left Algae Score");
       LeftAlgaeScoreToFeed = PathPlannerPath.fromPathFile("Left Algae Score to Feed");
+
+      GulfHotelToCenterEject = PathPlannerPath.fromPathFile("Gulf-Hotel to Center Eject");
 
     } catch (Exception e) {
       DriverStation.reportError("Failed to load PathPlanner paths", true);
