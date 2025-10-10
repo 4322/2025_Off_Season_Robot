@@ -19,6 +19,8 @@ import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 public class ScoreCoral extends Command {
 
   private Superstructure.Level level;
@@ -176,7 +178,7 @@ public class ScoreCoral extends Command {
 
   @Override
   public void execute() {
-
+    Logger.recordOutput("ScoreCoral/state", state);
     if (Constants.enableDriveToPoseTestingScoreCoral) {
       Pose2d safeDistPose =
           targetScoringPose.transformBy(
