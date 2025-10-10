@@ -8,6 +8,7 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
+import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
@@ -421,6 +422,10 @@ public class Superstructure extends SubsystemBase {
 
   public double getArmAngle() {
     return arm.getAngleDegrees();
+  }
+
+  public EndEffectorStates getEndEffectorState() {
+    return endEffector.getState();
   }
 
   public Superstates getState() {

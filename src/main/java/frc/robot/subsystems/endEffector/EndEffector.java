@@ -33,7 +33,7 @@ public class EndEffector extends SubsystemBase {
   private Timer intakingTimer = new Timer();
   private Timer releasingTimer = new Timer();
 
-  private enum EndEffectorStates {
+  public enum EndEffectorStates {
     IDLE,
     INTAKE_ALGAE,
     INTAKE_CORAL,
@@ -345,5 +345,9 @@ public class EndEffector extends SubsystemBase {
 
   public boolean isPiecePickupDetected() {
     return isPiecePickupDetected;
+  }
+
+  public EndEffectorStates getState() {
+    return state;
   }
 }
