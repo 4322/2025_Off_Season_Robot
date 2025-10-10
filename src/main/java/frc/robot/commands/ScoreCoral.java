@@ -325,7 +325,6 @@ public class ScoreCoral extends Command {
           }
           break;
         case DRIVE_IN:
-          
           if (scoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
           } else if (driveToPose.atGoal()) {
@@ -339,7 +338,6 @@ public class ScoreCoral extends Command {
           }
           break;
         case DRIVEBACK:
-          
           if (scoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
           }
