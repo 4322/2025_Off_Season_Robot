@@ -33,7 +33,6 @@ public class AlgaeScoreCommand extends Command {
 
   @Override
   public void execute() {
-   
 
     if (RobotContainer.isScoringTriggerHeld() && superstructure.isAlgaeHeld()) {
       superstructure.requestAlgaeScore();

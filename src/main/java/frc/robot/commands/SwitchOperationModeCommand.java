@@ -40,7 +40,6 @@ public class SwitchOperationModeCommand extends Command {
     }
   }
 
-
   @Override
   public boolean isFinished() {
     return false;
