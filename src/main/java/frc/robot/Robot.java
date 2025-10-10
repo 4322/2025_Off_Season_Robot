@@ -65,6 +65,11 @@ public class Robot extends LoggedRobot {
   public static PathPlannerPath DeltaToFeed;
   public static PathPlannerPath FeedToCharlie;
 
+  public static PathPlannerPath JulietToIndiaJuliet;
+  public static PathPlannerPath IndiaJulietToLeftBarge;
+  public static PathPlannerPath LeftBargeToLeftAlgaeScore;
+  public static PathPlannerPath LeftAlgaeScoreToFeed;
+
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -213,6 +218,12 @@ public class Robot extends LoggedRobot {
       FeedToDelta = PathPlannerPath.fromPathFile("Feed to Kilo").mirrorPath();
       DeltaToFeed = PathPlannerPath.fromPathFile("Kilo to Feed").mirrorPath();
       FeedToCharlie = PathPlannerPath.fromPathFile("Feed to Lima").mirrorPath();
+
+      JulietToIndiaJuliet = PathPlannerPath.fromPathFile("Juliet to India-Juliet");
+      IndiaJulietToLeftBarge = PathPlannerPath.fromPathFile("India-Juliet to Left Barge");
+      LeftBargeToLeftAlgaeScore = PathPlannerPath.fromPathFile("Left Barge to Left Algae Score");
+      LeftAlgaeScoreToFeed = PathPlannerPath.fromPathFile("Left Algae Score to Feed");
+
     } catch (Exception e) {
       DriverStation.reportError("Failed to load PathPlanner paths", true);
     }
