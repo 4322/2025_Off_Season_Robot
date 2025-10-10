@@ -23,15 +23,17 @@ public class AlgaeScoreCommand extends Command {
   @Override
   public void initialize() {
     superstructure.requestAlgaePrescore();
-  }
 
-  @Override
-  public void execute() {
     if (Robot.alliance == DriverStation.Alliance.Blue) {
       drive.requestAutoRotateMode(Rotation2d.fromDegrees(0));
     } else {
       drive.requestAutoRotateMode(Rotation2d.fromDegrees(180));
     }
+  }
+
+  @Override
+  public void execute() {
+   
 
     if (RobotContainer.isScoringTriggerHeld() && superstructure.isAlgaeHeld()) {
       superstructure.requestAlgaeScore();
