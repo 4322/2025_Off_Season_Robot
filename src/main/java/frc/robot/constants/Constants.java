@@ -137,7 +137,7 @@ public final class Constants {
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
 
-    public static final double kG = 0.5;
+    public static final double kG = 0.4;
 
     public static final double iSat = 0.002;
     public static final double iZone = 0.0138;
