@@ -12,6 +12,7 @@ import frc.robot.commands.CoralIntakeManual;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
@@ -34,18 +35,18 @@ public class ThreeCoralRight extends SequentialCommandGroup {
               drive.resetPose(path.getStartingHolonomicPose().get());
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartToEcho),
-        new ScoreCoral(superstructure, Superstructure.Level.L4, drive),
+        new ScoreCoral(superstructure, Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManual(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.EchoToFeed)),
         AutoBuilder.followPath(Robot.FeedToDelta),
-        new ScoreCoral(superstructure, Superstructure.Level.L4, drive),
+        new ScoreCoral(superstructure, Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManual(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.DeltaToFeed)),
         AutoBuilder.followPath(Robot.FeedToCharlie),
-        new ScoreCoral(superstructure, Superstructure.Level.L4, drive));
+        new ScoreCoral(superstructure, Level.L4, drive));
   }
 }
