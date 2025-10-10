@@ -6,6 +6,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -83,7 +84,9 @@ public class Drive extends SubsystemBase {
               modules[2].getPosition(),
               modules[3].getPosition()
             },
-            Pose2d.kZero);
+            Pose2d.kZero,
+            VecBuilder.fill(0.3, 0.3, 0.05),
+            VecBuilder.fill(0.4, 0.4, 0.4));
 
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configure(
