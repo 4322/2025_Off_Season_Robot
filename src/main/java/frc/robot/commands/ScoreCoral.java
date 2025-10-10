@@ -39,6 +39,7 @@ public class ScoreCoral extends Command {
 
   private Rotation2d robotReefAngle;
   private ReefStatus reefStatus;
+  private Pose2d safeDistPose = new Pose2d();
 
   public enum ScoreState {
     SAFE_DISTANCE,
@@ -294,7 +295,10 @@ public class ScoreCoral extends Command {
           }
         }
       }
-      Pose2d safeDistPose =
+
+      switch (state) {
+        case SAFE_DISTANCE:
+        safeDistPose =
           targetScoringPose.transformBy(
               new Transform2d(
                   level == Level.L1
@@ -303,8 +307,6 @@ public class ScoreCoral extends Command {
                   0,
                   new Rotation2d()));
 
-      switch (state) {
-        case SAFE_DISTANCE:
           currentPoseRequest = () -> safeDistPose;
           if (!driveToPose.isScheduled()) {
             driveToPose.schedule();
