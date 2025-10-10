@@ -28,6 +28,7 @@ public class ThreeCoralLeft extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () -> {
+              superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
               PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
               if (Robot.alliance == Alliance.Red) {
                 path = path.flipPath();

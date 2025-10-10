@@ -28,6 +28,7 @@ public class ThreeCoralRight extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () -> {
+              superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
               PathPlannerPath path = Robot.ThreeCoralStartToEcho;
               if (Robot.alliance == Alliance.Red) {
                 path = path.flipPath();
