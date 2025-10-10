@@ -267,9 +267,9 @@ public final class Constants {
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 100;
 
-    public static final double coralProximityThreshold = 0.2;
-    public static final double algaeProximityThresholdIntake = 0.15;
-    public static final double algaeProximityThreshold = 0.2;
+    public static final double coralProximityThreshold = 0.25;
+    public static final double algaeProximityThresholdIntake = 0.17;
+    public static final double algaeProximityThreshold = 0.25;
 
     public static final boolean useSensorColor = false; // TODO change this when we get color tuned
     // TODO tune these
