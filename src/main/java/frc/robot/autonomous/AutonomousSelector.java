@@ -5,6 +5,7 @@ import frc.robot.autonomous.modes.Leave;
 import frc.robot.autonomous.modes.OneCoralOneAlgaeCenter;
 import frc.robot.autonomous.modes.ThreeCoralLeft;
 import frc.robot.autonomous.modes.ThreeCoralRight;
+import frc.robot.autonomous.modes.TwoCoralOneAlgaeLeft;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
@@ -32,6 +33,10 @@ public class AutonomousSelector {
     autonomousSelector.addOption(
         "ONE_CORAL_ONE_ALGAE_CENTER",
         new OneCoralOneAlgaeCenter(drive, superstructure, intakeSuperstructure, vision));
+    autonomousSelector.addOption(
+      "TWO_CORAL_ONE_ALGAE_LEFT",
+      new TwoCoralOneAlgaeLeft(drive, superstructure, intakeSuperstructure, vision)
+    );
   }
 
   public SequentialCommandGroup get() {
