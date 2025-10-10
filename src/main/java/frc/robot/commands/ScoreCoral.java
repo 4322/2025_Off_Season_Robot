@@ -179,6 +179,8 @@ public class ScoreCoral extends Command {
   @Override
   public void execute() {
     Logger.recordOutput("ScoreCoral/state", state);
+    Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
+    Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
     if (Constants.enableDriveToPoseTestingScoreCoral) {
       Pose2d safeDistPose =
           targetScoringPose.transformBy(
