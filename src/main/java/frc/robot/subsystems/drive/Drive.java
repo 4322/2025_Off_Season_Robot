@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.DrivetrainConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -127,10 +126,7 @@ public class Drive extends SubsystemBase {
    */
   public void runVelocity(ChassisSpeeds speeds, boolean fieldRelative) {
     if (fieldRelative) {
-      speeds =
-          ChassisSpeeds.fromFieldRelativeSpeeds(
-              speeds,
-              Robot.alliance == Alliance.Red ? getRotation().plus(Rotation2d.kPi) : getRotation());
+      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getRotation());
     }
 
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
@@ -157,10 +153,7 @@ public class Drive extends SubsystemBase {
    */
   public void runOpenLoop(ChassisSpeeds speeds, boolean fieldRelative) {
     if (fieldRelative) {
-      speeds =
-          ChassisSpeeds.fromFieldRelativeSpeeds(
-              speeds,
-              Robot.alliance == Alliance.Red ? getRotation().plus(Rotation2d.kPi) : getRotation());
+      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getRotation());
     }
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
