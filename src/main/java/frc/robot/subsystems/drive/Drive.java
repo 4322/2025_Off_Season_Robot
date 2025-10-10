@@ -85,7 +85,7 @@ public class Drive extends SubsystemBase {
               modules[3].getPosition()
             },
             Pose2d.kZero,
-            VecBuilder.fill(0.3, 0.3, 0.05),
+            VecBuilder.fill(0.3, 0.3, 0.0005),
             VecBuilder.fill(0.4, 0.4, 0.4));
 
     // Configure AutoBuilder for PathPlanner
