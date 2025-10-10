@@ -18,7 +18,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends Command {
@@ -302,14 +301,14 @@ public class ScoreCoral extends Command {
 
       switch (state) {
         case SAFE_DISTANCE:
-        safeDistPose =
-          targetScoringPose.transformBy(
-              new Transform2d(
-                  level == Level.L1
-                      ? -FieldConstants.KeypointPoses.safeDistFromTroughScoringPos
-                      : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
-                  0,
-                  new Rotation2d()));
+          safeDistPose =
+              targetScoringPose.transformBy(
+                  new Transform2d(
+                      level == Level.L1
+                          ? -FieldConstants.KeypointPoses.safeDistFromTroughScoringPos
+                          : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
+                      0,
+                      new Rotation2d()));
 
           currentPoseRequest = () -> safeDistPose;
           if (!driveToPose.isScheduled()) {
@@ -320,23 +319,27 @@ public class ScoreCoral extends Command {
           } else if (isInSafeArea() || driveToPose.atGoal()) {
             superstructure.requestPrescoreCoral(level);
             if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
+              currentPoseRequest = () -> targetScoringPose;
               state = ScoreState.DRIVE_IN;
             }
           }
           break;
         case DRIVE_IN:
-          currentPoseRequest = () -> targetScoringPose;
+          
           if (scoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
           } else if (driveToPose.atGoal()) {
             superstructure.requestScoreCoral(level);
-            if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint() && !superstructure.isCoralHeld()) {
+            if (superstructure.armAtSetpoint()
+                && superstructure.elevatorAtSetpoint()
+                && !superstructure.isCoralHeld()) {
+              currentPoseRequest = () -> safeDistPose;
               state = ScoreState.DRIVEBACK;
             }
           }
           break;
         case DRIVEBACK:
-          currentPoseRequest = () -> safeDistPose;
+          
           if (scoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
           }
