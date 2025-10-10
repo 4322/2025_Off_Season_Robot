@@ -330,7 +330,7 @@ public class ScoreCoral extends Command {
             state = ScoreState.HOLD_POSITION;
           } else if (driveToPose.atGoal()) {
             superstructure.requestScoreCoral(level);
-            if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
+            if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint() && !superstructure.isCoralHeld()) {
               state = ScoreState.DRIVEBACK;
             }
           }
