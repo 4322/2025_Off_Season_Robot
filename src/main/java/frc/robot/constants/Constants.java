@@ -116,19 +116,19 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
 
     public static final double sensorToArm = 85 / 10.0;
-    public static final double motorShaftToSensorShaft = 56 / 16.0;
+    public static final double motorShaftToSensorShaft = 60 / 12.0;
     public static final double motorGearRatio = sensorToArm * motorShaftToSensorShaft;
 
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0;
     public static final double coralHoldDeg = 3;
-    public static final double algaeGroundDeg = 69.0; // TODO: Set to actual angle
+    public static final double algaeGroundDeg = 69.0; 
 
     public static final double ejectDeg = 51.0;
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
-    public static final double minArmSafeDeg = 47; // TODO: Set to actual angle
-    public static final double minArmSafeWithCoralDeg = 54; // TODO: Set to actual angle
+    public static final double minArmSafeDeg = 47;
+    public static final double minArmSafeWithCoralDeg = 54; 
     public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = enableArmSensor ? 0.5 : 0.75;
@@ -139,8 +139,8 @@ public final class Constants {
 
     public static final double kG = 0.5;
 
-    public static final double iSat = 0.002; // TODO
-    public static final double iZone = 0.0138; // TODO
+    public static final double iSat = 0.002; 
+    public static final double iZone = 0.0138; 
 
     public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 2;
     public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20;
