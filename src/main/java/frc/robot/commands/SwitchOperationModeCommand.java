@@ -16,10 +16,7 @@ public class SwitchOperationModeCommand extends Command {
   }
 
   @Override
-  public void initialize() {}
-
-  @Override
-  public void execute() {
+  public void initialize() {
     if (!driver.a().getAsBoolean()
         && !driver.x().getAsBoolean()
         && !driver.y().getAsBoolean()
@@ -42,6 +39,7 @@ public class SwitchOperationModeCommand extends Command {
       }
     }
   }
+
 
   @Override
   public boolean isFinished() {
