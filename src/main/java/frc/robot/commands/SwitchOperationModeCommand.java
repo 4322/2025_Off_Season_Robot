@@ -2,11 +2,11 @@ package frc.robot.commands;
 
 import static frc.robot.RobotContainer.driver;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Superstructure;
 
-public class SwitchOperationModeCommand extends Command {
+public class SwitchOperationModeCommand extends InstantCommand {
 
   private Superstructure superstructure;
 
@@ -37,11 +37,6 @@ public class SwitchOperationModeCommand extends Command {
         superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
       }
     }
-  }
-
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 
   @Override
