@@ -100,6 +100,12 @@ public class EndEffector extends SubsystemBase {
           state = EndEffectorStates.INTAKE_ALGAE;
         } else if (requestIntakeCoral) {
           state = EndEffectorStates.INTAKE_CORAL;
+        } else if (inputs.isCoralProximityDetected) {
+          state = EndEffectorStates.HOLD_CORAL;
+          coralHeld = true;
+        } else if (requestEject) {
+          unsetAllRequests();
+          state = EndEffectorStates.EJECT;
         }
         break;
       case INTAKE_ALGAE:

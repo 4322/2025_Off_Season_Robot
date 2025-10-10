@@ -213,6 +213,8 @@ public class Vision extends SubsystemBase {
                       Constants.Vision.stdDevBaseline
                           * Constants.Vision.thetaStdDevBaseline
                           * thetaStdDev));
+              Logger.recordOutput("Vision/StdDev/XY", Constants.Vision.stdDevBaseline * xyStdDev * Constants.Vision.thetaStdDevBaseline);
+              Logger.recordOutput("Vision/StdDev/Theta", Constants.Vision.stdDevBaseline * thetaStdDev * Constants.Vision.thetaStdDevBaseline);
             } else {
               xyStdDev = Math.max(xyStdDevModel.predict(avgTagDistance), 0.000001);
               thetaStdDev = Math.max(thetaStdDevModel.predict(avgTagDistance), 0.000001);
@@ -224,6 +226,9 @@ public class Vision extends SubsystemBase {
                       Constants.Vision.stdDevBaseline * xyStdDev,
                       Constants.Vision.stdDevBaseline * xyStdDev,
                       Constants.Vision.stdDevBaseline * thetaStdDev));
+
+              Logger.recordOutput("Vision/StdDev/XY", Constants.Vision.stdDevBaseline * xyStdDev);
+              Logger.recordOutput("Vision/StdDev/Theta", Constants.Vision.stdDevBaseline * thetaStdDev);
             }
           }
           break;
@@ -318,6 +323,9 @@ public class Vision extends SubsystemBase {
                     Constants.Vision.stdDevBaseline * xyStdDev,
                     Constants.Vision.stdDevBaseline * xyStdDev,
                     4322.0));
+
+            Logger.recordOutput("Vision/StdDev/XY", Constants.Vision.stdDevBaseline * xyStdDev);
+            Logger.recordOutput("Vision/StdDev/Theta", 4322);
           }
           break;
       }
@@ -415,10 +423,10 @@ public class Vision extends SubsystemBase {
               ? FieldConstants.ReefFaceTag.EF.idRed
               : FieldConstants.ReefFaceTag.KL.idBlue;
     } else if ((150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 180)
-        || (-150 <= reefCenterToRobotDeg && reefCenterToRobotDeg <= -180)) {
+        || (-150 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -180)) {
       robotToReefFace = 0;
       if ((153 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 177)
-          || (-153 <= reefCenterToRobotDeg && reefCenterToRobotDeg <= -177)) {
+          || (-147 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -183)) {
         reefFaceAmbiguity = false;
       } else {
         reefFaceAmbiguity = true;

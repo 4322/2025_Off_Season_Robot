@@ -147,6 +147,14 @@ public class IndexerIONitrate implements IndexerIO {
     }
   }
 
+  public void setLeftMotorVoltage(double voltage) {
+    indexerMotorLeft.setVoltage(voltage);
+  }
+
+  public void setRightMotorVoltage(double voltage) {
+    indexerMotorRight.setVoltage(voltage);
+  }
+
   @Override
   public void stop(IdleMode mode) {
     prevRequestedVoltage = -999;

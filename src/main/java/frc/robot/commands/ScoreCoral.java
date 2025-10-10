@@ -19,6 +19,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends Command {
 
@@ -40,6 +41,7 @@ public class ScoreCoral extends Command {
 
   private Rotation2d robotReefAngle;
   private ReefStatus reefStatus;
+  private Pose2d safeDistPose = new Pose2d();
 
   public enum ScoreState {
     SAFE_DISTANCE,
@@ -63,7 +65,7 @@ public class ScoreCoral extends Command {
     this.level = level;
     this.drive = drive;
 
-    driveToPose = new DriveToPose(drive, currentPoseRequest);
+    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
     addRequirements(superstructure);
   }
 
@@ -176,20 +178,25 @@ public class ScoreCoral extends Command {
 
   @Override
   public void execute() {
-
+    Logger.recordOutput("ScoreCoral/state", state);
+    Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
+    Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
     if (Constants.enableDriveToPoseTestingScoreCoral) {
       Pose2d safeDistPose =
           targetScoringPose.transformBy(
               new Transform2d(
-                  FieldConstants.KeypointPoses.safeDistFromCoralScoringPos,
+                  level == Level.L1
+                      ? -FieldConstants.KeypointPoses.safeDistFromTroughScoringPos
+                      : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
                   0,
-                  robotReefAngle.rotateBy(Rotation2d.k180deg)));
+                  new Rotation2d()));
+
       switch (driveToPoseState) {
         case SAFE_DISTANCE:
+          currentPoseRequest = () -> safeDistPose;
           if (!driveToPose.isScheduled()) {
             driveToPose.schedule();
           }
-          currentPoseRequest = () -> safeDistPose;
           if (Constants.enableDriveToPoseWithPrescore) {
             superstructure.requestPrescoreCoral(level);
           }
@@ -292,43 +299,49 @@ public class ScoreCoral extends Command {
           }
         }
       }
-      Pose2d safeDistPose =
-          targetScoringPose.transformBy(
-              new Transform2d(
-                  FieldConstants.KeypointPoses.safeDistFromCoralScoringPos,
-                  0,
-                  robotReefAngle.rotateBy(Rotation2d.k180deg)));
 
       switch (state) {
         case SAFE_DISTANCE:
+          safeDistPose =
+              targetScoringPose.transformBy(
+                  new Transform2d(
+                      level == Level.L1
+                          ? -FieldConstants.KeypointPoses.safeDistFromTroughScoringPos
+                          : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
+                      0,
+                      new Rotation2d()));
+
           currentPoseRequest = () -> safeDistPose;
           if (!driveToPose.isScheduled()) {
             driveToPose.schedule();
           }
-          if (isInSafeArea() || driveToPose.atGoal()) {
+          if (scoreButtonReleased()) {
+            state = ScoreState.HOLD_POSITION;
+          } else if (isInSafeArea() || driveToPose.atGoal()) {
             superstructure.requestPrescoreCoral(level);
-          }
-
-          if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
-            state = ScoreState.DRIVE_IN;
+            if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
+              currentPoseRequest = () -> targetScoringPose;
+              state = ScoreState.DRIVE_IN;
+            }
           }
           break;
         case DRIVE_IN:
-          currentPoseRequest = () -> targetScoringPose;
-
           if (scoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
           } else if (driveToPose.atGoal()) {
             superstructure.requestScoreCoral(level);
-            if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint() && level == Level.L1) {
-              state = ScoreState.DRIVEBACK;
+            if (superstructure.armAtSetpoint()
+                && superstructure.elevatorAtSetpoint()
+                && !superstructure.isCoralHeld() && level == Level.L1) {
+                  currentPoseRequest = () -> safeDistPose;
+                  state = ScoreState.DRIVEBACK;
             } else if (level != Level.L1 && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL) {
+              currentPoseRequest = () -> safeDistPose;
               state = ScoreState.DRIVEBACK;
             }
           }
           break;
         case DRIVEBACK:
-          currentPoseRequest = () -> safeDistPose;
           if (scoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
           }
@@ -391,6 +404,7 @@ public class ScoreCoral extends Command {
   }
 
   public boolean isInSafeArea() {
+    // Convert robot translation to reef face 0 degrees and compare x coordinates
     Translation2d convertedRobotTrans;
     if (Robot.alliance == DriverStation.Alliance.Red) {
       convertedRobotTrans =

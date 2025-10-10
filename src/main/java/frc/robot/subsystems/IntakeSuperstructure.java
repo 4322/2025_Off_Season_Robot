@@ -19,6 +19,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   private boolean requestIntakeEject;
   private boolean requestUnhome;
   private boolean isHomed = false;
+  private boolean requestIndexerEject;
 
   private enum RetractLockedOutStates {
     FALSE,
@@ -42,7 +43,8 @@ public class IntakeSuperstructure extends SubsystemBase {
     RETRACT_IDLE,
     FEED,
     SLOW_REJECT,
-    INTAKE_EJECT
+    INTAKE_EJECT,
+    INDEXER_EJECT
   }
 
   public IntakeSuperstructure(
@@ -86,8 +88,9 @@ public class IntakeSuperstructure extends SubsystemBase {
           rollers.feedSlow();
           indexer.feedSlow();
         }
-
-        if (requestIntakeEject) {
+        if (requestIndexerEject) {
+          state = IntakeSuperstates.INDEXER_EJECT;
+        } else if (requestIntakeEject) {
           state = IntakeSuperstates.INTAKE_EJECT;
         } else if (requestDeploy) {
           if (isCoralDetectedIndexer()
@@ -103,8 +106,12 @@ public class IntakeSuperstructure extends SubsystemBase {
         rollers.feed();
         indexer.feed();
         deployer.deploy();
+
         if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {
           state = IntakeSuperstates.SLOW_REJECT;
+        }
+        if (requestIndexerEject) {
+          state = IntakeSuperstates.INDEXER_EJECT;
         }
 
         switch (retractLockedOutState) {
@@ -179,6 +186,25 @@ public class IntakeSuperstructure extends SubsystemBase {
           state = IntakeSuperstates.RETRACT_IDLE;
         }
         break;
+      case INDEXER_EJECT:
+        deployer.deploy();
+        rollers.eject();
+
+        if (RobotContainer.driver.rightBumper().getAsBoolean()) {
+          indexer.ejectRight();
+        } else if (RobotContainer.driver.leftBumper().getAsBoolean()) {
+          indexer.ejectLeft();
+        } else {
+          requestIndexerEject = false;
+        }
+        if (!requestIndexerEject) {
+          if (requestRetractIdle) {
+            state = IntakeSuperstates.RETRACT_IDLE;
+          } else if (requestDeploy) {
+            state = IntakeSuperstates.FEED;
+          }
+        }
+        break;
     }
   }
 
@@ -187,6 +213,7 @@ public class IntakeSuperstructure extends SubsystemBase {
     requestRetractIdle = false;
     requestIntakeEject = false;
     requestDeploy = false;
+    requestIndexerEject = false;
   }
 
   public IntakeSuperstates getState() {
@@ -207,6 +234,10 @@ public class IntakeSuperstructure extends SubsystemBase {
   public void requestEject() {
     unsetAllRequests();
     requestIntakeEject = true;
+  }
+
+  public void requestIdexerEject() {
+    requestIndexerEject = true;
   }
 
   public void requestUnhome() {

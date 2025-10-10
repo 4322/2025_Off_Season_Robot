@@ -25,13 +25,13 @@ public final class Constants {
   public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = true;
-  public static final boolean enableArmSensor = false;
+  public static final boolean enableArmSensor = true;
   public static final boolean enableDriveToPoseTestingScoreCoral = false;
   public static final boolean enableDriveToPoseWithPrescore = false;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING_FIXED_VELOCITY;
   public static final boolean tuneAutoRotate = false;
   public static final boolean continuousNitrateRequestsEnabled = true;
-  public static final boolean enableReefLock = false;
+  public static final boolean enableReefLock = true;
   public static final boolean enableGlobalPoseTrigEstimation = false;
   public static final boolean enableDriveToPoseTuning = false;
   public static final boolean debugPIDModeEnabled = false;
@@ -116,19 +116,19 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
 
     public static final double sensorToArm = 85 / 10.0;
-    public static final double motorShaftToSensorShaft = 56 / 16.0;
+    public static final double motorShaftToSensorShaft = 60 / 12.0;
     public static final double motorGearRatio = sensorToArm * motorShaftToSensorShaft;
 
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0;
-    public static final double coralHoldDeg = 0.5;
-    public static final double algaeGroundDeg = 69.0; // TODO: Set to actual angle
+    public static final double coralHoldDeg = 3;
+    public static final double algaeGroundDeg = 69.0;
 
     public static final double ejectDeg = 51.0;
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
-    public static final double minArmSafeDeg = 47; // TODO: Set to actual angle
-    public static final double minArmSafeWithCoralDeg = 54; // TODO: Set to actual angle
+    public static final double minArmSafeDeg = 47;
+    public static final double minArmSafeWithCoralDeg = 54;
     public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = enableArmSensor ? 0.5 : 0.75;
@@ -137,14 +137,14 @@ public final class Constants {
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
 
-    public static final double kG = 0.5;
+    public static final double kG = 0.4;
 
-    public static final double iSat = 0.002; // TODO
-    public static final double iZone = 0.0138; // TODO
+    public static final double iSat = 0.002;
+    public static final double iZone = 0.0138;
 
     public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 2;
-    public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 31;
-    public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 30;
+    public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20;
+    public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20;
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL4CoralDeg - 14;
 
     // Prescore Degrees Arm
@@ -218,7 +218,7 @@ public final class Constants {
 
     public static final double intializationVoltage = 2.0;
     public static final double initializationTimerThresholdSecs = 5;
-    public static final double coralDetectionHeightThresholdSecs = 0.2;
+    public static final double coralDetectionHeightThresholdSecs = 0.4;
     public static final double initializationVelocityMetersThresholdPerSecs = 0.01;
 
     public static final double ejectHeightMeters = minElevatorSafeWithCoralMeters;
@@ -255,7 +255,7 @@ public final class Constants {
     public static final double coralHoldVolts = 0.45;
 
     public static final double algaeIntakeVolts = 6;
-    public static final double coralIntakeVolts = 3;
+    public static final double coralIntakeVolts = 4;
 
     public static final double algaeReleaseVolts = -3.0;
     public static final double coralReleaseVolts = -4.0;
@@ -298,11 +298,11 @@ public final class Constants {
     public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
 
     public static final double coralGrabDelaySeconds =
-        0.1; // Time to wait before lowering elevator after coral is detected in End Effector
+        0.2; // Time to wait before lowering elevator after coral is detected in End Effector
     public static final double algaeIntakingDelaySeconds =
         0.25; // Time to wait after algae is detected in End Effector before reducing voltage
     public static final double coralIntakingDelaySeconds =
-        0.05; // Time to wait after coral is detected in End Effector before reducing voltage
+        0.2; // Time to wait after coral is detected in End Effector before reducing voltage
     public static final double algaeReleasingDelaySeconds =
         0.5; // Time to wait when releasing before going back to non-holding voltage
     public static final double coralReleasingDelaySeconds = 0.5;
@@ -337,7 +337,8 @@ public final class Constants {
     public static final double motorGearRatio = 61.25;
     public static final double ejectPositionDegrees = 100;
     public static final double retractPositionDegrees = 125;
-    public static final double deployPositionDegrees = 0;
+
+    public static final double deployPositionDegrees = 3;
     public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kArm;
     public static final double maxRangeDegrees = 144.556;
     public static final double maxGravityDegrees = 40.0;
@@ -427,11 +428,11 @@ public final class Constants {
 
     public static final double driveMaxVelocity = 3.0;
     public static final double driveMaxVelocitySlow = Units.inchesToMeters(50.0);
-    public static final double driveMaxAcceleration = 4;
+    public static final double driveMaxAcceleration = 2.0;
 
-    public static final double thetaMaxVelocity = Units.degreesToRadians(360.0);
-    public static final double thetaMaxVelocitySlow = Units.degreesToRadians(90.0);
-    public static final double thetaMaxAcceleration = Units.degreesToRadians(720.0);
+    public static final double thetaMaxVelocity = 360;
+    public static final double thetaMaxVelocitySlow = 90;
+    public static final double thetaMaxAcceleration = 1440;
 
     public static final double driveTolerance = 0.06;
     public static final double driveToleranceSlow = 0.06;

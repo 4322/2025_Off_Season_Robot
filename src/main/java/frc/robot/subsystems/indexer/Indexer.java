@@ -18,6 +18,8 @@ public class Indexer extends SubsystemBase {
     EJECT,
     EJECT_SLOW,
     REJECT,
+    REJECT_LEFT,
+    REJECT_RIGHT,
     REJECT_SLOW
   }
 
@@ -59,6 +61,18 @@ public class Indexer extends SubsystemBase {
   public void rejectSlow() {
     currentAction = IndexerStatus.REJECT_SLOW;
     io.setVoltage(Constants.Indexer.voltageRejectSlow);
+  }
+
+  public void ejectLeft() {
+    currentAction = IndexerStatus.REJECT_LEFT;
+    io.setLeftMotorVoltage(Constants.Indexer.voltageReject);
+    io.setRightMotorVoltage(Constants.Indexer.voltageFeed);
+  }
+
+  public void ejectRight() {
+    currentAction = IndexerStatus.REJECT_RIGHT;
+    io.setRightMotorVoltage(Constants.Indexer.voltageReject);
+    io.setLeftMotorVoltage(Constants.Indexer.voltageFeed);
   }
 
   public void idle() {
