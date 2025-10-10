@@ -15,6 +15,8 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ReefStatus;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 public class DescoreAlgae extends Command {
   private final Superstructure superstructure;
   private final Drive drive;
@@ -79,7 +81,9 @@ public class DescoreAlgae extends Command {
 
   @Override
   public void execute() {
-
+    Logger.recordOutput("DescoreAlgae/State", state);
+    Logger.recordOutput("DscoreAlgae/atGoal", driveToPose.atGoal());
+    Logger.recordOutput("DscoreAlgae/isInSafeArea", isInSafeArea());
     if (superstructure.isAutoOperationMode()) {
       switch (state) {
         case SAFE_DISTANCE:
@@ -87,28 +91,26 @@ public class DescoreAlgae extends Command {
           if (!driveToPose.isScheduled()) {
             driveToPose.schedule();
           }
-          if (isInSafeArea() || driveToPose.atGoal()) {
-            superstructure.requestDescoreAlgae(level);
-          }
-
-          if (superstructure.armAtSetpoint()
-              && superstructure.elevatorAtSetpoint()
-              && driveToPose.atGoal()) {
-            state = ScoreState.DRIVE_IN;
-          }
-          break;
-        case DRIVE_IN:
-          currentPoseRequest = () -> targetScoringPose;
 
           if (descoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
+          } else if (isInSafeArea() || driveToPose.atGoal()) {
+              superstructure.requestDescoreAlgae(level);
+              if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
+                state = ScoreState.DRIVE_IN;
+                currentPoseRequest = () -> targetScoringPose;  
+              }
           }
-          if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
+          break;
+        case DRIVE_IN:
+          if (descoreButtonReleased()) {
+            state = ScoreState.HOLD_POSITION;
+          } else if (superstructure.isAlgaeHeld()) {
+            currentPoseRequest = () -> safeDescorePose;
             state = ScoreState.DRIVEBACK;
           }
           break;
         case DRIVEBACK:
-          currentPoseRequest = () -> safeDescorePose;
           if (descoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
           }
@@ -128,6 +130,10 @@ public class DescoreAlgae extends Command {
           break;
       }
     } else {
+      if (driveToPose.isScheduled()) {
+        driveToPose.cancel();
+      }
+
       superstructure.requestDescoreAlgae(level);
     }
   }
@@ -145,7 +151,6 @@ public class DescoreAlgae extends Command {
   @Override
   public void end(boolean interrupted) {
     superstructure.requestIdle();
-    drive.requestFieldRelativeMode();
     running = false;
   }
 
