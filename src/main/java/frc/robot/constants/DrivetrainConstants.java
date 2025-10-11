@@ -51,7 +51,7 @@ public class DrivetrainConstants {
   private static final int frontLeftDriveMotorId = 6;
   private static final int frontLeftTurnMotorId = 4;
   private static final int frontLeftTurnEncoderId = 3;
-  private static final double halfWheelBaseMeters = 0.57785;
+  private static final double halfWheelBaseMeters = 0.57785 / 2.0;
 
   private static final double frontLeftXPos = halfWheelBaseMeters;
   private static final double frontLeftYPos = halfWheelBaseMeters;
