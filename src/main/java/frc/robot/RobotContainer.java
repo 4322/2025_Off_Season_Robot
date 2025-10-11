@@ -236,11 +236,9 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral()
-                      && !endEffector.hasAlgae()
-                      && !Constants.enableDriveToPoseTestingScoreCoral) {
+                      && !endEffector.hasAlgae()) {
                     new AlgaeIntakeGround(superstructure).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
-                      || Constants.enableDriveToPoseTestingScoreCoral) {
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new ScoreCoral(superstructure, Level.L1, drive).schedule();
                   }
                 }));
@@ -250,11 +248,9 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral()
-                      && !endEffector.hasAlgae()
-                      && !Constants.enableDriveToPoseTestingScoreCoral) {
+                      && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L2, drive).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
-                      || Constants.enableDriveToPoseTestingScoreCoral) {
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new ScoreCoral(superstructure, Level.L2, drive).schedule();
                   }
                 }));
@@ -264,11 +260,9 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral()
-                      && !endEffector.hasAlgae()
-                      && !Constants.enableDriveToPoseTestingScoreCoral) {
+                      && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L3, drive).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
-                      || Constants.enableDriveToPoseTestingScoreCoral) {
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new ScoreCoral(superstructure, Level.L3, drive).schedule();
                   }
                 }));
@@ -278,11 +272,9 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral()
-                      && endEffector.hasAlgae()
-                      && !Constants.enableDriveToPoseTestingScoreCoral) {
+                      && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
-                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()
-                      || Constants.enableDriveToPoseTestingScoreCoral) {
+                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new ScoreCoral(superstructure, Level.L4, drive).schedule();
                   }
                 }));
