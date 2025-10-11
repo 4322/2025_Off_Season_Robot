@@ -157,13 +157,11 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean atSetpoint() {
-    if (requestedSetpoint == Constants.Arm.scoringAlgaeDeg){
+    if (requestedSetpoint == Constants.Arm.scoringAlgaeDeg) {
+      return true;
+    } else {
       return ClockUtil.atReference(
-        inputs.PositionDegrees, requestedSetpoint, 10, true);
-    }
-    else {
-    return ClockUtil.atReference(
-        inputs.PositionDegrees, requestedSetpoint, Constants.Arm.setpointToleranceDegrees, true);
+          inputs.PositionDegrees, requestedSetpoint, Constants.Arm.setpointToleranceDegrees, true);
     }
   }
 

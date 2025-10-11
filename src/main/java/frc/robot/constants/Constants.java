@@ -5,7 +5,6 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
-
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;

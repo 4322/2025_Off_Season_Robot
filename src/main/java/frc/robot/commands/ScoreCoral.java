@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
+import static frc.robot.RobotContainer.driver;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,7 +11,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
@@ -23,6 +20,8 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends Command {
 
@@ -303,7 +302,7 @@ public class ScoreCoral extends Command {
           }
         }
       }
-      if (DriverStation.isAutonomous()){
+      if (DriverStation.isAutonomous()) {
         switch (state) {
           case SAFE_DISTANCE:
             safeDistPose =
@@ -314,12 +313,11 @@ public class ScoreCoral extends Command {
                             : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
                         0,
                         new Rotation2d()));
-  
+
             currentPoseRequest = () -> safeDistPose;
             if (!driveToPose.isScheduled()) {
               driveToPose.schedule();
-            }
-           else if (isInSafeArea() || driveToPose.atGoal()) {
+            } else if (isInSafeArea() || driveToPose.atGoal()) {
               superstructure.requestPrescoreCoral(level);
               if (superstructure.getState() == Superstates.PRESCORE_CORAL
                   && superstructure.armAtSetpoint()
@@ -330,7 +328,6 @@ public class ScoreCoral extends Command {
             }
             break;
           case DRIVE_IN:
-  
             if (driveToPose.atGoal()) {
               times.start();
               if (times.hasElapsed(0.33)) {
@@ -344,9 +341,10 @@ public class ScoreCoral extends Command {
                   && level == Level.L1) {
                 currentPoseRequest = () -> safeDistPose;
                 state = ScoreState.DRIVEBACK;
-  
+
               } else if (level != Level.L1
-                  && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL) {
+                  && superstructure.getEndEffectorState()
+                      == EndEffectorStates.RELEASE_CORAL_NORMAL) {
                 currentPoseRequest = () -> safeDistPose;
                 state = ScoreState.DRIVEBACK;
               }
@@ -359,88 +357,87 @@ public class ScoreCoral extends Command {
             if (driveToPose.atGoal()) {
               running = false;
             }
-  
             break;
         }
-      }
-      else {
-      switch (state) {
-        case SAFE_DISTANCE:
-          safeDistPose =
-              targetScoringPose.transformBy(
-                  new Transform2d(
-                      level == Level.L1
-                          ? -FieldConstants.KeypointPoses.safeDistFromTroughScoringPos
-                          : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
-                      0,
-                      new Rotation2d()));
+      } else {
+        switch (state) {
+          case SAFE_DISTANCE:
+            safeDistPose =
+                targetScoringPose.transformBy(
+                    new Transform2d(
+                        level == Level.L1
+                            ? -FieldConstants.KeypointPoses.safeDistFromTroughScoringPos
+                            : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
+                        0,
+                        new Rotation2d()));
 
-          currentPoseRequest = () -> safeDistPose;
-          if (!driveToPose.isScheduled()) {
-            driveToPose.schedule();
-          }
-          if (scoreButtonReleased()) {
-            state = ScoreState.HOLD_POSITION;
-          } else if (isInSafeArea() || driveToPose.atGoal()) {
-            superstructure.requestPrescoreCoral(level);
-            if (superstructure.getState() == Superstates.PRESCORE_CORAL
-                && superstructure.armAtSetpoint()
-                && superstructure.elevatorAtSetpoint()) {
-              currentPoseRequest = () -> targetScoringPose;
-              state = ScoreState.DRIVE_IN;
+            currentPoseRequest = () -> safeDistPose;
+            if (!driveToPose.isScheduled()) {
+              driveToPose.schedule();
             }
-          }
-          break;
-        case DRIVE_IN:
-          if (scoreButtonReleased()) {
-            state = ScoreState.HOLD_POSITION;
-          }
+            if (scoreButtonReleased()) {
+              state = ScoreState.HOLD_POSITION;
+            } else if (isInSafeArea() || driveToPose.atGoal()) {
+              superstructure.requestPrescoreCoral(level);
+              if (superstructure.getState() == Superstates.PRESCORE_CORAL
+                  && superstructure.armAtSetpoint()
+                  && superstructure.elevatorAtSetpoint()) {
+                currentPoseRequest = () -> targetScoringPose;
+                state = ScoreState.DRIVE_IN;
+              }
+            }
+            break;
+          case DRIVE_IN:
+            if (scoreButtonReleased()) {
+              state = ScoreState.HOLD_POSITION;
+            }
 
-          if (driveToPose.atGoal()) {
-            times.start();
-            if (times.hasElapsed(0.33)) {
-              superstructure.requestScoreCoral(level);
+            if (driveToPose.atGoal()) {
+              times.start();
+              if (times.hasElapsed(0.33)) {
+                superstructure.requestScoreCoral(level);
+                times.stop();
+                times.reset();
+              }
+              if (superstructure.armAtSetpoint()
+                  && superstructure.elevatorAtSetpoint()
+                  && !superstructure.isCoralHeld()
+                  && level == Level.L1) {
+                currentPoseRequest = () -> safeDistPose;
+                state = ScoreState.DRIVEBACK;
+
+              } else if (level != Level.L1
+                  && superstructure.getEndEffectorState()
+                      == EndEffectorStates.RELEASE_CORAL_NORMAL) {
+                currentPoseRequest = () -> safeDistPose;
+                state = ScoreState.DRIVEBACK;
+              }
+            } else {
               times.stop();
               times.reset();
             }
-            if (superstructure.armAtSetpoint()
-                && superstructure.elevatorAtSetpoint()
-                && !superstructure.isCoralHeld()
-                && level == Level.L1) {
-              currentPoseRequest = () -> safeDistPose;
-              state = ScoreState.DRIVEBACK;
 
-            } else if (level != Level.L1
-                && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL) {
-              currentPoseRequest = () -> safeDistPose;
-              state = ScoreState.DRIVEBACK;
+            break;
+          case DRIVEBACK:
+            if (scoreButtonReleased()) {
+              state = ScoreState.HOLD_POSITION;
             }
-          } else {
-            times.stop();
-            times.reset();
-          }
+            if (driveToPose.atGoal()) {
+              running = false;
+            }
 
-          break;
-        case DRIVEBACK:
-          if (scoreButtonReleased()) {
-            state = ScoreState.HOLD_POSITION;
-          }
-          if (driveToPose.atGoal()) {
-            running = false;
-          }
-
-          break;
-        case HOLD_POSITION:
-          if (driveToPose.isScheduled()) {
-            driveToPose.cancel();
-          }
-          if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
-            state = ScoreState.SAFE_DISTANCE;
-            running = false;
-          }
-          break;
+            break;
+          case HOLD_POSITION:
+            if (driveToPose.isScheduled()) {
+              driveToPose.cancel();
+            }
+            if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
+              state = ScoreState.SAFE_DISTANCE;
+              running = false;
+            }
+            break;
+        }
       }
-    }
 
     } else {
       if (driveToPose.isScheduled()) {
