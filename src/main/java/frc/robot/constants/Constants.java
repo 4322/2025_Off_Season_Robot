@@ -138,17 +138,6 @@ public final class Constants {
                   DrivetrainConstants.backRight.moduleLocationX,
                   DrivetrainConstants.backRight.moduleLocationY)
             });
-
-    /*
-    static {
-      try {
-        pathPlannerConfig = RobotConfig.fromGUISettings();
-      } catch (Exception e) {
-        // Handle exception as needed
-        DriverStation.reportError("Failed to load PathPlanner robot config", true);
-      }
-    }
-      */
   }
 
   public static class Arm {
