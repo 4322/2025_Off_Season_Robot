@@ -155,13 +155,13 @@ public class ScoreCoral extends Command {
         leftBranchScoringPos =
             new Pose2d(
                 FieldConstants.KeypointPoses.leftReefBranchScoringRedL4.rotateAround(
-                    FieldConstants.KeypointPoses.blueReefCenter,
+                    FieldConstants.KeypointPoses.redReefCenter,
                     robotReefAngle.rotateBy(Rotation2d.k180deg)),
                 robotReefAngle);
         rightBranchScoringPose =
             new Pose2d(
                 FieldConstants.KeypointPoses.rightReefBranchScoringRedL4.rotateAround(
-                    FieldConstants.KeypointPoses.blueReefCenter,
+                    FieldConstants.KeypointPoses.redReefCenter,
                     robotReefAngle.rotateBy(Rotation2d.k180deg)),
                 robotReefAngle);
       }
