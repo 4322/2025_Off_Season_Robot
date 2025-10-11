@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import java.lang.reflect.Constructor;
 import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
@@ -33,6 +34,7 @@ public class ScoreCoral extends Command {
   public Timer times = new Timer();
   private Pose2d targetScoringPose;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
+ 
 
   private Pose2d leftBranchScoringPos;
   private Pose2d rightBranchScoringPose;
@@ -61,6 +63,14 @@ public class ScoreCoral extends Command {
     this.drive = drive;
     driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
     addRequirements(superstructure);
+  }
+
+  public ScoreCoral (DriveToPose driveToPose, Supplier<Pose2d> currentPoseRequest, Superstructure superstructure, Superstructure.Level level, Drive drive) {
+    this.currentPoseRequest = currentPoseRequest;
+    this.superstructure = superstructure;
+    this.level = level;
+    this.drive = drive;
+    this.driveToPose = driveToPose;
   }
 
   @Override
