@@ -105,7 +105,10 @@ public class IndexerIONitrate implements IndexerIO {
     motorRightConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
   }
 
-  private void configSensor() {}
+  private void configSensor() {
+    indexerSensorConfig.setColorFramePeriod(0); // reduce CAN bus traffic
+    pickupAreaSensorConfig.setColorFramePeriod(0);
+  }
 
   @Override
   public void updateInputs(IndexerIOInputs inputs) {

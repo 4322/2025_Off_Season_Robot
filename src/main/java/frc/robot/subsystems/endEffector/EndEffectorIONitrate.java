@@ -66,7 +66,9 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     motorConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
   }
 
-  private void initSensorConfig() {}
+  private void initSensorConfig() {
+    sensorConfig.setColorFramePeriod(0); // reduce CAN bus traffic
+  }
 
   @Override
   public void updateInputs(EndEffectorIOInputs inputs) {
