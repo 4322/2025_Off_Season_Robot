@@ -1,6 +1,7 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.autonomous.modes.DoNothing;
 import frc.robot.autonomous.modes.Leave;
 import frc.robot.autonomous.modes.OneCoralOneAlgaeCenter;
 import frc.robot.autonomous.modes.OneCoralOneAlgaeEjectCenter;
@@ -23,7 +24,7 @@ public class AutonomousSelector {
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,
       Vision vision) {
-    autonomousSelector.addDefaultOption("DO_NOTHING", new SequentialCommandGroup());
+    autonomousSelector.addDefaultOption("DO_NOTHING", new DoNothing(superstructure));
     autonomousSelector.addOption("LEAVE", new Leave(drive, superstructure));
     autonomousSelector.addOption(
         "THREE_CORAL_LEFT",
