@@ -14,6 +14,7 @@ import frc.robot.commands.DescoreAlgae;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.auto.AlgaePrescoreAuto;
 import frc.robot.commands.auto.AlgaeScoreAuto;
+import frc.robot.commands.auto.CoralIntakeManualAuto;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
@@ -54,7 +55,7 @@ public class TwoCoralOneAlgaeLeft extends SequentialCommandGroup {
         new WaitCommand(0.2),
         new WaitUntilCommand(() -> !superstructure.isAlgaeHeld()),
         new ParallelCommandGroup(
-            new CoralIntakeManual(intakeSuperstructure, true),
+            new CoralIntakeManualAuto(intakeSuperstructure),
             AutoBuilder.followPath(Robot.LeftAlgaeScoreToFeed)),
         AutoBuilder.followPath(Robot.FeedToKilo),
         new ScoreCoral(superstructure, Level.L4, drive));

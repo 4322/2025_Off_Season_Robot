@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
 import frc.robot.commands.CoralIntakeManual;
 import frc.robot.commands.ScoreCoral;
+import frc.robot.commands.auto.CoralIntakeManualAuto;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
@@ -39,13 +40,13 @@ public class ThreeCoralLeft extends SequentialCommandGroup {
         new ScoreCoral(superstructure, Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
-            new CoralIntakeManual(intakeSuperstructure, true),
+            new CoralIntakeManualAuto(intakeSuperstructure),
             AutoBuilder.followPath(Robot.JulietToFeed)),
         AutoBuilder.followPath(Robot.FeedToKilo),
         new ScoreCoral(superstructure, Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
-            new CoralIntakeManual(intakeSuperstructure, true),
+          new CoralIntakeManualAuto(intakeSuperstructure),
             AutoBuilder.followPath(Robot.KiloToFeed)),
         AutoBuilder.followPath(Robot.FeedToLima),
         new ScoreCoral(superstructure, Level.L4, drive));
