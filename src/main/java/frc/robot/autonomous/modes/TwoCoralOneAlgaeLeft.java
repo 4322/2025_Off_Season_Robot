@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
-import frc.robot.commands.CoralIntakeManual;
 import frc.robot.commands.DescoreAlgae;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.auto.AlgaePrescoreAuto;
