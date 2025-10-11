@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ReefStatus;
 import java.util.function.Supplier;
@@ -95,7 +96,7 @@ public class DescoreAlgae extends Command {
             state = ScoreState.HOLD_POSITION;
           } else if (isInSafeArea() || driveToPose.atGoal()) {
             superstructure.requestDescoreAlgae(level);
-            if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
+            if (superstructure.getState() == Superstates.DESCORE_ALGAE && superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
               state = ScoreState.DRIVE_IN;
               currentPoseRequest = () -> targetScoringPose;
             }
