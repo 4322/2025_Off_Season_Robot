@@ -395,7 +395,7 @@ public class FieldConstants {
 
     // Distance robot has to be from reef to score/descore
     private static final double scoringDistanceFromReef =
-        Units.inchesToMeters(7 + 6.5)
+        Units.inchesToMeters(7)
             + robotBumperToCenter; // TODO: Only change the number which represents distance between
     // face of reef and front of robot bumper
     private static final double descoreAlgaeDriveInDist =
@@ -406,7 +406,7 @@ public class FieldConstants {
     // Minimum distance from robot front bumper to reef face where arm can swing all the way out
     // without hitting reef
     public static final double reefSafeDistance =
-        Units.inchesToMeters(15 + 6.5)
+        Units.inchesToMeters(15)
             + robotBumperToCenter; // TODO: Only change the number which represents distance between
     // face of reef and front of robot bumper
 

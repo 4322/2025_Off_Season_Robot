@@ -258,11 +258,6 @@ public class ScoreCoral extends Command {
           }
         }
       }
-    } else if (DriverStation.isAutonomousEnabled()) {
-      superstructure.requestPrescoreCoral(level);
-      if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
-        superstructure.requestScoreCoral(level);
-      }
     } else if (superstructure.isAutoOperationMode()
         && !Constants.enableDriveToPoseTestingScoreCoral) {
       if (state == ScoreState.SAFE_DISTANCE) {
