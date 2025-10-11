@@ -395,7 +395,7 @@ public class FieldConstants {
 
     // Distance robot has to be from reef to score/descore
     private static final double scoringDistanceFromReef =
-        Units.inchesToMeters(8.5) // Changed from 7 added inches 1.5
+        Units.inchesToMeters(8) // Changed from 7 added inches 1.5
             + robotBumperToCenter; // TODO: Only change the number which represents distance between
     // face of reef and front of robot bumper
     private static final double descoreAlgaeDriveInDist =
