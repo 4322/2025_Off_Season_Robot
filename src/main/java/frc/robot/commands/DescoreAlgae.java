@@ -151,6 +151,9 @@ public class DescoreAlgae extends Command {
   public void end(boolean interrupted) {
     superstructure.requestIdle();
     running = false;
+    if (driveToPose.isScheduled()) {
+      driveToPose.cancel();
+    }
   }
 
   public boolean isInSafeArea() {
