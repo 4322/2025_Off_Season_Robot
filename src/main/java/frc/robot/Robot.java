@@ -214,7 +214,8 @@ public class Robot extends LoggedRobot {
       CenterAlgaeScoreToLeave = PathPlannerPath.fromPathFile("Center Algae Score to Leave");
 
       ThreeCoralStartToJuliet = PathPlannerPath.fromPathFile("Three Coral Start to Juliet");
-      ThreeCoralStartPushToJuliet = PathPlannerPath.fromPathFile("Three Coral Start Push to Juliet");
+      ThreeCoralStartPushToJuliet =
+          PathPlannerPath.fromPathFile("Three Coral Start Push to Juliet");
       JulietToFeed = PathPlannerPath.fromPathFile("Juliet to Feed");
       FeedToKilo = PathPlannerPath.fromPathFile("Feed to Kilo");
       KiloToFeed = PathPlannerPath.fromPathFile("Kilo to Feed");
