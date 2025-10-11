@@ -22,15 +22,14 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
 
 public class TwoCoralOneAlgaeLeft extends SequentialCommandGroup {
-    public TwoCoralOneAlgaeLeft(
-        Drive drive,
-        Superstructure superstructure,
-        IntakeSuperstructure intakeSuperstructure,
-        Vision vision
-    ) {
-        setName("TWO_CORAL_ONE_ALGAE_LEFT");
-        addRequirements(drive, superstructure, intakeSuperstructure);
-        addCommands(
+  public TwoCoralOneAlgaeLeft(
+      Drive drive,
+      Superstructure superstructure,
+      IntakeSuperstructure intakeSuperstructure,
+      Vision vision) {
+    setName("TWO_CORAL_ONE_ALGAE_LEFT");
+    addRequirements(drive, superstructure, intakeSuperstructure);
+    addCommands(
         new InstantCommand(
             () -> {
               superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
@@ -40,27 +39,24 @@ public class TwoCoralOneAlgaeLeft extends SequentialCommandGroup {
               }
               drive.resetPose(path.getStartingHolonomicPose().get());
             }),
-            AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
-            new ScoreCoral(superstructure, Level.L4, drive),
-            new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
-            AutoBuilder.followPath(Robot.JulietToIndiaJuliet),
-            new DescoreAlgae(superstructure, Level.L3, drive),
-            new WaitUntilCommand(() -> superstructure.getState() == Superstates.ALGAE_IDLE),
-            AutoBuilder.followPath(Robot.IndiaJulietToLeftBarge),
-            new AlgaePrescoreAuto(superstructure, drive),
-            new WaitUntilCommand(
-                () -> superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()),
-            AutoBuilder.followPath(Robot.LeftBargeToLeftAlgaeScore),
-            new AlgaeScoreAuto(superstructure, drive),
-            new WaitCommand(0.2),
-            new WaitUntilCommand(() -> !superstructure.isAlgaeHeld()),
-            new ParallelCommandGroup(
-                new CoralIntakeManual(intakeSuperstructure, true),
-                AutoBuilder.followPath(Robot.LeftAlgaeScoreToFeed)
-            ),
-            AutoBuilder.followPath(Robot.FeedToKilo),
-            new ScoreCoral(superstructure, Level.L4, drive)
-
-        );
-    }
+        AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
+        new ScoreCoral(superstructure, Level.L4, drive),
+        new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
+        AutoBuilder.followPath(Robot.JulietToIndiaJuliet),
+        new DescoreAlgae(superstructure, Level.L3, drive),
+        new WaitUntilCommand(() -> superstructure.getState() == Superstates.ALGAE_IDLE),
+        AutoBuilder.followPath(Robot.IndiaJulietToLeftBarge),
+        new AlgaePrescoreAuto(superstructure, drive),
+        new WaitUntilCommand(
+            () -> superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()),
+        AutoBuilder.followPath(Robot.LeftBargeToLeftAlgaeScore),
+        new AlgaeScoreAuto(superstructure, drive),
+        new WaitCommand(0.2),
+        new WaitUntilCommand(() -> !superstructure.isAlgaeHeld()),
+        new ParallelCommandGroup(
+            new CoralIntakeManual(intakeSuperstructure, true),
+            AutoBuilder.followPath(Robot.LeftAlgaeScoreToFeed)),
+        AutoBuilder.followPath(Robot.FeedToKilo),
+        new ScoreCoral(superstructure, Level.L4, drive));
+  }
 }

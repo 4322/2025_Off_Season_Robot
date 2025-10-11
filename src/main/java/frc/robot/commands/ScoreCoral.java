@@ -14,8 +14,8 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
-import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
 import java.util.function.Supplier;
@@ -332,10 +332,12 @@ public class ScoreCoral extends Command {
             superstructure.requestScoreCoral(level);
             if (superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()
-                && !superstructure.isCoralHeld() && level == Level.L1) {
-                  currentPoseRequest = () -> safeDistPose;
-                  state = ScoreState.DRIVEBACK;
-            } else if (level != Level.L1 && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL) {
+                && !superstructure.isCoralHeld()
+                && level == Level.L1) {
+              currentPoseRequest = () -> safeDistPose;
+              state = ScoreState.DRIVEBACK;
+            } else if (level != Level.L1
+                && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL) {
               currentPoseRequest = () -> safeDistPose;
               state = ScoreState.DRIVEBACK;
             }

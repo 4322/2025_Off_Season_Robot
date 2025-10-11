@@ -213,8 +213,16 @@ public class Vision extends SubsystemBase {
                       Constants.Vision.stdDevBaseline
                           * Constants.Vision.thetaStdDevBaseline
                           * thetaStdDev));
-              Logger.recordOutput("Vision/StdDev/XY", Constants.Vision.stdDevBaseline * xyStdDev * Constants.Vision.thetaStdDevBaseline);
-              Logger.recordOutput("Vision/StdDev/Theta", Constants.Vision.stdDevBaseline * thetaStdDev * Constants.Vision.thetaStdDevBaseline);
+              Logger.recordOutput(
+                  "Vision/StdDev/XY",
+                  Constants.Vision.stdDevBaseline
+                      * xyStdDev
+                      * Constants.Vision.thetaStdDevBaseline);
+              Logger.recordOutput(
+                  "Vision/StdDev/Theta",
+                  Constants.Vision.stdDevBaseline
+                      * thetaStdDev
+                      * Constants.Vision.thetaStdDevBaseline);
             } else {
               xyStdDev = Math.max(xyStdDevModel.predict(avgTagDistance), 0.000001);
               thetaStdDev = Math.max(thetaStdDevModel.predict(avgTagDistance), 0.000001);
@@ -228,7 +236,8 @@ public class Vision extends SubsystemBase {
                       Constants.Vision.stdDevBaseline * thetaStdDev));
 
               Logger.recordOutput("Vision/StdDev/XY", Constants.Vision.stdDevBaseline * xyStdDev);
-              Logger.recordOutput("Vision/StdDev/Theta", Constants.Vision.stdDevBaseline * thetaStdDev);
+              Logger.recordOutput(
+                  "Vision/StdDev/Theta", Constants.Vision.stdDevBaseline * thetaStdDev);
             }
           }
           break;

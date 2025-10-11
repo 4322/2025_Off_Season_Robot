@@ -19,7 +19,11 @@ public class EjectAuto extends Command {
     END_EFFECTOR
   }
 
-  public EjectAuto(IntakeSuperstructure intakeSuperstructure, Superstructure superstructure, EjectType ejectType, double timeout) {
+  public EjectAuto(
+      IntakeSuperstructure intakeSuperstructure,
+      Superstructure superstructure,
+      EjectType ejectType,
+      double timeout) {
     this.intakeSuperstructure = intakeSuperstructure;
     this.superstructure = superstructure;
     this.ejectType = ejectType;
@@ -30,8 +34,6 @@ public class EjectAuto extends Command {
     timer.stop();
 
     addRequirements(intakeSuperstructure, superstructure);
-
-    
   }
 
   @Override

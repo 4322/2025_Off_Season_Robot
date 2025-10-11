@@ -67,7 +67,7 @@ public class Robot extends LoggedRobot {
   public static PathPlannerPath GulfHotelToCenterBarge;
   public static PathPlannerPath CenterBargeToCenterAlgaeScore;
   public static PathPlannerPath CenterAlgaeScoreToLeave;
-  
+
   public static PathPlannerPath JulietToIndiaJuliet;
   public static PathPlannerPath IndiaJulietToLeftBarge;
   public static PathPlannerPath LeftBargeToLeftAlgaeScore;
