@@ -1,13 +1,16 @@
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSuperstructure;
 
 public class CoralIntakeManualAuto extends Command {
   private IntakeSuperstructure intakeSuperstructure;
+  private boolean isAutoEnd;
 
-  public CoralIntakeManualAuto(IntakeSuperstructure intakeSuperstructure) {
+  public CoralIntakeManualAuto(IntakeSuperstructure intakeSuperstructure, boolean isAutoEnd) {
     this.intakeSuperstructure = intakeSuperstructure;
+    this.isAutoEnd = isAutoEnd;
     addRequirements(intakeSuperstructure);
   }
 
@@ -21,7 +24,7 @@ public class CoralIntakeManualAuto extends Command {
 
   @Override
   public boolean isFinished() {
-    return intakeSuperstructure.isCoralDetectedIndexer();
+    return (intakeSuperstructure.isCoralDetectedIndexer() && isAutoEnd) || !DriverStation.isAutonomousEnabled();
   }
 
   @Override
