@@ -24,7 +24,7 @@ public class AutonomousSelector {
       IntakeSuperstructure intakeSuperstructure,
       Vision vision) {
     autonomousSelector.addDefaultOption("DO_NOTHING", new SequentialCommandGroup());
-    autonomousSelector.addOption("LEAVE", new Leave(drive));
+    autonomousSelector.addOption("LEAVE", new Leave(drive, superstructure));
     autonomousSelector.addOption(
         "THREE_CORAL_LEFT",
         new ThreeCoralLeft(drive, superstructure, intakeSuperstructure, vision));
@@ -35,11 +35,11 @@ public class AutonomousSelector {
         "ONE_CORAL_ONE_ALGAE_CENTER",
         new OneCoralOneAlgaeCenter(drive, superstructure, intakeSuperstructure, vision));
     autonomousSelector.addOption(
-      "TWO_CORAL_ONE_ALGAE_LEFT",
-      new TwoCoralOneAlgaeLeft(drive, superstructure, intakeSuperstructure, vision)
-    );
-    autonomousSelector.addOption("ONE_CORAL_ONE_ALGAE_EJECT_CENTER", 
-    new OneCoralOneAlgaeEjectCenter(drive, superstructure, intakeSuperstructure, vision));
+        "TWO_CORAL_ONE_ALGAE_LEFT",
+        new TwoCoralOneAlgaeLeft(drive, superstructure, intakeSuperstructure, vision));
+    autonomousSelector.addOption(
+        "ONE_CORAL_ONE_ALGAE_EJECT_CENTER",
+        new OneCoralOneAlgaeEjectCenter(drive, superstructure, intakeSuperstructure, vision));
   }
 
   public SequentialCommandGroup get() {
