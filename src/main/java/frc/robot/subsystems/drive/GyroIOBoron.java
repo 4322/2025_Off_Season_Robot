@@ -24,7 +24,8 @@ public class GyroIOBoron implements GyroIO {
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
-    inputs.connected = gyro.isConnected();
+    // check connection with 60ms timeout instead of 2s default due to frequency of gyro reporting failure
+    inputs.connected = gyro.isConnected(0.06);
     inputs.yawAngle = Rotation2d.fromRotations(gyro.getMultiturnYaw());
     inputs.yawVelocityDegPerSec = Units.rotationsToDegrees(gyro.getAngularVelocityYaw());
   }
