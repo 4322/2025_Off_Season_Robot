@@ -165,6 +165,16 @@ public class ScoreCoral extends Command {
                     robotReefAngle.rotateBy(Rotation2d.k180deg)),
                 robotReefAngle);
       }
+      switch (reefStatus.getClosestReefPipe()) {
+        case LEFT:
+          targetScoringPose = leftBranchScoringPos;
+          superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+          break;
+        case RIGHT:
+          targetScoringPose = rightBranchScoringPose;
+          superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+          break;
+      }
     } else {
       if (Robot.alliance == DriverStation.Alliance.Blue) {
         leftBranchScoringPos =
