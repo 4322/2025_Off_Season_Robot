@@ -137,6 +137,34 @@ public class ScoreCoral extends Command {
           break;
       }
 
+    } else if (level == Level.L4) {
+      if (Robot.alliance == DriverStation.Alliance.Blue) {
+        leftBranchScoringPos =
+            new Pose2d(
+                FieldConstants.KeypointPoses.leftReefBranchScoringBlueL4.rotateAround(
+                    FieldConstants.KeypointPoses.blueReefCenter,
+                    robotReefAngle.rotateBy(Rotation2d.k180deg)),
+                robotReefAngle);
+        rightBranchScoringPose =
+            new Pose2d(
+                FieldConstants.KeypointPoses.rightReefBranchScoringBlueL4.rotateAround(
+                    FieldConstants.KeypointPoses.blueReefCenter,
+                    robotReefAngle.rotateBy(Rotation2d.k180deg)),
+                robotReefAngle);
+      } else {
+        leftBranchScoringPos =
+            new Pose2d(
+                FieldConstants.KeypointPoses.leftReefBranchScoringRedL4.rotateAround(
+                    FieldConstants.KeypointPoses.blueReefCenter,
+                    robotReefAngle.rotateBy(Rotation2d.k180deg)),
+                robotReefAngle);
+        rightBranchScoringPose =
+            new Pose2d(
+                FieldConstants.KeypointPoses.rightReefBranchScoringRedL4.rotateAround(
+                    FieldConstants.KeypointPoses.blueReefCenter,
+                    robotReefAngle.rotateBy(Rotation2d.k180deg)),
+                robotReefAngle);
+      }
     } else {
       if (Robot.alliance == DriverStation.Alliance.Blue) {
         leftBranchScoringPos =
