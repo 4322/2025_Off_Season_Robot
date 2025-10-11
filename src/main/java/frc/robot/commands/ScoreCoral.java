@@ -18,6 +18,7 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
+import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
@@ -327,7 +328,7 @@ public class ScoreCoral extends Command {
             state = ScoreState.HOLD_POSITION;
           } else if (isInSafeArea() || driveToPose.atGoal()) {
             superstructure.requestPrescoreCoral(level);
-            if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
+            if (superstructure.getState() == Superstates.PRESCORE_CORAL && superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
               currentPoseRequest = () -> targetScoringPose;
               state = ScoreState.DRIVE_IN;
             }
