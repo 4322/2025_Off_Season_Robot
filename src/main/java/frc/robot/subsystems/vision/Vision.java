@@ -334,7 +334,7 @@ public class Vision extends SubsystemBase {
                     4322.0));
 
             Logger.recordOutput("Vision/StdDev/XY", Constants.Vision.stdDevBaseline * xyStdDev);
-            Logger.recordOutput("Vision/StdDev/Theta", 4322);
+            Logger.recordOutput("Vision/StdDev/Theta", 4322.0);
           }
           break;
       }
