@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
+import static frc.robot.RobotContainer.driver;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,12 +10,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ReefStatus;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class DescoreAlgae extends Command {
   private final Superstructure superstructure;
@@ -102,16 +101,16 @@ public class DescoreAlgae extends Command {
           } else if (isInSafeArea() || driveToPose.atGoal()) {
             times.start();
             superstructure.requestDescoreAlgae(level);
-            if (times.hasElapsed(0.3)){
+            if (times.hasElapsed(0.3)) {
               times.stop();
               times.reset();
-            if (superstructure.getState() == Superstates.DESCORE_ALGAE
-                && superstructure.armAtSetpoint()
-                && superstructure.elevatorAtSetpoint()) {
-              state = ScoreState.DRIVE_IN;
-              currentPoseRequest = () -> targetScoringPose;
+              if (superstructure.getState() == Superstates.DESCORE_ALGAE
+                  && superstructure.armAtSetpoint()
+                  && superstructure.elevatorAtSetpoint()) {
+                state = ScoreState.DRIVE_IN;
+                currentPoseRequest = () -> targetScoringPose;
+              }
             }
-          }
           } else {
             times.stop();
             times.reset();
