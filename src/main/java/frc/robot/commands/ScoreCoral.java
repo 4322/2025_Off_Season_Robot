@@ -222,81 +222,43 @@ public class ScoreCoral extends Command {
     Logger.recordOutput("ScoreCoral/state", state);
     Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
     Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
-    if (Constants.enableDriveToPoseTestingScoreCoral) {
-      Pose2d safeDistPose =
-          targetScoringPose.transformBy(
-              new Transform2d(
-                  level == Level.L1
-                      ? -FieldConstants.KeypointPoses.safeDistFromTroughScoringPos
-                      : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
-                  0,
-                  new Rotation2d()));
 
-      switch (driveToPoseState) {
-        case SAFE_DISTANCE:
-          currentPoseRequest = () -> safeDistPose;
-          if (!driveToPose.isScheduled()) {
-            driveToPose.schedule();
-          }
-          if (Constants.enableDriveToPoseWithPrescore) {
-            superstructure.requestPrescoreCoral(level);
-          }
-          if ((isInSafeArea() || driveToPose.atGoal()) && RobotContainer.isScoringTriggerHeld()) {
-            driveToPoseState = DriveToPoseTesting.DRIVE_IN;
-          }
-          break;
-        case DRIVE_IN:
-          currentPoseRequest = () -> leftBranchScoringPos;
-          if (driver.povRight().getAsBoolean() && driveToPose.atGoal()) {
-            driveToPoseState = DriveToPoseTesting.SAFE_DISTANCE;
-          }
-          break;
-      }
+    if (driveToPoseState == DriveToPoseTesting.SAFE_DISTANCE) {
 
-      if (driver.povLeft().getAsBoolean()) {
-        if (driveToPose.isScheduled()) {
-          driveToPose.cancel();
+      double x = -RobotContainer.driver.getLeftY();
+      double y = -RobotContainer.driver.getLeftX();
+      Rotation2d joystickAngle = Rotation2d.fromRadians(Math.atan2(y, x));
+      double joystickMag = Math.hypot(x, y);
+
+      if (level == Level.L1) {
+
+        if (joystickMag > 0.75) {
+          if (joystickAngle.getDegrees() > 30) {
+            targetScoringPose = leftTroughScoringPose;
+            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+          } else if (joystickAngle.minus(robotReefAngle).getDegrees() < -30) {
+            targetScoringPose = rightTroughScoringPose;
+            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+          } else {
+            targetScoringPose = middleTroughScoringPose;
+            superstructure.enableGlobalPose();
+          }
         }
-        running = false;
-      }
 
-      if (driveToPoseState == DriveToPoseTesting.SAFE_DISTANCE) {
+      } else {
 
-        double x = -RobotContainer.driver.getLeftY();
-        double y = -RobotContainer.driver.getLeftX();
-        Rotation2d joystickAngle = Rotation2d.fromRadians(Math.atan2(y, x));
-        double joystickMag = Math.hypot(x, y);
-
-        if (level == Level.L1) {
-
-          if (joystickMag > 0.75) {
-            if (joystickAngle.getDegrees() > 30) {
-              targetScoringPose = leftTroughScoringPose;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
-            } else if (joystickAngle.minus(robotReefAngle).getDegrees() < -30) {
-              targetScoringPose = rightTroughScoringPose;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
-            } else {
-              targetScoringPose = middleTroughScoringPose;
-              superstructure.enableGlobalPose();
-            }
-          }
-
-        } else {
-
-          if (joystickMag > 0.75) {
-            if (joystickAngle.getDegrees() > 0) {
-              targetScoringPose = leftBranchScoringPos;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
-            } else if (joystickAngle.getDegrees() < 0) {
-              targetScoringPose = rightBranchScoringPose;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
-            }
+        if (joystickMag > 0.75) {
+          if (joystickAngle.getDegrees() > 0) {
+            targetScoringPose = leftBranchScoringPos;
+            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+          } else if (joystickAngle.getDegrees() < 0) {
+            targetScoringPose = rightBranchScoringPose;
+            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
           }
         }
       }
-    } else if (superstructure.isAutoOperationMode()
-        && !Constants.enableDriveToPoseTestingScoreCoral) {
+    }
+    if (superstructure.isAutoOperationMode() && !Constants.enableDriveToPoseTestingScoreCoral) {
       if (state == ScoreState.SAFE_DISTANCE) {
 
         double x = -RobotContainer.driver.getLeftY();
