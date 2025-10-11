@@ -403,6 +403,7 @@ public class ScoreCoral extends Command {
     if (driveToPose.isScheduled()) {
       driveToPose.cancel();
     }
+    Logger.recordOutput("ScoreCoral/state", "Done");
   }
 
   public boolean scoreButtonReleased() {
