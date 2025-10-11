@@ -126,7 +126,7 @@ public class ScoreCoral extends Command {
       switch (reefStatus.getClosestL1Zone()) {
         case LEFT:
           targetScoringPose = leftTroughScoringPose;
-          superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+          superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
           break;
         case MIDDLE:
           targetScoringPose = middleTroughScoringPose;
@@ -134,7 +134,7 @@ public class ScoreCoral extends Command {
           break;
         case RIGHT:
           targetScoringPose = rightTroughScoringPose;
-          superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+          superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
           break;
       }
 
@@ -170,11 +170,11 @@ public class ScoreCoral extends Command {
       switch (reefStatus.getClosestReefPipe()) {
         case LEFT:
           targetScoringPose = leftBranchScoringPos;
-          superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+          superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
           break;
         case RIGHT:
           targetScoringPose = rightBranchScoringPose;
-          superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+          superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
           break;
       }
     }
@@ -235,10 +235,10 @@ public class ScoreCoral extends Command {
           if (joystickMag > 0.75) {
             if (joystickAngle.getDegrees() > 30) {
               targetScoringPose = leftTroughScoringPose;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
             } else if (joystickAngle.minus(robotReefAngle).getDegrees() < -30) {
               targetScoringPose = rightTroughScoringPose;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
             } else {
               targetScoringPose = middleTroughScoringPose;
               superstructure.enableGlobalPose();
@@ -250,10 +250,10 @@ public class ScoreCoral extends Command {
           if (joystickMag > 0.75) {
             if (joystickAngle.getDegrees() > 0) {
               targetScoringPose = leftBranchScoringPos;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
             } else if (joystickAngle.getDegrees() < 0) {
               targetScoringPose = rightBranchScoringPose;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
             }
           }
         }
@@ -285,10 +285,10 @@ public class ScoreCoral extends Command {
           if (joystickMag > 0.75) {
             if (joystickAngle.getDegrees() > 30) {
               targetScoringPose = leftTroughScoringPose;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
             } else if (joystickAngle.minus(robotReefAngle).getDegrees() < -30) {
               targetScoringPose = rightTroughScoringPose;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
             } else {
               targetScoringPose = middleTroughScoringPose;
               superstructure.enableGlobalPose();
@@ -300,10 +300,10 @@ public class ScoreCoral extends Command {
           if (joystickMag > 0.75) {
             if (joystickAngle.getDegrees() > 0) {
               targetScoringPose = leftBranchScoringPos;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
             } else if (joystickAngle.getDegrees() < 0) {
               targetScoringPose = rightBranchScoringPose;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
             }
           }
         }
