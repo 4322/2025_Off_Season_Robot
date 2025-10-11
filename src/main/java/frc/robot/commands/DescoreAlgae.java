@@ -96,7 +96,9 @@ public class DescoreAlgae extends Command {
             state = ScoreState.HOLD_POSITION;
           } else if (isInSafeArea() || driveToPose.atGoal()) {
             superstructure.requestDescoreAlgae(level);
-            if (superstructure.getState() == Superstates.DESCORE_ALGAE && superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
+            if (superstructure.getState() == Superstates.DESCORE_ALGAE
+                && superstructure.armAtSetpoint()
+                && superstructure.elevatorAtSetpoint()) {
               state = ScoreState.DRIVE_IN;
               currentPoseRequest = () -> targetScoringPose;
             }

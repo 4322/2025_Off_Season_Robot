@@ -20,11 +20,12 @@ public class CoralIntakeManualAuto extends Command {
   @Override
   public void execute() {
     intakeSuperstructure.requestIntake();
-    }
+  }
 
   @Override
   public boolean isFinished() {
-    return (intakeSuperstructure.isCoralDetectedIndexer() && isAutoEnd) || !DriverStation.isAutonomousEnabled();
+    return (intakeSuperstructure.isCoralDetectedIndexer() && isAutoEnd)
+        || !DriverStation.isAutonomousEnabled();
   }
 
   @Override
