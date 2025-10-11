@@ -156,7 +156,7 @@ public class Arm extends SubsystemBase {
 
   public boolean atSetpoint() {
     if (requestedSetpoint == Constants.Arm.scoringAlgaeDeg) {
-      return true;
+      return ClockUtil.atReference(inputs.PositionDegrees, requestedSetpoint, 10, true);
     } else {
       return ClockUtil.atReference(
           inputs.PositionDegrees, requestedSetpoint, Constants.Arm.setpointToleranceDegrees, true);
