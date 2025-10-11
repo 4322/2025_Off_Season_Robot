@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
@@ -29,7 +30,7 @@ public class ScoreCoral extends Command {
   private final Drive drive;
   private DriveToPose driveToPose;
   public boolean running;
-
+  public Timer times = new Timer();
   private Pose2d targetScoringPose;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
 
@@ -65,7 +66,8 @@ public class ScoreCoral extends Command {
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
-
+    times.stop();
+    times.reset();
     driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
     addRequirements(superstructure);
   }
@@ -255,13 +257,12 @@ public class ScoreCoral extends Command {
           }
         }
       }
-    } else if (DriverStation.isAutonomousEnabled()){
+    } else if (DriverStation.isAutonomousEnabled()) {
       superstructure.requestPrescoreCoral(level);
-      if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()){
+      if (superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()) {
         superstructure.requestScoreCoral(level);
       }
-    }
-    else if (superstructure.isAutoOperationMode()
+    } else if (superstructure.isAutoOperationMode()
         && !Constants.enableDriveToPoseTestingScoreCoral) {
       if (state == ScoreState.SAFE_DISTANCE) {
 
@@ -335,20 +336,32 @@ public class ScoreCoral extends Command {
         case DRIVE_IN:
           if (scoreButtonReleased()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (driveToPose.atGoal()) {
-            superstructure.requestScoreCoral(level);
+          }
+
+          if (driveToPose.atGoal()) {
+            times.start();
+            if (times.hasElapsed(0.33)) {
+              superstructure.requestScoreCoral(level);
+              times.stop();
+              times.reset();
+            }
             if (superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()
                 && !superstructure.isCoralHeld()
                 && level == Level.L1) {
               currentPoseRequest = () -> safeDistPose;
               state = ScoreState.DRIVEBACK;
+
             } else if (level != Level.L1
                 && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL) {
               currentPoseRequest = () -> safeDistPose;
               state = ScoreState.DRIVEBACK;
             }
+          } else {
+            times.stop();
+            times.reset();
           }
+
           break;
         case DRIVEBACK:
           if (scoreButtonReleased()) {

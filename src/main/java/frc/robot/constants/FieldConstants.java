@@ -2,9 +2,20 @@ package frc.robot.constants;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Quaternion;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Contains various field dimensions and useful reference points. All units are in meters and poses
@@ -384,7 +395,7 @@ public class FieldConstants {
 
     // Distance robot has to be from reef to score/descore
     private static final double scoringDistanceFromReef =
-        Units.inchesToMeters(7)
+        Units.inchesToMeters(7 + 6.5)
             + robotBumperToCenter; // TODO: Only change the number which represents distance between
     // face of reef and front of robot bumper
     private static final double descoreAlgaeDriveInDist =
@@ -395,7 +406,7 @@ public class FieldConstants {
     // Minimum distance from robot front bumper to reef face where arm can swing all the way out
     // without hitting reef
     public static final double reefSafeDistance =
-        Units.inchesToMeters(15)
+        Units.inchesToMeters(15 + 6.5)
             + robotBumperToCenter; // TODO: Only change the number which represents distance between
     // face of reef and front of robot bumper
 
