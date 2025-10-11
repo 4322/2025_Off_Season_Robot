@@ -1,5 +1,7 @@
 package frc.robot.autonomous.modes;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -36,6 +38,7 @@ public class ThreeCoralRight extends SequentialCommandGroup {
               drive.resetPose(path.getStartingHolonomicPose().get());
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartToEcho),
+        new InstantCommand(() -> Logger.recordOutput("Auto", "Finished path")),
         new ScoreCoral(superstructure, Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(

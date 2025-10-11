@@ -16,6 +16,7 @@ import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
+import org.littletonrobotics.junction.Logger;
 
 public class ThreeCoralLeft extends SequentialCommandGroup {
   public ThreeCoralLeft(
@@ -36,6 +37,7 @@ public class ThreeCoralLeft extends SequentialCommandGroup {
               drive.resetPose(path.getStartingHolonomicPose().get());
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
+        new InstantCommand(() -> Logger.recordOutput("Auto", "Finished path")),
         new ScoreCoral(superstructure, Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
