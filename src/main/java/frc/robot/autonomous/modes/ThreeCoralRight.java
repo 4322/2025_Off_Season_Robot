@@ -1,7 +1,5 @@
 package frc.robot.autonomous.modes;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -18,6 +16,7 @@ import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
+import org.littletonrobotics.junction.Logger;
 
 public class ThreeCoralRight extends SequentialCommandGroup {
   public ThreeCoralRight(
