@@ -1,9 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -18,8 +16,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
@@ -27,32 +23,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.util.OdometryValues;
-
 import java.util.ArrayList;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
-  // Values for Cu60 DCMotor specs come from https://docs.reduxrobotics.com/cu60/specifications
-  private static final RobotConfig pathPlannerConfig =
-      new RobotConfig(
-          Constants.PathPlanner.robotMassKg,
-          Constants.PathPlanner.robotMOI,
-          new ModuleConfig(
-              DrivetrainConstants.frontLeft.driveWheelRadius,
-              DrivetrainConstants.maxSpeedAt12Volts,
-              Constants.PathPlanner.wheelCOF,
-              new DCMotor(
-                      12.0, 7.3, 440.0, 2.0, Units.rotationsPerMinuteToRadiansPerSecond(6780), 1)
-                  .withReduction(DrivetrainConstants.frontLeft.driveMotorGearRatio),
-              DrivetrainConstants.frontLeft
-                  .driveElectricalLimitSettings
-                  .getStatorCurrentLimit()
-                  .get(),
-              1),
-          getModuleTranslations());
-
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
@@ -66,7 +41,8 @@ public class Drive extends SubsystemBase {
         new SwerveModulePosition()
       };
   private boolean wasGyroConnected = false;
-  private ArrayList<OdometryValues> prevOdometryReadings = new ArrayList<OdometryValues>(); // The last 3 odoemtry readings
+  private ArrayList<OdometryValues> prevOdometryReadings =
+      new ArrayList<OdometryValues>(); // The last 3 odoemtry readings
   private Rotation2d moduleDeltaRotation = Rotation2d.kZero;
   private SwerveDrivePoseEstimator poseEstimator;
 
@@ -114,7 +90,7 @@ public class Drive extends SubsystemBase {
             new PIDConstants(
                 Constants.PathPlanner.translationkP, 0.0, Constants.PathPlanner.translationkD),
             new PIDConstants(Constants.PathPlanner.rotkP, 0.0, Constants.PathPlanner.rotkD)),
-        pathPlannerConfig,
+        Constants.PathPlanner.pathPlannerConfig,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
         this);
   }
@@ -151,7 +127,9 @@ public class Drive extends SubsystemBase {
       // Calculate rotation from module deltas for caching
       Twist2d twist = kinematics.toTwist2d(moduleDeltas);
       moduleDeltaRotation = moduleDeltaRotation.plus(new Rotation2d(twist.dtheta));
-      prevOdometryReadings.add(new OdometryValues(RobotController.getFPGATime() / 1e6, moduleDeltaRotation, getModulePositions()));
+      prevOdometryReadings.add(
+          new OdometryValues(
+              RobotController.getFPGATime() / 1e6, moduleDeltaRotation, getModulePositions()));
 
       // Only cache the last 3 readings
       if (prevOdometryReadings.size() >= 4) {

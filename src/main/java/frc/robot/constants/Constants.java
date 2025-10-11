@@ -1,10 +1,14 @@
 package frc.robot.constants;
 
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -105,6 +109,49 @@ public final class Constants {
     public static final double robotMassKg = Units.lbsToKilograms(141.06); // TODO: Weigh robot
     public static final double robotMOI = 6.546; // Lzz from CAD
     public static final double wheelCOF = 1.2;
+
+    // Values for Cu60 DCMotor specs come from https://docs.reduxrobotics.com/cu60/specifications
+    public static RobotConfig pathPlannerConfig =
+        new RobotConfig(
+            Constants.PathPlanner.robotMassKg,
+            Constants.PathPlanner.robotMOI,
+            new ModuleConfig(
+                DrivetrainConstants.frontLeft.driveWheelRadius,
+                4.5,
+                Constants.PathPlanner.wheelCOF,
+                new DCMotor(
+                        12.0, 7.3, 440.0, 2.0, Units.rotationsPerMinuteToRadiansPerSecond(6780), 1)
+                    .withReduction(DrivetrainConstants.frontLeft.driveMotorGearRatio),
+                DrivetrainConstants.frontLeft
+                    .driveElectricalLimitSettings
+                    .getStatorCurrentLimit()
+                    .get(),
+                1),
+            new Translation2d[] {
+              new Translation2d(
+                  DrivetrainConstants.frontLeft.moduleLocationX,
+                  DrivetrainConstants.frontLeft.moduleLocationY),
+              new Translation2d(
+                  DrivetrainConstants.frontRight.moduleLocationX,
+                  DrivetrainConstants.frontRight.moduleLocationY),
+              new Translation2d(
+                  DrivetrainConstants.backLeft.moduleLocationX,
+                  DrivetrainConstants.backLeft.moduleLocationY),
+              new Translation2d(
+                  DrivetrainConstants.backRight.moduleLocationX,
+                  DrivetrainConstants.backRight.moduleLocationY)
+            });
+
+    /*
+    static {
+      try {
+        pathPlannerConfig = RobotConfig.fromGUISettings();
+      } catch (Exception e) {
+        // Handle exception as needed
+        DriverStation.reportError("Failed to load PathPlanner robot config", true);
+      }
+    }
+      */
   }
 
   public static class Arm {
