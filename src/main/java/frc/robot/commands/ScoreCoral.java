@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -11,6 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
@@ -20,8 +23,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends Command {
 
@@ -155,13 +156,13 @@ public class ScoreCoral extends Command {
         leftBranchScoringPos =
             new Pose2d(
                 FieldConstants.KeypointPoses.leftReefBranchScoringRedL4.rotateAround(
-                    FieldConstants.KeypointPoses.blueReefCenter,
+                    FieldConstants.KeypointPoses.redReefCenter,
                     robotReefAngle.rotateBy(Rotation2d.k180deg)),
                 robotReefAngle);
         rightBranchScoringPose =
             new Pose2d(
                 FieldConstants.KeypointPoses.rightReefBranchScoringRedL4.rotateAround(
-                    FieldConstants.KeypointPoses.blueReefCenter,
+                    FieldConstants.KeypointPoses.redReefCenter,
                     robotReefAngle.rotateBy(Rotation2d.k180deg)),
                 robotReefAngle);
       }
@@ -222,81 +223,43 @@ public class ScoreCoral extends Command {
     Logger.recordOutput("ScoreCoral/state", state);
     Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
     Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
-    if (Constants.enableDriveToPoseTestingScoreCoral) {
-      Pose2d safeDistPose =
-          targetScoringPose.transformBy(
-              new Transform2d(
-                  level == Level.L1
-                      ? -FieldConstants.KeypointPoses.safeDistFromTroughScoringPos
-                      : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
-                  0,
-                  new Rotation2d()));
 
-      switch (driveToPoseState) {
-        case SAFE_DISTANCE:
-          currentPoseRequest = () -> safeDistPose;
-          if (!driveToPose.isScheduled()) {
-            driveToPose.schedule();
-          }
-          if (Constants.enableDriveToPoseWithPrescore) {
-            superstructure.requestPrescoreCoral(level);
-          }
-          if ((isInSafeArea() || driveToPose.atGoal()) && RobotContainer.isScoringTriggerHeld()) {
-            driveToPoseState = DriveToPoseTesting.DRIVE_IN;
-          }
-          break;
-        case DRIVE_IN:
-          currentPoseRequest = () -> leftBranchScoringPos;
-          if (driver.povRight().getAsBoolean() && driveToPose.atGoal()) {
-            driveToPoseState = DriveToPoseTesting.SAFE_DISTANCE;
-          }
-          break;
-      }
+    if (driveToPoseState == DriveToPoseTesting.SAFE_DISTANCE) {
 
-      if (driver.povLeft().getAsBoolean()) {
-        if (driveToPose.isScheduled()) {
-          driveToPose.cancel();
+      double x = -RobotContainer.driver.getLeftY();
+      double y = -RobotContainer.driver.getLeftX();
+      Rotation2d joystickAngle = Rotation2d.fromRadians(Math.atan2(y, x));
+      double joystickMag = Math.hypot(x, y);
+
+      if (level == Level.L1) {
+
+        if (joystickMag > 0.75) {
+          if (joystickAngle.getDegrees() > 30) {
+            targetScoringPose = leftTroughScoringPose;
+            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+          } else if (joystickAngle.minus(robotReefAngle).getDegrees() < -30) {
+            targetScoringPose = rightTroughScoringPose;
+            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
+          } else {
+            targetScoringPose = middleTroughScoringPose;
+            superstructure.enableGlobalPose();
+          }
         }
-        running = false;
-      }
 
-      if (driveToPoseState == DriveToPoseTesting.SAFE_DISTANCE) {
+      } else {
 
-        double x = -RobotContainer.driver.getLeftY();
-        double y = -RobotContainer.driver.getLeftX();
-        Rotation2d joystickAngle = Rotation2d.fromRadians(Math.atan2(y, x));
-        double joystickMag = Math.hypot(x, y);
-
-        if (level == Level.L1) {
-
-          if (joystickMag > 0.75) {
-            if (joystickAngle.getDegrees() > 30) {
-              targetScoringPose = leftTroughScoringPose;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
-            } else if (joystickAngle.minus(robotReefAngle).getDegrees() < -30) {
-              targetScoringPose = rightTroughScoringPose;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
-            } else {
-              targetScoringPose = middleTroughScoringPose;
-              superstructure.enableGlobalPose();
-            }
-          }
-
-        } else {
-
-          if (joystickMag > 0.75) {
-            if (joystickAngle.getDegrees() > 0) {
-              targetScoringPose = leftBranchScoringPos;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
-            } else if (joystickAngle.getDegrees() < 0) {
-              targetScoringPose = rightBranchScoringPose;
-              superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
-            }
+        if (joystickMag > 0.75) {
+          if (joystickAngle.getDegrees() > 0) {
+            targetScoringPose = leftBranchScoringPos;
+            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
+          } else if (joystickAngle.getDegrees() < 0) {
+            targetScoringPose = rightBranchScoringPose;
+            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
           }
         }
       }
-    } else if (superstructure.isAutoOperationMode()
-        && !Constants.enableDriveToPoseTestingScoreCoral) {
+    }
+    if (superstructure.isAutoOperationMode() && !Constants.enableDriveToPoseTestingScoreCoral) {
       if (state == ScoreState.SAFE_DISTANCE) {
 
         double x = -RobotContainer.driver.getLeftY();
