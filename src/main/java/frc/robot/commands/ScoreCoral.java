@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -11,6 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
@@ -19,8 +22,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends Command {
 
@@ -65,8 +66,6 @@ public class ScoreCoral extends Command {
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
-    times.stop();
-    times.reset();
     driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
     addRequirements(superstructure);
   }
@@ -74,6 +73,8 @@ public class ScoreCoral extends Command {
   @Override
   public void initialize() {
     running = true;
+    times.stop();
+    times.reset();
     state = ScoreState.SAFE_DISTANCE;
 
     // Fill in poses of all possible scoring locations for the level requested
