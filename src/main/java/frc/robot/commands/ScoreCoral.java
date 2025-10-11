@@ -314,9 +314,11 @@ public class ScoreCoral extends Command {
                         0,
                         new Rotation2d()));
 
+
             currentPoseRequest = () -> safeDistPose;
             if (!driveToPose.isScheduled()) {
               driveToPose.schedule();
+            } else if (isInSafeArea() || driveToPose.atGoal()) {
             } else if (isInSafeArea() || driveToPose.atGoal()) {
               superstructure.requestPrescoreCoral(level);
               if (superstructure.getState() == Superstates.PRESCORE_CORAL
@@ -342,7 +344,10 @@ public class ScoreCoral extends Command {
                 currentPoseRequest = () -> safeDistPose;
                 state = ScoreState.DRIVEBACK;
 
+
               } else if (level != Level.L1
+                  && superstructure.getEndEffectorState()
+                      == EndEffectorStates.RELEASE_CORAL_NORMAL) {
                   && superstructure.getEndEffectorState()
                       == EndEffectorStates.RELEASE_CORAL_NORMAL) {
                 currentPoseRequest = () -> safeDistPose;
