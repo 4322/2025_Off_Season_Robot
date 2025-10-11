@@ -1,6 +1,9 @@
 package frc.robot.subsystems.arm;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BabyAlchemist;
@@ -8,7 +11,6 @@ import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.util.ClockUtil;
-import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
   private ArmIO io;
@@ -155,8 +157,14 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean atSetpoint() {
+    if (requestedSetpoint == Constants.Arm.scoringAlgaeDeg){
+      return ClockUtil.atReference(
+        inputs.PositionDegrees, requestedSetpoint, 10, true);
+    }
+    else {
     return ClockUtil.atReference(
         inputs.PositionDegrees, requestedSetpoint, Constants.Arm.setpointToleranceDegrees, true);
+    }
   }
 
   public void safeBargeRetract() {

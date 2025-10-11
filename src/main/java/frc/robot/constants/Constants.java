@@ -5,6 +5,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -175,6 +176,7 @@ public final class Constants {
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
     public static final double minArmSafeDeg = 47;
+    public static final double minArmSafeDegAfterScore = 47;
     public static final double minArmSafeWithCoralDeg = 54;
     public static final double maxArmSafeDeg = 245.0;
 
