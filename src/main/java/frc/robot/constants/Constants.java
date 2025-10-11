@@ -122,10 +122,7 @@ public final class Constants {
                 new DCMotor(
                         12.0, 7.3, 440.0, 2.0, Units.rotationsPerMinuteToRadiansPerSecond(6780), 1)
                     .withReduction(DrivetrainConstants.frontLeft.driveMotorGearRatio),
-                DrivetrainConstants.frontLeft
-                    .driveElectricalLimitSettings
-                    .getStatorCurrentLimit()
-                    .get(),
+                149,
                 1),
             new Translation2d[] {
               new Translation2d(
