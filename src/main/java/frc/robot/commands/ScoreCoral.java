@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import static frc.robot.RobotContainer.driver;
-import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
@@ -53,15 +52,8 @@ public class ScoreCoral extends Command {
     HOLD_POSITION
   }
 
-  private enum DriveToPoseTesting {
-    SAFE_DISTANCE,
-    DRIVE_IN,
-    DRIVEBACK,
-  }
 
   ScoreState state = ScoreState.SAFE_DISTANCE;
-
-  DriveToPoseTesting driveToPoseState = DriveToPoseTesting.SAFE_DISTANCE;
 
   public ScoreCoral(Superstructure superstructure, Superstructure.Level level, Drive drive) {
     this.superstructure = superstructure;
@@ -223,43 +215,8 @@ public class ScoreCoral extends Command {
     Logger.recordOutput("ScoreCoral/state", state);
     Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
     Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
-
-    if (driveToPoseState == DriveToPoseTesting.SAFE_DISTANCE) {
-
-      double x = -RobotContainer.driver.getLeftY();
-      double y = -RobotContainer.driver.getLeftX();
-      Rotation2d joystickAngle = Rotation2d.fromRadians(Math.atan2(y, x));
-      double joystickMag = Math.hypot(x, y);
-
-      if (level == Level.L1) {
-
-        if (joystickMag > 0.75) {
-          if (joystickAngle.getDegrees() > 30) {
-            targetScoringPose = leftTroughScoringPose;
-            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
-          } else if (joystickAngle.minus(robotReefAngle).getDegrees() < -30) {
-            targetScoringPose = rightTroughScoringPose;
-            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
-          } else {
-            targetScoringPose = middleTroughScoringPose;
-            superstructure.enableGlobalPose();
-          }
-        }
-
-      } else {
-
-        if (joystickMag > 0.75) {
-          if (joystickAngle.getDegrees() > 0) {
-            targetScoringPose = leftBranchScoringPos;
-            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.RIGHT);
-          } else if (joystickAngle.getDegrees() < 0) {
-            targetScoringPose = rightBranchScoringPose;
-            superstructure.enableSingleTag(reefStatus.getFaceTagId(), SingleTagCamera.LEFT);
-          }
-        }
-      }
-    }
-    if (superstructure.isAutoOperationMode() && !Constants.enableDriveToPoseTestingScoreCoral) {
+    
+    if (superstructure.isAutoOperationMode()) {
       if (state == ScoreState.SAFE_DISTANCE) {
 
         double x = -RobotContainer.driver.getLeftY();
@@ -303,6 +260,7 @@ public class ScoreCoral extends Command {
           }
         }
       }
+
       switch (state) {
         case SAFE_DISTANCE:
           safeDistPose =
@@ -321,6 +279,7 @@ public class ScoreCoral extends Command {
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (isInSafeArea() || driveToPose.atGoal()) {
+
             superstructure.requestPrescoreCoral(level);
             if (superstructure.getState() == Superstates.PRESCORE_CORAL
                 && superstructure.armAtSetpoint()
@@ -328,6 +287,7 @@ public class ScoreCoral extends Command {
               currentPoseRequest = () -> targetScoringPose;
               state = ScoreState.DRIVE_IN;
             }
+
           }
           break;
         case DRIVE_IN:
@@ -396,12 +356,9 @@ public class ScoreCoral extends Command {
   @Override
   public boolean isFinished() {
     return (scoreButtonReleased()
-            && !superstructure.isAutoOperationMode()
-            && !Constants.enableDriveToPoseTestingScoreCoral)
+            && !superstructure.isAutoOperationMode())
         || (superstructure.isAutoOperationMode()
-            && !running
-            && !Constants.enableDriveToPoseTestingScoreCoral)
-        || (Constants.enableDriveToPoseTestingScoreCoral && !running);
+            && !running);
   }
 
   @Override
