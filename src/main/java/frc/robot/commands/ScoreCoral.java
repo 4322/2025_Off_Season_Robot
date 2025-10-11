@@ -348,8 +348,6 @@ public class ScoreCoral extends Command {
               } else if (level != Level.L1
                   && superstructure.getEndEffectorState()
                       == EndEffectorStates.RELEASE_CORAL_NORMAL) {
-                  && superstructure.getEndEffectorState()
-                      == EndEffectorStates.RELEASE_CORAL_NORMAL) {
                 currentPoseRequest = () -> safeDistPose;
                 state = ScoreState.DRIVEBACK;
               }
