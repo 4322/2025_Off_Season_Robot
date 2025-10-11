@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.0,
-        "y": 4.8
+        "x": 7.609352993980455,
+        "y": 4.7936630503535
       },
       "isLocked": false,
       "linkedName": "CenterAlgaeScore"
@@ -20,8 +20,8 @@
         "y": 4.8
       },
       "prevControl": {
-        "x": 8.0,
-        "y": 4.8
+        "x": 7.345529971797057,
+        "y": 4.794827256270206
       },
       "nextControl": null,
       "isLocked": false,
