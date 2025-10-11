@@ -55,7 +55,7 @@ public class TwoCoralOneAlgaeLeft extends SequentialCommandGroup {
         new WaitCommand(0.2),
         new WaitUntilCommand(() -> !superstructure.isAlgaeHeld()),
         new ParallelCommandGroup(
-            new CoralIntakeManualAuto(intakeSuperstructure, false),
+            new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.LeftAlgaeScoreToFeed)),
         AutoBuilder.followPath(Robot.FeedToKilo),
         new ScoreCoral(superstructure, Level.L4, drive));

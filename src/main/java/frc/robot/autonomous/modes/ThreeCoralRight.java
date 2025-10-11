@@ -40,13 +40,13 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         new ScoreCoral(superstructure, Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
-            new CoralIntakeManualAuto(intakeSuperstructure, false),
+            new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.EchoToFeed)),
         AutoBuilder.followPath(Robot.FeedToDelta),
         new ScoreCoral(superstructure, Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
-          //new CoralIntakeManualAuto(intakeSuperstructure, false),
+          new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.DeltaToFeed)),
         AutoBuilder.followPath(Robot.FeedToCharlie),
         new ScoreCoral(superstructure, Level.L4, drive));
