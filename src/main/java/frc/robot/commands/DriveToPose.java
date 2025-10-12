@@ -27,8 +27,8 @@ public class DriveToPose extends Command {
   private final Drive drive;
   private final boolean slowMode;
   private Supplier<Pose2d> poseSupplier;
-  private Wrapper<Pose2d> poseWrapper = new Wrapper(new Pose2d());
-  private Wrapper<Boolean> atGoalBoolean = new Wrapper(new Boolean(false));
+  private Wrapper<Pose2d> poseWrapper = new Wrapper<Pose2d>(new Pose2d());
+  private Wrapper<Boolean> atGoalBoolean = new Wrapper<Boolean>(new Boolean(false));
 
   private boolean running = false;
   private final ProfiledPIDController driveController =

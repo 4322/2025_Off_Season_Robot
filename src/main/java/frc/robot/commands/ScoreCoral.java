@@ -31,8 +31,8 @@ public class ScoreCoral extends Command {
   public boolean running;
   public Timer times = new Timer();
   private Pose2d targetScoringPose;
-  private Wrapper<Pose2d> currentPoseRequest = new Wrapper(new Pose2d());
-  private Wrapper<Boolean> atGoalBoolean = new Wrapper(new Boolean(false));
+  private Wrapper<Pose2d> currentPoseRequest = new Wrapper<Pose2d>(new Pose2d());
+  private Wrapper<Boolean> atGoalBoolean = new Wrapper<Boolean>(new Boolean(false));
 
   private Pose2d leftBranchScoringPos;
   private Pose2d rightBranchScoringPose;

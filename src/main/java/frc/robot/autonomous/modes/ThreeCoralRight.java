@@ -24,8 +24,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class ThreeCoralRight extends SequentialCommandGroup {
 
-  private Wrapper<Pose2d> poseRequest = new Wrapper(new Pose2d());
-  private Wrapper<Boolean> atGoal = new Wrapper(new Boolean(false));
+  private Wrapper<Pose2d> poseRequest = new Wrapper<Pose2d>(new Pose2d());
+  private Wrapper<Boolean> atGoal = new Wrapper<Boolean>(new Boolean(false));
 
   public ThreeCoralRight(
       Drive drive,
