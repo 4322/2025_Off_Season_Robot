@@ -26,7 +26,7 @@ public class DriveToPose extends Command {
   private final Drive drive;
   private final boolean slowMode;
   private final Supplier<Pose2d> poseSupplier;
-  private Supplier<Boolean> atGoalBoolean;
+  private Supplier<Boolean> atGoalBoolean = () -> new Boolean(false);
 
   private boolean running = false;
   private final ProfiledPIDController driveController =
