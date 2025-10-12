@@ -235,8 +235,7 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral()
-                      && !endEffector.hasAlgae()) {
+                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new AlgaeIntakeGround(superstructure).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new ScoreCoral(superstructure, Level.L1, drive).schedule();
@@ -247,8 +246,7 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral()
-                      && !endEffector.hasAlgae()) {
+                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L2, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new ScoreCoral(superstructure, Level.L2, drive).schedule();
@@ -259,8 +257,7 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral()
-                      && !endEffector.hasAlgae()) {
+                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L3, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new ScoreCoral(superstructure, Level.L3, drive).schedule();
@@ -271,8 +268,7 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral()
-                      && endEffector.hasAlgae()) {
+                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new ScoreCoral(superstructure, Level.L4, drive).schedule();
