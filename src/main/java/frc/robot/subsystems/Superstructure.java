@@ -284,7 +284,7 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.SCORE_CORAL;
         } else if (requestIdle && endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
-        } if (requestIdle) {
+        } else if (requestIdle && !endEffector.hasCoral()) {
           state = Superstates.IDLE;
         }
 
