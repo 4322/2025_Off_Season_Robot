@@ -19,7 +19,6 @@ import frc.robot.LoggedTunableNumber;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.GeomUtil;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -27,7 +26,7 @@ public class DriveToPose extends Command {
   private final Drive drive;
   private final boolean slowMode;
   private final Supplier<Pose2d> poseSupplier;
-  private BooleanSupplier atGoalBoolean;
+  private Supplier<Boolean> atGoalBoolean;
 
   private boolean running = false;
   private final ProfiledPIDController driveController =
@@ -109,7 +108,7 @@ public class DriveToPose extends Command {
   }
 
   /** Drives to the specified pose under full software control. */
-  public DriveToPose(Drive drive, Supplier<Pose2d> poseSupplier, BooleanSupplier atGoalBoolean) {
+  public DriveToPose(Drive drive, Supplier<Pose2d> poseSupplier, Supplier<Boolean> atGoalBoolean) {
     this(drive, false, poseSupplier);
     this.atGoalBoolean = atGoalBoolean;
   }

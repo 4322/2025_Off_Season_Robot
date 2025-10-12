@@ -19,7 +19,6 @@ import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -28,9 +27,9 @@ public class ThreeCoralRight extends SequentialCommandGroup {
   private Supplier<Pose2d> poseRequest1 = () -> new Pose2d();
   private Supplier<Pose2d> poseRequest2 = () -> new Pose2d();
   private Supplier<Pose2d> poseRequest3 = () -> new Pose2d();
-  private BooleanSupplier booleanSupplier1;
-  private BooleanSupplier booleanSupplier2;
-  private BooleanSupplier booleanSupplier3;
+  private Supplier<Boolean> booleanSupplier1 = () -> new Boolean(false);
+  private Supplier<Boolean> booleanSupplier2 = () -> new Boolean(false);
+  private Supplier<Boolean> booleanSupplier3 = () -> new Boolean(false);
 
   public ThreeCoralRight(
       Drive drive,
@@ -53,8 +52,7 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         new InstantCommand(() -> Logger.recordOutput("Auto", "Finished path")),
         new ParallelRaceGroup(
             new DriveToPose(drive, () -> poseRequest1.get(), booleanSupplier1),
-            new ScoreCoral(
-                poseRequest1, booleanSupplier1.getAsBoolean(), superstructure, Level.L4, drive)),
+            new ScoreCoral(poseRequest1, booleanSupplier1.get(), superstructure, Level.L4, drive)),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
@@ -62,8 +60,7 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         AutoBuilder.followPath(Robot.FeedToDelta),
         new ParallelRaceGroup(
             new DriveToPose(drive, () -> poseRequest2.get(), booleanSupplier2),
-            new ScoreCoral(
-                poseRequest2, booleanSupplier2.getAsBoolean(), superstructure, Level.L4, drive)),
+            new ScoreCoral(poseRequest2, booleanSupplier2.get(), superstructure, Level.L4, drive)),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
@@ -71,7 +68,6 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         AutoBuilder.followPath(Robot.FeedToCharlie),
         new ParallelRaceGroup(
             new DriveToPose(drive, () -> poseRequest3.get(), booleanSupplier3),
-            new ScoreCoral(
-                poseRequest3, booleanSupplier3.getAsBoolean(), superstructure, Level.L4, drive)));
+            new ScoreCoral(poseRequest3, booleanSupplier3.get(), superstructure, Level.L4, drive)));
   }
 }

@@ -19,7 +19,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -33,7 +32,7 @@ public class ScoreCoral extends Command {
   public Timer times = new Timer();
   private Pose2d targetScoringPose;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
-  private BooleanSupplier atGoalBoolean;
+  private Supplier<Boolean> atGoalBoolean;
 
   private Pose2d leftBranchScoringPos;
   private Pose2d rightBranchScoringPose;
@@ -226,7 +225,7 @@ public class ScoreCoral extends Command {
   @Override
   public void execute() {
     Logger.recordOutput("ScoreCoral/state", state);
-    Logger.recordOutput("ScoreCoral/atGoal", atGoalBoolean.getAsBoolean());
+    Logger.recordOutput("ScoreCoral/atGoal", atGoalBoolean.get());
     Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
 
     if (superstructure.isAutoOperationMode()) {
@@ -291,7 +290,7 @@ public class ScoreCoral extends Command {
           }
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (isInSafeArea() || atGoalBoolean.getAsBoolean()) {
+          } else if (isInSafeArea() || atGoalBoolean.get()) {
 
             superstructure.requestPrescoreCoral(level);
             if (superstructure.getState() == Superstates.PRESCORE_CORAL
@@ -307,7 +306,7 @@ public class ScoreCoral extends Command {
             state = ScoreState.HOLD_POSITION;
           }
 
-          if (atGoalBoolean.getAsBoolean()) {
+          if (atGoalBoolean.get()) {
             times.start();
             if (times.hasElapsed(0.33)) {
               superstructure.requestScoreCoral(level);
@@ -336,7 +335,7 @@ public class ScoreCoral extends Command {
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           }
-          if (atGoalBoolean.getAsBoolean()) {
+          if (atGoalBoolean.get()) {
             running = false;
           }
 
