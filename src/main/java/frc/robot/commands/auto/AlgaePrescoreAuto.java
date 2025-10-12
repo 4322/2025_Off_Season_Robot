@@ -47,7 +47,5 @@ public class AlgaePrescoreAuto extends Command {
   }
 
   @Override
-  public void end(boolean interrupted) {
-    superstructure.requestIdle();
-  }
+  public void end(boolean interrupted) {}
 }
