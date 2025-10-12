@@ -19,7 +19,6 @@ import frc.robot.LoggedTunableNumber;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.GeomUtil;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -239,7 +238,7 @@ public class DriveToPose extends Command {
             lastSetpointTranslation, new Rotation2d(thetaController.getSetpoint().position)));
     Logger.recordOutput("DriveToPose/DriveToPoseGoal", targetPose);
 
-    atGoalBoolean = () -> atGoal(); 
+    atGoalBoolean = () -> atGoal();
   }
 
   @Override
