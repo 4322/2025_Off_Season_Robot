@@ -59,7 +59,6 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
-import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.util.ReefStatus;
 
 /**
@@ -98,17 +97,7 @@ public class RobotContainer {
               new ModuleIOSim(DrivetrainConstants.frontRight),
               new ModuleIOSim(DrivetrainConstants.backLeft),
               new ModuleIOSim(DrivetrainConstants.backRight));
-      vision =
-          new Vision(
-              drive,
-              new VisionIOPhotonVisionSim(
-                  Constants.Vision.leftCamName,
-                  Constants.Vision.leftCameraTransform,
-                  drive::getPose),
-              new VisionIOPhotonVisionSim(
-                  Constants.Vision.rightCamName,
-                  Constants.Vision.rightCameraTransform,
-                  drive::getPose));
+      vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
       sim1 = new CommandXboxController(1);
 
       elevator = new Elevator(new ElevatorIOSim());

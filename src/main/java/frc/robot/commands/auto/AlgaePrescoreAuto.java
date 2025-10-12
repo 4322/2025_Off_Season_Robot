@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 
 public class AlgaePrescoreAuto extends Command {
@@ -20,11 +21,18 @@ public class AlgaePrescoreAuto extends Command {
   @Override
   public void initialize() {
     superstructure.requestAlgaePrescore();
-
-    if (Robot.alliance == DriverStation.Alliance.Blue) {
-      drive.requestAutoRotateMode(Rotation2d.fromDegrees(0));
+    if (superstructure.scoreBackSideBarge()) {
+      if (Robot.alliance == DriverStation.Alliance.Red) {
+        drive.requestAutoRotateMode(Rotation2d.fromDegrees(0));
+      } else {
+        drive.requestAutoRotateMode(Rotation2d.fromDegrees(180));
+      }
     } else {
-      drive.requestAutoRotateMode(Rotation2d.fromDegrees(180));
+      if (Robot.alliance == DriverStation.Alliance.Blue) {
+        drive.requestAutoRotateMode(Rotation2d.fromDegrees(0));
+      } else {
+        drive.requestAutoRotateMode(Rotation2d.fromDegrees(180));
+      }
     }
   }
 
@@ -33,7 +41,9 @@ public class AlgaePrescoreAuto extends Command {
 
   @Override
   public boolean isFinished() {
-    return superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint();
+    return superstructure.armAtSetpoint()
+        && superstructure.elevatorAtSetpoint()
+        && superstructure.getState() == Superstates.ALGAE_PRESCORE;
   }
 
   @Override
