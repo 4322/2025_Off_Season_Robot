@@ -33,16 +33,12 @@ public class OneCoralTwoAlgaeCenter extends OrangeSequentialCommandGroup {
         AutoBuilder.followPath(Robot.GulfToGulfHotel),
         new DescoreAlgae(superstructure, Level.L2, drive),
         AutoBuilder.followPath(Robot.GulfHotelToCenterBargeBackwards),
-        new ParallelCommandGroup(
-            new AlgaePrescoreAuto(superstructure, drive),
-            AutoBuilder.followPath(Robot.CenterBargeBackwardsToCenterAlgaeScoreBackwards)),
+        new AlgaePrescoreAuto(superstructure, drive),
         new AlgaeScoreAuto(superstructure, drive),
         AutoBuilder.followPath(Robot.CenterAlgaeScoreBackwardsToIndiaJuliet),
         new DescoreAlgae(superstructure, Level.L3, drive),
         AutoBuilder.followPath(Robot.IndiaJulietToCenterBargeBackwards),
-        new ParallelCommandGroup(
-            new AlgaePrescoreAuto(superstructure, drive),
-            AutoBuilder.followPath(Robot.CenterBargeBackwardsToCenterAlgaeScoreBackwards)),
+        new AlgaePrescoreAuto(superstructure, drive),
         new AlgaeScoreAuto(superstructure, drive),
         AutoBuilder.followPath(Robot.CenterAlgaeScoreBackwardsToLeave));
   }
