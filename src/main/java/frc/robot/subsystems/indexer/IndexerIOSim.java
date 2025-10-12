@@ -10,6 +10,7 @@ public class IndexerIOSim implements IndexerIO {
     inputs.indexerSensorConnected = true;
     inputs.pickupAreaSensorConnected = true;
     inputs.pickupAreaSensorTriggered = true; // coral always available for pickup
+    inputs.indexerSensorTriggered = true;
     inputs.pickupAreaSensorProximity = 0.0; // not used
   }
 }
