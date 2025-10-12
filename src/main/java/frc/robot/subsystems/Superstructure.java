@@ -67,7 +67,6 @@ public class Superstructure extends SubsystemBase {
   OperationMode mode = OperationMode.AUTO;
 
   Superstates state = Superstates.HOMELESS;
-  Superstates prevState = Superstates.HOMELESS;
 
   private EndEffector endEffector;
   private Arm arm;
@@ -111,7 +110,6 @@ public class Superstructure extends SubsystemBase {
     Logger.recordOutput("Superstructure/currentAutoState", mode.toString());
     Logger.recordOutput("Superstructure/requestedLevel", level);
 
-    prevState = state;
     switch (state) {
       case HOMELESS:
         elevator.reset();
@@ -447,9 +445,8 @@ public class Superstructure extends SubsystemBase {
     return endEffector.getState();
   }
 
-  // Return the state executed in the current periodic cycle
   public Superstates getState() {
-    return prevState;
+    return state;
   }
 
   public ReefStatus getReefStatus() {
