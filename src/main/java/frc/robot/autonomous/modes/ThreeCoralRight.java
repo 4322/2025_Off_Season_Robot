@@ -52,7 +52,8 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         new InstantCommand(() -> Logger.recordOutput("Auto", "Finished path")),
         new ParallelRaceGroup(
             new DriveToPose(drive, () -> poseRequest1.get(), booleanSupplier1),
-            new ScoreCoral(poseRequest1, booleanSupplier1.get(), superstructure, Level.L4, drive)),
+            new ScoreCoral(
+                poseRequest1, () -> booleanSupplier1.get(), superstructure, Level.L4, drive)),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
@@ -60,7 +61,8 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         AutoBuilder.followPath(Robot.FeedToDelta),
         new ParallelRaceGroup(
             new DriveToPose(drive, () -> poseRequest2.get(), booleanSupplier2),
-            new ScoreCoral(poseRequest2, booleanSupplier2.get(), superstructure, Level.L4, drive)),
+            new ScoreCoral(
+                poseRequest2, () -> booleanSupplier2.get(), superstructure, Level.L4, drive)),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
@@ -68,6 +70,7 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         AutoBuilder.followPath(Robot.FeedToCharlie),
         new ParallelRaceGroup(
             new DriveToPose(drive, () -> poseRequest3.get(), booleanSupplier3),
-            new ScoreCoral(poseRequest3, booleanSupplier3.get(), superstructure, Level.L4, drive)));
+            new ScoreCoral(
+                poseRequest3, () -> booleanSupplier3.get(), superstructure, Level.L4, drive)));
   }
 }

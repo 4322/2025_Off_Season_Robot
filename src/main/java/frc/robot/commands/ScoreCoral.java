@@ -32,7 +32,7 @@ public class ScoreCoral extends Command {
   public Timer times = new Timer();
   private Pose2d targetScoringPose;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
-  private Supplier<Boolean> atGoalBoolean;
+  private Supplier<Boolean> atGoalBoolean = () -> new Boolean(false);
 
   private Pose2d leftBranchScoringPos;
   private Pose2d rightBranchScoringPose;
@@ -64,7 +64,7 @@ public class ScoreCoral extends Command {
 
   public ScoreCoral(
       Supplier<Pose2d> currentPoseRequest,
-      Boolean atGoalBoolean,
+      Supplier<Boolean> atGoalBoolean,
       Superstructure superstructure,
       Superstructure.Level level,
       Drive drive) {
@@ -72,7 +72,7 @@ public class ScoreCoral extends Command {
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
-    this.atGoalBoolean = () -> atGoalBoolean;
+    this.atGoalBoolean = atGoalBoolean;
   }
 
   @Override
