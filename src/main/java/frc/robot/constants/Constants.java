@@ -466,8 +466,8 @@ public final class Constants {
     public static final double thetaMaxVelocitySlow = 90;
     public static final double thetaMaxAcceleration = 1440;
 
-    public static final double driveTolerance = 0.06;
-    public static final double driveToleranceSlow = 0.06;
+    public static final double driveTolerance = 0.0254;
+    public static final double driveToleranceSlow = 0.0254;
 
     public static final double ffMinRadius = 0.1;
     public static final double ffMaxRadius = 0.8;
