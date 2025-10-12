@@ -183,7 +183,8 @@ public class Superstructure extends SubsystemBase {
         }
 
         if (requestIdle) {
-          if (elevator.getElevatorHeightMeters() >= Constants.Elevator.safeBargeRetractHeightMeters){
+          if (elevator.getElevatorHeightMeters()
+              >= Constants.Elevator.safeBargeRetractHeightMeters) {
             state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
           } else {
             state = Superstates.ALGAE_IDLE;
@@ -196,7 +197,7 @@ public class Superstructure extends SubsystemBase {
       case ALGAE_SCORE:
         endEffector.releaseAlgae();
         if (requestIdle) {
-            state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
+          state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
         }
 
         break;
