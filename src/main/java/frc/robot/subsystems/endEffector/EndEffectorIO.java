@@ -41,6 +41,15 @@ public interface EndEffectorIO {
 
   public default void stop(IdleMode idleMode) {}
 
+  // For sim mode
+  public default void simCoralHeld() {}
+
+  public default void simAlgaeHeld() {}
+
+  public default void simCoralReleased() {}
+
+  public default void simAlgaeReleased() {}
+
   // for tuning
   public default Nitrate getNitrate() {
     return null;
