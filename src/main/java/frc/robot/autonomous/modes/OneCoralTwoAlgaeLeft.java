@@ -5,7 +5,6 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 import frc.robot.commands.DescoreAlgae;
@@ -18,8 +17,9 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.util.OrangeSequentialCommandGroup;
 
-public class OneCoralTwoAlgaeLeft extends SequentialCommandGroup {
+public class OneCoralTwoAlgaeLeft extends OrangeSequentialCommandGroup {
   private Superstructure superstructure;
   private IntakeSuperstructure intakeSuperstructure;
   private Drive drive;
