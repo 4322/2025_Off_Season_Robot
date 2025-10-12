@@ -53,7 +53,11 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         new ParallelRaceGroup(
             new DriveToPose(drive, () -> poseRequest1.get(), () -> booleanSupplier1.get()),
             new ScoreCoral(
-                () -> poseRequest1.get(), () -> booleanSupplier1.get(), superstructure, Level.L4, drive)),
+                () -> poseRequest1.get(),
+                () -> booleanSupplier1.get(),
+                superstructure,
+                Level.L4,
+                drive)),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
@@ -62,7 +66,11 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         new ParallelRaceGroup(
             new DriveToPose(drive, () -> poseRequest2.get(), () -> booleanSupplier2.get()),
             new ScoreCoral(
-                () -> poseRequest2.get(), () -> booleanSupplier2.get(), superstructure, Level.L4, drive)),
+                () -> poseRequest2.get(),
+                () -> booleanSupplier2.get(),
+                superstructure,
+                Level.L4,
+                drive)),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
@@ -71,6 +79,10 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         new ParallelRaceGroup(
             new DriveToPose(drive, () -> poseRequest3.get(), () -> booleanSupplier3.get()),
             new ScoreCoral(
-                () -> poseRequest3.get(), () -> booleanSupplier3.get(), superstructure, Level.L4, drive)));
+                () -> poseRequest3.get(),
+                () -> booleanSupplier3.get(),
+                superstructure,
+                Level.L4,
+                drive)));
   }
 }
