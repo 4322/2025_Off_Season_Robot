@@ -101,7 +101,7 @@ public class DescoreAlgae extends Command {
           } else if (isInSafeArea() || driveToPose.atGoal()) {
             times.start();
             superstructure.requestDescoreAlgae(level);
-            if (times.hasElapsed(0.3)) {
+            if (times.hasElapsed(0.33)) {
               times.stop();
               times.reset();
               if (superstructure.getState() == Superstates.DESCORE_ALGAE

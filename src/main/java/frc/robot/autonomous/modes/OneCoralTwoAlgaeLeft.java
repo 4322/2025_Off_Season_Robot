@@ -2,7 +2,6 @@ package frc.robot.autonomous.modes;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
-
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -21,19 +20,23 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
 
 public class OneCoralTwoAlgaeLeft extends SequentialCommandGroup {
-    private Superstructure superstructure;
-    private IntakeSuperstructure intakeSuperstructure;
-    private Drive drive;
-    private Vision vision;
-    
-    public OneCoralTwoAlgaeLeft(Superstructure superstructure, IntakeSuperstructure intakeSuperstructure, Vision vision, Drive drive) {
-        this.superstructure = superstructure;
-        this.intakeSuperstructure = intakeSuperstructure;
-        this.drive = drive;
-        this.vision = vision;
+  private Superstructure superstructure;
+  private IntakeSuperstructure intakeSuperstructure;
+  private Drive drive;
+  private Vision vision;
 
-        addCommands(
-            new InstantCommand(
+  public OneCoralTwoAlgaeLeft(
+      Superstructure superstructure,
+      IntakeSuperstructure intakeSuperstructure,
+      Vision vision,
+      Drive drive) {
+    this.superstructure = superstructure;
+    this.intakeSuperstructure = intakeSuperstructure;
+    this.drive = drive;
+    this.vision = vision;
+
+    addCommands(
+        new InstantCommand(
             () -> {
               superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
               PathPlannerPath path = Robot.CenterStartToGulf;
@@ -42,26 +45,22 @@ public class OneCoralTwoAlgaeLeft extends SequentialCommandGroup {
               }
               drive.resetPose(path.getStartingHolonomicPose().get());
             }),
-            AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
-            new ScoreCoral(superstructure, Level.L4, drive),
-            AutoBuilder.followPath(Robot.JulietToIndiaJuliet),
-            new DescoreAlgae(superstructure, Level.L2, drive),
-            new ParallelCommandGroup(
-                AutoBuilder.followPath(Robot.IndiaJulietToLeftBargeBackwards),
-                new AlgaePrescoreAuto(superstructure, drive)
-            ),
-            AutoBuilder.followPath(Robot.LeftBargeBackwardsToLeftAlgaeScoreBackwards),
-            new AlgaeScoreAuto(superstructure, drive),
-            new WaitCommand(Constants.Auto.algaeScoreDelay),
-            AutoBuilder.followPath(Robot.LeftAlgaeScoreBackwardsToKiloLima),
-            new DescoreAlgae(superstructure, Level.L3, drive),
-            AutoBuilder.followPath(Robot.KiloLimaToLeftBargeBackwards),
-            new AlgaePrescoreAuto(superstructure, drive),
-            AutoBuilder.followPath(Robot.LeftBargeBackwardsToLeftAlgaeScoreBackwards),
-            new WaitCommand(Constants.Auto.algaeScoreDelay),
-            AutoBuilder.followPath(Robot.LeftAlgaeScoreBackwardsToLeave)
-
-
-        );
-    }
+        AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
+        new ScoreCoral(superstructure, Level.L4, drive),
+        AutoBuilder.followPath(Robot.JulietToIndiaJuliet),
+        new DescoreAlgae(superstructure, Level.L2, drive),
+        new ParallelCommandGroup(
+            AutoBuilder.followPath(Robot.IndiaJulietToLeftBargeBackwards),
+            new AlgaePrescoreAuto(superstructure, drive)),
+        AutoBuilder.followPath(Robot.LeftBargeBackwardsToLeftAlgaeScoreBackwards),
+        new AlgaeScoreAuto(superstructure, drive),
+        new WaitCommand(Constants.Auto.algaeScoreDelay),
+        AutoBuilder.followPath(Robot.LeftAlgaeScoreBackwardsToKiloLima),
+        new DescoreAlgae(superstructure, Level.L3, drive),
+        AutoBuilder.followPath(Robot.KiloLimaToLeftBargeBackwards),
+        new AlgaePrescoreAuto(superstructure, drive),
+        AutoBuilder.followPath(Robot.LeftBargeBackwardsToLeftAlgaeScoreBackwards),
+        new WaitCommand(Constants.Auto.algaeScoreDelay),
+        AutoBuilder.followPath(Robot.LeftAlgaeScoreBackwardsToLeave));
+  }
 }
