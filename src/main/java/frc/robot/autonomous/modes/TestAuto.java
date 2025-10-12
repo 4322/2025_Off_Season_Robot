@@ -4,7 +4,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Robot;
 import frc.robot.commands.ScoreCoral;
@@ -12,9 +11,9 @@ import frc.robot.commands.auto.CoralIntakeManualAuto;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
-import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
+import org.littletonrobotics.junction.Logger;
 
 public class TestAuto extends Command {
   private Superstructure superstructure;
@@ -23,12 +22,11 @@ public class TestAuto extends Command {
   private Vision vision;
 
   private ScoreCoral scoreCoral1;
-    private ScoreCoral scoreCoral2;
-    private CoralIntakeManualAuto coralIntakeManualAuto;
+  private ScoreCoral scoreCoral2;
+  private CoralIntakeManualAuto coralIntakeManualAuto;
   private Command ThreeCoralStartToJuliet;
   private Command JulietToFeed;
-    private Command FeedToKilo;
-
+  private Command FeedToKilo;
 
   private int currentCommand = 0;
   private boolean end = false;
@@ -53,20 +51,13 @@ public class TestAuto extends Command {
 
     this.commands[0] = ThreeCoralStartToJuliet;
     this.commands[1] = scoreCoral1;
-    this.commands[2] = new ParallelCommandGroup(
-        coralIntakeManualAuto,
-        JulietToFeed
-    );
+    this.commands[2] = new ParallelCommandGroup(coralIntakeManualAuto, JulietToFeed);
     this.commands[3] = FeedToKilo;
     this.commands[4] = scoreCoral2;
-
-    }
-    
-  
+  }
 
   @Override
   public void initialize() {
-    
 
     superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
     PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
@@ -80,13 +71,14 @@ public class TestAuto extends Command {
 
   @Override
   public void execute() {
-    if (currentCommand >= commands.length && commands[currentCommand - 1].isFinished()) {
-        end = true;
-    } else if (!commands[currentCommand].isScheduled() && commands[currentCommand - 1].isFinished()) {
-        commands[currentCommand - 1].schedule();
-        currentCommand++;
+    Logger.recordOutput("Auto/currentCommand", currentCommand);
+    if (currentCommand >= commands.length - 1 && commands[currentCommand - 1].isFinished()) {
+      end = true;
+    } else if (!commands[currentCommand].isScheduled()
+        && (commands[currentCommand - 1].isFinished())) {
+      commands[currentCommand].schedule();
+      currentCommand++;
     }
-    
   }
 
   @Override
