@@ -28,7 +28,6 @@ public class TwoCoralOneAlgaeLeft extends OrangeSequentialCommandGroup {
       IntakeSuperstructure intakeSuperstructure,
       Vision vision) {
     setName("TWO_CORAL_ONE_ALGAE_LEFT");
-    addRequirements(drive, superstructure, intakeSuperstructure);
     addCommands(
         new InstantCommand(
             () -> {

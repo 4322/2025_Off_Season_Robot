@@ -27,7 +27,6 @@ public class OneCoralOneAlgaeCenter extends OrangeSequentialCommandGroup {
       IntakeSuperstructure intakeSuperstructure,
       Vision vision) {
     setName("ONE_CORAL_ONE_ALGAE_CENTER");
-    addRequirements(drive, superstructure, intakeSuperstructure);
     addCommands(
         new InstantCommand(
             () -> {

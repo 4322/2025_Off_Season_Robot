@@ -25,7 +25,6 @@ public class ThreeCoralRight extends OrangeSequentialCommandGroup {
       IntakeSuperstructure intakeSuperstructure,
       Vision vision) {
     setName("THREE_CORAL_RIGHT");
-    addRequirements(drive, superstructure, intakeSuperstructure);
     addCommands(
         new InstantCommand(
             () -> {

@@ -61,7 +61,7 @@ public class OrangeSequentialCommandGroup extends Command {
     m_currentCommandIndex = 0;
 
     if (!m_commands.isEmpty()) {
-      m_commands.get(0).initialize();
+      m_commands.get(0).schedule();
     }
   }
 
@@ -73,12 +73,10 @@ public class OrangeSequentialCommandGroup extends Command {
 
     Command currentCommand = m_commands.get(m_currentCommandIndex);
 
-    currentCommand.execute();
-    if (currentCommand.isFinished()) {
-      currentCommand.end(false);
+    if (!currentCommand.isScheduled()) {
       m_currentCommandIndex++;
       if (m_currentCommandIndex < m_commands.size()) {
-        m_commands.get(m_currentCommandIndex).initialize();
+        m_commands.get(m_currentCommandIndex).schedule();
       }
     }
   }
@@ -89,7 +87,7 @@ public class OrangeSequentialCommandGroup extends Command {
         && !m_commands.isEmpty()
         && m_currentCommandIndex > -1
         && m_currentCommandIndex < m_commands.size()) {
-      m_commands.get(m_currentCommandIndex).end(true);
+      m_commands.get(m_currentCommandIndex).cancel();
     }
     m_currentCommandIndex = -1;
   }

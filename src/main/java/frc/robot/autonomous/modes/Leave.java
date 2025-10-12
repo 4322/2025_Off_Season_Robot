@@ -12,7 +12,6 @@ import frc.robot.util.OrangeSequentialCommandGroup;
 public class Leave extends OrangeSequentialCommandGroup {
   public Leave(Drive drive, Superstructure superstructure) {
     setName("LEAVE");
-    addRequirements(drive, superstructure);
     addCommands(
         new InstantCommand(
             () -> {

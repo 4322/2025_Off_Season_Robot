@@ -24,7 +24,6 @@ public class ThreeCoralLeftPush extends OrangeSequentialCommandGroup {
       IntakeSuperstructure intakeSuperstructure,
       Vision vision) {
     setName("THREE_CORAL_LEFT_PUSH");
-    addRequirements(drive, superstructure, intakeSuperstructure);
     addCommands(
         new InstantCommand(
             () -> {

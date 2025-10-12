@@ -20,20 +20,12 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.OrangeSequentialCommandGroup;
 
 public class OneCoralTwoAlgaeLeft extends OrangeSequentialCommandGroup {
-  private Superstructure superstructure;
-  private IntakeSuperstructure intakeSuperstructure;
-  private Drive drive;
-  private Vision vision;
 
   public OneCoralTwoAlgaeLeft(
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,
       Vision vision,
       Drive drive) {
-    this.superstructure = superstructure;
-    this.intakeSuperstructure = intakeSuperstructure;
-    this.drive = drive;
-    this.vision = vision;
 
     addCommands(
         new InstantCommand(
