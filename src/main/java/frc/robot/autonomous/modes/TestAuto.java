@@ -31,6 +31,7 @@ public class TestAuto extends Command {
 
 
   private int currentCommand = 0;
+  private boolean end = false;
 
   private Command[] commands = new Command[5];
 
@@ -74,16 +75,22 @@ public class TestAuto extends Command {
     }
     drive.resetPose(path.getStartingHolonomicPose().get());
     commands[0].schedule();
-    
+    currentCommand++;
   }
 
   @Override
   public void execute() {
+    if (currentCommand >= commands.length) {
+        end = true;
+    } else if (!commands[currentCommand - 1].isFinished()) {
+        commands[currentCommand - 1].schedule();
+        currentCommand++;
+    }
     
   }
 
   @Override
   public boolean isFinished() {
-    return false;
+    return end;
   }
 }
