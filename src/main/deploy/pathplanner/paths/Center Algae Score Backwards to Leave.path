@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.0,
-        "y": 4.8
+        "x": 7.384426229508196,
+        "y": 4.82218237704918
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.25,
-        "y": 4.8
+        "x": 7.634426229508196,
+        "y": 4.82218237704918
       },
       "isLocked": false,
       "linkedName": "CenterAlgaeScoreBackwards"
     },
     {
       "anchor": {
-        "x": 6.75,
-        "y": 4.8
+        "x": 6.36547131147541,
+        "y": 4.82218237704918
       },
       "prevControl": {
-        "x": 6.5,
-        "y": 4.8
+        "x": 6.11547131147541,
+        "y": 4.82218237704918
       },
       "nextControl": null,
       "isLocked": false,

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.5,
-        "y": 4.8
+        "x": 7.360450819672131,
+        "y": 4.82218237704918
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.75,
-        "y": 4.8
+        "x": 7.610450819672131,
+        "y": 4.82218237704918
       },
       "isLocked": false,
       "linkedName": "Center Barge Backwards"
     },
     {
       "anchor": {
-        "x": 8.0,
-        "y": 4.8
+        "x": 7.384426229508196,
+        "y": 4.82218237704918
       },
       "prevControl": {
-        "x": 7.75,
-        "y": 4.8
+        "x": 7.134426229508196,
+        "y": 4.82218237704918
       },
       "nextControl": null,
       "isLocked": false,
