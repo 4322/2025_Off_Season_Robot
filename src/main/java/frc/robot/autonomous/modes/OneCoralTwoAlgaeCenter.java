@@ -29,7 +29,7 @@ public class OneCoralTwoAlgaeCenter extends OrangeSequentialCommandGroup {
               drive.resetPose(path.getStartingHolonomicPose().get());
             }),
         new ScoreCoral(superstructure, Level.L4, drive),
-        AutoBuilder.followPath(Robot.GulfToGulfHotel),
+        //AutoBuilder.followPath(Robot.GulfToGulfHotel),
         new DescoreAlgae(superstructure, Level.L2, drive),
         AutoBuilder.followPath(Robot.GulfHotelToCenterBargeBackwards),
         new AlgaePrescoreAuto(superstructure, drive),

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.564241803278687,
-        "y": 4.678329918032786
+        "x": 7.44436475409836,
+        "y": 5.409579918032787
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.0828213487332325,
-        "y": 5.952491849850968
+        "x": 7.279436932795876,
+        "y": 5.5974597034287035
       },
       "isLocked": false,
-      "linkedName": "CenterAlgaeScoreBackwards"
+      "linkedName": "Center Barge Backwards"
     },
     {
       "anchor": {
-        "x": 5.25061475409836,
-        "y": 5.409579918032787
+        "x": 5.6160000000000005,
+        "y": 5.7604999999999995
       },
       "prevControl": {
-        "x": 6.357461345007452,
-        "y": 6.456596963487332
+        "x": 6.5086643663045045,
+        "y": 5.21871931574716
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 0.0,
     "rotation": -119.99999999999999
   },
   "reversed": false,
