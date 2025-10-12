@@ -280,7 +280,8 @@ public class Robot extends LoggedRobot {
 
     allianceUpdateTimer.start();
 
-    if (Constants.currentMode == Constants.RobotMode.SIM) {
+    if (Constants.currentMode == Constants.RobotMode.SIM
+        || Constants.currentMode == Constants.RobotMode.REPLAY) {
       // enable subsystems in sim mode
       RobotContainer.getSuperstructure().homeButtonActivated();
     }
