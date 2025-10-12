@@ -101,19 +101,14 @@ public class DescoreAlgae extends Command {
           } else if (isInSafeArea() || driveToPose.atGoal()) {
             times.start();
             superstructure.requestDescoreAlgae(level);
-            if (times.hasElapsed(0.33)) {
-              times.stop();
-              times.reset();
-              if (superstructure.getState() == Superstates.DESCORE_ALGAE
-                  && superstructure.armAtSetpoint()
-                  && superstructure.elevatorAtSetpoint()) {
-                state = ScoreState.DRIVE_IN;
-                currentPoseRequest = () -> targetScoringPose;
-              }
+
+            if (superstructure.getState() == Superstates.DESCORE_ALGAE
+                && superstructure.armAtSetpoint()
+                && superstructure.elevatorAtSetpoint()
+                && driveToPose.atGoal()) {
+              state = ScoreState.DRIVE_IN;
+              currentPoseRequest = () -> targetScoringPose;
             }
-          } else {
-            times.stop();
-            times.reset();
           }
           break;
         case DRIVE_IN:
