@@ -414,7 +414,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public boolean isCoralHeld() {
-    return endEffector.hasCoral();
+    return true;
   }
 
   public boolean isAlgaeHeld() {

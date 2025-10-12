@@ -39,6 +39,7 @@ import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOBoron;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIONitrate;
+import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIONitrate;
@@ -93,10 +94,10 @@ public class RobotContainer {
       drive =
           new Drive(
               new GyroIO() {},
-              new ModuleIO() {},
-              new ModuleIO() {},
-              new ModuleIO() {},
-              new ModuleIO() {});
+              new ModuleIOSim(DrivetrainConstants.frontLeft),
+              new ModuleIOSim(DrivetrainConstants.frontRight),
+              new ModuleIOSim(DrivetrainConstants.backLeft),
+              new ModuleIOSim(DrivetrainConstants.backRight));
       vision =
           new Vision(
               drive,
