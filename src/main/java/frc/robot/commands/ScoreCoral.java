@@ -227,7 +227,7 @@ public class ScoreCoral extends Command {
   @Override
   public void execute() {
     Logger.recordOutput("ScoreCoral/state", state);
-    Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
+    Logger.recordOutput("ScoreCoral/atGoal", atGoalBoolean.getAsBoolean());
     Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
 
     if (superstructure.isAutoOperationMode()) {
@@ -292,7 +292,7 @@ public class ScoreCoral extends Command {
           }
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (isInSafeArea() || driveToPose.atGoal()) {
+          } else if (isInSafeArea() || atGoalBoolean.getAsBoolean()) {
 
             superstructure.requestPrescoreCoral(level);
             if (superstructure.getState() == Superstates.PRESCORE_CORAL
@@ -308,7 +308,7 @@ public class ScoreCoral extends Command {
             state = ScoreState.HOLD_POSITION;
           }
 
-          if (driveToPose.atGoal()) {
+          if (atGoalBoolean.getAsBoolean()) {
             times.start();
             if (times.hasElapsed(0.33)) {
               superstructure.requestScoreCoral(level);
@@ -337,7 +337,7 @@ public class ScoreCoral extends Command {
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           }
-          if (driveToPose.atGoal()) {
+          if (atGoalBoolean.getAsBoolean()) {
             running = false;
           }
 

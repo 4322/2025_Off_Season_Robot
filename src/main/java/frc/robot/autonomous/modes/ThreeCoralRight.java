@@ -61,7 +61,7 @@ public class ThreeCoralRight extends SequentialCommandGroup {
             AutoBuilder.followPath(Robot.EchoToFeed)),
         AutoBuilder.followPath(Robot.FeedToDelta),
         new ParallelRaceGroup(
-          new DriveToPose(drive, () -> poseRequest1.get(), booleanSupplier1),
+          new DriveToPose(drive, () -> poseRequest2.get(), booleanSupplier2),
           new ScoreCoral(poseRequest2, booleanSupplier2.getAsBoolean(), superstructure, Level.L4, drive)),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
@@ -69,7 +69,7 @@ public class ThreeCoralRight extends SequentialCommandGroup {
             AutoBuilder.followPath(Robot.DeltaToFeed)),
         AutoBuilder.followPath(Robot.FeedToCharlie),
         new ParallelRaceGroup(
-          new DriveToPose(drive, () -> poseRequest1.get(), booleanSupplier1),
+          new DriveToPose(drive, () -> poseRequest3.get(), booleanSupplier3),
           new ScoreCoral(poseRequest3, booleanSupplier3.getAsBoolean(), superstructure, Level.L4, drive)));
   }
 }
