@@ -56,6 +56,8 @@ public class TestAuto extends Command {
         coralIntakeManualAuto,
         JulietToFeed
     );
+    this.commands[3] = FeedToKilo;
+    this.commands[4] = scoreCoral2;
 
     }
     
@@ -71,7 +73,8 @@ public class TestAuto extends Command {
       path = path.flipPath();
     }
     drive.resetPose(path.getStartingHolonomicPose().get());
-    ThreeCoralStartToJuliet.schedule();
+    commands[0].schedule();
+    
   }
 
   @Override
