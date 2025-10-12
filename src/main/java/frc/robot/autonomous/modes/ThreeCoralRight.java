@@ -51,26 +51,26 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         AutoBuilder.followPath(Robot.ThreeCoralStartToEcho),
         new InstantCommand(() -> Logger.recordOutput("Auto", "Finished path")),
         new ParallelRaceGroup(
-            new DriveToPose(drive, () -> poseRequest1.get(), booleanSupplier1),
+            new DriveToPose(drive, () -> poseRequest1.get(), () -> booleanSupplier1.get()),
             new ScoreCoral(
-                poseRequest1, () -> booleanSupplier1.get(), superstructure, Level.L4, drive)),
+                () -> poseRequest1.get(), () -> booleanSupplier1.get(), superstructure, Level.L4, drive)),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.EchoToFeed)),
         AutoBuilder.followPath(Robot.FeedToDelta),
         new ParallelRaceGroup(
-            new DriveToPose(drive, () -> poseRequest2.get(), booleanSupplier2),
+            new DriveToPose(drive, () -> poseRequest2.get(), () -> booleanSupplier2.get()),
             new ScoreCoral(
-                poseRequest2, () -> booleanSupplier2.get(), superstructure, Level.L4, drive)),
+                () -> poseRequest2.get(), () -> booleanSupplier2.get(), superstructure, Level.L4, drive)),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.DeltaToFeed)),
         AutoBuilder.followPath(Robot.FeedToCharlie),
         new ParallelRaceGroup(
-            new DriveToPose(drive, () -> poseRequest3.get(), booleanSupplier3),
+            new DriveToPose(drive, () -> poseRequest3.get(), () -> booleanSupplier3.get()),
             new ScoreCoral(
-                poseRequest3, () -> booleanSupplier3.get(), superstructure, Level.L4, drive)));
+                () -> poseRequest3.get(), () -> booleanSupplier3.get(), superstructure, Level.L4, drive)));
   }
 }
