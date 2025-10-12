@@ -30,5 +30,6 @@ public class AlgaeScoreAuto extends Command {
   @Override
   public void end(boolean interrupted) {
     superstructure.requestIdle();
+    drive.requestFieldRelativeMode();
   }
 }
