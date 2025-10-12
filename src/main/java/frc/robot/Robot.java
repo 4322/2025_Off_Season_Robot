@@ -77,6 +77,17 @@ public class Robot extends LoggedRobot {
 
   public static PathPlannerPath GulfHotelToCenterEject;
 
+  public static PathPlannerPath CenterAlgaeScoreBackwardsToIndiaJuliet;
+  public static PathPlannerPath CenterAlgaeScoreBackwardsToLeave;
+  public static PathPlannerPath CenterBargeBackwardsToCenterAlgaeScoreBackwards;
+  public static PathPlannerPath GulfHotelToCenterBargeBackwards;
+  public static PathPlannerPath IndiaJulietToCenterBargeBackwards;
+  public static PathPlannerPath IndiaJulietToLeftBargeBackwards;
+  public static PathPlannerPath KiloLimaToLeftBargeBackwards;
+  public static PathPlannerPath LeftAlgaeScoreBackwardsToKiloLima;
+  public static PathPlannerPath LeftAlgaeScoreBackwardsToLeave;
+  public static PathPlannerPath LeftBargeBackwardsToLeftAlgaeScoreBackwards;
+
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -234,6 +245,21 @@ public class Robot extends LoggedRobot {
       LeftAlgaeScoreToFeed = PathPlannerPath.fromPathFile("Left Algae Score to Feed");
 
       GulfHotelToCenterEject = PathPlannerPath.fromPathFile("Gulf-Hotel to Center Eject");
+
+      CenterAlgaeScoreBackwardsToIndiaJuliet = PathPlannerPath.fromPathFile("Center Algae Score Backwards to India-Juliet");
+      CenterAlgaeScoreBackwardsToLeave = PathPlannerPath.fromPathFile("Center Algae Score Backwards to Leave");
+      CenterBargeBackwardsToCenterAlgaeScoreBackwards = PathPlannerPath.fromPathFile("Center Barge Backwards to Center Algae Score Backwards");
+      GulfHotelToCenterBargeBackwards = PathPlannerPath.fromPathFile("Gulf-Hotel to Center Barge Backwards");
+      IndiaJulietToCenterBargeBackwards = PathPlannerPath.fromPathFile("India-Juliet to Center Barge Backwards");
+      IndiaJulietToLeftBargeBackwards = PathPlannerPath.fromPathFile("India-Juliet to Left Barge Backwards");
+      KiloLimaToLeftBargeBackwards = PathPlannerPath.fromPathFile("Kilo-Lima to Left Barge Backwards");
+      LeftAlgaeScoreBackwardsToKiloLima = PathPlannerPath.fromPathFile("Left Algae Score Backwards to Kilo-Lima");
+      LeftAlgaeScoreBackwardsToLeave = PathPlannerPath.fromPathFile("Left Algae Score Backwards to Leave");
+      LeftBargeBackwardsToLeftAlgaeScoreBackwards = PathPlannerPath.fromPathFile("Left Barge Backwards to Left Algae Score Backwards");
+      
+      
+
+
 
     } catch (Exception e) {
       DriverStation.reportError("Failed to load PathPlanner paths", true);

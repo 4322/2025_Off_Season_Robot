@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.574282786885245,
-        "y": 5.8171618852459
+        "x": 7.5,
+        "y": 4.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.217782786885246,
-        "y": 6.3924118852459
+        "x": 7.75,
+        "y": 4.8
       },
       "isLocked": false,
-      "linkedName": "India-JulietOut"
+      "linkedName": "Center Barge Backwards"
     },
     {
       "anchor": {
-        "x": 7.5,
-        "y": 7.4
+        "x": 8.0,
+        "y": 4.8
       },
       "prevControl": {
-        "x": 6.38625,
-        "y": 6.4625
+        "x": 7.75,
+        "y": 4.8
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LeftBarge"
+      "linkedName": "CenterAlgaeScoreBackwards"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -123.04812486997523
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
