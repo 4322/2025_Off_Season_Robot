@@ -472,4 +472,8 @@ public final class Constants {
     public static final double ffMinRadius = 0.1;
     public static final double ffMaxRadius = 0.8;
   }
+
+  public static class Auto {
+    public static final double algaeScoreDelay = 0.3;
+  }
 }
