@@ -199,9 +199,7 @@ public class EndEffector extends SubsystemBase {
         } else if (requestEject) {
           unsetAllRequests();
           state = EndEffectorStates.EJECT;
-        }
-
-        if (inputs.sensorProximity > Constants.EndEffector.coralProximityThreshold) {
+        } else if (inputs.sensorProximity > Constants.EndEffector.coralProximityThreshold) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
         }
@@ -289,26 +287,31 @@ public class EndEffector extends SubsystemBase {
   public void intakeAlgae() {
     unsetAllRequests();
     requestIntakeAlgae = true;
+    io.simAlgaeHeld();
   }
 
   public void intakeCoral() {
     unsetAllRequests();
     requestIntakeCoral = true;
+    io.simCoralHeld();
   }
 
   public void releaseAlgae() {
     unsetAllRequests();
     requestReleaseAlgae = true;
+    io.simAlgaeReleased();
   }
 
   public void releaseCoralNormal() {
     unsetAllRequests();
     requestReleaseCoralNormal = true;
+    io.simCoralReleased();
   }
 
   public void releaseCoralL1() {
     unsetAllRequests();
     requestReleaseCoralL1 = true;
+    io.simCoralReleased();
   }
 
   public void holdAlgae() {
