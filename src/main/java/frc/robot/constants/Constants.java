@@ -5,6 +5,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -184,11 +185,12 @@ public final class Constants {
     public static final double prescoringL2CoralDeg = 120.546;
     public static final double prescoringL3CoralDeg = 128.139;
     public static final double prescoringL4CoralDeg = 125.955;
-    public static final double scoringAlgaeDeg = 141;
+
+    public static final double scoringAlgaeDeg = 142;
+    public static final double scoringBacksideAlgaeDeg = 218;
 
     public static final double descoringAlgaeDeg = 75.682;
     public static final double safeBargeRetractDeg = 180;
-
     // To the encoder 0 is horizontal but to us its straight down
     public static final double OffsetEncoderDeg = -90;
 
