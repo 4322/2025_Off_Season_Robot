@@ -19,7 +19,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
-import java.util.function.Supplier;
+import frc.robot.util.Wrapper;
 import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends Command {
@@ -31,8 +31,8 @@ public class ScoreCoral extends Command {
   public boolean running;
   public Timer times = new Timer();
   private Pose2d targetScoringPose;
-  private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
-  private Supplier<Boolean> atGoalBoolean = () -> new Boolean(false);
+  private Wrapper<Pose2d> currentPoseRequest = new Wrapper(new Pose2d());
+  private Wrapper<Boolean> atGoalBoolean = new Wrapper(new Boolean(false));
 
   private Pose2d leftBranchScoringPos;
   private Pose2d rightBranchScoringPose;
@@ -58,13 +58,13 @@ public class ScoreCoral extends Command {
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
-    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get(), atGoalBoolean);
+    driveToPose = new DriveToPose(drive, currentPoseRequest, atGoalBoolean);
     addRequirements(superstructure);
   }
 
   public ScoreCoral(
-      Supplier<Pose2d> currentPoseRequest,
-      Supplier<Boolean> atGoalBoolean,
+      Wrapper<Pose2d> currentPoseRequest,
+      Wrapper<Boolean> atGoalBoolean,
       Superstructure superstructure,
       Superstructure.Level level,
       Drive drive) {
@@ -284,7 +284,7 @@ public class ScoreCoral extends Command {
                       0,
                       new Rotation2d()));
 
-          currentPoseRequest = () -> safeDistPose;
+          currentPoseRequest.set(safeDistPose);
           if (driveToPose != null && !driveToPose.isScheduled()) {
             driveToPose.schedule();
           }
@@ -296,7 +296,7 @@ public class ScoreCoral extends Command {
             if (superstructure.getState() == Superstates.PRESCORE_CORAL
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()) {
-              currentPoseRequest = () -> targetScoringPose;
+              currentPoseRequest.set(targetScoringPose);
               state = ScoreState.DRIVE_IN;
             }
           }
@@ -317,12 +317,12 @@ public class ScoreCoral extends Command {
                 && superstructure.elevatorAtSetpoint()
                 && !superstructure.isCoralHeld()
                 && level == Level.L1) {
-              currentPoseRequest = () -> safeDistPose;
+              currentPoseRequest.set(safeDistPose);
               state = ScoreState.DRIVEBACK;
 
             } else if (level != Level.L1
                 && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL) {
-              currentPoseRequest = () -> safeDistPose;
+              currentPoseRequest.set(safeDistPose);
               state = ScoreState.DRIVEBACK;
             }
           } else {

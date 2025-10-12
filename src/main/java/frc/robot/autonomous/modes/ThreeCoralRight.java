@@ -19,17 +19,13 @@ import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
-import java.util.function.Supplier;
+import frc.robot.util.Wrapper;
 import org.littletonrobotics.junction.Logger;
 
 public class ThreeCoralRight extends SequentialCommandGroup {
 
-  private Supplier<Pose2d> poseRequest1 = () -> new Pose2d();
-  private Supplier<Pose2d> poseRequest2 = () -> new Pose2d();
-  private Supplier<Pose2d> poseRequest3 = () -> new Pose2d();
-  private Supplier<Boolean> booleanSupplier1 = () -> new Boolean(false);
-  private Supplier<Boolean> booleanSupplier2 = () -> new Boolean(false);
-  private Supplier<Boolean> booleanSupplier3 = () -> new Boolean(false);
+  private Wrapper<Pose2d> poseRequest = new Wrapper(new Pose2d());
+  private Wrapper<Boolean> atGoal = new Wrapper(new Boolean(false));
 
   public ThreeCoralRight(
       Drive drive,
@@ -51,38 +47,23 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         AutoBuilder.followPath(Robot.ThreeCoralStartToEcho),
         new InstantCommand(() -> Logger.recordOutput("Auto", "Finished path")),
         new ParallelRaceGroup(
-            new DriveToPose(drive, () -> poseRequest1.get(), () -> booleanSupplier1.get()),
-            new ScoreCoral(
-                () -> poseRequest1.get(),
-                () -> booleanSupplier1.get(),
-                superstructure,
-                Level.L4,
-                drive)),
+            new DriveToPose(drive, poseRequest, atGoal),
+            new ScoreCoral(poseRequest, atGoal, superstructure, Level.L4, drive)),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.EchoToFeed)),
         AutoBuilder.followPath(Robot.FeedToDelta),
         new ParallelRaceGroup(
-            new DriveToPose(drive, () -> poseRequest2.get(), () -> booleanSupplier2.get()),
-            new ScoreCoral(
-                () -> poseRequest2.get(),
-                () -> booleanSupplier2.get(),
-                superstructure,
-                Level.L4,
-                drive)),
+            new DriveToPose(drive, poseRequest, atGoal),
+            new ScoreCoral(poseRequest, atGoal, superstructure, Level.L4, drive)),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.DeltaToFeed)),
         AutoBuilder.followPath(Robot.FeedToCharlie),
         new ParallelRaceGroup(
-            new DriveToPose(drive, () -> poseRequest3.get(), () -> booleanSupplier3.get()),
-            new ScoreCoral(
-                () -> poseRequest3.get(),
-                () -> booleanSupplier3.get(),
-                superstructure,
-                Level.L4,
-                drive)));
+            new DriveToPose(drive, poseRequest, atGoal),
+            new ScoreCoral(poseRequest, atGoal, superstructure, Level.L4, drive)));
   }
 }

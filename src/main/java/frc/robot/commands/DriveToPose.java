@@ -19,14 +19,16 @@ import frc.robot.LoggedTunableNumber;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.GeomUtil;
+import frc.robot.util.Wrapper;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class DriveToPose extends Command {
   private final Drive drive;
   private final boolean slowMode;
-  private final Supplier<Pose2d> poseSupplier;
-  private Supplier<Boolean> atGoalBoolean = () -> new Boolean(false);
+  private Supplier<Pose2d> poseSupplier;
+  private Wrapper<Pose2d> poseWrapper = new Wrapper(new Pose2d());
+  private Wrapper<Boolean> atGoalBoolean = new Wrapper(new Boolean(false));
 
   private boolean running = false;
   private final ProfiledPIDController driveController =
@@ -108,9 +110,13 @@ public class DriveToPose extends Command {
   }
 
   /** Drives to the specified pose under full software control. */
-  public DriveToPose(Drive drive, Supplier<Pose2d> poseSupplier, Supplier<Boolean> atGoalBoolean) {
-    this(drive, false, poseSupplier);
+  public DriveToPose(Drive drive, Wrapper<Pose2d> poseWrapper, Wrapper<Boolean> atGoalBoolean) {
+    this.drive = drive;
+    this.slowMode = false;
+    this.poseWrapper = poseWrapper;
+    thetaController.enableContinuousInput(-180, 180);
     this.atGoalBoolean = atGoalBoolean;
+    addRequirements(drive);
   }
 
   /** Drives to the specified pose under full software control. */
@@ -127,14 +133,14 @@ public class DriveToPose extends Command {
     // Reset all controllers
     Pose2d currentPose = drive.getPose();
     driveController.reset(
-        currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation()),
+        currentPose.getTranslation().getDistance(poseWrapper.get().getTranslation()),
         Math.min(
             0.0,
             -new Translation2d(
                     drive.getFieldRelativeSpeeds().vxMetersPerSecond,
                     drive.getFieldRelativeSpeeds().vyMetersPerSecond)
                 .rotateBy(
-                    poseSupplier
+                    poseWrapper
                         .get()
                         .getTranslation()
                         .minus(drive.getPose().getTranslation())
@@ -182,11 +188,11 @@ public class DriveToPose extends Command {
 
     // Get current and target pose
     Pose2d currentPose = drive.getPose();
-    Pose2d targetPose = poseSupplier.get();
+    Pose2d targetPose = poseWrapper.get();
 
     // Calculate drive speed
     double currentDistance =
-        currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation());
+        currentPose.getTranslation().getDistance(poseWrapper.get().getTranslation());
     double ffScaler =
         MathUtil.clamp(
             (currentDistance - ffMinRadius.get()) / (ffMaxRadius.get() - ffMinRadius.get()),
@@ -237,7 +243,7 @@ public class DriveToPose extends Command {
             lastSetpointTranslation, new Rotation2d(thetaController.getSetpoint().position)));
     Logger.recordOutput("DriveToPose/DriveToPoseGoal", targetPose);
 
-    atGoalBoolean = () -> atGoal();
+    atGoalBoolean.set(atGoal());
   }
 
   @Override
