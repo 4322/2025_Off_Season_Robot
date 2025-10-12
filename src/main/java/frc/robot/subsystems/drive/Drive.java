@@ -286,7 +286,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void resetPose(Pose2d pose) {
-    poseEstimator.resetPosition(gyroInputs.yawAngle, getModulePositions(), pose);
+    poseEstimator.resetPosition(odometryRotation, getModulePositions(), pose);
   }
 
   public void addVisionMeasurement(
