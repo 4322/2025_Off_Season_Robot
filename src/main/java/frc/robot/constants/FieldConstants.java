@@ -410,7 +410,7 @@ public class FieldConstants {
     // Minimum distance from robot front bumper to reef face where arm can swing all the way out
     // without hitting reef
     public static final double reefSafeDistance =
-        Units.inchesToMeters(15)
+        Units.inchesToMeters(18)
             + robotBumperToCenter; // TODO: Only change the number which represents distance between
     // face of reef and front of robot bumper
 
