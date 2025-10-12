@@ -19,6 +19,8 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
+
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -32,6 +34,7 @@ public class ScoreCoral extends Command {
   public Timer times = new Timer();
   private Pose2d targetScoringPose;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
+  private BooleanSupplier atGoalBoolean;
 
   private Pose2d leftBranchScoringPos;
   private Pose2d rightBranchScoringPose;
@@ -57,13 +60,13 @@ public class ScoreCoral extends Command {
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
-    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
+    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get(), atGoalBoolean);
     addRequirements(superstructure);
   }
 
   public ScoreCoral(
-      DriveToPose driveToPose,
       Supplier<Pose2d> currentPoseRequest,
+      Boolean atGoalBoolean,
       Superstructure superstructure,
       Superstructure.Level level,
       Drive drive) {
@@ -71,7 +74,7 @@ public class ScoreCoral extends Command {
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
-    this.driveToPose = driveToPose;
+    this.atGoalBoolean = () -> atGoalBoolean;
   }
 
   @Override
@@ -284,7 +287,7 @@ public class ScoreCoral extends Command {
                       new Rotation2d()));
 
           currentPoseRequest = () -> safeDistPose;
-          if (!driveToPose.isScheduled()) {
+          if (driveToPose != null && !driveToPose.isScheduled()) {
             driveToPose.schedule();
           }
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
@@ -375,7 +378,7 @@ public class ScoreCoral extends Command {
     superstructure.enableGlobalPose();
     running = false;
 
-    if (driveToPose.isScheduled()) {
+    if (driveToPose != null && driveToPose.isScheduled()) {
       driveToPose.cancel();
     }
     Logger.recordOutput("ScoreCoral/state", "Done");
