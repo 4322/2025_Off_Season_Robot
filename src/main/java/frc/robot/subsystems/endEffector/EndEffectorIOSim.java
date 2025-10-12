@@ -8,7 +8,7 @@ public class EndEffectorIOSim implements EndEffectorIO {
   private double sensorReading = Constants.EndEffector.coralProximityThreshold - 0.1;
 
   private boolean algaeDetected = false;
-  
+
   @Override
   public void updateInputs(EndEffectorIOInputs inputs) {
     inputs.isCoralProximityDetected = coralDetected;
@@ -26,7 +26,6 @@ public class EndEffectorIOSim implements EndEffectorIO {
   public void simAlgaeHeld() {
     algaeDetected = true;
     sensorReading = Constants.EndEffector.algaeProximityThresholdIntake - 0.1;
-    
   }
 
   @Override

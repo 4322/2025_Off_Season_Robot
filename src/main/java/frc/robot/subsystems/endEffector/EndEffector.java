@@ -199,9 +199,7 @@ public class EndEffector extends SubsystemBase {
         } else if (requestEject) {
           unsetAllRequests();
           state = EndEffectorStates.EJECT;
-        }
-
-        if (inputs.sensorProximity > Constants.EndEffector.coralProximityThreshold) {
+        } else if (inputs.sensorProximity > Constants.EndEffector.coralProximityThreshold) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
         }
