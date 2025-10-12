@@ -80,9 +80,9 @@ public class TestAuto extends Command {
 
   @Override
   public void execute() {
-    if (currentCommand >= commands.length) {
+    if (currentCommand >= commands.length && commands[currentCommand - 1].isFinished()) {
         end = true;
-    } else if (!commands[currentCommand - 1].isFinished()) {
+    } else if (!commands[currentCommand].isScheduled() && commands[currentCommand - 1].isFinished()) {
         commands[currentCommand - 1].schedule();
         currentCommand++;
     }
