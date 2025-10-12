@@ -12,20 +12,14 @@ import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.auto.AlgaePrescoreAuto;
 import frc.robot.commands.auto.AlgaeScoreAuto;
 import frc.robot.constants.Constants;
-import frc.robot.constants.Constants.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.OrangeSequentialCommandGroup;
 
 public class OneCoralTwoAlgaeLeft extends OrangeSequentialCommandGroup {
 
-  public OneCoralTwoAlgaeLeft(
-      Superstructure superstructure,
-      IntakeSuperstructure intakeSuperstructure,
-      Vision vision,
-      Drive drive) {
+  public OneCoralTwoAlgaeLeft(Drive drive, Superstructure superstructure) {
 
     addCommands(
         new InstantCommand(
