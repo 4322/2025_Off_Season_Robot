@@ -2,15 +2,12 @@ package frc.robot.autonomous.modes;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
-import frc.robot.commands.DriveToPose;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.auto.CoralIntakeManualAuto;
 import frc.robot.subsystems.IntakeSuperstructure;
@@ -19,18 +16,9 @@ import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
-import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class ThreeCoralRight extends SequentialCommandGroup {
-
-  private Supplier<Pose2d> poseRequest1 = () -> new Pose2d();
-  private Supplier<Pose2d> poseRequest2 = () -> new Pose2d();
-  private Supplier<Pose2d> poseRequest3 = () -> new Pose2d();
-  private DriveToPose driveToPose1;
-  private DriveToPose driveToPose2;
-  private DriveToPose driveToPose3;
-
   public ThreeCoralRight(
       Drive drive,
       Superstructure superstructure,
@@ -38,9 +26,6 @@ public class ThreeCoralRight extends SequentialCommandGroup {
       Vision vision) {
     setName("THREE_CORAL_RIGHT");
     addRequirements(drive, superstructure, intakeSuperstructure);
-    driveToPose1 = new DriveToPose(drive, () -> poseRequest1.get());
-    driveToPose2 = new DriveToPose(drive, () -> poseRequest2.get());
-    driveToPose3 = new DriveToPose(drive, () -> poseRequest3.get());
     addCommands(
         new InstantCommand(
             () -> {
@@ -53,24 +38,18 @@ public class ThreeCoralRight extends SequentialCommandGroup {
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartToEcho),
         new InstantCommand(() -> Logger.recordOutput("Auto", "Finished path")),
-        new ParallelRaceGroup(
-            driveToPose1,
-            new ScoreCoral(driveToPose1, poseRequest1, superstructure, Level.L4, drive)),
+        new ScoreCoral(superstructure, Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.EchoToFeed)),
         AutoBuilder.followPath(Robot.FeedToDelta),
-        new ParallelRaceGroup(
-            driveToPose2,
-            new ScoreCoral(driveToPose2, poseRequest1, superstructure, Level.L4, drive)),
+        new ScoreCoral(superstructure, Level.L4, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.DeltaToFeed)),
         AutoBuilder.followPath(Robot.FeedToCharlie),
-        new ParallelRaceGroup(
-            driveToPose3,
-            new ScoreCoral(driveToPose1, poseRequest3, superstructure, Level.L4, drive)));
+        new ScoreCoral(superstructure, Level.L4, drive));
   }
 }
