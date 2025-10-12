@@ -99,7 +99,6 @@ public class DescoreAlgae extends Command {
           if (descoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (isInSafeArea() || driveToPose.atGoal()) {
-            times.start();
             superstructure.requestDescoreAlgae(level);
 
             if (superstructure.getState() == Superstates.DESCORE_ALGAE
