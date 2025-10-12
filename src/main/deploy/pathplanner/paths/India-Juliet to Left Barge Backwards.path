@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.217782786885246,
-        "y": 6.3924118852459
+        "x": 5.838966937027423,
+        "y": 6.121778632929491
       },
       "isLocked": false,
       "linkedName": "India-JulietOut"
@@ -20,12 +20,12 @@
         "y": 7.4
       },
       "prevControl": {
-        "x": 6.38625,
-        "y": 6.4625
+        "x": 6.475145437609656,
+        "y": 7.073860047096799
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LeftBarge"
+      "linkedName": "LeftBargeBackwards"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
