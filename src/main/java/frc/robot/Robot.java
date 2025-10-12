@@ -251,7 +251,7 @@ public class Robot extends LoggedRobot {
       CenterAlgaeScoreBackwardsToLeave =
           PathPlannerPath.fromPathFile("Center Algae Score Backwards to Leave");
       CenterBargeBackwardsToCenterAlgaeScoreBackwards =
-          PathPlannerPath.fromPathFile("Center Barge Backwards to Center Algae Score Backwards");
+          PathPlannerPath.fromPathFile("Center Barge Backwards To Center Algae Score Backwards");
       GulfHotelToCenterBargeBackwards =
           PathPlannerPath.fromPathFile("Gulf-Hotel to Center Barge Backwards");
       IndiaJulietToCenterBargeBackwards =
