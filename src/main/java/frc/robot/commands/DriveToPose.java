@@ -235,8 +235,8 @@ public class DriveToPose extends Command {
   public void end(boolean interrupted) {
     running = false;
     drive.runVelocity(new ChassisSpeeds(), true);
-    Logger.recordOutput("DriveToPose/DriveToPoseSetpoint", new double[] {});
-    Logger.recordOutput("DriveToPose/DriveToPoseGoal", new double[] {});
+    Logger.recordOutput("DriveToPose/DriveToPoseSetpoint", new Pose2d() {});
+    Logger.recordOutput("DriveToPose/DriveToPoseGoal", new Pose2d() {});
   }
 
   /** Checks if the robot is at the final pose. */
