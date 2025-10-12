@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.552514580086774,
-        "y": 4.825583007608294
+        "x": 7.628267045454545,
+        "y": 5.655355113636364
       },
       "isLocked": false,
       "linkedName": "CenterAlgaeScoreBackwards"
     },
     {
       "anchor": {
-        "x": 5.574282786885245,
-        "y": 5.8171618852459
+        "x": 5.394630681818183,
+        "y": 5.485838068181818
       },
       "prevControl": {
-        "x": 6.421785554092803,
-        "y": 5.115625943429577
+        "x": 6.022677440387484,
+        "y": 6.41093470566319
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,8 +41,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -123.04812486997523
+    "velocity": 1.0,
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": null,

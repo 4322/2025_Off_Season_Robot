@@ -37,22 +37,21 @@ public class OneCoralTwoAlgaeCenter extends OrangeSequentialCommandGroup {
               }
               drive.resetPose(path.getStartingHolonomicPose().get());
             }),
-        AutoBuilder.followPath(Robot.CenterStartToGulf),
         new ScoreCoral(superstructure, Level.L4, drive),
         AutoBuilder.followPath(Robot.GulfToGulfHotel),
         new DescoreAlgae(superstructure, Level.L2, drive),
+        AutoBuilder.followPath(Robot.GulfHotelToCenterBargeBackwards),
         new ParallelCommandGroup(
-            AutoBuilder.followPath(Robot.GulfHotelToCenterBargeBackwards),
-            new AlgaePrescoreAuto(superstructure, drive)),
-        AutoBuilder.followPath(Robot.CenterBargeBackwardsToCenterAlgaeScoreBackwards),
+          new AlgaePrescoreAuto(superstructure, drive),
+          AutoBuilder.followPath(Robot.CenterBargeBackwardsToCenterAlgaeScoreBackwards)),
         new AlgaeScoreAuto(superstructure, drive),
-        new WaitCommand(Constants.Auto.algaeScoreDelay),
         AutoBuilder.followPath(Robot.CenterAlgaeScoreBackwardsToIndiaJuliet),
         new DescoreAlgae(superstructure, Level.L3, drive),
         AutoBuilder.followPath(Robot.IndiaJulietToCenterBargeBackwards),
-        new AlgaePrescoreAuto(superstructure, drive),
-        AutoBuilder.followPath(Robot.CenterBargeBackwardsToCenterAlgaeScoreBackwards),
-        new WaitCommand(Constants.Auto.algaeScoreDelay),
+        new ParallelCommandGroup(
+          new AlgaePrescoreAuto(superstructure, drive),
+          AutoBuilder.followPath(Robot.CenterBargeBackwardsToCenterAlgaeScoreBackwards)),
+        new AlgaeScoreAuto(superstructure, drive),
         AutoBuilder.followPath(Robot.CenterAlgaeScoreBackwardsToLeave));
   }
 }

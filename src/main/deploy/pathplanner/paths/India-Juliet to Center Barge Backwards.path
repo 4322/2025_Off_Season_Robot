@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.574282786885245,
-        "y": 5.8171618852459
+        "x": 5.394630681818183,
+        "y": 5.485838068181818
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.574282786885245,
-        "y": 5.8171618852459
+        "x": 6.995904187353535,
+        "y": 4.960997434116411
       },
       "isLocked": false,
       "linkedName": "India-JulietOut"
@@ -20,8 +20,8 @@
         "y": 4.8
       },
       "prevControl": {
-        "x": 6.5,
-        "y": 4.8
+        "x": 6.223254931336475,
+        "y": 4.760309112072689
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -123.04812486997523
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }
