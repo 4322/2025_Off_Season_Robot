@@ -4,6 +4,7 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
+
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 import frc.robot.util.SwerveUtil.SwerveModuleConstantsFactory;
@@ -106,7 +107,7 @@ public class DrivetrainConstants {
           .setMotionProfileDeaccelLimit(turnDeaccelerationLimit)
           .setMotionProfileVelocityLimit(turnVelocityLimit)
           .setMinwrapConfig(new MinwrapConfig.Enabled())
-          .setRampLimit(240);
+          .setRampLimit(Double.POSITIVE_INFINITY);
 
   private static final SwerveModuleConstantsFactory moduleCreator =
       new SwerveModuleConstantsFactory()
