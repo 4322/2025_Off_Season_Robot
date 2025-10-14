@@ -225,7 +225,14 @@ public class Vision extends SubsystemBase {
                       * Constants.Vision.thetaStdDevBaseline);
             } else {
               xyStdDev = Math.max(xyStdDevModel.predict(avgTagDistance), 0.000001);
-              thetaStdDev = Math.max(thetaStdDevModel.predict(avgTagDistance), 0.000001);
+
+              if (Constants.enableGlobalPoseTrigEstimation) {
+                thetaStdDev = 4322.0;
+              } else {
+                thetaStdDev =
+                    Math.max(thetaStdDevModel.predict(avgTagDistance), 0.000001)
+                        * Constants.Vision.stdDevBaseline;
+              }
 
               consumer.accept(
                   disambiguatedRobotPose.toPose2d(),
@@ -233,7 +240,7 @@ public class Vision extends SubsystemBase {
                   VecBuilder.fill(
                       Constants.Vision.stdDevBaseline * xyStdDev,
                       Constants.Vision.stdDevBaseline * xyStdDev,
-                      Constants.Vision.stdDevBaseline * thetaStdDev));
+                      thetaStdDev));
 
               Logger.recordOutput("Vision/StdDev/XY", Constants.Vision.stdDevBaseline * xyStdDev);
               Logger.recordOutput(
