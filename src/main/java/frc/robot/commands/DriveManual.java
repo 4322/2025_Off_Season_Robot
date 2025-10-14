@@ -91,11 +91,11 @@ public class DriveManual extends Command {
           // Lock heading to reef face first time we engage mode
           if (!firstReefLock) {
             firstReefLock = true;
-            currentReefLockDeg = reefCenterToRobotDeg;
+            currentReefLockDeg = (reefCenterToRobotDeg + 180);
           }
 
           if (currentReefLockDeg != reefCenterToRobotDeg) {
-            currentReefLockDeg = reefCenterToRobotDeg;
+            currentReefLockDeg = (reefCenterToRobotDeg + 180);
           }
 
           rot =

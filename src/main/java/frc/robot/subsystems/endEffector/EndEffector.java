@@ -197,7 +197,6 @@ public class EndEffector extends SubsystemBase {
         } else if (requestReleaseCoralL1) {
           state = EndEffectorStates.RELEASE_CORAL_L1;
         } else if (requestEject) {
-          unsetAllRequests();
           state = EndEffectorStates.EJECT;
         } else if (inputs.sensorProximity > Constants.EndEffector.coralProximityThreshold) {
           state = EndEffectorStates.IDLE;
@@ -259,6 +258,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case EJECT:
+
         if (holdAlgae) {
           state = EndEffectorStates.HOLD_ALGAE;
         } else if (holdCoral) {
@@ -325,6 +325,7 @@ public class EndEffector extends SubsystemBase {
   }
 
   public void eject() {
+    unsetAllRequests();
     requestEject = true;
   }
 
