@@ -37,7 +37,7 @@ public class DeployerIONitrate implements DeployerIO {
   private final PIDPositionRequest deployerMotorRetractPIDRequest =
       new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
-  private double previousRequestedPositionDeg = -1;
+  private double requestedPosDeg = -1;
   private double mechanismAngleDeg;
 
   public DeployerIONitrate() {
@@ -129,26 +129,24 @@ public class DeployerIONitrate implements DeployerIO {
       inputs.totalEffort = deployerMotor.getPIDDebugFrames().totalControlEffortFrame.getValue();
     }
 
-    inputs.prevRequestedPositionDeg = previousRequestedPositionDeg;
+    inputs.requestedPosDeg = requestedPosDeg;
 
     mechanismAngleDeg = inputs.angleDeg;
   }
 
   @Override
   public void setPosition(double degrees) {
-    if (degrees != previousRequestedPositionDeg) {
-      // Requested position in code coordinate system
-      previousRequestedPositionDeg = degrees;
+    // Requested position in code coordinate system
+    requestedPosDeg = degrees;
 
-      if ((mechanismAngleDeg) > degrees) {
-        deployerMotor.setRequest(
-            deployerMotorDeployPIDRequest.setPosition(
-                Units.degreesToRotations(toMotorCoords(degrees))));
-      } else {
-        deployerMotor.setRequest(
-            deployerMotorRetractPIDRequest.setPosition(
-                Units.degreesToRotations(toMotorCoords(degrees))));
-      }
+    if ((mechanismAngleDeg) > degrees) {
+      deployerMotor.setRequest(
+          deployerMotorDeployPIDRequest.setPosition(
+              Units.degreesToRotations(toMotorCoords(degrees))));
+    } else {
+      deployerMotor.setRequest(
+          deployerMotorRetractPIDRequest.setPosition(
+              Units.degreesToRotations(toMotorCoords(degrees))));
     }
   }
 
@@ -157,18 +155,18 @@ public class DeployerIONitrate implements DeployerIO {
     deployerMotor.setRequest(
         deployerMotorDeployPIDRequest.setPosition(
             Units.degreesToRotations(toMotorCoords(degrees))));
-    previousRequestedPositionDeg = degrees;
+    requestedPosDeg = degrees;
   }
 
   @Override
   public void setVoltage(double voltage) {
-    previousRequestedPositionDeg = -999;
+    requestedPosDeg = -1;
     deployerMotor.setVoltage(voltage);
   }
 
   @Override
   public void stop(IdleMode idleMode) {
-    previousRequestedPositionDeg = -999;
+    requestedPosDeg = -1;
     deployerMotor.stop(idleMode);
   }
 
