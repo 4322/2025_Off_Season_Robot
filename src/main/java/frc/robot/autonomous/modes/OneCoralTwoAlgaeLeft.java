@@ -32,8 +32,7 @@ public class OneCoralTwoAlgaeLeft extends OrangeSequentialCommandGroup {
               drive.resetPose(path.getStartingHolonomicPose().get());
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
-        new ScoreCoral(superstructure, Level.L4, drive),
-        AutoBuilder.followPath(Robot.JulietToIndiaJuliet),
+        new ScoreCoral(superstructure, Level.L4, drive, true),
         new DescoreAlgae(superstructure, Level.L2, drive),
         new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.IndiaJulietToLeftBargeBackwards),

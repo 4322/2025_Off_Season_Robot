@@ -39,7 +39,7 @@ public class TwoCoralOneAlgaeLeft extends OrangeSequentialCommandGroup {
               drive.resetPose(path.getStartingHolonomicPose().get());
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
-        new ScoreCoral(superstructure, Level.L4, drive),
+        new ScoreCoral(superstructure, Level.L4, drive, false),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         AutoBuilder.followPath(Robot.JulietToIndiaJuliet),
         new DescoreAlgae(superstructure, Level.L3, drive),
@@ -56,6 +56,6 @@ public class TwoCoralOneAlgaeLeft extends OrangeSequentialCommandGroup {
             new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.LeftAlgaeScoreToFeed)),
         AutoBuilder.followPath(Robot.FeedToKilo),
-        new ScoreCoral(superstructure, Level.L4, drive));
+        new ScoreCoral(superstructure, Level.L4, drive, false));
   }
 }

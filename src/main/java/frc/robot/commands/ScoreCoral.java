@@ -44,6 +44,8 @@ public class ScoreCoral extends Command {
   private ReefStatus reefStatus;
   private Pose2d safeDistPose = new Pose2d();
 
+  private boolean chainedAlgaeMode;
+
   public enum ScoreState {
     SAFE_DISTANCE,
     DRIVE_IN,
@@ -53,10 +55,11 @@ public class ScoreCoral extends Command {
 
   ScoreState state = ScoreState.SAFE_DISTANCE;
 
-  public ScoreCoral(Superstructure superstructure, Superstructure.Level level, Drive drive) {
+  public ScoreCoral(Superstructure superstructure, Superstructure.Level level, Drive drive, boolean chainedAlgaeMode) {
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
+    this.chainedAlgaeMode = chainedAlgaeMode;
     driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
     addRequirements(superstructure);
   }
@@ -374,7 +377,9 @@ public class ScoreCoral extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    superstructure.requestIdle();
+    if (!chainedAlgaeMode) {
+      superstructure.requestIdle();
+    }
     superstructure.enableGlobalPose();
     running = false;
 

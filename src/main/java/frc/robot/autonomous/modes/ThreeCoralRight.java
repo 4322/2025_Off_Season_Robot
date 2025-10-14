@@ -37,18 +37,18 @@ public class ThreeCoralRight extends OrangeSequentialCommandGroup {
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartToEcho),
         new InstantCommand(() -> Logger.recordOutput("Auto", "Finished path")),
-        new ScoreCoral(superstructure, Level.L4, drive),
+        new ScoreCoral(superstructure, Level.L4, drive, false),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.EchoToFeed)),
         AutoBuilder.followPath(Robot.FeedToDelta),
-        new ScoreCoral(superstructure, Level.L4, drive),
+        new ScoreCoral(superstructure, Level.L4, drive, false),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.DeltaToFeed)),
         AutoBuilder.followPath(Robot.FeedToCharlie),
-        new ScoreCoral(superstructure, Level.L4, drive));
+        new ScoreCoral(superstructure, Level.L4, drive, false));
   }
 }
