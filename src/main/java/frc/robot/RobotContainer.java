@@ -74,6 +74,7 @@ public class RobotContainer {
   private static Vision vision;
   private static ReefStatus reefStatus;
   private static DriveToPose drivetopose;
+  private static ScoreCoral scoreCoral;
   private static Drive drive;
   private static Arm arm;
   private static EndEffector endEffector;
@@ -83,6 +84,7 @@ public class RobotContainer {
   private static IntakeSuperstructure intakeSuperstructure;
   private static Superstructure superstructure;
   private static Elevator elevator;
+  private boolean requestedAlgaeDescore;
 
   public static AutonomousSelector autonomousSelector;
 
@@ -241,6 +243,9 @@ public class RobotContainer {
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new ScoreCoral(superstructure, Level.L2, drive).schedule();
                   }
+                  if (scoreCoral.isRunning()){
+                    requestedAlgaeDescore = true;
+                  }
                 }));
     driver
         .y()
@@ -252,7 +257,17 @@ public class RobotContainer {
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new ScoreCoral(superstructure, Level.L3, drive).schedule();
                   }
+                  if (scoreCoral.isRunning()){
+                    requestedAlgaeDescore = true;
+                  }
                 }));
+    if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()){
+      requestedAlgaeDescore = false;
+    }
+    
+    if (requestedAlgaeDescore && scoreCoral.isRunning()){
+      new DescoreAlgae(superstructure, Level.L3, drive).schedule();
+    }
     driver
         .b()
         .onTrue(

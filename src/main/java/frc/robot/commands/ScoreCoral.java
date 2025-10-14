@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -11,6 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
@@ -19,8 +22,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends Command {
 
@@ -275,6 +276,7 @@ public class ScoreCoral extends Command {
 
       switch (state) {
         case SAFE_DISTANCE:
+        superstructure.requestPrescoreCoral(level);
           safeDistPose =
               targetScoringPose.transformBy(
                   new Transform2d(
@@ -290,16 +292,14 @@ public class ScoreCoral extends Command {
           }
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (isInSafeArea() || driveToPose.atGoal()) {
-
-            superstructure.requestPrescoreCoral(level);
-            if (superstructure.getState() == Superstates.PRESCORE_CORAL
+          }
+          else if (superstructure.getState() == Superstates.PRESCORE_CORAL
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()) {
               currentPoseRequest = () -> targetScoringPose;
               state = ScoreState.DRIVE_IN;
             }
-          }
+        
           break;
         case DRIVE_IN:
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
@@ -392,6 +392,10 @@ public class ScoreCoral extends Command {
         && !driver.x().getAsBoolean()
         && !driver.y().getAsBoolean()
         && !driver.b().getAsBoolean();
+  }
+
+  public boolean isRunning(){
+    return running;
   }
 
   public boolean isInSafeArea() {

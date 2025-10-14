@@ -24,6 +24,7 @@ public class DescoreAlgae extends Command {
   private DriveToPose driveToPose;
   public boolean running;
   public Timer times = new Timer();
+  private double reefAngle;
 
   private Pose2d targetScoringPose;
   private Rotation2d robotReefAngle;
@@ -59,6 +60,7 @@ public class DescoreAlgae extends Command {
 
     reefStatus = superstructure.getReefStatus();
     robotReefAngle = reefStatus.getClosestRobotAngle();
+    reefAngle = reefStatus.getClosestRobotAngle().getDegrees();
 
     if (Robot.alliance == DriverStation.Alliance.Blue) {
       targetScoringPose =
@@ -91,6 +93,11 @@ public class DescoreAlgae extends Command {
     if (superstructure.isAutoOperationMode()) {
       switch (state) {
         case SAFE_DISTANCE:
+        if (reefAngle == 180 || reefAngle == 60 || reefAngle == -60){
+          level = level.L3;
+        } else{
+          level = level.L2;
+        }
           currentPoseRequest = () -> safeDescorePose;
           if (!driveToPose.isScheduled()) {
             driveToPose.schedule();
