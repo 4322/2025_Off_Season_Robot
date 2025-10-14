@@ -265,8 +265,8 @@ public class EndEffector extends SubsystemBase {
           state = EndEffectorStates.HOLD_CORAL;
         } else if (ClockUtil.inBound(
             RobotContainer.getSuperstructure().getArmAngle(),
-            Constants.Arm.ejectDeg - Constants.Arm.setpointToleranceDegrees,
-            Constants.Arm.ejectDeg + Constants.Arm.setpointToleranceDegrees,
+            Constants.Arm.ejectDeg - Constants.Arm.setpointToleranceDegreesEject,
+            Constants.Arm.ejectDeg + Constants.Arm.setpointToleranceDegreesEject,
             true)) /*TODO set acual values*/ {
           io.setVoltage(Constants.EndEffector.ejectVolts);
           if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {

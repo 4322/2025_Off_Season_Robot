@@ -164,6 +164,7 @@ public final class Constants {
     public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = enableArmSensor ? 0.5 : 0.75;
+    public static final double setpointToleranceDegreesEject = enableArmSensor ? 5 : 0.75;
     public static final double bufferDeg =
         setpointToleranceDegrees * 4; // Degrees of buffer zone for min safe angle
     public static final double supplyCurrentLimitAmps = 40;
