@@ -246,8 +246,7 @@ public class DriveToPose extends Command {
 
   /** Checks if the robot pose is within the allowed drive tolerance. */
   public boolean withinTolerance(double driveTolerance) {
-    return running
-        && Math.abs(driveErrorAbs) < driveTolerance;
+    return running && Math.abs(driveErrorAbs) < driveTolerance;
   }
 
   /** Returns whether the command is actively running. */

@@ -55,7 +55,11 @@ public class ScoreCoral extends Command {
 
   ScoreState state = ScoreState.SAFE_DISTANCE;
 
-  public ScoreCoral(Superstructure superstructure, Superstructure.Level level, Drive drive, boolean chainedAlgaeMode) {
+  public ScoreCoral(
+      Superstructure superstructure,
+      Superstructure.Level level,
+      Drive drive,
+      boolean chainedAlgaeMode) {
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;

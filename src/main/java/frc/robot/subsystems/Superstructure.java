@@ -306,6 +306,8 @@ public class Superstructure extends SubsystemBase {
           } else {
             state = Superstates.IDLE;
           }
+        } else if (requestDescoreAlgae && !endEffector.hasCoral()) {
+          state = Superstates.DESCORE_ALGAE;
         }
         break;
       case SAFE_SCORE_ALGAE_RETRACT:
