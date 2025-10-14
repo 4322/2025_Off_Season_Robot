@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,9 +11,9 @@ import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.constants.DrivetrainConstants;
+import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ClockUtil;
-import frc.robot.util.ReefStatus;
 
 public class DriveManual extends Command {
   private Drive drive;
@@ -77,17 +78,23 @@ public class DriveManual extends Command {
         if (Constants.enableReefLock
             && RobotContainer.getSuperstructure().isCoralHeld()
             && Math.abs(rot) < 0.01) {
-          ReefStatus reefStatus = RobotContainer.getSuperstructure().getReefStatus();
-          double newReefLockDeg = reefStatus.getClosestRobotAngle().getDegrees();
-
+          Translation2d reefCenterPoint;
+          
+    if (Robot.alliance == DriverStation.Alliance.Red) {
+      reefCenterPoint = FieldConstants.KeypointPoses.redReefCenter;
+    } else {
+      reefCenterPoint = FieldConstants.KeypointPoses.blueReefCenter;
+    }
+    Translation2d robotTranslation = drive.getPose().getTranslation();
+    double reefCenterToRobotDeg = robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
           // Lock heading to reef face first time we engage mode
           if (!firstReefLock) {
             firstReefLock = true;
-            currentReefLockDeg = newReefLockDeg;
+            currentReefLockDeg = reefCenterToRobotDeg;
           }
 
-          if (currentReefLockDeg != newReefLockDeg && !reefStatus.getReefFaceAmbiguity()) {
-            currentReefLockDeg = newReefLockDeg;
+          if (currentReefLockDeg != reefCenterToRobotDeg) {
+            currentReefLockDeg = reefCenterToRobotDeg;
           }
 
           rot =
