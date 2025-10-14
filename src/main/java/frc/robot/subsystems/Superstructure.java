@@ -232,6 +232,7 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case END_EFFECTOR_CORAL_PICKUP:
+        arm.idle();
         endEffector.intakeCoral();
 
         if (!coralElevatorPickUp) {
