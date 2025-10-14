@@ -88,12 +88,15 @@ public class DriveManual extends Command {
           Translation2d robotTranslation = drive.getPose().getTranslation();
           double reefCenterToRobotDeg =
               robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
+          double reefLockDeg = reefCenterToRobotDeg + 180;
           // Lock heading to reef face first time we engage mode
           if (!firstReefLock) {
             firstReefLock = true;
-            currentReefLockDeg = (reefCenterToRobotDeg + 180);
+            currentReefLockDeg = reefLockDeg;
           }
-            currentReefLockDeg = (reefCenterToRobotDeg + 180);
+          if ((reefLockDeg - currentReefLockDeg) > Constants.Drive.reefLockToleranceDegrees || (reefLockDeg - currentReefLockDeg) < -(Constants.Drive.reefLockToleranceDegrees)){
+            currentReefLockDeg = reefLockDeg;
+          }
           rot =
               autoRotateController.calculate(drive.getRotation().getDegrees(), currentReefLockDeg);
           if (autoRotateController.atSetpoint()) {
