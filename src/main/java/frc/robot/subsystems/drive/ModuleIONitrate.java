@@ -140,7 +140,7 @@ public class ModuleIONitrate implements ModuleIO {
   @Override
   public void setDriveVelocity(double driveWheelVelocityRadPerSec) {
     if (Math.abs(driveWheelVelocityRadPerSec) <= Constants.Drive.minWheelRadPerSec) {
-      driveMotor.stop(IdleMode.kBrake); // allow for higher kP without chatter
+      driveMotor.setVoltage(0); // allow for higher kP without chatter
     } else {
       driveMotor.setRequest(
           drivePIDVelocityRequest.setVelocity(
