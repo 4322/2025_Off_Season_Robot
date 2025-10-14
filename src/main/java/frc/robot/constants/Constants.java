@@ -77,8 +77,8 @@ public final class Constants {
   }
 
   public static class Drive {
-    public static final double autoRotatekP = 0.03;
-    public static final double autoRotatekD = 0.0015;
+    public static final double autoRotatekP = 0.11;
+    public static final double autoRotatekD = 0.005;
 
     public static final double angularErrorToleranceDeg = 1.25;
     public static final double angularErrorToleranceDegPerSec = 20.0;

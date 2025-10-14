@@ -344,22 +344,22 @@ public class RobotContainer {
                   () -> {
                     drive.requestFieldRelativeMode();
                   }));
+    } else {
+      driver
+          .leftBumper()
+          .onTrue(
+              new InstantCommand(
+                  () -> {
+                    intakeSuperstructure.requestIdexerEject();
+                  }));
+      driver
+          .rightBumper()
+          .onTrue(
+              new InstantCommand(
+                  () -> {
+                    intakeSuperstructure.requestIdexerEject();
+                  }));
     }
-
-    driver
-        .leftBumper()
-        .onTrue(
-            new InstantCommand(
-                () -> {
-                  intakeSuperstructure.requestIdexerEject();
-                }));
-    driver
-        .rightBumper()
-        .onTrue(
-            new InstantCommand(
-                () -> {
-                  intakeSuperstructure.requestIdexerEject();
-                }));
   }
 
   public static boolean isScoringTriggerHeld() {
