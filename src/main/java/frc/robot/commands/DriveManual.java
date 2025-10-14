@@ -93,11 +93,7 @@ public class DriveManual extends Command {
             firstReefLock = true;
             currentReefLockDeg = (reefCenterToRobotDeg + 180);
           }
-
-          if (currentReefLockDeg != reefCenterToRobotDeg) {
             currentReefLockDeg = (reefCenterToRobotDeg + 180);
-          }
-
           rot =
               autoRotateController.calculate(drive.getRotation().getDegrees(), currentReefLockDeg);
           if (autoRotateController.atSetpoint()) {

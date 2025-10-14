@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
+import static frc.robot.RobotContainer.driver;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,7 +11,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
@@ -22,6 +19,8 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends Command {
 
@@ -228,10 +227,6 @@ public class ScoreCoral extends Command {
     Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
     Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
 
-    if (RobotContainer.isScoringTriggerHeld()) {
-      superstructure.requestScoreCoral(level);
-    }
-
     if (superstructure.isAutoOperationMode()) {
 
       if (state == ScoreState.SAFE_DISTANCE) {
@@ -320,6 +315,9 @@ public class ScoreCoral extends Command {
             } else {
               superstructure.requestScoreCoral(level);
             }
+            if (RobotContainer.isScoringTriggerHeld()) {
+              superstructure.requestScoreCoral(level);
+            }
             if (superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()
                 && !superstructure.isCoralHeld()
@@ -364,6 +362,10 @@ public class ScoreCoral extends Command {
       }
 
       superstructure.requestPrescoreCoral(level);
+
+      if (RobotContainer.isScoringTriggerHeld()) {
+        superstructure.requestScoreCoral(level);
+      }
     }
   }
 
