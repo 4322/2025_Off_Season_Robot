@@ -26,13 +26,13 @@ public class DrivetrainConstants {
 
   public static final double driveSupplyCurrentLimit = 40.0;
   public static final double driveSupplyCurrentTime = 0.0;
-  public static final double driveStatorCurrentLimit = 75;
+  public static final double driveStatorCurrentLimit = 100;
 
   public static final double turnSupplyCurrentLimit = 30.0;
   public static final double turnSupplyCurrentTime = 0.0;
   public static final double turnStatorCurrentLimit = 50;
 
-  private static final double drivekP = 0.1; // 2.0 not working
+  private static final double drivekP = 0.25; // higher chatters trying to acheive 0 velocity when stopped
   private static final double drivekD = 0;
   private static final double drivekS = 0.2;
   private static final double drivekV = 0.95;
