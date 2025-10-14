@@ -4,7 +4,6 @@ import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
-
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 import frc.robot.util.SwerveUtil.SwerveModuleConstantsFactory;
@@ -29,9 +28,9 @@ public class DrivetrainConstants {
   public static final double driveSupplyCurrentTime = 0.0;
   public static final double driveStatorCurrentLimit = 75;
 
-  public static final double turnSupplyCurrentLimit = 20.0;
+  public static final double turnSupplyCurrentLimit = 30.0;
   public static final double turnSupplyCurrentTime = 0.0;
-  public static final double turnStatorCurrentLimit = 35;
+  public static final double turnStatorCurrentLimit = 50;
 
   private static final double drivekP = 0.1; // 2.0 not working
   private static final double drivekD = 0;
