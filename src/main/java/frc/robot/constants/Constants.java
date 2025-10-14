@@ -473,6 +473,8 @@ public final class Constants {
     public static final double driveTolerance = 0.0254;
     public static final double driveToleranceSlow = 0.0254;
 
+    public static final double algaeSafeDistTolerance = 0.127;
+
     public static final double ffMinRadius = 0.1;
     public static final double ffMaxRadius = 0.8;
   }
