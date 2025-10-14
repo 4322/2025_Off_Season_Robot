@@ -92,8 +92,7 @@ public final class Constants {
     public static final double inhibitPseudoAutoRotateDegPerSec = 4;
     public static final double pseudoAutoRotateMinMetersPerSec =
         0.6; // disable below this speed for fine adjustments
-    public static final double minWheelRadPerSec =
-        0.01 / (2 * Math.PI * DrivetrainConstants.wheelRadius);
+    public static final double minWheelRadPerSec = 0.01 / DrivetrainConstants.wheelRadius;
 
     public static final double L234DistanceFromReefInches = 7;
     public static final double L1DistanceFromReefInches = 2;
@@ -472,6 +471,8 @@ public final class Constants {
 
     public static final double driveTolerance = 0.0254;
     public static final double driveToleranceSlow = 0.0254;
+
+    public static final double algaeSafeDistTolerance = 0.127;
 
     public static final double ffMinRadius = 0.1;
     public static final double ffMaxRadius = 0.8;

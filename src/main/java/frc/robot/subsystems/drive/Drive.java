@@ -40,6 +40,14 @@ public class Drive extends SubsystemBase {
         new SwerveModulePosition(),
         new SwerveModulePosition()
       };
+  private final SwerveModuleState[] zeroSwerveModuleStates =
+      new SwerveModuleState[] {
+        new SwerveModuleState(),
+        new SwerveModuleState(),
+        new SwerveModuleState(),
+        new SwerveModuleState()
+      };
+
   private boolean wasGyroConnected = false;
   private ArrayList<OdometryValues> prevOdometryReadings =
       new ArrayList<OdometryValues>(); // The last 3 odoemtry readings
@@ -104,10 +112,9 @@ public class Drive extends SubsystemBase {
     }
 
     // Read wheel positions and deltas from each module
-    SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
+    SwerveModulePosition[] modulePositions = getModulePositions();
     SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
     for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
-      modulePositions[moduleIndex] = getModulePositions()[moduleIndex];
       moduleDeltas[moduleIndex] =
           new SwerveModulePosition(
               modulePositions[moduleIndex].distanceMeters
@@ -129,7 +136,7 @@ public class Drive extends SubsystemBase {
       moduleDeltaRotation = moduleDeltaRotation.plus(new Rotation2d(twist.dtheta));
       prevOdometryReadings.add(
           new OdometryValues(
-              RobotController.getFPGATime() / 1e6, moduleDeltaRotation, getModulePositions()));
+              RobotController.getFPGATime() / 1e6, moduleDeltaRotation, modulePositions));
 
       // Only cache the last 3 readings
       if (prevOdometryReadings.size() >= 4) {
@@ -156,11 +163,11 @@ public class Drive extends SubsystemBase {
     }
 
     poseEstimator.updateWithTime(
-        RobotController.getFPGATime() / 1e6, odometryRotation, getModulePositions());
+        RobotController.getFPGATime() / 1e6, odometryRotation, modulePositions);
 
     if (DriverStation.isDisabled()) {
-      Logger.recordOutput("Drive/SwerveStates/Setpoints", new SwerveModuleState[] {});
-      Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
+      Logger.recordOutput("Drive/SwerveStates/Setpoints", zeroSwerveModuleStates);
+      Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", zeroSwerveModuleStates);
     }
   }
 

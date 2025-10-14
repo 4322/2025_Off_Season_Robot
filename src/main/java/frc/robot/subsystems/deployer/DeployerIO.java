@@ -22,7 +22,7 @@ public interface DeployerIO {
     public double totalEffort;
     public double controllerTempCelcius = 0.0;
 
-    public double prevRequestedPositionDeg = 0.0;
+    public double requestedPosDeg = 0.0;
   }
 
   public default void updateInputs(DeployerIOInputs inputs) {}

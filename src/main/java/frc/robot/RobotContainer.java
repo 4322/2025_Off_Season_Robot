@@ -230,7 +230,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new AlgaeIntakeGround(superstructure).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    new ScoreCoral(superstructure, Level.L1, drive).schedule();
+                    new ScoreCoral(superstructure, Level.L1, drive, false).schedule();
                   }
                 }));
     driver
@@ -241,7 +241,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L2, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    new ScoreCoral(superstructure, Level.L2, drive).schedule();
+                    new ScoreCoral(superstructure, Level.L2, drive, false).schedule();
                   }
                   if (scoreCoral.isRunning()){
                     requestedAlgaeDescore = true;
@@ -255,7 +255,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L3, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    new ScoreCoral(superstructure, Level.L3, drive).schedule();
+                    new ScoreCoral(superstructure, Level.L3, drive, false).schedule();
                   }
                   if (scoreCoral.isRunning()){
                     requestedAlgaeDescore = true;
@@ -276,7 +276,7 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L4, drive).schedule();
+                    new ScoreCoral(superstructure, Level.L4, drive, false).schedule();
                   }
                 }));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));

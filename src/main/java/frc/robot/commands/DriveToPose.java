@@ -244,11 +244,9 @@ public class DriveToPose extends Command {
     return driveController.atGoal() && thetaController.atGoal();
   }
 
-  /** Checks if the robot pose is within the allowed drive and theta tolerances. */
-  public boolean withinTolerance(double driveTolerance, Rotation2d thetaToleranceDeg) {
-    return running
-        && Math.abs(driveErrorAbs) < driveTolerance
-        && Math.abs(thetaErrorAbs) < thetaToleranceDeg.getDegrees();
+  /** Checks if the robot pose is within the allowed drive tolerance. */
+  public boolean withinTolerance(double driveTolerance) {
+    return running && Math.abs(driveErrorAbs) < driveTolerance;
   }
 
   /** Returns whether the command is actively running. */

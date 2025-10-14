@@ -7,9 +7,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
+import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Superstates;
@@ -54,8 +54,6 @@ public class DescoreAlgae extends Command {
   @Override
   public void initialize() {
     running = true;
-    times.stop();
-    times.reset();
     state = ScoreState.SAFE_DISTANCE;
 
     reefStatus = superstructure.getReefStatus();
@@ -106,13 +104,12 @@ public class DescoreAlgae extends Command {
           if (descoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (isInSafeArea() || driveToPose.atGoal()) {
-            times.start();
             superstructure.requestDescoreAlgae(level);
 
             if (superstructure.getState() == Superstates.DESCORE_ALGAE
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()
-                && driveToPose.atGoal()) {
+                && driveToPose.withinTolerance(Constants.AutoScoring.algaeSafeDistTolerance)) {
               state = ScoreState.DRIVE_IN;
               currentPoseRequest = () -> targetScoringPose;
             }
