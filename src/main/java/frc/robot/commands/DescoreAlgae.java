@@ -23,7 +23,6 @@ public class DescoreAlgae extends Command {
   private final Drive drive;
   private DriveToPose driveToPose;
   public boolean running;
-  public Timer times = new Timer();
   private double reefAngle;
 
   private Pose2d targetScoringPose;
@@ -91,11 +90,11 @@ public class DescoreAlgae extends Command {
     if (superstructure.isAutoOperationMode()) {
       switch (state) {
         case SAFE_DISTANCE:
-        if (reefAngle == 180 || reefAngle == 60 || reefAngle == -60){
-          level = level.L3;
-        } else{
-          level = level.L2;
-        }
+          if (reefAngle == 180 || reefAngle == 60 || reefAngle == -60) {
+            level = level.L3;
+          } else {
+            level = level.L2;
+          }
           currentPoseRequest = () -> safeDescorePose;
           if (!driveToPose.isScheduled()) {
             driveToPose.schedule();

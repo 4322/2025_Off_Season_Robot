@@ -243,7 +243,7 @@ public class RobotContainer {
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new ScoreCoral(superstructure, Level.L2, drive, false).schedule();
                   }
-                  if (scoreCoral.isRunning()){
+                  if (scoreCoral.isRunning()) {
                     requestedAlgaeDescore = true;
                   }
                 }));
@@ -257,15 +257,16 @@ public class RobotContainer {
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new ScoreCoral(superstructure, Level.L3, drive, false).schedule();
                   }
-                  if (scoreCoral.isRunning()){
+                  if (scoreCoral.isRunning()) {
                     requestedAlgaeDescore = true;
                   }
                 }));
-    if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()){
+
+    if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()) {
       requestedAlgaeDescore = false;
     }
-    
-    if (requestedAlgaeDescore && scoreCoral.isRunning()){
+
+    if (requestedAlgaeDescore && scoreCoral.isRunning()) {
       new DescoreAlgae(superstructure, Level.L3, drive).schedule();
     }
     driver

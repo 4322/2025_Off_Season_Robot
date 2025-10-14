@@ -94,7 +94,8 @@ public class DriveManual extends Command {
             firstReefLock = true;
             currentReefLockDeg = reefLockDeg;
           }
-          if ((reefLockDeg - currentReefLockDeg) > Constants.Drive.reefLockToleranceDegrees || (reefLockDeg - currentReefLockDeg) < -(Constants.Drive.reefLockToleranceDegrees)){
+          if ((reefLockDeg - currentReefLockDeg) > Constants.Drive.reefLockToleranceDegrees
+              || (reefLockDeg - currentReefLockDeg) < -(Constants.Drive.reefLockToleranceDegrees)) {
             currentReefLockDeg = reefLockDeg;
           }
           rot =
