@@ -258,7 +258,6 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case EJECT:
-
         if (holdAlgae) {
           state = EndEffectorStates.HOLD_ALGAE;
         } else if (holdCoral) {
