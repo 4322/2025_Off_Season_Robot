@@ -258,7 +258,6 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case EJECT:
-      Logger.recordOutput("End Effector/algaeHeld", holdAlgae);
 
         if (holdAlgae) {
           state = EndEffectorStates.HOLD_ALGAE;
