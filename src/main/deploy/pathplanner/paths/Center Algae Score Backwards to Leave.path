@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.0,
-        "y": 4.8
+        "x": 7.564241803278687,
+        "y": 4.678329918032786
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.25,
-        "y": 4.8
+        "x": 7.814241803278687,
+        "y": 4.678329918032786
       },
       "isLocked": false,
       "linkedName": "CenterAlgaeScoreBackwards"

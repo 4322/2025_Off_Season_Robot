@@ -88,6 +88,8 @@ public class Robot extends LoggedRobot {
   public static PathPlannerPath LeftAlgaeScoreBackwardsToLeave;
   public static PathPlannerPath LeftBargeBackwardsToLeftAlgaeScoreBackwards;
 
+  public static PathPlannerPath CenterBargeBackwardsToLeave;
+
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -266,6 +268,8 @@ public class Robot extends LoggedRobot {
           PathPlannerPath.fromPathFile("Left Algae Score Backwards to Leave");
       LeftBargeBackwardsToLeftAlgaeScoreBackwards =
           PathPlannerPath.fromPathFile("Left Barge Backwards to Left Algae Score Backwards");
+
+      CenterBargeBackwardsToLeave = PathPlannerPath.fromPathFile("Center Barge Backwards to Leave");
 
     } catch (Exception e) {
       DriverStation.reportError("Failed to load PathPlanner paths", true);
