@@ -79,14 +79,15 @@ public class DriveManual extends Command {
             && RobotContainer.getSuperstructure().isCoralHeld()
             && Math.abs(rot) < 0.01) {
           Translation2d reefCenterPoint;
-          
-    if (Robot.alliance == DriverStation.Alliance.Red) {
-      reefCenterPoint = FieldConstants.KeypointPoses.redReefCenter;
-    } else {
-      reefCenterPoint = FieldConstants.KeypointPoses.blueReefCenter;
-    }
-    Translation2d robotTranslation = drive.getPose().getTranslation();
-    double reefCenterToRobotDeg = robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
+
+          if (Robot.alliance == DriverStation.Alliance.Red) {
+            reefCenterPoint = FieldConstants.KeypointPoses.redReefCenter;
+          } else {
+            reefCenterPoint = FieldConstants.KeypointPoses.blueReefCenter;
+          }
+          Translation2d robotTranslation = drive.getPose().getTranslation();
+          double reefCenterToRobotDeg =
+              robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
           // Lock heading to reef face first time we engage mode
           if (!firstReefLock) {
             firstReefLock = true;

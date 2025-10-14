@@ -18,6 +18,7 @@ import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.constants.Constants;
 import frc.robot.util.ClockUtil;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 
@@ -138,8 +139,13 @@ public class ModuleIONitrate implements ModuleIO {
 
   @Override
   public void setDriveVelocity(double driveWheelVelocityRadPerSec) {
-    driveMotor.setRequest(
-        drivePIDVelocityRequest.setVelocity(Units.radiansToRotations(driveWheelVelocityRadPerSec)));
+    if (Math.abs(driveWheelVelocityRadPerSec) <= Constants.Drive.minWheelRadPerSec) {
+      driveMotor.stop(IdleMode.kBrake); // allow for higher kP without chatter
+    } else {
+      driveMotor.setRequest(
+          drivePIDVelocityRequest.setVelocity(
+              Units.radiansToRotations(driveWheelVelocityRadPerSec)));
+    }
   }
 
   @Override

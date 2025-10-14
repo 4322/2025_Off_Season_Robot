@@ -92,6 +92,8 @@ public final class Constants {
     public static final double inhibitPseudoAutoRotateDegPerSec = 4;
     public static final double pseudoAutoRotateMinMetersPerSec =
         0.6; // disable below this speed for fine adjustments
+    public static final double minWheelRadPerSec =
+        0.01 / (2 * Math.PI * DrivetrainConstants.wheelRadius);
 
     public static final double L234DistanceFromReefInches = 7;
     public static final double L1DistanceFromReefInches = 2;

@@ -17,7 +17,7 @@ public class DrivetrainConstants {
   private static final double turnGearRatio = 150.0 / 7.0;
   private static final double turnCoupleRatio = 3.8181818181818183; // TODO
 
-  private static final double wheelRadius = Units.inchesToMeters(2.0);
+  public static final double wheelRadius = Units.inchesToMeters(2.0);
 
   private static final boolean turnMotorInverted = false;
   private static final boolean turnEncoderInverted = true;
