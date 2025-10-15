@@ -293,11 +293,13 @@ public class ScoreCoral extends Command {
                       new Rotation2d()));
 
           currentPoseRequest = () -> safeDistPose;
-          superstructure.requestPrescoreCoral(level);
 
           if (!driveToPose.isScheduled()) {
             driveToPose.schedule();
           }
+          
+          superstructure.requestPrescoreCoral(level);
+
           if ((driveToPose.atGoal() && (superstructure.armAtSetpoint()
           && superstructure.elevatorAtSetpoint())) || (superstructure.armAtSetpoint()
           && superstructure.elevatorAtSetpoint())){
