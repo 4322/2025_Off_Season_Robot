@@ -194,12 +194,7 @@ public class RobotContainer {
 
     intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
     superstructure = new Superstructure(endEffector, arm, elevator, intakeSuperstructure, vision);
-    
-    lastScoreCoral = new ScoreCoral(superstructure, Level.L1, drive, false);
-    scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false);
-    scoreL2Coral = new ScoreCoral(superstructure, Level.L2, drive, false);
-    scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
-    scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -212,6 +207,12 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     drive.setDefaultCommand(new DriveManual(drive));
+
+    lastScoreCoral = new ScoreCoral(superstructure, Level.L1, drive, false);
+    scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false);
+    scoreL2Coral = new ScoreCoral(superstructure, Level.L2, drive, false);
+    scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
+    scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
     // The commands deal with the on False logic if the button is no longer held
 
     driver
@@ -269,14 +270,14 @@ public class RobotContainer {
                   }
                 }));
 
-    if (lastScoreCoral.isRunning() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
+    if (lastScoreCoral.isFinished() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
       requestedAlgaeDescore = true;
     }
     if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()) {
       requestedAlgaeDescore = false;
     } 
 
-    if (requestedAlgaeDescore && !lastScoreCoral.isRunning()) {
+    if (requestedAlgaeDescore && !lastScoreCoral.isFinished()) {
       new DescoreAlgae(superstructure, Level.L3, drive).schedule();
     }
 

@@ -326,6 +326,10 @@ public class ScoreCoral extends Command {
               }
             } else {
               superstructure.requestScoreCoral(level);
+            } 
+            
+            if (RobotContainer.isScoringTriggerHeld()) {
+              superstructure.requestScoreCoral(level);
             }
             if (superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()
@@ -369,8 +373,10 @@ public class ScoreCoral extends Command {
       if (driveToPose.isScheduled()) {
         driveToPose.cancel();
       }
-
       superstructure.requestPrescoreCoral(level);
+    if (RobotContainer.isScoringTriggerHeld()) {
+      superstructure.requestScoreCoral(level);
+    }
     }
   }
 
