@@ -41,6 +41,7 @@ public class ReefStatus {
     this.closestReefPipe = closestReefPipe;
     this.closestL1Zone = closestL1Zone;
     this.tagId = tagId;
+    this.algaeLevel = algaeLevel;
   }
 
   public boolean getReefFaceAmbiguity() {
@@ -63,7 +64,7 @@ public class ReefStatus {
     return closestL1Zone;
   }
 
-  public AlgaeLevel getAlgaeLevel(){
+  public AlgaeLevel getAlgaeLevel() {
     return algaeLevel;
   }
 
