@@ -231,8 +231,8 @@ public final class Constants {
     public static final double maxElevatorHeightMeters = 1.3068401092;
     public static final double homeHeightMeters = 0.37926;
 
-    public static final double minElevatorSafeHeightMeters = 0.459;
-    public static final double minElevatorSafeWithCoralMeters = 0.46;
+    public static final double minElevatorSafeHeightMeters = 0.475; // measure after homing with wheels compressed
+    public static final double minElevatorSafeWithCoralMeters = 0.475;
 
     public static final double elevatorHeightToleranceMeters = 0.01;
 
