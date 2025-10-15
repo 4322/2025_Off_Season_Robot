@@ -38,7 +38,7 @@ public class OneCoralOneAlgaeEjectCenter extends OrangeSequentialCommandGroup {
         new ScoreCoral(superstructure, Level.L4, drive, false),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         AutoBuilder.followPath(Robot.GulfToGulfHotel),
-        new DescoreAlgae(superstructure, Level.L2, drive),
+        new DescoreAlgae(superstructure, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.ALGAE_IDLE),
         AutoBuilder.followPath(Robot.GulfHotelToCenterEject),
         new EjectAuto(intakeSuperstructure, superstructure, EjectAuto.EjectType.END_EFFECTOR, 1.0));

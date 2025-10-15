@@ -234,10 +234,6 @@ public class ScoreCoral extends Command {
     Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
     Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
 
-    if (RobotContainer.isScoringTriggerHeld()) {
-      superstructure.requestScoreCoral(level);
-    }
-
     if (superstructure.isAutoOperationMode()) {
 
       if (state == ScoreState.SAFE_DISTANCE) {
@@ -315,7 +311,7 @@ public class ScoreCoral extends Command {
         case DRIVE_IN:
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (driveToPose.atGoal()) {
+          } else if (driveToPose.atGoal() || (RobotContainer.isScoringTriggerHeld() && level == Level.L1)) {
             if (level == Level.L4) {
               times.start();
               if (times.hasElapsed(0.1)) {
@@ -326,6 +322,7 @@ public class ScoreCoral extends Command {
             } else {
               superstructure.requestScoreCoral(level);
             }
+
             if (superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()
                 && !superstructure.isCoralHeld()
@@ -348,7 +345,7 @@ public class ScoreCoral extends Command {
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           }
-          if (driveToPose.atGoal()) {
+          if (driveToPose.atGoal() || isInSafeArea()) {
             running = false;
           }
 
@@ -368,8 +365,11 @@ public class ScoreCoral extends Command {
       if (driveToPose.isScheduled()) {
         driveToPose.cancel();
       }
-
+      drive.requestAutoRotateMode(robotReefAngle);
       superstructure.requestPrescoreCoral(level);
+      if (RobotContainer.isScoringTriggerHeld()) {
+        superstructure.requestScoreCoral(level);
+      }
     }
   }
 
@@ -381,15 +381,17 @@ public class ScoreCoral extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    if (driveToPose.isScheduled()) {
+      driveToPose.cancel();
+    }
+
     if (!chainedAlgaeMode) {
       superstructure.requestIdle();
     }
     superstructure.enableGlobalPose();
     running = false;
+    drive.requestFieldRelativeMode();
 
-    if (driveToPose.isScheduled()) {
-      driveToPose.cancel();
-    }
     Logger.recordOutput("ScoreCoral/state", "Done");
   }
 

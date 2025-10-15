@@ -65,7 +65,7 @@ public class DriveToPose extends Command {
   private static final LoggedTunableNumber ffMinRadius =
       new LoggedTunableNumber("DriveToPose/FFMinRadius");
   private static final LoggedTunableNumber ffMaxRadius =
-      new LoggedTunableNumber("DriveToPose/FFMinRadius");
+      new LoggedTunableNumber("DriveToPose/FFMaxRadius");
 
   static {
     driveKp.initDefault(Constants.AutoScoring.drivekP);

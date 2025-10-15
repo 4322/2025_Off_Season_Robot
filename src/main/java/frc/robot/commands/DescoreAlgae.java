@@ -15,6 +15,7 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ReefStatus;
+import frc.robot.util.ReefStatus.AlgaeLevel;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -23,6 +24,7 @@ public class DescoreAlgae extends Command {
   private final Drive drive;
   private DriveToPose driveToPose;
   public boolean running;
+  private AlgaeLevel reefLevel;
 
   private Pose2d targetScoringPose;
   private Rotation2d robotReefAngle;
@@ -40,9 +42,8 @@ public class DescoreAlgae extends Command {
   private Superstructure.Level level;
   private ScoreState state = ScoreState.SAFE_DISTANCE;
 
-  public DescoreAlgae(Superstructure superstructure, Superstructure.Level level, Drive drive) {
+  public DescoreAlgae(Superstructure superstructure, Drive drive) {
     this.superstructure = superstructure;
-    this.level = level;
     this.drive = drive;
 
     driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
@@ -51,11 +52,19 @@ public class DescoreAlgae extends Command {
 
   @Override
   public void initialize() {
+
     running = true;
     state = ScoreState.SAFE_DISTANCE;
 
     reefStatus = superstructure.getReefStatus();
     robotReefAngle = reefStatus.getClosestRobotAngle();
+    reefLevel = reefStatus.getAlgaeLevel();
+
+    if (reefLevel == ReefStatus.AlgaeLevel.L2) {
+      level = Superstructure.Level.L2;
+    } else {
+      level = Superstructure.Level.L3;
+    }
 
     if (Robot.alliance == DriverStation.Alliance.Blue) {
       targetScoringPose =

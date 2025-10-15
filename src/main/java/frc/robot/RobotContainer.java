@@ -74,6 +74,11 @@ public class RobotContainer {
   private static Vision vision;
   private static ReefStatus reefStatus;
   private static DriveToPose drivetopose;
+  private static ScoreCoral lastScoreCoral;
+  private static ScoreCoral scoreL1Coral;
+  private static ScoreCoral scoreL2Coral;
+  private static ScoreCoral scoreL3Coral;
+  private static ScoreCoral scoreL4Coral;
   private static Drive drive;
   private static Arm arm;
   private static EndEffector endEffector;
@@ -83,6 +88,7 @@ public class RobotContainer {
   private static IntakeSuperstructure intakeSuperstructure;
   private static Superstructure superstructure;
   private static Elevator elevator;
+  public boolean requestedAlgaeDescore;
 
   public static AutonomousSelector autonomousSelector;
 
@@ -112,6 +118,7 @@ public class RobotContainer {
 
       if (Constants.driveMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
+
         GyroIOBoron gyro = new GyroIOBoron();
         drive =
             new Drive(
@@ -200,6 +207,12 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     drive.setDefaultCommand(new DriveManual(drive));
+
+    scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false);
+    scoreL2Coral = new ScoreCoral(superstructure, Level.L2, drive, false);
+    scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
+    scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
+    lastScoreCoral = scoreL1Coral;
     // The commands deal with the on False logic if the button is no longer held
 
     driver
@@ -228,7 +241,8 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new AlgaeIntakeGround(superstructure).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    new ScoreCoral(superstructure, Level.L1, drive, false).schedule();
+                    scoreL1Coral.schedule();
+                    lastScoreCoral = scoreL1Coral;
                   }
                 }));
     driver
@@ -237,9 +251,10 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new DescoreAlgae(superstructure, Level.L2, drive).schedule();
+                    new DescoreAlgae(superstructure, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    new ScoreCoral(superstructure, Level.L2, drive, false).schedule();
+                    scoreL2Coral.schedule();
+                    lastScoreCoral = scoreL2Coral;
                   }
                 }));
     driver
@@ -248,11 +263,13 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new DescoreAlgae(superstructure, Level.L3, drive).schedule();
+                    new DescoreAlgae(superstructure, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    new ScoreCoral(superstructure, Level.L3, drive, false).schedule();
+                    scoreL3Coral.schedule();
+                    lastScoreCoral = scoreL3Coral;
                   }
                 }));
+
     driver
         .b()
         .onTrue(
@@ -261,7 +278,8 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L4, drive, false).schedule();
+                    scoreL4Coral.schedule();
+                    lastScoreCoral = scoreL4Coral;
                   }
                 }));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
@@ -372,6 +390,17 @@ public class RobotContainer {
 
   public static Superstructure getSuperstructure() {
     return superstructure;
+  }
+
+  public void TriggerAlgae() {
+    if (lastScoreCoral.isScheduled() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
+      requestedAlgaeDescore = true;
+    } else if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()) {
+      requestedAlgaeDescore = false;
+    } else if (!lastScoreCoral.isScheduled()) {
+      new DescoreAlgae(superstructure, drive).schedule();
+      requestedAlgaeDescore = false;
+    }
   }
 
   /**

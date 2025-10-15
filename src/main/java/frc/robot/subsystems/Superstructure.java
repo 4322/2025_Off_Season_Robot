@@ -30,6 +30,7 @@ public class Superstructure extends SubsystemBase {
   private boolean ishomed = false;
   private Timer coralPickupTimer = new Timer();
   private boolean coralElevatorPickUp = false;
+  private boolean scoreBackSide = false;
 
   public enum Superstates {
     HOMELESS,
@@ -111,6 +112,10 @@ public class Superstructure extends SubsystemBase {
     Logger.recordOutput("Superstructure/currentAutoState", mode.toString());
     Logger.recordOutput("Superstructure/requestedLevel", level);
 
+    if (requestEject) {
+      state = Superstates.EJECT;
+    }
+
     prevState = state;
     switch (state) {
       case HOMELESS:
@@ -130,10 +135,13 @@ public class Superstructure extends SubsystemBase {
       case IDLE:
         if (requestEject) {
           state = Superstates.EJECT;
-        } else if (intakeSuperstructure.isCoralDetectedPickupArea()
-            && arm.atSetpoint()
-            && elevator.atSetpoint()) {
-          state = Superstates.END_EFFECTOR_CORAL_PICKUP;
+        } else if (intakeSuperstructure.isCoralDetectedPickupArea()) {
+          endEffector.idle();
+          elevator.idle();
+          arm.idle();
+          if (arm.atSetpoint() && elevator.atSetpoint()) {
+            state = Superstates.END_EFFECTOR_CORAL_PICKUP;
+          }
         } else if (requestIntakeAlgaeFloor) {
           state = Superstates.INTAKE_ALGAE_FLOOR;
         } else if (requestDescoreAlgae) {
@@ -179,7 +187,7 @@ public class Superstructure extends SubsystemBase {
       case ALGAE_PRESCORE:
         elevator.scoreAlgae();
         if (elevator.atSetpoint()) {
-          arm.scoreAlgae();
+          arm.scoreAlgae(scoreBackSide);
         }
 
         if (requestIdle) {
@@ -229,20 +237,22 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case END_EFFECTOR_CORAL_PICKUP:
+        Logger.recordOutput("Superstructure/CoralStopIsDisabled", coralElevatorPickUp);
+        arm.idle();
         endEffector.intakeCoral();
 
         if (!coralElevatorPickUp) {
           coralPickupTimer.start();
         }
 
-        if (!coralElevatorPickUp
-            && coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
+        if (coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
           elevator.pickupCoral();
           coralElevatorPickUp = true;
         }
 
         if (coralPickupTimer.hasElapsed(Constants.Elevator.coralDetectionHeightThresholdSecs)) {
           if (endEffector.hasCoral()) {
+            coralElevatorPickUp = false;
             coralPickupTimer.stop();
             coralPickupTimer.reset();
             state = Superstates.CORAL_HELD;
@@ -251,10 +261,10 @@ public class Superstructure extends SubsystemBase {
               && !intakeSuperstructure.isCoralDetectedPickupArea()
               && arm.atSetpoint()
               && getElevatorHeight() >= Constants.Elevator.minElevatorSafeHeightMeters) {
+            coralElevatorPickUp = false;
             coralPickupTimer.stop();
             coralPickupTimer.reset();
             state = Superstates.IDLE;
-            coralElevatorPickUp = false;
           }
         }
 
@@ -357,14 +367,6 @@ public class Superstructure extends SubsystemBase {
     return arm.atSetpoint();
   }
 
-  public boolean scoreBackSideBarge() {
-    if (DriverStation.isAutonomous()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   public boolean elevatorAtSetpoint() {
     return elevator.atSetpoint();
   }
@@ -383,9 +385,10 @@ public class Superstructure extends SubsystemBase {
     requestEject = true;
   }
 
-  public void requestAlgaePrescore() {
+  public void requestAlgaePrescore(boolean prescoreBackSide) {
     unsetAllRequests();
     requestAlgaePrescore = true;
+    this.scoreBackSide = prescoreBackSide;
   }
 
   public void requestAlgaeScore() {

@@ -84,6 +84,7 @@ public final class Constants {
     public static final double angularErrorToleranceDegPerSec = 20.0;
     public static final double driveDeadband = 0.1;
     public static final double rotDeadband = 0.1;
+    public static final double reefLockToleranceDegrees = 1;
 
     public static final double pseudoAutoRotatekP = 6;
     public static final double pseudoAutoRotatekI = 0;
@@ -92,7 +93,7 @@ public final class Constants {
     public static final double inhibitPseudoAutoRotateDegPerSec = 4;
     public static final double pseudoAutoRotateMinMetersPerSec =
         0.6; // disable below this speed for fine adjustments
-    public static final double minWheelRadPerSec = 0.01 / DrivetrainConstants.wheelRadius;
+    public static final double minWheelRadPerSec = 0.005 / DrivetrainConstants.wheelRadius;
 
     public static final double L234DistanceFromReefInches = 7;
     public static final double L1DistanceFromReefInches = 2;
@@ -190,7 +191,7 @@ public final class Constants {
     public static final double scoringAlgaeDeg = 142;
     public static final double scoringBacksideAlgaeDeg = 218;
 
-    public static final double descoringAlgaeDeg = 75.682;
+    public static final double descoringAlgaeDeg = 90.0;
     public static final double safeBargeRetractDeg = 180;
     // To the encoder 0 is horizontal but to us its straight down
     public static final double OffsetEncoderDeg = -90;
@@ -229,14 +230,15 @@ public final class Constants {
     public static final double maxElevatorHeightMeters = 1.3068401092;
     public static final double homeHeightMeters = 0.37926;
 
-    public static final double minElevatorSafeHeightMeters = 0.459;
-    public static final double minElevatorSafeWithCoralMeters = 0.46;
+    public static final double minElevatorSafeHeightMeters =
+        0.475; // measure after homing with wheels compressed
+    public static final double minElevatorSafeWithCoralMeters = 0.475;
 
     public static final double elevatorHeightToleranceMeters = 0.01;
 
     public static final double algaeGroundHeightMeters = 0.00635;
-    public static final double algaeReefL2HeightMeters = 0.5283249 + (3 * (0.0254));
-    public static final double algaeReefL3HeightMeters = 0.8739758746 + (4 * (0.0254));
+    public static final double algaeReefL2HeightMeters = 0.384498;
+    public static final double algaeReefL3HeightMeters = 0.770257;
 
     public static final double prescoreCoralL1HeightMeters = 0.4811766;
     public static final double prescoreCoralL2HeightMeters = 0.10647135;

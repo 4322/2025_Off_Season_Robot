@@ -414,7 +414,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    robotContainer.TriggerAlgae();
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override
