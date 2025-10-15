@@ -74,7 +74,11 @@ public class RobotContainer {
   private static Vision vision;
   private static ReefStatus reefStatus;
   private static DriveToPose drivetopose;
-  private static ScoreCoral scoreCoral;
+  private static ScoreCoral lastScoreCoral;
+  private static ScoreCoral scoreL1Coral;
+  private static ScoreCoral scoreL2Coral;
+  private static ScoreCoral scoreL3Coral;
+  private static ScoreCoral scoreL4Coral;
   private static Drive drive;
   private static Arm arm;
   private static EndEffector endEffector;
@@ -114,6 +118,12 @@ public class RobotContainer {
 
       if (Constants.driveMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
+          lastScoreCoral = new ScoreCoral(superstructure, Level.L1, drive, false);
+          scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false);
+          scoreL2Coral = new ScoreCoral(superstructure, Level.L2, drive, false);
+          scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
+          scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
+
         GyroIOBoron gyro = new GyroIOBoron();
         drive =
             new Drive(
@@ -230,7 +240,8 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new AlgaeIntakeGround(superstructure).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    new ScoreCoral(superstructure, Level.L1, drive, false).schedule();
+                    scoreL1Coral.schedule();
+                    lastScoreCoral = scoreL1Coral;
                   }
                 }));
     driver
@@ -241,10 +252,8 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L2, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    new ScoreCoral(superstructure, Level.L2, drive, false).schedule();
-                  }
-                  if (scoreCoral.isRunning()) {
-                    requestedAlgaeDescore = true;
+                    scoreL2Coral.schedule();
+                    lastScoreCoral = scoreL2Coral;
                   }
                 }));
     driver
@@ -255,20 +264,22 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, Level.L3, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    new ScoreCoral(superstructure, Level.L3, drive, false).schedule();
-                  }
-                  if (scoreCoral.isRunning()) {
-                    requestedAlgaeDescore = true;
+                    scoreL3Coral.schedule();
+                    lastScoreCoral = scoreL3Coral;
                   }
                 }));
 
+    if (lastScoreCoral.isRunning() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
+      requestedAlgaeDescore = true;
+    }
     if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()) {
       requestedAlgaeDescore = false;
-    }
+    } 
 
-    if (requestedAlgaeDescore && !scoreCoral.isRunning()) {
+    if (requestedAlgaeDescore && !lastScoreCoral.isRunning()) {
       new DescoreAlgae(superstructure, Level.L3, drive).schedule();
     }
+
     driver
         .b()
         .onTrue(
@@ -277,7 +288,8 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L4, drive, false).schedule();
+                    scoreL4Coral.schedule();
+                    lastScoreCoral = scoreL4Coral;
                   }
                 }));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
