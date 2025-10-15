@@ -15,6 +15,7 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ReefStatus;
+import frc.robot.util.ReefStatus.AlgaeLevel;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -23,7 +24,7 @@ public class DescoreAlgae extends Command {
   private final Drive drive;
   private DriveToPose driveToPose;
   public boolean running;
-  private double reefAngle;
+  private AlgaeLevel reefLevel;
 
   private Pose2d targetScoringPose;
   private Rotation2d robotReefAngle;
@@ -43,8 +44,8 @@ public class DescoreAlgae extends Command {
 
   public DescoreAlgae(Superstructure superstructure, Superstructure.Level level, Drive drive) {
     this.superstructure = superstructure;
-    this.level = level;
     this.drive = drive;
+    this.level = level;
 
     driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
     addRequirements(superstructure);
@@ -52,12 +53,19 @@ public class DescoreAlgae extends Command {
 
   @Override
   public void initialize() {
+
     running = true;
     state = ScoreState.SAFE_DISTANCE;
 
     reefStatus = superstructure.getReefStatus();
     robotReefAngle = reefStatus.getClosestRobotAngle();
-    reefAngle = reefStatus.getClosestRobotAngle().getDegrees();
+    reefLevel = reefStatus.getAlgaeLevel();
+
+    if (reefLevel == ReefStatus.AlgaeLevel.L2) {
+      level = Superstructure.Level.L2;
+    } else {
+      level = Superstructure.Level.L3;
+    }
 
     if (Robot.alliance == DriverStation.Alliance.Blue) {
       targetScoringPose =
@@ -90,11 +98,6 @@ public class DescoreAlgae extends Command {
     if (superstructure.isAutoOperationMode()) {
       switch (state) {
         case SAFE_DISTANCE:
-          if (reefAngle == 180 || reefAngle == 60 || reefAngle == -60) {
-            level = level.L3;
-          } else {
-            level = level.L2;
-          }
           currentPoseRequest = () -> safeDescorePose;
           if (!driveToPose.isScheduled()) {
             driveToPose.schedule();
