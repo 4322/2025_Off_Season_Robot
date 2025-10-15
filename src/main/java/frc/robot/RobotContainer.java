@@ -88,7 +88,7 @@ public class RobotContainer {
   private static IntakeSuperstructure intakeSuperstructure;
   private static Superstructure superstructure;
   private static Elevator elevator;
-  private boolean requestedAlgaeDescore;
+  public boolean requestedAlgaeDescore;
 
   public static AutonomousSelector autonomousSelector;
 
@@ -270,18 +270,6 @@ public class RobotContainer {
                   }
                 }));
 
-    if (lastScoreCoral.isScheduled() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
-      requestedAlgaeDescore = true;
-    }
-    if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()) {
-      requestedAlgaeDescore = false;
-    }
-
-    if (requestedAlgaeDescore && !lastScoreCoral.isScheduled()) {
-      new DescoreAlgae(superstructure, drive).schedule();
-      requestedAlgaeDescore = false;
-    }
-
     driver
         .b()
         .onTrue(
@@ -402,6 +390,17 @@ public class RobotContainer {
 
   public static Superstructure getSuperstructure() {
     return superstructure;
+  }
+
+  public void TriggerAlgae() {
+    if (lastScoreCoral.isScheduled() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
+      requestedAlgaeDescore = true;
+    } else if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()) {
+      requestedAlgaeDescore = false;
+    } else if (!lastScoreCoral.isScheduled()) {
+      new DescoreAlgae(superstructure, drive).schedule();
+      requestedAlgaeDescore = false;
+    }
   }
 
   /**
