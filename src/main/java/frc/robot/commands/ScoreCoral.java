@@ -311,7 +311,7 @@ public class ScoreCoral extends Command {
         case DRIVE_IN:
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (driveToPose.atGoal()) {
+          } else if (driveToPose.atGoal() || (RobotContainer.isScoringTriggerHeld() && level == Level.L1)) {
             if (level == Level.L4) {
               times.start();
               if (times.hasElapsed(0.1)) {
@@ -323,9 +323,6 @@ public class ScoreCoral extends Command {
               superstructure.requestScoreCoral(level);
             }
 
-            if (RobotContainer.isScoringTriggerHeld()) {
-              superstructure.requestScoreCoral(level);
-            }
             if (superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()
                 && !superstructure.isCoralHeld()
