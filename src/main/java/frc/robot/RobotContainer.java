@@ -118,11 +118,6 @@ public class RobotContainer {
 
       if (Constants.driveMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-          lastScoreCoral = new ScoreCoral(superstructure, Level.L1, drive, false);
-          scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false);
-          scoreL2Coral = new ScoreCoral(superstructure, Level.L2, drive, false);
-          scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
-          scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
 
         GyroIOBoron gyro = new GyroIOBoron();
         drive =
@@ -199,7 +194,12 @@ public class RobotContainer {
 
     intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
     superstructure = new Superstructure(endEffector, arm, elevator, intakeSuperstructure, vision);
-
+    
+    lastScoreCoral = new ScoreCoral(superstructure, Level.L1, drive, false);
+    scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false);
+    scoreL2Coral = new ScoreCoral(superstructure, Level.L2, drive, false);
+    scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
+    scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
     // Configure the button bindings
     configureButtonBindings();
   }
