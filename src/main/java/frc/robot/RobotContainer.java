@@ -256,10 +256,6 @@ public class RobotContainer {
                     scoreL2Coral.schedule();
                     lastScoreCoral = scoreL2Coral;
                   }
-                  if (lastScoreCoral.isScheduled() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
-                    requestedAlgaeDescore = true;
-                  }
-              
                 }));
     driver
         .y()
@@ -272,35 +268,19 @@ public class RobotContainer {
                     scoreL3Coral.schedule();
                     lastScoreCoral = scoreL3Coral;
                   }
-                  if (lastScoreCoral.isScheduled() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
-                    requestedAlgaeDescore = true;
-                  }
                 }));
-                
-    driver.y() .whileTrue(
-      new InstantCommand( () ->{
-      if (requestedAlgaeDescore && !lastScoreCoral.isScheduled()) {
+
+    if (lastScoreCoral.isScheduled() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
+      requestedAlgaeDescore = true;
+    }
+    if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()) {
+      requestedAlgaeDescore = false;
+    }
+
+    if (requestedAlgaeDescore && !lastScoreCoral.isScheduled()) {
       new DescoreAlgae(superstructure, drive).schedule();
       requestedAlgaeDescore = false;
-    }}));
-
-    driver.x() .whileTrue(
-      new InstantCommand( () ->{
-      if (requestedAlgaeDescore && !lastScoreCoral.isScheduled()) {
-      new DescoreAlgae(superstructure, drive).schedule();
-      requestedAlgaeDescore = false;
-    }}));
-
-    driver.y() .onFalse(
-      new InstantCommand( () ->{
-      requestedAlgaeDescore = false;
-  }));
-
-    driver.x() .onFalse(
-      new InstantCommand( () ->{
-      requestedAlgaeDescore = false;
-  }));
-    
+    }
 
     driver
         .b()
