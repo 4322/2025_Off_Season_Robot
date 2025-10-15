@@ -208,11 +208,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     drive.setDefaultCommand(new DriveManual(drive));
 
-    lastScoreCoral = new ScoreCoral(superstructure, Level.L1, drive, false);
     scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false);
     scoreL2Coral = new ScoreCoral(superstructure, Level.L2, drive, false);
     scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
     scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
+    lastScoreCoral = scoreL1Coral;
     // The commands deal with the on False logic if the button is no longer held
 
     driver
@@ -275,10 +275,11 @@ public class RobotContainer {
     }
     if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()) {
       requestedAlgaeDescore = false;
-    } 
+    }
 
     if (requestedAlgaeDescore && !lastScoreCoral.isScheduled()) {
       new DescoreAlgae(superstructure, Level.L3, drive).schedule();
+      requestedAlgaeDescore = false;
     }
 
     driver

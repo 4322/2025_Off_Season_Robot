@@ -22,6 +22,7 @@ import frc.robot.subsystems.vision.VisionIO.SingleTagPoseObservation;
 import frc.robot.util.GeomUtil;
 import frc.robot.util.PolynomialRegression;
 import frc.robot.util.ReefStatus;
+import frc.robot.util.ReefStatus.AlgaeLevel;
 import frc.robot.util.ReefStatus.ClosestReefPipe;
 import frc.robot.util.ReefStatus.L1Zone;
 import java.util.LinkedList;
@@ -38,6 +39,7 @@ public class Vision extends SubsystemBase {
   private double robotToReefFace;
   public ClosestReefPipe closestReefPipe;
   public L1Zone l1Zone;
+  public AlgaeLevel algaeLevel;
   public int tagId;
 
   private PolynomialRegression xyStdDevModel =
@@ -404,7 +406,6 @@ public class Vision extends SubsystemBase {
     }
     Translation2d robotTranslation = drive.getPose().getTranslation();
     double reefCenterToRobotDeg = robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
-
     if (-30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 30) {
       robotToReefFace = 180;
       if (-27 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 27) {
@@ -416,6 +417,11 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.AB.idRed
               : FieldConstants.ReefFaceTag.GH.idBlue;
+      if (Robot.alliance == DriverStation.Alliance.Red) {
+        algaeLevel = AlgaeLevel.L3;
+      } else {
+        algaeLevel = AlgaeLevel.L2;
+      }
     } else if (30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 90) {
       robotToReefFace = -120;
       if (33 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 87) {
@@ -427,6 +433,11 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.CD.idRed
               : FieldConstants.ReefFaceTag.IJ.idBlue;
+      if (Robot.alliance == DriverStation.Alliance.Red) {
+        algaeLevel = AlgaeLevel.L2;
+      } else {
+        algaeLevel = AlgaeLevel.L3;
+      }
     } else if (90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 150) {
       robotToReefFace = -60;
       if (93 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 147) {
@@ -438,6 +449,12 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.EF.idRed
               : FieldConstants.ReefFaceTag.KL.idBlue;
+
+      if (Robot.alliance == DriverStation.Alliance.Red) {
+        algaeLevel = AlgaeLevel.L3;
+      } else {
+        algaeLevel = AlgaeLevel.L2;
+      }
     } else if ((150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 180)
         || (-150 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -180)) {
       robotToReefFace = 0;
@@ -451,6 +468,11 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.GH.idRed
               : FieldConstants.ReefFaceTag.AB.idBlue;
+      if (Robot.alliance == DriverStation.Alliance.Blue) {
+        algaeLevel = AlgaeLevel.L3;
+      } else {
+        algaeLevel = AlgaeLevel.L2;
+      }
     } else if (-150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -90) {
       robotToReefFace = 60;
       if (-153 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -87) {
@@ -462,6 +484,11 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.IJ.idRed
               : FieldConstants.ReefFaceTag.CD.idBlue;
+      if (Robot.alliance == DriverStation.Alliance.Red) {
+        algaeLevel = AlgaeLevel.L3;
+      } else {
+        algaeLevel = AlgaeLevel.L2;
+      }
     } else if (-90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -30) {
       robotToReefFace = 120;
       if (-93 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -27) {
@@ -473,39 +500,45 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.KL.idRed
               : FieldConstants.ReefFaceTag.EF.idBlue;
+      if (Robot.alliance == DriverStation.Alliance.Blue) {
+        algaeLevel = AlgaeLevel.L3;
+      } else {
+        algaeLevel = AlgaeLevel.L2;
+      }
+
+      Translation2d convertedRobotTrans =
+          robotTranslation.rotateAround(
+              reefCenterPoint,
+              Rotation2d.fromDegrees(robotToReefFace).rotateBy(Rotation2d.k180deg).unaryMinus());
+
+      if (convertedRobotTrans.minus(reefCenterPoint).getAngle().getDegrees() >= 0) {
+        closestReefPipe = ClosestReefPipe.RIGHT;
+      } else {
+        closestReefPipe = ClosestReefPipe.LEFT;
+      }
+
+      if (convertedRobotTrans.minus(leftL1Split).getAngle().getDegrees() < 0) {
+        l1Zone = L1Zone.LEFT;
+      } else if (convertedRobotTrans.minus(rightL1Split).getAngle().getDegrees() > 0) {
+        l1Zone = L1Zone.RIGHT;
+      } else {
+        l1Zone = L1Zone.MIDDLE;
+      }
+
+      Logger.recordOutput("ReefStatus/ReefFaceAmbiguity", reefFaceAmbiguity);
+      Logger.recordOutput("ReefStatus/RobotFaceAngle", robotToReefFace);
+      Logger.recordOutput("ReefStatus/ClosestReefPipe", closestReefPipe.toString());
+      Logger.recordOutput("ReefStatus/ClosestL1Zone", l1Zone.toString());
+      Logger.recordOutput("ReefStatus/TagID", tagId);
+
+      return new ReefStatus(
+          reefFaceAmbiguity,
+          reefPipeAmbiguity,
+          Rotation2d.fromDegrees(robotToReefFace),
+          closestReefPipe,
+          l1Zone,
+          algaeLevel,
+          tagId);
     }
-
-    Translation2d convertedRobotTrans =
-        robotTranslation.rotateAround(
-            reefCenterPoint,
-            Rotation2d.fromDegrees(robotToReefFace).rotateBy(Rotation2d.k180deg).unaryMinus());
-
-    if (convertedRobotTrans.minus(reefCenterPoint).getAngle().getDegrees() >= 0) {
-      closestReefPipe = ClosestReefPipe.RIGHT;
-    } else {
-      closestReefPipe = ClosestReefPipe.LEFT;
-    }
-
-    if (convertedRobotTrans.minus(leftL1Split).getAngle().getDegrees() < 0) {
-      l1Zone = L1Zone.LEFT;
-    } else if (convertedRobotTrans.minus(rightL1Split).getAngle().getDegrees() > 0) {
-      l1Zone = L1Zone.RIGHT;
-    } else {
-      l1Zone = L1Zone.MIDDLE;
-    }
-
-    Logger.recordOutput("ReefStatus/ReefFaceAmbiguity", reefFaceAmbiguity);
-    Logger.recordOutput("ReefStatus/RobotFaceAngle", robotToReefFace);
-    Logger.recordOutput("ReefStatus/ClosestReefPipe", closestReefPipe.toString());
-    Logger.recordOutput("ReefStatus/ClosestL1Zone", l1Zone.toString());
-    Logger.recordOutput("ReefStatus/TagID", tagId);
-
-    return new ReefStatus(
-        reefFaceAmbiguity,
-        reefPipeAmbiguity,
-        Rotation2d.fromDegrees(robotToReefFace),
-        closestReefPipe,
-        l1Zone,
-        tagId);
   }
 }
