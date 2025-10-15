@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,7 +15,6 @@ import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
-import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -236,7 +238,7 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case END_EFFECTOR_CORAL_PICKUP:
-        elevator.idle();
+        Logger.recordOutput("Superstructure/CoralStopIsDisabled", coralElevatorPickUp);
         arm.idle();
         endEffector.intakeCoral();
 
@@ -244,8 +246,7 @@ public class Superstructure extends SubsystemBase {
           coralPickupTimer.start();
         }
 
-        if (!coralElevatorPickUp
-            && coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
+        if (coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
           elevator.pickupCoral();
           coralElevatorPickUp = true;
         }
