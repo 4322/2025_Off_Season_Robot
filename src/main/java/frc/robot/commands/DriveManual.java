@@ -115,8 +115,9 @@ public class DriveManual extends Command {
               firstReefLock = true;
               currentReefLockDeg = newReefLockDeg;
             }
-            if (RotationDeg > Constants.Drive.reefLockToleranceDegrees
-                || RotationDeg < -(Constants.Drive.reefLockToleranceDegrees)) {
+            if ((RotationDeg > Constants.Drive.reefLockToleranceDegrees
+                    || RotationDeg < -Constants.Drive.reefLockToleranceDegrees)
+                && Math.hypot(dx, dy) > 0.01) {
               currentReefLockDeg = newReefLockDeg;
             }
             rot =

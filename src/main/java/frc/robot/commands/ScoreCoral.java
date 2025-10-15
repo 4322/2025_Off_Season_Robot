@@ -394,7 +394,7 @@ public class ScoreCoral extends Command {
     superstructure.enableGlobalPose();
     running = false;
     drive.requestFieldRelativeMode();
-    
+
     Logger.recordOutput("ScoreCoral/state", "Done");
   }
 
