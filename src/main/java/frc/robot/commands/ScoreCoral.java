@@ -235,10 +235,6 @@ public class ScoreCoral extends Command {
     Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
     Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
 
-    if (RobotContainer.isScoringTriggerHeld()) {
-      superstructure.requestScoreCoral(level);
-    }
-
     if (superstructure.isAutoOperationMode()) {
 
       if (state == ScoreState.SAFE_DISTANCE) {

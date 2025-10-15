@@ -270,14 +270,14 @@ public class RobotContainer {
                   }
                 }));
 
-    if (lastScoreCoral.isFinished() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
+    if (lastScoreCoral.isScheduled() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
       requestedAlgaeDescore = true;
     }
     if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()) {
       requestedAlgaeDescore = false;
     } 
 
-    if (requestedAlgaeDescore && !lastScoreCoral.isFinished()) {
+    if (requestedAlgaeDescore && !lastScoreCoral.isScheduled()) {
       new DescoreAlgae(superstructure, Level.L3, drive).schedule();
     }
 
