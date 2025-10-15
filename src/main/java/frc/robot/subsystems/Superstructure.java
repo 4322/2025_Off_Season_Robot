@@ -110,6 +110,7 @@ public class Superstructure extends SubsystemBase {
     Logger.recordOutput("Superstructure/currentState", state.toString());
     Logger.recordOutput("Superstructure/currentAutoState", mode.toString());
     Logger.recordOutput("Superstructure/requestedLevel", level);
+
     if (requestEject) {
       state = Superstates.EJECT;
     }
@@ -133,10 +134,13 @@ public class Superstructure extends SubsystemBase {
       case IDLE:
         if (requestEject) {
           state = Superstates.EJECT;
-        } else if (intakeSuperstructure.isCoralDetectedPickupArea()
-            && arm.atSetpoint()
-            && elevator.atSetpoint()) {
-          state = Superstates.END_EFFECTOR_CORAL_PICKUP;
+        } else if (intakeSuperstructure.isCoralDetectedPickupArea()) {
+          endEffector.idle();
+          elevator.idle();
+          arm.idle();
+          if (arm.atSetpoint() && elevator.atSetpoint()) {
+            state = Superstates.END_EFFECTOR_CORAL_PICKUP;
+          }
         } else if (requestIntakeAlgaeFloor) {
           state = Superstates.INTAKE_ALGAE_FLOOR;
         } else if (requestDescoreAlgae) {
@@ -232,6 +236,7 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case END_EFFECTOR_CORAL_PICKUP:
+        elevator.idle();
         arm.idle();
         endEffector.intakeCoral();
 
@@ -247,6 +252,7 @@ public class Superstructure extends SubsystemBase {
 
         if (coralPickupTimer.hasElapsed(Constants.Elevator.coralDetectionHeightThresholdSecs)) {
           if (endEffector.hasCoral()) {
+            coralElevatorPickUp = false;
             coralPickupTimer.stop();
             coralPickupTimer.reset();
             state = Superstates.CORAL_HELD;
@@ -255,10 +261,10 @@ public class Superstructure extends SubsystemBase {
               && !intakeSuperstructure.isCoralDetectedPickupArea()
               && arm.atSetpoint()
               && getElevatorHeight() >= Constants.Elevator.minElevatorSafeHeightMeters) {
+            coralElevatorPickUp = false;
             coralPickupTimer.stop();
             coralPickupTimer.reset();
             state = Superstates.IDLE;
-            coralElevatorPickUp = false;
           }
         }
 
