@@ -192,7 +192,7 @@ public final class Constants {
     public static final double scoringAlgaeDeg = 142;
     public static final double scoringBacksideAlgaeDeg = 218;
 
-    public static final double descoringAlgaeDeg = 75.682;
+    public static final double descoringAlgaeDeg = 90.0;
     public static final double safeBargeRetractDeg = 180;
     // To the encoder 0 is horizontal but to us its straight down
     public static final double OffsetEncoderDeg = -90;
@@ -237,8 +237,8 @@ public final class Constants {
     public static final double elevatorHeightToleranceMeters = 0.01;
 
     public static final double algaeGroundHeightMeters = 0.00635;
-    public static final double algaeReefL2HeightMeters = 0.5283249 + (3 * (0.0254));
-    public static final double algaeReefL3HeightMeters = 0.8739758746 + (4 * (0.0254));
+    public static final double algaeReefL2HeightMeters = 0.384498;
+    public static final double algaeReefL3HeightMeters = 0.770257;
 
     public static final double prescoreCoralL1HeightMeters = 0.4811766;
     public static final double prescoreCoralL2HeightMeters = 0.10647135;
