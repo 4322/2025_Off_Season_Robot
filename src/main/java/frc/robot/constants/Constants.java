@@ -84,7 +84,7 @@ public final class Constants {
     public static final double angularErrorToleranceDegPerSec = 20.0;
     public static final double driveDeadband = 0.1;
     public static final double rotDeadband = 0.1;
-    public static final double reefLockToleranceDegrees = 6;
+    public static final double reefLockToleranceDegrees = 1;
 
     public static final double pseudoAutoRotatekP = 6;
     public static final double pseudoAutoRotatekI = 0;
@@ -93,7 +93,7 @@ public final class Constants {
     public static final double inhibitPseudoAutoRotateDegPerSec = 4;
     public static final double pseudoAutoRotateMinMetersPerSec =
         0.6; // disable below this speed for fine adjustments
-    public static final double minWheelRadPerSec = 0.01 / DrivetrainConstants.wheelRadius;
+    public static final double minWheelRadPerSec = 0.005 / DrivetrainConstants.wheelRadius;
 
     public static final double L234DistanceFromReefInches = 7;
     public static final double L1DistanceFromReefInches = 2;
