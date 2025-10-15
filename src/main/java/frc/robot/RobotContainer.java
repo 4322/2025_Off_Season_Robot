@@ -266,7 +266,7 @@ public class RobotContainer {
       requestedAlgaeDescore = false;
     }
 
-    if (requestedAlgaeDescore && scoreCoral.isRunning()) {
+    if (requestedAlgaeDescore && !scoreCoral.isRunning()) {
       new DescoreAlgae(superstructure, Level.L3, drive).schedule();
     }
     driver
