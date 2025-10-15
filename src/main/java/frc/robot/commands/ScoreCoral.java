@@ -368,6 +368,7 @@ public class ScoreCoral extends Command {
       if (driveToPose.isScheduled()) {
         driveToPose.cancel();
       }
+      drive.requestAutoRotateMode(robotReefAngle);
       superstructure.requestPrescoreCoral(level);
       if (RobotContainer.isScoringTriggerHeld()) {
         superstructure.requestScoreCoral(level);
@@ -383,15 +384,17 @@ public class ScoreCoral extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    if (driveToPose.isScheduled()) {
+      driveToPose.cancel();
+    }
+
     if (!chainedAlgaeMode) {
       superstructure.requestIdle();
     }
     superstructure.enableGlobalPose();
     running = false;
-
-    if (driveToPose.isScheduled()) {
-      driveToPose.cancel();
-    }
+    drive.requestFieldRelativeMode();
+    
     Logger.recordOutput("ScoreCoral/state", "Done");
   }
 
