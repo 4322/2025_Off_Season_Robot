@@ -345,7 +345,7 @@ public class ScoreCoral extends Command {
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           }
-          if (driveToPose.atGoal()) {
+          if (driveToPose.atGoal() || isInSafeArea()) {
             running = false;
           }
 
