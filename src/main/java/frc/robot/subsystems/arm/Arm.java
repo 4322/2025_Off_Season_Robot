@@ -112,8 +112,8 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = Constants.Arm.descoringAlgaeDeg;
   }
 
-  public void scoreAlgae() {
-    if (RobotContainer.getSuperstructure().scoreBackSideBarge()) {
+  public void scoreAlgae(boolean scoreBackSide) {
+    if (scoreBackSide) {
       requestedSetpoint = Constants.Arm.scoringBacksideAlgaeDeg;
     } else {
       requestedSetpoint = Constants.Arm.scoringAlgaeDeg;

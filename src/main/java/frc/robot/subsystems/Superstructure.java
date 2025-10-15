@@ -32,6 +32,7 @@ public class Superstructure extends SubsystemBase {
   private boolean ishomed = false;
   private Timer coralPickupTimer = new Timer();
   private boolean coralElevatorPickUp = false;
+  private boolean scoreBackSide = false;
 
   public enum Superstates {
     HOMELESS,
@@ -188,7 +189,7 @@ public class Superstructure extends SubsystemBase {
       case ALGAE_PRESCORE:
         elevator.scoreAlgae();
         if (elevator.atSetpoint()) {
-          arm.scoreAlgae();
+          arm.scoreAlgae(scoreBackSide);
         }
 
         if (requestIdle) {
@@ -368,14 +369,6 @@ public class Superstructure extends SubsystemBase {
     return arm.atSetpoint();
   }
 
-  public boolean scoreBackSideBarge() {
-    if (DriverStation.isAutonomous()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   public boolean elevatorAtSetpoint() {
     return elevator.atSetpoint();
   }
@@ -394,9 +387,10 @@ public class Superstructure extends SubsystemBase {
     requestEject = true;
   }
 
-  public void requestAlgaePrescore() {
+  public void requestAlgaePrescore(boolean prescoreBackSide) {
     unsetAllRequests();
     requestAlgaePrescore = true;
+    this.scoreBackSide = prescoreBackSide;
   }
 
   public void requestAlgaeScore() {
