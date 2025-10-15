@@ -251,7 +251,7 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new DescoreAlgae(superstructure, Level.L2, drive).schedule();
+                    new DescoreAlgae(superstructure, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     scoreL2Coral.schedule();
                     lastScoreCoral = scoreL2Coral;
@@ -263,7 +263,7 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new DescoreAlgae(superstructure, Level.L3, drive).schedule();
+                    new DescoreAlgae(superstructure, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     scoreL3Coral.schedule();
                     lastScoreCoral = scoreL3Coral;
@@ -278,7 +278,7 @@ public class RobotContainer {
     }
 
     if (requestedAlgaeDescore && !lastScoreCoral.isScheduled()) {
-      new DescoreAlgae(superstructure, Level.L3, drive).schedule();
+      new DescoreAlgae(superstructure, drive).schedule();
       requestedAlgaeDescore = false;
     }
 
