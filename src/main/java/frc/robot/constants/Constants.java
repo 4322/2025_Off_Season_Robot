@@ -5,6 +5,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -84,7 +85,7 @@ public final class Constants {
     public static final double angularErrorToleranceDegPerSec = 20.0;
     public static final double driveDeadband = 0.1;
     public static final double rotDeadband = 0.1;
-    public static final double reefLockToleranceDegrees = 1;
+    public static final double reefLockToleranceDegrees = 6;
 
     public static final double pseudoAutoRotatekP = 6;
     public static final double pseudoAutoRotatekI = 0;

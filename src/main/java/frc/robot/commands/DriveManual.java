@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -92,6 +94,7 @@ public class DriveManual extends Command {
             if (currentReefLockDeg != newReefLockDeg && !reefStatus.getReefFaceAmbiguity()) {
               currentReefLockDeg = newReefLockDeg;
             }
+
           } else {
             Translation2d reefCenterPoint;
 
@@ -103,16 +106,19 @@ public class DriveManual extends Command {
             Translation2d robotTranslation = drive.getPose().getTranslation();
             double reefCenterToRobotDeg =
                 robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
-            double newreefLockDeg = (reefCenterToRobotDeg + 180);
+            double newReefLockDeg = (reefCenterToRobotDeg + 180);
+
+            double RotationDeg = (currentReefLockDeg - newReefLockDeg);
+
+            Logger.recordOutput("WhatTheTolorance?", RotationDeg);
             // Lock heading to reef face first time we engage mode
             if (!firstReefLock) {
               firstReefLock = true;
-              currentReefLockDeg = newreefLockDeg;
+              currentReefLockDeg = newReefLockDeg;
             }
-            if ((newreefLockDeg - currentReefLockDeg) > Constants.Drive.reefLockToleranceDegrees
-                || (newreefLockDeg - currentReefLockDeg)
-                    < -(Constants.Drive.reefLockToleranceDegrees)) {
-              currentReefLockDeg = newreefLockDeg;
+            if (RotationDeg > Constants.Drive.reefLockToleranceDegrees
+                || RotationDeg < -(Constants.Drive.reefLockToleranceDegrees)) {
+              currentReefLockDeg = newReefLockDeg;
             }
             rot =
                 autoRotateController.calculate(
