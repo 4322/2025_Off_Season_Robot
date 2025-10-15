@@ -235,6 +235,10 @@ public class ScoreCoral extends Command {
     Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
     Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
 
+    if (RobotContainer.isScoringTriggerHeld()) {
+      superstructure.requestScoreCoral(level);
+    }
+
     if (superstructure.isAutoOperationMode()) {
 
       if (state == ScoreState.SAFE_DISTANCE) {
@@ -293,26 +297,21 @@ public class ScoreCoral extends Command {
                       new Rotation2d()));
 
           currentPoseRequest = () -> safeDistPose;
-
           if (!driveToPose.isScheduled()) {
             driveToPose.schedule();
           }
-          
-          superstructure.requestPrescoreCoral(level);
-
-          if ((driveToPose.atGoal() && (superstructure.armAtSetpoint()
-          && superstructure.elevatorAtSetpoint())) || (superstructure.armAtSetpoint()
-          && superstructure.elevatorAtSetpoint())){
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (superstructure.getState() == Superstates.PRESCORE_CORAL
-              && superstructure.armAtSetpoint()
-              && superstructure.elevatorAtSetpoint()) {
-            currentPoseRequest = () -> targetScoringPose;
-            state = ScoreState.DRIVE_IN;
-          }
-        }
+          } else if (isInSafeArea() || driveToPose.atGoal()) {
 
+            superstructure.requestPrescoreCoral(level);
+            if (superstructure.getState() == Superstates.PRESCORE_CORAL
+                && superstructure.armAtSetpoint()
+                && superstructure.elevatorAtSetpoint()) {
+              currentPoseRequest = () -> targetScoringPose;
+              state = ScoreState.DRIVE_IN;
+            }
+          }
           break;
         case DRIVE_IN:
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
@@ -326,9 +325,6 @@ public class ScoreCoral extends Command {
                 times.reset();
               }
             } else {
-              superstructure.requestScoreCoral(level);
-            }
-            if (RobotContainer.isScoringTriggerHeld()) {
               superstructure.requestScoreCoral(level);
             }
             if (superstructure.armAtSetpoint()
@@ -375,10 +371,6 @@ public class ScoreCoral extends Command {
       }
 
       superstructure.requestPrescoreCoral(level);
-
-      if (RobotContainer.isScoringTriggerHeld()) {
-        superstructure.requestScoreCoral(level);
-      }
     }
   }
 
@@ -407,10 +399,6 @@ public class ScoreCoral extends Command {
         && !driver.x().getAsBoolean()
         && !driver.y().getAsBoolean()
         && !driver.b().getAsBoolean();
-  }
-
-  public boolean isRunning() {
-    return running;
   }
 
   public boolean isInSafeArea() {
