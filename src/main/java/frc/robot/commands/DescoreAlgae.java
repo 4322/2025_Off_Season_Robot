@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
+import static frc.robot.RobotContainer.driver;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -11,7 +9,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
@@ -19,6 +16,8 @@ import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ReefStatus;
 import frc.robot.util.ReefStatus.AlgaeLevel;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class DescoreAlgae extends Command {
   private final Superstructure superstructure;

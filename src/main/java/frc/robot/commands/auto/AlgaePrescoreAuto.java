@@ -20,11 +20,11 @@ public class AlgaePrescoreAuto extends Command {
 
   @Override
   public void initialize() {
-    if (Math.abs(drive.getRotation().minus(Rotation2d.kZero).getDegrees()) < Math.abs(drive.getRotation().minus(Rotation2d.k180deg).getDegrees())) {
+    if (Math.abs(drive.getRotation().minus(Rotation2d.kZero).getDegrees())
+        < Math.abs(drive.getRotation().minus(Rotation2d.k180deg).getDegrees())) {
       drive.requestAutoRotateMode(Rotation2d.kZero);
       superstructure.requestAlgaePrescore(Robot.alliance == DriverStation.Alliance.Red);
-    }
-    else {
+    } else {
       drive.requestAutoRotateMode(Rotation2d.k180deg);
       superstructure.requestAlgaePrescore(Robot.alliance == DriverStation.Alliance.Blue);
     }
