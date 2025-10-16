@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
@@ -312,7 +311,7 @@ public class ScoreCoral extends Command {
         case DRIVE_IN:
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (driveToPose.withinTolerance(Constants.AutoScoring.coralSafeDistTolerance) || (RobotContainer.isScoringTriggerHeld() && level == Level.L1)) {
+          } else if (driveToPose.atGoal() || (RobotContainer.isScoringTriggerHeld() && level == Level.L1)) {
             if (level == Level.L4) {
               times.start();
               if (times.hasElapsed(0.1)) {
