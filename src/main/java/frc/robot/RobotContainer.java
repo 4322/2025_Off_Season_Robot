@@ -241,7 +241,7 @@ public class RobotContainer {
                 () -> {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new AlgaeIntakeGround(superstructure).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae()) && !lastScoreCoral.isScheduled()) {
                     scoreL1Coral.schedule();
                     lastScoreCoral = scoreL1Coral;
                   }
@@ -253,7 +253,7 @@ public class RobotContainer {
                 () -> {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, drive).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae()) && !lastScoreCoral.isScheduled()) {
                     new OrangeSequentialCommandGroup(
                             scoreL2Coral,
                             new DescoreAlgae(superstructure, drive)
@@ -272,7 +272,7 @@ public class RobotContainer {
                   } else {
                     if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                       new DescoreAlgae(superstructure, drive).schedule();
-                    } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
+                    } else if ((endEffector.hasCoral() && !endEffector.hasAlgae()) && !lastScoreCoral.isScheduled()) {
                       scoreL3Coral.schedule();
                       lastScoreCoral = scoreL3Coral;
                     }
@@ -286,7 +286,7 @@ public class RobotContainer {
                 () -> {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
-                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae() && !lastScoreCoral.isScheduled()) {
                     new OrangeSequentialCommandGroup(
                             scoreL4Coral,
                             new DescoreAlgae(superstructure, drive)
