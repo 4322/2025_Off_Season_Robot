@@ -59,6 +59,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
+import frc.robot.util.OrangeSequentialCommandGroup;
 import frc.robot.util.ReefStatus;
 
 /**
@@ -253,7 +254,11 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    scoreL2Coral.schedule();
+                    new OrangeSequentialCommandGroup(
+                            scoreL2Coral,
+                            new DescoreAlgae(superstructure, drive)
+                                .onlyIf(() -> driver.y().getAsBoolean()))
+                        .schedule();
                     lastScoreCoral = scoreL2Coral;
                   }
                 }));
@@ -262,11 +267,15 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new DescoreAlgae(superstructure, drive).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    scoreL3Coral.schedule();
-                    lastScoreCoral = scoreL3Coral;
+                  if (lastScoreCoral.isScheduled()) {
+                    lastScoreCoral.chainAlgae(true);
+                  } else {
+                    if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                      new DescoreAlgae(superstructure, drive).schedule();
+                    } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
+                      scoreL3Coral.schedule();
+                      lastScoreCoral = scoreL3Coral;
+                    }
                   }
                 }));
 
@@ -278,7 +287,11 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    scoreL4Coral.schedule();
+                    new OrangeSequentialCommandGroup(
+                            scoreL4Coral,
+                            new DescoreAlgae(superstructure, drive)
+                                .onlyIf(() -> driver.y().getAsBoolean()))
+                        .schedule();
                     lastScoreCoral = scoreL4Coral;
                   }
                 }));
