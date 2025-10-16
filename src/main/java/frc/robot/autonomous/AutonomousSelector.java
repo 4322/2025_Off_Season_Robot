@@ -39,8 +39,7 @@ public class AutonomousSelector {
         "THREE_CORAL_RIGHT",
         new ThreeCoralRight(drive, superstructure, intakeSuperstructure, vision));
     autonomousSelector.addOption(
-        "ONE_CORAL_ONE_ALGAE_CENTER",
-        new OneCoralOneAlgaeCenter(drive, superstructure, intakeSuperstructure, vision));
+        "ONE_CORAL_ONE_ALGAE_CENTER", new OneCoralOneAlgaeCenter(drive, superstructure));
     autonomousSelector.addOption(
         "TWO_CORAL_ONE_ALGAE_LEFT",
         new TwoCoralOneAlgaeLeft(drive, superstructure, intakeSuperstructure, vision));

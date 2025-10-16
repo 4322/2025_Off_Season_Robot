@@ -4,24 +4,18 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Robot;
 import frc.robot.commands.DescoreAlgae;
 import frc.robot.commands.ScoreCoral;
-import frc.robot.commands.auto.AlgaePrescoreAuto;
 import frc.robot.commands.auto.AlgaeScoreAuto;
-import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.OrangeSequentialCommandGroup;
 
 public class OneCoralOneAlgaeCenter extends OrangeSequentialCommandGroup {
-  public OneCoralOneAlgaeCenter(
-      Drive drive,
-      Superstructure superstructure,
-      IntakeSuperstructure intakeSuperstructure,
-      Vision vision) {
+  public OneCoralOneAlgaeCenter(Drive drive, Superstructure superstructure) {
     setName("ONE_CORAL_ONE_ALGAE_CENTER");
     addCommands(
         new InstantCommand(
@@ -35,8 +29,9 @@ public class OneCoralOneAlgaeCenter extends OrangeSequentialCommandGroup {
             }),
         new ScoreCoral(superstructure, Level.L4, drive, true),
         new DescoreAlgae(superstructure, drive),
-        AutoBuilder.followPath(Robot.GulfHotelToCenterBargeBackwards),
-        new AlgaePrescoreAuto(superstructure, drive),
+        new ParallelCommandGroup(
+            AutoBuilder.followPath(Robot.GulfHotelToCenterBargeBackwards),
+            new AlgaeScoreAuto(superstructure, drive)),
         new AlgaeScoreAuto(superstructure, drive),
         AutoBuilder.followPath(Robot.CenterAlgaeScoreBackwardsToLeave));
   }

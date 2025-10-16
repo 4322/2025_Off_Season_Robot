@@ -414,6 +414,10 @@ public class FieldConstants {
             + robotBumperToCenter; // TODO: Only change the number which represents distance between
     // face of reef and front of robot bumper
 
+    // TODO: Only change the number which represents distance from inside of auto starting line to
+    // edge of robot bumper
+    private static final double autoBargePreScoreDistance = Units.inchesToMeters(0);
+
     public static final double safeDistFromBranchScoringPos =
         reefSafeDistance - scoringDistanceFromReef;
     public static final double safeDistFromTroughScoringPos =
@@ -487,5 +491,10 @@ public class FieldConstants {
         leftReefBranchFaceBlue.plus(new Translation2d(descoreAlgaeDriveInDist, 0.164338));
     public static final Translation2d descoreAlgaeDriveInRed =
         leftReefBranchFaceRed.plus(new Translation2d(descoreAlgaeDriveInDist, 0.164338));
+
+    public static final double blueAutoBargePreScoreX =
+        startingLineX - robotBumperToCenter - autoBargePreScoreDistance;
+    public static final double redAutoBargePreScoreX =
+        (fieldLength - startingLineX) + robotBumperToCenter + autoBargePreScoreDistance;
   }
 }
