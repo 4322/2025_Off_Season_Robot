@@ -414,6 +414,9 @@ public class FieldConstants {
             + robotBumperToCenter; // TODO: Only change the number which represents distance between
     // face of reef and front of robot bumper
 
+    // TODO: Only change this number which starts from reef safe distance and goes further back
+    public static final double extraDriveBackDistance = Units.inchesToMeters(12);
+
     // TODO: Only change the number which represents distance from inside of auto starting line to
     // edge of robot bumper
     private static final double autoBargePreScoreDistance = Units.inchesToMeters(0);
