@@ -257,7 +257,8 @@ public class RobotContainer {
                     new DescoreAlgae(superstructure, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new OrangeSequentialCommandGroup(
-                            scoreL2Coral, descoreAlgae.onlyIf(() -> driver.y().getAsBoolean()))
+                            new ScoreCoral(superstructure, Level.L2, drive, false),
+                            descoreAlgae.onlyIf(() -> driver.y().getAsBoolean()))
                         .schedule();
                     lastScoreCoral = scoreL2Coral;
                   }
@@ -288,7 +289,8 @@ public class RobotContainer {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new OrangeSequentialCommandGroup(
-                            scoreL4Coral, descoreAlgae.onlyIf(() -> driver.y().getAsBoolean()))
+                            new ScoreCoral(superstructure, Level.L4, drive, false),
+                            descoreAlgae.onlyIf(() -> driver.y().getAsBoolean()))
                         .schedule();
                     lastScoreCoral = scoreL4Coral;
                   }
