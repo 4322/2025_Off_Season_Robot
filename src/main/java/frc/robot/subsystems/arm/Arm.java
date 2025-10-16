@@ -45,7 +45,7 @@ public class Arm extends SubsystemBase {
             Double newPos =
                 BabyAlchemist.run(0, io.getNitrate(), "Arm", inputs.PositionDegrees, "degrees");
             if (newPos != null) {
-              io.requestPosition(newPos);
+              io.requestPositionCoral(newPos);
             }
             break;
           case DISABLED:
@@ -79,7 +79,11 @@ public class Arm extends SubsystemBase {
             }
 
             if (prevSetpoint != newSetpoint || Constants.continuousNitrateRequestsEnabled) {
-              io.requestPosition(newSetpoint);
+              if (RobotContainer.getSuperstructure().isAlgaeHeld()) {
+                io.requestPositionAlgae(newSetpoint);
+              } else {
+                io.requestPositionCoral(newSetpoint);
+              }
               prevSetpoint = newSetpoint;
             }
         }

@@ -200,10 +200,12 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double AccelerationLimit = 12.0;
-    public static final double DeaccelerationLimit = 5.0;
-    public static final double VelocityLimit = 4.0;
-    public static final double slowVelocityLimit = 0.1;
+    public static final double accelerationLimitCoral = 12.0;
+    public static final double deaccelerationLimitCoral = 5.0;
+    public static final double velocityLimitCoral = 4.0;
+    public static final double accelerationLimitAlgae = 2.5;
+    public static final double deaccelerationLimitAlgae = 1.5;
+    public static final double velocityLimitAlgae = 2.0;
   }
 
   public static class Elevator {

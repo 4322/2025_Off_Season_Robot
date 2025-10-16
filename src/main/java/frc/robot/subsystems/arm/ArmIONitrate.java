@@ -27,9 +27,9 @@ public class ArmIONitrate implements ArmIO {
   private final Canandmag armEncoder;
   private double lastRequestedPosDeg;
 
-  private final PIDPositionRequest PIDPositionRequest =
+  private final PIDPositionRequest PIDPositionRequestCoral =
       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
-  private final PIDPositionRequest SlowPIDPositionRequest =
+  private final PIDPositionRequest PIDPositionRequestAlgae =
       new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
   public ArmIONitrate() {
@@ -43,13 +43,27 @@ public class ArmIONitrate implements ArmIO {
             .setFeedforwardMode(PIDFeedforwardMode.kArm)
             .setGravitationalFeedforward(Constants.Arm.kG)
             .setMinwrapConfig(new MinwrapConfig.Disabled())
-            .setMotionProfileAccelLimit(Constants.Arm.AccelerationLimit)
-            .setMotionProfileDeaccelLimit(Constants.Arm.DeaccelerationLimit)
-            .setMotionProfileVelocityLimit(Constants.Arm.VelocityLimit)
+            .setMotionProfileAccelLimit(Constants.Arm.accelerationLimitCoral)
+            .setMotionProfileDeaccelLimit(Constants.Arm.deaccelerationLimitCoral)
+            .setMotionProfileVelocityLimit(Constants.Arm.velocityLimitCoral)
             .setISaturation(Constants.Arm.iSat)
             .setIZone(Constants.Arm.iZone)
             .setRampLimit(240),
         PIDConfigSlot.kSlot0);
+
+    armConfig.setPIDSettings(
+        PIDSettings.defaultSettings(PIDConfigSlot.kSlot1)
+            .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
+            .setFeedforwardMode(PIDFeedforwardMode.kArm)
+            .setGravitationalFeedforward(Constants.Arm.kG)
+            .setMinwrapConfig(new MinwrapConfig.Disabled())
+            .setMotionProfileAccelLimit(Constants.Arm.accelerationLimitAlgae)
+            .setMotionProfileDeaccelLimit(Constants.Arm.deaccelerationLimitAlgae)
+            .setMotionProfileVelocityLimit(Constants.Arm.velocityLimitAlgae)
+            .setISaturation(Constants.Arm.iSat)
+            .setIZone(Constants.Arm.iZone)
+            .setRampLimit(240),
+        PIDConfigSlot.kSlot1);
 
     if (Constants.enableArmSensor) {
       armConfig.setFeedbackSensorSettings(
@@ -137,9 +151,17 @@ public class ArmIONitrate implements ArmIO {
   }
 
   @Override
-  public void requestPosition(double requestSetpoint) {
+  public void requestPositionCoral(double requestSetpoint) {
     armMotor.setRequest(
-        PIDPositionRequest.setPosition(
+        PIDPositionRequestCoral.setPosition(
+            Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg)));
+    lastRequestedPosDeg = requestSetpoint;
+  }
+
+  @Override
+  public void requestPositionAlgae(double requestSetpoint) {
+    armMotor.setRequest(
+        PIDPositionRequestAlgae.setPosition(
             Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg)));
     lastRequestedPosDeg = requestSetpoint;
   }
