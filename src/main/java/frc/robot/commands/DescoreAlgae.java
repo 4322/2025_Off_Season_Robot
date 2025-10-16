@@ -103,7 +103,8 @@ public class DescoreAlgae extends Command {
       switch (state) {
         case SAFE_DISTANCE:
           currentPoseRequest = () -> safeDescorePose;
-          if (!driveToPose.isScheduled()) {
+          // Scheduling and cancelling command in same loop won't work so need to check for isFinished first
+          if (!driveToPose.isScheduled() && !isFinished()) {
             driveToPose.schedule();
           }
 

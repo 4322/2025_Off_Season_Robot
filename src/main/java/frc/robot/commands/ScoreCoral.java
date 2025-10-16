@@ -298,7 +298,8 @@ public class ScoreCoral extends Command {
                       -FieldConstants.KeypointPoses.extraDriveBackDistance, 0, new Rotation2d()));
 
           currentPoseRequest = () -> safeDistPose;
-          if (!driveToPose.isScheduled()) {
+          // Scheduling and cancelling command in same loop won't work so need to check for isFinished first
+          if (!driveToPose.isScheduled() && !isFinished()) {
             driveToPose.schedule();
           }
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
