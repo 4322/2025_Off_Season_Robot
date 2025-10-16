@@ -311,7 +311,8 @@ public class ScoreCoral extends Command {
         case DRIVE_IN:
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (driveToPose.atGoal() || (RobotContainer.isScoringTriggerHeld() && level == Level.L1)) {
+          } else if (driveToPose.atGoal()
+              || (RobotContainer.isScoringTriggerHeld() && level == Level.L1)) {
             if (level == Level.L4) {
               times.start();
               if (times.hasElapsed(0.1)) {
@@ -342,11 +343,14 @@ public class ScoreCoral extends Command {
 
           break;
         case DRIVEBACK:
-          if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
-            state = ScoreState.HOLD_POSITION;
-          }
           if (driveToPose.atGoal() || isInSafeArea()) {
             running = false;
+          }
+          // Only don't do drive back if robot is stuck against other robot while driving back
+          else if (scoreButtonReleased()
+              && !DriverStation.isAutonomous()
+              && Math.abs(drive.getRobotRelativeSpeeds().vxMetersPerSecond) < 0.001) {
+            state = ScoreState.HOLD_POSITION;
           }
 
           break;
@@ -392,6 +396,9 @@ public class ScoreCoral extends Command {
     running = false;
     drive.requestFieldRelativeMode();
 
+    // Reset chained more ONLY AFTER command finishes so it won't be stuck in this mode forever
+    this.chainedAlgaeMode = false;
+
     Logger.recordOutput("ScoreCoral/state", "Done");
   }
 
@@ -400,6 +407,10 @@ public class ScoreCoral extends Command {
         && !driver.x().getAsBoolean()
         && !driver.y().getAsBoolean()
         && !driver.b().getAsBoolean();
+  }
+
+  public void chainAlgae(boolean requestChainAlgae) {
+    this.chainedAlgaeMode = requestChainAlgae;
   }
 
   public boolean isInSafeArea() {

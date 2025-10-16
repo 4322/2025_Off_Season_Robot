@@ -59,6 +59,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
+import frc.robot.util.OrangeSequentialCommandGroup;
 import frc.robot.util.ReefStatus;
 
 /**
@@ -79,6 +80,7 @@ public class RobotContainer {
   private static ScoreCoral scoreL2Coral;
   private static ScoreCoral scoreL3Coral;
   private static ScoreCoral scoreL4Coral;
+  private static DescoreAlgae descoreAlgae;
   private static Drive drive;
   private static Arm arm;
   private static EndEffector endEffector;
@@ -213,6 +215,7 @@ public class RobotContainer {
     scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
     scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
     lastScoreCoral = scoreL1Coral;
+    descoreAlgae = new DescoreAlgae(superstructure, drive);
     // The commands deal with the on False logic if the button is no longer held
 
     driver
@@ -253,7 +256,10 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new DescoreAlgae(superstructure, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    scoreL2Coral.schedule();
+                    new OrangeSequentialCommandGroup(
+                            new ScoreCoral(superstructure, Level.L2, drive, false),
+                            descoreAlgae.onlyIf(() -> driver.y().getAsBoolean()))
+                        .schedule();
                     lastScoreCoral = scoreL2Coral;
                   }
                 }));
@@ -262,11 +268,15 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new DescoreAlgae(superstructure, drive).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    scoreL3Coral.schedule();
-                    lastScoreCoral = scoreL3Coral;
+                  if (lastScoreCoral.isScheduled()) {
+                    lastScoreCoral.chainAlgae(true);
+                  } else {
+                    if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                      new DescoreAlgae(superstructure, drive).schedule();
+                    } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
+                      scoreL3Coral.schedule();
+                      lastScoreCoral = scoreL3Coral;
+                    }
                   }
                 }));
 
@@ -278,7 +288,10 @@ public class RobotContainer {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    scoreL4Coral.schedule();
+                    new OrangeSequentialCommandGroup(
+                            new ScoreCoral(superstructure, Level.L4, drive, false),
+                            descoreAlgae.onlyIf(() -> driver.y().getAsBoolean()))
+                        .schedule();
                     lastScoreCoral = scoreL4Coral;
                   }
                 }));
@@ -390,17 +403,6 @@ public class RobotContainer {
 
   public static Superstructure getSuperstructure() {
     return superstructure;
-  }
-
-  public void TriggerAlgae() {
-    if (lastScoreCoral.isScheduled() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
-      requestedAlgaeDescore = true;
-    } else if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()) {
-      requestedAlgaeDescore = false;
-    } else if (!lastScoreCoral.isScheduled()) {
-      new DescoreAlgae(superstructure, drive).schedule();
-      requestedAlgaeDescore = false;
-    }
   }
 
   /**
