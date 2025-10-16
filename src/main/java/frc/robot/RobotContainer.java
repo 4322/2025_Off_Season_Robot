@@ -80,7 +80,6 @@ public class RobotContainer {
   private static ScoreCoral scoreL2Coral;
   private static ScoreCoral scoreL3Coral;
   private static ScoreCoral scoreL4Coral;
-  private static DescoreAlgae descoreAlgae;
   private static Drive drive;
   private static Arm arm;
   private static EndEffector endEffector;
@@ -215,7 +214,6 @@ public class RobotContainer {
     scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
     scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
     lastScoreCoral = scoreL1Coral;
-    descoreAlgae = new DescoreAlgae(superstructure, drive);
     // The commands deal with the on False logic if the button is no longer held
 
     driver
@@ -258,7 +256,7 @@ public class RobotContainer {
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new OrangeSequentialCommandGroup(
                             new ScoreCoral(superstructure, Level.L2, drive, false),
-                            descoreAlgae.onlyIf(() -> driver.y().getAsBoolean()))
+                            new DescoreAlgae(superstructure, drive).onlyIf(() -> driver.y().getAsBoolean()))
                         .schedule();
                     lastScoreCoral = scoreL2Coral;
                   }
@@ -290,7 +288,7 @@ public class RobotContainer {
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new OrangeSequentialCommandGroup(
                             new ScoreCoral(superstructure, Level.L4, drive, false),
-                            descoreAlgae.onlyIf(() -> driver.y().getAsBoolean()))
+                            new DescoreAlgae(superstructure, drive).onlyIf(() -> driver.y().getAsBoolean()))
                         .schedule();
                     lastScoreCoral = scoreL4Coral;
                   }
