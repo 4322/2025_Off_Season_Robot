@@ -92,8 +92,8 @@ public class DescoreAlgae extends Command {
   @Override
   public void execute() {
     Logger.recordOutput("DescoreAlgae/State", state);
-    Logger.recordOutput("DscoreAlgae/atGoal", driveToPose.atGoal());
-    Logger.recordOutput("DscoreAlgae/isInSafeArea", isInSafeArea());
+    Logger.recordOutput("DescoreAlgae/atGoal", driveToPose.atGoal());
+    Logger.recordOutput("DescoreAlgae/isInSafeArea", isInSafeArea());
     if (superstructure.isAutoOperationMode()) {
       switch (state) {
         case SAFE_DISTANCE:
@@ -169,6 +169,8 @@ public class DescoreAlgae extends Command {
     if (driveToPose.isScheduled()) {
       driveToPose.cancel();
     }
+
+    Logger.recordOutput("DescoreAlgae/State", "Done");
   }
 
   public boolean isInSafeArea() {

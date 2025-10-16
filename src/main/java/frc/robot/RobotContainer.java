@@ -80,6 +80,7 @@ public class RobotContainer {
   private static ScoreCoral scoreL2Coral;
   private static ScoreCoral scoreL3Coral;
   private static ScoreCoral scoreL4Coral;
+  private static DescoreAlgae descoreAlgae;
   private static Drive drive;
   private static Arm arm;
   private static EndEffector endEffector;
@@ -214,6 +215,7 @@ public class RobotContainer {
     scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
     scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
     lastScoreCoral = scoreL1Coral;
+    descoreAlgae = new DescoreAlgae(superstructure, drive);
     // The commands deal with the on False logic if the button is no longer held
 
     driver
@@ -255,9 +257,7 @@ public class RobotContainer {
                     new DescoreAlgae(superstructure, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
                     new OrangeSequentialCommandGroup(
-                            scoreL2Coral,
-                            new DescoreAlgae(superstructure, drive)
-                                .onlyIf(() -> driver.y().getAsBoolean()))
+                            scoreL2Coral, descoreAlgae.onlyIf(() -> driver.y().getAsBoolean()))
                         .schedule();
                     lastScoreCoral = scoreL2Coral;
                   }
@@ -288,9 +288,7 @@ public class RobotContainer {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
                   } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new OrangeSequentialCommandGroup(
-                            scoreL4Coral,
-                            new DescoreAlgae(superstructure, drive)
-                                .onlyIf(() -> driver.y().getAsBoolean()))
+                            scoreL4Coral, descoreAlgae.onlyIf(() -> driver.y().getAsBoolean()))
                         .schedule();
                     lastScoreCoral = scoreL4Coral;
                   }
@@ -403,17 +401,6 @@ public class RobotContainer {
 
   public static Superstructure getSuperstructure() {
     return superstructure;
-  }
-
-  public void TriggerAlgae() {
-    if (lastScoreCoral.isScheduled() && (driver.y().getAsBoolean() || driver.b().getAsBoolean())) {
-      requestedAlgaeDescore = true;
-    } else if (!driver.y().getAsBoolean() && !driver.b().getAsBoolean()) {
-      requestedAlgaeDescore = false;
-    } else if (!lastScoreCoral.isScheduled()) {
-      new DescoreAlgae(superstructure, drive).schedule();
-      requestedAlgaeDescore = false;
-    }
   }
 
   /**
