@@ -198,12 +198,12 @@ public final class Constants {
 
     public static final double kP = 200;
     public static final double kI = 0;
-    public static final double kD = 0;
+    public static final double kD = 1;
 
-    public static final double AccelerationLimit = 2.5; // TODO
-    public static final double DeaccelerationLimit = 1.5; // TODO
-    public static final double VelocityLimit = 1; // TODO
-    public static final double slowVelocityLimit = 0.1; // TODO
+    public static final double AccelerationLimit = 12.0; 
+    public static final double DeaccelerationLimit = 5.0;
+    public static final double VelocityLimit = 4.0;
+    public static final double slowVelocityLimit = 0.1;
   }
 
   public static class Elevator {
@@ -269,7 +269,7 @@ public final class Constants {
     public static final double statorCurrentLimitAmps = 100;
 
     public static final double fastAccelerationMetersPerSec2 = 700 / 50.0;
-    public static final double fastDecelerationMetersPerSec2 = 300 / 50.0;
+    public static final double fastDecelerationMetersPerSec2 = 700 / 50.0;
     public static final double fastVelocityMetersPerSec = 100 / 50.0;
 
     public static final double slowAccelerationMetersPerSec2 = 10 / 50.0; // TODO tune these
