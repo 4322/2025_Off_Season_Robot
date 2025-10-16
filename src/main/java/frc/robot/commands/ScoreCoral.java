@@ -298,7 +298,8 @@ public class ScoreCoral extends Command {
                       -FieldConstants.KeypointPoses.extraDriveBackDistance, 0, new Rotation2d()));
 
           currentPoseRequest = () -> safeDistPose;
-          // Scheduling and cancelling command in same loop won't work so need to check for isFinished first
+          // Scheduling and cancelling command in same loop won't work so need to check for
+          // isFinished first
           if (!driveToPose.isScheduled() && !isFinished()) {
             driveToPose.schedule();
           }
@@ -321,9 +322,11 @@ public class ScoreCoral extends Command {
           } else if (driveToPose.atGoal()
               || (level == Level.L1
                   && (RobotContainer.isScoringTriggerHeld() // Driver override
-                      || (drive.getRobotRelativeSpeeds().vxMetersPerSecond // Robot not moving and pretty close to reef
+                      || (drive.getRobotRelativeSpeeds()
+                                  .vxMetersPerSecond // Robot not moving and pretty close to reef
                               < Constants.AutoScoring.notMovingVelocityThreshold
-                          && driveToPose.withinTolerance(Constants.AutoScoring.atReefFaceL1Tolerance))))) {
+                          && driveToPose.withinTolerance(
+                              Constants.AutoScoring.atReefFaceL1Tolerance))))) {
             if (level == Level.L4) {
               times.start();
               if (times.hasElapsed(0.1)) {
