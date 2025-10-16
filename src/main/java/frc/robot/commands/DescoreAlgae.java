@@ -31,6 +31,7 @@ public class DescoreAlgae extends Command {
   private ReefStatus reefStatus;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
   private Pose2d safeDescorePose;
+  private Pose2d driveBackPose;
 
   public enum ScoreState {
     SAFE_DISTANCE,
@@ -82,11 +83,15 @@ public class DescoreAlgae extends Command {
               robotReefAngle);
     }
 
-    // TODO: Make sure safe dist is the same for Algae as it is for coral
     safeDescorePose =
         targetScoringPose.transformBy(
             new Transform2d(
                 -FieldConstants.KeypointPoses.safeDistFromAlgaeDescorePos, 0, new Rotation2d()));
+
+    driveBackPose =
+        safeDescorePose.transformBy(
+            new Transform2d(
+                -FieldConstants.KeypointPoses.extraDriveBackDistance, 0, new Rotation2d()));
   }
 
   @Override
@@ -120,7 +125,7 @@ public class DescoreAlgae extends Command {
           if (descoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (superstructure.isAlgaeHeld()) {
-            currentPoseRequest = () -> safeDescorePose;
+            currentPoseRequest = () -> driveBackPose;
             state = ScoreState.DRIVEBACK;
           }
           break;

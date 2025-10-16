@@ -2,8 +2,10 @@ package frc.robot.commands.auto;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
+import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
@@ -11,6 +13,8 @@ import frc.robot.subsystems.drive.Drive;
 public class AlgaePrescoreAuto extends Command {
   private Superstructure superstructure;
   private Drive drive;
+  private Rotation2d targetAngle;
+  private boolean scoreBackSide;
 
   public AlgaePrescoreAuto(Superstructure superstructure, Drive drive) {
     this.superstructure = superstructure;
@@ -22,16 +26,33 @@ public class AlgaePrescoreAuto extends Command {
   public void initialize() {
     if (Math.abs(drive.getRotation().minus(Rotation2d.kZero).getDegrees())
         < Math.abs(drive.getRotation().minus(Rotation2d.k180deg).getDegrees())) {
-      drive.requestAutoRotateMode(Rotation2d.kZero);
-      superstructure.requestAlgaePrescore(Robot.alliance == DriverStation.Alliance.Red);
+      targetAngle = Rotation2d.kZero;
+      scoreBackSide = Robot.alliance == DriverStation.Alliance.Red;
     } else {
-      drive.requestAutoRotateMode(Rotation2d.k180deg);
-      superstructure.requestAlgaePrescore(Robot.alliance == DriverStation.Alliance.Blue);
+      targetAngle = Rotation2d.k180deg;
+      scoreBackSide = Robot.alliance == DriverStation.Alliance.Blue;
     }
   }
 
   @Override
-  public void execute() {}
+  public void execute() {
+    // Only request auto rotate if not following pathplanner path command
+    if (drive.getCurrentCommand() == drive.getDefaultCommand()) {
+      drive.requestAutoRotateMode(targetAngle);
+    }
+
+    if (Robot.alliance == Alliance.Blue) {
+      if (drive.getPose().getTranslation().getX()
+          >= FieldConstants.KeypointPoses.blueAutoBargePreScoreX) {
+        superstructure.requestAlgaePrescore(scoreBackSide);
+      }
+    } else {
+      if (drive.getPose().getTranslation().getX()
+          <= FieldConstants.KeypointPoses.redAutoBargePreScoreX) {
+        superstructure.requestAlgaePrescore(scoreBackSide);
+      }
+    }
+  }
 
   @Override
   public boolean isFinished() {

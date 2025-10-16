@@ -43,6 +43,7 @@ public class ScoreCoral extends Command {
   private Rotation2d robotReefAngle;
   private ReefStatus reefStatus;
   private Pose2d safeDistPose = new Pose2d();
+  private Pose2d driveBackPose = new Pose2d();
 
   private boolean chainedAlgaeMode;
 
@@ -290,6 +291,10 @@ public class ScoreCoral extends Command {
                           : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
                       0,
                       new Rotation2d()));
+          driveBackPose =
+              safeDistPose.transformBy(
+                  new Transform2d(
+                      -FieldConstants.KeypointPoses.extraDriveBackDistance, 0, new Rotation2d()));
 
           currentPoseRequest = () -> safeDistPose;
           if (!driveToPose.isScheduled()) {
@@ -328,12 +333,12 @@ public class ScoreCoral extends Command {
                 && superstructure.elevatorAtSetpoint()
                 && !superstructure.isCoralHeld()
                 && level == Level.L1) {
-              currentPoseRequest = () -> safeDistPose;
+              currentPoseRequest = () -> driveBackPose;
               state = ScoreState.DRIVEBACK;
 
             } else if (level != Level.L1
                 && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL) {
-              currentPoseRequest = () -> safeDistPose;
+              currentPoseRequest = () -> driveBackPose;
               state = ScoreState.DRIVEBACK;
             }
           } else if (level == Level.L4) {
