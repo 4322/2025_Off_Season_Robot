@@ -478,6 +478,10 @@ public final class Constants {
 
     public static final double ffMinRadius = 0.1;
     public static final double ffMaxRadius = 0.8;
+
+    // Used to see if robot is up against reef or stuck against alliance partner during drive back
+    public static final double notMovingVelocityThreshold = 0.0254;
+    public static final double atReefFaceL1Tolerance = 0.08;
   }
 
   public static class Auto {

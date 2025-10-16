@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
@@ -317,7 +318,11 @@ public class ScoreCoral extends Command {
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (driveToPose.atGoal()
-              || (RobotContainer.isScoringTriggerHeld() && level == Level.L1)) {
+              || (level == Level.L1
+                  && (RobotContainer.isScoringTriggerHeld() // Driver override
+                      || (drive.getRobotRelativeSpeeds().vxMetersPerSecond // Robot not moving and pretty close to reef
+                              < Constants.AutoScoring.notMovingVelocityThreshold
+                          && driveToPose.withinTolerance(Constants.AutoScoring.atReefFaceL1Tolerance))))) {
             if (level == Level.L4) {
               times.start();
               if (times.hasElapsed(0.1)) {
@@ -354,7 +359,8 @@ public class ScoreCoral extends Command {
           // Only don't do drive back if robot is stuck against other robot while driving back
           else if (scoreButtonReleased()
               && !DriverStation.isAutonomous()
-              && Math.abs(drive.getRobotRelativeSpeeds().vxMetersPerSecond) < 0.001) {
+              && Math.abs(drive.getRobotRelativeSpeeds().vxMetersPerSecond)
+                  < Constants.AutoScoring.notMovingVelocityThreshold) {
             state = ScoreState.HOLD_POSITION;
           }
 
