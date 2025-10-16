@@ -198,7 +198,7 @@ public final class Constants {
 
     public static final double kP = 200;
     public static final double kI = 0;
-    public static final double kD = 1;
+    public static final double kD = 0;
 
     public static final double AccelerationLimit = 12.0;
     public static final double DeaccelerationLimit = 5.0;
