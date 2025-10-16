@@ -52,9 +52,16 @@ public class ArmIOSim implements ArmIO {
   }
 
   @Override
-  public void requestPosition(double degrees) {
+  public void requestPositionCoral(double degrees) {
     requestedPosition = degrees;
     rate = fastRate;
+    requestedVoltage = undefinedVoltage;
+  }
+
+  @Override
+  public void requestPositionAlgae(double degrees) {
+    requestedPosition = degrees;
+    rate = slowRate;
     requestedVoltage = undefinedVoltage;
   }
 
