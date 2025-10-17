@@ -16,7 +16,6 @@ import frc.robot.commands.DescoreAlgae;
 import frc.robot.commands.DriveManual;
 import frc.robot.commands.DriveToPose;
 import frc.robot.commands.Eject;
-import frc.robot.commands.EmergencyInitilization;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.SwitchOperationModeCommand;
 import frc.robot.constants.Constants;
@@ -300,11 +299,6 @@ public class RobotContainer {
                   }
                 }));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
-    driver
-        .back()
-        .onTrue(
-            new EmergencyInitilization(
-                superstructure, intakeSuperstructure, arm, elevator, deployer));
 
     driver
         .leftTrigger()
