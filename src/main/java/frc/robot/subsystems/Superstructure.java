@@ -429,6 +429,17 @@ public class Superstructure extends SubsystemBase {
     requestClimb = true;
   }
 
+  public void requestUnhome() {
+    endEffector.idle(); // let any algae pop-out, coral must have already been ejected
+    unsetAllRequests();
+    state = Superstates.HOMELESS;
+  }
+
+  public void requestReHome() {
+    ishomed = true;
+    state = Superstates.IDLE;
+  }
+
   public boolean isCoralHeld() {
     return endEffector.hasCoral();
   }

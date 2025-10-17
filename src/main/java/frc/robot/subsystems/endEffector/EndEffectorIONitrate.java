@@ -140,6 +140,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
   public void stop(IdleMode idleMode) {
     previousRequestedVoltage = -999;
     endEffectorMotor.stop(idleMode);
+    endEffectorMotor.setVoltage(0); // work around stop not working
   }
 
   @Override

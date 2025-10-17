@@ -210,6 +210,7 @@ public class ElevatorIONitrate implements ElevatorIO {
   public void stop(IdleMode idleMode) {
     followerMotor.setRequest(followerRequest); // temporary work-around for firmware issue
     leaderMotor.stop(idleMode);
+    leaderMotor.setVoltage(0); // work around stop not working
     lastRequestedPosMeters = -1;
     lastRequestedPosRotations = -1;
   }

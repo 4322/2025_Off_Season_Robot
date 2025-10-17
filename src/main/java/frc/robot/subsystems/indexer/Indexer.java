@@ -78,7 +78,6 @@ public class Indexer extends SubsystemBase {
   public void idle() {
     currentAction = IndexerStatus.START;
     io.stop(IdleMode.kCoast);
-    io.setVoltage(0); // stop not gein honored
   }
 
   public boolean isCoralDetectedIndexer() {

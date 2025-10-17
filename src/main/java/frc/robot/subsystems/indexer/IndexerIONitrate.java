@@ -163,6 +163,8 @@ public class IndexerIONitrate implements IndexerIO {
     prevRequestedVoltage = -999;
     indexerMotorRight.stop(mode);
     indexerMotorLeft.stop(mode);
+    indexerMotorRight.setVoltage(0); // work around stop not working
+    indexerMotorLeft.setVoltage(0);
   }
 
   @Override

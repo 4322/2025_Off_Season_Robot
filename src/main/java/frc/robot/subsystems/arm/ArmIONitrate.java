@@ -175,6 +175,7 @@ public class ArmIONitrate implements ArmIO {
   @Override
   public void stopArmMotor(IdleMode idleMode) {
     armMotor.stop(idleMode);
+    armMotor.setVoltage(0); // work around stop not working
     lastRequestedPosDeg = -1;
   }
 
