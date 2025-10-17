@@ -88,6 +88,7 @@ public class Rollers extends SubsystemBase {
   public void idle() {
     currentAction = RollersStatus.IDLE;
     io.stop(IdleMode.kCoast);
+    io.setVoltage(0); // stop not gein honored
   }
 
   public boolean isCoralPickupDetected() {

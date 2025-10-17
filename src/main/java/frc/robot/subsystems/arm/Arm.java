@@ -189,7 +189,9 @@ public class Arm extends SubsystemBase {
   }
 
   public void setEmergencyHomingComplete() {
-    io.setHomePosition(Constants.Arm.hittingIndexerDegrees);
+    io.setHomePosition(
+        Units.degreesToRotations(
+            Constants.Arm.OffsetEncoderDeg + Constants.Arm.hittingIndexerDegrees));
     isHomed = true;
     idle();
   }

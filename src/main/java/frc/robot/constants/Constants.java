@@ -177,10 +177,10 @@ public final class Constants {
     public static final double iSat = 0.002;
     public static final double iZone = 0.0138;
 
-    public static final double intializationVoltage = 0.4;
+    public static final double intializationVoltage = -0.1;
     public static final double initializationCompleteSpeed = 1.0;
     public static final double initializationCompleteSec = 0.1;
-    public static final double hittingIndexerDegrees = -3.5;
+    public static final double hittingIndexerDegrees = -3.05;
 
     public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 2;
     public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20;

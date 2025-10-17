@@ -59,7 +59,7 @@ public class EmergencyInitilization extends Command {
   @Override
   public void execute() {
     if (!elevatorDone) {
-      if (elevator.emergencyHoming() <= Constants.Elevator.initializationCompleteSpeed) {
+      if (Math.abs(elevator.emergencyHoming()) <= Constants.Elevator.initializationCompleteSpeed) {
         elevatorStoppedTimer.start();
       } else {
         elevatorStoppedTimer.stop();
@@ -71,7 +71,7 @@ public class EmergencyInitilization extends Command {
       }
     }
     if (!deployerDone) {
-      if (deployer.emergencyHoming() <= Constants.Deployer.initializationCompleteSpeed) {
+      if (Math.abs(deployer.emergencyHoming()) <= Constants.Deployer.initializationCompleteSpeed) {
         deployerStoppedTimer.start();
       } else {
         deployerStoppedTimer.stop();
@@ -84,7 +84,7 @@ public class EmergencyInitilization extends Command {
     }
     if (!armDone && elevatorDone && deployerDone) {
       arm.stop(IdleMode.kBrake);
-      if (arm.emergencyHoming() <= Constants.Arm.initializationCompleteSpeed) {
+      if (Math.abs(arm.emergencyHoming()) <= Constants.Arm.initializationCompleteSpeed) {
         armStoppedTimer.start();
       } else {
         armStoppedTimer.stop();
