@@ -162,6 +162,8 @@ public class Vision extends SubsystemBase {
                             visionRobotPose.getY(),
                             disambiguatedRobotPose.getZ()),
                         new Rotation3d(visionRobotPose.getRotation()));
+
+                Logger.recordOutput("Vision/TrigGlobalPose", disambiguatedRobotPose.toPose2d());
               }
             }
 
