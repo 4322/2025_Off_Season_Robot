@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
@@ -42,10 +41,10 @@ public class EmergencyInitilization extends Command {
   @Override
   public void initialize() {
     // can't unhome the superstructure because it only supports re-homing in the standard positions
+    // don't coast the arm because it could swing into the carbon fiber rod as the elevator descends
     armDone = false;
     elevatorDone = false;
     deployerDone = false;
-    arm.stop(IdleMode.kCoast);
     intakeSuperstructure.requestUnhome();
     elevator.emergencyHoming();
     elevatorStoppedTimer.stop();
@@ -82,8 +81,7 @@ public class EmergencyInitilization extends Command {
         deployerDone = true;
       }
     }
-    if (!armDone && elevatorDone && deployerDone) {
-      arm.stop(IdleMode.kBrake);
+    if (!armDone && elevatorDone && deployerDone && superstructure.elevatorAtSetpoint()) {
       if (Math.abs(arm.emergencyHoming()) <= Constants.Arm.initializationCompleteSpeed) {
         armStoppedTimer.start();
       } else {
