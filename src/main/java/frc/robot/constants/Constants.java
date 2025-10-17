@@ -34,7 +34,7 @@ public final class Constants {
   public static final boolean tuneAutoRotate = false;
   public static final boolean continuousNitrateRequestsEnabled = true;
   public static final boolean enableReefLock = true;
-  public static final boolean enableGlobalPoseTrigEstimation = true;
+  public static final boolean enableGlobalPoseTrigEstimation = false;
   public static final boolean enableDriveToPoseTuning = false;
   public static final boolean debugPIDModeEnabled = false;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
