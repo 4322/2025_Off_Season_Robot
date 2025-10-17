@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 5.344772727272727,
-        "y": 5.555639204545454
+        "y": 5.428
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.9882727272727285,
-        "y": 6.130889204545453
+        "y": 6.0032499999999995
       },
       "isLocked": false,
       "linkedName": "India-JulietOut"

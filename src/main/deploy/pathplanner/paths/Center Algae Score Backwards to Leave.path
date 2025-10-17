@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.44436475409836,
-        "y": 5.409579918032787
+        "x": 7.078639618138425,
+        "y": 5.428
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.945662745430689,
-        "y": 5.4243180814136425
+        "x": 6.579937609470754,
+        "y": 5.442738163380856
       },
       "isLocked": false,
       "linkedName": "Center Barge Backwards"
