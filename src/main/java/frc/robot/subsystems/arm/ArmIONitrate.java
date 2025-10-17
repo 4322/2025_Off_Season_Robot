@@ -145,9 +145,9 @@ public class ArmIONitrate implements ArmIO {
   //
 
   @Override
-  public void setHomePosition() {
+  public void setHomePosition(double degrees) {
+    armMotor.setPosition(degrees);
     stopArmMotor(IdleMode.kBrake);
-    armMotor.setPosition(Units.degreesToRotations(Constants.Arm.OffsetEncoderDeg));
   }
 
   @Override

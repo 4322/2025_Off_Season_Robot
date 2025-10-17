@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,11 +12,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.autonomous.AutonomousSelector;
 import frc.robot.commands.AlgaeIntakeGround;
 import frc.robot.commands.AlgaeScoreCommand;
-import frc.robot.commands.CoastCommand;
 import frc.robot.commands.DescoreAlgae;
 import frc.robot.commands.DriveManual;
 import frc.robot.commands.DriveToPose;
 import frc.robot.commands.Eject;
+import frc.robot.commands.EmergencyInitilization;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.SwitchOperationModeCommand;
 import frc.robot.constants.Constants;
@@ -304,9 +303,8 @@ public class RobotContainer {
     driver
         .back()
         .onTrue(
-            new CoastCommand(arm, elevator, deployer, superstructure)
-                .onlyIf(() -> DriverStation.isDisabled())
-                .ignoringDisable(true));
+            new EmergencyInitilization(
+                superstructure, intakeSuperstructure, arm, elevator, deployer));
 
     driver
         .leftTrigger()

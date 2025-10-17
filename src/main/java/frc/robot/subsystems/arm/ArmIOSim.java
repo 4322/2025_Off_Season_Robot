@@ -39,7 +39,7 @@ public class ArmIOSim implements ArmIO {
   }
 
   @Override
-  public void setHomePosition() {
+  public void setHomePosition(double degrees) {
     stopArmMotor(IdleMode.kBrake);
     this.position = 0;
   }

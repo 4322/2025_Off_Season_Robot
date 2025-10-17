@@ -26,7 +26,7 @@ public interface ArmIO {
     public double feedbackError;
   }
 
-  public default void setHomePosition() {}
+  public default void setHomePosition(double degrees) {}
 
   public default void updateInputs(ArmIOInputs inputs) {}
 

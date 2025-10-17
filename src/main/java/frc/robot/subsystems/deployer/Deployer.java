@@ -98,6 +98,12 @@ public class Deployer extends SubsystemBase {
 
   public void clearHome() {
     isHomed = false;
+    currentAction = DeployerStatus.STOP;
+  }
+
+  public double emergencyHoming() {
+    io.setVoltage(Constants.Deployer.intializationVoltage);
+    return inputs.speedRotationsPerSec;
   }
 
   public void stop(IdleMode mode) {

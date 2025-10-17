@@ -1,6 +1,7 @@
 package frc.robot.subsystems.arm;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BabyAlchemist;
@@ -92,7 +93,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void setHomePosition() {
-    io.setHomePosition();
+    io.setHomePosition(Units.degreesToRotations(Constants.Arm.OffsetEncoderDeg));
     isHomed = true;
   }
 
@@ -179,6 +180,18 @@ public class Arm extends SubsystemBase {
   public void stop(IdleMode mode) {
     prevSetpoint = -1000; // To reset the setpoint so we can send a new request
     io.stopArmMotor(mode);
+  }
+
+  public double emergencyHoming() {
+    isHomed = false;
+    io.setVoltage(Constants.Arm.intializationVoltage);
+    return inputs.velocityDegSec;
+  }
+
+  public void setEmergencyHomingComplete() {
+    io.setHomePosition(Constants.Arm.hittingIndexerDegrees);
+    isHomed = true;
+    idle();
   }
 
   public void climbing() {

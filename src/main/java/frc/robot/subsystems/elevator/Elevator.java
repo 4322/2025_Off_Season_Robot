@@ -187,6 +187,18 @@ public class Elevator extends SubsystemBase {
     isSlow = false;
   }
 
+  public double emergencyHoming() {
+    isHomed = false;
+    io.setVoltage(Constants.Elevator.intializationVoltage);
+    return inputs.leaderVelocityMetersPerSecond;
+  }
+
+  public void setEmergencyHomingComplete() {
+    io.setPosition(Constants.Elevator.maxElevatorHeightMeters);
+    isHomed = true;
+    idle();
+  }
+
   public void stop(IdleMode idleMode) {
     io.stop(idleMode);
     isSlow = false;

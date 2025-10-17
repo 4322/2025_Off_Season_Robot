@@ -17,7 +17,6 @@ public class IntakeSuperstructure extends SubsystemBase {
   private boolean requestRetractIdle;
   private boolean requestDeploy;
   private boolean requestIntakeEject;
-  private boolean requestUnhome;
   private boolean isHomed = false;
   private boolean requestIndexerEject;
 
@@ -62,7 +61,11 @@ public class IntakeSuperstructure extends SubsystemBase {
       deployer.setHome();
       requestHomed = false;
       isHomed = true;
-      state = IntakeSuperstates.DISABLED;
+      if (DriverStation.isEnabled()) {
+        state = IntakeSuperstates.RETRACT_IDLE;
+      } else {
+        state = IntakeSuperstates.DISABLED;
+      }
     }
 
     if (DriverStation.isDisabled() && isHomed) {
@@ -246,7 +249,6 @@ public class IntakeSuperstructure extends SubsystemBase {
     indexer.idle();
     state = IntakeSuperstates.HOMELESS;
     unsetAllRequests();
-    requestUnhome = true;
   }
 
   public boolean isCoralDetectedPickupArea() {
@@ -271,5 +273,3 @@ public class IntakeSuperstructure extends SubsystemBase {
     return state;
   }
 }
-  // TODO add manual homing procedure
-// Review logic

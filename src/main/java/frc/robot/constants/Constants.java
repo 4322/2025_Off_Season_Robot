@@ -177,6 +177,11 @@ public final class Constants {
     public static final double iSat = 0.002;
     public static final double iZone = 0.0138;
 
+    public static final double intializationVoltage = 0.4;
+    public static final double initializationCompleteSpeed = 1.0;
+    public static final double initializationCompleteSec = 0.1;
+    public static final double hittingIndexerDegrees = -3.5;
+
     public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 2;
     public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20;
     public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20;
@@ -256,10 +261,10 @@ public final class Constants {
     public static final double pickupCoralHeightMeters = 0.387;
 
     public static final double intializationVoltage = 2.0;
-    public static final double initializationTimerThresholdSecs = 5;
-    public static final double coralDetectionHeightThresholdSecs = 0.4;
-    public static final double initializationVelocityMetersThresholdPerSecs = 0.01;
+    public static final double initializationCompleteSpeed = 0.01;
+    public static final double initializationCompleteSec = 0.1;
 
+    public static final double coralDetectionHeightThresholdSecs = 0.4;
     public static final double ejectHeightMeters = minElevatorSafeWithCoralMeters;
 
     public static final double safeBargeRetractHeightMeters = 0.773472037;
@@ -371,6 +376,10 @@ public final class Constants {
     public static final int deployerMotorEncoderId = 0; // not currently installed
     public static final InvertMode motorEncoderInverted =
         InvertMode.kInverted; // reverse of motor, if installed TODO
+
+    public static final double intializationVoltage = 1.5;
+    public static final double initializationCompleteSpeed = 0.1;
+    public static final double initializationCompleteSec = 0.1;
 
     // Range of motion of deployer is about 0-140 degrees
     public static final double motorGearRatio = 61.25;
