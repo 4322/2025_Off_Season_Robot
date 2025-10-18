@@ -255,7 +255,9 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                  if (!endEffector.hasCoral()
+                      && !endEffector.hasAlgae()
+                      && !lastScoreCoral.isScheduled()) {
                     new DescoreAlgae(superstructure, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
                       && !lastScoreCoral.isScheduled()) {
