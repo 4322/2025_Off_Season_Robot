@@ -304,7 +304,7 @@ public class RobotContainer {
         .back()
         .onTrue(
             new EmergencyInitilization(
-                superstructure, intakeSuperstructure, arm, elevator, deployer));
+                superstructure, intakeSuperstructure, arm, elevator, deployer, drive));
 
     driver
         .leftTrigger()

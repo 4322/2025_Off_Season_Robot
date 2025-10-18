@@ -8,6 +8,7 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 
 // Never invoke this command while the arm is striaght up or on the back side of the robot!
@@ -18,6 +19,7 @@ public class EmergencyInitilization extends Command {
   private final Arm arm;
   private final Elevator elevator;
   private final Deployer deployer;
+  private final Drive drive;
   private boolean armDone;
   private boolean elevatorDone;
   private boolean deployerDone;
@@ -31,13 +33,16 @@ public class EmergencyInitilization extends Command {
       IntakeSuperstructure intakeSuperstructure,
       Arm arm,
       Elevator elevator,
-      Deployer deployer) {
+      Deployer deployer,
+      Drive drive) {
     this.superstructure = superstructure;
     this.intakeSuperstructure = intakeSuperstructure;
     this.arm = arm;
     this.elevator = elevator;
     this.deployer = deployer;
-    addRequirements(superstructure, arm, elevator, deployer);
+    this.drive = drive;
+    // break out of everything
+    addRequirements(superstructure, intakeSuperstructure, arm, elevator, deployer, drive);
   }
 
   @Override
