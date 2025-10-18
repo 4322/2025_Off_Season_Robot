@@ -1,7 +1,8 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import static frc.robot.RobotContainer.driver;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
@@ -22,12 +23,12 @@ public class Eject extends Command {
 
   @Override
   public void initialize() {
-    if (drive.getCurrentCommand() != null){
-    if (drive.getCurrentCommand() != drive.getDefaultCommand()) {
-      drive.getCurrentCommand().cancel();
+    if (drive.getCurrentCommand() != null) {
+      if (drive.getCurrentCommand() != drive.getDefaultCommand()) {
+        drive.getCurrentCommand().cancel();
+      }
     }
   }
-}
 
   @Override
   public void execute() {
