@@ -17,6 +17,7 @@ public class Elevator extends SubsystemBase {
   private double requestedHeightMeters = 0.0;
   private double prevHeightMeters = 0.0;
   private double newElevatorHeight;
+  private double currentScoreHeight;
   private boolean isSlow = false;
   private boolean isHomed;
   Superstructure superstructure = RobotContainer.getSuperstructure();
@@ -157,18 +158,26 @@ public class Elevator extends SubsystemBase {
     switch (level) {
       case L1:
         requestedHeightMeters = Constants.Elevator.scoreCoralL1HeightMeters;
+        currentScoreHeight = Constants.Elevator.scoreCoralL1HeightMeters;
         break;
       case L2:
         requestedHeightMeters = Constants.Elevator.scoreCoralL2HeightMeters;
+        currentScoreHeight = Constants.Elevator.scoreCoralL2HeightMeters;
         break;
       case L3:
         requestedHeightMeters = Constants.Elevator.scoreCoralL3HeightMeters;
+        currentScoreHeight = Constants.Elevator.scoreCoralL3HeightMeters;
         break;
       case L4:
         requestedHeightMeters = Constants.Elevator.scoreCoralL4HeightMeters;
+        currentScoreHeight = Constants.Elevator.scoreCoralL4HeightMeters;
         break;
     }
     isSlow = false;
+  }
+
+  public double releaseCoralSetpoint() {
+    return currentScoreHeight + 0.001;
   }
 
   public void pickupCoral() {

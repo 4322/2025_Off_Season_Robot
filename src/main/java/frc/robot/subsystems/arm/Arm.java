@@ -20,6 +20,7 @@ public class Arm extends SubsystemBase {
   private double requestedSetpoint;
   private double prevSetpoint = -1000;
   private double newSetpoint;
+  private double currentScoreSetpoint;
   private double elevatorHeight;
   private boolean isHomed;
   private boolean inSync = true;
@@ -163,17 +164,25 @@ public class Arm extends SubsystemBase {
     switch (level) {
       case L1:
         requestedSetpoint = Constants.Arm.scoringL1CoralDeg;
+        currentScoreSetpoint = Constants.Arm.scoringL1CoralDeg;
         break;
       case L2:
         requestedSetpoint = Constants.Arm.scoringL2CoralDeg;
+        currentScoreSetpoint = Constants.Arm.scoringL2CoralDeg;
         break;
       case L3:
         requestedSetpoint = Constants.Arm.scoringL3CoralDeg;
+        currentScoreSetpoint = Constants.Arm.scoringL3CoralDeg;
         break;
       case L4:
         requestedSetpoint = Constants.Arm.scoringL4CoralDeg;
+        currentScoreSetpoint = Constants.Arm.scoringL4CoralDeg;
         break;
     }
+  }
+
+  public double scoreReleaseSetpoint() {
+    return (currentScoreSetpoint + 4);
   }
 
   public boolean atSetpoint() {

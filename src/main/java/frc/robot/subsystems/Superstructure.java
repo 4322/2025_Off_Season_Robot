@@ -303,11 +303,16 @@ public class Superstructure extends SubsystemBase {
           if (arm.atSetpoint() && elevator.atSetpoint()) {
             endEffector.releaseCoralL1();
           }
-        } else if (level == Level.L4
-            && (arm.getAngleDegrees() <= Constants.Arm.scoringEarilyReleaseL4)) {
-          endEffector.releaseCoralNormal();
+        } else if ((arm.getAngleDegrees() <= arm.scoreReleaseSetpoint())) {
+          if (level == Level.L4) {
+            endEffector.releaseCoralNormal();
+          } else {
+            if (elevator.getElevatorHeightMeters() <= elevator.releaseCoralSetpoint()) {
+              endEffector.releaseCoralNormal();
+            }
+          }
         } else {
-          if (arm.atSetpoint() && elevator.atSetpoint()) {
+          if (elevator.atSetpoint() && arm.atSetpoint()) {
             endEffector.releaseCoralNormal();
           }
         }
