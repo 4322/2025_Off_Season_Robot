@@ -398,7 +398,7 @@ public class FieldConstants {
         Units.inchesToMeters(8) // Changed from 7 added inches 1.5
             + robotBumperToCenter;
     private static final double scoringDistanceFromReefL4 =
-        Units.inchesToMeters(8.3) // Changed from 7 added inches 1.5
+        Units.inchesToMeters(8.2) // Changed from 7 added inches 1.5
             + robotBumperToCenter;
     // TODO: Only change the number which represents distance between
     // face of reef and front of robot bumper
