@@ -27,7 +27,7 @@ public class ThreeCoralLeftPush extends OrangeSequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () -> {
-              superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
+              superstructure.requestOperationMode(Superstructure.OperationMode.TeleAUTO);
               PathPlannerPath path = Robot.ThreeCoralStartPushToJuliet;
               if (Robot.alliance == Alliance.Red) {
                 path = path.flipPath();

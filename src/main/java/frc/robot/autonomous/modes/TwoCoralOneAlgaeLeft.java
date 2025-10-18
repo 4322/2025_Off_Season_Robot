@@ -31,7 +31,7 @@ public class TwoCoralOneAlgaeLeft extends OrangeSequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () -> {
-              superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
+              superstructure.requestOperationMode(Superstructure.OperationMode.TeleAUTO);
               PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
               if (Robot.alliance == Alliance.Red) {
                 path = path.flipPath();

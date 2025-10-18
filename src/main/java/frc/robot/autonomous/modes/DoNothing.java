@@ -9,6 +9,6 @@ public class DoNothing extends OrangeSequentialCommandGroup {
     setName("DO_NOTHING");
     addCommands(
         new InstantCommand(
-            () -> superstructure.requestOperationMode(Superstructure.OperationMode.AUTO)));
+            () -> superstructure.requestOperationMode(Superstructure.OperationMode.TeleAUTO)));
   }
 }

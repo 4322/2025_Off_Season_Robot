@@ -61,11 +61,11 @@ public class Superstructure extends SubsystemBase {
   Level level = Level.L1;
 
   public static enum OperationMode {
-    AUTO,
+    TeleAUTO,
     MANUAL,
   }
 
-  OperationMode mode = OperationMode.AUTO;
+  OperationMode mode = OperationMode.TeleAUTO;
 
   Superstates state = Superstates.HOMELESS;
   Superstates prevState = Superstates.HOMELESS;
@@ -373,7 +373,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public boolean isAutoOperationMode() {
-    return mode == OperationMode.AUTO;
+    return mode == OperationMode.TeleAUTO;
   }
 
   public void requestIdle() {

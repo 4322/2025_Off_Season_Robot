@@ -15,7 +15,7 @@ public class Leave extends OrangeSequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () -> {
-              superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
+              superstructure.requestOperationMode(Superstructure.OperationMode.TeleAUTO);
               PathPlannerPath path = Robot.Leave;
               if (Robot.alliance == Alliance.Red) {
                 path = path.flipPath();

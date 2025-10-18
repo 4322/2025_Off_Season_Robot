@@ -34,7 +34,7 @@ public class SwitchOperationModeCommand extends InstantCommand {
       if (superstructure.isAutoOperationMode()) {
         superstructure.requestOperationMode(Superstructure.OperationMode.MANUAL);
       } else {
-        superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
+        superstructure.requestOperationMode(Superstructure.OperationMode.TeleAUTO);
       }
     }
   }

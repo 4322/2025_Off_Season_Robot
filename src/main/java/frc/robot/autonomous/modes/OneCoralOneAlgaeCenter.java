@@ -21,7 +21,7 @@ public class OneCoralOneAlgaeCenter extends OrangeSequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () -> {
-              superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
+              superstructure.requestOperationMode(Superstructure.OperationMode.TeleAUTO);
               PathPlannerPath path = Robot.CenterStartToGulf;
               if (Robot.alliance == Alliance.Red) {
                 path = path.flipPath();
