@@ -141,9 +141,7 @@ public class DescoreAlgae extends Command {
 
           break;
         case HOLD_POSITION:
-          if (driveToPose.isScheduled()) {
-            driveToPose.cancel();
-          }
+          driveToPose.cancel();
           if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
             state = ScoreState.SAFE_DISTANCE;
             running = false;
@@ -151,9 +149,7 @@ public class DescoreAlgae extends Command {
           break;
       }
     } else {
-      if (driveToPose.isScheduled()) {
-        driveToPose.cancel();
-      }
+      driveToPose.cancel();
 
       superstructure.requestDescoreAlgae(level);
     }
@@ -173,9 +169,8 @@ public class DescoreAlgae extends Command {
   public void end(boolean interrupted) {
     superstructure.requestIdle();
     running = false;
-    if (driveToPose.isScheduled()) {
-      driveToPose.cancel();
-    }
+
+    driveToPose.cancel();
 
     Logger.recordOutput("DescoreAlgae/State", "Done");
   }
