@@ -228,9 +228,13 @@ public class RobotContainer {
                     })
                 .ignoringDisable(true));
 
-    driver.povUp().whileTrue(new Eject(intakeSuperstructure, superstructure)); // Intake Eject
+    driver
+        .povUp()
+        .whileTrue(new Eject(intakeSuperstructure, superstructure, drive)); // Intake Eject
 
-    driver.povDown().whileTrue(new Eject(intakeSuperstructure, superstructure)); // Score Eject
+    driver
+        .povDown()
+        .whileTrue(new Eject(intakeSuperstructure, superstructure, drive)); // Score Eject
 
     // Prescore/Descore Levels
     driver
