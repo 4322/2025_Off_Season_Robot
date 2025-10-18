@@ -22,6 +22,7 @@ public class Arm extends SubsystemBase {
   private double newSetpoint;
   private double elevatorHeight;
   private boolean isHomed;
+  private boolean inSync = true;
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -37,6 +38,13 @@ public class Arm extends SubsystemBase {
 
     } else {
       if (isHomed) {
+        if (Math.abs(inputs.PositionDegrees - inputs.encoderArmRotations % 1.0 * 360)
+            <= Constants.Arm.syncToleranceDegrees) {
+          inSync = true;
+        } else if (!isMoving()) {
+          inSync = false;
+        }
+        Logger.recordOutput("Arm/inSync", inSync);
         switch (Constants.armMode) {
           case OPEN_LOOP:
             double x = -RobotContainer.driver.getRightX();
@@ -95,6 +103,7 @@ public class Arm extends SubsystemBase {
   public void setHomePosition() {
     io.setHomePosition(Units.degreesToRotations(Constants.Arm.OffsetEncoderDeg));
     isHomed = true;
+    idle(); // must have a valid initial position request when enabled
   }
 
   public void idle() {
@@ -125,6 +134,7 @@ public class Arm extends SubsystemBase {
     }
   }
 
+  // Reset the setpoint so we can send a new request
   public void reset() {
     prevSetpoint = -1;
   }
@@ -178,8 +188,8 @@ public class Arm extends SubsystemBase {
   }
 
   public void stop(IdleMode mode) {
-    prevSetpoint = -1000; // To reset the setpoint so we can send a new request
     io.stopArmMotor(mode);
+    reset();
   }
 
   public double emergencyHoming() {
@@ -192,8 +202,16 @@ public class Arm extends SubsystemBase {
     io.setHomePosition(
         Units.degreesToRotations(
             Constants.Arm.OffsetEncoderDeg + Constants.Arm.hittingIndexerDegrees));
+    setReHome();
+  }
+
+  public void setReHome() {
     isHomed = true;
     idle();
+  }
+
+  public boolean isMoving() {
+    return !atSetpoint() || inputs.velocityDegSec > Constants.Arm.initializationCompleteSpeed;
   }
 
   public void climbing() {

@@ -167,6 +167,7 @@ public final class Constants {
 
     public static final double setpointToleranceDegrees = enableArmSensor ? 0.5 : 0.75;
     public static final double setpointToleranceDegreesEject = enableArmSensor ? 5 : 0.75;
+    public static final double syncToleranceDegrees = 1.0;
     public static final double bufferDeg =
         setpointToleranceDegrees * 4; // Degrees of buffer zone for min safe angle
     public static final double supplyCurrentLimitAmps = 40;
@@ -242,6 +243,7 @@ public final class Constants {
     public static final double minElevatorSafeWithCoralMeters = 0.475;
 
     public static final double elevatorHeightToleranceMeters = 0.01;
+    public static final double syncToleranceMeters = 0.005;
 
     public static final double algaeGroundHeightMeters = 0.00635;
     public static final double algaeReefL2HeightMeters = 0.384498;

@@ -93,7 +93,13 @@ public class Deployer extends SubsystemBase {
 
   public void setHome() {
     io.setHome();
+    setReHome();
+  }
+
+  public void setReHome() {
     isHomed = true;
+    // must have a valid initial position request when enabled
+    requestedPosDeg = Constants.Deployer.retractPositionDegrees;
   }
 
   public void clearHome() {

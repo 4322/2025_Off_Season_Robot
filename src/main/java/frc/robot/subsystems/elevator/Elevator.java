@@ -22,6 +22,7 @@ public class Elevator extends SubsystemBase {
   Superstructure superstructure = RobotContainer.getSuperstructure();
   private double minSafeArmDegree = 0.0;
   private double minElevatorHeight = 0.0;
+  private boolean inSync = true;
 
   public Elevator(ElevatorIO ELVIO) {
     this.io = ELVIO;
@@ -35,6 +36,13 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("Elevator/TargetHeight", requestedHeightMeters);
 
     if (isHomed) {
+      if (Math.abs(inputs.leaderheightMeters - inputs.followerHeightMeters)
+          <= Constants.Elevator.syncToleranceMeters) {
+        inSync = true;
+      } else if (!isMoving()) {
+        inSync = false;
+      }
+      Logger.recordOutput("Elevator/inSync", inSync);
       switch (Constants.elevatorMode) {
         case OPEN_LOOP:
           io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
@@ -45,6 +53,7 @@ public class Elevator extends SubsystemBase {
                   0, io.getNitrate(), "Elevator", inputs.leaderheightMeters, "meters");
           if (newPos != null) {
             io.requestHeightMeters(newPos);
+            requestedHeightMeters = newPos;
           }
           break;
         case DISABLED:
@@ -185,23 +194,35 @@ public class Elevator extends SubsystemBase {
     io.setPosition(Constants.Elevator.homeHeightMeters);
     isHomed = true;
     isSlow = false;
+    idle(); // must have a valid initial position request when enabled
   }
 
   public double emergencyHoming() {
     isHomed = false;
     io.setVoltage(Constants.Elevator.intializationVoltage);
+    requestedHeightMeters = 0;
     return inputs.leaderVelocityMetersPerSecond;
   }
 
   public void setEmergencyHomingComplete() {
     io.setPosition(Constants.Elevator.maxElevatorHeightMeters);
+    setReHome();
+  }
+
+  public void setReHome() {
     isHomed = true;
     idle();
   }
 
   public void stop(IdleMode idleMode) {
     io.stop(idleMode);
+    reset();
     isSlow = false;
+  }
+
+  public boolean isMoving() {
+    return !atSetpoint()
+        || inputs.leaderVelocityMetersPerSecond > Constants.Elevator.initializationCompleteSpeed;
   }
 
   public void safeBargeRetract() {

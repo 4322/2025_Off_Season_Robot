@@ -437,6 +437,9 @@ public class Superstructure extends SubsystemBase {
 
   public void requestReHome() {
     ishomed = true;
+    elevator.setReHome();
+    arm.setReHome();
+    intakeSuperstructure.setReHome();
     state = Superstates.IDLE;
   }
 

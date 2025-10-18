@@ -132,7 +132,7 @@ public class ArmIONitrate implements ArmIO {
     inputs.controllerTempCelsius = armMotor.getControllerTemperatureFrame().getData();
     inputs.armEncoderConnected = armEncoder.isConnected();
     inputs.voltage = armMotor.getAppliedVoltageFrame().getValue();
-    inputs.encoderRotations = armMotor.getPosition();
+    inputs.encoderArmRotations = armEncoder.getPosition() / Constants.Arm.sensorToArm;
     if (Constants.debugPIDModeEnabled) {
       inputs.kPeffort = armMotor.getPIDDebugFrames().kPControlEffortFrame.getValue();
       inputs.kIeffort = armMotor.getPIDDebugFrames().kIControlEffortFrame.getValue();

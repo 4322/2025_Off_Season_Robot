@@ -175,11 +175,10 @@ public class ElevatorIONitrate implements ElevatorIO {
 
   @Override
   public void setPosition(double elevatorPositionMeters) {
-    stop(IdleMode.kBrake);
     lastRequestedPosRotations = metersToRotations(elevatorPositionMeters);
     leaderMotor.setPosition(lastRequestedPosRotations);
     followerMotor.setPosition(lastRequestedPosRotations);
-    lastRequestedPosMeters = -1;
+    stop(IdleMode.kBrake);
   }
 
   @Override

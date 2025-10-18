@@ -263,6 +263,16 @@ public class IntakeSuperstructure extends SubsystemBase {
     requestHomed = true;
   }
 
+  public void setReHome() {
+    deployer.setReHome();
+    isHomed = true;
+    if (DriverStation.isEnabled()) {
+      state = IntakeSuperstates.RETRACT_IDLE;
+    } else {
+      state = IntakeSuperstates.DISABLED;
+    }
+  }
+
   public boolean isCoralDetectedIntake() {
     return rollers.isCoralPickupDetected()
         || indexer.isCoralDetectedPickupArea()
