@@ -37,9 +37,11 @@ public class AlgaePrescoreAuto extends Command {
   @Override
   public void execute() {
     // Only request auto rotate if not following pathplanner path command
-    if (drive.getCurrentCommand() == drive.getDefaultCommand() && (drive.getCurrentCommand() != null)) {
+    if (drive.getCurrentCommand() != null){
+    if (drive.getCurrentCommand() == drive.getDefaultCommand()) {
       drive.requestAutoRotateMode(targetAngle);
     }
+  }
 
     if (Robot.alliance == Alliance.Blue) {
       if (drive.getPose().getTranslation().getX()
