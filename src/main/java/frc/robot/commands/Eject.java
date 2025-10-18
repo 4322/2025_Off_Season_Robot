@@ -23,9 +23,10 @@ public class Eject extends Command {
 
   @Override
   public void initialize() {
-    if (drive.getCurrentCommand() != drive.getDefaultCommand() && (drive.getCurrentCommand() != null)) {
+    if (drive.getCurrentCommand() != drive.getDefaultCommand()
+        && (drive.getCurrentCommand() != null)) {
       drive.getCurrentCommand().cancel();
-    } 
+    }
   }
 
   @Override
