@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,7 +15,6 @@ import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
-import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -285,7 +287,6 @@ public class Superstructure extends SubsystemBase {
       case PRESCORE_CORAL:
         arm.prescoreCoral(level);
         elevator.prescoreCoral(level);
-
         if (requestScoreCoral && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.SCORE_CORAL;
         } else if (requestIdle) {
@@ -304,6 +305,9 @@ public class Superstructure extends SubsystemBase {
           if (arm.atSetpoint() && elevator.atSetpoint()) {
             endEffector.releaseCoralL1();
           }
+        } else if (level == Level.L4
+            && (arm.getAngleDegrees() <= Constants.Arm.scoringEarilyReleaseL4)) {
+          endEffector.releaseCoralNormal();
         } else {
           if (arm.atSetpoint() && elevator.atSetpoint()) {
             endEffector.releaseCoralNormal();

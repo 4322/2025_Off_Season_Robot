@@ -188,6 +188,7 @@ public final class Constants {
     public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20;
     public static final double scoringL4CoralDeg = Constants.Arm.prescoringL4CoralDeg - 7;
 
+    public static final double scoringEarilyReleaseL4 = Constants.Arm.scoringL4CoralDeg + 4;
     // Prescore Degrees Arm
     public static final double prescoringL1CoralDeg = 57.773;
     public static final double prescoringL2CoralDeg = 120.546;

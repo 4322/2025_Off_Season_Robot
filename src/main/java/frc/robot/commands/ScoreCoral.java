@@ -329,7 +329,7 @@ public class ScoreCoral extends Command {
                               Constants.AutoScoring.atReefFaceL1Tolerance))))) {
             if (level == Level.L4) {
               times.start();
-              if (times.hasElapsed(0.1)) {
+              if (times.hasElapsed(0.05)) {
                 superstructure.requestScoreCoral(level);
                 times.stop();
                 times.reset();
