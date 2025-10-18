@@ -38,7 +38,10 @@ public class Arm extends SubsystemBase {
 
     } else {
       if (isHomed) {
-        if (Math.abs(inputs.PositionDegrees - inputs.encoderArmRotations % 1.0 * 360)
+        if (Math.abs(
+                inputs.PositionDegrees
+                    + Constants.Arm.OffsetEncoderDeg
+                    - inputs.encoderArmRotations % 1.0 * 360)
             <= Constants.Arm.syncToleranceDegrees) {
           inSync = true;
         } else if (!isMoving()) {
