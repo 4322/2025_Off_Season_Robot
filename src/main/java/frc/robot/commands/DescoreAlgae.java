@@ -135,7 +135,7 @@ public class DescoreAlgae extends Command {
           if (descoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           }
-          if (driveToPose.atGoal()) {
+          if (driveToPose.atGoal() || isInSafeArea()) {
             running = false;
           }
 
