@@ -1,11 +1,5 @@
 package frc.robot.constants;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,6 +11,11 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Contains various field dimensions and useful reference points. All units are in meters and poses
@@ -399,16 +398,15 @@ public class FieldConstants {
         Units.inchesToMeters(8) // Changed from 7 added inches 1.5
             + robotBumperToCenter;
     private static final double scoringDistanceFromReefBlue =
-    Units.inchesToMeters(8.7) // Changed from 7 added inches 1.5
-        + robotBumperToCenter;
+        Units.inchesToMeters(8.7) // Changed from 7 added inches 1.5
+            + robotBumperToCenter;
 
     private static final double scoringDistanceFromReefL4Blue =
         Units.inchesToMeters(8.9) // Changed from 8.2 added inches 1
             + robotBumperToCenter;
-            
+
     private static final double scoringDistanceFromReefL4Red =
-        Units.inchesToMeters(8.2) 
-            + robotBumperToCenter;
+        Units.inchesToMeters(8.2) + robotBumperToCenter;
     // TODO: Only change the number which represents distance between
     // face of reef and front of robot bumper
     private static final double descoreAlgaeDriveInDist =
@@ -457,9 +455,9 @@ public class FieldConstants {
 
     // Scoring positions of center of robot drivebase
     public static final Translation2d leftReefBranchScoringBlue =
-        leftReefBranchFaceBlue.plus(new Translation2d(scoringDistanceFromReefBlue , 0));
+        leftReefBranchFaceBlue.plus(new Translation2d(scoringDistanceFromReefBlue, 0));
     public static final Translation2d rightReefBranchScoringBlue =
-        rightReefBranchFaceBlue.plus(new Translation2d(scoringDistanceFromReefBlue , 0));
+        rightReefBranchFaceBlue.plus(new Translation2d(scoringDistanceFromReefBlue, 0));
 
     public static final Translation2d leftReefBranchScoringBlueL4 =
         leftReefBranchFaceBlue.plus(new Translation2d(scoringDistanceFromReefL4Blue, 0));
