@@ -419,7 +419,7 @@ public class FieldConstants {
 
     // TODO: Only change the number which represents distance from inside of auto starting line to
     // edge of robot bumper
-    private static final double autoBargePreScoreDistance = Units.inchesToMeters(0);
+    private static final double autoBargePreScoreDistance = Units.inchesToMeters(18);
 
     public static final double safeDistFromBranchScoringPos =
         reefSafeDistance - scoringDistanceFromReef;
