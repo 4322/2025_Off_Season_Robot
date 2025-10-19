@@ -1,5 +1,11 @@
 package frc.robot.constants;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -11,11 +17,6 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Contains various field dimensions and useful reference points. All units are in meters and poses
@@ -398,11 +399,11 @@ public class FieldConstants {
         Units.inchesToMeters(8) // Changed from 7 added inches 1.5
             + robotBumperToCenter;
     private static final double scoringDistanceFromReefBlue =
-        Units.inchesToMeters(8.7) // Changed from 7 added inches 1.5
+        Units.inchesToMeters(8.1) // Changed from 7 added inches 1.5
             + robotBumperToCenter;
 
     private static final double scoringDistanceFromReefL4Blue =
-        Units.inchesToMeters(8.9) // Changed from 8.2 added inches 1
+        Units.inchesToMeters(8.3) // Changed from 8.2 added inches 1
             + robotBumperToCenter;
 
     private static final double scoringDistanceFromReefL4Red =
