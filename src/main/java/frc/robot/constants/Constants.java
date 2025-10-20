@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
@@ -146,11 +147,15 @@ public final class Constants {
 
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // positive is up toward scoring side
+    public static final InvertedValue motorInversion = InvertedValue.Clockwise_Positive;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
 
     public static final double sensorToArm = 85 / 10.0;
     public static final double motorShaftToSensorShaft = 60 / 12.0;
     public static final double motorGearRatio = sensorToArm * motorShaftToSensorShaft;
+    public static final double motionMagicJerk = 0;
+    public static final double peakForwardVoltage = 12.0;
+    public static final double peakReverseVoltage = -12.0;
 
     public static final double armIdleDeg = 0.0;
     public static final double algaeHoldDeg = 180.0;

@@ -184,3 +184,60 @@ public class ArmIONitrate implements ArmIO {
     return armMotor;
   }
 }
+
+// public ArmIOTalonfX() {
+//   armMotor = new TalonFX(Constants.Arm.armMotorId);
+//   StatusCode armConfigStatus = configArm();
+//   StatusCode configStatus = configArm();
+//   if (configStatus != StatusCode.OK) {
+//     DriverStation.reportError(
+//         "Kraken "
+//             + armMotor.getDeviceID()
+//             + " (Arm motor) failed to configure"
+//             + configStatus.getDescription(),
+//         false);
+//   }
+// }
+// // }
+
+// public StatusCode configArm() {
+//   motorConfig.Slot0.kP = Constants.Arm.kP;
+//   motorConfig.Slot0.kI = Constants.Arm.kI;
+//   motorConfig.Slot0.kD = Constants.Arm.kD;
+
+//   motorConfig.CurrentLimits.SupplyCurrentLimit = Constants.Arm.supplyCurrentLimitAmps;
+//   motorConfig.CurrentLimits.StatorCurrentLimit = Constants.Arm.statorCurrentLimitAmps;
+
+//   motorConfig.Voltage.PeakForwardVoltage = Constants.Arm.peakForwardVoltage;
+//   motorConfig.Voltage.PeakReverseVoltage = Constants.Arm.peakReverseVoltage;
+
+//   motorConfig.MotorOutput.Inverted = Constants.Arm.motorInversion;
+//   motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+//   motorConfig.MotionMagic.MotionMagicCruiseVelocity =
+//       (Constants.Arm.velocityLimitCoral / (Math.PI * Constants.Arm.motorGearRatio));
+//   motorConfig.MotionMagic.MotionMagicJerk = Constants.Arm.motionMagicJerk;
+
+//   return armMotor.getConfigurator().apply(motorConfig);
+// }
+
+// @Override
+// public void updateInputs(ArmIOInputs inputs) {
+//   inputs.requestedPosDeg = lastRequestedPosDeg;
+//   inputs.PositionDegrees =
+//       Units.rotationsToDegrees(armMotor.getPosition().getValueAsDouble())
+//           - Constants.Arm.OffsetEncoderDeg;
+//   inputs.armConnected = armMotor.isConnected();
+//   // inputs.voltage = armMotor.getBusVoltageFrame().getValueAsDouble();
+//   inputs.velocityDegSec = Units.rotationsToDegrees(armMotor.getVelocity().getValueAsDouble());
+//   inputs.SupplyCurrentAmps = armMotor.getSupplyCurrent().getValueAsDouble();
+//   inputs.StatorCurrentAmps = armMotor.getStatorCurrent().getValueAsDouble();
+//   inputs.motorTempCelsius = armMotor.getDeviceTemp().getValueAsDouble();
+//   inputs.tempCelcius =
+//       new double[] {
+//         armMotor.getDeviceTemp().getValueAsDouble(),
+//       };
+//   inputs.armEncoderConnected = armEncoder.isConnected();
+//   // inputs.voltage = armMotor.getAppliedVolts().getValueAsDouble();
+//   inputs.encoderArmRotations = armEncoder.getPosition() / Constants.Arm.sensorToArm;
+// }

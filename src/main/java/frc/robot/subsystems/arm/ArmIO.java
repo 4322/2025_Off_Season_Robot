@@ -16,6 +16,7 @@ public interface ArmIO {
     public double SupplyCurrentAmps = 0.0;
     public double StatorCurrentAmps = 0.0;
     public double motorTempCelsius = 0.0;
+    public double[] tempCelcius = new double[] {};
     public double controllerTempCelsius = 0.0;
     public double PositionDegrees =
         0.0; // 0 is vertical to front of robot. Posititve clockwise looking from the left
