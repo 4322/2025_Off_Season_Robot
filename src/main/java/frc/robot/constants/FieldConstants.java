@@ -398,11 +398,11 @@ public class FieldConstants {
         Units.inchesToMeters(8) // Changed from 7 added inches 1.5
             + robotBumperToCenter;
     private static final double scoringDistanceFromReefBlue =
-        Units.inchesToMeters(8.1) // Changed from 7 added inches 1.5
+        Units.inchesToMeters(8) // Changed from 7 added inches 1.5
             + robotBumperToCenter;
 
     private static final double scoringDistanceFromReefL4Blue =
-        Units.inchesToMeters(8.3) // Changed from 8.2 added inches 1
+        Units.inchesToMeters(8.2) // Changed from 8.2 added inches 1
             + robotBumperToCenter;
 
     private static final double scoringDistanceFromReefL4Red =
