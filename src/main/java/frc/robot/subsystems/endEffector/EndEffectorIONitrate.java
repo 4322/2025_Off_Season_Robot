@@ -75,7 +75,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.motorConnected = endEffectorMotor.isConnected();
     inputs.speedRotationsPerSec = endEffectorMotor.getVelocity();
     inputs.statorCurrentAmps = endEffectorMotor.getStatorCurrent();
-    inputs.MotortempCelcius = endEffectorMotor.getMotorTemperatureFrame().getValue();
+    inputs.motorTempCelcius = endEffectorMotor.getMotorTemperatureFrame().getValue();
     inputs.controllerTempCelcius = endEffectorMotor.getControllerTemperatureFrame().getValue();
     inputs.busCurrentAmps = endEffectorMotor.getBusCurrent();
     inputs.appliedVolts = endEffectorMotor.getBusVoltageFrame().getValue();

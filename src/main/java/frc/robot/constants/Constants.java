@@ -338,6 +338,7 @@ public final class Constants {
     public static final double whiteDetectRed = 180;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert = InvertMode.kNotInverted; // positive is intaking
+    public static final InvertedValue motorInvertPhoenix = InvertedValue.Clockwise_Positive; // TODO check if this is right
 
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
