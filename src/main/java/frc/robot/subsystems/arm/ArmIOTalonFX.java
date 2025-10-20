@@ -1,4 +1,4 @@
-package frc.robot.subsystems.flipper;
+package frc.robot.subsystems.arm;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
