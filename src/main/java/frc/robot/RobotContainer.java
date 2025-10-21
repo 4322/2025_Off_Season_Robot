@@ -41,8 +41,8 @@ import frc.robot.subsystems.drive.ModuleIONitrate;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIONitrate;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.elevator.ElevatorIOTalonFX;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
@@ -158,7 +158,7 @@ public class RobotContainer {
 
       if (Constants.elevatorMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        elevator = new Elevator(new ElevatorIONitrate());
+        elevator = new Elevator(new ElevatorIOTalonFX());
       } else {
         elevator = new Elevator(new ElevatorIO() {});
       }

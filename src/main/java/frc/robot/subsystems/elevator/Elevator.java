@@ -1,8 +1,6 @@
 package frc.robot.subsystems.elevator;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.BabyAlchemist;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
@@ -48,15 +46,15 @@ public class Elevator extends SubsystemBase {
         case OPEN_LOOP:
           io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
           break;
-        case TUNING:
-          Double newPos =
-              BabyAlchemist.run(
-                  0, io.getNitrate(), "Elevator", inputs.leaderheightMeters, "meters");
-          if (newPos != null) {
-            io.requestHeightMeters(newPos);
-            requestedHeightMeters = newPos;
-          }
-          break;
+          // case TUNING:
+          //   Double newPos =
+          //       BabyAlchemist.run(
+          //           0, io.getNitrate(), "Elevator", inputs.leaderheightMeters, "meters");
+          //   if (newPos != null) {
+          //     io.requestHeightMeters(newPos);
+          //     requestedHeightMeters = newPos;
+          //   }
+          //   break;
         case DISABLED:
           break;
         case NORMAL:
@@ -210,7 +208,7 @@ public class Elevator extends SubsystemBase {
     isHomed = false;
     io.setVoltage(Constants.Elevator.intializationVoltage);
     requestedHeightMeters = 0;
-    return inputs.leaderVelocityMetersPerSecond;
+    return inputs.velMetersPerSecond;
   }
 
   public void setEmergencyHomingComplete() {
@@ -223,15 +221,15 @@ public class Elevator extends SubsystemBase {
     idle();
   }
 
-  public void stop(IdleMode idleMode) {
-    io.stop(idleMode);
+  public void stop() {
+    io.stop();
     reset();
     isSlow = false;
   }
 
   public boolean isMoving() {
     return !atSetpoint()
-        || inputs.leaderVelocityMetersPerSecond > Constants.Elevator.initializationCompleteSpeed;
+        || Math.abs(inputs.velMetersPerSecond) > Constants.Elevator.initializationCompleteSpeed;
   }
 
   public void safeBargeRetract() {

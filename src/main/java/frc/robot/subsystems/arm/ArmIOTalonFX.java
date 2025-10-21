@@ -6,7 +6,6 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -27,10 +26,7 @@ public class ArmIOTalonFX implements ArmIO {
 
     if (armConfigStatus != StatusCode.OK) {
       DriverStation.reportError(
-          "Talon"
-              + armMotor.getDeviceID()
-              + " error (Arm): "
-              + armConfigStatus.getDescription(),
+          "Talon" + armMotor.getDeviceID() + " error (Arm): " + armConfigStatus.getDescription(),
           false);
     }
   }
@@ -54,11 +50,11 @@ public class ArmIOTalonFX implements ArmIO {
     motorConfig.HardwareLimitSwitch.ReverseLimitEnable = false;
 
     motorConfig.MotionMagic.MotionMagicAcceleration =
-        Constants.Arm.accelerationLimitCoral/ (Math.PI * Constants.Arm.gearRatio);
-        motorConfig.MotionMagic.MotionMagicCruiseVelocity =
-        Constants.Arm.deaccelerationLimitCoral/ (Math.PI * Constants.Arm.gearRatio);
+        Constants.Arm.accelerationLimitCoral / (Math.PI * Constants.Arm.gearRatio);
+    motorConfig.MotionMagic.MotionMagicCruiseVelocity =
+        Constants.Arm.deaccelerationLimitCoral / (Math.PI * Constants.Arm.gearRatio);
 
-    motorConfig.MotionMagic.MotionMagicJerk = Constants.Arm.motionMagicJerk;   
+    motorConfig.MotionMagic.MotionMagicJerk = Constants.Arm.motionMagicJerk;
 
     motorConfig.HardwareLimitSwitch.ForwardLimitEnable = false;
     motorConfig.HardwareLimitSwitch.ReverseLimitEnable = false;

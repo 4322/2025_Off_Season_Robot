@@ -6,7 +6,6 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
-
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -228,6 +227,7 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
     public static final InvertMode motorBackInvert = InvertMode.kInverted; // positive is up
+    public static final InvertedValue motorInversion = InvertedValue.Clockwise_Positive;
 
     public static final double fast_kP = 4; // TODO: Set to actual value
     public static final double fast_kI = 0; // TODO: Set to actual value
@@ -287,6 +287,8 @@ public final class Constants {
     public static final double fastAccelerationMetersPerSec2 = 700 / 50.0;
     public static final double fastDecelerationMetersPerSec2 = 300 / 50.0;
     public static final double fastVelocityMetersPerSec = 100 / 50.0;
+
+    public static final double motionMagicJerk = 0;
 
     public static final double slowAccelerationMetersPerSec2 = 10 / 50.0; // TODO tune these
     public static final double slowDecelerationMetersPerSec2 = 10 / 50.0;
