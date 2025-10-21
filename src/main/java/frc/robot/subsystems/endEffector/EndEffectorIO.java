@@ -39,7 +39,11 @@ public interface EndEffectorIO {
 
   public default void setVoltage(double voltage) {}
 
-  public default void stop(IdleMode idleMode) {}
+  public default void stopNitrate(IdleMode idleMode) {}
+
+  public default void stop() {}
+
+  public default void enableBrakeMode(boolean enable) {}
 
   // For sim mode
   public default void simCoralHeld() {}

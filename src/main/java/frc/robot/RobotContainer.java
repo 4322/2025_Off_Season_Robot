@@ -45,12 +45,12 @@ import frc.robot.subsystems.elevator.ElevatorIONitrate;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
-import frc.robot.subsystems.endEffector.EndEffectorIONitrate;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
+import frc.robot.subsystems.endEffector.EndEffectorIOTalonFX;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
-import frc.robot.subsystems.indexer.IndexerIONitrate;
 import frc.robot.subsystems.indexer.IndexerIOSim;
+import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
@@ -165,7 +165,7 @@ public class RobotContainer {
 
       if (Constants.indexerMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        indexer = new Indexer(new IndexerIONitrate());
+        indexer = new Indexer(new IndexerIOTalonFX());
       } else {
         indexer = new Indexer(new IndexerIO() {});
       }
@@ -179,7 +179,7 @@ public class RobotContainer {
 
       if (Constants.endEffectorMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        endEffector = new EndEffector(new EndEffectorIONitrate());
+        endEffector = new EndEffector(new EndEffectorIOTalonFX());
       } else {
         endEffector = new EndEffector(new EndEffectorIO() {});
       }

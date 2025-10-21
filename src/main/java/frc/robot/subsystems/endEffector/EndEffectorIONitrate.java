@@ -137,7 +137,7 @@ public class EndEffectorIONitrate implements EndEffectorIO {
 
   @Override
   // This covers both stopping motor as well as setting brake/coast mode
-  public void stop(IdleMode idleMode) {
+  public void stopNitrate(IdleMode idleMode) {
     previousRequestedVoltage = -999;
     endEffectorMotor.stop(idleMode);
     endEffectorMotor.setVoltage(0); // work around stop not working

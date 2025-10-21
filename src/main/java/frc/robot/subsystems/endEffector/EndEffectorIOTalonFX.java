@@ -108,10 +108,12 @@ public class EndEffectorIOTalonFX implements EndEffectorIO {
     }
   }
 
+  @Override
   public void stop() {
     endEffectorMotor.stopMotor();
   }
 
+  @Override
   public void enableBrakeMode(boolean enable) {
     endEffectorMotor.setNeutralMode(enable ? NeutralModeValue.Brake : NeutralModeValue.Coast);
   }
