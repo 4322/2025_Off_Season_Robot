@@ -37,11 +37,15 @@ public interface IndexerIO {
 
   public default void setVoltage(double voltage) {}
 
-  public default void stop(IdleMode mode) {}
+  public default void stopNitrate(IdleMode mode) {}
+
+  public default void stop() {}
 
   public default void setLeftMotorVoltage(double voltage) {}
 
   public default void setRightMotorVoltage(double voltage) {}
+
+  public default void enableBrakeMode(boolean enable) {}
 
   // for tuning
   public default Nitrate getRightNitrate() {

@@ -132,11 +132,13 @@ public class IndexerIOTalonFX implements IndexerIO {
     }
   }
 
+  @Override
   public void stop() {
     indexerMotorRight.stopMotor();
     indexerMotorLeft.stopMotor();
   }
 
+  @Override
   public void enableBrakeMode(boolean enable) {
     indexerMotorRight.setNeutralMode(enable ? NeutralModeValue.Brake : NeutralModeValue.Coast);
     indexerMotorLeft.setNeutralMode(enable ? NeutralModeValue.Brake : NeutralModeValue.Coast);

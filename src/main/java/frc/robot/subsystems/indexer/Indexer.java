@@ -1,6 +1,5 @@
 package frc.robot.subsystems.indexer;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BabyAlchemist;
 import frc.robot.constants.Constants;
@@ -77,7 +76,11 @@ public class Indexer extends SubsystemBase {
 
   public void idle() {
     currentAction = IndexerStatus.START;
-    io.stop(IdleMode.kCoast);
+    io.stop();
+  }
+
+  public void enableBrakeMode(boolean enable) {
+    io.enableBrakeMode(enable);
   }
 
   public boolean isCoralDetectedIndexer() {

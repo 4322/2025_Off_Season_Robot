@@ -1,6 +1,5 @@
 package frc.robot.subsystems.endEffector;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -95,7 +94,7 @@ public class EndEffector extends SubsystemBase {
 
     switch (state) {
       case IDLE:
-        io.stop(IdleMode.kCoast);
+        io.stop();
         if (requestIntakeAlgae) {
           state = EndEffectorStates.INTAKE_ALGAE;
         } else if (requestIntakeCoral) {
@@ -336,8 +335,8 @@ public class EndEffector extends SubsystemBase {
     return coralHeld;
   }
 
-  public void setNeutralMode(IdleMode mode) {
-    io.stop(mode);
+  public void enableBrakeMode(boolean enable) {
+    io.enableBrakeMode(enable);
   }
 
   private void unsetAllRequests() {
