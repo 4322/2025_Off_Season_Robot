@@ -19,7 +19,6 @@ public class ArmIOSim implements ArmIO {
   @Override
   public void updateInputs(ArmIOInputs inputs) {
     inputs.armConnected = true;
-    inputs.armEncoderConnected = true;
 
     double prevPos = position;
     simPos();

@@ -1,6 +1,6 @@
 package frc.robot.subsystems.arm;
 
-import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
+import com.ctre.phoenix6.hardware.TalonFX;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
@@ -46,7 +46,7 @@ public interface ArmIO {
 
   public default void setManualInitialization() {}
 
-  public default Nitrate getKrakenFX() {
+  public default TalonFX getKrakenFX() {
     return null;
   } // for tuning
 }
