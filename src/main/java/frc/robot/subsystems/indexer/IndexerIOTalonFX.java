@@ -6,23 +6,20 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 import com.reduxrobotics.sensors.canandcolor.CanandcolorSettings;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.endEffector.EndEffectorIO.EndEffectorIOInputs;
 
 public class IndexerIOTalonFX implements IndexerIO {
   private TalonFX indexerMotorLeft;
   private TalonFX indexerMotorRight;
-private Canandcolor indexerSensor;
+  private Canandcolor indexerSensor;
   private Canandcolor pickupAreaSensor;
-
 
   private double previousRequestedVoltage = -999;
 
   private TalonFXConfiguration motorConfigsLeft = new TalonFXConfiguration();
-    private TalonFXConfiguration motorConfigsRight = new TalonFXConfiguration();
-    private CanandcolorSettings indexerSensorConfig = new CanandcolorSettings();
+  private TalonFXConfiguration motorConfigsRight = new TalonFXConfiguration();
+  private CanandcolorSettings indexerSensorConfig = new CanandcolorSettings();
   private CanandcolorSettings pickupAreaSensorConfig = new CanandcolorSettings();
 
   public IndexerIOTalonFX() {
@@ -53,8 +50,6 @@ private Canandcolor indexerSensor;
 
     StatusCode feederConfigStatusRight = indexerMotorLeft.getConfigurator().apply(motorConfigsLeft);
 
-
-
     if (feederConfigStatusLeft != StatusCode.OK) {
       DriverStation.reportError(
           "Talon "
@@ -65,15 +60,15 @@ private Canandcolor indexerSensor;
     }
 
     if (feederConfigStatusRight != StatusCode.OK) {
-        DriverStation.reportError(
-            "Talon "
-                + indexerMotorRight.getDeviceID()
-                + " error (End Effector): "
-                + feederConfigStatusRight.getDescription(),
-            false);
-      }
+      DriverStation.reportError(
+          "Talon "
+              + indexerMotorRight.getDeviceID()
+              + " error (End Effector): "
+              + feederConfigStatusRight.getDescription(),
+          false);
+    }
 
-      configSensor();
+    configSensor();
     CanandcolorSettings indexerSensorConfigStatus =
         indexerSensor.setSettings(indexerSensorConfig, 0.1, 5);
     if (!indexerSensorConfigStatus.isEmpty()) {
@@ -93,7 +88,6 @@ private Canandcolor indexerSensor;
               + " error (Pickup Area Sensor); Did not receive settings",
           false);
     }
-
   }
 
   @Override
@@ -122,7 +116,6 @@ private Canandcolor indexerSensor;
     inputs.pickupAreaSensorTriggered =
         pickupAreaSensor.getProximity() < Constants.Indexer.pickupAreaSensorMax;
     inputs.pickupAreaSensorProximity = pickupAreaSensor.getProximity();
-
   }
 
   private void configSensor() {
@@ -133,10 +126,10 @@ private Canandcolor indexerSensor;
   @Override
   public void setVoltage(double voltage) {
     if (voltage != previousRequestedVoltage || Constants.continuousNitrateRequestsEnabled) {
-        previousRequestedVoltage = voltage;
-        indexerMotorRight.setVoltage(voltage);
-        indexerMotorLeft.setVoltage(voltage);
-      }
+      previousRequestedVoltage = voltage;
+      indexerMotorRight.setVoltage(voltage);
+      indexerMotorLeft.setVoltage(voltage);
+    }
   }
 
   public void stop() {

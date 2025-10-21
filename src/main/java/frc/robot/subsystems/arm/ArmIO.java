@@ -19,6 +19,8 @@ public interface ArmIO {
     public double controllerTempCelsius = 0.0;
     public double PositionDegrees =
         0.0; // 0 is vertical to front of robot. Posititve clockwise looking from the left
+
+    // ASk if we still need the PID debugging frames
     public double kGeffort;
     public double kPeffort;
     public double kIeffort;

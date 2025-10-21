@@ -103,9 +103,9 @@ public class EndEffectorIOTalonFX implements EndEffectorIO {
   @Override
   public void setVoltage(double voltage) {
     if (voltage != previousRequestedVoltage || Constants.continuousNitrateRequestsEnabled) {
-        previousRequestedVoltage = voltage;
-        endEffectorMotor.setVoltage(voltage);
-      }
+      previousRequestedVoltage = voltage;
+      endEffectorMotor.setVoltage(voltage);
+    }
   }
 
   public void stop() {
