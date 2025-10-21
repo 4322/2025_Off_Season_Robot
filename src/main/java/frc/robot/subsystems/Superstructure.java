@@ -482,13 +482,13 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void CoastMotors() {
-    arm.stop(IdleMode.kCoast);
+    arm.stop();
     elevator.stop(IdleMode.kCoast);
     intakeSuperstructure.deployer.stop(IdleMode.kCoast);
   }
 
   public void BreakMotors() {
-    arm.stop(IdleMode.kBrake);
+    arm.stop();
     elevator.stop(IdleMode.kBrake);
     intakeSuperstructure.deployer.stop(IdleMode.kBrake);
   }

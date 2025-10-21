@@ -28,8 +28,8 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
-import frc.robot.subsystems.arm.ArmIONitrate;
 import frc.robot.subsystems.arm.ArmIOSim;
+import frc.robot.subsystems.arm.ArmIOTalonFX;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.deployer.DeployerIO;
 import frc.robot.subsystems.deployer.DeployerIONitrate;
@@ -151,7 +151,7 @@ public class RobotContainer {
 
       if (Constants.armMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        arm = new Arm(new ArmIONitrate());
+        arm = new Arm(new ArmIOTalonFX());
       } else {
         arm = new Arm(new ArmIO() {});
       }

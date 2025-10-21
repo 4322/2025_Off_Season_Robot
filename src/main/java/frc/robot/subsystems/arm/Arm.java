@@ -1,10 +1,8 @@
 package frc.robot.subsystems.arm;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.BabyAlchemist;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
@@ -54,13 +52,14 @@ public class Arm extends SubsystemBase {
             double x = -RobotContainer.driver.getRightX();
             io.setVoltage(x * x * x * 12.0);
             break;
-          case TUNING:
-            Double newPos =
-                BabyAlchemist.run(0, io.getNitrate(), "Arm", inputs.PositionDegrees, "degrees");
-            if (newPos != null) {
-              io.requestPositionCoral(newPos);
-            }
-            break;
+            // case TUNING:
+            //   Double newPos =
+            //       BabyAlchemist.run(0, io.getKrakenFX(), "Arm", inputs.PositionDegrees,
+            // "degrees");
+            //   if (newPos != null) {
+            //     io.requestPositionCoral(newPos);
+            //   }
+            //   break;
           case DISABLED:
             break;
           case NORMAL:
@@ -199,8 +198,8 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = Constants.Arm.safeBargeRetractDeg;
   }
 
-  public void stop(IdleMode mode) {
-    io.stopArmMotor(mode);
+  public void stop() {
+    io.stopArmMotor();
     reset();
   }
 

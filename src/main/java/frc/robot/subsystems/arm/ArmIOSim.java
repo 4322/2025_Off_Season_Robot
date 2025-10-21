@@ -1,6 +1,6 @@
 package frc.robot.subsystems.arm;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import frc.robot.subsystems.arm.ArmIO.ArmIOInputs;
 
 public class ArmIOSim implements ArmIO {
 
@@ -40,7 +40,7 @@ public class ArmIOSim implements ArmIO {
 
   @Override
   public void setHomePosition(double degrees) {
-    stopArmMotor(IdleMode.kBrake);
+    stopArmMotor();
     this.position = 0;
   }
 
@@ -66,7 +66,7 @@ public class ArmIOSim implements ArmIO {
   }
 
   @Override
-  public void stopArmMotor(IdleMode idleMode) {
+  public void stopArmMotor() {
     requestedPosition = undefinedPosition;
     requestedVoltage = undefinedVoltage;
   }
