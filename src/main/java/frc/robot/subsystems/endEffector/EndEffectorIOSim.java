@@ -4,39 +4,39 @@ import frc.robot.constants.Constants;
 
 public class EndEffectorIOSim implements EndEffectorIO {
   // Preload for beginning of auto
-  private boolean coralDetected = true;
-  private double sensorReading = Constants.EndEffector.coralProximityThreshold - 0.1;
+  private boolean rigatoniDetected = true;
+  private double sensorReading = Constants.EndEffector.rigatoniProximityThreshold - 0.1;
 
-  private boolean algaeDetected = false;
+  private boolean meatballDetected = false;
 
   @Override
   public void updateInputs(EndEffectorIOInputs inputs) {
-    inputs.isCoralProximityDetected = coralDetected;
-    inputs.isAlgaeProximityDetected = algaeDetected;
+    inputs.isRigatoniProximityDetected = rigatoniDetected;
+    inputs.isMeatballProximityDetected = meatballDetected;
     inputs.sensorProximity = sensorReading;
   }
 
   @Override
-  public void simCoralHeld() {
-    coralDetected = true;
-    sensorReading = Constants.EndEffector.coralProximityThreshold - 0.1;
+  public void simRigatoniHeld() {
+    rigatoniDetected = true;
+    sensorReading = Constants.EndEffector.rigatoniProximityThreshold - 0.1;
   }
 
   @Override
-  public void simAlgaeHeld() {
-    algaeDetected = true;
-    sensorReading = Constants.EndEffector.algaeProximityThresholdIntake - 0.1;
+  public void simMeatballHeld() {
+    meatballDetected = true;
+    sensorReading = Constants.EndEffector.meatballProximityThresholdIntake - 0.1;
   }
 
   @Override
-  public void simCoralReleased() {
-    coralDetected = false;
-    sensorReading = Constants.EndEffector.coralProximityThreshold + 0.1;
+  public void simRigatoniReleased() {
+    rigatoniDetected = false;
+    sensorReading = Constants.EndEffector.rigatoniProximityThreshold + 0.1;
   }
 
   @Override
-  public void simAlgaeReleased() {
-    algaeDetected = false;
-    sensorReading = Constants.EndEffector.algaeProximityThresholdIntake + 0.1;
+  public void simMeatballReleased() {
+    meatballDetected = false;
+    sensorReading = Constants.EndEffector.meatballProximityThresholdIntake + 0.1;
   }
 }

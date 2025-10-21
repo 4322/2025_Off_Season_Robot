@@ -9,7 +9,7 @@ public class ReefStatus {
   private ClosestReefPipe closestReefPipe;
   private L1Zone closestL1Zone;
   private int tagId;
-  private AlgaeLevel algaeLevel;
+  private MeatballLevel meatballLevel;
 
   public enum L1Zone {
     MIDDLE,
@@ -22,7 +22,7 @@ public class ReefStatus {
     RIGHT
   }
 
-  public enum AlgaeLevel {
+  public enum MeatballLevel {
     L2,
     L3
   }
@@ -33,7 +33,7 @@ public class ReefStatus {
       Rotation2d closestReefFaceAngle,
       ClosestReefPipe closestReefPipe,
       L1Zone closestL1Zone,
-      AlgaeLevel algaeLevel,
+      MeatballLevel meatballLevel,
       int tagId) {
     this.reefFaceAmbiguity = reefFaceAmbiguity;
     this.reefPipeAmbiguity = reefPipeAmbiguity;
@@ -41,7 +41,7 @@ public class ReefStatus {
     this.closestReefPipe = closestReefPipe;
     this.closestL1Zone = closestL1Zone;
     this.tagId = tagId;
-    this.algaeLevel = algaeLevel;
+    this.meatballLevel = meatballLevel;
   }
 
   public boolean getReefFaceAmbiguity() {
@@ -64,8 +64,8 @@ public class ReefStatus {
     return closestL1Zone;
   }
 
-  public AlgaeLevel getAlgaeLevel() {
-    return algaeLevel;
+  public MeatballLevel getMeatballLevel() {
+    return meatballLevel;
   }
 
   public int getFaceTagId() {

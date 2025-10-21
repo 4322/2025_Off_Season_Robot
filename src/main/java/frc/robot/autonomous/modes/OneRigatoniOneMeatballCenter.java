@@ -6,18 +6,18 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Robot;
-import frc.robot.commands.DescoreAlgae;
-import frc.robot.commands.ScoreCoral;
-import frc.robot.commands.auto.AlgaePrescoreAuto;
-import frc.robot.commands.auto.AlgaeScoreAuto;
+import frc.robot.commands.DescoreMeatball;
+import frc.robot.commands.ScoreRigatoni;
+import frc.robot.commands.auto.MeatballPrescoreAuto;
+import frc.robot.commands.auto.MeatballScoreAuto;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.OrangeSequentialCommandGroup;
 
-public class OneCoralTwoAlgaeCenter extends OrangeSequentialCommandGroup {
-
-  public OneCoralTwoAlgaeCenter(Drive drive, Superstructure superstructure) {
+public class OneRigatoniOneMeatballCenter extends OrangeSequentialCommandGroup {
+  public OneRigatoniOneMeatballCenter(Drive drive, Superstructure superstructure) {
+    setName("ONE_RIGATONI_ONE_MEATBALL_CENTER");
     addCommands(
         new InstantCommand(
             () -> {
@@ -28,18 +28,12 @@ public class OneCoralTwoAlgaeCenter extends OrangeSequentialCommandGroup {
               }
               drive.resetPose(path.getStartingHolonomicPose().get());
             }),
-        new ScoreCoral(superstructure, Level.L4, drive, true),
-        new DescoreAlgae(superstructure, drive),
+        new ScoreRigatoni(superstructure, Level.L4, drive, true),
+        new DescoreMeatball(superstructure, drive),
         new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.GulfHotelToCenterBargeBackwards),
-            new AlgaePrescoreAuto(superstructure, drive)),
-        new AlgaeScoreAuto(superstructure, drive),
-        AutoBuilder.followPath(Robot.CenterAlgaeScoreBackwardsToIndiaJuliet),
-        new DescoreAlgae(superstructure, drive),
-        new ParallelCommandGroup(
-            AutoBuilder.followPath(Robot.IndiaJulietToCenterBargeBackwards),
-            new AlgaePrescoreAuto(superstructure, drive)),
-        new AlgaeScoreAuto(superstructure, drive),
-        AutoBuilder.followPath(Robot.CenterBargeBackwardsToLeave));
+            new MeatballPrescoreAuto(superstructure, drive)),
+        new MeatballScoreAuto(superstructure, drive),
+        AutoBuilder.followPath(Robot.CenterMeatballScoreBackwardsToLeave));
   }
 }

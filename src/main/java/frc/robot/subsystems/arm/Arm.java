@@ -57,15 +57,15 @@ public class Arm extends SubsystemBase {
             //       BabyAlchemist.run(0, io.getKrakenFX(), "Arm", inputs.PositionDegrees,
             // "degrees");
             //   if (newPos != null) {
-            //     io.requestPositionCoral(newPos);
+            //     io.requestPositionRigatoni(newPos);
             //   }
             //   break;
           case DISABLED:
             break;
           case NORMAL:
-            if (RobotContainer.getSuperstructure().isCoralHeld()) {
-              minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
-              minElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralMeters;
+            if (RobotContainer.getSuperstructure().isRigatoniHeld()) {
+              minSafeArmDegree = Constants.Arm.minArmSafeWithRigatoniDeg;
+              minElevatorHeight = Constants.Elevator.minElevatorSafeWithRigatoniMeters;
             } else {
               minSafeArmDegree = Constants.Arm.minArmSafeDeg;
               minElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
@@ -91,10 +91,10 @@ public class Arm extends SubsystemBase {
             }
 
             if (prevSetpoint != newSetpoint || Constants.continuousNitrateRequestsEnabled) {
-              if (RobotContainer.getSuperstructure().isAlgaeHeld()) {
-                io.requestPositionAlgae(newSetpoint);
+              if (RobotContainer.getSuperstructure().isMeatballHeld()) {
+                io.requestPositionMeatball(newSetpoint);
               } else {
-                io.requestPositionCoral(newSetpoint);
+                io.requestPositionRigatoni(newSetpoint);
               }
               prevSetpoint = newSetpoint;
             }
@@ -113,27 +113,27 @@ public class Arm extends SubsystemBase {
     requestedSetpoint = Constants.Arm.armIdleDeg;
   }
 
-  public void algaeHold() {
-    requestedSetpoint = Constants.Arm.algaeHoldDeg;
+  public void meatballHold() {
+    requestedSetpoint = Constants.Arm.meatballHoldDeg;
   }
 
-  public void coralHold() {
-    requestedSetpoint = Constants.Arm.coralHoldDeg;
+  public void rigatoniHold() {
+    requestedSetpoint = Constants.Arm.rigatoniHoldDeg;
   }
 
-  public void algaeGround() {
-    requestedSetpoint = Constants.Arm.algaeGroundDeg;
+  public void meatballGround() {
+    requestedSetpoint = Constants.Arm.meatballGroundDeg;
   }
 
-  public void algaeReef() {
-    requestedSetpoint = Constants.Arm.descoringAlgaeDeg;
+  public void meatballReef() {
+    requestedSetpoint = Constants.Arm.descoringMeatballDeg;
   }
 
-  public void scoreAlgae(boolean scoreBackSide) {
+  public void scoreMeatball(boolean scoreBackSide) {
     if (scoreBackSide) {
-      requestedSetpoint = Constants.Arm.scoringBacksideAlgaeDeg;
+      requestedSetpoint = Constants.Arm.scoringBacksideMeatballDeg;
     } else {
-      requestedSetpoint = Constants.Arm.scoringAlgaeDeg;
+      requestedSetpoint = Constants.Arm.scoringMeatballDeg;
     }
   }
 
@@ -142,40 +142,40 @@ public class Arm extends SubsystemBase {
     prevSetpoint = -1;
   }
 
-  public void prescoreCoral(Level level) {
+  public void prescoreRigatoni(Level level) {
     switch (level) {
       case L1:
-        requestedSetpoint = Constants.Arm.prescoringL1CoralDeg;
+        requestedSetpoint = Constants.Arm.prescoringL1RigatoniDeg;
         break;
       case L2:
-        requestedSetpoint = Constants.Arm.prescoringL2CoralDeg;
+        requestedSetpoint = Constants.Arm.prescoringL2RigatoniDeg;
         break;
       case L3:
-        requestedSetpoint = Constants.Arm.prescoringL3CoralDeg;
+        requestedSetpoint = Constants.Arm.prescoringL3RigatoniDeg;
         break;
       case L4:
-        requestedSetpoint = Constants.Arm.prescoringL4CoralDeg;
+        requestedSetpoint = Constants.Arm.prescoringL4RigatoniDeg;
         break;
     }
   }
 
-  public void scoreCoral(Level level) {
+  public void scoreRigatoni(Level level) {
     switch (level) {
       case L1:
-        requestedSetpoint = Constants.Arm.scoringL1CoralDeg;
-        currentScoreSetpoint = Constants.Arm.scoringL1CoralDeg;
+        requestedSetpoint = Constants.Arm.scoringL1RigatoniDeg;
+        currentScoreSetpoint = Constants.Arm.scoringL1RigatoniDeg;
         break;
       case L2:
-        requestedSetpoint = Constants.Arm.scoringL2CoralDeg;
-        currentScoreSetpoint = Constants.Arm.scoringL2CoralDeg;
+        requestedSetpoint = Constants.Arm.scoringL2RigatoniDeg;
+        currentScoreSetpoint = Constants.Arm.scoringL2RigatoniDeg;
         break;
       case L3:
-        requestedSetpoint = Constants.Arm.scoringL3CoralDeg;
-        currentScoreSetpoint = Constants.Arm.scoringL3CoralDeg;
+        requestedSetpoint = Constants.Arm.scoringL3RigatoniDeg;
+        currentScoreSetpoint = Constants.Arm.scoringL3RigatoniDeg;
         break;
       case L4:
-        requestedSetpoint = Constants.Arm.scoringL4CoralDeg;
-        currentScoreSetpoint = Constants.Arm.scoringL4CoralDeg;
+        requestedSetpoint = Constants.Arm.scoringL4RigatoniDeg;
+        currentScoreSetpoint = Constants.Arm.scoringL4RigatoniDeg;
         break;
     }
   }
@@ -185,8 +185,8 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean atSetpoint() {
-    if (requestedSetpoint == Constants.Arm.scoringBacksideAlgaeDeg
-        || requestedSetpoint == Constants.Arm.scoringAlgaeDeg) {
+    if (requestedSetpoint == Constants.Arm.scoringBacksideMeatballDeg
+        || requestedSetpoint == Constants.Arm.scoringMeatballDeg) {
       return true;
     } else {
       return ClockUtil.atReference(

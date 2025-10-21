@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
-import frc.robot.commands.ScoreCoral;
-import frc.robot.commands.auto.CoralIntakeManualAuto;
+import frc.robot.commands.ScoreRigatoni;
+import frc.robot.commands.auto.RigatoniIntakeManualAuto;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
@@ -18,37 +18,37 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.OrangeSequentialCommandGroup;
 import org.littletonrobotics.junction.Logger;
 
-public class ThreeCoralRight extends OrangeSequentialCommandGroup {
-  public ThreeCoralRight(
+public class ThreeRigatoniRight extends OrangeSequentialCommandGroup {
+  public ThreeRigatoniRight(
       Drive drive,
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,
       Vision vision) {
-    setName("THREE_CORAL_RIGHT");
+    setName("THREE_RIGATONI_RIGHT");
     addCommands(
         new InstantCommand(
             () -> {
               superstructure.requestOperationMode(Superstructure.OperationMode.TeleAUTO);
-              PathPlannerPath path = Robot.ThreeCoralStartToEcho;
+              PathPlannerPath path = Robot.ThreeRigatoniStartToEcho;
               if (Robot.alliance == Alliance.Red) {
                 path = path.flipPath();
               }
               drive.resetPose(path.getStartingHolonomicPose().get());
             }),
-        AutoBuilder.followPath(Robot.ThreeCoralStartToEcho),
+        AutoBuilder.followPath(Robot.ThreeRigatoniStartToEcho),
         new InstantCommand(() -> Logger.recordOutput("Auto", "Finished path")),
-        new ScoreCoral(superstructure, Level.L4, drive, false),
+        new ScoreRigatoni(superstructure, Level.L4, drive, false),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
-            new CoralIntakeManualAuto(intakeSuperstructure, true),
+            new RigatoniIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.EchoToFeed)),
         AutoBuilder.followPath(Robot.FeedToDelta),
-        new ScoreCoral(superstructure, Level.L4, drive, false),
+        new ScoreRigatoni(superstructure, Level.L4, drive, false),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
-            new CoralIntakeManualAuto(intakeSuperstructure, true),
+            new RigatoniIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.DeltaToFeed)),
         AutoBuilder.followPath(Robot.FeedToCharlie),
-        new ScoreCoral(superstructure, Level.L4, drive, false));
+        new ScoreRigatoni(superstructure, Level.L4, drive, false));
   }
 }

@@ -86,15 +86,15 @@ public class EndEffectorIONitrate implements EndEffectorIO {
     inputs.sensorColorGreen = endEffectorSensor.getGreen();
     inputs.sensorColorRed = endEffectorSensor.getRed();
 
-    inputs.isCoralProximityDetected =
-        endEffectorSensor.getProximity() < Constants.EndEffector.coralProximityThreshold;
-    inputs.isAlgaeProximityDetected =
-        endEffectorSensor.getProximity() < Constants.EndEffector.algaeProximityThreshold;
-    // than coral is
+    inputs.isRigatoniProximityDetected =
+        endEffectorSensor.getProximity() < Constants.EndEffector.rigatoniProximityThreshold;
+    inputs.isMeatballProximityDetected =
+        endEffectorSensor.getProximity() < Constants.EndEffector.meatballProximityThreshold;
+    // than rigatoni is
 
     // Enable color detection based on Constant setting
     if (Constants.EndEffector.useSensorColor) {
-      if (inputs.isAlgaeProximityDetected) {
+      if (inputs.isMeatballProximityDetected) {
 
         // Green detected is within range; Blue detected is within range; Red detected is below
         // threshold
@@ -103,13 +103,13 @@ public class EndEffectorIONitrate implements EndEffectorIO {
             && inputs.sensorColorBlue > Constants.EndEffector.greenDetectBlueLower
             && inputs.sensorColorBlue < Constants.EndEffector.greenDetectBlueUpper
             && inputs.sensorColorRed < Constants.EndEffector.greenDetectRed) {
-          inputs.sensorPieceDetected = gamePiece.ALGAE;
+          inputs.sensorPieceDetected = gamePiece.MEATBALL;
 
           // All colors detected are above threshold
         } else if (inputs.sensorColorGreen > Constants.EndEffector.whiteDetectGreen
             && inputs.sensorColorBlue > Constants.EndEffector.whiteDetectBlue
             && inputs.sensorColorRed > Constants.EndEffector.whiteDetectRed) {
-          inputs.sensorPieceDetected = gamePiece.CORAL;
+          inputs.sensorPieceDetected = gamePiece.RIGATONI;
         } else {
           inputs.sensorPieceDetected = gamePiece.UNKNOWN;
         }
@@ -117,10 +117,10 @@ public class EndEffectorIONitrate implements EndEffectorIO {
         inputs.sensorPieceDetected = gamePiece.NONE;
       }
     } else {
-      if (inputs.isAlgaeProximityDetected) {
-        inputs.sensorPieceDetected = gamePiece.ALGAE;
-      } else if (inputs.isCoralProximityDetected) {
-        inputs.sensorPieceDetected = gamePiece.CORAL;
+      if (inputs.isMeatballProximityDetected) {
+        inputs.sensorPieceDetected = gamePiece.MEATBALL;
+      } else if (inputs.isRigatoniProximityDetected) {
+        inputs.sensorPieceDetected = gamePiece.RIGATONI;
       } else {
         inputs.sensorPieceDetected = gamePiece.NONE;
       }

@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSuperstructure;
 
-public class CoralIntakeManual extends Command {
+public class RigatoniIntakeManual extends Command {
   private IntakeSuperstructure intakeSuperstructure;
   private Timer rumbleTimer = new Timer();
   private boolean autoEnd;
 
-  public CoralIntakeManual(IntakeSuperstructure intakeSuperstructure, boolean autoEnd) {
+  public RigatoniIntakeManual(IntakeSuperstructure intakeSuperstructure, boolean autoEnd) {
     this.intakeSuperstructure = intakeSuperstructure;
     addRequirements(intakeSuperstructure);
     rumbleTimer.reset();
@@ -26,7 +26,7 @@ public class CoralIntakeManual extends Command {
   @Override
   public void execute() {
     intakeSuperstructure.requestIntake();
-    if (intakeSuperstructure.isCoralDetectedIntake()) {
+    if (intakeSuperstructure.isRigatoniDetectedIntake()) {
       if (!rumbleTimer.isRunning()) {
         rumbleTimer.reset();
         rumbleTimer.start();
@@ -41,7 +41,7 @@ public class CoralIntakeManual extends Command {
   @Override
   public boolean isFinished() {
     return !(driver.getLeftTriggerAxis() > 0.5)
-        || (autoEnd && intakeSuperstructure.isCoralDetectedIndexer());
+        || (autoEnd && intakeSuperstructure.isRigatoniDetectedIndexer());
   }
 
   @Override

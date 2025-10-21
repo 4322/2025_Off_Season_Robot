@@ -84,7 +84,7 @@ public class IntakeSuperstructure extends SubsystemBase {
         break;
       case RETRACT_IDLE:
         deployer.retract();
-        if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {
+        if (isRigatoniDetectedPickupArea() || RobotContainer.getSuperstructure().isRigatoniHeld()) {
           rollers.rejectSlow();
           indexer.feedSlow();
         } else {
@@ -96,9 +96,9 @@ public class IntakeSuperstructure extends SubsystemBase {
         } else if (requestIntakeEject) {
           state = IntakeSuperstates.INTAKE_EJECT;
         } else if (requestDeploy) {
-          if (isCoralDetectedIndexer()
-              || isCoralDetectedPickupArea()
-              || RobotContainer.getSuperstructure().isCoralHeld()) {
+          if (isRigatoniDetectedIndexer()
+              || isRigatoniDetectedPickupArea()
+              || RobotContainer.getSuperstructure().isRigatoniHeld()) {
             state = IntakeSuperstates.SLOW_REJECT;
           } else {
             state = IntakeSuperstates.FEED;
@@ -110,7 +110,7 @@ public class IntakeSuperstructure extends SubsystemBase {
         indexer.feed();
         deployer.deploy();
 
-        if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {
+        if (isRigatoniDetectedPickupArea() || RobotContainer.getSuperstructure().isRigatoniHeld()) {
           state = IntakeSuperstates.SLOW_REJECT;
         }
         if (requestIndexerEject) {
@@ -118,9 +118,9 @@ public class IntakeSuperstructure extends SubsystemBase {
         }
 
         switch (retractLockedOutState) {
-            // Default case, starts lockout timer when coral is detected in rollers
+            // Default case, starts lockout timer when rigatoni is detected in rollers
           case FALSE:
-            if (rollers.isCoralPickupDetected()) {
+            if (rollers.isRigatoniPickupDetected()) {
               retractLockedOutState = RetractLockedOutStates.INDEXER;
               retractTimeOutIndexerTimer.stop();
               retractTimeOutIndexerTimer.reset();
@@ -128,14 +128,14 @@ public class IntakeSuperstructure extends SubsystemBase {
             }
             break;
           case INDEXER:
-            // If coral isn't detected in indexer after x time, clear lockout; Otherwise start
+            // If rigatoni isn't detected in indexer after x time, clear lockout; Otherwise start
             // pickup area timer
-            if (isCoralDetectedIndexer()) {
+            if (isRigatoniDetectedIndexer()) {
               retractLockedOutState = RetractLockedOutStates.PICKUP;
               retractTimeOutIndexerTimer.stop();
               retractTimeOutPickupAreaTimer.reset();
               retractTimeOutPickupAreaTimer.start();
-            } else if (!isCoralDetectedIndexer()
+            } else if (!isRigatoniDetectedIndexer()
                 && retractTimeOutIndexerTimer.hasElapsed(
                     Constants.IntakeSuperstructure.indexerRetractTimeoutSeconds)) {
               retractTimeOutIndexerTimer.stop();
@@ -145,8 +145,8 @@ public class IntakeSuperstructure extends SubsystemBase {
           case PICKUP:
             retractTimeOutIndexerTimer.stop();
             retractTimeOutIndexerTimer.reset();
-            // If coral is detected in pickup area/end effector or x time has passed, clear lockout
-            if ((isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld())
+            // If rigatoni is detected in pickup area/end effector or x time has passed, clear lockout
+            if ((isRigatoniDetectedPickupArea() || RobotContainer.getSuperstructure().isRigatoniHeld())
                 || retractTimeOutPickupAreaTimer.hasElapsed(
                     Constants.IntakeSuperstructure.pickupAreaRetractTimeoutSeconds)) {
               retractTimeOutPickupAreaTimer.stop();
@@ -159,8 +159,8 @@ public class IntakeSuperstructure extends SubsystemBase {
           state = IntakeSuperstates.INTAKE_EJECT;
         } else if (requestRetractIdle && retractLockedOutState == RetractLockedOutStates.FALSE) {
           state = IntakeSuperstates.RETRACT_IDLE;
-        } else if (isCoralDetectedPickupArea()
-            || RobotContainer.getSuperstructure().isCoralHeld()) {
+        } else if (isRigatoniDetectedPickupArea()
+            || RobotContainer.getSuperstructure().isRigatoniHeld()) {
           state = IntakeSuperstates.SLOW_REJECT;
         }
 
@@ -174,9 +174,9 @@ public class IntakeSuperstructure extends SubsystemBase {
           state = IntakeSuperstates.INTAKE_EJECT;
         } else if (requestRetractIdle) {
           state = IntakeSuperstates.RETRACT_IDLE;
-        } else if (!isCoralDetectedIndexer()
-            && !isCoralDetectedPickupArea()
-            && !RobotContainer.getSuperstructure().isCoralHeld()) {
+        } else if (!isRigatoniDetectedIndexer()
+            && !isRigatoniDetectedPickupArea()
+            && !RobotContainer.getSuperstructure().isRigatoniHeld()) {
           state = IntakeSuperstates.FEED;
         }
 
@@ -229,7 +229,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   }
 
   public void requestIntake() {
-    // Transitions to Feeding or Rejecting based on if coral in robot
+    // Transitions to Feeding or Rejecting based on if rigatoni in robot
     unsetAllRequests();
     requestDeploy = true;
   }
@@ -251,12 +251,12 @@ public class IntakeSuperstructure extends SubsystemBase {
     unsetAllRequests();
   }
 
-  public boolean isCoralDetectedPickupArea() {
-    return indexer.isCoralDetectedPickupArea();
+  public boolean isRigatoniDetectedPickupArea() {
+    return indexer.isRigatoniDetectedPickupArea();
   }
 
-  public boolean isCoralDetectedIndexer() {
-    return indexer.isCoralDetectedIndexer();
+  public boolean isRigatoniDetectedIndexer() {
+    return indexer.isRigatoniDetectedIndexer();
   }
 
   public void setHome() {
@@ -273,10 +273,10 @@ public class IntakeSuperstructure extends SubsystemBase {
     }
   }
 
-  public boolean isCoralDetectedIntake() {
-    return rollers.isCoralPickupDetected()
-        || indexer.isCoralDetectedPickupArea()
-        || indexer.isCoralDetectedIndexer();
+  public boolean isRigatoniDetectedIntake() {
+    return rollers.isRigatoniPickupDetected()
+        || indexer.isRigatoniDetectedPickupArea()
+        || indexer.isRigatoniDetectedIndexer();
   }
 
   public IntakeSuperstates getIntakeSuperstate() {

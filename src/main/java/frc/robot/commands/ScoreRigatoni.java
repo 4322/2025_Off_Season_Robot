@@ -23,7 +23,7 @@ import frc.robot.util.ReefStatus;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-public class ScoreCoral extends Command {
+public class ScoreRigatoni extends Command {
 
   private Superstructure.Level level;
   private final Superstructure superstructure;
@@ -46,7 +46,7 @@ public class ScoreCoral extends Command {
   private Pose2d safeDistPose = new Pose2d();
   private Pose2d driveBackPose = new Pose2d();
 
-  private boolean chainedAlgaeMode;
+  private boolean chainedMeatballMode;
 
   public enum ScoreState {
     SAFE_DISTANCE,
@@ -57,20 +57,20 @@ public class ScoreCoral extends Command {
 
   ScoreState state = ScoreState.SAFE_DISTANCE;
 
-  public ScoreCoral(
+  public ScoreRigatoni(
       Superstructure superstructure,
       Superstructure.Level level,
       Drive drive,
-      boolean chainedAlgaeMode) {
+      boolean chainedMeatballMode) {
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
-    this.chainedAlgaeMode = chainedAlgaeMode;
+    this.chainedMeatballMode = chainedMeatballMode;
     driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
     addRequirements(superstructure);
   }
 
-  public ScoreCoral(
+  public ScoreRigatoni(
       DriveToPose driveToPose,
       Supplier<Pose2d> currentPoseRequest,
       Superstructure superstructure,
@@ -232,9 +232,9 @@ public class ScoreCoral extends Command {
 
   @Override
   public void execute() {
-    Logger.recordOutput("ScoreCoral/state", state);
-    Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
-    Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
+    Logger.recordOutput("ScoreRigatoni/state", state);
+    Logger.recordOutput("ScoreRigatoni/atGoal", driveToPose.atGoal());
+    Logger.recordOutput("ScoreRigatoni/isInSafeArea", isInSafeArea());
 
     if (superstructure.isAutoOperationMode()) {
 
@@ -307,8 +307,8 @@ public class ScoreCoral extends Command {
             state = ScoreState.HOLD_POSITION;
           } else if (isInSafeArea() || driveToPose.atGoal()) {
 
-            superstructure.requestPrescoreCoral(level);
-            if (superstructure.getState() == Superstates.PRESCORE_CORAL
+            superstructure.requestPrescoreRigatoni(level);
+            if (superstructure.getState() == Superstates.PRESCORE_RIGATONI
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()) {
               currentPoseRequest = () -> targetScoringPose;
@@ -330,23 +330,23 @@ public class ScoreCoral extends Command {
             if (level == Level.L4) {
               times.start();
               if (times.hasElapsed(0.05)) {
-                superstructure.requestScoreCoral(level);
+                superstructure.requestScoreRigatoni(level);
                 times.stop();
                 times.reset();
               }
             } else {
-              superstructure.requestScoreCoral(level);
+              superstructure.requestScoreRigatoni(level);
             }
 
             if (superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()
-                && !superstructure.isCoralHeld()
+                && !superstructure.isRigatoniHeld()
                 && level == Level.L1) {
               currentPoseRequest = () -> driveBackPose;
               state = ScoreState.DRIVEBACK;
 
             } else if (level != Level.L1
-                && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL) {
+                && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_RIGATONI_NORMAL) {
               currentPoseRequest = () -> driveBackPose;
               state = ScoreState.DRIVEBACK;
             }
@@ -384,9 +384,9 @@ public class ScoreCoral extends Command {
       driveToPose.cancel();
 
       drive.requestAutoRotateMode(robotReefAngle);
-      superstructure.requestPrescoreCoral(level);
+      superstructure.requestPrescoreRigatoni(level);
       if (RobotContainer.isScoringTriggerHeld()) {
-        superstructure.requestScoreCoral(level);
+        superstructure.requestScoreRigatoni(level);
       }
     }
   }
@@ -401,7 +401,7 @@ public class ScoreCoral extends Command {
   public void end(boolean interrupted) {
     driveToPose.cancel();
 
-    if (!chainedAlgaeMode) {
+    if (!chainedMeatballMode) {
       superstructure.requestIdle();
     }
     superstructure.enableGlobalPose();
@@ -409,9 +409,9 @@ public class ScoreCoral extends Command {
     drive.requestFieldRelativeMode();
 
     // Reset chained more ONLY AFTER command finishes so it won't be stuck in this mode forever
-    this.chainedAlgaeMode = false;
+    this.chainedMeatballMode = false;
 
-    Logger.recordOutput("ScoreCoral/state", "Done");
+    Logger.recordOutput("ScoreRigatoni/state", "Done");
   }
 
   public boolean scoreButtonReleased() {
@@ -421,8 +421,8 @@ public class ScoreCoral extends Command {
         && !driver.b().getAsBoolean();
   }
 
-  public void chainAlgae(boolean requestChainAlgae) {
-    this.chainedAlgaeMode = requestChainAlgae;
+  public void chainMeatball(boolean requestChainMeatball) {
+    this.chainedMeatballMode = requestChainMeatball;
   }
 
   public boolean isInSafeArea() {

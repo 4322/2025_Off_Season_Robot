@@ -159,16 +159,16 @@ public final class Constants {
     public static final double peakReverseVoltage = -12.0;
 
     public static final double armIdleDeg = 0.0;
-    public static final double algaeHoldDeg = 180.0;
-    public static final double coralHoldDeg = 3;
-    public static final double algaeGroundDeg = 69.0;
+    public static final double meatballHoldDeg = 180.0;
+    public static final double rigatoniHoldDeg = 3;
+    public static final double meatballGroundDeg = 69.0;
 
     public static final double ejectDeg = 51.0;
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
     public static final double minArmSafeDeg = 47;
     public static final double minArmSafeDegAfterScore = 47;
-    public static final double minArmSafeWithCoralDeg = 54;
+    public static final double minArmSafeWithRigatoniDeg = 54;
     public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = enableArmSensor ? 0.5 : 0.75;
@@ -189,22 +189,22 @@ public final class Constants {
     public static final double initializationCompleteSec = 0.1;
     public static final double hittingIndexerDegrees = -3.05;
 
-    public static final double scoringL1CoralDeg = Constants.Arm.prescoringL1CoralDeg - 2;
-    public static final double scoringL2CoralDeg = Constants.Arm.prescoringL2CoralDeg - 20;
-    public static final double scoringL3CoralDeg = Constants.Arm.prescoringL3CoralDeg - 20;
-    public static final double scoringL4CoralDeg = Constants.Arm.prescoringL4CoralDeg - 7;
+    public static final double scoringL1RigatoniDeg = Constants.Arm.prescoringL1RigatoniDeg - 2;
+    public static final double scoringL2RigatoniDeg = Constants.Arm.prescoringL2RigatoniDeg - 20;
+    public static final double scoringL3RigatoniDeg = Constants.Arm.prescoringL3RigatoniDeg - 20;
+    public static final double scoringL4RigatoniDeg = Constants.Arm.prescoringL4RigatoniDeg - 7;
 
-    public static final double scoringEarilyReleaseL4 = Constants.Arm.scoringL4CoralDeg + 4;
+    public static final double scoringEarilyReleaseL4 = Constants.Arm.scoringL4RigatoniDeg + 4;
     // Prescore Degrees Arm
-    public static final double prescoringL1CoralDeg = 57.773;
-    public static final double prescoringL2CoralDeg = 120.546;
-    public static final double prescoringL3CoralDeg = 128.139;
-    public static final double prescoringL4CoralDeg = 125.955;
+    public static final double prescoringL1RigatoniDeg = 57.773;
+    public static final double prescoringL2RigatoniDeg = 120.546;
+    public static final double prescoringL3RigatoniDeg = 128.139;
+    public static final double prescoringL4RigatoniDeg = 125.955;
 
-    public static final double scoringAlgaeDeg = 142;
-    public static final double scoringBacksideAlgaeDeg = 218;
+    public static final double scoringMeatballDeg = 142;
+    public static final double scoringBacksideMeatballDeg = 218;
 
-    public static final double descoringAlgaeDeg = 90.0;
+    public static final double descoringMeatballDeg = 90.0;
     public static final double safeBargeRetractDeg = 180;
     // To the encoder 0 is horizontal but to us its straight down
     public static final double OffsetEncoderDeg = -90;
@@ -213,12 +213,12 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double accelerationLimitCoral = 2.5;
-    public static final double deaccelerationLimitCoral = 1.5;
-    public static final double velocityLimitCoral = 1.0;
-    public static final double accelerationLimitAlgae = 2.5;
-    public static final double deaccelerationLimitAlgae = 1.5;
-    public static final double velocityLimitAlgae = 1.0;
+    public static final double accelerationLimitRigatoni = 2.5;
+    public static final double deaccelerationLimitRigatoni = 1.5;
+    public static final double velocityLimitRigatoni = 1.0;
+    public static final double accelerationLimitMeatball = 2.5;
+    public static final double deaccelerationLimitMeatball = 1.5;
+    public static final double velocityLimitMeatball = 1.0;
   }
 
   public static class Elevator {
@@ -247,39 +247,39 @@ public final class Constants {
 
     public static final double minElevatorSafeHeightMeters =
         0.475; // measure after homing with wheels compressed
-    public static final double minElevatorSafeWithCoralMeters = 0.475;
+    public static final double minElevatorSafeWithRigatoniMeters = 0.475;
 
     public static final double elevatorHeightToleranceMeters = 0.01;
     public static final double syncToleranceMeters = 0.005;
 
-    public static final double algaeGroundHeightMeters = 0.00635;
-    public static final double algaeReefL2HeightMeters = 0.384498;
-    public static final double algaeReefL3HeightMeters = 0.770257;
+    public static final double meatballGroundHeightMeters = 0.00635;
+    public static final double meatballReefL2HeightMeters = 0.384498;
+    public static final double meatballReefL3HeightMeters = 0.770257;
 
-    public static final double prescoreCoralL1HeightMeters = 0.4811766;
-    public static final double prescoreCoralL2HeightMeters = 0.10647135;
-    public static final double prescoreCoralL3HeightMeters = 0.411644735361526 + 0.015;
-    public static final double prescoreCoralL4HeightMeters = 1.08791332;
+    public static final double prescoreRigatoniL1HeightMeters = 0.4811766;
+    public static final double prescoreRigatoniL2HeightMeters = 0.10647135;
+    public static final double prescoreRigatoniL3HeightMeters = 0.411644735361526 + 0.015;
+    public static final double prescoreRigatoniL4HeightMeters = 1.08791332;
 
-    public static final double scoreCoralL1HeightMeters = prescoreCoralL1HeightMeters;
-    public static final double scoreCoralL2HeightMeters = prescoreCoralL2HeightMeters - 0.002;
-    public static final double scoreCoralL3HeightMeters = prescoreCoralL3HeightMeters - 0.0048;
-    public static final double scoreCoralL4HeightMeters = 0.932657;
-    public static final double scoreAlgaeHeightMeters = 1.3026999;
+    public static final double scoreRigatoniL1HeightMeters = prescoreRigatoniL1HeightMeters;
+    public static final double scoreRigatoniL2HeightMeters = prescoreRigatoniL2HeightMeters - 0.002;
+    public static final double scoreRigatoniL3HeightMeters = prescoreRigatoniL3HeightMeters - 0.0048;
+    public static final double scoreRigatoniL4HeightMeters = 0.932657;
+    public static final double scoreMeatballHeightMeters = 1.3026999;
 
-    public static final double pickupCoralHeightMeters = 0.387;
+    public static final double pickupRigatoniHeightMeters = 0.387;
 
     public static final double intializationVoltage = 2.0;
     public static final double initializationCompleteSpeed = 0.01;
     public static final double initializationCompleteSec = 0.1;
 
-    public static final double coralDetectionHeightThresholdSecs = 0.4;
-    public static final double ejectHeightMeters = minElevatorSafeWithCoralMeters;
+    public static final double rigatoniDetectionHeightThresholdSecs = 0.4;
+    public static final double ejectHeightMeters = minElevatorSafeWithRigatoniMeters;
 
     public static final double safeBargeRetractHeightMeters = 0.773472037;
-    public static final double safeBargeRetractWithAlgaeHeightMeters = 0.3321799808;
+    public static final double safeBargeRetractWithMeatballHeightMeters = 0.3321799808;
 
-    public static final double algaeHoldMeters = 0;
+    public static final double meatballHoldMeters = 0;
 
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
@@ -303,16 +303,16 @@ public final class Constants {
     public static final int motorId = 13;
     public static final int sensorId = 2;
 
-    public static final double maxAlgaeHoldVolts = 1.2;
-    public static final double minAlgaeHoldVolts = 0.9;
-    public static final double coralHoldVolts = 0.45;
+    public static final double maxMeatballHoldVolts = 1.2;
+    public static final double minMeatballHoldVolts = 0.9;
+    public static final double rigatoniHoldVolts = 0.45;
 
-    public static final double algaeIntakeVolts = 6;
-    public static final double coralIntakeVolts = 4;
+    public static final double meatballIntakeVolts = 6;
+    public static final double rigatoniIntakeVolts = 4;
 
-    public static final double algaeReleaseVolts = -3.0;
-    public static final double coralReleaseVolts = -4.0;
-    public static final double coralReleaseVoltsL1 = -2.0;
+    public static final double meatballReleaseVolts = -3.0;
+    public static final double rigatoniReleaseVolts = -4.0;
+    public static final double rigatoniReleaseVoltsL1 = -2.0;
 
     public static final double ejectVolts = -6.0;
 
@@ -320,20 +320,20 @@ public final class Constants {
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 100;
 
-    public static final double coralProximityThreshold = 0.25;
-    public static final double algaeProximityThresholdIntake = 0.17;
-    public static final double algaeProximityThreshold = 0.25;
+    public static final double rigatoniProximityThreshold = 0.25;
+    public static final double meatballProximityThresholdIntake = 0.17;
+    public static final double meatballProximityThreshold = 0.25;
 
     public static final boolean useSensorColor = false; // TODO change this when we get color tuned
     // TODO tune these
-    // For algae
+    // For meatball
     public static final double greenDetectGreenLower = 120;
     public static final double greenDetectGreenUpper = 140;
     public static final double greenDetectBlueLower = 120;
     public static final double greenDetectBlueUpper = 140;
     public static final double greenDetectRed = 38; // Max value
 
-    // For coral; All are minimum values
+    // For rigatoni; All are minimum values
     public static final double whiteDetectGreen = 180;
     public static final double whiteDetectBlue = 180;
     public static final double whiteDetectRed = 180;
@@ -352,15 +352,15 @@ public final class Constants {
     public static final double VelocityDetectionMaxAccumulationSeconds = 1;
     public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
 
-    public static final double coralGrabDelaySeconds =
-        0.2; // Time to wait before lowering elevator after coral is detected in End Effector
-    public static final double algaeIntakingDelaySeconds =
-        0.25; // Time to wait after algae is detected in End Effector before reducing voltage
-    public static final double coralIntakingDelaySeconds =
-        0.2; // Time to wait after coral is detected in End Effector before reducing voltage
-    public static final double algaeReleasingDelaySeconds =
+    public static final double rigatoniGrabDelaySeconds =
+        0.2; // Time to wait before lowering elevator after rigatoni is detected in End Effector
+    public static final double meatballIntakingDelaySeconds =
+        0.25; // Time to wait after meatball is detected in End Effector before reducing voltage
+    public static final double rigatoniIntakingDelaySeconds =
+        0.2; // Time to wait after rigatoni is detected in End Effector before reducing voltage
+    public static final double meatballReleasingDelaySeconds =
         0.5; // Time to wait when releasing before going back to non-holding voltage
-    public static final double coralReleasingDelaySeconds = 0.5;
+    public static final double rigatoniReleasingDelaySeconds = 0.5;
   }
 
   public static class Deployer {
@@ -499,7 +499,7 @@ public final class Constants {
     public static final double driveTolerance = 0.0254;
     public static final double driveToleranceSlow = 0.0254;
 
-    public static final double algaeSafeDistTolerance = 0.127;
+    public static final double meatballSafeDistTolerance = 0.127;
 
     public static final double ffMinRadius = 0.1;
     public static final double ffMaxRadius = 0.8;
@@ -510,6 +510,6 @@ public final class Constants {
   }
 
   public static class Auto {
-    public static final double algaeScoreDelay = 0.3;
+    public static final double meatballScoreDelay = 0.3;
   }
 }

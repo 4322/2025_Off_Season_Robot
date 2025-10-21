@@ -27,9 +27,9 @@
 //   private final Canandmag armEncoder;
 //   private double lastRequestedPosDeg;
 
-//   private final PIDPositionRequest PIDPositionRequestCoral =
+//   private final PIDPositionRequest PIDPositionRequestRigatoni =
 //       new PIDPositionRequest(PIDConfigSlot.kSlot0, 0).useMotionProfile(true);
-//   private final PIDPositionRequest PIDPositionRequestAlgae =
+//   private final PIDPositionRequest PIDPositionRequestMeatball =
 //       new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
 //   public ArmIONitrate() {
@@ -43,9 +43,9 @@
 //             .setFeedforwardMode(PIDFeedforwardMode.kArm)
 //             .setGravitationalFeedforward(Constants.Arm.kG)
 //             .setMinwrapConfig(new MinwrapConfig.Disabled())
-//             .setMotionProfileAccelLimit(Constants.Arm.accelerationLimitCoral)
-//             .setMotionProfileDeaccelLimit(Constants.Arm.deaccelerationLimitCoral)
-//             .setMotionProfileVelocityLimit(Constants.Arm.velocityLimitCoral)
+//             .setMotionProfileAccelLimit(Constants.Arm.accelerationLimitRigatoni)
+//             .setMotionProfileDeaccelLimit(Constants.Arm.deaccelerationLimitRigatoni)
+//             .setMotionProfileVelocityLimit(Constants.Arm.velocityLimitRigatoni)
 //             .setISaturation(Constants.Arm.iSat)
 //             .setIZone(Constants.Arm.iZone)
 //             .setRampLimit(240),
@@ -57,9 +57,9 @@
 //             .setFeedforwardMode(PIDFeedforwardMode.kArm)
 //             .setGravitationalFeedforward(Constants.Arm.kG)
 //             .setMinwrapConfig(new MinwrapConfig.Disabled())
-//             .setMotionProfileAccelLimit(Constants.Arm.accelerationLimitAlgae)
-//             .setMotionProfileDeaccelLimit(Constants.Arm.deaccelerationLimitAlgae)
-//             .setMotionProfileVelocityLimit(Constants.Arm.velocityLimitAlgae)
+//             .setMotionProfileAccelLimit(Constants.Arm.accelerationLimitMeatball)
+//             .setMotionProfileDeaccelLimit(Constants.Arm.deaccelerationLimitMeatball)
+//             .setMotionProfileVelocityLimit(Constants.Arm.velocityLimitMeatball)
 //             .setISaturation(Constants.Arm.iSat)
 //             .setIZone(Constants.Arm.iZone)
 //             .setRampLimit(240),
@@ -151,17 +151,17 @@
 //   }
 
 //   @Override
-//   public void requestPositionCoral(double requestSetpoint) {
+//   public void requestPositionRigatoni(double requestSetpoint) {
 //     armMotor.setRequest(
-//         PIDPositionRequestCoral.setPosition(
+//         PIDPositionRequestRigatoni.setPosition(
 //             Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg)));
 //     lastRequestedPosDeg = requestSetpoint;
 //   }
 
 //   @Override
-//   public void requestPositionAlgae(double requestSetpoint) {
+//   public void requestPositionMeatball(double requestSetpoint) {
 //     armMotor.setRequest(
-//         PIDPositionRequestAlgae.setPosition(
+//         PIDPositionRequestMeatball.setPosition(
 //             Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg)));
 //     lastRequestedPosDeg = requestSetpoint;
 //   }

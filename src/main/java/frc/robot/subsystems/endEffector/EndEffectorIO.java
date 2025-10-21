@@ -22,13 +22,13 @@ public interface EndEffectorIO {
     public double sensorColorGreen = 0.0;
     public double sensorColorBlue = 0.0;
 
-    public boolean isCoralProximityDetected = false;
-    public boolean isAlgaeProximityDetected = false;
+    public boolean isRigatoniProximityDetected = false;
+    public boolean isMeatballProximityDetected = false;
 
     public enum gamePiece {
       NONE,
-      ALGAE,
-      CORAL,
+      MEATBALL,
+      RIGATONI,
       UNKNOWN
     }
 
@@ -46,13 +46,13 @@ public interface EndEffectorIO {
   public default void enableBrakeMode(boolean enable) {}
 
   // For sim mode
-  public default void simCoralHeld() {}
+  public default void simRigatoniHeld() {}
 
-  public default void simAlgaeHeld() {}
+  public default void simMeatballHeld() {}
 
-  public default void simCoralReleased() {}
+  public default void simRigatoniReleased() {}
 
-  public default void simAlgaeReleased() {}
+  public default void simMeatballReleased() {}
 
   // for tuning
   public default Nitrate getNitrate() {

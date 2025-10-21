@@ -54,9 +54,9 @@ public class ArmIOTalonFX implements ArmIO {
     motorConfig.HardwareLimitSwitch.ReverseLimitEnable = false;
 
     motorConfig.MotionMagic.MotionMagicAcceleration =
-        Constants.Arm.accelerationLimitCoral/ (Math.PI * Constants.Arm.gearRatio);
+        Constants.Arm.accelerationLimitRigatoni/ (Math.PI * Constants.Arm.gearRatio);
         motorConfig.MotionMagic.MotionMagicCruiseVelocity =
-        Constants.Arm.deaccelerationLimitCoral/ (Math.PI * Constants.Arm.gearRatio);
+        Constants.Arm.deaccelerationLimitRigatoni/ (Math.PI * Constants.Arm.gearRatio);
 
     motorConfig.MotionMagic.MotionMagicJerk = Constants.Arm.motionMagicJerk;   
 
@@ -91,7 +91,7 @@ public class ArmIOTalonFX implements ArmIO {
   }
 
   @Override
-  public void requestPositionCoral(double requestSetpoint) {
+  public void requestPositionRigatoni(double requestSetpoint) {
     armMotor.setControl(
         new MotionMagicVoltage(
                 Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg))
@@ -101,7 +101,7 @@ public class ArmIOTalonFX implements ArmIO {
   }
 
   @Override
-  public void requestPositionAlgae(double requestSetpoint) {
+  public void requestPositionMeatball(double requestSetpoint) {
     armMotor.setControl(
         new MotionMagicVoltage(
                 Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg))

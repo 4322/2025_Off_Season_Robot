@@ -34,9 +34,9 @@ public interface ArmIO {
 
   public default void setArmOpenLoop(double outputVoltage) {}
 
-  public default void requestPositionCoral(double requestedSetpoint) {}
+  public default void requestPositionRigatoni(double requestedSetpoint) {}
 
-  public default void requestPositionAlgae(double requestedSetpoint) {}
+  public default void requestPositionMeatball(double requestedSetpoint) {}
 
   public default void stopArmMotor() {}
 

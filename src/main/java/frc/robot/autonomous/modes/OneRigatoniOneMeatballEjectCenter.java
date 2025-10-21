@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
-import frc.robot.commands.DescoreAlgae;
-import frc.robot.commands.ScoreCoral;
+import frc.robot.commands.DescoreMeatball;
+import frc.robot.commands.ScoreRigatoni;
 import frc.robot.commands.auto.EjectAuto;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
@@ -17,13 +17,13 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.OrangeSequentialCommandGroup;
 
-public class OneCoralOneAlgaeEjectCenter extends OrangeSequentialCommandGroup {
-  public OneCoralOneAlgaeEjectCenter(
+public class OneRigatoniOneMeatballEjectCenter extends OrangeSequentialCommandGroup {
+  public OneRigatoniOneMeatballEjectCenter(
       Drive drive,
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,
       Vision vision) {
-    setName("ONE_CORAL_ONE_ALGAE_CENTER");
+    setName("ONE_RIGATONI_ONE_MEATBALL_CENTER");
     addCommands(
         new InstantCommand(
             () -> {
@@ -35,11 +35,11 @@ public class OneCoralOneAlgaeEjectCenter extends OrangeSequentialCommandGroup {
               drive.resetPose(path.getStartingHolonomicPose().get());
             }),
         AutoBuilder.followPath(Robot.CenterStartToGulf),
-        new ScoreCoral(superstructure, Level.L4, drive, false),
+        new ScoreRigatoni(superstructure, Level.L4, drive, false),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         AutoBuilder.followPath(Robot.GulfToGulfHotel),
-        new DescoreAlgae(superstructure, drive),
-        new WaitUntilCommand(() -> superstructure.getState() == Superstates.ALGAE_IDLE),
+        new DescoreMeatball(superstructure, drive),
+        new WaitUntilCommand(() -> superstructure.getState() == Superstates.MEATBALL_IDLE),
         AutoBuilder.followPath(Robot.GulfHotelToCenterEject),
         new EjectAuto(intakeSuperstructure, superstructure, EjectAuto.EjectType.END_EFFECTOR, 1.0));
   }

@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.autonomous.AutonomousSelector;
-import frc.robot.commands.AlgaeIntakeGround;
-import frc.robot.commands.AlgaeScoreCommand;
-import frc.robot.commands.DescoreAlgae;
+import frc.robot.commands.MeatballIntakeGround;
+import frc.robot.commands.MeatballScoreCommand;
+import frc.robot.commands.DescoreMeatball;
 import frc.robot.commands.DriveManual;
 import frc.robot.commands.DriveToPose;
 import frc.robot.commands.Eject;
 import frc.robot.commands.EmergencyInitilization;
-import frc.robot.commands.ScoreCoral;
+import frc.robot.commands.ScoreRigatoni;
 import frc.robot.commands.SwitchOperationModeCommand;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.SubsystemMode;
@@ -74,11 +74,11 @@ public class RobotContainer {
   private static Vision vision;
   private static ReefStatus reefStatus;
   private static DriveToPose drivetopose;
-  private static ScoreCoral lastScoreCoral;
-  private static ScoreCoral scoreL1Coral;
-  private static ScoreCoral scoreL2Coral;
-  private static ScoreCoral scoreL3Coral;
-  private static ScoreCoral scoreL4Coral;
+  private static ScoreRigatoni lastScoreRigatoni;
+  private static ScoreRigatoni scoreL1Rigatoni;
+  private static ScoreRigatoni scoreL2Rigatoni;
+  private static ScoreRigatoni scoreL3Rigatoni;
+  private static ScoreRigatoni scoreL4Rigatoni;
   private static Drive drive;
   private static Arm arm;
   private static EndEffector endEffector;
@@ -88,7 +88,7 @@ public class RobotContainer {
   private static IntakeSuperstructure intakeSuperstructure;
   private static Superstructure superstructure;
   private static Elevator elevator;
-  public boolean requestedAlgaeDescore;
+  public boolean requestedMeatballDescore;
 
   public static AutonomousSelector autonomousSelector;
 
@@ -208,11 +208,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     drive.setDefaultCommand(new DriveManual(drive));
 
-    scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false);
-    scoreL2Coral = new ScoreCoral(superstructure, Level.L2, drive, false);
-    scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
-    scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
-    lastScoreCoral = scoreL1Coral;
+    scoreL1Rigatoni = new ScoreRigatoni(superstructure, Level.L1, drive, false);
+    scoreL2Rigatoni = new ScoreRigatoni(superstructure, Level.L2, drive, false);
+    scoreL3Rigatoni = new ScoreRigatoni(superstructure, Level.L3, drive, false);
+    scoreL4Rigatoni = new ScoreRigatoni(superstructure, Level.L4, drive, false);
+    lastScoreRigatoni = scoreL1Rigatoni;
     // The commands deal with the on False logic if the button is no longer held
 
     driver
@@ -242,12 +242,12 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new AlgaeIntakeGround(superstructure).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
-                      && !lastScoreCoral.isScheduled()) {
-                    scoreL1Coral.schedule();
-                    lastScoreCoral = scoreL1Coral;
+                  if (!endEffector.hasRigatoni() && !endEffector.hasMeatball()) {
+                    new MeatballIntakeGround(superstructure).schedule();
+                  } else if ((endEffector.hasRigatoni() && !endEffector.hasMeatball())
+                      && !lastScoreRigatoni.isScheduled()) {
+                    scoreL1Rigatoni.schedule();
+                    lastScoreRigatoni = scoreL1Rigatoni;
                   }
                 }));
     driver
@@ -255,18 +255,18 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral()
-                      && !endEffector.hasAlgae()
-                      && !lastScoreCoral.isScheduled()) {
-                    new DescoreAlgae(superstructure, drive).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
-                      && !lastScoreCoral.isScheduled()) {
+                  if (!endEffector.hasRigatoni()
+                      && !endEffector.hasMeatball()
+                      && !lastScoreRigatoni.isScheduled()) {
+                    new DescoreMeatball(superstructure, drive).schedule();
+                  } else if ((endEffector.hasRigatoni() && !endEffector.hasMeatball())
+                      && !lastScoreRigatoni.isScheduled()) {
                     new OrangeSequentialCommandGroup(
-                            scoreL2Coral,
-                            new DescoreAlgae(superstructure, drive)
+                            scoreL2Rigatoni,
+                            new DescoreMeatball(superstructure, drive)
                                 .onlyIf(() -> driver.y().getAsBoolean()))
                         .schedule();
-                    lastScoreCoral = scoreL2Coral;
+                    lastScoreRigatoni = scoreL2Rigatoni;
                   }
                 }));
     driver
@@ -274,15 +274,15 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (lastScoreCoral.isScheduled()) {
-                    lastScoreCoral.chainAlgae(true);
+                  if (lastScoreRigatoni.isScheduled()) {
+                    lastScoreRigatoni.chainMeatball(true);
                   } else {
-                    if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                      new DescoreAlgae(superstructure, drive).schedule();
-                    } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
-                        && !lastScoreCoral.isScheduled()) {
-                      scoreL3Coral.schedule();
-                      lastScoreCoral = scoreL3Coral;
+                    if (!endEffector.hasRigatoni() && !endEffector.hasMeatball()) {
+                      new DescoreMeatball(superstructure, drive).schedule();
+                    } else if ((endEffector.hasRigatoni() && !endEffector.hasMeatball())
+                        && !lastScoreRigatoni.isScheduled()) {
+                      scoreL3Rigatoni.schedule();
+                      lastScoreRigatoni = scoreL3Rigatoni;
                     }
                   }
                 }));
@@ -292,17 +292,17 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    new AlgaeScoreCommand(superstructure, drive).schedule();
-                  } else if (endEffector.hasCoral()
-                      && !endEffector.hasAlgae()
-                      && !lastScoreCoral.isScheduled()) {
+                  if (!endEffector.hasRigatoni() && endEffector.hasMeatball()) {
+                    new MeatballScoreCommand(superstructure, drive).schedule();
+                  } else if (endEffector.hasRigatoni()
+                      && !endEffector.hasMeatball()
+                      && !lastScoreRigatoni.isScheduled()) {
                     new OrangeSequentialCommandGroup(
-                            scoreL4Coral,
-                            new DescoreAlgae(superstructure, drive)
+                            scoreL4Rigatoni,
+                            new DescoreMeatball(superstructure, drive)
                                 .onlyIf(() -> driver.y().getAsBoolean()))
                         .schedule();
-                    lastScoreCoral = scoreL4Coral;
+                    lastScoreRigatoni = scoreL4Rigatoni;
                   }
                 }));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));

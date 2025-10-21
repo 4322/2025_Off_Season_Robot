@@ -15,16 +15,16 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ReefStatus;
-import frc.robot.util.ReefStatus.AlgaeLevel;
+import frc.robot.util.ReefStatus.MeatballLevel;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-public class DescoreAlgae extends Command {
+public class DescoreMeatball extends Command {
   private final Superstructure superstructure;
   private final Drive drive;
   private DriveToPose driveToPose;
   public boolean running;
-  private AlgaeLevel reefLevel;
+  private MeatballLevel reefLevel;
 
   private Pose2d targetScoringPose;
   private Rotation2d robotReefAngle;
@@ -43,7 +43,7 @@ public class DescoreAlgae extends Command {
   private Superstructure.Level level;
   private ScoreState state = ScoreState.SAFE_DISTANCE;
 
-  public DescoreAlgae(Superstructure superstructure, Drive drive) {
+  public DescoreMeatball(Superstructure superstructure, Drive drive) {
     this.superstructure = superstructure;
     this.drive = drive;
 
@@ -59,9 +59,9 @@ public class DescoreAlgae extends Command {
 
     reefStatus = superstructure.getReefStatus();
     robotReefAngle = reefStatus.getClosestRobotAngle();
-    reefLevel = reefStatus.getAlgaeLevel();
+    reefLevel = reefStatus.getMeatballLevel();
 
-    if (reefLevel == ReefStatus.AlgaeLevel.L2) {
+    if (reefLevel == ReefStatus.MeatballLevel.L2) {
       level = Superstructure.Level.L2;
     } else {
       level = Superstructure.Level.L3;
@@ -70,14 +70,14 @@ public class DescoreAlgae extends Command {
     if (Robot.alliance == DriverStation.Alliance.Blue) {
       targetScoringPose =
           new Pose2d(
-              FieldConstants.KeypointPoses.descoreAlgaeDriveInBlue.rotateAround(
+              FieldConstants.KeypointPoses.descoreMeatballDriveInBlue.rotateAround(
                   FieldConstants.KeypointPoses.blueReefCenter,
                   robotReefAngle.rotateBy(Rotation2d.k180deg)),
               robotReefAngle);
     } else {
       targetScoringPose =
           new Pose2d(
-              FieldConstants.KeypointPoses.descoreAlgaeDriveInRed.rotateAround(
+              FieldConstants.KeypointPoses.descoreMeatballDriveInRed.rotateAround(
                   FieldConstants.KeypointPoses.redReefCenter,
                   robotReefAngle.rotateBy(Rotation2d.k180deg)),
               robotReefAngle);
@@ -86,7 +86,7 @@ public class DescoreAlgae extends Command {
     safeDescorePose =
         targetScoringPose.transformBy(
             new Transform2d(
-                -FieldConstants.KeypointPoses.safeDistFromAlgaeDescorePos, 0, new Rotation2d()));
+                -FieldConstants.KeypointPoses.safeDistFromMeatballDescorePos, 0, new Rotation2d()));
 
     driveBackPose =
         safeDescorePose.transformBy(
@@ -96,9 +96,9 @@ public class DescoreAlgae extends Command {
 
   @Override
   public void execute() {
-    Logger.recordOutput("DescoreAlgae/State", state);
-    Logger.recordOutput("DescoreAlgae/atGoal", driveToPose.atGoal());
-    Logger.recordOutput("DescoreAlgae/isInSafeArea", isInSafeArea());
+    Logger.recordOutput("DescoreMeatball/State", state);
+    Logger.recordOutput("DescoreMeatball/atGoal", driveToPose.atGoal());
+    Logger.recordOutput("DescoreMeatball/isInSafeArea", isInSafeArea());
     if (superstructure.isAutoOperationMode()) {
       switch (state) {
         case SAFE_DISTANCE:
@@ -112,12 +112,12 @@ public class DescoreAlgae extends Command {
           if (descoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (isInSafeArea() || driveToPose.atGoal()) {
-            superstructure.requestDescoreAlgae(level);
+            superstructure.requestDescoreMeatball(level);
 
-            if (superstructure.getState() == Superstates.DESCORE_ALGAE
+            if (superstructure.getState() == Superstates.DESCORE_MEATBALL
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()
-                && driveToPose.withinTolerance(Constants.AutoScoring.algaeSafeDistTolerance)) {
+                && driveToPose.withinTolerance(Constants.AutoScoring.meatballSafeDistTolerance)) {
               state = ScoreState.DRIVE_IN;
               currentPoseRequest = () -> targetScoringPose;
             }
@@ -126,7 +126,7 @@ public class DescoreAlgae extends Command {
         case DRIVE_IN:
           if (descoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (superstructure.isAlgaeHeld()) {
+          } else if (superstructure.isMeatballHeld()) {
             currentPoseRequest = () -> driveBackPose;
             state = ScoreState.DRIVEBACK;
           }
@@ -151,7 +151,7 @@ public class DescoreAlgae extends Command {
     } else {
       driveToPose.cancel();
 
-      superstructure.requestDescoreAlgae(level);
+      superstructure.requestDescoreMeatball(level);
     }
   }
 
@@ -172,7 +172,7 @@ public class DescoreAlgae extends Command {
 
     driveToPose.cancel();
 
-    Logger.recordOutput("DescoreAlgae/State", "Done");
+    Logger.recordOutput("DescoreMeatball/State", "Done");
   }
 
   public boolean isInSafeArea() {

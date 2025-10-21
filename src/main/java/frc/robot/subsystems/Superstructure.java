@@ -19,17 +19,17 @@ public class Superstructure extends SubsystemBase {
   private boolean requestIdle = false;
   private boolean requestHomed = false;
   private boolean requestEject = false;
-  private boolean requestAlgaePrescore = false;
-  private boolean requestAlgaeScore = false;
-  private boolean requestIntakeAlgaeFloor = false;
-  private boolean requestDescoreAlgae = false;
-  private boolean requestPrescoreCoral = false;
-  private boolean requestScoreCoral = false;
+  private boolean requestMeatballPrescore = false;
+  private boolean requestMeatballScore = false;
+  private boolean requestIntakeMeatballFloor = false;
+  private boolean requestDescoreMeatball = false;
+  private boolean requestPrescoreRigatoni = false;
+  private boolean requestScoreRigatoni = false;
   private boolean requestPreClimb = false;
   private boolean requestClimb = false;
   private boolean ishomed = false;
-  private Timer coralPickupTimer = new Timer();
-  private boolean coralElevatorPickUp = false;
+  private Timer rigatoniPickupTimer = new Timer();
+  private boolean rigatoniElevatorPickUp = false;
   private boolean scoreBackSide = false;
 
   public enum Superstates {
@@ -37,16 +37,16 @@ public class Superstructure extends SubsystemBase {
     DISABLED,
     IDLE,
     EJECT,
-    ALGAE_IDLE,
-    ALGAE_PRESCORE,
-    ALGAE_SCORE,
-    INTAKE_ALGAE_FLOOR,
-    DESCORE_ALGAE,
-    END_EFFECTOR_CORAL_PICKUP,
-    CORAL_HELD,
-    PRESCORE_CORAL,
-    SCORE_CORAL,
-    SAFE_SCORE_ALGAE_RETRACT,
+    MEATBALL_IDLE,
+    MEATBALL_PRESCORE,
+    MEATBALL_SCORE,
+    INTAKE_MEATBALL_FLOOR,
+    DESCORE_MEATBALL,
+    END_EFFECTOR_RIGATONI_PICKUP,
+    RIGATONI_HELD,
+    PRESCORE_RIGATONI,
+    SCORE_RIGATONI,
+    SAFE_SCORE_MEATBALL_RETRACT,
     PRECLIMB,
     CLIMB
   }
@@ -135,21 +135,21 @@ public class Superstructure extends SubsystemBase {
       case IDLE:
         if (requestEject) {
           state = Superstates.EJECT;
-        } else if (intakeSuperstructure.isCoralDetectedPickupArea()) {
+        } else if (intakeSuperstructure.isRigatoniDetectedPickupArea()) {
           endEffector.idle();
           elevator.idle();
           arm.idle();
           if (arm.atSetpoint() && elevator.atSetpoint()) {
-            state = Superstates.END_EFFECTOR_CORAL_PICKUP;
+            state = Superstates.END_EFFECTOR_RIGATONI_PICKUP;
           }
-        } else if (requestIntakeAlgaeFloor) {
-          state = Superstates.INTAKE_ALGAE_FLOOR;
-        } else if (requestDescoreAlgae) {
-          state = Superstates.DESCORE_ALGAE;
+        } else if (requestIntakeMeatballFloor) {
+          state = Superstates.INTAKE_MEATBALL_FLOOR;
+        } else if (requestDescoreMeatball) {
+          state = Superstates.DESCORE_MEATBALL;
         } else if (requestPreClimb && DriverStation.getMatchTime() < 30.0) {
           state = Superstates.PRECLIMB;
-        } else if (endEffector.hasCoral()) {
-          state = Superstates.CORAL_HELD;
+        } else if (endEffector.hasRigatoni()) {
+          state = Superstates.RIGATONI_HELD;
         } else {
           endEffector.idle();
           elevator.idle();
@@ -162,174 +162,174 @@ public class Superstructure extends SubsystemBase {
         arm.eject();
         endEffector.eject();
 
-        if (requestIdle && !endEffector.hasAlgae() && !endEffector.hasCoral()) {
+        if (requestIdle && !endEffector.hasMeatball() && !endEffector.hasRigatoni()) {
           state = Superstates.IDLE;
-        } else if (requestIdle && endEffector.hasAlgae()) {
-          state = Superstates.ALGAE_IDLE;
-        } else if (requestIdle && endEffector.hasCoral()) {
-          state = Superstates.CORAL_HELD;
+        } else if (requestIdle && endEffector.hasMeatball()) {
+          state = Superstates.MEATBALL_IDLE;
+        } else if (requestIdle && endEffector.hasRigatoni()) {
+          state = Superstates.RIGATONI_HELD;
         }
 
         break;
-      case ALGAE_IDLE:
-        endEffector.holdAlgae();
-        arm.algaeHold();
-        elevator.algaeHold();
+      case MEATBALL_IDLE:
+        endEffector.holdMeatball();
+        arm.meatballHold();
+        elevator.meatballHold();
         if (requestEject) {
           state = Superstates.EJECT;
-        } else if (!endEffector.hasAlgae()) {
+        } else if (!endEffector.hasMeatball()) {
           state = Superstates.IDLE;
-        } else if (requestAlgaePrescore) {
-          state = Superstates.ALGAE_PRESCORE;
+        } else if (requestMeatballPrescore) {
+          state = Superstates.MEATBALL_PRESCORE;
         }
 
         break;
-      case ALGAE_PRESCORE:
-        elevator.scoreAlgae();
+      case MEATBALL_PRESCORE:
+        elevator.scoreMeatball();
         if (elevator.atSetpoint()) {
-          arm.scoreAlgae(scoreBackSide);
+          arm.scoreMeatball(scoreBackSide);
         }
 
         if (requestIdle) {
           if (elevator.getElevatorHeightMeters()
               >= Constants.Elevator.safeBargeRetractHeightMeters) {
-            state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
+            state = Superstates.SAFE_SCORE_MEATBALL_RETRACT;
           } else {
-            state = Superstates.ALGAE_IDLE;
+            state = Superstates.MEATBALL_IDLE;
           }
-        } else if (requestAlgaeScore && arm.atSetpoint()) {
-          state = Superstates.ALGAE_SCORE;
+        } else if (requestMeatballScore && arm.atSetpoint()) {
+          state = Superstates.MEATBALL_SCORE;
         }
 
         break;
-      case ALGAE_SCORE:
-        endEffector.releaseAlgae();
+      case MEATBALL_SCORE:
+        endEffector.releaseMeatball();
         if (requestIdle) {
-          state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
+          state = Superstates.SAFE_SCORE_MEATBALL_RETRACT;
         }
 
         break;
-      case INTAKE_ALGAE_FLOOR: // Needs to move up then arm out then back down
-        elevator.algaeGround();
-        arm.algaeGround();
-        endEffector.intakeAlgae();
+      case INTAKE_MEATBALL_FLOOR: // Needs to move up then arm out then back down
+        elevator.meatballGround();
+        arm.meatballGround();
+        endEffector.intakeMeatball();
 
         if (requestIdle) {
-          if (endEffector.hasAlgae()) {
-            state = Superstates.ALGAE_IDLE;
+          if (endEffector.hasMeatball()) {
+            state = Superstates.MEATBALL_IDLE;
           } else {
             state = Superstates.IDLE;
           }
         }
 
         break;
-      case DESCORE_ALGAE:
-        arm.algaeReef();
-        elevator.algaeReef(level);
-        endEffector.intakeAlgae();
+      case DESCORE_MEATBALL:
+        arm.meatballReef();
+        elevator.meatballReef(level);
+        endEffector.intakeMeatball();
 
         if (requestIdle) {
-          if (endEffector.hasAlgae()) {
-            state = Superstates.ALGAE_IDLE;
-          } else if (!endEffector.hasAlgae()) {
+          if (endEffector.hasMeatball()) {
+            state = Superstates.MEATBALL_IDLE;
+          } else if (!endEffector.hasMeatball()) {
             state = Superstates.IDLE;
           }
         }
         break;
-      case END_EFFECTOR_CORAL_PICKUP:
-        Logger.recordOutput("Superstructure/CoralStopIsDisabled", coralElevatorPickUp);
+      case END_EFFECTOR_RIGATONI_PICKUP:
+        Logger.recordOutput("Superstructure/RigatoniStopIsDisabled", rigatoniElevatorPickUp);
         arm.idle();
-        endEffector.intakeCoral();
+        endEffector.intakeRigatoni();
 
-        if (!coralElevatorPickUp) {
-          coralPickupTimer.start();
+        if (!rigatoniElevatorPickUp) {
+          rigatoniPickupTimer.start();
         }
 
-        if (coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
-          elevator.pickupCoral();
-          coralElevatorPickUp = true;
+        if (rigatoniPickupTimer.hasElapsed(Constants.EndEffector.rigatoniGrabDelaySeconds)) {
+          elevator.pickupRigatoni();
+          rigatoniElevatorPickUp = true;
         }
 
-        if (coralPickupTimer.hasElapsed(Constants.Elevator.coralDetectionHeightThresholdSecs)) {
-          if (endEffector.hasCoral()) {
-            coralElevatorPickUp = false;
-            coralPickupTimer.stop();
-            coralPickupTimer.reset();
-            state = Superstates.CORAL_HELD;
-            coralElevatorPickUp = false;
-          } else if (!endEffector.hasCoral()
-              && !intakeSuperstructure.isCoralDetectedPickupArea()
+        if (rigatoniPickupTimer.hasElapsed(Constants.Elevator.rigatoniDetectionHeightThresholdSecs)) {
+          if (endEffector.hasRigatoni()) {
+            rigatoniElevatorPickUp = false;
+            rigatoniPickupTimer.stop();
+            rigatoniPickupTimer.reset();
+            state = Superstates.RIGATONI_HELD;
+            rigatoniElevatorPickUp = false;
+          } else if (!endEffector.hasRigatoni()
+              && !intakeSuperstructure.isRigatoniDetectedPickupArea()
               && arm.atSetpoint()
               && getElevatorHeight() >= Constants.Elevator.minElevatorSafeHeightMeters) {
-            coralElevatorPickUp = false;
-            coralPickupTimer.stop();
-            coralPickupTimer.reset();
+            rigatoniElevatorPickUp = false;
+            rigatoniPickupTimer.stop();
+            rigatoniPickupTimer.reset();
             state = Superstates.IDLE;
           }
         }
 
         break;
-      case CORAL_HELD:
-        arm.coralHold();
-        elevator.coralHold();
-        endEffector.holdCoral();
+      case RIGATONI_HELD:
+        arm.rigatoniHold();
+        elevator.rigatoniHold();
+        endEffector.holdRigatoni();
 
         if (requestEject) {
           state = Superstates.EJECT;
-        } else if (!endEffector.hasCoral()) {
+        } else if (!endEffector.hasRigatoni()) {
           state = Superstates.IDLE;
-        } else if (requestPrescoreCoral) {
-          state = Superstates.PRESCORE_CORAL;
+        } else if (requestPrescoreRigatoni) {
+          state = Superstates.PRESCORE_RIGATONI;
         }
         break;
-      case PRESCORE_CORAL:
-        arm.prescoreCoral(level);
-        elevator.prescoreCoral(level);
-        if (requestScoreCoral && arm.atSetpoint() && elevator.atSetpoint()) {
-          state = Superstates.SCORE_CORAL;
+      case PRESCORE_RIGATONI:
+        arm.prescoreRigatoni(level);
+        elevator.prescoreRigatoni(level);
+        if (requestScoreRigatoni && arm.atSetpoint() && elevator.atSetpoint()) {
+          state = Superstates.SCORE_RIGATONI;
         } else if (requestIdle) {
-          if (endEffector.hasCoral()) {
-            state = Superstates.CORAL_HELD;
+          if (endEffector.hasRigatoni()) {
+            state = Superstates.RIGATONI_HELD;
           } else {
             state = Superstates.IDLE;
           }
         }
 
         break;
-      case SCORE_CORAL:
-        arm.scoreCoral(level);
-        elevator.scoreCoral(level);
+      case SCORE_RIGATONI:
+        arm.scoreRigatoni(level);
+        elevator.scoreRigatoni(level);
         if (level == Level.L1) {
           if (arm.atSetpoint() && elevator.atSetpoint()) {
-            endEffector.releaseCoralL1();
+            endEffector.releaseRigatoniL1();
           }
         } else if ((arm.getAngleDegrees() <= arm.scoreReleaseSetpoint())) {
-          endEffector.releaseCoralNormal();
+          endEffector.releaseRigatoniNormal();
         } else {
           if (elevator.atSetpoint() && arm.atSetpoint()) {
-            endEffector.releaseCoralNormal();
+            endEffector.releaseRigatoniNormal();
           }
         }
 
         if (requestIdle) {
-          if (endEffector.hasCoral()) {
-            state = Superstates.CORAL_HELD;
+          if (endEffector.hasRigatoni()) {
+            state = Superstates.RIGATONI_HELD;
           } else {
             state = Superstates.IDLE;
           }
-        } else if (requestDescoreAlgae && !endEffector.hasCoral()) {
-          state = Superstates.DESCORE_ALGAE;
+        } else if (requestDescoreMeatball && !endEffector.hasRigatoni()) {
+          state = Superstates.DESCORE_MEATBALL;
         }
         break;
-      case SAFE_SCORE_ALGAE_RETRACT:
+      case SAFE_SCORE_MEATBALL_RETRACT:
         arm.safeBargeRetract();
         if (arm.atSetpoint()) {
           elevator.safeBargeRetract();
           if (elevator.atSetpoint()) {
-            if (!endEffector.hasAlgae()) {
+            if (!endEffector.hasMeatball()) {
               state = Superstates.IDLE;
-            } else if (endEffector.hasAlgae()) {
-              state = Superstates.ALGAE_IDLE;
+            } else if (endEffector.hasMeatball()) {
+              state = Superstates.MEATBALL_IDLE;
             }
           }
         }
@@ -349,15 +349,15 @@ public class Superstructure extends SubsystemBase {
     // don't clear requestHomed since it must be processed
     requestEject = false;
     requestIdle = false;
-    requestAlgaeScore = false;
-    requestIntakeAlgaeFloor = false;
-    requestDescoreAlgae = false;
-    requestAlgaePrescore = false;
-    requestPrescoreCoral = false;
-    requestScoreCoral = false;
+    requestMeatballScore = false;
+    requestIntakeMeatballFloor = false;
+    requestDescoreMeatball = false;
+    requestMeatballPrescore = false;
+    requestPrescoreRigatoni = false;
+    requestScoreRigatoni = false;
     requestPreClimb = false;
     requestClimb = false;
-    requestIntakeAlgaeFloor = false;
+    requestIntakeMeatballFloor = false;
   }
 
   public void requestOperationMode(OperationMode mode) {
@@ -386,37 +386,37 @@ public class Superstructure extends SubsystemBase {
     requestEject = true;
   }
 
-  public void requestAlgaePrescore(boolean prescoreBackSide) {
+  public void requestMeatballPrescore(boolean prescoreBackSide) {
     unsetAllRequests();
-    requestAlgaePrescore = true;
+    requestMeatballPrescore = true;
     this.scoreBackSide = prescoreBackSide;
   }
 
-  public void requestAlgaeScore() {
+  public void requestMeatballScore() {
     unsetAllRequests();
-    requestAlgaeScore = true;
+    requestMeatballScore = true;
   }
 
-  public void requestIntakeAlgaeFloor() {
+  public void requestIntakeMeatballFloor() {
     unsetAllRequests();
-    requestIntakeAlgaeFloor = true;
+    requestIntakeMeatballFloor = true;
   }
 
-  public void requestDescoreAlgae(Level level) {
+  public void requestDescoreMeatball(Level level) {
     unsetAllRequests();
-    requestDescoreAlgae = true;
+    requestDescoreMeatball = true;
     this.level = level;
   }
 
-  public void requestPrescoreCoral(Level level) {
+  public void requestPrescoreRigatoni(Level level) {
     unsetAllRequests();
-    requestPrescoreCoral = true;
+    requestPrescoreRigatoni = true;
     this.level = level;
   }
 
-  public void requestScoreCoral(Level level) {
+  public void requestScoreRigatoni(Level level) {
     unsetAllRequests();
-    requestScoreCoral = true;
+    requestScoreRigatoni = true;
     this.level = level;
   }
 
@@ -431,7 +431,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void requestUnhome() {
-    endEffector.idle(); // let any algae pop-out, coral must have already been ejected
+    endEffector.idle(); // let any meatball pop-out, rigatoni must have already been ejected
     unsetAllRequests();
     state = Superstates.HOMELESS;
   }
@@ -444,12 +444,12 @@ public class Superstructure extends SubsystemBase {
     state = Superstates.IDLE;
   }
 
-  public boolean isCoralHeld() {
-    return endEffector.hasCoral();
+  public boolean isRigatoniHeld() {
+    return endEffector.hasRigatoni();
   }
 
-  public boolean isAlgaeHeld() {
-    return endEffector.hasAlgae();
+  public boolean isMeatballHeld() {
+    return endEffector.hasMeatball();
   }
 
   public double getElevatorHeight() {

@@ -12,7 +12,7 @@ public class Rollers extends SubsystemBase {
   private RollersIO io;
   private RollersIOInputsAutoLogged inputs = new RollersIOInputsAutoLogged();
 
-  private boolean isCoralPickupDetected = false;
+  private boolean isRigatoniPickupDetected = false;
   private boolean currentDetectionTriggered = false;
   private boolean velocityDetectionTriggered = false;
 
@@ -54,9 +54,9 @@ public class Rollers extends SubsystemBase {
     Logger.processInputs("Rollers", inputs);
     currentDetectionTriggered = currentDetectionDebouncer.calculate(inputs.statorCurrentAmps);
     velocityDetectionTriggered = velocityDetectionDebouncer.calculate(inputs.speedRotationsPerSec);
-    isCoralPickupDetected = currentDetectionTriggered && velocityDetectionTriggered;
+    isRigatoniPickupDetected = currentDetectionTriggered && velocityDetectionTriggered;
 
-    Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected);
+    Logger.recordOutput("Rollers/isRigatoniPickupDetected", isRigatoniPickupDetected);
     Logger.recordOutput("Rollers/currentDetectionTriggered", currentDetectionTriggered);
     Logger.recordOutput("Rollers/velocityDetectionTriggered", velocityDetectionTriggered);
 
@@ -90,7 +90,7 @@ public class Rollers extends SubsystemBase {
     io.stop(IdleMode.kCoast);
   }
 
-  public boolean isCoralPickupDetected() {
-    return isCoralPickupDetected;
+  public boolean isRigatoniPickupDetected() {
+    return isRigatoniPickupDetected;
   }
 }

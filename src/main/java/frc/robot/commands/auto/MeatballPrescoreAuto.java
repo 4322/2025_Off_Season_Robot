@@ -10,13 +10,13 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 
-public class AlgaePrescoreAuto extends Command {
+public class MeatballPrescoreAuto extends Command {
   private Superstructure superstructure;
   private Drive drive;
   private Rotation2d targetAngle;
   private boolean scoreBackSide;
 
-  public AlgaePrescoreAuto(Superstructure superstructure, Drive drive) {
+  public MeatballPrescoreAuto(Superstructure superstructure, Drive drive) {
     this.superstructure = superstructure;
     this.drive = drive;
     addRequirements(superstructure);
@@ -46,12 +46,12 @@ public class AlgaePrescoreAuto extends Command {
     if (Robot.alliance == Alliance.Blue) {
       if (drive.getPose().getTranslation().getX()
           >= FieldConstants.KeypointPoses.blueAutoBargePreScoreX) {
-        superstructure.requestAlgaePrescore(scoreBackSide);
+        superstructure.requestMeatballPrescore(scoreBackSide);
       }
     } else {
       if (drive.getPose().getTranslation().getX()
           <= FieldConstants.KeypointPoses.redAutoBargePreScoreX) {
-        superstructure.requestAlgaePrescore(scoreBackSide);
+        superstructure.requestMeatballPrescore(scoreBackSide);
       }
     }
   }
@@ -60,7 +60,7 @@ public class AlgaePrescoreAuto extends Command {
   public boolean isFinished() {
     return superstructure.armAtSetpoint()
         && superstructure.elevatorAtSetpoint()
-        && superstructure.getState() == Superstates.ALGAE_PRESCORE;
+        && superstructure.getState() == Superstates.MEATBALL_PRESCORE;
   }
 
   @Override

@@ -83,11 +83,11 @@ public class Indexer extends SubsystemBase {
     io.enableBrakeMode(enable);
   }
 
-  public boolean isCoralDetectedIndexer() {
+  public boolean isRigatoniDetectedIndexer() {
     return inputs.indexerSensorTriggered;
   }
 
-  public boolean isCoralDetectedPickupArea() {
+  public boolean isRigatoniDetectedPickupArea() {
     return inputs.pickupAreaSensorTriggered;
   }
 }

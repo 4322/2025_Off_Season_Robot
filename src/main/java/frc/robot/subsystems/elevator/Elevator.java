@@ -62,15 +62,15 @@ public class Elevator extends SubsystemBase {
         case NORMAL:
           double armAngle = RobotContainer.getSuperstructure().getArmAngle();
 
-          if (RobotContainer.getSuperstructure().isCoralHeld()) {
-            minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
-            minElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralMeters;
+          if (RobotContainer.getSuperstructure().isRigatoniHeld()) {
+            minSafeArmDegree = Constants.Arm.minArmSafeWithRigatoniDeg;
+            minElevatorHeight = Constants.Elevator.minElevatorSafeWithRigatoniMeters;
           } else {
             minSafeArmDegree = Constants.Arm.minArmSafeDeg;
             minElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
           }
 
-          if (RobotContainer.getSuperstructure().getState() != Superstates.END_EFFECTOR_CORAL_PICKUP
+          if (RobotContainer.getSuperstructure().getState() != Superstates.END_EFFECTOR_RIGATONI_PICKUP
               && requestedHeightMeters < minElevatorHeight
               && armAngle < (minSafeArmDegree - Constants.Arm.bufferDeg)) {
             newElevatorHeight = minElevatorHeight;
@@ -96,18 +96,18 @@ public class Elevator extends SubsystemBase {
     isSlow = false;
   }
 
-  public void algaeHold() {
-    requestedHeightMeters = Constants.Elevator.algaeHoldMeters;
+  public void meatballHold() {
+    requestedHeightMeters = Constants.Elevator.meatballHoldMeters;
     isSlow = false;
   }
 
-  public void coralHold() {
-    requestedHeightMeters = Constants.Elevator.minElevatorSafeWithCoralMeters;
+  public void rigatoniHold() {
+    requestedHeightMeters = Constants.Elevator.minElevatorSafeWithRigatoniMeters;
     isSlow = false;
   }
 
-  public void algaeGround() {
-    requestedHeightMeters = Constants.Elevator.algaeGroundHeightMeters;
+  public void meatballGround() {
+    requestedHeightMeters = Constants.Elevator.meatballGroundHeightMeters;
     isSlow = false;
   }
 
@@ -116,74 +116,74 @@ public class Elevator extends SubsystemBase {
     prevHeightMeters = -1;
   }
 
-  public void algaeReef(Level level) {
+  public void meatballReef(Level level) {
     switch (level) {
       case L2:
-        requestedHeightMeters = Constants.Elevator.algaeReefL2HeightMeters;
+        requestedHeightMeters = Constants.Elevator.meatballReefL2HeightMeters;
         break;
       case L3:
-        requestedHeightMeters = Constants.Elevator.algaeReefL3HeightMeters;
+        requestedHeightMeters = Constants.Elevator.meatballReefL3HeightMeters;
         break;
       default:
-        System.out.println("Invalid level in Elevator.algaeReef()");
+        System.out.println("Invalid level in Elevator.meatballReef()");
         System.exit(-1); // die so someone has to fix this
     }
     isSlow = false;
   }
 
-  public void scoreAlgae() {
-    requestedHeightMeters = Constants.Elevator.scoreAlgaeHeightMeters;
+  public void scoreMeatball() {
+    requestedHeightMeters = Constants.Elevator.scoreMeatballHeightMeters;
     isSlow = false;
   }
 
-  public void prescoreCoral(Level level) {
+  public void prescoreRigatoni(Level level) {
     switch (level) {
       case L1:
-        requestedHeightMeters = Constants.Elevator.prescoreCoralL1HeightMeters;
+        requestedHeightMeters = Constants.Elevator.prescoreRigatoniL1HeightMeters;
         break;
       case L2:
-        requestedHeightMeters = Constants.Elevator.prescoreCoralL2HeightMeters;
+        requestedHeightMeters = Constants.Elevator.prescoreRigatoniL2HeightMeters;
         break;
       case L3:
-        requestedHeightMeters = Constants.Elevator.prescoreCoralL3HeightMeters;
+        requestedHeightMeters = Constants.Elevator.prescoreRigatoniL3HeightMeters;
         break;
       case L4:
-        requestedHeightMeters = Constants.Elevator.prescoreCoralL4HeightMeters;
+        requestedHeightMeters = Constants.Elevator.prescoreRigatoniL4HeightMeters;
         break;
     }
     isSlow = false;
   }
 
-  public void scoreCoral(Level level) {
+  public void scoreRigatoni(Level level) {
     switch (level) {
       case L1:
-        requestedHeightMeters = Constants.Elevator.scoreCoralL1HeightMeters;
-        currentScoreHeight = Constants.Elevator.scoreCoralL1HeightMeters;
+        requestedHeightMeters = Constants.Elevator.scoreRigatoniL1HeightMeters;
+        currentScoreHeight = Constants.Elevator.scoreRigatoniL1HeightMeters;
         break;
       case L2:
-        requestedHeightMeters = Constants.Elevator.scoreCoralL2HeightMeters;
-        currentScoreHeight = Constants.Elevator.scoreCoralL2HeightMeters;
+        requestedHeightMeters = Constants.Elevator.scoreRigatoniL2HeightMeters;
+        currentScoreHeight = Constants.Elevator.scoreRigatoniL2HeightMeters;
         break;
       case L3:
-        requestedHeightMeters = Constants.Elevator.scoreCoralL3HeightMeters;
-        currentScoreHeight = Constants.Elevator.scoreCoralL3HeightMeters;
+        requestedHeightMeters = Constants.Elevator.scoreRigatoniL3HeightMeters;
+        currentScoreHeight = Constants.Elevator.scoreRigatoniL3HeightMeters;
         break;
       case L4:
-        requestedHeightMeters = Constants.Elevator.scoreCoralL4HeightMeters;
-        currentScoreHeight = Constants.Elevator.scoreCoralL4HeightMeters;
+        requestedHeightMeters = Constants.Elevator.scoreRigatoniL4HeightMeters;
+        currentScoreHeight = Constants.Elevator.scoreRigatoniL4HeightMeters;
         break;
     }
     isSlow = false;
   }
 
-  public double releaseCoralSetpoint() {
+  public double releaseRigatoniSetpoint() {
     return currentScoreHeight + 0.001;
   }
 
-  public void pickupCoral() {
+  public void pickupRigatoni() {
     requestedHeightMeters =
         Constants.Elevator
-            .pickupCoralHeightMeters; // Adjust this value based on the desired height for coral
+            .pickupRigatoniHeightMeters; // Adjust this value based on the desired height for rigatoni
     isSlow = false;
   }
 

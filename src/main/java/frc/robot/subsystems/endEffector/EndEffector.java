@@ -16,17 +16,17 @@ public class EndEffector extends SubsystemBase {
   private EndEffectorIOInputsAutoLogged inputs = new EndEffectorIOInputsAutoLogged();
 
   private boolean requestIdle;
-  private boolean requestIntakeAlgae;
-  private boolean requestIntakeCoral;
-  private boolean requestReleaseAlgae;
-  private boolean requestReleaseCoralNormal;
-  private boolean requestReleaseCoralL1;
+  private boolean requestIntakeMeatball;
+  private boolean requestIntakeRigatoni;
+  private boolean requestReleaseMeatball;
+  private boolean requestReleaseRigatoniNormal;
+  private boolean requestReleaseRigatoniL1;
   private boolean requestEject;
-  private boolean holdAlgae;
-  private boolean holdCoral;
+  private boolean holdMeatball;
+  private boolean holdRigatoni;
 
-  private boolean coralHeld = false;
-  private boolean algaeHeld = false;
+  private boolean rigatoniHeld = false;
+  private boolean meatballHeld = false;
   private boolean isPiecePickupDetected = false;
 
   private Timer intakingTimer = new Timer();
@@ -34,16 +34,16 @@ public class EndEffector extends SubsystemBase {
 
   public enum EndEffectorStates {
     IDLE,
-    INTAKE_ALGAE,
-    INTAKE_CORAL,
-    HOLD_ALGAE,
-    HOLD_CORAL,
-    RELEASE_ALGAE,
-    RELEASE_CORAL_NORMAL,
-    RELEASE_CORAL_L1,
-    INTAKING_CORAL, // This and below state used to give delay before reducing intake voltage to
+    INTAKE_MEATBALL,
+    INTAKE_RIGATONI,
+    HOLD_MEATBALL,
+    HOLD_RIGATONI,
+    RELEASE_MEATBALL,
+    RELEASE_RIGATONI_NORMAL,
+    RELEASE_RIGATONI_L1,
+    INTAKING_RIGATONI, // This and below state used to give delay before reducing intake voltage to
     // allow a piece to fully come in
-    INTAKING_ALGAE,
+    INTAKING_MEATBALL,
     EJECT
   }
 
@@ -78,8 +78,8 @@ public class EndEffector extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("End Effector", inputs);
     Logger.recordOutput("End Effector/State", state.toString());
-    Logger.recordOutput("End Effector/coralHeld", coralHeld);
-    Logger.recordOutput("End Effector/algaeHeld", algaeHeld);
+    Logger.recordOutput("End Effector/rigatoniHeld", rigatoniHeld);
+    Logger.recordOutput("End Effector/meatballHeld", meatballHeld);
 
     isPiecePickupDetected =
         currentDetectionDebouncer.calculate(inputs.statorCurrentAmps)
@@ -95,53 +95,53 @@ public class EndEffector extends SubsystemBase {
     switch (state) {
       case IDLE:
         io.stop();
-        if (requestIntakeAlgae) {
-          state = EndEffectorStates.INTAKE_ALGAE;
-        } else if (requestIntakeCoral) {
-          state = EndEffectorStates.INTAKE_CORAL;
-        } else if (inputs.isCoralProximityDetected) {
-          state = EndEffectorStates.HOLD_CORAL;
-          coralHeld = true;
+        if (requestIntakeMeatball) {
+          state = EndEffectorStates.INTAKE_MEATBALL;
+        } else if (requestIntakeRigatoni) {
+          state = EndEffectorStates.INTAKE_RIGATONI;
+        } else if (inputs.isRigatoniProximityDetected) {
+          state = EndEffectorStates.HOLD_RIGATONI;
+          rigatoniHeld = true;
         } else if (requestEject) {
           unsetAllRequests();
           state = EndEffectorStates.EJECT;
         }
         break;
-      case INTAKE_ALGAE:
+      case INTAKE_MEATBALL:
         if (requestIdle) {
           state = EndEffectorStates.IDLE;
-          algaeHeld = false;
+          meatballHeld = false;
         } else {
-          io.setVoltage(Constants.EndEffector.algaeIntakeVolts);
+          io.setVoltage(Constants.EndEffector.meatballIntakeVolts);
           intakingTimer.start();
-          state = EndEffectorStates.INTAKING_ALGAE;
+          state = EndEffectorStates.INTAKING_MEATBALL;
         }
 
         break;
-      case INTAKE_CORAL:
-        io.setVoltage(Constants.EndEffector.coralIntakeVolts);
+      case INTAKE_RIGATONI:
+        io.setVoltage(Constants.EndEffector.rigatoniIntakeVolts);
         if (inputs
-            .isCoralProximityDetected /*|| isPiecePickupDetected*/) { // TODO until we have current
+            .isRigatoniProximityDetected /*|| isPiecePickupDetected*/) { // TODO until we have current
           // detection tuned (if we end
           // up doing)
-          state = EndEffectorStates.INTAKING_CORAL;
-          coralHeld = true;
+          state = EndEffectorStates.INTAKING_RIGATONI;
+          rigatoniHeld = true;
         }
         if (requestIdle) {
           state = EndEffectorStates.IDLE;
-          coralHeld = false;
+          rigatoniHeld = false;
         }
         break;
-      case INTAKING_ALGAE:
+      case INTAKING_MEATBALL:
         if (intakingTimer.isRunning()) {
-          if (intakingTimer.hasElapsed(Constants.EndEffector.algaeIntakingDelaySeconds)) {
-            if (inputs.sensorProximity > Constants.EndEffector.algaeProximityThresholdIntake) {
-              algaeHeld = false;
+          if (intakingTimer.hasElapsed(Constants.EndEffector.meatballIntakingDelaySeconds)) {
+            if (inputs.sensorProximity > Constants.EndEffector.meatballProximityThresholdIntake) {
+              meatballHeld = false;
               state = EndEffectorStates.IDLE;
             } else if (inputs.sensorProximity
-                < Constants.EndEffector.algaeProximityThresholdIntake) {
-              state = EndEffectorStates.HOLD_ALGAE;
-              algaeHeld = true;
+                < Constants.EndEffector.meatballProximityThresholdIntake) {
+              state = EndEffectorStates.HOLD_MEATBALL;
+              meatballHeld = true;
             }
             intakingTimer.stop();
             intakingTimer.reset();
@@ -151,10 +151,10 @@ public class EndEffector extends SubsystemBase {
           intakingTimer.start();
         }
         break;
-      case INTAKING_CORAL:
+      case INTAKING_RIGATONI:
         if (intakingTimer.isRunning()) {
-          if (intakingTimer.hasElapsed(Constants.EndEffector.coralIntakingDelaySeconds)) {
-            state = EndEffectorStates.HOLD_CORAL;
+          if (intakingTimer.hasElapsed(Constants.EndEffector.rigatoniIntakingDelaySeconds)) {
+            state = EndEffectorStates.HOLD_RIGATONI;
             intakingTimer.stop();
             intakingTimer.reset();
           }
@@ -162,115 +162,115 @@ public class EndEffector extends SubsystemBase {
           intakingTimer.start();
         }
         break;
-      case HOLD_ALGAE:
+      case HOLD_MEATBALL:
         if (intakingTimer.isRunning()) {
           intakingTimer.stop();
           intakingTimer.reset();
         }
 
         if (RobotContainer.getSuperstructure().getArmAngle() <= 90) {
-          io.setVoltage(Constants.EndEffector.maxAlgaeHoldVolts);
+          io.setVoltage(Constants.EndEffector.maxMeatballHoldVolts);
         } else {
           io.setVoltage(
               Math.abs(
                           Math.sin(
                               Units.degreesToRadians(
                                   RobotContainer.getSuperstructure().getArmAngle())))
-                      * (Constants.EndEffector.maxAlgaeHoldVolts
-                          - Constants.EndEffector.minAlgaeHoldVolts)
-                  + Constants.EndEffector.minAlgaeHoldVolts);
+                      * (Constants.EndEffector.maxMeatballHoldVolts
+                          - Constants.EndEffector.minMeatballHoldVolts)
+                  + Constants.EndEffector.minMeatballHoldVolts);
         }
-        if (requestReleaseAlgae) {
-          state = EndEffectorStates.RELEASE_ALGAE;
+        if (requestReleaseMeatball) {
+          state = EndEffectorStates.RELEASE_MEATBALL;
         } else if (requestEject) {
           state = EndEffectorStates.EJECT;
-        } else if (inputs.sensorProximity > Constants.EndEffector.algaeProximityThreshold) {
+        } else if (inputs.sensorProximity > Constants.EndEffector.meatballProximityThreshold) {
           state = EndEffectorStates.IDLE;
-          algaeHeld = false;
+          meatballHeld = false;
         }
         break;
-      case HOLD_CORAL:
-        io.setVoltage(Constants.EndEffector.coralHoldVolts);
-        if (requestReleaseCoralNormal) {
-          state = EndEffectorStates.RELEASE_CORAL_NORMAL;
-        } else if (requestReleaseCoralL1) {
-          state = EndEffectorStates.RELEASE_CORAL_L1;
+      case HOLD_RIGATONI:
+        io.setVoltage(Constants.EndEffector.rigatoniHoldVolts);
+        if (requestReleaseRigatoniNormal) {
+          state = EndEffectorStates.RELEASE_RIGATONI_NORMAL;
+        } else if (requestReleaseRigatoniL1) {
+          state = EndEffectorStates.RELEASE_RIGATONI_L1;
         } else if (requestEject) {
           state = EndEffectorStates.EJECT;
-        } else if (inputs.sensorProximity > Constants.EndEffector.coralProximityThreshold) {
+        } else if (inputs.sensorProximity > Constants.EndEffector.rigatoniProximityThreshold) {
           state = EndEffectorStates.IDLE;
-          coralHeld = false;
+          rigatoniHeld = false;
         }
         break;
-      case RELEASE_ALGAE:
+      case RELEASE_MEATBALL:
         if (!releasingTimer.isRunning()) {
           releasingTimer.reset();
           releasingTimer.start();
         }
-        io.setVoltage(Constants.EndEffector.algaeReleaseVolts);
-        if (holdAlgae) {
-          state = EndEffectorStates.HOLD_ALGAE;
-        } else if (!inputs.isAlgaeProximityDetected
-            && releasingTimer.hasElapsed(Constants.EndEffector.algaeReleasingDelaySeconds)) {
+        io.setVoltage(Constants.EndEffector.meatballReleaseVolts);
+        if (holdMeatball) {
+          state = EndEffectorStates.HOLD_MEATBALL;
+        } else if (!inputs.isMeatballProximityDetected
+            && releasingTimer.hasElapsed(Constants.EndEffector.meatballReleasingDelaySeconds)) {
           state = EndEffectorStates.IDLE;
-          algaeHeld = false;
+          meatballHeld = false;
           releasingTimer.stop();
           releasingTimer.reset();
-        } else if (inputs.isAlgaeProximityDetected) {
-          state = EndEffectorStates.HOLD_ALGAE;
+        } else if (inputs.isMeatballProximityDetected) {
+          state = EndEffectorStates.HOLD_MEATBALL;
         }
         break;
-      case RELEASE_CORAL_NORMAL:
+      case RELEASE_RIGATONI_NORMAL:
         if (!releasingTimer.isRunning()) {
           releasingTimer.reset();
           releasingTimer.start();
         }
-        io.setVoltage(Constants.EndEffector.coralReleaseVolts);
-        if (holdCoral) {
-          state = EndEffectorStates.HOLD_CORAL;
+        io.setVoltage(Constants.EndEffector.rigatoniReleaseVolts);
+        if (holdRigatoni) {
+          state = EndEffectorStates.HOLD_RIGATONI;
           releasingTimer.stop();
           releasingTimer.reset();
-        } else if ((!inputs.isCoralProximityDetected
-            && releasingTimer.hasElapsed(Constants.EndEffector.coralReleasingDelaySeconds))) {
+        } else if ((!inputs.isRigatoniProximityDetected
+            && releasingTimer.hasElapsed(Constants.EndEffector.rigatoniReleasingDelaySeconds))) {
           state = EndEffectorStates.IDLE;
-          coralHeld = false;
+          rigatoniHeld = false;
           releasingTimer.stop();
           releasingTimer.reset();
         }
         break;
-      case RELEASE_CORAL_L1:
+      case RELEASE_RIGATONI_L1:
         if (!releasingTimer.isRunning()) {
           releasingTimer.reset();
           releasingTimer.start();
         }
-        io.setVoltage(Constants.EndEffector.coralReleaseVoltsL1);
-        if (holdCoral) {
-          state = EndEffectorStates.HOLD_CORAL;
+        io.setVoltage(Constants.EndEffector.rigatoniReleaseVoltsL1);
+        if (holdRigatoni) {
+          state = EndEffectorStates.HOLD_RIGATONI;
           releasingTimer.stop();
           releasingTimer.reset();
-        } else if ((!inputs.isCoralProximityDetected
-            && releasingTimer.hasElapsed(Constants.EndEffector.coralReleasingDelaySeconds))) {
+        } else if ((!inputs.isRigatoniProximityDetected
+            && releasingTimer.hasElapsed(Constants.EndEffector.rigatoniReleasingDelaySeconds))) {
           state = EndEffectorStates.IDLE;
-          coralHeld = false;
+          rigatoniHeld = false;
           releasingTimer.stop();
           releasingTimer.reset();
         }
         break;
       case EJECT:
-        if (holdAlgae) {
-          state = EndEffectorStates.HOLD_ALGAE;
-        } else if (holdCoral) {
-          state = EndEffectorStates.HOLD_CORAL;
+        if (holdMeatball) {
+          state = EndEffectorStates.HOLD_MEATBALL;
+        } else if (holdRigatoni) {
+          state = EndEffectorStates.HOLD_RIGATONI;
         } else if (ClockUtil.inBound(
             RobotContainer.getSuperstructure().getArmAngle(),
             Constants.Arm.ejectDeg - Constants.Arm.setpointToleranceDegreesEject,
             Constants.Arm.ejectDeg + Constants.Arm.setpointToleranceDegreesEject,
             true)) /*TODO set acual values*/ {
           io.setVoltage(Constants.EndEffector.ejectVolts);
-          if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+          if ((!inputs.isRigatoniProximityDetected && !inputs.isMeatballProximityDetected)) {
             state = EndEffectorStates.IDLE;
-            coralHeld = false;
-            algaeHeld = false;
+            rigatoniHeld = false;
+            meatballHeld = false;
           }
         }
         break;
@@ -282,44 +282,44 @@ public class EndEffector extends SubsystemBase {
     requestIdle = true;
   }
 
-  public void intakeAlgae() {
+  public void intakeMeatball() {
     unsetAllRequests();
-    requestIntakeAlgae = true;
-    io.simAlgaeHeld();
+    requestIntakeMeatball = true;
+    io.simMeatballHeld();
   }
 
-  public void intakeCoral() {
+  public void intakeRigatoni() {
     unsetAllRequests();
-    requestIntakeCoral = true;
-    io.simCoralHeld();
+    requestIntakeRigatoni = true;
+    io.simRigatoniHeld();
   }
 
-  public void releaseAlgae() {
+  public void releaseMeatball() {
     unsetAllRequests();
-    requestReleaseAlgae = true;
-    io.simAlgaeReleased();
+    requestReleaseMeatball = true;
+    io.simMeatballReleased();
   }
 
-  public void releaseCoralNormal() {
+  public void releaseRigatoniNormal() {
     unsetAllRequests();
-    requestReleaseCoralNormal = true;
-    io.simCoralReleased();
+    requestReleaseRigatoniNormal = true;
+    io.simRigatoniReleased();
   }
 
-  public void releaseCoralL1() {
+  public void releaseRigatoniL1() {
     unsetAllRequests();
-    requestReleaseCoralL1 = true;
-    io.simCoralReleased();
+    requestReleaseRigatoniL1 = true;
+    io.simRigatoniReleased();
   }
 
-  public void holdAlgae() {
+  public void holdMeatball() {
     unsetAllRequests();
-    holdAlgae = true;
+    holdMeatball = true;
   }
 
-  public void holdCoral() {
+  public void holdRigatoni() {
     unsetAllRequests();
-    holdCoral = true;
+    holdRigatoni = true;
   }
 
   public void eject() {
@@ -327,12 +327,12 @@ public class EndEffector extends SubsystemBase {
     requestEject = true;
   }
 
-  public boolean hasAlgae() {
-    return algaeHeld;
+  public boolean hasMeatball() {
+    return meatballHeld;
   }
 
-  public boolean hasCoral() {
-    return coralHeld;
+  public boolean hasRigatoni() {
+    return rigatoniHeld;
   }
 
   public void enableBrakeMode(boolean enable) {
@@ -341,14 +341,14 @@ public class EndEffector extends SubsystemBase {
 
   private void unsetAllRequests() {
     requestIdle = false;
-    requestIntakeAlgae = false;
-    requestIntakeCoral = false;
-    requestReleaseAlgae = false;
-    requestReleaseCoralNormal = false;
-    requestReleaseCoralL1 = false;
+    requestIntakeMeatball = false;
+    requestIntakeRigatoni = false;
+    requestReleaseMeatball = false;
+    requestReleaseRigatoniNormal = false;
+    requestReleaseRigatoniL1 = false;
     requestEject = false;
-    holdAlgae = false;
-    holdCoral = false;
+    holdMeatball = false;
+    holdRigatoni = false;
   }
 
   public boolean isPiecePickupDetected() {

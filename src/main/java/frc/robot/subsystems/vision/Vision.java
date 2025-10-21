@@ -22,7 +22,7 @@ import frc.robot.subsystems.vision.VisionIO.SingleTagPoseObservation;
 import frc.robot.util.GeomUtil;
 import frc.robot.util.PolynomialRegression;
 import frc.robot.util.ReefStatus;
-import frc.robot.util.ReefStatus.AlgaeLevel;
+import frc.robot.util.ReefStatus.MeatballLevel;
 import frc.robot.util.ReefStatus.ClosestReefPipe;
 import frc.robot.util.ReefStatus.L1Zone;
 import java.util.LinkedList;
@@ -39,7 +39,7 @@ public class Vision extends SubsystemBase {
   private double robotToReefFace;
   public ClosestReefPipe closestReefPipe;
   public L1Zone l1Zone;
-  public AlgaeLevel algaeLevel;
+  public MeatballLevel meatballLevel;
   public int tagId;
 
   private PolynomialRegression xyStdDevModel =
@@ -420,9 +420,9 @@ public class Vision extends SubsystemBase {
               ? FieldConstants.ReefFaceTag.AB.idRed
               : FieldConstants.ReefFaceTag.GH.idBlue;
       if (Robot.alliance == DriverStation.Alliance.Red) {
-        algaeLevel = AlgaeLevel.L3;
+        meatballLevel = MeatballLevel.L3;
       } else {
-        algaeLevel = AlgaeLevel.L2;
+        meatballLevel = MeatballLevel.L2;
       }
     } else if (30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 90) {
       robotToReefFace = -120;
@@ -436,9 +436,9 @@ public class Vision extends SubsystemBase {
               ? FieldConstants.ReefFaceTag.CD.idRed
               : FieldConstants.ReefFaceTag.IJ.idBlue;
       if (Robot.alliance == DriverStation.Alliance.Red) {
-        algaeLevel = AlgaeLevel.L2;
+        meatballLevel = MeatballLevel.L2;
       } else {
-        algaeLevel = AlgaeLevel.L3;
+        meatballLevel = MeatballLevel.L3;
       }
     } else if (90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 150) {
       robotToReefFace = -60;
@@ -453,9 +453,9 @@ public class Vision extends SubsystemBase {
               : FieldConstants.ReefFaceTag.KL.idBlue;
 
       if (Robot.alliance == DriverStation.Alliance.Red) {
-        algaeLevel = AlgaeLevel.L3;
+        meatballLevel = MeatballLevel.L3;
       } else {
-        algaeLevel = AlgaeLevel.L2;
+        meatballLevel = MeatballLevel.L2;
       }
     } else if ((150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 180)
         || (-150 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -180)) {
@@ -470,9 +470,9 @@ public class Vision extends SubsystemBase {
               ? FieldConstants.ReefFaceTag.GH.idRed
               : FieldConstants.ReefFaceTag.AB.idBlue;
       if (Robot.alliance == DriverStation.Alliance.Red) {
-        algaeLevel = AlgaeLevel.L2;
+        meatballLevel = MeatballLevel.L2;
       } else {
-        algaeLevel = AlgaeLevel.L3;
+        meatballLevel = MeatballLevel.L3;
       }
     } else if (-150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -90) {
       robotToReefFace = 60;
@@ -486,9 +486,9 @@ public class Vision extends SubsystemBase {
               ? FieldConstants.ReefFaceTag.IJ.idRed
               : FieldConstants.ReefFaceTag.CD.idBlue;
       if (Robot.alliance == DriverStation.Alliance.Red) {
-        algaeLevel = AlgaeLevel.L3;
+        meatballLevel = MeatballLevel.L3;
       } else {
-        algaeLevel = AlgaeLevel.L2;
+        meatballLevel = MeatballLevel.L2;
       }
     } else if (-90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -30) {
       robotToReefFace = 120;
@@ -502,9 +502,9 @@ public class Vision extends SubsystemBase {
               ? FieldConstants.ReefFaceTag.KL.idRed
               : FieldConstants.ReefFaceTag.EF.idBlue;
       if (Robot.alliance == DriverStation.Alliance.Red) {
-        algaeLevel = AlgaeLevel.L2;
+        meatballLevel = MeatballLevel.L2;
       } else {
-        algaeLevel = AlgaeLevel.L3;
+        meatballLevel = MeatballLevel.L3;
       }
     }
     Translation2d convertedRobotTrans =
@@ -538,7 +538,7 @@ public class Vision extends SubsystemBase {
         Rotation2d.fromDegrees(robotToReefFace),
         closestReefPipe,
         l1Zone,
-        algaeLevel,
+        meatballLevel,
         tagId);
   }
 }

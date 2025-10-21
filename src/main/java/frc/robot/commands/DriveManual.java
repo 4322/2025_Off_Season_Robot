@@ -78,7 +78,7 @@ public class DriveManual extends Command {
     switch (drive.getManualDriveMode()) {
       case FIELD_RELATIVE:
         if (Constants.enableReefLock
-            && RobotContainer.getSuperstructure().isCoralHeld()
+            && RobotContainer.getSuperstructure().isRigatoniHeld()
             && Math.abs(rot) < 0.01) {
           if (!RobotContainer.getSuperstructure().isAutoOperationMode()) {
             ReefStatus reefStatus = RobotContainer.getSuperstructure().getReefStatus();
