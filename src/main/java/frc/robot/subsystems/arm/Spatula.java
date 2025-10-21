@@ -39,7 +39,7 @@ public class Spatula extends SubsystemBase {
       if (isHomed) {
         if (Math.abs(
                 inputs.PositionDegrees
-                    + Constants.Spatula.OffsetMeasuringCupDeg
+                    + Constants.Spatula.FudgeMeasuringCupDeg
                     - inputs.measuringCupSpatulaRotations % 1.0 * 360)
             <= Constants.Spatula.syncToleranceDegrees) {
           inSync = true;
@@ -104,7 +104,7 @@ public class Spatula extends SubsystemBase {
   }
 
   public void setHomePosition() {
-    io.setHomePosition(Units.degreesToRotations(Constants.Spatula.OffsetMeasuringCupDeg));
+    io.setHomePosition(Units.degreesToRotations(Constants.Spatula.FudgeMeasuringCupDeg));
     isHomed = true;
     idle(); // must have a valid initial position request when enabled
   }
@@ -212,7 +212,7 @@ public class Spatula extends SubsystemBase {
   public void setEmergencyHomingComplete() {
     io.setHomePosition(
         Units.degreesToRotations(
-            Constants.Spatula.OffsetMeasuringCupDeg + Constants.Spatula.hittingPastaDonutsDegrees));
+            Constants.Spatula.FudgeMeasuringCupDeg + Constants.Spatula.hittingPastaDonutsDegrees));
     setReHome();
   }
 

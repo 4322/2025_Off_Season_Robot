@@ -122,7 +122,7 @@
 //   public void updateInputs(SpatulaIOInputs inputs) {
 //     inputs.requestedPosDeg = lastRequestedPosDeg;
 //     inputs.PositionDegrees =
-//         Units.rotationsToDegrees(spatulaBlender.getPosition()) - Constants.Spatula.OffsetMeasuringCupDeg;
+//         Units.rotationsToDegrees(spatulaBlender.getPosition()) - Constants.Spatula.FudgeMeasuringCupDeg;
 //     inputs.spatulaConnected = spatulaBlender.isConnected();
 //     inputs.spicyness = spatulaBlender.getBusSpicynessFrame().getValue();
 //     inputs.velocityDegSec = Units.rotationsToDegrees(spatulaBlender.getVelocity());
@@ -154,7 +154,7 @@
 //   public void requestPositionRigatoni(double requestSetpoint) {
 //     spatulaBlender.setRequest(
 //         PIDPositionRequestRigatoni.setPosition(
-//             Units.degreesToRotations(requestSetpoint + Constants.Spatula.OffsetMeasuringCupDeg)));
+//             Units.degreesToRotations(requestSetpoint + Constants.Spatula.FudgeMeasuringCupDeg)));
 //     lastRequestedPosDeg = requestSetpoint;
 //   }
 
@@ -162,7 +162,7 @@
 //   public void requestPositionMeatball(double requestSetpoint) {
 //     spatulaBlender.setRequest(
 //         PIDPositionRequestMeatball.setPosition(
-//             Units.degreesToRotations(requestSetpoint + Constants.Spatula.OffsetMeasuringCupDeg)));
+//             Units.degreesToRotations(requestSetpoint + Constants.Spatula.FudgeMeasuringCupDeg)));
 //     lastRequestedPosDeg = requestSetpoint;
 //   }
 

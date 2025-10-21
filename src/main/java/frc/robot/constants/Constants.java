@@ -207,7 +207,7 @@ public final class Constants {
     public static final double descoringMeatballDeg = 90.0;
     public static final double safeBargeRetractDeg = 180;
     // To the measuringCup 0 is horizontal but to us its straight down
-    public static final double OffsetMeasuringCupDeg = -90;
+    public static final double FudgeMeasuringCupDeg = -90;
 
     public static final double kPepper = 200;
     public static final double kItalian = 0;
