@@ -421,6 +421,8 @@ public final class Constants {
     public static final double voltageRejectSlow = -0.5;
     public static final double voltageFeedSlow = 0.5;
     public static final double voltageReject = -8;
+    public static final InvertedValue leftMotorInvertPhoenix = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue rightMotorInvertPhoenix = InvertedValue.Clockwise_Positive;
   }
 
   public static class Rollers {
