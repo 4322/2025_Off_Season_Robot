@@ -6,6 +6,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -151,8 +152,8 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
 
     public static final double sensorToArm = 85 / 10.0;
-    public static final double motorShaftToSensorShaft = 60 / 12.0;
-    public static final double motorGearRatio = sensorToArm * motorShaftToSensorShaft;
+    public static final double motorShaftToSensorShaft = 60 / 10.0;
+    public static final double gearRatio = sensorToArm;
     public static final double motionMagicJerk = 0;
     public static final double peakForwardVoltage = 12.0;
     public static final double peakReverseVoltage = -12.0;

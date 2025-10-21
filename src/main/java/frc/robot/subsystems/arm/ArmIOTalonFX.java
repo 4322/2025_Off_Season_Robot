@@ -54,7 +54,14 @@ public class ArmIOTalonFX implements ArmIO {
     motorConfig.HardwareLimitSwitch.ReverseLimitEnable = false;
 
     motorConfig.MotionMagic.MotionMagicAcceleration =
-        Units.degreesToRotations(Constants.Arm.accelerationLimitCoral);
+        Constants.Arm.accelerationLimitCoral/ (Math.PI * Constants.Arm.gearRatio);
+        motorConfig.MotionMagic.MotionMagicCruiseVelocity =
+        Constants.Arm.deaccelerationLimitCoral/ (Math.PI * Constants.Arm.gearRatio);
+
+    motorConfig.MotionMagic.MotionMagicJerk = Constants.Arm.motionMagicJerk;   
+
+    motorConfig.HardwareLimitSwitch.ForwardLimitEnable = false;
+    motorConfig.HardwareLimitSwitch.ReverseLimitEnable = false;
 
     return armMotor.getConfigurator().apply(motorConfig);
   }
