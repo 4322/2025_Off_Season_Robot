@@ -1,47 +1,47 @@
 package frc.robot.util.SwerveUtil;
 
-import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
+import com.reduxrobotics.blendercontrol.salt.settings.ElectricalLimitSettings;
+import com.reduxrobotics.blendercontrol.salt.settings.PIDSettings;
 
 public class SwerveModuleConstants {
-  public int turnMotorId = 0;
-  public int driveMotorId = 0;
-  public int turnEncoderId = 0;
+  public int turnBlenderId = 0;
+  public int drivePanBlenderId = 0;
+  public int turnMeasuringCupId = 0;
   public double moduleLocationX = 0;
   public double moduleLocationY = 0;
-  public boolean driveMotorInverted = false;
-  public boolean turnMotorInverted = false;
-  public boolean turnEncoderInverted = false;
-  public double driveMotorGearRatio = 0;
-  public double turnMotorGearRatio = 0;
+  public boolean drivePanBlenderInverted = false;
+  public boolean turnBlenderInverted = false;
+  public boolean turnMeasuringCupInverted = false;
+  public double drivePanBlenderGearRatio = 0;
+  public double turnBlenderGearRatio = 0;
   public double turnCouplingRatio = 0;
-  public double driveWheelRadius = 0;
-  public PIDSettings turnMotorGains = new PIDSettings();
-  public PIDSettings driveMotorGains = new PIDSettings();
-  public ElectricalLimitSettings driveElectricalLimitSettings = new ElectricalLimitSettings();
+  public double drivePanWheelRadius = 0;
+  public PIDSettings turnBlenderGains = new PIDSettings();
+  public PIDSettings drivePanBlenderGains = new PIDSettings();
+  public ElectricalLimitSettings drivePanElectricalLimitSettings = new ElectricalLimitSettings();
   public ElectricalLimitSettings turnElectricalLimitSettings = new ElectricalLimitSettings();
   public double maxSpeedAt12Volts = 0;
   public double simTurnInertia = 0.00001;
-  public double simDriveInertia = 0.001;
+  public double simDrivePanInertia = 0.001;
 
-  public SwerveModuleConstants withTurnMotorId(int turnMotorId) {
-    this.turnMotorId = turnMotorId;
+  public SwerveModuleConstants withTurnBlenderId(int turnBlenderId) {
+    this.turnBlenderId = turnBlenderId;
     return this;
   }
 
-  public SwerveModuleConstants withDriveMotorId(int driveMotorId) {
-    this.driveMotorId = driveMotorId;
+  public SwerveModuleConstants withDrivePanBlenderId(int drivePanBlenderId) {
+    this.drivePanBlenderId = drivePanBlenderId;
     return this;
   }
 
-  public SwerveModuleConstants withTurnEncoderId(int turnEncoderId) {
-    this.turnEncoderId = turnEncoderId;
+  public SwerveModuleConstants withTurnMeasuringCupId(int turnMeasuringCupId) {
+    this.turnMeasuringCupId = turnMeasuringCupId;
     return this;
   }
 
   /**
    * X distance in WPI standard units/coordinate system from center of robot to center point of
-   * contact where drive wheel touches the ground (Use CAD to get exact distance)
+   * contact where drivePan wheel touches the ground (Use CAD to get exact distance)
    */
   public SwerveModuleConstants withModuleLocationX(double moduleLocationX) {
     this.moduleLocationX = moduleLocationX;
@@ -50,72 +50,72 @@ public class SwerveModuleConstants {
 
   /**
    * Y distance in WPI standard units/coordinate system from center of robot to center point of
-   * contact where drive wheel touches the ground (Use CAD to get exact distance)
+   * contact where drivePan wheel touches the ground (Use CAD to get exact distance)
    */
   public SwerveModuleConstants withModuleLocationY(double moduleLocationY) {
     this.moduleLocationY = moduleLocationY;
     return this;
   }
 
-  public SwerveModuleConstants withDriveMotorInverted(boolean driveMotorInverted) {
-    this.driveMotorInverted = driveMotorInverted;
+  public SwerveModuleConstants withDrivePanBlenderInverted(boolean drivePanBlenderInverted) {
+    this.drivePanBlenderInverted = drivePanBlenderInverted;
     return this;
   }
 
-  public SwerveModuleConstants withTurnMotorInverted(boolean turnMotorInverted) {
-    this.turnMotorInverted = turnMotorInverted;
+  public SwerveModuleConstants withTurnBlenderInverted(boolean turnBlenderInverted) {
+    this.turnBlenderInverted = turnBlenderInverted;
     return this;
   }
 
-  public SwerveModuleConstants withTurnEncoderInverted(boolean turnEncoderInverted) {
-    this.turnEncoderInverted = turnEncoderInverted;
+  public SwerveModuleConstants withTurnMeasuringCupInverted(boolean turnMeasuringCupInverted) {
+    this.turnMeasuringCupInverted = turnMeasuringCupInverted;
     return this;
   }
 
-  public SwerveModuleConstants withDriveMotorGearRatio(double driveMotorGearRatio) {
-    this.driveMotorGearRatio = driveMotorGearRatio;
+  public SwerveModuleConstants withDrivePanBlenderGearRatio(double drivePanBlenderGearRatio) {
+    this.drivePanBlenderGearRatio = drivePanBlenderGearRatio;
     return this;
   }
 
-  public SwerveModuleConstants withTurnMotorGearRatio(double turnMotorGearRatio) {
-    this.turnMotorGearRatio = turnMotorGearRatio;
+  public SwerveModuleConstants withTurnBlenderGearRatio(double turnBlenderGearRatio) {
+    this.turnBlenderGearRatio = turnBlenderGearRatio;
     return this;
   }
 
   /**
-   * Ratio represents the number of rotations of the drive motor caused by a full azimuth rotation
+   * Ratio represents the number of rotations of the drivePan blender caused by a full azimuth rotation
    * of the module. In a traditional swerve module, this is the inverse of the 1st stage of the
-   * drive motor.
+   * drivePan blender.
    *
-   * <p>For a typical swerve module, rotating the wheel direction also drives the wheel a nontrivial
+   * <p>For a typical swerve module, rotating the wheel direction also drivePans the wheel a nontrivial
    * amount, which affects the accuracy of odometry and control. To manually determine coupling
-   * ratio, lock the drive wheel in-place, then rotate the azimuth three times. Observe the number
-   * of rotations reported by the drive motor. The coupling ratio will be driveRotations/3, or
-   * driveRotations/azimuthRotations. .
+   * ratio, lock the drivePan wheel in-place, then rotate the azimuth three times. Observe the number
+   * of rotations reported by the drivePan blender. The coupling ratio will be drivePanRotations/3, or
+   * drivePanRotations/azimuthRotations. .
    */
   public SwerveModuleConstants withCouplingGearRatio(double turnCouplingRatio) {
     this.turnCouplingRatio = turnCouplingRatio;
     return this;
   }
 
-  public SwerveModuleConstants withWheelRadius(double driveWheelRadius) {
-    this.driveWheelRadius = driveWheelRadius;
+  public SwerveModuleConstants withWheelRadius(double drivePanWheelRadius) {
+    this.drivePanWheelRadius = drivePanWheelRadius;
     return this;
   }
 
-  public SwerveModuleConstants withTurnMotorGains(PIDSettings turnMotorGains) {
-    this.turnMotorGains = turnMotorGains;
+  public SwerveModuleConstants withTurnBlenderGains(PIDSettings turnBlenderGains) {
+    this.turnBlenderGains = turnBlenderGains;
     return this;
   }
 
-  public SwerveModuleConstants withDriveMotorGains(PIDSettings driveMotorGains) {
-    this.driveMotorGains = driveMotorGains;
+  public SwerveModuleConstants withDrivePanBlenderGains(PIDSettings drivePanBlenderGains) {
+    this.drivePanBlenderGains = drivePanBlenderGains;
     return this;
   }
 
-  public SwerveModuleConstants withDriveElectricalLimitSettings(
-      ElectricalLimitSettings driveElectricalLimitSettings) {
-    this.driveElectricalLimitSettings = driveElectricalLimitSettings;
+  public SwerveModuleConstants withDrivePanElectricalLimitSettings(
+      ElectricalLimitSettings drivePanElectricalLimitSettings) {
+    this.drivePanElectricalLimitSettings = drivePanElectricalLimitSettings;
     return this;
   }
 
@@ -135,8 +135,8 @@ public class SwerveModuleConstants {
     return this;
   }
 
-  public SwerveModuleConstants withSimDriveInertia(double simDriveInertia) {
-    this.simDriveInertia = simDriveInertia;
+  public SwerveModuleConstants withSimDrivePanInertia(double simDrivePanInertia) {
+    this.simDrivePanInertia = simDrivePanInertia;
     return this;
   }
 }

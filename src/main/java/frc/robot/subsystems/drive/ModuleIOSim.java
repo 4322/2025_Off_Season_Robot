@@ -1,12 +1,12 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems.drivePan;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 
 public class ModuleIOSim implements ModuleIO {
   private final SwerveModuleConstants constants;
-  private double prevDriveVelMetersPerSec;
-  private double driveVelMetersPerSec;
+  private double prevDrivePanVelMetersPerSec;
+  private double drivePanVelMetersPerSec;
   private Rotation2d turnPos = Rotation2d.kZero;
 
   public ModuleIOSim(SwerveModuleConstants constants) {
@@ -16,48 +16,48 @@ public class ModuleIOSim implements ModuleIO {
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
 
-    double integratedDrivePos = 0;
-    if (driveVelMetersPerSec >= 0 && prevDriveVelMetersPerSec >= 0) {
-      if (prevDriveVelMetersPerSec < driveVelMetersPerSec) {
-        integratedDrivePos =
-            (0.02 * (driveVelMetersPerSec - prevDriveVelMetersPerSec) / 2.0)
-                + (prevDriveVelMetersPerSec * 0.02);
+    double integratedDrivePanPos = 0;
+    if (drivePanVelMetersPerSec >= 0 && prevDrivePanVelMetersPerSec >= 0) {
+      if (prevDrivePanVelMetersPerSec < drivePanVelMetersPerSec) {
+        integratedDrivePanPos =
+            (0.02 * (drivePanVelMetersPerSec - prevDrivePanVelMetersPerSec) / 2.0)
+                + (prevDrivePanVelMetersPerSec * 0.02);
       } else {
-        integratedDrivePos =
-            (0.02 * (prevDriveVelMetersPerSec - driveVelMetersPerSec) / 2.0)
-                + (driveVelMetersPerSec * 0.02);
+        integratedDrivePanPos =
+            (0.02 * (prevDrivePanVelMetersPerSec - drivePanVelMetersPerSec) / 2.0)
+                + (drivePanVelMetersPerSec * 0.02);
       }
-    } else if (driveVelMetersPerSec <= 0 && prevDriveVelMetersPerSec <= 0) {
-      if (prevDriveVelMetersPerSec < driveVelMetersPerSec) {
-        integratedDrivePos =
-            (0.02 * (prevDriveVelMetersPerSec - driveVelMetersPerSec) / 2.0)
-                + (driveVelMetersPerSec * 0.02);
+    } else if (drivePanVelMetersPerSec <= 0 && prevDrivePanVelMetersPerSec <= 0) {
+      if (prevDrivePanVelMetersPerSec < drivePanVelMetersPerSec) {
+        integratedDrivePanPos =
+            (0.02 * (prevDrivePanVelMetersPerSec - drivePanVelMetersPerSec) / 2.0)
+                + (drivePanVelMetersPerSec * 0.02);
       } else {
-        integratedDrivePos =
-            (0.02 * (driveVelMetersPerSec - prevDriveVelMetersPerSec) / 2.0)
-                + (prevDriveVelMetersPerSec * 0.02);
+        integratedDrivePanPos =
+            (0.02 * (drivePanVelMetersPerSec - prevDrivePanVelMetersPerSec) / 2.0)
+                + (prevDrivePanVelMetersPerSec * 0.02);
       }
     } else {
-      integratedDrivePos =
-          (driveVelMetersPerSec * 0.01) / 2.0 + (prevDriveVelMetersPerSec * 0.01) / 2.0;
+      integratedDrivePanPos =
+          (drivePanVelMetersPerSec * 0.01) / 2.0 + (prevDrivePanVelMetersPerSec * 0.01) / 2.0;
     }
 
-    inputs.drivePositionMeters += integratedDrivePos;
+    inputs.drivePanPositionMeters += integratedDrivePanPos;
 
-    inputs.driveVelocityMetersPerSec = driveVelMetersPerSec;
+    inputs.drivePanVelocityMetersPerSec = drivePanVelMetersPerSec;
     inputs.turnPosition = turnPos;
 
-    prevDriveVelMetersPerSec = driveVelMetersPerSec;
+    prevDrivePanVelMetersPerSec = drivePanVelMetersPerSec;
   }
 
   @Override
-  public void setDriveOpenLoop(double driveWheelVelocityRadPerSec) {
-    driveVelMetersPerSec = driveWheelVelocityRadPerSec * constants.driveWheelRadius;
+  public void setDrivePanOpenLoop(double drivePanWheelVelocityRadPerSec) {
+    drivePanVelMetersPerSec = drivePanWheelVelocityRadPerSec * constants.drivePanWheelRadius;
   }
 
   @Override
-  public void setDriveVelocity(double driveWheelVelocityRadPerSec) {
-    driveVelMetersPerSec = driveWheelVelocityRadPerSec * constants.driveWheelRadius;
+  public void setDrivePanVelocity(double drivePanWheelVelocityRadPerSec) {
+    drivePanVelMetersPerSec = drivePanWheelVelocityRadPerSec * constants.drivePanWheelRadius;
   }
 
   @Override

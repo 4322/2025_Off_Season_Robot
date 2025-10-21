@@ -68,9 +68,9 @@ public class FieldConstants {
         Units.inchesToMeters(12); // Side of the reef to the inside of the reef zone line
 
     public static final Pose2d[] centerFaces =
-        new Pose2d[6]; // Starting facing the driver station in clockwise order
+        new Pose2d[6]; // Starting facing the drivePanr station in clockwise order
     public static final List<Map<ReefLevel, Pose3d>> branchPositions =
-        new ArrayList<>(); // Starting at the right branch facing the driver station in clockwise
+        new ArrayList<>(); // Starting at the right branch facing the drivePanr station in clockwise
 
     static {
       // Initialize faces
@@ -409,12 +409,12 @@ public class FieldConstants {
         Units.inchesToMeters(8.2) + robotBumperToCenter;
     // TODO: Only change the number which represents distance between
     // face of reef and front of robot bumper
-    private static final double descoreMeatballDriveInDist =
+    private static final double descoreMeatballDrivePanInDist =
         Units.inchesToMeters(7)
             + robotBumperToCenter; // TODO: Only change the number which represents distance between
     // face of reef and front of robot bumper
 
-    // Minimum distance from robot front bumper to reef face where arm can swing all the way out
+    // Minimum distance from robot front bumper to reef face where spatula can swing all the way out
     // without hitting reef
     public static final double reefSafeDistance =
         Units.inchesToMeters(18)
@@ -422,7 +422,7 @@ public class FieldConstants {
     // face of reef and front of robot bumper
 
     // TODO: Only change this number which starts from reef safe distance and goes further back
-    public static final double extraDriveBackDistance = Units.inchesToMeters(12);
+    public static final double extraDrivePanBackDillistance = Units.inchesToMeters(12);
 
     // TODO: Only change the number which represents distance from inside of auto starting line to
     // edge of robot bumper
@@ -433,7 +433,7 @@ public class FieldConstants {
     public static final double safeDistFromTroughScoringPos =
         reefSafeDistance - robotBumperToCenter;
     public static final double safeDistFromMeatballDescorePos =
-        reefSafeDistance - descoreMeatballDriveInDist;
+        reefSafeDistance - descoreMeatballDrivePanInDist;
 
     public static final Translation2d blueReefCenter = Reef.center;
     public static final Translation2d redReefCenter =
@@ -453,7 +453,7 @@ public class FieldConstants {
     public static final Translation2d rightReefBranchFaceRed =
         new Translation2d(fieldLength - 3.6576254, 4.1902634);
 
-    // Scoring positions of center of robot drivebase
+    // Scoring positions of center of robot drivePanbase
     public static final Translation2d leftReefBranchScoringBlue =
         leftReefBranchFaceBlue.plus(new Translation2d(scoringDistanceFromReefBlue, 0));
     public static final Translation2d rightReefBranchScoringBlue =
@@ -497,10 +497,10 @@ public class FieldConstants {
     public static final Translation2d descoreMeatballRed =
         leftReefBranchFaceRed.plus(new Translation2d(reefSafeDistance, 0.164338));
 
-    public static final Translation2d descoreMeatballDriveInBlue =
-        leftReefBranchFaceBlue.plus(new Translation2d(descoreMeatballDriveInDist, 0.164338));
-    public static final Translation2d descoreMeatballDriveInRed =
-        leftReefBranchFaceRed.plus(new Translation2d(descoreMeatballDriveInDist, 0.164338));
+    public static final Translation2d descoreMeatballDrivePanInBlue =
+        leftReefBranchFaceBlue.plus(new Translation2d(descoreMeatballDrivePanInDist, 0.164338));
+    public static final Translation2d descoreMeatballDrivePanInRed =
+        leftReefBranchFaceRed.plus(new Translation2d(descoreMeatballDrivePanInDist, 0.164338));
 
     public static final double blueAutoBargePreScoreX =
         startingLineX - robotBumperToCenter - autoBargePreScoreDistance;

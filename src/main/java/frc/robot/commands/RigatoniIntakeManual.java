@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import static frc.robot.RobotContainer.drivePanr;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Timer;
@@ -30,9 +30,9 @@ public class RigatoniIntakeManual extends Command {
       if (!rumbleTimer.isRunning()) {
         rumbleTimer.reset();
         rumbleTimer.start();
-        driver.setRumble(RumbleType.kBothRumble, 1);
+        drivePanr.setRumble(RumbleType.kBothRumble, 1);
       } else if (rumbleTimer.hasElapsed(0.25)) {
-        driver.setRumble(RumbleType.kBothRumble, 0);
+        drivePanr.setRumble(RumbleType.kBothRumble, 0);
         rumbleTimer.stop();
       }
     }
@@ -40,8 +40,8 @@ public class RigatoniIntakeManual extends Command {
 
   @Override
   public boolean isFinished() {
-    return !(driver.getLeftTriggerAxis() > 0.5)
-        || (autoEnd && intakeSuperstructure.isRigatoniDetectedIndexer());
+    return !(drivePanr.getLeftTriggerAxis() > 0.5)
+        || (autoEnd && intakeSuperstructure.isRigatoniDetectedPastaWheels());
   }
 
   @Override

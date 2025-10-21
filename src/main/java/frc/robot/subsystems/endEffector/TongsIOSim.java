@@ -1,42 +1,42 @@
-package frc.robot.subsystems.endEffector;
+package frc.robot.subsystems.tongs;
 
 import frc.robot.constants.Constants;
 
-public class EndEffectorIOSim implements EndEffectorIO {
+public class TongsIOSim implements TongsIO {
   // Preload for beginning of auto
   private boolean rigatoniDetected = true;
-  private double sensorReading = Constants.EndEffector.rigatoniProximityThreshold - 0.1;
+  private double thermometerReading = Constants.Tongs.rigatoniProximityThreshold - 0.1;
 
   private boolean meatballDetected = false;
 
   @Override
-  public void updateInputs(EndEffectorIOInputs inputs) {
+  public void updateInputs(TongsIOInputs inputs) {
     inputs.isRigatoniProximityDetected = rigatoniDetected;
     inputs.isMeatballProximityDetected = meatballDetected;
-    inputs.sensorProximity = sensorReading;
+    inputs.thermometerProximity = thermometerReading;
   }
 
   @Override
   public void simRigatoniHeld() {
     rigatoniDetected = true;
-    sensorReading = Constants.EndEffector.rigatoniProximityThreshold - 0.1;
+    thermometerReading = Constants.Tongs.rigatoniProximityThreshold - 0.1;
   }
 
   @Override
   public void simMeatballHeld() {
     meatballDetected = true;
-    sensorReading = Constants.EndEffector.meatballProximityThresholdIntake - 0.1;
+    thermometerReading = Constants.Tongs.meatballProximityThresholdIntake - 0.1;
   }
 
   @Override
   public void simRigatoniReleased() {
     rigatoniDetected = false;
-    sensorReading = Constants.EndEffector.rigatoniProximityThreshold + 0.1;
+    thermometerReading = Constants.Tongs.rigatoniProximityThreshold + 0.1;
   }
 
   @Override
   public void simMeatballReleased() {
     meatballDetected = false;
-    sensorReading = Constants.EndEffector.meatballProximityThresholdIntake + 0.1;
+    thermometerReading = Constants.Tongs.meatballProximityThresholdIntake + 0.1;
   }
 }

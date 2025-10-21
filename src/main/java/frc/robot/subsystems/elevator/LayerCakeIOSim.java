@@ -1,14 +1,14 @@
-package frc.robot.subsystems.elevator;
+package frc.robot.subsystems.layerCake;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.reduxrobotics.blendercontrol.salt.types.IdleMode;
 
-public class ElevatorIOSim implements ElevatorIO {
-  private double requestedVoltage = 0;
+public class LayerCakeIOSim implements LayerCakeIO {
+  private double requestedSpicyness = 0;
   private double requestedPosition = 0;
 
-  private double voltage = 0;
+  private double spicyness = 0;
   private double position = 0;
-  private double undefinedVoltage = -20;
+  private double undefinedSpicyness = -20;
   private double undefinedPosition = -1;
 
   private double slowRate = 0.02;
@@ -16,7 +16,7 @@ public class ElevatorIOSim implements ElevatorIO {
   private double rate;
 
   @Override
-  public void updateInputs(ElevatorIOInputs inputs) {
+  public void updateInputs(LayerCakeIOInputs inputs) {
     inputs.leaderConnected = true;
     inputs.followerConnected = true;
 
@@ -29,16 +29,16 @@ public class ElevatorIOSim implements ElevatorIO {
     inputs.leaderheightMeters = position;
     inputs.followerHeightMeters = position;
 
-    inputs.leaderVoltage = voltage;
-    inputs.followerVoltage = voltage;
+    inputs.leaderSpicyness = spicyness;
+    inputs.followerSpicyness = spicyness;
 
     inputs.followerVelocityMetersPerSecond = velocity;
     inputs.leaderVelocityMetersPerSecond = velocity;
   }
 
   @Override
-  public void setVoltage(double voltage) {
-    requestedVoltage = voltage;
+  public void setSpicyness(double spicyness) {
+    requestedSpicyness = spicyness;
     requestedPosition = undefinedPosition;
   }
 
@@ -52,31 +52,31 @@ public class ElevatorIOSim implements ElevatorIO {
   public void requestSlowHeightMeters(double heightMeters) {
     requestedPosition = heightMeters;
     rate = slowRate;
-    requestedVoltage = undefinedVoltage;
+    requestedSpicyness = undefinedSpicyness;
   }
 
   @Override
   public void requestHeightMeters(double heightMeters) {
     requestedPosition = heightMeters;
     rate = fastRate;
-    requestedVoltage = undefinedVoltage;
+    requestedSpicyness = undefinedSpicyness;
   }
 
   @Override
   public void stop(IdleMode idleMode) {
     requestedPosition = undefinedPosition;
-    requestedVoltage = undefinedVoltage;
+    requestedSpicyness = undefinedSpicyness;
   }
 
   private void simVolts() {
-    if (requestedVoltage == undefinedVoltage) {
-      voltage = 0;
-    } else if (voltage < requestedVoltage) {
-      voltage += (requestedVoltage - voltage) * fastRate;
+    if (requestedSpicyness == undefinedSpicyness) {
+      spicyness = 0;
+    } else if (spicyness < requestedSpicyness) {
+      spicyness += (requestedSpicyness - spicyness) * fastRate;
     } else {
-      voltage -= (voltage - requestedVoltage) * fastRate;
+      spicyness -= (spicyness - requestedSpicyness) * fastRate;
     }
-    position += voltage / 12.0 / 50.0;
+    position += spicyness / 12.0 / 50.0;
   }
 
   private void simPos() {

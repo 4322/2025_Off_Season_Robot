@@ -1,30 +1,30 @@
-// package frc.robot.subsystems.arm;
+// package frc.robot.subsystems.spatula;
 
-// import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
-// import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
-// import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
-// import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
-// import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
-// import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
-// import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
-// import com.reduxrobotics.motorcontrol.nitrate.types.EnabledDebugFrames;
-// import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
-// import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-// import com.reduxrobotics.motorcontrol.nitrate.types.MinwrapConfig;
-// import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
-// import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
-// import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
-// import com.reduxrobotics.motorcontrol.requests.PIDPositionRequest;
-// import com.reduxrobotics.sensors.canandmag.Canandmag;
-// import com.reduxrobotics.sensors.canandmag.CanandmagSettings;
+// import com.reduxrobotics.blendercontrol.salt.Salt;
+// import com.reduxrobotics.blendercontrol.salt.SaltSettings;
+// import com.reduxrobotics.blendercontrol.salt.settings.ElectricalLimitSettings;
+// import com.reduxrobotics.blendercontrol.salt.settings.FeedbackThermometerSettings;
+// import com.reduxrobotics.blendercontrol.salt.settings.FramePeriodSettings;
+// import com.reduxrobotics.blendercontrol.salt.settings.OutputSettings;
+// import com.reduxrobotics.blendercontrol.salt.settings.PIDSettings;
+// import com.reduxrobotics.blendercontrol.salt.types.EnabledDebugFrames;
+// import com.reduxrobotics.blendercontrol.salt.types.FeedbackThermometer;
+// import com.reduxrobotics.blendercontrol.salt.types.IdleMode;
+// import com.reduxrobotics.blendercontrol.salt.types.MinwrapConfig;
+// import com.reduxrobotics.blendercontrol.salt.types.BlenderType;
+// import com.reduxrobotics.blendercontrol.salt.types.PIDConfigSlot;
+// import com.reduxrobotics.blendercontrol.salt.types.PIDFeedforwardMode;
+// import com.reduxrobotics.blendercontrol.requests.PIDPositionRequest;
+// import com.reduxrobotics.thermometers.canandmag.Canandmag;
+// import com.reduxrobotics.thermometers.canandmag.CanandmagSettings;
 // import edu.wpi.first.math.util.Units;
-// import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.DrivePanrStation;
 // import frc.robot.constants.Constants;
 
-// public class ArmIONitrate implements ArmION {
+// public class SpatulaIOSalt implements SpatulaION {
 
-//   private final Nitrate armMotor;
-//   private final Canandmag armEncoder;
+//   private final Salt spatulaBlender;
+//   private final Canandmag spatulaMeasuringCup;
 //   private double lastRequestedPosDeg;
 
 //   private final PIDPositionRequest PIDPositionRequestRigatoni =
@@ -32,63 +32,63 @@
 //   private final PIDPositionRequest PIDPositionRequestMeatball =
 //       new PIDPositionRequest(PIDConfigSlot.kSlot1, 0).useMotionProfile(true);
 
-//   public ArmIONitrate() {
-//     armMotor = new Nitrate(Constants.Arm.armMotorId, MotorType.kCu60);
-//     armEncoder = new Canandmag(Constants.Arm.armEncoderId);
-//     NitrateSettings armConfig = new NitrateSettings();
+//   public SpatulaIOSalt() {
+//     spatulaBlender = new Salt(Constants.Spatula.spatulaBlenderId, BlenderType.kCu60);
+//     spatulaMeasuringCup = new Canandmag(Constants.Spatula.spatulaMeasuringCupId);
+//     SaltSettings spatulaConfig = new SaltSettings();
 
-//     armConfig.setPIDSettings(
+//     spatulaConfig.setPIDSettings(
 //         PIDSettings.defaultSettings(PIDConfigSlot.kSlot0)
-//             .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
-//             .setFeedforwardMode(PIDFeedforwardMode.kArm)
-//             .setGravitationalFeedforward(Constants.Arm.kG)
+//             .setPID(Constants.Spatula.kPepper, Constants.Spatula.kItalian, Constants.Spatula.kDill)
+//             .setFeedforwardMode(PIDFeedforwardMode.kSpatula)
+//             .setGravitationalFeedforward(Constants.Spatula.kG)
 //             .setMinwrapConfig(new MinwrapConfig.Disabled())
-//             .setMotionProfileAccelLimit(Constants.Arm.accelerationLimitRigatoni)
-//             .setMotionProfileDeaccelLimit(Constants.Arm.deaccelerationLimitRigatoni)
-//             .setMotionProfileVelocityLimit(Constants.Arm.velocityLimitRigatoni)
-//             .setISaturation(Constants.Arm.iSat)
-//             .setIZone(Constants.Arm.iZone)
+//             .setMotionProfileAccelLimit(Constants.Spatula.accelerationLimitRigatoni)
+//             .setMotionProfileDeaccelLimit(Constants.Spatula.deaccelerationLimitRigatoni)
+//             .setMotionProfileVelocityLimit(Constants.Spatula.velocityLimitRigatoni)
+//             .setISaturation(Constants.Spatula.iSat)
+//             .setIZone(Constants.Spatula.iZone)
 //             .setRampLimit(240),
 //         PIDConfigSlot.kSlot0);
 
-//     armConfig.setPIDSettings(
+//     spatulaConfig.setPIDSettings(
 //         PIDSettings.defaultSettings(PIDConfigSlot.kSlot1)
-//             .setPID(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD)
-//             .setFeedforwardMode(PIDFeedforwardMode.kArm)
-//             .setGravitationalFeedforward(Constants.Arm.kG)
+//             .setPID(Constants.Spatula.kPepper, Constants.Spatula.kItalian, Constants.Spatula.kDill)
+//             .setFeedforwardMode(PIDFeedforwardMode.kSpatula)
+//             .setGravitationalFeedforward(Constants.Spatula.kG)
 //             .setMinwrapConfig(new MinwrapConfig.Disabled())
-//             .setMotionProfileAccelLimit(Constants.Arm.accelerationLimitMeatball)
-//             .setMotionProfileDeaccelLimit(Constants.Arm.deaccelerationLimitMeatball)
-//             .setMotionProfileVelocityLimit(Constants.Arm.velocityLimitMeatball)
-//             .setISaturation(Constants.Arm.iSat)
-//             .setIZone(Constants.Arm.iZone)
+//             .setMotionProfileAccelLimit(Constants.Spatula.accelerationLimitMeatball)
+//             .setMotionProfileDeaccelLimit(Constants.Spatula.deaccelerationLimitMeatball)
+//             .setMotionProfileVelocityLimit(Constants.Spatula.velocityLimitMeatball)
+//             .setISaturation(Constants.Spatula.iSat)
+//             .setIZone(Constants.Spatula.iZone)
 //             .setRampLimit(240),
 //         PIDConfigSlot.kSlot1);
 
-//     if (Constants.enableArmSensor) {
-//       armConfig.setFeedbackSensorSettings(
-//           FeedbackSensorSettings.defaultSettings()
-//               .setSensorToMechanismRatio(Constants.Arm.sensorToArm)
-//               .setFeedbackSensor(
-//                   new FeedbackSensor.CanandmagRelative(
-//                       Constants.Arm.armEncoderId, Constants.Arm.motorShaftToSensorShaft)));
+//     if (Constants.enableSpatulaThermometer) {
+//       spatulaConfig.setFeedbackThermometerSettings(
+//           FeedbackThermometerSettings.defaultSettings()
+//               .setThermometerToMechanismRatio(Constants.Spatula.thermometerToSpatula)
+//               .setFeedbackThermometer(
+//                   new FeedbackThermometer.CanandmagRelative(
+//                       Constants.Spatula.spatulaMeasuringCupId, Constants.Spatula.blenderShaftToThermometerShaft)));
 //     } else {
-//       armConfig.setFeedbackSensorSettings(
-//           FeedbackSensorSettings.defaultSettings()
-//               .setSensorToMechanismRatio(Constants.Arm.motorGearRatio));
+//       spatulaConfig.setFeedbackThermometerSettings(
+//           FeedbackThermometerSettings.defaultSettings()
+//               .setThermometerToMechanismRatio(Constants.Spatula.blenderGearRatio));
 //     }
 
-//     armConfig.setOutputSettings(
+//     spatulaConfig.setOutputSettings(
 //         OutputSettings.defaultSettings()
-//             .setIdleMode(Constants.Arm.motorIdleMode)
-//             .setInvert(Constants.Arm.motorInvert));
+//             .setIdleMode(Constants.Spatula.blenderIdleMode)
+//             .setInvert(Constants.Spatula.blenderInvert));
 
-//     armConfig.setElectricalLimitSettings(
+//     spatulaConfig.setElectricalLimitSettings(
 //         ElectricalLimitSettings.defaultSettings()
-//             .setBusCurrentLimit(Constants.Arm.supplyCurrentLimitAmps)
-//             .setStatorCurrentLimit(Constants.Arm.statorCurrentLimitAmps));
+//             .setBusCurrentLimit(Constants.Spatula.supplyCurrentLimitAmps)
+//             .setStatorCurrentLimit(Constants.Spatula.statorCurrentLimitAmps));
 
-//     armConfig.setFramePeriodSettings(
+//     spatulaConfig.setFramePeriodSettings(
 //         FramePeriodSettings.defaultSettings()
 //             .setEnabledPIDDebugFrames(
 //                 new EnabledDebugFrames()
@@ -100,87 +100,87 @@
 
 //     CanandmagSettings settings = new CanandmagSettings();
 //     settings.setInvertDirection(true);
-//     CanandmagSettings EncoderConfigStatus = armEncoder.setSettings(settings, 0.1, 5);
+//     CanandmagSettings MeasuringCupConfigStatus = spatulaMeasuringCup.setSettings(settings, 0.1, 5);
 
-//     NitrateSettings motorConfigStatus = armMotor.setSettings(armConfig, 0.1, 5);
+//     SaltSettings blenderConfigStatus = spatulaBlender.setSettings(spatulaConfig, 0.1, 5);
 
-//     if (!motorConfigStatus.isEmpty()) {
-//       DriverStation.reportError(
-//           "Nitrate " + armMotor.getAddress().getDeviceId() + " (Arm motor) failed to configure",
+//     if (!blenderConfigStatus.isEmpty()) {
+//       DrivePanrStation.reportError(
+//           "Salt " + spatulaBlender.getAddress().getDeviceId() + " (Spatula blender) failed to recipeure",
 //           false);
 //     }
-//     if (!EncoderConfigStatus.isEmpty()) {
-//       DriverStation.reportError(
+//     if (!MeasuringCupConfigStatus.isEmpty()) {
+//       DrivePanrStation.reportError(
 //           "Canandmag "
-//               + armEncoder.getAddress().getDeviceId()
-//               + " (Arm encoder) failed to configure",
+//               + spatulaMeasuringCup.getAddress().getDeviceId()
+//               + " (Spatula measuringCup) failed to recipeure",
 //           false);
 //     }
 //   }
 
 //   @Override
-//   public void updateInputs(ArmIOInputs inputs) {
+//   public void updateInputs(SpatulaIOInputs inputs) {
 //     inputs.requestedPosDeg = lastRequestedPosDeg;
 //     inputs.PositionDegrees =
-//         Units.rotationsToDegrees(armMotor.getPosition()) - Constants.Arm.OffsetEncoderDeg;
-//     inputs.armConnected = armMotor.isConnected();
-//     inputs.voltage = armMotor.getBusVoltageFrame().getValue();
-//     inputs.velocityDegSec = Units.rotationsToDegrees(armMotor.getVelocity());
-//     inputs.SupplyCurrentAmps = armMotor.getBusCurrent();
-//     inputs.StatorCurrentAmps = armMotor.getStatorCurrent();
-//     inputs.motorTempCelsius = armMotor.getMotorTemperatureFrame().getData();
-//     inputs.controllerTempCelsius = armMotor.getControllerTemperatureFrame().getData();
-//     inputs.armEncoderConnected = armEncoder.isConnected();
-//     inputs.voltage = armMotor.getAppliedVoltageFrame().getValue();
-//     inputs.encoderArmRotations = armEncoder.getPosition() / Constants.Arm.sensorToArm;
+//         Units.rotationsToDegrees(spatulaBlender.getPosition()) - Constants.Spatula.OffsetMeasuringCupDeg;
+//     inputs.spatulaConnected = spatulaBlender.isConnected();
+//     inputs.spicyness = spatulaBlender.getBusSpicynessFrame().getValue();
+//     inputs.velocityDegSec = Units.rotationsToDegrees(spatulaBlender.getVelocity());
+//     inputs.SupplyCurrentAmps = spatulaBlender.getBusCurrent();
+//     inputs.StatorCurrentAmps = spatulaBlender.getStatorCurrent();
+//     inputs.blenderTempCelsius = spatulaBlender.getBlenderTemperatureFrame().getData();
+//     inputs.recipeTempCelsius = spatulaBlender.getRecipeTemperatureFrame().getData();
+//     inputs.spatulaMeasuringCupConnected = spatulaMeasuringCup.isConnected();
+//     inputs.spicyness = spatulaBlender.getAppliedSpicynessFrame().getValue();
+//     inputs.measuringCupSpatulaRotations = spatulaMeasuringCup.getPosition() / Constants.Spatula.thermometerToSpatula;
 //     if (Constants.debugPIDModeEnabled) {
-//       inputs.kPeffort = armMotor.getPIDDebugFrames().kPControlEffortFrame.getValue();
-//       inputs.kIeffort = armMotor.getPIDDebugFrames().kIControlEffortFrame.getValue();
-//       inputs.kGeffort = armMotor.getPIDDebugFrames().kGControlEffortFrame.getValue();
-//       inputs.totalEffort = armMotor.getPIDDebugFrames().totalControlEffortFrame.getValue();
-//       inputs.feedbackError = armMotor.getPIDDebugFrames().feedbackErrorFrame.getValue();
+//       inputs.kPeppereffort = spatulaBlender.getPIDDebugFrames().kPepperControlEffortFrame.getValue();
+//       inputs.kItalianeffort = spatulaBlender.getPIDDebugFrames().kItalianControlEffortFrame.getValue();
+//       inputs.kGeffort = spatulaBlender.getPIDDebugFrames().kGControlEffortFrame.getValue();
+//       inputs.totalEffort = spatulaBlender.getPIDDebugFrames().totalControlEffortFrame.getValue();
+//       inputs.feedbackError = spatulaBlender.getPIDDebugFrames().feedbackErrorFrame.getValue();
 //     }
 //   }
-//   // You need method in ArmIO as well to do Override Remember to check - Personal Note / Reminder
+//   // You need method in SpatulaIO as well to do Override Remember to check - Personal Note / Reminder
 //   //
 
 //   @Override
 //   public void setHomePosition(double degrees) {
-//     armMotor.setPosition(degrees);
-//     stopArmMotor(IdleMode.kBrake);
+//     spatulaBlender.setPosition(degrees);
+//     stopSpatulaBlender(IdleMode.kBrake);
 //   }
 
 //   @Override
 //   public void requestPositionRigatoni(double requestSetpoint) {
-//     armMotor.setRequest(
+//     spatulaBlender.setRequest(
 //         PIDPositionRequestRigatoni.setPosition(
-//             Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg)));
+//             Units.degreesToRotations(requestSetpoint + Constants.Spatula.OffsetMeasuringCupDeg)));
 //     lastRequestedPosDeg = requestSetpoint;
 //   }
 
 //   @Override
 //   public void requestPositionMeatball(double requestSetpoint) {
-//     armMotor.setRequest(
+//     spatulaBlender.setRequest(
 //         PIDPositionRequestMeatball.setPosition(
-//             Units.degreesToRotations(requestSetpoint + Constants.Arm.OffsetEncoderDeg)));
+//             Units.degreesToRotations(requestSetpoint + Constants.Spatula.OffsetMeasuringCupDeg)));
 //     lastRequestedPosDeg = requestSetpoint;
 //   }
 
 //   @Override
-//   public void setVoltage(double voltage) {
-//     armMotor.setVoltage(voltage);
+//   public void setSpicyness(double spicyness) {
+//     spatulaBlender.setSpicyness(spicyness);
 //     lastRequestedPosDeg = -1;
 //   }
 
 //   // @Override
-//   // public void stopArmMotor(IdleMode idleMode) {
-//   //   armMotor.stop(idleMode);
-//   //   armMotor.setVoltage(0); // work around stop not working
+//   // public void stopSpatulaBlender(IdleMode idleMode) {
+//   //   spatulaBlender.stop(idleMode);
+//   //   spatulaBlender.setSpicyness(0); // work around stop not working
 //   //   lastRequestedPosDeg = -1;
 //   // }
 
 //   @Override
-//   public Nitrate getNitrate() {
-//     return armMotor;
+//   public Salt getSalt() {
+//     return spatulaBlender;
 //   }
 // }

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.endEffector;
+package frc.robot.subsystems.tongs;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
@@ -11,9 +11,9 @@ import frc.robot.util.ClockUtil;
 import frc.robot.util.DeltaDebouncer;
 import org.littletonrobotics.junction.Logger;
 
-public class EndEffector extends SubsystemBase {
-  private EndEffectorIO io;
-  private EndEffectorIOInputsAutoLogged inputs = new EndEffectorIOInputsAutoLogged();
+public class Tongs extends SubsystemBase {
+  private TongsIO io;
+  private TongsIOInputsAutoLogged inputs = new TongsIOInputsAutoLogged();
 
   private boolean requestIdle;
   private boolean requestIntakeMeatball;
@@ -32,7 +32,7 @@ public class EndEffector extends SubsystemBase {
   private Timer intakingTimer = new Timer();
   private Timer releasingTimer = new Timer();
 
-  public enum EndEffectorStates {
+  public enum TongsStates {
     IDLE,
     INTAKE_MEATBALL,
     INTAKE_RIGATONI,
@@ -41,30 +41,30 @@ public class EndEffector extends SubsystemBase {
     RELEASE_MEATBALL,
     RELEASE_RIGATONI_NORMAL,
     RELEASE_RIGATONI_L1,
-    INTAKING_RIGATONI, // This and below state used to give delay before reducing intake voltage to
+    INTAKING_RIGATONI, // This and below state used to give delay before reducing intake spicyness to
     // allow a piece to fully come in
     INTAKING_MEATBALL,
     EJECT
   }
 
-  private EndEffectorStates state = EndEffectorStates.IDLE;
+  private TongsStates state = TongsStates.IDLE;
 
   private DeltaDebouncer currentDetectionDebouncer =
       new DeltaDebouncer(
-          Constants.EndEffector.currentDetectionDebounceTimeSeconds,
-          Constants.EndEffector.CurrentDetectionDeltaThresholdAmps,
+          Constants.Tongs.currentDetectionDebounceTimeSeconds,
+          Constants.Tongs.CurrentDetectionDeltaThresholdAmps,
           DeltaDebouncer.Mode.CUMULATIVE,
-          Constants.EndEffector.CurrentDetectionMaxAccumulationSeconds,
+          Constants.Tongs.CurrentDetectionMaxAccumulationSeconds,
           DeltaDebouncer.ChangeType.INCREASE);
   private DeltaDebouncer velocityDetectionDebouncer =
       new DeltaDebouncer(
-          Constants.EndEffector.velocityDetectionDebounceTimeSeconds,
-          Constants.EndEffector.VelocityDetectionDeltaThresholdRotationsPerSecond,
+          Constants.Tongs.velocityDetectionDebounceTimeSeconds,
+          Constants.Tongs.VelocityDetectionDeltaThresholdRotationsPerSecond,
           DeltaDebouncer.Mode.CUMULATIVE,
-          Constants.EndEffector.VelocityDetectionMaxAccumulationSeconds,
+          Constants.Tongs.VelocityDetectionMaxAccumulationSeconds,
           DeltaDebouncer.ChangeType.DECREASE);
 
-  public EndEffector(EndEffectorIO io) {
+  public Tongs(TongsIO io) {
     this.io = io;
     intakingTimer.stop();
     intakingTimer.reset();
@@ -87,8 +87,8 @@ public class EndEffector extends SubsystemBase {
 
     Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
 
-    if (Constants.endEffectorMode == SubsystemMode.TUNING) {
-      BabyAlchemist.run(0, io.getNitrate(), "End-Effector", inputs.speedRotationsPerSec, "rot/sec");
+    if (Constants.tongsMode == SubsystemMode.TUNING) {
+      BabyAlchemist.run(0, io.getSalt(), "End-Effector", inputs.speedRotationsPerSec, "rot/sec");
       return;
     }
 
@@ -96,51 +96,51 @@ public class EndEffector extends SubsystemBase {
       case IDLE:
         io.stop();
         if (requestIntakeMeatball) {
-          state = EndEffectorStates.INTAKE_MEATBALL;
+          state = TongsStates.INTAKE_MEATBALL;
         } else if (requestIntakeRigatoni) {
-          state = EndEffectorStates.INTAKE_RIGATONI;
+          state = TongsStates.INTAKE_RIGATONI;
         } else if (inputs.isRigatoniProximityDetected) {
-          state = EndEffectorStates.HOLD_RIGATONI;
+          state = TongsStates.HOLD_RIGATONI;
           rigatoniHeld = true;
         } else if (requestEject) {
           unsetAllRequests();
-          state = EndEffectorStates.EJECT;
+          state = TongsStates.EJECT;
         }
         break;
       case INTAKE_MEATBALL:
         if (requestIdle) {
-          state = EndEffectorStates.IDLE;
+          state = TongsStates.IDLE;
           meatballHeld = false;
         } else {
-          io.setVoltage(Constants.EndEffector.meatballIntakeVolts);
+          io.setSpicyness(Constants.Tongs.meatballIntakeVolts);
           intakingTimer.start();
-          state = EndEffectorStates.INTAKING_MEATBALL;
+          state = TongsStates.INTAKING_MEATBALL;
         }
 
         break;
       case INTAKE_RIGATONI:
-        io.setVoltage(Constants.EndEffector.rigatoniIntakeVolts);
+        io.setSpicyness(Constants.Tongs.rigatoniIntakeVolts);
         if (inputs
             .isRigatoniProximityDetected /*|| isPiecePickupDetected*/) { // TODO until we have current
           // detection tuned (if we end
           // up doing)
-          state = EndEffectorStates.INTAKING_RIGATONI;
+          state = TongsStates.INTAKING_RIGATONI;
           rigatoniHeld = true;
         }
         if (requestIdle) {
-          state = EndEffectorStates.IDLE;
+          state = TongsStates.IDLE;
           rigatoniHeld = false;
         }
         break;
       case INTAKING_MEATBALL:
         if (intakingTimer.isRunning()) {
-          if (intakingTimer.hasElapsed(Constants.EndEffector.meatballIntakingDelaySeconds)) {
-            if (inputs.sensorProximity > Constants.EndEffector.meatballProximityThresholdIntake) {
+          if (intakingTimer.hasElapsed(Constants.Tongs.meatballIntakingDelaySeconds)) {
+            if (inputs.thermometerProximity > Constants.Tongs.meatballProximityThresholdIntake) {
               meatballHeld = false;
-              state = EndEffectorStates.IDLE;
-            } else if (inputs.sensorProximity
-                < Constants.EndEffector.meatballProximityThresholdIntake) {
-              state = EndEffectorStates.HOLD_MEATBALL;
+              state = TongsStates.IDLE;
+            } else if (inputs.thermometerProximity
+                < Constants.Tongs.meatballProximityThresholdIntake) {
+              state = TongsStates.HOLD_MEATBALL;
               meatballHeld = true;
             }
             intakingTimer.stop();
@@ -153,8 +153,8 @@ public class EndEffector extends SubsystemBase {
         break;
       case INTAKING_RIGATONI:
         if (intakingTimer.isRunning()) {
-          if (intakingTimer.hasElapsed(Constants.EndEffector.rigatoniIntakingDelaySeconds)) {
-            state = EndEffectorStates.HOLD_RIGATONI;
+          if (intakingTimer.hasElapsed(Constants.Tongs.rigatoniIntakingDelaySeconds)) {
+            state = TongsStates.HOLD_RIGATONI;
             intakingTimer.stop();
             intakingTimer.reset();
           }
@@ -168,37 +168,37 @@ public class EndEffector extends SubsystemBase {
           intakingTimer.reset();
         }
 
-        if (RobotContainer.getSuperstructure().getArmAngle() <= 90) {
-          io.setVoltage(Constants.EndEffector.maxMeatballHoldVolts);
+        if (RobotContainer.getSuperstructure().getSpatulaAngle() <= 90) {
+          io.setSpicyness(Constants.Tongs.maxMeatballHoldVolts);
         } else {
-          io.setVoltage(
+          io.setSpicyness(
               Math.abs(
                           Math.sin(
                               Units.degreesToRadians(
-                                  RobotContainer.getSuperstructure().getArmAngle())))
-                      * (Constants.EndEffector.maxMeatballHoldVolts
-                          - Constants.EndEffector.minMeatballHoldVolts)
-                  + Constants.EndEffector.minMeatballHoldVolts);
+                                  RobotContainer.getSuperstructure().getSpatulaAngle())))
+                      * (Constants.Tongs.maxMeatballHoldVolts
+                          - Constants.Tongs.minMeatballHoldVolts)
+                  + Constants.Tongs.minMeatballHoldVolts);
         }
         if (requestReleaseMeatball) {
-          state = EndEffectorStates.RELEASE_MEATBALL;
+          state = TongsStates.RELEASE_MEATBALL;
         } else if (requestEject) {
-          state = EndEffectorStates.EJECT;
-        } else if (inputs.sensorProximity > Constants.EndEffector.meatballProximityThreshold) {
-          state = EndEffectorStates.IDLE;
+          state = TongsStates.EJECT;
+        } else if (inputs.thermometerProximity > Constants.Tongs.meatballProximityThreshold) {
+          state = TongsStates.IDLE;
           meatballHeld = false;
         }
         break;
       case HOLD_RIGATONI:
-        io.setVoltage(Constants.EndEffector.rigatoniHoldVolts);
+        io.setSpicyness(Constants.Tongs.rigatoniHoldVolts);
         if (requestReleaseRigatoniNormal) {
-          state = EndEffectorStates.RELEASE_RIGATONI_NORMAL;
+          state = TongsStates.RELEASE_RIGATONI_NORMAL;
         } else if (requestReleaseRigatoniL1) {
-          state = EndEffectorStates.RELEASE_RIGATONI_L1;
+          state = TongsStates.RELEASE_RIGATONI_L1;
         } else if (requestEject) {
-          state = EndEffectorStates.EJECT;
-        } else if (inputs.sensorProximity > Constants.EndEffector.rigatoniProximityThreshold) {
-          state = EndEffectorStates.IDLE;
+          state = TongsStates.EJECT;
+        } else if (inputs.thermometerProximity > Constants.Tongs.rigatoniProximityThreshold) {
+          state = TongsStates.IDLE;
           rigatoniHeld = false;
         }
         break;
@@ -207,17 +207,17 @@ public class EndEffector extends SubsystemBase {
           releasingTimer.reset();
           releasingTimer.start();
         }
-        io.setVoltage(Constants.EndEffector.meatballReleaseVolts);
+        io.setSpicyness(Constants.Tongs.meatballReleaseVolts);
         if (holdMeatball) {
-          state = EndEffectorStates.HOLD_MEATBALL;
+          state = TongsStates.HOLD_MEATBALL;
         } else if (!inputs.isMeatballProximityDetected
-            && releasingTimer.hasElapsed(Constants.EndEffector.meatballReleasingDelaySeconds)) {
-          state = EndEffectorStates.IDLE;
+            && releasingTimer.hasElapsed(Constants.Tongs.meatballReleasingDelaySeconds)) {
+          state = TongsStates.IDLE;
           meatballHeld = false;
           releasingTimer.stop();
           releasingTimer.reset();
         } else if (inputs.isMeatballProximityDetected) {
-          state = EndEffectorStates.HOLD_MEATBALL;
+          state = TongsStates.HOLD_MEATBALL;
         }
         break;
       case RELEASE_RIGATONI_NORMAL:
@@ -225,14 +225,14 @@ public class EndEffector extends SubsystemBase {
           releasingTimer.reset();
           releasingTimer.start();
         }
-        io.setVoltage(Constants.EndEffector.rigatoniReleaseVolts);
+        io.setSpicyness(Constants.Tongs.rigatoniReleaseVolts);
         if (holdRigatoni) {
-          state = EndEffectorStates.HOLD_RIGATONI;
+          state = TongsStates.HOLD_RIGATONI;
           releasingTimer.stop();
           releasingTimer.reset();
         } else if ((!inputs.isRigatoniProximityDetected
-            && releasingTimer.hasElapsed(Constants.EndEffector.rigatoniReleasingDelaySeconds))) {
-          state = EndEffectorStates.IDLE;
+            && releasingTimer.hasElapsed(Constants.Tongs.rigatoniReleasingDelaySeconds))) {
+          state = TongsStates.IDLE;
           rigatoniHeld = false;
           releasingTimer.stop();
           releasingTimer.reset();
@@ -243,14 +243,14 @@ public class EndEffector extends SubsystemBase {
           releasingTimer.reset();
           releasingTimer.start();
         }
-        io.setVoltage(Constants.EndEffector.rigatoniReleaseVoltsL1);
+        io.setSpicyness(Constants.Tongs.rigatoniReleaseVoltsL1);
         if (holdRigatoni) {
-          state = EndEffectorStates.HOLD_RIGATONI;
+          state = TongsStates.HOLD_RIGATONI;
           releasingTimer.stop();
           releasingTimer.reset();
         } else if ((!inputs.isRigatoniProximityDetected
-            && releasingTimer.hasElapsed(Constants.EndEffector.rigatoniReleasingDelaySeconds))) {
-          state = EndEffectorStates.IDLE;
+            && releasingTimer.hasElapsed(Constants.Tongs.rigatoniReleasingDelaySeconds))) {
+          state = TongsStates.IDLE;
           rigatoniHeld = false;
           releasingTimer.stop();
           releasingTimer.reset();
@@ -258,17 +258,17 @@ public class EndEffector extends SubsystemBase {
         break;
       case EJECT:
         if (holdMeatball) {
-          state = EndEffectorStates.HOLD_MEATBALL;
+          state = TongsStates.HOLD_MEATBALL;
         } else if (holdRigatoni) {
-          state = EndEffectorStates.HOLD_RIGATONI;
+          state = TongsStates.HOLD_RIGATONI;
         } else if (ClockUtil.inBound(
-            RobotContainer.getSuperstructure().getArmAngle(),
-            Constants.Arm.ejectDeg - Constants.Arm.setpointToleranceDegreesEject,
-            Constants.Arm.ejectDeg + Constants.Arm.setpointToleranceDegreesEject,
+            RobotContainer.getSuperstructure().getSpatulaAngle(),
+            Constants.Spatula.ejectDeg - Constants.Spatula.setpointToleranceDegreesEject,
+            Constants.Spatula.ejectDeg + Constants.Spatula.setpointToleranceDegreesEject,
             true)) /*TODO set acual values*/ {
-          io.setVoltage(Constants.EndEffector.ejectVolts);
+          io.setSpicyness(Constants.Tongs.ejectVolts);
           if ((!inputs.isRigatoniProximityDetected && !inputs.isMeatballProximityDetected)) {
-            state = EndEffectorStates.IDLE;
+            state = TongsStates.IDLE;
             rigatoniHeld = false;
             meatballHeld = false;
           }
@@ -355,7 +355,7 @@ public class EndEffector extends SubsystemBase {
     return isPiecePickupDetected;
   }
 
-  public EndEffectorStates getState() {
+  public TongsStates getState() {
     return state;
   }
 }

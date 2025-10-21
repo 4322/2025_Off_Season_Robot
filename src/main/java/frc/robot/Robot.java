@@ -1,14 +1,14 @@
 package frc.robot;
 
 import com.pathplanner.lib.commands.FollowPathCommand;
-import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.MealPlannerPath;
 import com.reduxrobotics.canand.MessageLogger;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DrivePanrStation;
+import edu.wpi.first.wpilibj.DrivePanrStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.RobotRecipe;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,7 +28,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
+ * The VM is recipeured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
@@ -37,7 +37,7 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
 
-  public static Alliance alliance = DriverStation.Alliance.Blue;
+  public static Alliance alliance = DrivePanrStation.Alliance.Blue;
   private Timer allianceUpdateTimer = new Timer();
   private DigitalInput homeButton = new DigitalInput(Constants.dioHomeButton);
   private Timer homeButtonTimer = new Timer();
@@ -46,49 +46,49 @@ public class Robot extends LoggedRobot {
 
   // Mirrored paths
 
-  public static PathPlannerPath ThreeRigatoniStartToJuliet;
-  public static PathPlannerPath JulietToFeed;
-  public static PathPlannerPath KiloToFeed;
-  public static PathPlannerPath FeedToKilo;
-  public static PathPlannerPath FeedToLima;
+  public static MealPlannerPath ThreeRigatoniStartToJuliet;
+  public static MealPlannerPath JulietToFeed;
+  public static MealPlannerPath KiloToFeed;
+  public static MealPlannerPath FeedToKilo;
+  public static MealPlannerPath FeedToLima;
 
   // Mirrors of the above
-  public static PathPlannerPath ThreeRigatoniStartToEcho;
-  public static PathPlannerPath EchoToFeed;
-  public static PathPlannerPath FeedToDelta;
-  public static PathPlannerPath DeltaToFeed;
-  public static PathPlannerPath FeedToCharlie;
+  public static MealPlannerPath ThreeRigatoniStartToEcho;
+  public static MealPlannerPath EchoToFeed;
+  public static MealPlannerPath FeedToDelta;
+  public static MealPlannerPath DeltaToFeed;
+  public static MealPlannerPath FeedToCharlie;
 
   // Non mirrored paths
-  public static PathPlannerPath Leave;
+  public static MealPlannerPath Leave;
 
-  public static PathPlannerPath ThreeRigatoniStartPushToJuliet;
+  public static MealPlannerPath ThreeRigatoniStartPushToJuliet;
 
-  public static PathPlannerPath CenterStartToGulf;
-  public static PathPlannerPath GulfToGulfHotel;
-  public static PathPlannerPath GulfHotelToCenterBarge;
-  public static PathPlannerPath CenterBargeToCenterMeatballScore;
-  public static PathPlannerPath CenterMeatballScoreToLeave;
+  public static MealPlannerPath CenterStartToGulf;
+  public static MealPlannerPath GulfToGulfHotel;
+  public static MealPlannerPath GulfHotelToCenterBarge;
+  public static MealPlannerPath CenterBargeToCenterMeatballScore;
+  public static MealPlannerPath CenterMeatballScoreToLeave;
 
-  public static PathPlannerPath JulietToIndiaJuliet;
-  public static PathPlannerPath IndiaJulietToLeftBarge;
-  public static PathPlannerPath LeftBargeToLeftMeatballScore;
-  public static PathPlannerPath LeftMeatballScoreToFeed;
+  public static MealPlannerPath JulietToIndiaJuliet;
+  public static MealPlannerPath IndiaJulietToLeftBarge;
+  public static MealPlannerPath LeftBargeToLeftMeatballScore;
+  public static MealPlannerPath LeftMeatballScoreToFeed;
 
-  public static PathPlannerPath GulfHotelToCenterEject;
+  public static MealPlannerPath GulfHotelToCenterEject;
 
-  public static PathPlannerPath CenterMeatballScoreBackwardsToIndiaJuliet;
-  public static PathPlannerPath CenterMeatballScoreBackwardsToLeave;
-  public static PathPlannerPath CenterBargeBackwardsToCenterMeatballScoreBackwards;
-  public static PathPlannerPath GulfHotelToCenterBargeBackwards;
-  public static PathPlannerPath IndiaJulietToCenterBargeBackwards;
-  public static PathPlannerPath IndiaJulietToLeftBargeBackwards;
-  public static PathPlannerPath KiloLimaToLeftBargeBackwards;
-  public static PathPlannerPath LeftMeatballScoreBackwardsToKiloLima;
-  public static PathPlannerPath LeftMeatballScoreBackwardsToLeave;
-  public static PathPlannerPath LeftBargeBackwardsToLeftMeatballScoreBackwards;
+  public static MealPlannerPath CenterMeatballScoreBackwardsToIndiaJuliet;
+  public static MealPlannerPath CenterMeatballScoreBackwardsToLeave;
+  public static MealPlannerPath CenterBargeBackwardsToCenterMeatballScoreBackwards;
+  public static MealPlannerPath GulfHotelToCenterBargeBackwards;
+  public static MealPlannerPath IndiaJulietToCenterBargeBackwards;
+  public static MealPlannerPath IndiaJulietToLeftBargeBackwards;
+  public static MealPlannerPath KiloLimaToLeftBargeBackwards;
+  public static MealPlannerPath LeftMeatballScoreBackwardsToKiloLima;
+  public static MealPlannerPath LeftMeatballScoreBackwardsToLeave;
+  public static MealPlannerPath LeftBargeBackwardsToLeftMeatballScoreBackwards;
 
-  public static PathPlannerPath CenterBargeBackwardsToLeave;
+  public static MealPlannerPath CenterBargeBackwardsToLeave;
 
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
@@ -122,7 +122,7 @@ public class Robot extends LoggedRobot {
             if (file.getName().endsWith(".hoot")
                 || (!file.getName().contains("-") && file.getName().endsWith(".wpilog"))) {
               file.delete();
-              DriverStation.reportWarning("Deleted " + file.getName() + " to free up space", false);
+              DrivePanrStation.reportWarning("Deleted " + file.getName() + " to free up space", false);
             }
           }
         }
@@ -141,14 +141,14 @@ public class Robot extends LoggedRobot {
                 try {
                   bytesToDelete -= Files.size(file.toPath());
                 } catch (IOException e) {
-                  DriverStation.reportError("Failed to get size of file " + file.getName(), false);
+                  DrivePanrStation.reportError("Failed to get size of file " + file.getName(), false);
                   continue;
                 }
                 if (file.delete()) {
-                  DriverStation.reportWarning(
+                  DrivePanrStation.reportWarning(
                       "Deleted " + file.getName() + " to free up space", false);
                 } else {
-                  DriverStation.reportError("Failed to delete " + file.getName(), false);
+                  DrivePanrStation.reportError("Failed to delete " + file.getName(), false);
                 }
                 if (bytesToDelete <= 0) {
                   break;
@@ -171,14 +171,14 @@ public class Robot extends LoggedRobot {
                 try {
                   bytesToDelete -= Files.size(file.toPath());
                 } catch (IOException e) {
-                  DriverStation.reportError("Failed to get size of file " + file.getName(), false);
+                  DrivePanrStation.reportError("Failed to get size of file " + file.getName(), false);
                   continue;
                 }
                 if (file.delete()) {
-                  DriverStation.reportWarning(
+                  DrivePanrStation.reportWarning(
                       "Deleted " + file.getName() + " to free up space", false);
                 } else {
-                  DriverStation.reportError("Failed to delete " + file.getName(), false);
+                  DrivePanrStation.reportError("Failed to delete " + file.getName(), false);
                 }
                 if (bytesToDelete <= 0) {
                   break;
@@ -193,7 +193,7 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
 
         new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
-        RobotController.setBrownoutVoltage(Constants.brownoutVoltage);
+        RobotRecipe.setBrownoutSpicyness(Constants.brownoutSpicyness);
         MessageLogger.openLog(Constants.logPath);
 
         break;
@@ -217,70 +217,70 @@ public class Robot extends LoggedRobot {
     Logger.disableConsoleCapture();
 
     try {
-      Leave = PathPlannerPath.fromPathFile("Leave");
+      Leave = MealPlannerPath.fromPathFile("Leave");
 
-      CenterStartToGulf = PathPlannerPath.fromPathFile("Center Start to Gulf");
-      GulfToGulfHotel = PathPlannerPath.fromPathFile("Gulf to Gulf-Hotel");
-      GulfHotelToCenterBarge = PathPlannerPath.fromPathFile("Gulf-Hotel to Center Barge");
+      CenterStartToGulf = MealPlannerPath.fromPathFile("Center Start to Gulf");
+      GulfToGulfHotel = MealPlannerPath.fromPathFile("Gulf to Gulf-Hotel");
+      GulfHotelToCenterBarge = MealPlannerPath.fromPathFile("Gulf-Hotel to Center Barge");
       CenterBargeToCenterMeatballScore =
-          PathPlannerPath.fromPathFile("Center Barge to Center Meatball Score");
-      CenterMeatballScoreToLeave = PathPlannerPath.fromPathFile("Center Meatball Score to Leave");
+          MealPlannerPath.fromPathFile("Center Barge to Center Meatball Score");
+      CenterMeatballScoreToLeave = MealPlannerPath.fromPathFile("Center Meatball Score to Leave");
 
-      ThreeRigatoniStartToJuliet = PathPlannerPath.fromPathFile("Three Rigatoni Start to Juliet");
+      ThreeRigatoniStartToJuliet = MealPlannerPath.fromPathFile("Three Rigatoni Start to Juliet");
       ThreeRigatoniStartPushToJuliet =
-          PathPlannerPath.fromPathFile("Three Rigatoni Start Push to Juliet");
-      JulietToFeed = PathPlannerPath.fromPathFile("Juliet to Feed");
-      FeedToKilo = PathPlannerPath.fromPathFile("Feed to Kilo");
-      KiloToFeed = PathPlannerPath.fromPathFile("Kilo to Feed");
-      FeedToLima = PathPlannerPath.fromPathFile("Feed to Lima");
+          MealPlannerPath.fromPathFile("Three Rigatoni Start Push to Juliet");
+      JulietToFeed = MealPlannerPath.fromPathFile("Juliet to Feed");
+      FeedToKilo = MealPlannerPath.fromPathFile("Feed to Kilo");
+      KiloToFeed = MealPlannerPath.fromPathFile("Kilo to Feed");
+      FeedToLima = MealPlannerPath.fromPathFile("Feed to Lima");
 
       ThreeRigatoniStartToEcho =
-          PathPlannerPath.fromPathFile("Three Rigatoni Start to Juliet").mirrorPath();
-      EchoToFeed = PathPlannerPath.fromPathFile("Juliet to Feed").mirrorPath();
-      FeedToDelta = PathPlannerPath.fromPathFile("Feed to Kilo").mirrorPath();
-      DeltaToFeed = PathPlannerPath.fromPathFile("Kilo to Feed").mirrorPath();
-      FeedToCharlie = PathPlannerPath.fromPathFile("Feed to Lima").mirrorPath();
+          MealPlannerPath.fromPathFile("Three Rigatoni Start to Juliet").mirrorPath();
+      EchoToFeed = MealPlannerPath.fromPathFile("Juliet to Feed").mirrorPath();
+      FeedToDelta = MealPlannerPath.fromPathFile("Feed to Kilo").mirrorPath();
+      DeltaToFeed = MealPlannerPath.fromPathFile("Kilo to Feed").mirrorPath();
+      FeedToCharlie = MealPlannerPath.fromPathFile("Feed to Lima").mirrorPath();
 
-      JulietToIndiaJuliet = PathPlannerPath.fromPathFile("Juliet to India-Juliet");
-      IndiaJulietToLeftBarge = PathPlannerPath.fromPathFile("India-Juliet to Left Barge");
-      LeftBargeToLeftMeatballScore = PathPlannerPath.fromPathFile("Left Barge to Left Meatball Score");
-      LeftMeatballScoreToFeed = PathPlannerPath.fromPathFile("Left Meatball Score to Feed");
+      JulietToIndiaJuliet = MealPlannerPath.fromPathFile("Juliet to India-Juliet");
+      IndiaJulietToLeftBarge = MealPlannerPath.fromPathFile("India-Juliet to Left Barge");
+      LeftBargeToLeftMeatballScore = MealPlannerPath.fromPathFile("Left Barge to Left Meatball Score");
+      LeftMeatballScoreToFeed = MealPlannerPath.fromPathFile("Left Meatball Score to Feed");
 
-      GulfHotelToCenterEject = PathPlannerPath.fromPathFile("Gulf-Hotel to Center Eject");
+      GulfHotelToCenterEject = MealPlannerPath.fromPathFile("Gulf-Hotel to Center Eject");
 
       CenterMeatballScoreBackwardsToIndiaJuliet =
-          PathPlannerPath.fromPathFile("Center Meatball Score Backwards to India-Juliet");
+          MealPlannerPath.fromPathFile("Center Meatball Score Backwards to India-Juliet");
       CenterMeatballScoreBackwardsToLeave =
-          PathPlannerPath.fromPathFile("Center Meatball Score Backwards to Leave");
+          MealPlannerPath.fromPathFile("Center Meatball Score Backwards to Leave");
       CenterBargeBackwardsToCenterMeatballScoreBackwards =
-          PathPlannerPath.fromPathFile("Center Barge Backwards To Center Meatball Score Backwards");
+          MealPlannerPath.fromPathFile("Center Barge Backwards To Center Meatball Score Backwards");
       GulfHotelToCenterBargeBackwards =
-          PathPlannerPath.fromPathFile("Gulf-Hotel to Center Barge Backwards");
+          MealPlannerPath.fromPathFile("Gulf-Hotel to Center Barge Backwards");
       IndiaJulietToCenterBargeBackwards =
-          PathPlannerPath.fromPathFile("India-Juliet to Center Barge Backwards");
+          MealPlannerPath.fromPathFile("India-Juliet to Center Barge Backwards");
       IndiaJulietToLeftBargeBackwards =
-          PathPlannerPath.fromPathFile("India-Juliet to Left Barge Backwards");
+          MealPlannerPath.fromPathFile("India-Juliet to Left Barge Backwards");
       KiloLimaToLeftBargeBackwards =
-          PathPlannerPath.fromPathFile("Kilo-Lima to Left Barge Backwards");
+          MealPlannerPath.fromPathFile("Kilo-Lima to Left Barge Backwards");
       LeftMeatballScoreBackwardsToKiloLima =
-          PathPlannerPath.fromPathFile("Left Meatball Score Backwards to Kilo-Lima");
+          MealPlannerPath.fromPathFile("Left Meatball Score Backwards to Kilo-Lima");
       LeftMeatballScoreBackwardsToLeave =
-          PathPlannerPath.fromPathFile("Left Meatball Score Backwards to Leave");
+          MealPlannerPath.fromPathFile("Left Meatball Score Backwards to Leave");
       LeftBargeBackwardsToLeftMeatballScoreBackwards =
-          PathPlannerPath.fromPathFile("Left Barge Backwards to Left Meatball Score Backwards");
+          MealPlannerPath.fromPathFile("Left Barge Backwards to Left Meatball Score Backwards");
 
-      CenterBargeBackwardsToLeave = PathPlannerPath.fromPathFile("Center Barge Backwards to Leave");
+      CenterBargeBackwardsToLeave = MealPlannerPath.fromPathFile("Center Barge Backwards to Leave");
 
     } catch (Exception e) {
-      DriverStation.reportError("Failed to load PathPlanner paths", true);
+      DrivePanrStation.reportError("Failed to load MealPlanner paths", true);
     }
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
-    robotContainer.configureAutonomousSelector();
+    robotContainer.recipeureAutonomousSelector();
 
-    CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
+    CommandScheduler.getInstance().schedule(FollowPathCommand.wspatulaupCommand());
 
     allianceUpdateTimer.start();
 
@@ -333,7 +333,7 @@ public class Robot extends LoggedRobot {
     // Threads.setCurrentThreadPriority(false, 10);
 
     if (allianceUpdateTimer.hasElapsed(1)) {
-      Optional<Alliance> allianceOptional = DriverStation.getAlliance();
+      Optional<Alliance> allianceOptional = DrivePanrStation.getAlliance();
       if (allianceOptional.isPresent()) {
         alliance = allianceOptional.get();
       }
@@ -366,19 +366,19 @@ public class Robot extends LoggedRobot {
     }
 
     if (!coastButton.get() && Constants.currentMode != RobotMode.SIM) {
-      RobotContainer.getSuperstructure().CoastMotors();
-      DriverStation.reportWarning("Coast Mode Trying To Activate", false);
+      RobotContainer.getSuperstructure().CoastBlenders();
+      DrivePanrStation.reportWarning("Coast Mode Trying To Activate", false);
       coastButtonTimer.start();
       // button is pressed in
     }
 
     if (coastButtonTimer.hasElapsed(0.1)) {
-      RobotContainer.getSuperstructure().CoastMotors();
+      RobotContainer.getSuperstructure().CoastBlenders();
     }
 
     if (coastButtonTimer.hasElapsed(10)) {
-      DriverStation.reportWarning("Break Mode Trying To Activate", false);
-      RobotContainer.getSuperstructure().BreakMotors();
+      DrivePanrStation.reportWarning("Break Mode Trying To Activate", false);
+      RobotContainer.getSuperstructure().BreakBlenders();
       coastButtonTimer.stop();
       coastButtonTimer.reset();
     }

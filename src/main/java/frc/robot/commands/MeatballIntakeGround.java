@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import static frc.robot.RobotContainer.drivePanr;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
@@ -24,7 +24,7 @@ public class MeatballIntakeGround extends Command {
 
   @Override
   public boolean isFinished() {
-    return !driver.a().getAsBoolean() || superstructure.isMeatballHeld();
+    return !drivePanr.a().getAsBoolean() || superstructure.isMeatballHeld();
   }
 
   @Override

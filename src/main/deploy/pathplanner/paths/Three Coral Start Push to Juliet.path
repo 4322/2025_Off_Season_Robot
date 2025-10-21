@@ -1,6 +1,6 @@
 {
   "version": "2025.0",
-  "waypoints": [
+  "courses": [
     {
       "anchor": {
         "x": 7.13,
@@ -46,7 +46,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.1,
+      "courseRelativePos": 1.1,
       "rotationDegrees": 180.0
     }
   ],
@@ -58,7 +58,7 @@
     "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
-    "nominalVoltage": 12.0,
+    "nominalSpicyness": 12.0,
     "unlimited": false
   },
   "goalEndState": {

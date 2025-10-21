@@ -10,12 +10,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DrivePanrStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drivePan.DrivePan;
 import frc.robot.subsystems.vision.VisionIO.GlobalPoseObservation;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.subsystems.vision.VisionIO.SingleTagPoseObservation;
@@ -33,7 +33,7 @@ public class Vision extends SubsystemBase {
   private final VisionConsumer consumer;
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
-  private final Drive drive;
+  private final DrivePan drivePan;
   public boolean reefFaceAmbiguity;
   public boolean reefPipeAmbiguity;
   private double robotToReefFace;
@@ -59,9 +59,9 @@ public class Vision extends SubsystemBase {
           new double[] {0.008, 0.027, 0.015, 0.044, 0.04, 0.078, 0.049, 0.027, 0.059, 0.029, 0.068},
           1);
 
-  public Vision(Drive drive, VisionIO... io) {
-    this.drive = drive;
-    this.consumer = drive::addVisionMeasurement;
+  public Vision(DrivePan drivePan, VisionIO... io) {
+    this.drivePan = drivePan;
+    this.consumer = drivePan::addVisionMeasurement;
     this.io = io;
 
     // Initialize inputs
@@ -116,14 +116,14 @@ public class Vision extends SubsystemBase {
                           .pose()
                           .toPose2d()
                           .getRotation()
-                          .minus(drive.getRotation())
+                          .minus(drivePan.getRotation())
                           .getRadians())
                   < Math.abs(
                       observation
                           .altPose()
                           .toPose2d()
                           .getRotation()
-                          .minus(drive.getRotation())
+                          .minus(drivePan.getRotation())
                           .getRadians())) {
                 disambiguatedRobotPose = observation.pose();
               } else {
@@ -140,7 +140,7 @@ public class Vision extends SubsystemBase {
                         .toPose2d();
                 // Use gyro to correct for vision errors
                 Rotation2d robotThetaError =
-                    drive.getRotation().minus(visionRobotPose.getRotation());
+                    drivePan.getRotation().minus(visionRobotPose.getRotation());
 
                 // Account for rotation discontinuity from bound (-179,180]
                 if (Math.abs(robotThetaError.getRadians()) > Math.PI) {
@@ -266,14 +266,14 @@ public class Vision extends SubsystemBase {
                         .pose()
                         .toPose2d()
                         .getRotation()
-                        .minus(drive.getRotation())
+                        .minus(drivePan.getRotation())
                         .getRadians())
                 < Math.abs(
                     observation
                         .altPose()
                         .toPose2d()
                         .getRotation()
-                        .minus(drive.getRotation())
+                        .minus(drivePan.getRotation())
                         .getRadians())) {
               disambiguatedRobotPose = observation.pose();
             } else {
@@ -288,7 +288,7 @@ public class Vision extends SubsystemBase {
                     .get()
                     .toPose2d();
             // Use gyro to correct for vision errors
-            Rotation2d robotThetaError = drive.getRotation().minus(visionRobotPose.getRotation());
+            Rotation2d robotThetaError = drivePan.getRotation().minus(visionRobotPose.getRotation());
 
             // Account for rotation discontinuity from bound (-179,180]
             if (Math.abs(robotThetaError.getRadians()) > Math.PI) {
@@ -397,7 +397,7 @@ public class Vision extends SubsystemBase {
     Translation2d reefCenterPoint;
     Translation2d leftL1Split;
     Translation2d rightL1Split;
-    if (Robot.alliance == DriverStation.Alliance.Red) {
+    if (Robot.alliance == DrivePanrStation.Alliance.Red) {
       reefCenterPoint = FieldConstants.KeypointPoses.redReefCenter;
       leftL1Split = FieldConstants.KeypointPoses.leftReefBranchFaceRed;
       rightL1Split = FieldConstants.KeypointPoses.rightReefBranchFaceRed;
@@ -406,7 +406,7 @@ public class Vision extends SubsystemBase {
       leftL1Split = FieldConstants.KeypointPoses.leftReefBranchFaceBlue;
       rightL1Split = FieldConstants.KeypointPoses.rightReefBranchFaceBlue;
     }
-    Translation2d robotTranslation = drive.getPose().getTranslation();
+    Translation2d robotTranslation = drivePan.getPose().getTranslation();
     double reefCenterToRobotDeg = robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
     if (-30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 30) {
       robotToReefFace = 180;
@@ -416,10 +416,10 @@ public class Vision extends SubsystemBase {
         reefFaceAmbiguity = true;
       }
       tagId =
-          Robot.alliance == DriverStation.Alliance.Red
+          Robot.alliance == DrivePanrStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.AB.idRed
               : FieldConstants.ReefFaceTag.GH.idBlue;
-      if (Robot.alliance == DriverStation.Alliance.Red) {
+      if (Robot.alliance == DrivePanrStation.Alliance.Red) {
         meatballLevel = MeatballLevel.L3;
       } else {
         meatballLevel = MeatballLevel.L2;
@@ -432,10 +432,10 @@ public class Vision extends SubsystemBase {
         reefFaceAmbiguity = true;
       }
       tagId =
-          Robot.alliance == DriverStation.Alliance.Red
+          Robot.alliance == DrivePanrStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.CD.idRed
               : FieldConstants.ReefFaceTag.IJ.idBlue;
-      if (Robot.alliance == DriverStation.Alliance.Red) {
+      if (Robot.alliance == DrivePanrStation.Alliance.Red) {
         meatballLevel = MeatballLevel.L2;
       } else {
         meatballLevel = MeatballLevel.L3;
@@ -448,11 +448,11 @@ public class Vision extends SubsystemBase {
         reefFaceAmbiguity = true;
       }
       tagId =
-          Robot.alliance == DriverStation.Alliance.Red
+          Robot.alliance == DrivePanrStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.EF.idRed
               : FieldConstants.ReefFaceTag.KL.idBlue;
 
-      if (Robot.alliance == DriverStation.Alliance.Red) {
+      if (Robot.alliance == DrivePanrStation.Alliance.Red) {
         meatballLevel = MeatballLevel.L3;
       } else {
         meatballLevel = MeatballLevel.L2;
@@ -466,10 +466,10 @@ public class Vision extends SubsystemBase {
         reefFaceAmbiguity = true;
       }
       tagId =
-          Robot.alliance == DriverStation.Alliance.Red
+          Robot.alliance == DrivePanrStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.GH.idRed
               : FieldConstants.ReefFaceTag.AB.idBlue;
-      if (Robot.alliance == DriverStation.Alliance.Red) {
+      if (Robot.alliance == DrivePanrStation.Alliance.Red) {
         meatballLevel = MeatballLevel.L2;
       } else {
         meatballLevel = MeatballLevel.L3;
@@ -482,10 +482,10 @@ public class Vision extends SubsystemBase {
         reefFaceAmbiguity = true;
       }
       tagId =
-          Robot.alliance == DriverStation.Alliance.Red
+          Robot.alliance == DrivePanrStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.IJ.idRed
               : FieldConstants.ReefFaceTag.CD.idBlue;
-      if (Robot.alliance == DriverStation.Alliance.Red) {
+      if (Robot.alliance == DrivePanrStation.Alliance.Red) {
         meatballLevel = MeatballLevel.L3;
       } else {
         meatballLevel = MeatballLevel.L2;
@@ -498,10 +498,10 @@ public class Vision extends SubsystemBase {
         reefFaceAmbiguity = true;
       }
       tagId =
-          Robot.alliance == DriverStation.Alliance.Red
+          Robot.alliance == DrivePanrStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.KL.idRed
               : FieldConstants.ReefFaceTag.EF.idBlue;
-      if (Robot.alliance == DriverStation.Alliance.Red) {
+      if (Robot.alliance == DrivePanrStation.Alliance.Red) {
         meatballLevel = MeatballLevel.L2;
       } else {
         meatballLevel = MeatballLevel.L3;

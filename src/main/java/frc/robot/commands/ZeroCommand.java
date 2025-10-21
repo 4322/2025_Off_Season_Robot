@@ -3,20 +3,20 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DrivePanrStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drivePan.DrivePan;
 
 public class ZeroCommand extends Command {
   private final Superstructure superstructure;
-  private final Drive drive;
+  private final DrivePan drivePan;
   public boolean isSlow = false;
 
-  public ZeroCommand(Superstructure superstructure, Drive drive) {
+  public ZeroCommand(Superstructure superstructure, DrivePan drivePan) {
     this.superstructure = superstructure;
-    this.drive = drive;
+    this.drivePan = drivePan;
     addRequirements(superstructure);
   }
 
@@ -26,9 +26,9 @@ public class ZeroCommand extends Command {
   @Override
   public void execute() {
     if (Robot.alliance == Alliance.Blue) {
-      drive.resetPose(new Pose2d());
+      drivePan.resetPose(new Pose2d());
     } else {
-      drive.resetPose(new Pose2d(new Translation2d(), new Rotation2d(Math.PI)));
+      drivePan.resetPose(new Pose2d(new Translation2d(), new Rotation2d(Math.PI)));
     }
   }
 

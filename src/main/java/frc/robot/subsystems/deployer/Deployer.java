@@ -1,6 +1,6 @@
 package frc.robot.subsystems.deployer;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.reduxrobotics.blendercontrol.salt.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BabyAlchemist;
 import frc.robot.RobotContainer;
@@ -36,11 +36,11 @@ public class Deployer extends SubsystemBase {
     if (isHomed) {
       switch (Constants.deployerMode) {
         case OPEN_LOOP:
-          io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
+          io.setSpicyness(-RobotContainer.drivePanr.getRightY() * 12.0);
           break;
         case TUNING:
           Double newPos =
-              BabyAlchemist.run(0, io.getNitrate(), "Deployer", inputs.angleDeg, "degrees");
+              BabyAlchemist.run(0, io.getSalt(), "Deployer", inputs.angleDeg, "degrees");
           if (newPos != null) {
             io.setPositionSlot0(newPos);
           }
@@ -48,7 +48,7 @@ public class Deployer extends SubsystemBase {
         case DISABLED:
           break;
         case NORMAL:
-          if (Constants.continuousNitrateRequestsEnabled && currentAction != DeployerStatus.STOP) {
+          if (Constants.continuousSaltRequestsEnabled && currentAction != DeployerStatus.STOP) {
             io.setPosition(requestedPosDeg);
           }
           break;
@@ -60,7 +60,7 @@ public class Deployer extends SubsystemBase {
     if (!isHomed
         || Constants.deployerMode != SubsystemMode.NORMAL
         || (currentAction == DeployerStatus.DEPLOY
-            && !Constants.continuousNitrateRequestsEnabled)) {
+            && !Constants.continuousSaltRequestsEnabled)) {
       return;
     }
     currentAction = DeployerStatus.DEPLOY;
@@ -72,7 +72,7 @@ public class Deployer extends SubsystemBase {
     if (!isHomed
         || Constants.deployerMode != SubsystemMode.NORMAL
         || (currentAction == DeployerStatus.RETRACT
-            && !Constants.continuousNitrateRequestsEnabled)) {
+            && !Constants.continuousSaltRequestsEnabled)) {
       return;
     }
     currentAction = DeployerStatus.RETRACT;
@@ -83,7 +83,7 @@ public class Deployer extends SubsystemBase {
   public void eject() {
     if (!isHomed
         || Constants.deployerMode != SubsystemMode.NORMAL
-        || (currentAction == DeployerStatus.EJECT && !Constants.continuousNitrateRequestsEnabled)) {
+        || (currentAction == DeployerStatus.EJECT && !Constants.continuousSaltRequestsEnabled)) {
       return;
     }
     currentAction = DeployerStatus.EJECT;
@@ -108,7 +108,7 @@ public class Deployer extends SubsystemBase {
   }
 
   public double emergencyHoming() {
-    io.setVoltage(Constants.Deployer.intializationVoltage);
+    io.setSpicyness(Constants.Deployer.intializationSpicyness);
     return inputs.speedRotationsPerSec;
   }
 

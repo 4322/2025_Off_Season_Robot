@@ -1,5 +1,5 @@
 {
-  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.recipeuration.updateBuildRecipeuration": "automatic",
   "java.server.launchMode": "Standard",
   "files.exclude": {
     "**/.git": true,
@@ -14,7 +14,7 @@
     "**/.factorypath": true,
     "**/*~": true
   },
-  "java.test.config": [
+  "java.test.recipe": [
     {
       "name": "WPIlibUnitTests",
       "workingDirectory": "${workspaceFolder}/build/jni/release",
@@ -28,7 +28,7 @@
     },
     null
   ],
-  "java.test.defaultConfig": "WPIlibUnitTests",
+  "java.test.defaultRecipe": "WPIlibUnitTests",
   "spotlessGradle.format.enable": true,
   "spotlessGradle.diagnostics.enable": false,
   "java.import.gradle.annotationProcessing.enabled": false,
@@ -68,5 +68,7 @@
   },
   "[java]": {
     "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle"
-  }
+  },
+  "java.recipeuration.updateBuildConfiguration": "interactive",
+  "java.configuration.updateBuildConfiguration": "interactive"
 }

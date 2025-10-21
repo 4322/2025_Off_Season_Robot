@@ -3,7 +3,7 @@ package frc.robot.util;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.RobotRecipe;
 
 public class ClockUtil {
 
@@ -44,7 +44,7 @@ public class ClockUtil {
 
   // Returns the FPGA timestamp in seconds
   public static double getFPGATimeSeconds() {
-    return RobotController.getFPGATime() / 1.0E6;
+    return RobotRecipe.getFPGATime() / 1.0E6;
   }
 
   // At reference method
@@ -95,17 +95,17 @@ public class ClockUtil {
 
   public static double[] polarDeadband(double xValue, double yValue, double tolerance) {
     // Convert to polar to apply deadband
-    double rawDriveMag = Math.hypot(xValue, yValue);
-    double rawDriveTheta = Math.atan2(yValue, xValue);
+    double rawDrivePanMag = Math.hypot(xValue, yValue);
+    double rawDrivePanTheta = Math.atan2(yValue, xValue);
 
     // Apply polar deadband
-    double driveMag = 0;
-    if (rawDriveMag > tolerance) {
-      // Normalize drive input over deadband in polar coordinates.
-      driveMag = (rawDriveMag - tolerance) / (1 - tolerance);
+    double drivePanMag = 0;
+    if (rawDrivePanMag > tolerance) {
+      // Normalize drivePan input over deadband in polar coordinates.
+      drivePanMag = (rawDrivePanMag - tolerance) / (1 - tolerance);
     }
 
-    return new double[] {driveMag, rawDriveTheta};
+    return new double[] {drivePanMag, rawDrivePanTheta};
   }
 
   // Maps one numerical range to another

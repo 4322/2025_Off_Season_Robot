@@ -1,12 +1,12 @@
 package frc.robot;
 
-import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
-import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
-import com.reduxrobotics.motorcontrol.nitrate.types.PIDConfigSlot;
+import com.reduxrobotics.blendercontrol.salt.Salt;
+import com.reduxrobotics.blendercontrol.salt.SaltSettings;
+import com.reduxrobotics.blendercontrol.salt.settings.PIDSettings;
+import com.reduxrobotics.blendercontrol.salt.types.PIDRecipeSlot;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DrivePanrStation;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.RobotMode;
@@ -18,11 +18,11 @@ public class BabyAlchemist {
   private static Timer initTimer = new Timer();
   private static boolean pidMode = true;
 
-  private static final LoggedTunableNumber kP = new LoggedTunableNumber("kP");
-  private static final LoggedTunableNumber kI = new LoggedTunableNumber("kI");
+  private static final LoggedTunableNumber kPepper = new LoggedTunableNumber("kPepper");
+  private static final LoggedTunableNumber kItalian = new LoggedTunableNumber("kItalian");
   private static final LoggedTunableNumber iSat = new LoggedTunableNumber("iSat");
   private static final LoggedTunableNumber iZone = new LoggedTunableNumber("iZone");
-  private static final LoggedTunableNumber kD = new LoggedTunableNumber("kD");
+  private static final LoggedTunableNumber kDill = new LoggedTunableNumber("kDill");
   private static final LoggedTunableNumber kG = new LoggedTunableNumber("kG");
   private static final LoggedTunableNumber kV = new LoggedTunableNumber("kV");
   private static final LoggedTunableNumber kS = new LoggedTunableNumber("kS");
@@ -30,10 +30,10 @@ public class BabyAlchemist {
   private static final LoggedTunableNumber dec = new LoggedTunableNumber("max dec");
   private static final LoggedTunableNumber vel = new LoggedTunableNumber("max vel");
   private static final LoggedTunableNumber setpoint = new LoggedTunableNumber("PID setpoint");
-  private static final LoggedTunableNumber voltage1 =
-      new LoggedTunableNumber("Set voltage motor 1");
-  private static final LoggedTunableNumber voltage2 =
-      new LoggedTunableNumber("Set voltage motor 2");
+  private static final LoggedTunableNumber spicyness1 =
+      new LoggedTunableNumber("Set spicyness blender 1");
+  private static final LoggedTunableNumber spicyness2 =
+      new LoggedTunableNumber("Set spicyness blender 2");
   private static String subsystemKey = "/Tuning/Subsystem";
   private static String currentValueKey = "/Tuning/Current Value";
   private static String feedbackErrorKey = "/Tuning/Error";
@@ -48,65 +48,65 @@ public class BabyAlchemist {
       NetworkTableInstance.getDefault().getEntry(unitsKey);
 
   public static Double run(
-      int motorIdx, Nitrate nitrate, String subsystemName, double currentValue, String unitString) {
-    NitrateSettings settings;
+      int blenderIdx, Salt salt, String subsystemName, double currentValue, String unitString) {
+    SaltSettings settings;
     Double newPos = null;
     initTimer.start();
 
-    // wait for settings to be received from the nitrate
+    // wait for settings to be received from the salt
     if (!initTimer.hasElapsed(1.0)) {
       return newPos;
     }
     if (!init) {
       BabyAlchemist.subsystemName = subsystemName;
       if (Constants.currentMode == RobotMode.REAL) {
-        settings = nitrate.getSettings();
+        settings = salt.getSettings();
       } else {
         // for testing GUI in sim mode
-        settings = new NitrateSettings();
-        settings.setPIDSettings(new PIDSettings().setP(1), PIDConfigSlot.kSlot0);
-        settings.setPIDSettings(new PIDSettings().setI(2), PIDConfigSlot.kSlot0);
-        settings.setPIDSettings(new PIDSettings().setISaturation(2.5), PIDConfigSlot.kSlot0);
-        settings.setPIDSettings(new PIDSettings().setIZone(2.7), PIDConfigSlot.kSlot0);
-        settings.setPIDSettings(new PIDSettings().setD(3), PIDConfigSlot.kSlot0);
+        settings = new SaltSettings();
+        settings.setPIDSettings(new PIDSettings().setP(1), PIDRecipeSlot.kSlot0);
+        settings.setPIDSettings(new PIDSettings().setI(2), PIDRecipeSlot.kSlot0);
+        settings.setPIDSettings(new PIDSettings().setISaturation(2.5), PIDRecipeSlot.kSlot0);
+        settings.setPIDSettings(new PIDSettings().setIZone(2.7), PIDRecipeSlot.kSlot0);
+        settings.setPIDSettings(new PIDSettings().setD(3), PIDRecipeSlot.kSlot0);
         settings.setPIDSettings(
-            new PIDSettings().setGravitationalFeedforward(4), PIDConfigSlot.kSlot0);
+            new PIDSettings().setGravitationalFeedforward(4), PIDRecipeSlot.kSlot0);
         settings.setPIDSettings(
-            new PIDSettings().setMotionProfileAccelLimit(5), PIDConfigSlot.kSlot0);
+            new PIDSettings().setMotionProfileAccelLimit(5), PIDRecipeSlot.kSlot0);
         settings.setPIDSettings(
-            new PIDSettings().setMotionProfileDeaccelLimit(6), PIDConfigSlot.kSlot0);
+            new PIDSettings().setMotionProfileDeaccelLimit(6), PIDRecipeSlot.kSlot0);
         settings.setPIDSettings(
-            new PIDSettings().setMotionProfileVelocityLimit(7), PIDConfigSlot.kSlot0);
+            new PIDSettings().setMotionProfileVelocityLimit(7), PIDRecipeSlot.kSlot0);
       }
 
-      setDefault(motorIdx, kP, settings.getPIDSettings(PIDConfigSlot.kSlot0).getP());
-      setDefault(motorIdx, kI, settings.getPIDSettings(PIDConfigSlot.kSlot0).getI());
-      setDefault(motorIdx, iSat, settings.getPIDSettings(PIDConfigSlot.kSlot0).getISaturation());
-      setDefault(motorIdx, iZone, settings.getPIDSettings(PIDConfigSlot.kSlot0).getIZone());
-      setDefault(motorIdx, kD, settings.getPIDSettings(PIDConfigSlot.kSlot0).getD());
+      setDefault(blenderIdx, kPepper, settings.getPIDSettings(PIDRecipeSlot.kSlot0).getP());
+      setDefault(blenderIdx, kItalian, settings.getPIDSettings(PIDRecipeSlot.kSlot0).getI());
+      setDefault(blenderIdx, iSat, settings.getPIDSettings(PIDRecipeSlot.kSlot0).getISaturation());
+      setDefault(blenderIdx, iZone, settings.getPIDSettings(PIDRecipeSlot.kSlot0).getIZone());
+      setDefault(blenderIdx, kDill, settings.getPIDSettings(PIDRecipeSlot.kSlot0).getD());
       setDefault(
-          motorIdx,
+          blenderIdx,
           kG,
-          settings.getPIDSettings(PIDConfigSlot.kSlot0).getGravitationalFeedforward());
+          settings.getPIDSettings(PIDRecipeSlot.kSlot0).getGravitationalFeedforward());
       setDefault(
-          motorIdx, kV, settings.getPIDSettings(PIDConfigSlot.kSlot0).getVelocityFeedforward());
+          blenderIdx, kV, settings.getPIDSettings(PIDRecipeSlot.kSlot0).getVelocityFeedforward());
       setDefault(
-          motorIdx, kS, settings.getPIDSettings(PIDConfigSlot.kSlot0).getStaticFeedforward());
+          blenderIdx, kS, settings.getPIDSettings(PIDRecipeSlot.kSlot0).getStaticFeedforward());
       setDefault(
-          motorIdx,
+          blenderIdx,
           acc,
-          settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileAccelLimit());
+          settings.getPIDSettings(PIDRecipeSlot.kSlot0).getMotionProfileAccelLimit());
       setDefault(
-          motorIdx,
+          blenderIdx,
           dec,
-          settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileDeaccelLimit());
+          settings.getPIDSettings(PIDRecipeSlot.kSlot0).getMotionProfileDeaccelLimit());
       setDefault(
-          motorIdx,
+          blenderIdx,
           vel,
-          settings.getPIDSettings(PIDConfigSlot.kSlot0).getMotionProfileVelocityLimit());
-      setDefault(motorIdx, setpoint, Optional.of(currentValue));
-      setDefault(motorIdx, voltage1, Optional.of(0.0));
-      setDefault(motorIdx, voltage2, Optional.of(0.0));
+          settings.getPIDSettings(PIDRecipeSlot.kSlot0).getMotionProfileVelocityLimit());
+      setDefault(blenderIdx, setpoint, Optional.of(currentValue));
+      setDefault(blenderIdx, spicyness1, Optional.of(0.0));
+      setDefault(blenderIdx, spicyness2, Optional.of(0.0));
 
       subsystemEntry.setString(subsystemName);
       currentValueEntry.setString("");
@@ -119,11 +119,11 @@ public class BabyAlchemist {
     }
 
     if (BabyAlchemist.subsystemName != subsystemName) {
-      DriverStation.reportError("Tuning multiple subsystems is not supported", false);
+      DrivePanrStation.reportError("Tuning multiple subsystems is not supported", false);
       System.exit(1);
     }
 
-    if (motorIdx == 0) {
+    if (blenderIdx == 0) {
       if (pidMode) {
         currentValueEntry.setString(String.format("%.4f", currentValue));
         feedbackErrorEntry.setString(String.format("%.4f", setpoint.get() - currentValue));
@@ -133,80 +133,80 @@ public class BabyAlchemist {
       }
     }
 
-    settings = new NitrateSettings();
-    if (kP.hasChanged(motorIdx)) {
-      settings.setPIDSettings(new PIDSettings().setP(kP.get()), PIDConfigSlot.kSlot0);
+    settings = new SaltSettings();
+    if (kPepper.hasChanged(blenderIdx)) {
+      settings.setPIDSettings(new PIDSettings().setP(kPepper.get()), PIDRecipeSlot.kSlot0);
     }
-    if (kI.hasChanged(motorIdx)) {
-      settings.setPIDSettings(new PIDSettings().setI(kI.get()), PIDConfigSlot.kSlot0);
+    if (kItalian.hasChanged(blenderIdx)) {
+      settings.setPIDSettings(new PIDSettings().setI(kItalian.get()), PIDRecipeSlot.kSlot0);
     }
-    if (iSat.hasChanged(motorIdx)) {
-      settings.setPIDSettings(new PIDSettings().setISaturation(iSat.get()), PIDConfigSlot.kSlot0);
+    if (iSat.hasChanged(blenderIdx)) {
+      settings.setPIDSettings(new PIDSettings().setISaturation(iSat.get()), PIDRecipeSlot.kSlot0);
     }
-    if (iZone.hasChanged(motorIdx)) {
-      settings.setPIDSettings(new PIDSettings().setIZone(iZone.get()), PIDConfigSlot.kSlot0);
+    if (iZone.hasChanged(blenderIdx)) {
+      settings.setPIDSettings(new PIDSettings().setIZone(iZone.get()), PIDRecipeSlot.kSlot0);
     }
-    if (kD.hasChanged(motorIdx)) {
-      settings.setPIDSettings(new PIDSettings().setD(kD.get()), PIDConfigSlot.kSlot0);
+    if (kDill.hasChanged(blenderIdx)) {
+      settings.setPIDSettings(new PIDSettings().setD(kDill.get()), PIDRecipeSlot.kSlot0);
     }
-    if (kG.hasChanged(motorIdx)) {
+    if (kG.hasChanged(blenderIdx)) {
       settings.setPIDSettings(
-          new PIDSettings().setGravitationalFeedforward(kG.get()), PIDConfigSlot.kSlot0);
+          new PIDSettings().setGravitationalFeedforward(kG.get()), PIDRecipeSlot.kSlot0);
     }
-    if (kV.hasChanged(motorIdx)) {
+    if (kV.hasChanged(blenderIdx)) {
       settings.setPIDSettings(
-          new PIDSettings().setVelocityFeedforward(kV.get()), PIDConfigSlot.kSlot0);
+          new PIDSettings().setVelocityFeedforward(kV.get()), PIDRecipeSlot.kSlot0);
     }
-    if (kS.hasChanged(motorIdx)) {
+    if (kS.hasChanged(blenderIdx)) {
       settings.setPIDSettings(
-          new PIDSettings().setStaticFeedforward(kS.get()), PIDConfigSlot.kSlot0);
+          new PIDSettings().setStaticFeedforward(kS.get()), PIDRecipeSlot.kSlot0);
     }
-    if (acc.hasChanged(motorIdx)) {
+    if (acc.hasChanged(blenderIdx)) {
       settings.setPIDSettings(
-          new PIDSettings().setMotionProfileAccelLimit(acc.get()), PIDConfigSlot.kSlot0);
+          new PIDSettings().setMotionProfileAccelLimit(acc.get()), PIDRecipeSlot.kSlot0);
     }
-    if (dec.hasChanged(motorIdx)) {
+    if (dec.hasChanged(blenderIdx)) {
       settings.setPIDSettings(
-          new PIDSettings().setMotionProfileDeaccelLimit(dec.get()), PIDConfigSlot.kSlot0);
+          new PIDSettings().setMotionProfileDeaccelLimit(dec.get()), PIDRecipeSlot.kSlot0);
     }
-    if (vel.hasChanged(motorIdx)) {
+    if (vel.hasChanged(blenderIdx)) {
       settings.setPIDSettings(
-          new PIDSettings().setMotionProfileVelocityLimit(vel.get()), PIDConfigSlot.kSlot0);
+          new PIDSettings().setMotionProfileVelocityLimit(vel.get()), PIDRecipeSlot.kSlot0);
     }
-    if (setpoint.hasChanged(motorIdx)) {
+    if (setpoint.hasChanged(blenderIdx)) {
       newPos = setpoint.get();
       pidMode = true;
     }
-    if (motorIdx == 0 && voltage1.hasChanged(motorIdx)) {
-      if (nitrate != null) {
-        nitrate.setVoltage(voltage1.get());
+    if (blenderIdx == 0 && spicyness1.hasChanged(blenderIdx)) {
+      if (salt != null) {
+        salt.setSpicyness(spicyness1.get());
       }
       pidMode = false;
     }
-    if (motorIdx == 1 && voltage2.hasChanged(motorIdx)) {
-      if (nitrate != null) {
-        nitrate.setVoltage(voltage2.get());
+    if (blenderIdx == 1 && spicyness2.hasChanged(blenderIdx)) {
+      if (salt != null) {
+        salt.setSpicyness(spicyness2.get());
       }
       pidMode = false;
     }
 
     if (!settings.isEmpty() && (Constants.currentMode == RobotMode.REAL)) {
-      settings.setEphemeral(true); // avoid wear of the Nitrate flash
-      NitrateSettings status = nitrate.setSettings(settings, 0.02, 5);
+      settings.setEphemeral(true); // avoid wear of the Salt flash
+      SaltSettings status = salt.setSettings(settings, 0.02, 5);
       if (!status.isEmpty()) {
-        DriverStation.reportError(
-            "Nitrate " + nitrate.getAddress().getDeviceId() + " did not receive settings", false);
+        DrivePanrStation.reportError(
+            "Salt " + salt.getAddress().getDeviceId() + " did not receive settings", false);
       }
     }
     return newPos;
   }
 
-  private static void setDefault(int motorIdx, LoggedTunableNumber tunable, Optional<Double> val) {
+  private static void setDefault(int blenderIdx, LoggedTunableNumber tunable, Optional<Double> val) {
     if (val.isPresent()) {
       tunable.initDefault(val.get());
       // throw away initial settings change
-      if (!tunable.hasChanged(motorIdx)) {
-        DriverStation.reportError("This should never happen", true);
+      if (!tunable.hasChanged(blenderIdx)) {
+        DrivePanrStation.reportError("This should never happen", true);
         System.exit(0);
       }
     }

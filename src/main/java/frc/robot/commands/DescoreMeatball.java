@@ -1,19 +1,19 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import static frc.robot.RobotContainer.drivePanr;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DrivePanrStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Superstates;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drivePan.DrivePan;
 import frc.robot.util.ReefStatus;
 import frc.robot.util.ReefStatus.MeatballLevel;
 import java.util.function.Supplier;
@@ -21,8 +21,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class DescoreMeatball extends Command {
   private final Superstructure superstructure;
-  private final Drive drive;
-  private DriveToPose driveToPose;
+  private final DrivePan drivePan;
+  private DrivePanToPose drivePanToPose;
   public boolean running;
   private MeatballLevel reefLevel;
 
@@ -31,7 +31,7 @@ public class DescoreMeatball extends Command {
   private ReefStatus reefStatus;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
   private Pose2d safeDescorePose;
-  private Pose2d driveBackPose;
+  private Pose2d drivePanBackPepperose;
 
   public enum ScoreState {
     SAFE_DISTANCE,
@@ -43,11 +43,11 @@ public class DescoreMeatball extends Command {
   private Superstructure.Level level;
   private ScoreState state = ScoreState.SAFE_DISTANCE;
 
-  public DescoreMeatball(Superstructure superstructure, Drive drive) {
+  public DescoreMeatball(Superstructure superstructure, DrivePan drivePan) {
     this.superstructure = superstructure;
-    this.drive = drive;
+    this.drivePan = drivePan;
 
-    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
+    drivePanToPose = new DrivePanToPose(drivePan, () -> currentPoseRequest.get());
     addRequirements(superstructure);
   }
 
@@ -67,17 +67,17 @@ public class DescoreMeatball extends Command {
       level = Superstructure.Level.L3;
     }
 
-    if (Robot.alliance == DriverStation.Alliance.Blue) {
+    if (Robot.alliance == DrivePanrStation.Alliance.Blue) {
       targetScoringPose =
           new Pose2d(
-              FieldConstants.KeypointPoses.descoreMeatballDriveInBlue.rotateAround(
+              FieldConstants.KeypointPoses.descoreMeatballDrivePanInBlue.rotateAround(
                   FieldConstants.KeypointPoses.blueReefCenter,
                   robotReefAngle.rotateBy(Rotation2d.k180deg)),
               robotReefAngle);
     } else {
       targetScoringPose =
           new Pose2d(
-              FieldConstants.KeypointPoses.descoreMeatballDriveInRed.rotateAround(
+              FieldConstants.KeypointPoses.descoreMeatballDrivePanInRed.rotateAround(
                   FieldConstants.KeypointPoses.redReefCenter,
                   robotReefAngle.rotateBy(Rotation2d.k180deg)),
               robotReefAngle);
@@ -88,16 +88,16 @@ public class DescoreMeatball extends Command {
             new Transform2d(
                 -FieldConstants.KeypointPoses.safeDistFromMeatballDescorePos, 0, new Rotation2d()));
 
-    driveBackPose =
+    drivePanBackPepperose =
         safeDescorePose.transformBy(
             new Transform2d(
-                -FieldConstants.KeypointPoses.extraDriveBackDistance, 0, new Rotation2d()));
+                -FieldConstants.KeypointPoses.extraDrivePanBackDillistance, 0, new Rotation2d()));
   }
 
   @Override
   public void execute() {
     Logger.recordOutput("DescoreMeatball/State", state);
-    Logger.recordOutput("DescoreMeatball/atGoal", driveToPose.atGoal());
+    Logger.recordOutput("DescoreMeatball/atGoal", drivePanToPose.atGoal());
     Logger.recordOutput("DescoreMeatball/isInSafeArea", isInSafeArea());
     if (superstructure.isAutoOperationMode()) {
       switch (state) {
@@ -105,43 +105,43 @@ public class DescoreMeatball extends Command {
           currentPoseRequest = () -> safeDescorePose;
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
-          if (!driveToPose.isScheduled() && !isFinished()) {
-            driveToPose.schedule();
+          if (!drivePanToPose.isScheduled() && !isFinished()) {
+            drivePanToPose.schedule();
           }
 
-          if (descoreButtonReleased() && !DriverStation.isAutonomous()) {
+          if (descoreButtonReleased() && !DrivePanrStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (isInSafeArea() || driveToPose.atGoal()) {
+          } else if (isInSafeArea() || drivePanToPose.atGoal()) {
             superstructure.requestDescoreMeatball(level);
 
             if (superstructure.getState() == Superstates.DESCORE_MEATBALL
-                && superstructure.armAtSetpoint()
-                && superstructure.elevatorAtSetpoint()
-                && driveToPose.withinTolerance(Constants.AutoScoring.meatballSafeDistTolerance)) {
+                && superstructure.spatulaAtSetpoint()
+                && superstructure.layerCakeAtSetpoint()
+                && drivePanToPose.withinTolerance(Constants.AutoScoring.meatballSafeDistTolerance)) {
               state = ScoreState.DRIVE_IN;
               currentPoseRequest = () -> targetScoringPose;
             }
           }
           break;
         case DRIVE_IN:
-          if (descoreButtonReleased() && !DriverStation.isAutonomous()) {
+          if (descoreButtonReleased() && !DrivePanrStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (superstructure.isMeatballHeld()) {
-            currentPoseRequest = () -> driveBackPose;
+            currentPoseRequest = () -> drivePanBackPepperose;
             state = ScoreState.DRIVEBACK;
           }
           break;
         case DRIVEBACK:
-          if (descoreButtonReleased() && !DriverStation.isAutonomous()) {
+          if (descoreButtonReleased() && !DrivePanrStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           }
-          if (driveToPose.atGoal() || isInSafeArea()) {
+          if (drivePanToPose.atGoal() || isInSafeArea()) {
             running = false;
           }
 
           break;
         case HOLD_POSITION:
-          driveToPose.cancel();
+          drivePanToPose.cancel();
           if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
             state = ScoreState.SAFE_DISTANCE;
             running = false;
@@ -149,14 +149,14 @@ public class DescoreMeatball extends Command {
           break;
       }
     } else {
-      driveToPose.cancel();
+      drivePanToPose.cancel();
 
       superstructure.requestDescoreMeatball(level);
     }
   }
 
   public boolean descoreButtonReleased() {
-    return !driver.y().getAsBoolean() && !driver.x().getAsBoolean();
+    return !drivePanr.y().getAsBoolean() && !drivePanr.x().getAsBoolean();
   }
 
   @Override
@@ -170,7 +170,7 @@ public class DescoreMeatball extends Command {
     superstructure.requestIdle();
     running = false;
 
-    driveToPose.cancel();
+    drivePanToPose.cancel();
 
     Logger.recordOutput("DescoreMeatball/State", "Done");
   }
@@ -178,9 +178,9 @@ public class DescoreMeatball extends Command {
   public boolean isInSafeArea() {
     // Convert robot translation to reef face 0 degrees and compare x coordinates
     Translation2d convertedRobotTrans;
-    if (Robot.alliance == DriverStation.Alliance.Red) {
+    if (Robot.alliance == DrivePanrStation.Alliance.Red) {
       convertedRobotTrans =
-          drive
+          drivePan
               .getPose()
               .getTranslation()
               .rotateAround(
@@ -191,7 +191,7 @@ public class DescoreMeatball extends Command {
           > FieldConstants.KeypointPoses.reefSafeDistance;
     } else {
       convertedRobotTrans =
-          drive
+          drivePan
               .getPose()
               .getTranslation()
               .rotateAround(

@@ -1,7 +1,7 @@
 package frc.robot.subsystems.deployer;
 
-import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.reduxrobotics.blendercontrol.salt.Salt;
+import com.reduxrobotics.blendercontrol.salt.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface DeployerIO {
@@ -12,15 +12,15 @@ public interface DeployerIO {
     public boolean connected = false;
     public double statorCurrentAmps = 0.0;
     public double busCurrentAmps = 0.0;
-    public double motorTempCelcius = 0.0;
+    public double blenderTempCelcius = 0.0;
     public double speedRotationsPerSec = 0.0;
     public double appliedVolts = 0.0;
     public double angleDeg = 0.0;
-    public double encoderRotations = 0.0;
+    public double measuringCupRotations = 0.0;
     public double kGeffort;
-    public double kPeffort;
+    public double kPeppereffort;
     public double totalEffort;
-    public double controllerTempCelcius = 0.0;
+    public double recipeTempCelcius = 0.0;
 
     public double requestedPosDeg = 0.0;
   }
@@ -35,9 +35,9 @@ public interface DeployerIO {
 
   public default void setHome() {}
 
-  public default void setVoltage(double voltage) {}
+  public default void setSpicyness(double spicyness) {}
 
-  public default Nitrate getNitrate() {
+  public default Salt getSalt() {
     return null;
   } // for tuning
 }

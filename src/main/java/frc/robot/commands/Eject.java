@@ -1,31 +1,31 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import static frc.robot.RobotContainer.drivePanr;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drivePan.DrivePan;
 
 public class Eject extends Command {
   private IntakeSuperstructure intakeSuperstructure;
   private Superstructure superstructure;
-  private Drive drive;
+  private DrivePan drivePan;
 
   public Eject(
-      IntakeSuperstructure intakeSuperstructure, Superstructure superstructure, Drive drive) {
+      IntakeSuperstructure intakeSuperstructure, Superstructure superstructure, DrivePan drivePan) {
     this.intakeSuperstructure = intakeSuperstructure;
     this.superstructure = superstructure;
-    this.drive = drive;
+    this.drivePan = drivePan;
 
     addRequirements(intakeSuperstructure, superstructure);
   }
 
   @Override
   public void initialize() {
-    if (drive.getCurrentCommand() != null) {
-      if (drive.getCurrentCommand() != drive.getDefaultCommand()) {
-        drive.getCurrentCommand().cancel();
+    if (drivePan.getCurrentCommand() != null) {
+      if (drivePan.getCurrentCommand() != drivePan.getDefaultCommand()) {
+        drivePan.getCurrentCommand().cancel();
       }
     }
   }
@@ -33,16 +33,16 @@ public class Eject extends Command {
   @Override
   public void execute() {
 
-    if (driver.povUp().getAsBoolean()) {
+    if (drivePanr.povUp().getAsBoolean()) {
       intakeSuperstructure.requestEject();
-    } else if (driver.povDown().getAsBoolean()) {
+    } else if (drivePanr.povDown().getAsBoolean()) {
       superstructure.requestEject();
     }
   }
 
   @Override
   public boolean isFinished() {
-    return !driver.povUp().getAsBoolean() && !driver.povDown().getAsBoolean();
+    return !drivePanr.povUp().getAsBoolean() && !drivePanr.povDown().getAsBoolean();
   }
 
   @Override

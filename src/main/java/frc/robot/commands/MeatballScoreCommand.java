@@ -1,34 +1,34 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import static frc.robot.RobotContainer.drivePanr;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DrivePanrStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drivePan.DrivePan;
 
 public class MeatballScoreCommand extends Command {
   private Superstructure superstructure;
-  private Drive drive;
+  private DrivePan drivePan;
 
-  public MeatballScoreCommand(Superstructure superstructure, Drive drive) {
+  public MeatballScoreCommand(Superstructure superstructure, DrivePan drivePan) {
     this.superstructure = superstructure;
-    this.drive = drive;
+    this.drivePan = drivePan;
     addRequirements(superstructure);
   }
 
   @Override
   public void initialize() {
-    if (Math.abs(drive.getRotation().minus(Rotation2d.kZero).getDegrees())
-        < Math.abs(drive.getRotation().minus(Rotation2d.k180deg).getDegrees())) {
-      drive.requestAutoRotateMode(Rotation2d.kZero);
-      superstructure.requestMeatballPrescore(Robot.alliance == DriverStation.Alliance.Red);
+    if (Math.abs(drivePan.getRotation().minus(Rotation2d.kZero).getDegrees())
+        < Math.abs(drivePan.getRotation().minus(Rotation2d.k180deg).getDegrees())) {
+      drivePan.requestAutoRotateMode(Rotation2d.kZero);
+      superstructure.requestMeatballPrescore(Robot.alliance == DrivePanrStation.Alliance.Red);
     } else {
-      drive.requestAutoRotateMode(Rotation2d.k180deg);
-      superstructure.requestMeatballPrescore(Robot.alliance == DriverStation.Alliance.Blue);
+      drivePan.requestAutoRotateMode(Rotation2d.k180deg);
+      superstructure.requestMeatballPrescore(Robot.alliance == DrivePanrStation.Alliance.Blue);
     }
   }
 
@@ -41,12 +41,12 @@ public class MeatballScoreCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return !driver.b().getAsBoolean();
+    return !drivePanr.b().getAsBoolean();
   }
 
   @Override
   public void end(boolean interrupted) {
     superstructure.requestIdle();
-    drive.requestFieldRelativeMode();
+    drivePan.requestFieldRelativeMode();
   }
 }

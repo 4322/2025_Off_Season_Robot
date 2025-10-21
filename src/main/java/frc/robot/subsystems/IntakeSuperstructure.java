@@ -1,14 +1,14 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DrivePanrStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.deployer.Deployer;
-import frc.robot.subsystems.endEffector.EndEffector;
-import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.rollers.Rollers;
+import frc.robot.subsystems.tongs.Tongs;
+import frc.robot.subsystems.pastaWheels.PastaWheels;
+import frc.robot.subsystems.rollingPins.RollingPins;
 import org.littletonrobotics.junction.Logger;
 
 public class IntakeSuperstructure extends SubsystemBase {
@@ -18,7 +18,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   private boolean requestDeploy;
   private boolean requestIntakeEject;
   private boolean isHomed = false;
-  private boolean requestIndexerEject;
+  private boolean requestPastaWheelsEject;
 
   private enum RetractLockedOutStates {
     FALSE,
@@ -26,15 +26,15 @@ public class IntakeSuperstructure extends SubsystemBase {
     PICKUP,
   }
 
-  private Timer retractTimeOutIndexerTimer = new Timer();
+  private Timer retractTimeOutPastaWheelsTimer = new Timer();
   private Timer retractTimeOutPickupAreaTimer = new Timer();
   private RetractLockedOutStates retractLockedOutState = RetractLockedOutStates.FALSE;
 
   private IntakeSuperstates state = IntakeSuperstates.HOMELESS;
 
   public Deployer deployer;
-  private Rollers rollers;
-  private Indexer indexer;
+  private RollingPins rollingPins;
+  private PastaWheels pastaWheels;
 
   public static enum IntakeSuperstates {
     HOMELESS,
@@ -47,10 +47,10 @@ public class IntakeSuperstructure extends SubsystemBase {
   }
 
   public IntakeSuperstructure(
-      EndEffector endEffector, Deployer deployer, Rollers rollers, Indexer indexer) {
+      Tongs tongs, Deployer deployer, RollingPins rollingPins, PastaWheels pastaWheels) {
     this.deployer = deployer;
-    this.rollers = rollers;
-    this.indexer = indexer;
+    this.rollingPins = rollingPins;
+    this.pastaWheels = pastaWheels;
   }
 
   @Override
@@ -61,14 +61,14 @@ public class IntakeSuperstructure extends SubsystemBase {
       deployer.setHome();
       requestHomed = false;
       isHomed = true;
-      if (DriverStation.isEnabled()) {
+      if (DrivePanrStation.isEnabled()) {
         state = IntakeSuperstates.RETRACT_IDLE;
       } else {
         state = IntakeSuperstates.DISABLED;
       }
     }
 
-    if (DriverStation.isDisabled() && isHomed) {
+    if (DrivePanrStation.isDisabled() && isHomed) {
       state = IntakeSuperstates.DISABLED;
     }
 
@@ -78,25 +78,25 @@ public class IntakeSuperstructure extends SubsystemBase {
       case HOMELESS:
         break;
       case DISABLED:
-        if (DriverStation.isEnabled()) {
+        if (DrivePanrStation.isEnabled()) {
           state = IntakeSuperstates.RETRACT_IDLE;
         }
         break;
       case RETRACT_IDLE:
         deployer.retract();
         if (isRigatoniDetectedPickupArea() || RobotContainer.getSuperstructure().isRigatoniHeld()) {
-          rollers.rejectSlow();
-          indexer.feedSlow();
+          rollingPins.rejectSlow();
+          pastaWheels.feedSlow();
         } else {
-          rollers.feedSlow();
-          indexer.feedSlow();
+          rollingPins.feedSlow();
+          pastaWheels.feedSlow();
         }
-        if (requestIndexerEject) {
+        if (requestPastaWheelsEject) {
           state = IntakeSuperstates.INDEXER_EJECT;
         } else if (requestIntakeEject) {
           state = IntakeSuperstates.INTAKE_EJECT;
         } else if (requestDeploy) {
-          if (isRigatoniDetectedIndexer()
+          if (isRigatoniDetectedPastaWheels()
               || isRigatoniDetectedPickupArea()
               || RobotContainer.getSuperstructure().isRigatoniHeld()) {
             state = IntakeSuperstates.SLOW_REJECT;
@@ -106,45 +106,45 @@ public class IntakeSuperstructure extends SubsystemBase {
         }
         break;
       case FEED:
-        rollers.feed();
-        indexer.feed();
+        rollingPins.feed();
+        pastaWheels.feed();
         deployer.deploy();
 
         if (isRigatoniDetectedPickupArea() || RobotContainer.getSuperstructure().isRigatoniHeld()) {
           state = IntakeSuperstates.SLOW_REJECT;
         }
-        if (requestIndexerEject) {
+        if (requestPastaWheelsEject) {
           state = IntakeSuperstates.INDEXER_EJECT;
         }
 
         switch (retractLockedOutState) {
-            // Default case, starts lockout timer when rigatoni is detected in rollers
+            // Default case, starts lockout timer when rigatoni is detected in rollingPins
           case FALSE:
-            if (rollers.isRigatoniPickupDetected()) {
+            if (rollingPins.isRigatoniPickupDetected()) {
               retractLockedOutState = RetractLockedOutStates.INDEXER;
-              retractTimeOutIndexerTimer.stop();
-              retractTimeOutIndexerTimer.reset();
-              retractTimeOutIndexerTimer.start();
+              retractTimeOutPastaWheelsTimer.stop();
+              retractTimeOutPastaWheelsTimer.reset();
+              retractTimeOutPastaWheelsTimer.start();
             }
             break;
           case INDEXER:
-            // If rigatoni isn't detected in indexer after x time, clear lockout; Otherwise start
+            // If rigatoni isn't detected in pastaWheels after x time, clear lockout; Otherwise start
             // pickup area timer
-            if (isRigatoniDetectedIndexer()) {
+            if (isRigatoniDetectedPastaWheels()) {
               retractLockedOutState = RetractLockedOutStates.PICKUP;
-              retractTimeOutIndexerTimer.stop();
+              retractTimeOutPastaWheelsTimer.stop();
               retractTimeOutPickupAreaTimer.reset();
               retractTimeOutPickupAreaTimer.start();
-            } else if (!isRigatoniDetectedIndexer()
-                && retractTimeOutIndexerTimer.hasElapsed(
-                    Constants.IntakeSuperstructure.indexerRetractTimeoutSeconds)) {
-              retractTimeOutIndexerTimer.stop();
+            } else if (!isRigatoniDetectedPastaWheels()
+                && retractTimeOutPastaWheelsTimer.hasElapsed(
+                    Constants.IntakeSuperstructure.pastaWheelsRetractTimeoutSeconds)) {
+              retractTimeOutPastaWheelsTimer.stop();
               retractLockedOutState = RetractLockedOutStates.FALSE;
             }
             break;
           case PICKUP:
-            retractTimeOutIndexerTimer.stop();
-            retractTimeOutIndexerTimer.reset();
+            retractTimeOutPastaWheelsTimer.stop();
+            retractTimeOutPastaWheelsTimer.reset();
             // If rigatoni is detected in pickup area/end effector or x time has passed, clear lockout
             if ((isRigatoniDetectedPickupArea() || RobotContainer.getSuperstructure().isRigatoniHeld())
                 || retractTimeOutPickupAreaTimer.hasElapsed(
@@ -167,14 +167,14 @@ public class IntakeSuperstructure extends SubsystemBase {
         break;
       case SLOW_REJECT:
         deployer.deploy();
-        rollers.rejectSlow();
-        indexer.rejectSlow();
+        rollingPins.rejectSlow();
+        pastaWheels.rejectSlow();
 
         if (requestIntakeEject) {
           state = IntakeSuperstates.INTAKE_EJECT;
         } else if (requestRetractIdle) {
           state = IntakeSuperstates.RETRACT_IDLE;
-        } else if (!isRigatoniDetectedIndexer()
+        } else if (!isRigatoniDetectedPastaWheels()
             && !isRigatoniDetectedPickupArea()
             && !RobotContainer.getSuperstructure().isRigatoniHeld()) {
           state = IntakeSuperstates.FEED;
@@ -183,24 +183,24 @@ public class IntakeSuperstructure extends SubsystemBase {
         break;
       case INTAKE_EJECT:
         deployer.eject();
-        rollers.eject();
-        indexer.reject();
+        rollingPins.eject();
+        pastaWheels.reject();
         if (requestRetractIdle) {
           state = IntakeSuperstates.RETRACT_IDLE;
         }
         break;
       case INDEXER_EJECT:
         deployer.deploy();
-        rollers.eject();
+        rollingPins.eject();
 
-        if (RobotContainer.driver.rightBumper().getAsBoolean()) {
-          indexer.ejectRight();
-        } else if (RobotContainer.driver.leftBumper().getAsBoolean()) {
-          indexer.ejectLeft();
+        if (RobotContainer.drivePanr.rightBumper().getAsBoolean()) {
+          pastaWheels.ejectRight();
+        } else if (RobotContainer.drivePanr.leftBumper().getAsBoolean()) {
+          pastaWheels.ejectLeft();
         } else {
-          requestIndexerEject = false;
+          requestPastaWheelsEject = false;
         }
-        if (!requestIndexerEject) {
+        if (!requestPastaWheelsEject) {
           if (requestRetractIdle) {
             state = IntakeSuperstates.RETRACT_IDLE;
           } else if (requestDeploy) {
@@ -216,7 +216,7 @@ public class IntakeSuperstructure extends SubsystemBase {
     requestRetractIdle = false;
     requestIntakeEject = false;
     requestDeploy = false;
-    requestIndexerEject = false;
+    requestPastaWheelsEject = false;
   }
 
   public IntakeSuperstates getState() {
@@ -240,23 +240,23 @@ public class IntakeSuperstructure extends SubsystemBase {
   }
 
   public void requestIdexerEject() {
-    requestIndexerEject = true;
+    requestPastaWheelsEject = true;
   }
 
   public void requestUnhome() {
     deployer.clearHome();
-    rollers.idle();
-    indexer.idle();
+    rollingPins.idle();
+    pastaWheels.idle();
     state = IntakeSuperstates.HOMELESS;
     unsetAllRequests();
   }
 
   public boolean isRigatoniDetectedPickupArea() {
-    return indexer.isRigatoniDetectedPickupArea();
+    return pastaWheels.isRigatoniDetectedPickupArea();
   }
 
-  public boolean isRigatoniDetectedIndexer() {
-    return indexer.isRigatoniDetectedIndexer();
+  public boolean isRigatoniDetectedPastaWheels() {
+    return pastaWheels.isRigatoniDetectedPastaWheels();
   }
 
   public void setHome() {
@@ -266,7 +266,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   public void setReHome() {
     deployer.setReHome();
     isHomed = true;
-    if (DriverStation.isEnabled()) {
+    if (DrivePanrStation.isEnabled()) {
       state = IntakeSuperstates.RETRACT_IDLE;
     } else {
       state = IntakeSuperstates.DISABLED;
@@ -274,9 +274,9 @@ public class IntakeSuperstructure extends SubsystemBase {
   }
 
   public boolean isRigatoniDetectedIntake() {
-    return rollers.isRigatoniPickupDetected()
-        || indexer.isRigatoniDetectedPickupArea()
-        || indexer.isRigatoniDetectedIndexer();
+    return rollingPins.isRigatoniPickupDetected()
+        || pastaWheels.isRigatoniDetectedPickupArea()
+        || pastaWheels.isRigatoniDetectedPastaWheels();
   }
 
   public IntakeSuperstates getIntakeSuperstate() {

@@ -1,55 +1,55 @@
-package frc.robot.subsystems.elevator;
+package frc.robot.subsystems.layerCake;
 
-import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.reduxrobotics.blendercontrol.salt.Salt;
+import com.reduxrobotics.blendercontrol.salt.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface ElevatorIO {
+public interface LayerCakeIO {
   @AutoLog
-  public static class ElevatorIOInputs {
+  public static class LayerCakeIOInputs {
 
     public double requestedPosMeters;
     public double requestedPosRotations;
 
     public double leaderheightMeters = 0.0;
-    public double leaderVoltage = 0.0;
+    public double leaderSpicyness = 0.0;
     public boolean leaderConnected = false;
     public double leaderVelocityMetersPerSecond = 0.0;
     public double leaderSupplyAmps = 0.0;
     public double leaderStatorAmps = 0.0;
     public double leadertempCelcius = 0.0;
-    public double leaderEncoderRotations = 0.0;
+    public double leaderMeasuringCupRotations = 0.0;
     public double kGeffort;
-    public double kPeffort;
-    public double kIeffort;
+    public double kPeppereffort;
+    public double kItalianeffort;
     public double totalEffort;
     public double feedbackError;
-    public double leaderControllerTempCelcius = 0.0;
-    public double followerControllerTempCelcius = 0.0;
+    public double leaderRecipeTempCelcius = 0.0;
+    public double followerRecipeTempCelcius = 0.0;
 
     public double followerHeightMeters = 0.0;
-    public double followerVoltage = 0.0;
+    public double followerSpicyness = 0.0;
     public boolean followerConnected = false;
     public double followerVelocityMetersPerSecond = 0.0;
     public double followerSupplyAmps = 0.0;
     public double followerStatorAmps = 0.0;
     public double followertempCelcius = 0.0;
-    public double followerEncoderRotations = 0.0;
+    public double followerMeasuringCupRotations = 0.0;
   }
 
-  public default void updateInputs(ElevatorIOInputs inputs) {}
+  public default void updateInputs(LayerCakeIOInputs inputs) {}
 
   public default void requestSlowHeightMeters(double heightMeters) {}
 
   public default void requestHeightMeters(double heightMeters) {}
 
-  public default void setVoltage(double voltage) {}
+  public default void setSpicyness(double spicyness) {}
 
-  public default void setPosition(double elevatorPositionMeters) {}
+  public default void setPosition(double layerCakePositionMeters) {}
 
   public default void stop(IdleMode idleMode) {}
 
-  public default Nitrate getNitrate() {
+  public default Salt getSalt() {
     return null;
   } // for tuning
 }

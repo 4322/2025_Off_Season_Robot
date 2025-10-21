@@ -32,7 +32,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "linuxathena"
       ],
       "simMode": "hwsim"
@@ -46,7 +46,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "linuxathena"
       ],
       "simMode": "hwsim"
@@ -60,7 +60,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -74,7 +74,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -88,7 +88,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -102,7 +102,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -116,7 +116,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -130,7 +130,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -144,7 +144,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -158,7 +158,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -172,7 +172,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -186,7 +186,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -200,7 +200,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -214,7 +214,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -228,7 +228,7 @@
       "validPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -246,7 +246,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "linuxathena"
       ],
       "simMode": "hwsim"
@@ -262,7 +262,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "linuxathena"
       ],
       "simMode": "hwsim"
@@ -278,7 +278,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -294,7 +294,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -310,7 +310,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -326,7 +326,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -342,7 +342,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -358,7 +358,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -374,7 +374,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -390,7 +390,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -406,7 +406,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -422,7 +422,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -438,7 +438,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -454,7 +454,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"
@@ -470,7 +470,7 @@
       "binaryPlatforms": [
         "windowsx86-64",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal"
       ],
       "simMode": "swsim"

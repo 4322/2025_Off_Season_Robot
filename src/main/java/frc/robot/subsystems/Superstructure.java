@@ -1,14 +1,14 @@
 package frc.robot.subsystems;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import edu.wpi.first.wpilibj.DriverStation;
+import com.reduxrobotics.blendercontrol.salt.types.IdleMode;
+import edu.wpi.first.wpilibj.DrivePanrStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.endEffector.EndEffector;
-import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
+import frc.robot.subsystems.spatula.Spatula;
+import frc.robot.subsystems.layerCake.LayerCake;
+import frc.robot.subsystems.tongs.Tongs;
+import frc.robot.subsystems.tongs.Tongs.TongsStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
@@ -29,7 +29,7 @@ public class Superstructure extends SubsystemBase {
   private boolean requestClimb = false;
   private boolean ishomed = false;
   private Timer rigatoniPickupTimer = new Timer();
-  private boolean rigatoniElevatorPickUp = false;
+  private boolean rigatoniLayerCakePickUp = false;
   private boolean scoreBackSide = false;
 
   public enum Superstates {
@@ -70,23 +70,23 @@ public class Superstructure extends SubsystemBase {
   Superstates state = Superstates.HOMELESS;
   Superstates prevState = Superstates.HOMELESS;
 
-  private EndEffector endEffector;
-  private Arm arm;
-  private Elevator elevator;
+  private Tongs tongs;
+  private Spatula spatula;
+  private LayerCake layerCake;
   private IntakeSuperstructure intakeSuperstructure;
   private Vision vision;
 
   // Add this variable to track the previous state of the home button
 
   public Superstructure(
-      EndEffector endEffector,
-      Arm arm,
-      Elevator elevator,
+      Tongs tongs,
+      Spatula spatula,
+      LayerCake layerCake,
       IntakeSuperstructure intakeSuperstructure,
       Vision vision) {
-    this.endEffector = endEffector;
-    this.arm = arm;
-    this.elevator = elevator;
+    this.tongs = tongs;
+    this.spatula = spatula;
+    this.layerCake = layerCake;
     this.intakeSuperstructure = intakeSuperstructure;
     this.vision = vision;
   }
@@ -94,14 +94,14 @@ public class Superstructure extends SubsystemBase {
   @Override
   public void periodic() {
 
-    if (DriverStation.isDisabled() && ishomed) {
+    if (DrivePanrStation.isDisabled() && ishomed) {
       state = Superstates.DISABLED;
     }
 
     // The home button can only be activated when the robot is disabled, so accept it from any state
     if (requestHomed) {
-      elevator.setHomePosition();
-      arm.setHomePosition();
+      layerCake.setHomePosition();
+      spatula.setHomePosition();
       intakeSuperstructure.setHome();
       requestHomed = false;
       ishomed = true;
@@ -119,65 +119,65 @@ public class Superstructure extends SubsystemBase {
     prevState = state;
     switch (state) {
       case HOMELESS:
-        elevator.reset();
-        arm.reset();
+        layerCake.reset();
+        spatula.reset();
         break;
 
       case DISABLED:
-        elevator.reset();
-        arm.reset();
-        if (DriverStation.isEnabled()) {
+        layerCake.reset();
+        spatula.reset();
+        if (DrivePanrStation.isEnabled()) {
           state = Superstates.IDLE;
-          elevator.reset();
-          arm.reset();
+          layerCake.reset();
+          spatula.reset();
         }
         break;
       case IDLE:
         if (requestEject) {
           state = Superstates.EJECT;
         } else if (intakeSuperstructure.isRigatoniDetectedPickupArea()) {
-          endEffector.idle();
-          elevator.idle();
-          arm.idle();
-          if (arm.atSetpoint() && elevator.atSetpoint()) {
+          tongs.idle();
+          layerCake.idle();
+          spatula.idle();
+          if (spatula.atSetpoint() && layerCake.atSetpoint()) {
             state = Superstates.END_EFFECTOR_RIGATONI_PICKUP;
           }
         } else if (requestIntakeMeatballFloor) {
           state = Superstates.INTAKE_MEATBALL_FLOOR;
         } else if (requestDescoreMeatball) {
           state = Superstates.DESCORE_MEATBALL;
-        } else if (requestPreClimb && DriverStation.getMatchTime() < 30.0) {
+        } else if (requestPreClimb && DrivePanrStation.getMatchTime() < 30.0) {
           state = Superstates.PRECLIMB;
-        } else if (endEffector.hasRigatoni()) {
+        } else if (tongs.hasRigatoni()) {
           state = Superstates.RIGATONI_HELD;
         } else {
-          endEffector.idle();
-          elevator.idle();
-          arm.idle();
+          tongs.idle();
+          layerCake.idle();
+          spatula.idle();
         }
 
         break;
       case EJECT:
-        elevator.eject();
-        arm.eject();
-        endEffector.eject();
+        layerCake.eject();
+        spatula.eject();
+        tongs.eject();
 
-        if (requestIdle && !endEffector.hasMeatball() && !endEffector.hasRigatoni()) {
+        if (requestIdle && !tongs.hasMeatball() && !tongs.hasRigatoni()) {
           state = Superstates.IDLE;
-        } else if (requestIdle && endEffector.hasMeatball()) {
+        } else if (requestIdle && tongs.hasMeatball()) {
           state = Superstates.MEATBALL_IDLE;
-        } else if (requestIdle && endEffector.hasRigatoni()) {
+        } else if (requestIdle && tongs.hasRigatoni()) {
           state = Superstates.RIGATONI_HELD;
         }
 
         break;
       case MEATBALL_IDLE:
-        endEffector.holdMeatball();
-        arm.meatballHold();
-        elevator.meatballHold();
+        tongs.holdMeatball();
+        spatula.meatballHold();
+        layerCake.meatballHold();
         if (requestEject) {
           state = Superstates.EJECT;
-        } else if (!endEffector.hasMeatball()) {
+        } else if (!tongs.hasMeatball()) {
           state = Superstates.IDLE;
         } else if (requestMeatballPrescore) {
           state = Superstates.MEATBALL_PRESCORE;
@@ -185,37 +185,37 @@ public class Superstructure extends SubsystemBase {
 
         break;
       case MEATBALL_PRESCORE:
-        elevator.scoreMeatball();
-        if (elevator.atSetpoint()) {
-          arm.scoreMeatball(scoreBackSide);
+        layerCake.scoreMeatball();
+        if (layerCake.atSetpoint()) {
+          spatula.scoreMeatball(scoreBackSide);
         }
 
         if (requestIdle) {
-          if (elevator.getElevatorHeightMeters()
-              >= Constants.Elevator.safeBargeRetractHeightMeters) {
+          if (layerCake.getLayerCakeHeightMeters()
+              >= Constants.LayerCake.safeBargeRetractHeightMeters) {
             state = Superstates.SAFE_SCORE_MEATBALL_RETRACT;
           } else {
             state = Superstates.MEATBALL_IDLE;
           }
-        } else if (requestMeatballScore && arm.atSetpoint()) {
+        } else if (requestMeatballScore && spatula.atSetpoint()) {
           state = Superstates.MEATBALL_SCORE;
         }
 
         break;
       case MEATBALL_SCORE:
-        endEffector.releaseMeatball();
+        tongs.releaseMeatball();
         if (requestIdle) {
           state = Superstates.SAFE_SCORE_MEATBALL_RETRACT;
         }
 
         break;
-      case INTAKE_MEATBALL_FLOOR: // Needs to move up then arm out then back down
-        elevator.meatballGround();
-        arm.meatballGround();
-        endEffector.intakeMeatball();
+      case INTAKE_MEATBALL_FLOOR: // Needs to move up then spatula out then back down
+        layerCake.meatballGround();
+        spatula.meatballGround();
+        tongs.intakeMeatball();
 
         if (requestIdle) {
-          if (endEffector.hasMeatball()) {
+          if (tongs.hasMeatball()) {
             state = Superstates.MEATBALL_IDLE;
           } else {
             state = Superstates.IDLE;
@@ -224,44 +224,44 @@ public class Superstructure extends SubsystemBase {
 
         break;
       case DESCORE_MEATBALL:
-        arm.meatballReef();
-        elevator.meatballReef(level);
-        endEffector.intakeMeatball();
+        spatula.meatballReef();
+        layerCake.meatballReef(level);
+        tongs.intakeMeatball();
 
         if (requestIdle) {
-          if (endEffector.hasMeatball()) {
+          if (tongs.hasMeatball()) {
             state = Superstates.MEATBALL_IDLE;
-          } else if (!endEffector.hasMeatball()) {
+          } else if (!tongs.hasMeatball()) {
             state = Superstates.IDLE;
           }
         }
         break;
       case END_EFFECTOR_RIGATONI_PICKUP:
-        Logger.recordOutput("Superstructure/RigatoniStopIsDisabled", rigatoniElevatorPickUp);
-        arm.idle();
-        endEffector.intakeRigatoni();
+        Logger.recordOutput("Superstructure/RigatoniStopIsDisabled", rigatoniLayerCakePickUp);
+        spatula.idle();
+        tongs.intakeRigatoni();
 
-        if (!rigatoniElevatorPickUp) {
+        if (!rigatoniLayerCakePickUp) {
           rigatoniPickupTimer.start();
         }
 
-        if (rigatoniPickupTimer.hasElapsed(Constants.EndEffector.rigatoniGrabDelaySeconds)) {
-          elevator.pickupRigatoni();
-          rigatoniElevatorPickUp = true;
+        if (rigatoniPickupTimer.hasElapsed(Constants.Tongs.rigatoniGrabDelaySeconds)) {
+          layerCake.pickupRigatoni();
+          rigatoniLayerCakePickUp = true;
         }
 
-        if (rigatoniPickupTimer.hasElapsed(Constants.Elevator.rigatoniDetectionHeightThresholdSecs)) {
-          if (endEffector.hasRigatoni()) {
-            rigatoniElevatorPickUp = false;
+        if (rigatoniPickupTimer.hasElapsed(Constants.LayerCake.rigatoniDetectionHeightThresholdSecs)) {
+          if (tongs.hasRigatoni()) {
+            rigatoniLayerCakePickUp = false;
             rigatoniPickupTimer.stop();
             rigatoniPickupTimer.reset();
             state = Superstates.RIGATONI_HELD;
-            rigatoniElevatorPickUp = false;
-          } else if (!endEffector.hasRigatoni()
+            rigatoniLayerCakePickUp = false;
+          } else if (!tongs.hasRigatoni()
               && !intakeSuperstructure.isRigatoniDetectedPickupArea()
-              && arm.atSetpoint()
-              && getElevatorHeight() >= Constants.Elevator.minElevatorSafeHeightMeters) {
-            rigatoniElevatorPickUp = false;
+              && spatula.atSetpoint()
+              && getLayerCakeHeight() >= Constants.LayerCake.minLayerCakeSafeHeightMeters) {
+            rigatoniLayerCakePickUp = false;
             rigatoniPickupTimer.stop();
             rigatoniPickupTimer.reset();
             state = Superstates.IDLE;
@@ -270,25 +270,25 @@ public class Superstructure extends SubsystemBase {
 
         break;
       case RIGATONI_HELD:
-        arm.rigatoniHold();
-        elevator.rigatoniHold();
-        endEffector.holdRigatoni();
+        spatula.rigatoniHold();
+        layerCake.rigatoniHold();
+        tongs.holdRigatoni();
 
         if (requestEject) {
           state = Superstates.EJECT;
-        } else if (!endEffector.hasRigatoni()) {
+        } else if (!tongs.hasRigatoni()) {
           state = Superstates.IDLE;
         } else if (requestPrescoreRigatoni) {
           state = Superstates.PRESCORE_RIGATONI;
         }
         break;
       case PRESCORE_RIGATONI:
-        arm.prescoreRigatoni(level);
-        elevator.prescoreRigatoni(level);
-        if (requestScoreRigatoni && arm.atSetpoint() && elevator.atSetpoint()) {
+        spatula.prescoreRigatoni(level);
+        layerCake.prescoreRigatoni(level);
+        if (requestScoreRigatoni && spatula.atSetpoint() && layerCake.atSetpoint()) {
           state = Superstates.SCORE_RIGATONI;
         } else if (requestIdle) {
-          if (endEffector.hasRigatoni()) {
+          if (tongs.hasRigatoni()) {
             state = Superstates.RIGATONI_HELD;
           } else {
             state = Superstates.IDLE;
@@ -297,38 +297,38 @@ public class Superstructure extends SubsystemBase {
 
         break;
       case SCORE_RIGATONI:
-        arm.scoreRigatoni(level);
-        elevator.scoreRigatoni(level);
+        spatula.scoreRigatoni(level);
+        layerCake.scoreRigatoni(level);
         if (level == Level.L1) {
-          if (arm.atSetpoint() && elevator.atSetpoint()) {
-            endEffector.releaseRigatoniL1();
+          if (spatula.atSetpoint() && layerCake.atSetpoint()) {
+            tongs.releaseRigatoniL1();
           }
-        } else if ((arm.getAngleDegrees() <= arm.scoreReleaseSetpoint())) {
-          endEffector.releaseRigatoniNormal();
+        } else if ((spatula.getAngleDegrees() <= spatula.scoreReleaseSetpoint())) {
+          tongs.releaseRigatoniNormal();
         } else {
-          if (elevator.atSetpoint() && arm.atSetpoint()) {
-            endEffector.releaseRigatoniNormal();
+          if (layerCake.atSetpoint() && spatula.atSetpoint()) {
+            tongs.releaseRigatoniNormal();
           }
         }
 
         if (requestIdle) {
-          if (endEffector.hasRigatoni()) {
+          if (tongs.hasRigatoni()) {
             state = Superstates.RIGATONI_HELD;
           } else {
             state = Superstates.IDLE;
           }
-        } else if (requestDescoreMeatball && !endEffector.hasRigatoni()) {
+        } else if (requestDescoreMeatball && !tongs.hasRigatoni()) {
           state = Superstates.DESCORE_MEATBALL;
         }
         break;
       case SAFE_SCORE_MEATBALL_RETRACT:
-        arm.safeBargeRetract();
-        if (arm.atSetpoint()) {
-          elevator.safeBargeRetract();
-          if (elevator.atSetpoint()) {
-            if (!endEffector.hasMeatball()) {
+        spatula.safeBargeRetract();
+        if (spatula.atSetpoint()) {
+          layerCake.safeBargeRetract();
+          if (layerCake.atSetpoint()) {
+            if (!tongs.hasMeatball()) {
               state = Superstates.IDLE;
-            } else if (endEffector.hasMeatball()) {
+            } else if (tongs.hasMeatball()) {
               state = Superstates.MEATBALL_IDLE;
             }
           }
@@ -364,12 +364,12 @@ public class Superstructure extends SubsystemBase {
     this.mode = mode;
   }
 
-  public boolean armAtSetpoint() {
-    return arm.atSetpoint();
+  public boolean spatulaAtSetpoint() {
+    return spatula.atSetpoint();
   }
 
-  public boolean elevatorAtSetpoint() {
-    return elevator.atSetpoint();
+  public boolean layerCakeAtSetpoint() {
+    return layerCake.atSetpoint();
   }
 
   public boolean isAutoOperationMode() {
@@ -431,37 +431,37 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void requestUnhome() {
-    endEffector.idle(); // let any meatball pop-out, rigatoni must have already been ejected
+    tongs.idle(); // let any meatball pop-out, rigatoni must have already been ejected
     unsetAllRequests();
     state = Superstates.HOMELESS;
   }
 
   public void requestReHome() {
     ishomed = true;
-    elevator.setReHome();
-    arm.setReHome();
+    layerCake.setReHome();
+    spatula.setReHome();
     intakeSuperstructure.setReHome();
     state = Superstates.IDLE;
   }
 
   public boolean isRigatoniHeld() {
-    return endEffector.hasRigatoni();
+    return tongs.hasRigatoni();
   }
 
   public boolean isMeatballHeld() {
-    return endEffector.hasMeatball();
+    return tongs.hasMeatball();
   }
 
-  public double getElevatorHeight() {
-    return elevator.getElevatorHeightMeters();
+  public double getLayerCakeHeight() {
+    return layerCake.getLayerCakeHeightMeters();
   }
 
-  public double getArmAngle() {
-    return arm.getAngleDegrees();
+  public double getSpatulaAngle() {
+    return spatula.getAngleDegrees();
   }
 
-  public EndEffectorStates getEndEffectorState() {
-    return endEffector.getState();
+  public TongsStates getTongsState() {
+    return tongs.getState();
   }
 
   // Return the state executed in the current periodic cycle
@@ -481,15 +481,15 @@ public class Superstructure extends SubsystemBase {
     requestHomed = true;
   }
 
-  public void CoastMotors() {
-    arm.stop();
-    elevator.stop(IdleMode.kCoast);
+  public void CoastBlenders() {
+    spatula.stop();
+    layerCake.stop(IdleMode.kCoast);
     intakeSuperstructure.deployer.stop(IdleMode.kCoast);
   }
 
-  public void BreakMotors() {
-    arm.stop();
-    elevator.stop(IdleMode.kBrake);
+  public void BreakBlenders() {
+    spatula.stop();
+    layerCake.stop(IdleMode.kBrake);
     intakeSuperstructure.deployer.stop(IdleMode.kBrake);
   }
 

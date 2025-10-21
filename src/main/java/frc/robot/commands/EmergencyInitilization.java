@@ -6,75 +6,75 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Superstates;
-import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.spatula.Spatula;
 import frc.robot.subsystems.deployer.Deployer;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.drivePan.DrivePan;
+import frc.robot.subsystems.layerCake.LayerCake;
 
-// Never invoke this command while the arm is striaght up or on the back side of the robot!
+// Never invoke this command while the spatula is striaght up or on the back side of the robot!
 
 public class EmergencyInitilization extends Command {
   private final Superstructure superstructure;
   private final IntakeSuperstructure intakeSuperstructure;
-  private final Arm arm;
-  private final Elevator elevator;
+  private final Spatula spatula;
+  private final LayerCake layerCake;
   private final Deployer deployer;
-  private final Drive drive;
-  private boolean armDone;
-  private boolean elevatorDone;
+  private final DrivePan drivePan;
+  private boolean spatulaDone;
+  private boolean layerCakeDone;
   private boolean deployerDone;
-  private final Timer armStoppedTimer = new Timer();
-  private final Timer elevatorStoppedTimer = new Timer();
+  private final Timer spatulaStoppedTimer = new Timer();
+  private final Timer layerCakeStoppedTimer = new Timer();
   private final Timer deployerStoppedTimer = new Timer();
   private boolean wasHomed;
 
   public EmergencyInitilization(
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,
-      Arm arm,
-      Elevator elevator,
+      Spatula spatula,
+      LayerCake layerCake,
       Deployer deployer,
-      Drive drive) {
+      DrivePan drivePan) {
     this.superstructure = superstructure;
     this.intakeSuperstructure = intakeSuperstructure;
-    this.arm = arm;
-    this.elevator = elevator;
+    this.spatula = spatula;
+    this.layerCake = layerCake;
     this.deployer = deployer;
-    this.drive = drive;
+    this.drivePan = drivePan;
     // break out of everything
-    addRequirements(superstructure, intakeSuperstructure, arm, elevator, deployer, drive);
+    addRequirements(superstructure, intakeSuperstructure, spatula, layerCake, deployer, drivePan);
   }
 
   @Override
   public void initialize() {
-    // don't coast the arm because it could swing into the carbon fiber rod as the elevator descends
+    // don't coast the spatula because it could swing into the carbon fiber rod as the layerCake descends
     wasHomed = (superstructure.getState() != Superstates.HOMELESS);
-    armDone = false;
-    elevatorDone = false;
+    spatulaDone = false;
+    layerCakeDone = false;
     deployerDone = false;
     superstructure.requestUnhome();
     intakeSuperstructure.requestUnhome();
-    elevator.emergencyHoming();
-    elevatorStoppedTimer.stop();
-    elevatorStoppedTimer.reset();
+    layerCake.emergencyHoming();
+    layerCakeStoppedTimer.stop();
+    layerCakeStoppedTimer.reset();
     deployerStoppedTimer.stop();
     deployerStoppedTimer.reset();
-    armStoppedTimer.stop();
-    armStoppedTimer.reset();
+    spatulaStoppedTimer.stop();
+    spatulaStoppedTimer.reset();
   }
 
   @Override
   public void execute() {
-    if (!elevatorDone) {
-      if (Math.abs(elevator.emergencyHoming()) <= Constants.Elevator.initializationCompleteSpeed) {
-        elevatorStoppedTimer.start();
+    if (!layerCakeDone) {
+      if (Math.abs(layerCake.emergencyHoming()) <= Constants.LayerCake.initializationCompleteSpeed) {
+        layerCakeStoppedTimer.start();
       } else {
-        elevatorStoppedTimer.stop();
-        elevatorStoppedTimer.reset();
+        layerCakeStoppedTimer.stop();
+        layerCakeStoppedTimer.reset();
       }
-      if (elevatorStoppedTimer.hasElapsed(Constants.Elevator.initializationCompleteSec)) {
-        elevator.setEmergencyHomingComplete();
-        elevatorDone = true;
+      if (layerCakeStoppedTimer.hasElapsed(Constants.LayerCake.initializationCompleteSec)) {
+        layerCake.setEmergencyHomingComplete();
+        layerCakeDone = true;
       }
     }
     if (!deployerDone) {
@@ -89,29 +89,29 @@ public class EmergencyInitilization extends Command {
         deployerDone = true;
       }
     }
-    if (!armDone && elevatorDone && deployerDone && superstructure.elevatorAtSetpoint()) {
-      if (Math.abs(arm.emergencyHoming()) <= Constants.Arm.initializationCompleteSpeed) {
-        armStoppedTimer.start();
+    if (!spatulaDone && layerCakeDone && deployerDone && superstructure.layerCakeAtSetpoint()) {
+      if (Math.abs(spatula.emergencyHoming()) <= Constants.Spatula.initializationCompleteSpeed) {
+        spatulaStoppedTimer.start();
       } else {
-        armStoppedTimer.stop();
-        armStoppedTimer.reset();
+        spatulaStoppedTimer.stop();
+        spatulaStoppedTimer.reset();
       }
-      if (armStoppedTimer.hasElapsed(Constants.Arm.initializationCompleteSec)) {
-        arm.setEmergencyHomingComplete();
-        armDone = true;
+      if (spatulaStoppedTimer.hasElapsed(Constants.Spatula.initializationCompleteSec)) {
+        spatula.setEmergencyHomingComplete();
+        spatulaDone = true;
       }
     }
   }
 
   @Override
   public boolean isFinished() {
-    return armDone && elevatorDone && deployerDone;
+    return spatulaDone && layerCakeDone && deployerDone;
   }
 
   @Override
   public void end(boolean interrupted) {
     if (wasHomed || !interrupted) {
-      superstructure.requestReHome(); // don't be homeless, even if arm/elevator not yet done
+      superstructure.requestReHome(); // don't be homeless, even if spatula/layerCake not yet done
     }
   }
 }

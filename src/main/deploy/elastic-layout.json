@@ -8,28 +8,28 @@
         "layouts": [],
         "containers": [
           {
-            "title": "kP",
+            "title": "kPepper",
             "x": 0.0,
             "y": 128.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/Tuning/kP",
+              "topic": "/Tuning/kPepper",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
             }
           },
           {
-            "title": "kI",
+            "title": "kItalian",
             "x": 128.0,
             "y": 128.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/Tuning/kI",
+              "topic": "/Tuning/kItalian",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -50,14 +50,14 @@
             }
           },
           {
-            "title": "kD",
+            "title": "kDill",
             "x": 512.0,
             "y": 128.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/Tuning/kD",
+              "topic": "/Tuning/kDill",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -148,14 +148,14 @@
             }
           },
           {
-            "title": "Set voltage motor 1",
+            "title": "Set spicyness blender 1",
             "x": 0.0,
             "y": 384.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Number Slider",
             "properties": {
-              "topic": "/Tuning/Set voltage motor 1",
+              "topic": "/Tuning/Set spicyness blender 1",
               "period": 0.06,
               "data_type": "double",
               "min_value": -12.0,
@@ -165,14 +165,14 @@
             }
           },
           {
-            "title": "Set voltage motor 2",
+            "title": "Set spicyness blender 2",
             "x": 256.0,
             "y": 384.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Number Slider",
             "properties": {
-              "topic": "/Tuning/Set voltage motor 2",
+              "topic": "/Tuning/Set spicyness blender 2",
               "period": 0.06,
               "data_type": "double",
               "min_value": -12.0,

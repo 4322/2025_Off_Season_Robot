@@ -1,12 +1,12 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import static frc.robot.RobotContainer.drivePanr;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DrivePanrStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
@@ -16,8 +16,8 @@ import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.Superstructure.Superstates;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
+import frc.robot.subsystems.drivePan.DrivePan;
+import frc.robot.subsystems.tongs.Tongs.TongsStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
 import java.util.function.Supplier;
@@ -27,8 +27,8 @@ public class ScoreRigatoni extends Command {
 
   private Superstructure.Level level;
   private final Superstructure superstructure;
-  private final Drive drive;
-  private DriveToPose driveToPose;
+  private final DrivePan drivePan;
+  private DrivePanToPose drivePanToPose;
   public boolean running;
   public Timer times = new Timer();
   private Pose2d targetScoringPose;
@@ -44,7 +44,7 @@ public class ScoreRigatoni extends Command {
   private Rotation2d robotReefAngle;
   private ReefStatus reefStatus;
   private Pose2d safeDistPose = new Pose2d();
-  private Pose2d driveBackPose = new Pose2d();
+  private Pose2d drivePanBackPepperose = new Pose2d();
 
   private boolean chainedMeatballMode;
 
@@ -60,27 +60,27 @@ public class ScoreRigatoni extends Command {
   public ScoreRigatoni(
       Superstructure superstructure,
       Superstructure.Level level,
-      Drive drive,
+      DrivePan drivePan,
       boolean chainedMeatballMode) {
     this.superstructure = superstructure;
     this.level = level;
-    this.drive = drive;
+    this.drivePan = drivePan;
     this.chainedMeatballMode = chainedMeatballMode;
-    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
+    drivePanToPose = new DrivePanToPose(drivePan, () -> currentPoseRequest.get());
     addRequirements(superstructure);
   }
 
   public ScoreRigatoni(
-      DriveToPose driveToPose,
+      DrivePanToPose drivePanToPose,
       Supplier<Pose2d> currentPoseRequest,
       Superstructure superstructure,
       Superstructure.Level level,
-      Drive drive) {
+      DrivePan drivePan) {
     this.currentPoseRequest = currentPoseRequest;
     this.superstructure = superstructure;
     this.level = level;
-    this.drive = drive;
-    this.driveToPose = driveToPose;
+    this.drivePan = drivePan;
+    this.drivePanToPose = drivePanToPose;
   }
 
   @Override
@@ -95,7 +95,7 @@ public class ScoreRigatoni extends Command {
     robotReefAngle = reefStatus.getClosestRobotAngle();
 
     if (level == Level.L1) {
-      if (Robot.alliance == DriverStation.Alliance.Blue) {
+      if (Robot.alliance == DrivePanrStation.Alliance.Blue) {
         leftTroughScoringPose =
             new Pose2d(
                 FieldConstants.KeypointPoses.leftTroughScoringBlue.rotateAround(
@@ -151,7 +151,7 @@ public class ScoreRigatoni extends Command {
       }
 
     } else if (level == Level.L4) {
-      if (Robot.alliance == DriverStation.Alliance.Blue) {
+      if (Robot.alliance == DrivePanrStation.Alliance.Blue) {
         leftBranchScoringPos =
             new Pose2d(
                 FieldConstants.KeypointPoses.leftReefBranchScoringBlueL4.rotateAround(
@@ -189,7 +189,7 @@ public class ScoreRigatoni extends Command {
           break;
       }
     } else {
-      if (Robot.alliance == DriverStation.Alliance.Blue) {
+      if (Robot.alliance == DrivePanrStation.Alliance.Blue) {
         leftBranchScoringPos =
             new Pose2d(
                 FieldConstants.KeypointPoses.leftReefBranchScoringBlue.rotateAround(
@@ -233,19 +233,19 @@ public class ScoreRigatoni extends Command {
   @Override
   public void execute() {
     Logger.recordOutput("ScoreRigatoni/state", state);
-    Logger.recordOutput("ScoreRigatoni/atGoal", driveToPose.atGoal());
+    Logger.recordOutput("ScoreRigatoni/atGoal", drivePanToPose.atGoal());
     Logger.recordOutput("ScoreRigatoni/isInSafeArea", isInSafeArea());
 
     if (superstructure.isAutoOperationMode()) {
 
       if (state == ScoreState.SAFE_DISTANCE) {
 
-        double x = -RobotContainer.driver.getLeftY();
-        double y = -RobotContainer.driver.getLeftX();
+        double x = -RobotContainer.drivePanr.getLeftY();
+        double y = -RobotContainer.drivePanr.getLeftX();
         Rotation2d joystickAngle = Rotation2d.fromRadians(Math.atan2(y, x));
         double joystickMag = Math.hypot(x, y);
 
-        if (Robot.alliance == DriverStation.Alliance.Red) {
+        if (Robot.alliance == DrivePanrStation.Alliance.Red) {
           joystickAngle =
               joystickAngle.rotateBy(Rotation2d.k180deg); // Convert joystick to field relative
         }
@@ -292,40 +292,40 @@ public class ScoreRigatoni extends Command {
                           : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
                       0,
                       new Rotation2d()));
-          driveBackPose =
+          drivePanBackPepperose =
               safeDistPose.transformBy(
                   new Transform2d(
-                      -FieldConstants.KeypointPoses.extraDriveBackDistance, 0, new Rotation2d()));
+                      -FieldConstants.KeypointPoses.extraDrivePanBackDillistance, 0, new Rotation2d()));
 
           currentPoseRequest = () -> safeDistPose;
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
-          if (!driveToPose.isScheduled() && !isFinished()) {
-            driveToPose.schedule();
+          if (!drivePanToPose.isScheduled() && !isFinished()) {
+            drivePanToPose.schedule();
           }
-          if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
+          if (scoreButtonReleased() && !DrivePanrStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (isInSafeArea() || driveToPose.atGoal()) {
+          } else if (isInSafeArea() || drivePanToPose.atGoal()) {
 
             superstructure.requestPrescoreRigatoni(level);
             if (superstructure.getState() == Superstates.PRESCORE_RIGATONI
-                && superstructure.armAtSetpoint()
-                && superstructure.elevatorAtSetpoint()) {
+                && superstructure.spatulaAtSetpoint()
+                && superstructure.layerCakeAtSetpoint()) {
               currentPoseRequest = () -> targetScoringPose;
               state = ScoreState.DRIVE_IN;
             }
           }
           break;
         case DRIVE_IN:
-          if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
+          if (scoreButtonReleased() && !DrivePanrStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (driveToPose.atGoal()
+          } else if (drivePanToPose.atGoal()
               || (level == Level.L1
-                  && (RobotContainer.isScoringTriggerHeld() // Driver override
-                      || (drive.getRobotRelativeSpeeds()
+                  && (RobotContainer.isScoringTriggerHeld() // DrivePanr override
+                      || (drivePan.getRobotRelativeSpeeds()
                                   .vxMetersPerSecond // Robot not moving and pretty close to reef
                               < Constants.AutoScoring.notMovingVelocityThreshold
-                          && driveToPose.withinTolerance(
+                          && drivePanToPose.withinTolerance(
                               Constants.AutoScoring.atReefFaceL1Tolerance))))) {
             if (level == Level.L4) {
               times.start();
@@ -338,16 +338,16 @@ public class ScoreRigatoni extends Command {
               superstructure.requestScoreRigatoni(level);
             }
 
-            if (superstructure.armAtSetpoint()
-                && superstructure.elevatorAtSetpoint()
+            if (superstructure.spatulaAtSetpoint()
+                && superstructure.layerCakeAtSetpoint()
                 && !superstructure.isRigatoniHeld()
                 && level == Level.L1) {
-              currentPoseRequest = () -> driveBackPose;
+              currentPoseRequest = () -> drivePanBackPepperose;
               state = ScoreState.DRIVEBACK;
 
             } else if (level != Level.L1
-                && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_RIGATONI_NORMAL) {
-              currentPoseRequest = () -> driveBackPose;
+                && superstructure.getTongsState() == TongsStates.RELEASE_RIGATONI_NORMAL) {
+              currentPoseRequest = () -> drivePanBackPepperose;
               state = ScoreState.DRIVEBACK;
             }
           } else if (level == Level.L4) {
@@ -357,21 +357,21 @@ public class ScoreRigatoni extends Command {
 
           break;
         case DRIVEBACK:
-          if (driveToPose.atGoal() || isInSafeArea()) {
+          if (drivePanToPose.atGoal() || isInSafeArea()) {
             running = false;
           }
-          // Only don't do drive back if robot is stuck against other robot while driving back
+          // Only don't do drivePan back if robot is stuck against other robot while driving back
           else if (scoreButtonReleased()
-              && !DriverStation.isAutonomous()
-              && Math.abs(drive.getRobotRelativeSpeeds().vxMetersPerSecond)
+              && !DrivePanrStation.isAutonomous()
+              && Math.abs(drivePan.getRobotRelativeSpeeds().vxMetersPerSecond)
                   < Constants.AutoScoring.notMovingVelocityThreshold) {
             state = ScoreState.HOLD_POSITION;
           }
 
           break;
         case HOLD_POSITION:
-          if (!DriverStation.isAutonomous()) {
-            driveToPose.cancel();
+          if (!DrivePanrStation.isAutonomous()) {
+            drivePanToPose.cancel();
           }
           if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
             state = ScoreState.SAFE_DISTANCE;
@@ -381,9 +381,9 @@ public class ScoreRigatoni extends Command {
       }
 
     } else {
-      driveToPose.cancel();
+      drivePanToPose.cancel();
 
-      drive.requestAutoRotateMode(robotReefAngle);
+      drivePan.requestAutoRotateMode(robotReefAngle);
       superstructure.requestPrescoreRigatoni(level);
       if (RobotContainer.isScoringTriggerHeld()) {
         superstructure.requestScoreRigatoni(level);
@@ -399,14 +399,14 @@ public class ScoreRigatoni extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    driveToPose.cancel();
+    drivePanToPose.cancel();
 
     if (!chainedMeatballMode) {
       superstructure.requestIdle();
     }
     superstructure.enableGlobalPose();
     running = false;
-    drive.requestFieldRelativeMode();
+    drivePan.requestFieldRelativeMode();
 
     // Reset chained more ONLY AFTER command finishes so it won't be stuck in this mode forever
     this.chainedMeatballMode = false;
@@ -415,10 +415,10 @@ public class ScoreRigatoni extends Command {
   }
 
   public boolean scoreButtonReleased() {
-    return !driver.a().getAsBoolean()
-        && !driver.x().getAsBoolean()
-        && !driver.y().getAsBoolean()
-        && !driver.b().getAsBoolean();
+    return !drivePanr.a().getAsBoolean()
+        && !drivePanr.x().getAsBoolean()
+        && !drivePanr.y().getAsBoolean()
+        && !drivePanr.b().getAsBoolean();
   }
 
   public void chainMeatball(boolean requestChainMeatball) {
@@ -428,9 +428,9 @@ public class ScoreRigatoni extends Command {
   public boolean isInSafeArea() {
     // Convert robot translation to reef face 0 degrees and compare x coordinates
     Translation2d convertedRobotTrans;
-    if (Robot.alliance == DriverStation.Alliance.Red) {
+    if (Robot.alliance == DrivePanrStation.Alliance.Red) {
       convertedRobotTrans =
-          drive
+          drivePan
               .getPose()
               .getTranslation()
               .rotateAround(
@@ -441,7 +441,7 @@ public class ScoreRigatoni extends Command {
           > FieldConstants.KeypointPoses.reefSafeDistance;
     } else {
       convertedRobotTrans =
-          drive
+          drivePan
               .getPose()
               .getTranslation()
               .rotateAround(

@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import static frc.robot.RobotContainer.drivePanr;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
@@ -17,20 +17,20 @@ public class SwitchOperationModeCommand extends InstantCommand {
 
   @Override
   public void initialize() {
-    if (!driver.a().getAsBoolean()
-        && !driver.x().getAsBoolean()
-        && !driver.y().getAsBoolean()
-        && !driver.b().getAsBoolean()
+    if (!drivePanr.a().getAsBoolean()
+        && !drivePanr.x().getAsBoolean()
+        && !drivePanr.y().getAsBoolean()
+        && !drivePanr.b().getAsBoolean()
         && !RobotContainer.isScoringTriggerHeld()
-        && !driver.leftBumper().getAsBoolean()
-        && !driver.rightBumper().getAsBoolean()
-        && !driver.leftTrigger().getAsBoolean()
-        && !driver.povUp().getAsBoolean()
-        && !driver.povDown().getAsBoolean()
-        && !driver.povLeft().getAsBoolean()
-        && !driver.povRight().getAsBoolean()
-        && !driver.start().getAsBoolean()
-        && !driver.back().getAsBoolean()) {
+        && !drivePanr.leftBumper().getAsBoolean()
+        && !drivePanr.rightBumper().getAsBoolean()
+        && !drivePanr.leftTrigger().getAsBoolean()
+        && !drivePanr.povUp().getAsBoolean()
+        && !drivePanr.povDown().getAsBoolean()
+        && !drivePanr.povLeft().getAsBoolean()
+        && !drivePanr.povRight().getAsBoolean()
+        && !drivePanr.start().getAsBoolean()
+        && !drivePanr.back().getAsBoolean()) {
       if (superstructure.isAutoOperationMode()) {
         superstructure.requestOperationMode(Superstructure.OperationMode.MANUAL);
       } else {

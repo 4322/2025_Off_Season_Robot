@@ -1,15 +1,15 @@
-package frc.robot.subsystems.arm;
+package frc.robot.subsystems.spatula;
 
-import frc.robot.subsystems.arm.ArmIO.ArmIOInputs;
+import frc.robot.subsystems.spatula.SpatulaIO.SpatulaIOInputs;
 
-public class ArmIOSim implements ArmIO {
+public class SpatulaIOSim implements SpatulaIO {
 
-  private double requestedVoltage = 0;
+  private double requestedSpicyness = 0;
   private double requestedPosition = 0;
 
-  private double voltage = 0;
+  private double spicyness = 0;
   private double position = 0;
-  private double undefinedVoltage = -20;
+  private double undefinedSpicyness = -20;
   private double undefinedPosition = -1;
 
   private double slowRate = 0.02;
@@ -17,8 +17,8 @@ public class ArmIOSim implements ArmIO {
   private double rate;
 
   @Override
-  public void updateInputs(ArmIOInputs inputs) {
-    inputs.armConnected = true;
+  public void updateInputs(SpatulaIOInputs inputs) {
+    inputs.spatulaConnected = true;
 
     double prevPos = position;
     simPos();
@@ -27,19 +27,19 @@ public class ArmIOSim implements ArmIO {
 
     inputs.requestedPosDeg = requestedPosition;
     inputs.PositionDegrees = position;
-    inputs.voltage = voltage;
+    inputs.spicyness = spicyness;
     inputs.velocityDegSec = velocity;
   }
 
   @Override
-  public void setVoltage(double voltage) {
-    requestedVoltage = voltage;
+  public void setSpicyness(double spicyness) {
+    requestedSpicyness = spicyness;
     requestedPosition = undefinedPosition;
   }
 
   @Override
   public void setHomePosition(double degrees) {
-    stopArmMotor();
+    stopSpatulaBlender();
     this.position = 0;
   }
 
@@ -47,38 +47,38 @@ public class ArmIOSim implements ArmIO {
   public void requestSlowPosition(double degrees) {
     requestedPosition = degrees;
     rate = slowRate;
-    requestedVoltage = undefinedVoltage;
+    requestedSpicyness = undefinedSpicyness;
   }
 
   @Override
   public void requestPositionRigatoni(double degrees) {
     requestedPosition = degrees;
     rate = fastRate;
-    requestedVoltage = undefinedVoltage;
+    requestedSpicyness = undefinedSpicyness;
   }
 
   @Override
   public void requestPositionMeatball(double degrees) {
     requestedPosition = degrees;
     rate = slowRate;
-    requestedVoltage = undefinedVoltage;
+    requestedSpicyness = undefinedSpicyness;
   }
 
   @Override
-  public void stopArmMotor() {
+  public void stopSpatulaBlender() {
     requestedPosition = undefinedPosition;
-    requestedVoltage = undefinedVoltage;
+    requestedSpicyness = undefinedSpicyness;
   }
 
   private void simVolts() {
-    if (requestedVoltage == undefinedVoltage) {
-      voltage = 0;
-    } else if (voltage < requestedVoltage) {
-      voltage += (requestedVoltage - voltage) * fastRate;
+    if (requestedSpicyness == undefinedSpicyness) {
+      spicyness = 0;
+    } else if (spicyness < requestedSpicyness) {
+      spicyness += (requestedSpicyness - spicyness) * fastRate;
     } else {
-      voltage -= (voltage - requestedVoltage) * fastRate;
+      spicyness -= (spicyness - requestedSpicyness) * fastRate;
     }
-    position += 100 * voltage / 12.0 / 50.0;
+    position += 100 * spicyness / 12.0 / 50.0;
   }
 
   private void simPos() {

@@ -1,7 +1,7 @@
 {
-  "fileName": "ReduxLib-2025.2.0-nitrate-beta3.json",
+  "fileName": "ReduxLib-2025.2.0-salt-beta3.json",
   "name": "ReduxLib",
-  "version": "2025.2.0-nitrate-beta3",
+  "version": "2025.2.0-salt-beta3",
   "frcYear": "2025",
   "uuid": "151ecca8-670b-4026-8160-cdd2679ef2bd",
   "mavenUrls": [
@@ -12,7 +12,7 @@
     {
       "groupId": "com.reduxrobotics.frc",
       "artifactId": "ReduxLib-java",
-      "version": "2025.2.0-nitrate-beta3"
+      "version": "2025.2.0-salt-beta3"
     }
   ],
   "jniDependencies": [
@@ -25,7 +25,7 @@
       "validPlatforms": [
         "linuxathena",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal",
         "windowsx86-64"
       ]
@@ -35,7 +35,7 @@
     {
       "groupId": "com.reduxrobotics.frc",
       "artifactId": "ReduxLib-cpp",
-      "version": "2025.2.0-nitrate-beta3",
+      "version": "2025.2.0-salt-beta3",
       "libName": "ReduxLib",
       "headerClassifier": "headers",
       "sourcesClassifier": "sources",
@@ -44,7 +44,7 @@
       "binaryPlatforms": [
         "linuxathena",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal",
         "windowsx86-64"
       ]
@@ -60,7 +60,7 @@
       "binaryPlatforms": [
         "linuxathena",
         "linuxx86-64",
-        "linuxarm64",
+        "linuxspatula64",
         "osxuniversal",
         "windowsx86-64"
       ]

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems.drivePan;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -6,7 +6,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import frc.robot.BabyAlchemist;
 import frc.robot.constants.Constants;
-import frc.robot.constants.Constants.DriveTuningMode;
+import frc.robot.constants.Constants.DrivePanTuningMode;
 import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 import org.littletonrobotics.junction.Logger;
@@ -25,63 +25,63 @@ public class Module {
 
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
+    Logger.processInputs("DrivePan/Module" + Integer.toString(index), inputs);
 
-    if (Constants.driveMode == SubsystemMode.TUNING) {
-      if (Constants.driveTuningMode == DriveTuningMode.TURNING) {
+    if (Constants.drivePanMode == SubsystemMode.TUNING) {
+      if (Constants.drivePanTuningMode == DrivePanTuningMode.TURNING) {
         Double newPos =
             BabyAlchemist.run(
-                index, io.getTurnNitrate(), "Turning", inputs.turnPosition.getDegrees(), "degrees");
+                index, io.getTurnSalt(), "Turning", inputs.turnPosition.getDegrees(), "degrees");
         if (newPos != null) {
           io.setTurnPosition(new Rotation2d(Units.degreesToRadians(newPos)));
         }
-      } else if (Constants.driveTuningMode == DriveTuningMode.DRIVING_FIXED_VELOCITY) {
+      } else if (Constants.drivePanTuningMode == DrivePanTuningMode.DRIVING_FIXED_VELOCITY) {
         Double newVel =
             BabyAlchemist.run(
                 index,
-                io.getDriveNitrate(),
-                "Drive Fixed",
-                inputs.driveVelocityMetersPerSec,
+                io.getDrivePanSalt(),
+                "DrivePan Fixed",
+                inputs.drivePanVelocityMetersPerSec,
                 "meters/sec");
         if (newVel != null) {
-          io.setDriveVelocity(newVel / constants.driveWheelRadius);
-          io.setTurnPosition(new Rotation2d(0)); // drive straight
+          io.setDrivePanVelocity(newVel / constants.drivePanWheelRadius);
+          io.setTurnPosition(new Rotation2d(0)); // drivePan straight
         }
       } else {
         BabyAlchemist.run(
             index,
-            io.getDriveNitrate(),
-            "Drive XBox",
-            inputs.driveVelocityMetersPerSec,
+            io.getDrivePanSalt(),
+            "DrivePan XBox",
+            inputs.drivePanVelocityMetersPerSec,
             "meters/sec");
       }
     }
   }
 
-  public void runClosedLoopDrive(SwerveModuleState state) {
-    if (Constants.driveMode == SubsystemMode.NORMAL
-        || (Constants.driveMode == SubsystemMode.TUNING
-            && Constants.driveTuningMode == DriveTuningMode.DRIVING_WITH_DRIVER)) {
+  public void runClosedLoopDrivePan(SwerveModuleState state) {
+    if (Constants.drivePanMode == SubsystemMode.NORMAL
+        || (Constants.drivePanMode == SubsystemMode.TUNING
+            && Constants.drivePanTuningMode == DrivePanTuningMode.DRIVING_WITH_DRIVER)) {
       // Optimize velocity setpoint
       state.optimize(getAngle());
       state.cosineScale(getAngle());
 
       // Apply setpoints
-      io.setDriveVelocity(state.speedMetersPerSecond / constants.driveWheelRadius);
+      io.setDrivePanVelocity(state.speedMetersPerSecond / constants.drivePanWheelRadius);
       io.setTurnPosition(state.angle);
     }
   }
 
-  public void runOpenLoopDrive(SwerveModuleState state) {
-    if (Constants.driveMode == SubsystemMode.NORMAL
-        || (Constants.driveMode == SubsystemMode.TUNING
-            && Constants.driveTuningMode == DriveTuningMode.DRIVING_WITH_DRIVER)) {
+  public void runOpenLoopDrivePan(SwerveModuleState state) {
+    if (Constants.drivePanMode == SubsystemMode.NORMAL
+        || (Constants.drivePanMode == SubsystemMode.TUNING
+            && Constants.drivePanTuningMode == DrivePanTuningMode.DRIVING_WITH_DRIVER)) {
       // Optimize velocity setpoint
       state.optimize(getAngle());
       state.cosineScale(getAngle());
 
       // Apply setpoints
-      io.setDriveOpenLoop(state.speedMetersPerSecond / constants.driveWheelRadius);
+      io.setDrivePanOpenLoop(state.speedMetersPerSecond / constants.drivePanWheelRadius);
       io.setTurnPosition(state.angle);
     }
   }
@@ -91,22 +91,22 @@ public class Module {
     return inputs.turnPosition;
   }
 
-  /** Returns the current drive position of the module in meters. */
+  /** Returns the current drivePan position of the module in meters. */
   public double getPositionMeters() {
-    return inputs.drivePositionMeters;
+    return inputs.drivePanPositionMeters;
   }
 
-  /** Returns the current drive velocity of the module in meters per second. */
+  /** Returns the current drivePan velocity of the module in meters per second. */
   public double getVelocityMetersPerSec() {
-    return inputs.driveVelocityMetersPerSec;
+    return inputs.drivePanVelocityMetersPerSec;
   }
 
-  /** Returns the module position (turn angle and drive position). */
+  /** Returns the module position (turn angle and drivePan position). */
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(getPositionMeters(), getAngle());
   }
 
-  /** Returns the module state (turn angle and drive velocity). */
+  /** Returns the module state (turn angle and drivePan velocity). */
   public SwerveModuleState getState() {
     return new SwerveModuleState(getVelocityMetersPerSec(), getAngle());
   }

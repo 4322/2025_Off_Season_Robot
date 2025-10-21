@@ -3,57 +3,57 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DrivePanrStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxRecipe;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxRecipe;
 import frc.robot.autonomous.AutonomousSelector;
 import frc.robot.commands.MeatballIntakeGround;
 import frc.robot.commands.MeatballScoreCommand;
 import frc.robot.commands.DescoreMeatball;
-import frc.robot.commands.DriveManual;
-import frc.robot.commands.DriveToPose;
+import frc.robot.commands.DrivePanManual;
+import frc.robot.commands.DrivePanToPose;
 import frc.robot.commands.Eject;
 import frc.robot.commands.EmergencyInitilization;
 import frc.robot.commands.ScoreRigatoni;
 import frc.robot.commands.SwitchOperationModeCommand;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.SubsystemMode;
-import frc.robot.constants.DrivetrainConstants;
+import frc.robot.constants.DrivePantrainConstants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
-import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.ArmIO;
-import frc.robot.subsystems.arm.ArmIOSim;
-import frc.robot.subsystems.arm.ArmIOTalonFX;
+import frc.robot.subsystems.spatula.Spatula;
+import frc.robot.subsystems.spatula.SpatulaIO;
+import frc.robot.subsystems.spatula.SpatulaIOSim;
+import frc.robot.subsystems.spatula.SpatulaIOTalonFX;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.deployer.DeployerIO;
-import frc.robot.subsystems.deployer.DeployerIONitrate;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.GyroIO;
-import frc.robot.subsystems.drive.GyroIOBoron;
-import frc.robot.subsystems.drive.ModuleIO;
-import frc.robot.subsystems.drive.ModuleIONitrate;
-import frc.robot.subsystems.drive.ModuleIOSim;
-import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIONitrate;
-import frc.robot.subsystems.elevator.ElevatorIOSim;
-import frc.robot.subsystems.endEffector.EndEffector;
-import frc.robot.subsystems.endEffector.EndEffectorIO;
-import frc.robot.subsystems.endEffector.EndEffectorIOSim;
-import frc.robot.subsystems.endEffector.EndEffectorIOTalonFX;
-import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.indexer.IndexerIO;
-import frc.robot.subsystems.indexer.IndexerIOSim;
-import frc.robot.subsystems.indexer.IndexerIOTalonFX;
-import frc.robot.subsystems.rollers.Rollers;
-import frc.robot.subsystems.rollers.RollersIO;
-import frc.robot.subsystems.rollers.RollersIONitrate;
+import frc.robot.subsystems.deployer.DeployerIOSalt;
+import frc.robot.subsystems.drivePan.DrivePan;
+import frc.robot.subsystems.drivePan.GyroWrapIO;
+import frc.robot.subsystems.drivePan.GyroWrapIOBoron;
+import frc.robot.subsystems.drivePan.ModuleIO;
+import frc.robot.subsystems.drivePan.ModuleIOSalt;
+import frc.robot.subsystems.drivePan.ModuleIOSim;
+import frc.robot.subsystems.layerCake.LayerCake;
+import frc.robot.subsystems.layerCake.LayerCakeIO;
+import frc.robot.subsystems.layerCake.LayerCakeIOSalt;
+import frc.robot.subsystems.layerCake.LayerCakeIOSim;
+import frc.robot.subsystems.tongs.Tongs;
+import frc.robot.subsystems.tongs.TongsIO;
+import frc.robot.subsystems.tongs.TongsIOSim;
+import frc.robot.subsystems.tongs.TongsIOTalonFX;
+import frc.robot.subsystems.pastaWheels.PastaWheels;
+import frc.robot.subsystems.pastaWheels.PastaWheelsIO;
+import frc.robot.subsystems.pastaWheels.PastaWheelsIOSim;
+import frc.robot.subsystems.pastaWheels.PastaWheelsIOTalonFX;
+import frc.robot.subsystems.rollingPins.RollingPins;
+import frc.robot.subsystems.rollingPins.RollingPinsIO;
+import frc.robot.subsystems.rollingPins.RollingPinsIOSalt;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
@@ -68,26 +68,26 @@ import frc.robot.util.ReefStatus;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  public static CommandXboxController driver = new CommandXboxController(0);
-  private static CommandXboxController sim1;
+  public static CommandXboxRecipe drivePanr = new CommandXboxRecipe(0);
+  private static CommandXboxRecipe sim1;
 
   private static Vision vision;
   private static ReefStatus reefStatus;
-  private static DriveToPose drivetopose;
+  private static DrivePanToPose drivePantopose;
   private static ScoreRigatoni lastScoreRigatoni;
   private static ScoreRigatoni scoreL1Rigatoni;
   private static ScoreRigatoni scoreL2Rigatoni;
   private static ScoreRigatoni scoreL3Rigatoni;
   private static ScoreRigatoni scoreL4Rigatoni;
-  private static Drive drive;
-  private static Arm arm;
-  private static EndEffector endEffector;
-  private static Indexer indexer;
-  private static Rollers rollers;
+  private static DrivePan drivePan;
+  private static Spatula spatula;
+  private static Tongs tongs;
+  private static PastaWheels pastaWheels;
+  private static RollingPins rollingPins;
   private static Deployer deployer;
   private static IntakeSuperstructure intakeSuperstructure;
   private static Superstructure superstructure;
-  private static Elevator elevator;
+  private static LayerCake layerCake;
   public boolean requestedMeatballDescore;
 
   public static AutonomousSelector autonomousSelector;
@@ -96,41 +96,41 @@ public class RobotContainer {
   public RobotContainer() {
 
     if (Constants.currentMode == Constants.RobotMode.SIM) {
-      drive =
-          new Drive(
-              new GyroIO() {},
-              new ModuleIOSim(DrivetrainConstants.frontLeft),
-              new ModuleIOSim(DrivetrainConstants.frontRight),
-              new ModuleIOSim(DrivetrainConstants.backLeft),
-              new ModuleIOSim(DrivetrainConstants.backRight));
-      vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
-      sim1 = new CommandXboxController(1);
+      drivePan =
+          new DrivePan(
+              new GyroWrapIO() {},
+              new ModuleIOSim(DrivePantrainConstants.frontLeft),
+              new ModuleIOSim(DrivePantrainConstants.frontRight),
+              new ModuleIOSim(DrivePantrainConstants.backLeft),
+              new ModuleIOSim(DrivePantrainConstants.backRight));
+      vision = new Vision(drivePan, new VisionIO() {}, new VisionIO() {});
+      sim1 = new CommandXboxRecipe(1);
 
-      elevator = new Elevator(new ElevatorIOSim());
-      arm = new Arm(new ArmIOSim());
-      endEffector = new EndEffector(new EndEffectorIOSim());
-      indexer = new Indexer(new IndexerIOSim());
+      layerCake = new LayerCake(new LayerCakeIOSim());
+      spatula = new Spatula(new SpatulaIOSim());
+      tongs = new Tongs(new TongsIOSim());
+      pastaWheels = new PastaWheels(new PastaWheelsIOSim());
 
-      rollers = new Rollers(new RollersIO() {});
+      rollingPins = new RollingPins(new RollingPinsIO() {});
       deployer = new Deployer(new DeployerIO() {});
 
     } else {
 
-      if (Constants.driveMode != SubsystemMode.DISABLED
+      if (Constants.drivePanMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
 
-        GyroIOBoron gyro = new GyroIOBoron();
-        drive =
-            new Drive(
+        GyroWrapIOBoron gyro = new GyroWrapIOBoron();
+        drivePan =
+            new DrivePan(
                 gyro,
-                new ModuleIONitrate(DrivetrainConstants.frontLeft, gyro),
-                new ModuleIONitrate(DrivetrainConstants.frontRight, gyro),
-                new ModuleIONitrate(DrivetrainConstants.backLeft, gyro),
-                new ModuleIONitrate(DrivetrainConstants.backRight, gyro));
+                new ModuleIOSalt(DrivePantrainConstants.frontLeft, gyro),
+                new ModuleIOSalt(DrivePantrainConstants.frontRight, gyro),
+                new ModuleIOSalt(DrivePantrainConstants.backLeft, gyro),
+                new ModuleIOSalt(DrivePantrainConstants.backRight, gyro));
       } else {
-        drive =
-            new Drive(
-                new GyroIO() {},
+        drivePan =
+            new DrivePan(
+                new GyroWrapIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {},
@@ -140,136 +140,136 @@ public class RobotContainer {
       if (Constants.visionEnabled && Constants.currentMode == Constants.RobotMode.REAL) {
         vision =
             new Vision(
-                drive,
+                drivePan,
                 new VisionIOPhotonVision(
                     Constants.Vision.leftCamName, Constants.Vision.leftCameraTransform),
                 new VisionIOPhotonVision(
                     Constants.Vision.rightCamName, Constants.Vision.rightCameraTransform));
       } else {
-        vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
+        vision = new Vision(drivePan, new VisionIO() {}, new VisionIO() {});
       }
 
-      if (Constants.armMode != SubsystemMode.DISABLED
+      if (Constants.spatulaMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        arm = new Arm(new ArmIOTalonFX());
+        spatula = new Spatula(new SpatulaIOTalonFX());
       } else {
-        arm = new Arm(new ArmIO() {});
+        spatula = new Spatula(new SpatulaIO() {});
       }
 
-      if (Constants.elevatorMode != SubsystemMode.DISABLED
+      if (Constants.layerCakeMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        elevator = new Elevator(new ElevatorIONitrate());
+        layerCake = new LayerCake(new LayerCakeIOSalt());
       } else {
-        elevator = new Elevator(new ElevatorIO() {});
+        layerCake = new LayerCake(new LayerCakeIO() {});
       }
 
-      if (Constants.indexerMode != SubsystemMode.DISABLED
+      if (Constants.pastaWheelsMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        indexer = new Indexer(new IndexerIOTalonFX());
+        pastaWheels = new PastaWheels(new PastaWheelsIOTalonFX());
       } else {
-        indexer = new Indexer(new IndexerIO() {});
+        pastaWheels = new PastaWheels(new PastaWheelsIO() {});
       }
 
-      if (Constants.rollersMode != SubsystemMode.DISABLED
+      if (Constants.rollingPinsMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        rollers = new Rollers(new RollersIONitrate());
+        rollingPins = new RollingPins(new RollingPinsIOSalt());
       } else {
-        rollers = new Rollers(new RollersIO() {});
+        rollingPins = new RollingPins(new RollingPinsIO() {});
       }
 
-      if (Constants.endEffectorMode != SubsystemMode.DISABLED
+      if (Constants.tongsMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        endEffector = new EndEffector(new EndEffectorIOTalonFX());
+        tongs = new Tongs(new TongsIOTalonFX());
       } else {
-        endEffector = new EndEffector(new EndEffectorIO() {});
+        tongs = new Tongs(new TongsIO() {});
       }
 
       if (Constants.deployerMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        deployer = new Deployer(new DeployerIONitrate());
+        deployer = new Deployer(new DeployerIOSalt());
       } else {
         deployer = new Deployer(new DeployerIO() {});
       }
     }
 
-    intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
-    superstructure = new Superstructure(endEffector, arm, elevator, intakeSuperstructure, vision);
+    intakeSuperstructure = new IntakeSuperstructure(tongs, deployer, rollingPins, pastaWheels);
+    superstructure = new Superstructure(tongs, spatula, layerCake, intakeSuperstructure, vision);
 
-    // Configure the button bindings
-    configureButtonBindings();
+    // Recipeure the button bindings
+    recipeureButtonBindings();
   }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxRecipe}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
-    drive.setDefaultCommand(new DriveManual(drive));
+  private void recipeureButtonBindings() {
+    drivePan.setDefaultCommand(new DrivePanManual(drivePan));
 
-    scoreL1Rigatoni = new ScoreRigatoni(superstructure, Level.L1, drive, false);
-    scoreL2Rigatoni = new ScoreRigatoni(superstructure, Level.L2, drive, false);
-    scoreL3Rigatoni = new ScoreRigatoni(superstructure, Level.L3, drive, false);
-    scoreL4Rigatoni = new ScoreRigatoni(superstructure, Level.L4, drive, false);
+    scoreL1Rigatoni = new ScoreRigatoni(superstructure, Level.L1, drivePan, false);
+    scoreL2Rigatoni = new ScoreRigatoni(superstructure, Level.L2, drivePan, false);
+    scoreL3Rigatoni = new ScoreRigatoni(superstructure, Level.L3, drivePan, false);
+    scoreL4Rigatoni = new ScoreRigatoni(superstructure, Level.L4, drivePan, false);
     lastScoreRigatoni = scoreL1Rigatoni;
     // The commands deal with the on False logic if the button is no longer held
 
-    driver
+    drivePanr
         .start()
         .onTrue(
             new InstantCommand(
                     () -> {
                       if (Robot.alliance == Alliance.Blue) {
-                        drive.resetPose(new Pose2d());
+                        drivePan.resetPose(new Pose2d());
                       } else {
-                        drive.resetPose(new Pose2d(new Translation2d(), new Rotation2d(Math.PI)));
+                        drivePan.resetPose(new Pose2d(new Translation2d(), new Rotation2d(Math.PI)));
                       }
                     })
                 .ignoringDisable(true));
 
-    driver
+    drivePanr
         .povUp()
-        .whileTrue(new Eject(intakeSuperstructure, superstructure, drive)); // Intake Eject
+        .whileTrue(new Eject(intakeSuperstructure, superstructure, drivePan)); // Intake Eject
 
-    driver
+    drivePanr
         .povDown()
-        .whileTrue(new Eject(intakeSuperstructure, superstructure, drive)); // Score Eject
+        .whileTrue(new Eject(intakeSuperstructure, superstructure, drivePan)); // Score Eject
 
     // Prescore/Descore Levels
-    driver
+    drivePanr
         .a()
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasRigatoni() && !endEffector.hasMeatball()) {
+                  if (!tongs.hasRigatoni() && !tongs.hasMeatball()) {
                     new MeatballIntakeGround(superstructure).schedule();
-                  } else if ((endEffector.hasRigatoni() && !endEffector.hasMeatball())
+                  } else if ((tongs.hasRigatoni() && !tongs.hasMeatball())
                       && !lastScoreRigatoni.isScheduled()) {
                     scoreL1Rigatoni.schedule();
                     lastScoreRigatoni = scoreL1Rigatoni;
                   }
                 }));
-    driver
+    drivePanr
         .x()
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasRigatoni()
-                      && !endEffector.hasMeatball()
+                  if (!tongs.hasRigatoni()
+                      && !tongs.hasMeatball()
                       && !lastScoreRigatoni.isScheduled()) {
-                    new DescoreMeatball(superstructure, drive).schedule();
-                  } else if ((endEffector.hasRigatoni() && !endEffector.hasMeatball())
+                    new DescoreMeatball(superstructure, drivePan).schedule();
+                  } else if ((tongs.hasRigatoni() && !tongs.hasMeatball())
                       && !lastScoreRigatoni.isScheduled()) {
                     new OrangeSequentialCommandGroup(
                             scoreL2Rigatoni,
-                            new DescoreMeatball(superstructure, drive)
-                                .onlyIf(() -> driver.y().getAsBoolean()))
+                            new DescoreMeatball(superstructure, drivePan)
+                                .onlyIf(() -> drivePanr.y().getAsBoolean()))
                         .schedule();
                     lastScoreRigatoni = scoreL2Rigatoni;
                   }
                 }));
-    driver
+    drivePanr
         .y()
         .onTrue(
             new InstantCommand(
@@ -277,9 +277,9 @@ public class RobotContainer {
                   if (lastScoreRigatoni.isScheduled()) {
                     lastScoreRigatoni.chainMeatball(true);
                   } else {
-                    if (!endEffector.hasRigatoni() && !endEffector.hasMeatball()) {
-                      new DescoreMeatball(superstructure, drive).schedule();
-                    } else if ((endEffector.hasRigatoni() && !endEffector.hasMeatball())
+                    if (!tongs.hasRigatoni() && !tongs.hasMeatball()) {
+                      new DescoreMeatball(superstructure, drivePan).schedule();
+                    } else if ((tongs.hasRigatoni() && !tongs.hasMeatball())
                         && !lastScoreRigatoni.isScheduled()) {
                       scoreL3Rigatoni.schedule();
                       lastScoreRigatoni = scoreL3Rigatoni;
@@ -287,32 +287,32 @@ public class RobotContainer {
                   }
                 }));
 
-    driver
+    drivePanr
         .b()
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasRigatoni() && endEffector.hasMeatball()) {
-                    new MeatballScoreCommand(superstructure, drive).schedule();
-                  } else if (endEffector.hasRigatoni()
-                      && !endEffector.hasMeatball()
+                  if (!tongs.hasRigatoni() && tongs.hasMeatball()) {
+                    new MeatballScoreCommand(superstructure, drivePan).schedule();
+                  } else if (tongs.hasRigatoni()
+                      && !tongs.hasMeatball()
                       && !lastScoreRigatoni.isScheduled()) {
                     new OrangeSequentialCommandGroup(
                             scoreL4Rigatoni,
-                            new DescoreMeatball(superstructure, drive)
-                                .onlyIf(() -> driver.y().getAsBoolean()))
+                            new DescoreMeatball(superstructure, drivePan)
+                                .onlyIf(() -> drivePanr.y().getAsBoolean()))
                         .schedule();
                     lastScoreRigatoni = scoreL4Rigatoni;
                   }
                 }));
-    driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
-    driver
+    drivePanr.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
+    drivePanr
         .back()
         .onTrue(
             new EmergencyInitilization(
-                superstructure, intakeSuperstructure, arm, elevator, deployer, drive));
+                superstructure, intakeSuperstructure, spatula, layerCake, deployer, drivePan));
 
-    driver
+    drivePanr
         .leftTrigger()
         .onTrue(
             new InstantCommand(
@@ -331,8 +331,8 @@ public class RobotContainer {
                         intakeSuperstructure.getIntakeSuperstate()
                             != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
 
-    if (Constants.enableDriveToPoseTuning) {
-      driver
+    if (Constants.enableDrivePanToPoseTuning) {
+      drivePanr
           .povRight()
           .onTrue(
               new InstantCommand(
@@ -353,46 +353,46 @@ public class RobotContainer {
                       vision.enableSingleTagSingleCam(
                           FieldConstants.ReefFaceTag.AB.idRed, SingleTagCamera.LEFT);
                     }
-                    drivetopose = new DriveToPose(drive, new Pose2d(scoringPos, rotation));
-                    drivetopose.schedule();
+                    drivePantopose = new DrivePanToPose(drivePan, new Pose2d(scoringPos, rotation));
+                    drivePantopose.schedule();
                   }));
 
-      driver
+      drivePanr
           .povRight()
           .onFalse(
               new InstantCommand(
                   () -> {
-                    if (drivetopose.isScheduled()) {
-                      drivetopose.cancel();
+                    if (drivePantopose.isScheduled()) {
+                      drivePantopose.cancel();
                     }
                     vision.enableGlobalPose();
                     ;
                   }));
     }
     if (Constants.tuneAutoRotate) {
-      driver
+      drivePanr
           .leftBumper()
           .onTrue(
               new InstantCommand(
                   () -> {
-                    drive.requestAutoRotateMode(Rotation2d.kZero);
+                    drivePan.requestAutoRotateMode(Rotation2d.kZero);
                   }));
-      driver
+      drivePanr
           .leftBumper()
           .onFalse(
               new InstantCommand(
                   () -> {
-                    drive.requestFieldRelativeMode();
+                    drivePan.requestFieldRelativeMode();
                   }));
     } else {
-      driver
+      drivePanr
           .leftBumper()
           .onTrue(
               new InstantCommand(
                   () -> {
                     intakeSuperstructure.requestIdexerEject();
                   }));
-      driver
+      drivePanr
           .rightBumper()
           .onTrue(
               new InstantCommand(
@@ -406,7 +406,7 @@ public class RobotContainer {
     if (Constants.currentMode == Constants.RobotMode.SIM) {
       return sim1.a().getAsBoolean();
     } else {
-      return driver.rightTrigger().getAsBoolean();
+      return drivePanr.rightTrigger().getAsBoolean();
     }
   }
 
@@ -423,8 +423,8 @@ public class RobotContainer {
     return autonomousSelector.get();
   }
 
-  public void configureAutonomousSelector() {
+  public void recipeureAutonomousSelector() {
     autonomousSelector =
-        new AutonomousSelector(drive, superstructure, intakeSuperstructure, vision);
+        new AutonomousSelector(drivePan, superstructure, intakeSuperstructure, vision);
   }
 }

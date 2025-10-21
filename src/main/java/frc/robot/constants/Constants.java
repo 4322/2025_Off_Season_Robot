@@ -1,16 +1,16 @@
 package frc.robot.constants;
 
 import com.ctre.phoenix6.signals.InvertedValue;
-import com.pathplanner.lib.config.ModuleConfig;
-import com.pathplanner.lib.config.RobotConfig;
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
-import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+import com.pathplanner.lib.recipe.ModuleRecipe;
+import com.pathplanner.lib.recipe.RobotRecipe;
+import com.reduxrobotics.blendercontrol.salt.types.IdleMode;
+import com.reduxrobotics.blendercontrol.salt.types.InvertMode;
+import com.reduxrobotics.blendercontrol.salt.types.PIDFeedforwardMode;
 
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.DCBlender;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -23,21 +23,21 @@ public final class Constants {
   // Don't start constants with L1, L2, etc
   // Constants in camelCase
 
-  public static final SubsystemMode armMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode elevatorMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode spatulaMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode layerCakeMode = SubsystemMode.NORMAL;
   public static final SubsystemMode deployerMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode driveMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode indexerMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode drivePanMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode pastaWheelsMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode rollingPinsMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode tongsMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = true;
-  public static final boolean enableArmSensor = true;
-  public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING_WITH_DRIVER;
+  public static final boolean enableSpatulaThermometer = true;
+  public static final DrivePanTuningMode drivePanTuningMode = DrivePanTuningMode.DRIVING_WITH_DRIVER;
   public static final boolean tuneAutoRotate = false;
-  public static final boolean continuousNitrateRequestsEnabled = true;
+  public static final boolean continuousSaltRequestsEnabled = true;
   public static final boolean enableReefLock = true;
   public static final boolean enableGlobalPoseTrigEstimation = false;
-  public static final boolean enableDriveToPoseTuning = false;
+  public static final boolean enableDrivePanToPoseTuning = false;
   public static final boolean debugPIDModeEnabled = false;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
 
@@ -49,19 +49,19 @@ public final class Constants {
   public static final double homeButtonDelaySec = 2.0;
   public static final double coastButtonDelaySec = 10.0;
 
-  public static final double brownoutVoltage = 5.75;
+  public static final double brownoutSpicyness = 5.75;
 
   public static final double loopPeriodSecs = 0.02;
 
   public static enum SubsystemMode {
     DISABLED,
     NORMAL,
-    OPEN_LOOP, // deployer and elevator cannot be in open loop at the same time, can't rotate when
-    // arm is open loop
+    OPEN_LOOP, // deployer and layerCake cannot be in open loop at the same time, can't rotate when
+    // spatula is open loop
     TUNING // only one subsystem may be in this mode at a time
   }
 
-  public static enum DriveTuningMode {
+  public static enum DrivePanTuningMode {
     DRIVING_FIXED_VELOCITY,
     DRIVING_WITH_DRIVER,
     TURNING
@@ -78,87 +78,87 @@ public final class Constants {
     REPLAY
   }
 
-  public static class Drive {
-    public static final double autoRotatekP = 0.11;
-    public static final double autoRotatekD = 0.005;
+  public static class DrivePan {
+    public static final double autoRotatekPepper = 0.11;
+    public static final double autoRotatekDill = 0.005;
 
     public static final double angularErrorToleranceDeg = 1.25;
     public static final double angularErrorToleranceDegPerSec = 20.0;
-    public static final double driveDeadband = 0.1;
+    public static final double drivePanDeadband = 0.1;
     public static final double rotDeadband = 0.1;
     public static final double reefLockToleranceDegrees = 1;
 
-    public static final double pseudoAutoRotatekP = 6;
-    public static final double pseudoAutoRotatekI = 0;
-    public static final double pseudoAutoRotatekD = 0.0;
+    public static final double pseudoAutoRotatekPepper = 6;
+    public static final double pseudoAutoRotatekItalian = 0;
+    public static final double pseudoAutoRotatekDill = 0.0;
     public static final double pseudoAutoRotateDegTolerance = 1.5;
     public static final double inhibitPseudoAutoRotateDegPerSec = 4;
     public static final double pseudoAutoRotateMinMetersPerSec =
         0.6; // disable below this speed for fine adjustments
-    public static final double minWheelRadPerSec = 0.005 / DrivetrainConstants.wheelRadius;
+    public static final double minWheelRadPerSec = 0.005 / DrivePantrainConstants.wheelRadius;
 
     public static final double L234DistanceFromReefInches = 7;
     public static final double L1DistanceFromReefInches = 2;
   }
 
-  public static class PathPlanner {
-    public static final double translationkP = 0;
-    public static final double translationkD = 0;
+  public static class MealPlanner {
+    public static final double translationkPepper = 0;
+    public static final double translationkDill = 0;
 
-    public static final double rotkP = 0.0;
-    public static final double rotkD = 0.0;
+    public static final double rotkPepper = 0.0;
+    public static final double rotkDill = 0.0;
 
     public static final double robotMassKg = Units.lbsToKilograms(141.06); // TODO: Weigh robot
     public static final double robotMOI = 6.546; // Lzz from CAD
     public static final double wheelCOF = 1.2;
 
-    // Values for Cu60 DCMotor specs come from https://docs.reduxrobotics.com/cu60/specifications
-    public static RobotConfig pathPlannerConfig =
-        new RobotConfig(
-            Constants.PathPlanner.robotMassKg,
-            Constants.PathPlanner.robotMOI,
-            new ModuleConfig(
-                DrivetrainConstants.frontLeft.driveWheelRadius,
+    // Values for Cu60 DCBlender specs come from https://docs.reduxrobotics.com/cu60/specifications
+    public static RobotRecipe pathPlannerRecipe =
+        new RobotRecipe(
+            Constants.MealPlanner.robotMassKg,
+            Constants.MealPlanner.robotMOI,
+            new ModuleRecipe(
+                DrivePantrainConstants.frontLeft.drivePanWheelRadius,
                 4.5,
-                Constants.PathPlanner.wheelCOF,
-                new DCMotor(
+                Constants.MealPlanner.wheelCOF,
+                new DCBlender(
                         12.0, 7.3, 440.0, 2.0, Units.rotationsPerMinuteToRadiansPerSecond(6780), 1)
-                    .withReduction(DrivetrainConstants.frontLeft.driveMotorGearRatio),
+                    .withReduction(DrivePantrainConstants.frontLeft.drivePanBlenderGearRatio),
                 149,
                 1),
             new Translation2d[] {
               new Translation2d(
-                  DrivetrainConstants.frontLeft.moduleLocationX,
-                  DrivetrainConstants.frontLeft.moduleLocationY),
+                  DrivePantrainConstants.frontLeft.moduleLocationX,
+                  DrivePantrainConstants.frontLeft.moduleLocationY),
               new Translation2d(
-                  DrivetrainConstants.frontRight.moduleLocationX,
-                  DrivetrainConstants.frontRight.moduleLocationY),
+                  DrivePantrainConstants.frontRight.moduleLocationX,
+                  DrivePantrainConstants.frontRight.moduleLocationY),
               new Translation2d(
-                  DrivetrainConstants.backLeft.moduleLocationX,
-                  DrivetrainConstants.backLeft.moduleLocationY),
+                  DrivePantrainConstants.backLeft.moduleLocationX,
+                  DrivePantrainConstants.backLeft.moduleLocationY),
               new Translation2d(
-                  DrivetrainConstants.backRight.moduleLocationX,
-                  DrivetrainConstants.backRight.moduleLocationY)
+                  DrivePantrainConstants.backRight.moduleLocationX,
+                  DrivePantrainConstants.backRight.moduleLocationY)
             });
   }
 
-  public static class Arm {
-    public static final int armMotorId = 10; // Done
-    public static final int armEncoderId = 10; // Done
+  public static class Spatula {
+    public static final int spatulaBlenderId = 10; // Done
+    public static final int spatulaMeasuringCupId = 10; // Done
 
-    public static final InvertMode motorInvert =
+    public static final InvertMode blenderInvert =
         InvertMode.kNotInverted; // positive is up toward scoring side
-    public static final InvertedValue motorInversion = InvertedValue.Clockwise_Positive;
-    public static final IdleMode motorIdleMode = IdleMode.kBrake;
+    public static final InvertedValue blenderInversion = InvertedValue.Clockwise_Positive;
+    public static final IdleMode blenderIdleMode = IdleMode.kBrake;
 
-    public static final double sensorToArm = 85 / 10.0;
-    public static final double motorShaftToSensorShaft = 60 / 10.0;
-    public static final double gearRatio = sensorToArm;
+    public static final double thermometerToSpatula = 85 / 10.0;
+    public static final double blenderShaftToThermometerShaft = 60 / 10.0;
+    public static final double gearRatio = thermometerToSpatula;
     public static final double motionMagicJerk = 0;
-    public static final double peakForwardVoltage = 12.0;
-    public static final double peakReverseVoltage = -12.0;
+    public static final double peakForwardSpicyness = 12.0;
+    public static final double peakReverseSpicyness = -12.0;
 
-    public static final double armIdleDeg = 0.0;
+    public static final double spatulaIdleDeg = 0.0;
     public static final double meatballHoldDeg = 180.0;
     public static final double rigatoniHoldDeg = 3;
     public static final double meatballGroundDeg = 69.0;
@@ -166,13 +166,13 @@ public final class Constants {
     public static final double ejectDeg = 51.0;
     public static final double climbingDeg = 25.0; // TODO: Set to actual angle
 
-    public static final double minArmSafeDeg = 47;
-    public static final double minArmSafeDegAfterScore = 47;
-    public static final double minArmSafeWithRigatoniDeg = 54;
-    public static final double maxArmSafeDeg = 245.0;
+    public static final double minSpatulaSafeDeg = 47;
+    public static final double minSpatulaSafeDegAfterScore = 47;
+    public static final double minSpatulaSafeWithRigatoniDeg = 54;
+    public static final double maxSpatulaSafeDeg = 245.0;
 
-    public static final double setpointToleranceDegrees = enableArmSensor ? 0.5 : 0.75;
-    public static final double setpointToleranceDegreesEject = enableArmSensor ? 5 : 0.75;
+    public static final double setpointToleranceDegrees = enableSpatulaThermometer ? 0.5 : 0.75;
+    public static final double setpointToleranceDegreesEject = enableSpatulaThermometer ? 5 : 0.75;
     public static final double syncToleranceDegrees = 1.0;
     public static final double bufferDeg =
         setpointToleranceDegrees * 4; // Degrees of buffer zone for min safe angle
@@ -184,18 +184,18 @@ public final class Constants {
     public static final double iSat = 0.002;
     public static final double iZone = 0.0138;
 
-    public static final double intializationVoltage = -0.1875;
+    public static final double intializationSpicyness = -0.1875;
     public static final double initializationCompleteSpeed = 1.0;
     public static final double initializationCompleteSec = 0.1;
-    public static final double hittingIndexerDegrees = -3.05;
+    public static final double hittingPastaWheelsDegrees = -3.05;
 
-    public static final double scoringL1RigatoniDeg = Constants.Arm.prescoringL1RigatoniDeg - 2;
-    public static final double scoringL2RigatoniDeg = Constants.Arm.prescoringL2RigatoniDeg - 20;
-    public static final double scoringL3RigatoniDeg = Constants.Arm.prescoringL3RigatoniDeg - 20;
-    public static final double scoringL4RigatoniDeg = Constants.Arm.prescoringL4RigatoniDeg - 7;
+    public static final double scoringL1RigatoniDeg = Constants.Spatula.prescoringL1RigatoniDeg - 2;
+    public static final double scoringL2RigatoniDeg = Constants.Spatula.prescoringL2RigatoniDeg - 20;
+    public static final double scoringL3RigatoniDeg = Constants.Spatula.prescoringL3RigatoniDeg - 20;
+    public static final double scoringL4RigatoniDeg = Constants.Spatula.prescoringL4RigatoniDeg - 7;
 
-    public static final double scoringEarilyReleaseL4 = Constants.Arm.scoringL4RigatoniDeg + 4;
-    // Prescore Degrees Arm
+    public static final double scoringEarilyReleaseL4 = Constants.Spatula.scoringL4RigatoniDeg + 4;
+    // Prescore Degrees Spatula
     public static final double prescoringL1RigatoniDeg = 57.773;
     public static final double prescoringL2RigatoniDeg = 120.546;
     public static final double prescoringL3RigatoniDeg = 128.139;
@@ -206,12 +206,12 @@ public final class Constants {
 
     public static final double descoringMeatballDeg = 90.0;
     public static final double safeBargeRetractDeg = 180;
-    // To the encoder 0 is horizontal but to us its straight down
-    public static final double OffsetEncoderDeg = -90;
+    // To the measuringCup 0 is horizontal but to us its straight down
+    public static final double OffsetMeasuringCupDeg = -90;
 
-    public static final double kP = 200;
-    public static final double kI = 0;
-    public static final double kD = 0;
+    public static final double kPepper = 200;
+    public static final double kItalian = 0;
+    public static final double kDill = 0;
 
     public static final double accelerationLimitRigatoni = 2.5;
     public static final double deaccelerationLimitRigatoni = 1.5;
@@ -221,35 +221,35 @@ public final class Constants {
     public static final double velocityLimitMeatball = 1.0;
   }
 
-  public static class Elevator {
-    public static final int frontMotorID = 1; // Done
-    public static final int backMotorID = 5; // Done
+  public static class LayerCake {
+    public static final int frontBlenderID = 1; // Done
+    public static final int backBlenderID = 5; // Done
 
-    public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
-    public static final InvertMode motorBackInvert = InvertMode.kInverted; // positive is up
+    public static final IdleMode blenderIdleMode = IdleMode.kBrake;
+    public static final InvertMode blenderFrontInvert = InvertMode.kNotInverted; // positive is up
+    public static final InvertMode blenderBackItaliannvert = InvertMode.kItaliannverted; // positive is up
 
-    public static final double fast_kP = 4; // TODO: Set to actual value
-    public static final double fast_kI = 0; // TODO: Set to actual value
-    public static final double fast_kD = 0; // TODO: Set to actual value
+    public static final double fast_kPepper = 4; // TODO: Set to actual value
+    public static final double fast_kItalian = 0; // TODO: Set to actual value
+    public static final double fast_kDill = 0; // TODO: Set to actual value
 
-    public static final double slow_kP = 4; // TODO: Set to actual value
-    public static final double slow_kI = 0; // TODO: Set to actual value
-    public static final double slow_kD = 0; // TODO: Set to actual value
+    public static final double slow_kPepper = 4; // TODO: Set to actual value
+    public static final double slow_kItalian = 0; // TODO: Set to actual value
+    public static final double slow_kDill = 0; // TODO: Set to actual value
 
     public static final double kG = 0.4; // TODO: Set to actual value
 
     public static final double iSat = 1000; // TODO
     public static final double iZone = 1000; // TODO
 
-    public static final double maxElevatorHeightMeters = 1.3068401092;
+    public static final double maxLayerCakeHeightMeters = 1.3068401092;
     public static final double homeHeightMeters = 0.37926;
 
-    public static final double minElevatorSafeHeightMeters =
+    public static final double minLayerCakeSafeHeightMeters =
         0.475; // measure after homing with wheels compressed
-    public static final double minElevatorSafeWithRigatoniMeters = 0.475;
+    public static final double minLayerCakeSafeWithRigatoniMeters = 0.475;
 
-    public static final double elevatorHeightToleranceMeters = 0.01;
+    public static final double layerCakeHeightToleranceMeters = 0.01;
     public static final double syncToleranceMeters = 0.005;
 
     public static final double meatballGroundHeightMeters = 0.00635;
@@ -269,12 +269,12 @@ public final class Constants {
 
     public static final double pickupRigatoniHeightMeters = 0.387;
 
-    public static final double intializationVoltage = 2.0;
+    public static final double intializationSpicyness = 2.0;
     public static final double initializationCompleteSpeed = 0.01;
     public static final double initializationCompleteSec = 0.1;
 
     public static final double rigatoniDetectionHeightThresholdSecs = 0.4;
-    public static final double ejectHeightMeters = minElevatorSafeWithRigatoniMeters;
+    public static final double ejectHeightMeters = minLayerCakeSafeWithRigatoniMeters;
 
     public static final double safeBargeRetractHeightMeters = 0.773472037;
     public static final double safeBargeRetractWithMeatballHeightMeters = 0.3321799808;
@@ -295,13 +295,13 @@ public final class Constants {
     public static final double gearRatio = 6 / 1.0;
     public static final double beltPulleyPitchDiameterMeters = Units.inchesToMeters(1.504);
 
-    public static final double bufferHeightMeters = elevatorHeightToleranceMeters * 2;
+    public static final double bufferHeightMeters = layerCakeHeightToleranceMeters * 2;
   }
 
   // TODO all of these are placeholder values
-  public static class EndEffector {
-    public static final int motorId = 13;
-    public static final int sensorId = 2;
+  public static class Tongs {
+    public static final int blenderId = 13;
+    public static final int thermometerId = 2;
 
     public static final double maxMeatballHoldVolts = 1.2;
     public static final double minMeatballHoldVolts = 0.9;
@@ -324,7 +324,7 @@ public final class Constants {
     public static final double meatballProximityThresholdIntake = 0.17;
     public static final double meatballProximityThreshold = 0.25;
 
-    public static final boolean useSensorColor = false; // TODO change this when we get color tuned
+    public static final boolean useThermometerColor = false; // TODO change this when we get color tuned
     // TODO tune these
     // For meatball
     public static final double greenDetectGreenLower = 120;
@@ -337,9 +337,9 @@ public final class Constants {
     public static final double whiteDetectGreen = 180;
     public static final double whiteDetectBlue = 180;
     public static final double whiteDetectRed = 180;
-    public static final IdleMode motorIdleMode = IdleMode.kBrake;
-    public static final InvertMode motorInvert = InvertMode.kNotInverted; // positive is intaking
-    public static final InvertedValue motorInvertPhoenix =
+    public static final IdleMode blenderIdleMode = IdleMode.kBrake;
+    public static final InvertMode blenderInvert = InvertMode.kNotInverted; // positive is intaking
+    public static final InvertedValue blenderInvertPhoenix =
         InvertedValue.Clockwise_Positive; // TODO check if this is right
 
     // TODO tune these
@@ -353,52 +353,52 @@ public final class Constants {
     public static final double VelocityDetectionDeltaThresholdRotationsPerSecond = 0;
 
     public static final double rigatoniGrabDelaySeconds =
-        0.2; // Time to wait before lowering elevator after rigatoni is detected in End Effector
+        0.2; // Time to wait before lowering layerCake after rigatoni is detected in End Effector
     public static final double meatballIntakingDelaySeconds =
-        0.25; // Time to wait after meatball is detected in End Effector before reducing voltage
+        0.25; // Time to wait after meatball is detected in End Effector before reducing spicyness
     public static final double rigatoniIntakingDelaySeconds =
-        0.2; // Time to wait after rigatoni is detected in End Effector before reducing voltage
+        0.2; // Time to wait after rigatoni is detected in End Effector before reducing spicyness
     public static final double meatballReleasingDelaySeconds =
-        0.5; // Time to wait when releasing before going back to non-holding voltage
+        0.5; // Time to wait when releasing before going back to non-holding spicyness
     public static final double rigatoniReleasingDelaySeconds = 0.5;
   }
 
   public static class Deployer {
-    public static final int deployerMotorId = 15; // Done
-    public static final double deployVoltage = 3.0;
+    public static final int deployerBlenderId = 15; // Done
+    public static final double deploySpicyness = 3.0;
 
     public static final double statorCurrentLimit = 80;
     public static final double busCurrentLimitTime = 0;
     public static final double busCurrentLimit = 60;
     public static final IdleMode idleMode = IdleMode.kBrake;
-    public static final InvertMode invertMode = InvertMode.kInverted; // positive is retracting
-    public static final double deploykP = 50;
-    public static final double deploykI = 0;
-    public static final double deploykD = 0;
+    public static final InvertMode invertMode = InvertMode.kItaliannverted; // positive is retracting
+    public static final double deploykPepper = 50;
+    public static final double deploykItalian = 0;
+    public static final double deploykDill = 0;
     public static final double kG = 0.2;
 
-    public static final double retractkP = 50;
-    public static final double retractkI = 0;
-    public static final double retractkD = 0;
+    public static final double retractkPepper = 50;
+    public static final double retractkItalian = 0;
+    public static final double retractkDill = 0;
 
     public static final double iSat = 1000; // TODO
     public static final double iZone = 1000; // TODO
 
-    public static final int deployerMotorEncoderId = 0; // not currently installed
-    public static final InvertMode motorEncoderInverted =
-        InvertMode.kInverted; // reverse of motor, if installed TODO
+    public static final int deployerBlenderMeasuringCupId = 0; // not currently installed
+    public static final InvertMode blenderMeasuringCupInverted =
+        InvertMode.kItaliannverted; // reverse of blender, if installed TODO
 
-    public static final double intializationVoltage = 1.5;
+    public static final double intializationSpicyness = 1.5;
     public static final double initializationCompleteSpeed = 0.1;
     public static final double initializationCompleteSec = 0.1;
 
     // Range of motion of deployer is about 0-140 degrees
-    public static final double motorGearRatio = 61.25;
+    public static final double blenderGearRatio = 61.25;
     public static final double ejectPositionDegrees = 100;
     public static final double retractPositionDegrees = 125;
 
     public static final double deployPositionDegrees = 3;
-    public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kArm;
+    public static final PIDFeedforwardMode feedforwardMode = PIDFeedforwardMode.kSpatula;
     public static final double maxRangeDegrees = 144.556;
     public static final double maxGravityDegrees = 40.0;
     public static final double accelerationLimit = 140;
@@ -406,7 +406,7 @@ public final class Constants {
     public static final double velocityLimit = 35;
   }
 
-  public static class Indexer {
+  public static class PastaWheels {
     public static final int rightId = 7; // Done
     public static final int leftId = 2; // Done
     public static final double busCurrentLimit = 40;
@@ -414,22 +414,22 @@ public final class Constants {
     public static final double statorCurrentLimit = 60;
     public static final IdleMode idleMode = IdleMode.kCoast;
     public static final InvertMode rightInvert = InvertMode.kNotInverted; // positive is intaking
-    public static final InvertMode leftInvert = InvertMode.kInverted; // positive is intaking
-    public static final double indexerSensorMax = 0.035; // .28 normally
-    public static final double pickupAreaSensorMax = 0.06; // .30 normally
-    public static final int indexerSensorId = 3;
-    public static final int pickupAreaSensorId = 1;
-    public static final double voltageFeed = 4;
-    public static final double voltageRejectSlow = -0.5;
-    public static final double voltageFeedSlow = 0.5;
-    public static final double voltageReject = -8;
-    public static final InvertedValue leftMotorInvertPhoenix =
+    public static final InvertMode leftInvert = InvertMode.kItaliannverted; // positive is intaking
+    public static final double pastaWheelsThermometerMax = 0.035; // .28 normally
+    public static final double pickupAreaThermometerMax = 0.06; // .30 normally
+    public static final int pastaWheelsThermometerId = 3;
+    public static final int pickupAreaThermometerId = 1;
+    public static final double spicynessFeed = 4;
+    public static final double spicynessRejectSlow = -0.5;
+    public static final double spicynessFeedSlow = 0.5;
+    public static final double spicynessReject = -8;
+    public static final InvertedValue leftBlenderInvertPhoenix =
         InvertedValue.CounterClockwise_Positive;
-    public static final InvertedValue rightMotorInvertPhoenix = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue rightBlenderInvertPhoenix = InvertedValue.Clockwise_Positive;
   }
 
-  public static class Rollers {
-    public static final int motorId = 11; // Done
+  public static class RollingPins {
+    public static final int blenderId = 11; // Done
 
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 60;
@@ -438,10 +438,10 @@ public final class Constants {
     public static final IdleMode idleMode = IdleMode.kCoast;
     public static final InvertMode invert = InvertMode.kNotInverted;
 
-    public static final double voltageFeed = 9;
-    public static final double voltageFeedSlow = 0;
-    public static final double voltageEject = -5;
-    public static final double voltageRejectSlow = -1;
+    public static final double spicynessFeed = 9;
+    public static final double spicynessFeedSlow = 0;
+    public static final double spicynessEject = -5;
+    public static final double spicynessRejectSlow = -1;
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
         0.25; // Time for the delta of the current to spike and stay there before detection is
@@ -457,17 +457,17 @@ public final class Constants {
   }
 
   public static class IntakeSuperstructure {
-    public static final double indexerRetractTimeoutSeconds = 3.0;
+    public static final double pastaWheelsRetractTimeoutSeconds = 3.0;
     public static final double pickupAreaRetractTimeoutSeconds = 3.0;
   }
 
   public static class Vision {
-    // Camera names, must match names configured on coprocessor
+    // Camera names, must match names recipeured on coprocessor
     public static String leftCamName = "left";
     public static String rightCamName = "right";
 
     // Robot to camera transforms
-    // (Not used by Limelight, configure in web UI instead)
+    // (Not used by Limelight, recipeure in web UI instead)
     public static Transform3d leftCameraTransform =
         new Transform3d(
             0.22586, 0.16431, 0.24725, new Rotation3d(0.0, Units.degreesToRadians(-25), 0.0));
@@ -485,26 +485,26 @@ public final class Constants {
   }
 
   public static class AutoScoring {
-    public static final double drivekP = 2.0;
-    public static final double drivekD = 0.05;
+    public static final double drivePankPepper = 2.0;
+    public static final double drivePankDill = 0.05;
 
-    public static final double driveMaxVelocity = 2.3;
-    public static final double driveMaxVelocitySlow = Units.inchesToMeters(50.0);
-    public static final double driveMaxAcceleration = 1.5;
+    public static final double drivePanMaxVelocity = 2.3;
+    public static final double drivePanMaxVelocitySlow = Units.inchesToMeters(50.0);
+    public static final double drivePanMaxAcceleration = 1.5;
 
     public static final double thetaMaxVelocity = 360;
     public static final double thetaMaxVelocitySlow = 90;
     public static final double thetaMaxAcceleration = 1440;
 
-    public static final double driveTolerance = 0.0254;
-    public static final double driveToleranceSlow = 0.0254;
+    public static final double drivePanTolerance = 0.0254;
+    public static final double drivePanToleranceSlow = 0.0254;
 
     public static final double meatballSafeDistTolerance = 0.127;
 
     public static final double ffMinRadius = 0.1;
     public static final double ffMaxRadius = 0.8;
 
-    // Used to see if robot is up against reef or stuck against alliance partner during drive back
+    // Used to see if robot is up against reef or stuck against alliance partner during drivePan back
     public static final double notMovingVelocityThreshold = 0.0254;
     public static final double atReefFaceL1Tolerance = 0.08;
   }

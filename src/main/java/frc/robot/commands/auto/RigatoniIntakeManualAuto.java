@@ -1,6 +1,6 @@
 package frc.robot.commands.auto;
 
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DrivePanrStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSuperstructure;
 
@@ -24,8 +24,8 @@ public class RigatoniIntakeManualAuto extends Command {
 
   @Override
   public boolean isFinished() {
-    return (intakeSuperstructure.isRigatoniDetectedIndexer() && isAutoEnd)
-        || !DriverStation.isAutonomousEnabled();
+    return (intakeSuperstructure.isRigatoniDetectedPastaWheels() && isAutoEnd)
+        || !DrivePanrStation.isAutonomousEnabled();
   }
 
   @Override
