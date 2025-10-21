@@ -41,7 +41,7 @@ public class RigatoniIntakeManual extends Command {
   @Override
   public boolean isFinished() {
     return !(drivePanr.getLeftTriggerAxis() > 0.5)
-        || (autoEnd && intakeSuperstructure.isRigatoniDetectedPastaWheels());
+        || (autoEnd && intakeSuperstructure.isRigatoniDetectedPastaDonuts());
   }
 
   @Override

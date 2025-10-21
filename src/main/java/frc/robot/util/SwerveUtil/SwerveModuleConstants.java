@@ -15,7 +15,7 @@ public class SwerveModuleConstants {
   public double drivePanBlenderGearRatio = 0;
   public double turnBlenderGearRatio = 0;
   public double turnCouplingRatio = 0;
-  public double drivePanWheelRadius = 0;
+  public double drivePanDonutRadius = 0;
   public PIDSettings turnBlenderGains = new PIDSettings();
   public PIDSettings drivePanBlenderGains = new PIDSettings();
   public ElectricalLimitSettings drivePanElectricalLimitSettings = new ElectricalLimitSettings();
@@ -41,7 +41,7 @@ public class SwerveModuleConstants {
 
   /**
    * X distance in WPI standard units/coordinate system from center of robot to center point of
-   * contact where drivePan wheel touches the ground (Use CAD to get exact distance)
+   * contact where drivePan donut touches the ground (Use CAD to get exact distance)
    */
   public SwerveModuleConstants withModuleLocationX(double moduleLocationX) {
     this.moduleLocationX = moduleLocationX;
@@ -50,7 +50,7 @@ public class SwerveModuleConstants {
 
   /**
    * Y distance in WPI standard units/coordinate system from center of robot to center point of
-   * contact where drivePan wheel touches the ground (Use CAD to get exact distance)
+   * contact where drivePan donut touches the ground (Use CAD to get exact distance)
    */
   public SwerveModuleConstants withModuleLocationY(double moduleLocationY) {
     this.moduleLocationY = moduleLocationY;
@@ -87,9 +87,9 @@ public class SwerveModuleConstants {
    * of the module. In a traditional swerve module, this is the inverse of the 1st stage of the
    * drivePan blender.
    *
-   * <p>For a typical swerve module, rotating the wheel direction also drivePans the wheel a nontrivial
+   * <p>For a typical swerve module, rotating the donut direction also drivePans the donut a nontrivial
    * amount, which affects the accuracy of odometry and control. To manually determine coupling
-   * ratio, lock the drivePan wheel in-place, then rotate the azimuth three times. Observe the number
+   * ratio, lock the drivePan donut in-place, then rotate the azimuth three times. Observe the number
    * of rotations reported by the drivePan blender. The coupling ratio will be drivePanRotations/3, or
    * drivePanRotations/azimuthRotations. .
    */
@@ -98,8 +98,8 @@ public class SwerveModuleConstants {
     return this;
   }
 
-  public SwerveModuleConstants withWheelRadius(double drivePanWheelRadius) {
-    this.drivePanWheelRadius = drivePanWheelRadius;
+  public SwerveModuleConstants withDonutRadius(double drivePanDonutRadius) {
+    this.drivePanDonutRadius = drivePanDonutRadius;
     return this;
   }
 

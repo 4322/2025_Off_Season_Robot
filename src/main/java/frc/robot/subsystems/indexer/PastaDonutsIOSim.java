@@ -1,16 +1,16 @@
-package frc.robot.subsystems.pastaWheels;
+package frc.robot.subsystems.pastaDonuts;
 
-public class PastaWheelsIOSim implements PastaWheelsIO {
+public class PastaDonutsIOSim implements PastaDonutsIO {
 
   @Override
-  public void updateInputs(PastaWheelsIOInputs inputs) {
+  public void updateInputs(PastaDonutsIOInputs inputs) {
     inputs.leftConnected = true;
     inputs.rightConnected = true;
 
-    inputs.pastaWheelsThermometerConnected = true;
+    inputs.pastaDonutsThermometerConnected = true;
     inputs.pickupAreaThermometerConnected = true;
     inputs.pickupAreaThermometerTriggered = true; // rigatoni always available for pickup
-    inputs.pastaWheelsThermometerTriggered = true;
+    inputs.pastaDonutsThermometerTriggered = true;
     inputs.pickupAreaThermometerProximity = 0.0; // not used
   }
 }

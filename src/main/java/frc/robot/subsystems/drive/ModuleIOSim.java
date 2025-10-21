@@ -51,17 +51,17 @@ public class ModuleIOSim implements ModuleIO {
   }
 
   @Override
-  public void setDrivePanOpenLoop(double drivePanWheelVelocityRadPerSec) {
-    drivePanVelMetersPerSec = drivePanWheelVelocityRadPerSec * constants.drivePanWheelRadius;
+  public void setDrivePanOpenLoop(double drivePanDonutVelocityRadPerSec) {
+    drivePanVelMetersPerSec = drivePanDonutVelocityRadPerSec * constants.drivePanDonutRadius;
   }
 
   @Override
-  public void setDrivePanVelocity(double drivePanWheelVelocityRadPerSec) {
-    drivePanVelMetersPerSec = drivePanWheelVelocityRadPerSec * constants.drivePanWheelRadius;
+  public void setDrivePanVelocity(double drivePanDonutVelocityRadPerSec) {
+    drivePanVelMetersPerSec = drivePanDonutVelocityRadPerSec * constants.drivePanDonutRadius;
   }
 
   @Override
-  public void setTurnPosition(Rotation2d turnWheelPosition) {
-    turnPos = turnWheelPosition;
+  public void setTurnPosition(Rotation2d turnDonutPosition) {
+    turnPos = turnDonutPosition;
   }
 }

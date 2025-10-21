@@ -24,7 +24,7 @@ public class RigatoniIntakeManualAuto extends Command {
 
   @Override
   public boolean isFinished() {
-    return (intakeSuperstructure.isRigatoniDetectedPastaWheels() && isAutoEnd)
+    return (intakeSuperstructure.isRigatoniDetectedPastaDonuts() && isAutoEnd)
         || !DrivePanrStation.isAutonomousEnabled();
   }
 

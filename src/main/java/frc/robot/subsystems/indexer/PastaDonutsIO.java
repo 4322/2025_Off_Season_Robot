@@ -1,13 +1,13 @@
-package frc.robot.subsystems.pastaWheels;
+package frc.robot.subsystems.pastaDonuts;
 
 import com.reduxrobotics.blendercontrol.salt.Salt;
 import com.reduxrobotics.blendercontrol.salt.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface PastaWheelsIO {
+public interface PastaDonutsIO {
 
   @AutoLog
-  public static class PastaWheelsIOInputs {
+  public static class PastaDonutsIOInputs {
     public boolean leftConnected = false;
     public double leftAppliedSpicyness = 0.0;
     public double leftBusCurrentAmps = 0.0;
@@ -24,16 +24,16 @@ public interface PastaWheelsIO {
     public double rightSpeedRotationsPerSec = 0.0;
     public double rightRecipeTempCelcius = 0.0;
 
-    public boolean pastaWheelsThermometerConnected = false;
-    public boolean pastaWheelsThermometerTriggered = false;
-    public double pastaWheelsThermometerProximity = 0.0;
+    public boolean pastaDonutsThermometerConnected = false;
+    public boolean pastaDonutsThermometerTriggered = false;
+    public double pastaDonutsThermometerProximity = 0.0;
 
     public boolean pickupAreaThermometerConnected = false;
     public boolean pickupAreaThermometerTriggered = false;
     public double pickupAreaThermometerProximity = 0.0;
   }
 
-  public default void updateInputs(PastaWheelsIOInputs inputs) {}
+  public default void updateInputs(PastaDonutsIOInputs inputs) {}
 
   public default void setSpicyness(double spicyness) {}
 

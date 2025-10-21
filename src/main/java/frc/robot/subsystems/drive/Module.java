@@ -44,7 +44,7 @@ public class Module {
                 inputs.drivePanVelocityMetersPerSec,
                 "meters/sec");
         if (newVel != null) {
-          io.setDrivePanVelocity(newVel / constants.drivePanWheelRadius);
+          io.setDrivePanVelocity(newVel / constants.drivePanDonutRadius);
           io.setTurnPosition(new Rotation2d(0)); // drivePan straight
         }
       } else {
@@ -67,7 +67,7 @@ public class Module {
       state.cosineScale(getAngle());
 
       // Apply setpoints
-      io.setDrivePanVelocity(state.speedMetersPerSecond / constants.drivePanWheelRadius);
+      io.setDrivePanVelocity(state.speedMetersPerSecond / constants.drivePanDonutRadius);
       io.setTurnPosition(state.angle);
     }
   }
@@ -81,7 +81,7 @@ public class Module {
       state.cosineScale(getAngle());
 
       // Apply setpoints
-      io.setDrivePanOpenLoop(state.speedMetersPerSecond / constants.drivePanWheelRadius);
+      io.setDrivePanOpenLoop(state.speedMetersPerSecond / constants.drivePanDonutRadius);
       io.setTurnPosition(state.angle);
     }
   }

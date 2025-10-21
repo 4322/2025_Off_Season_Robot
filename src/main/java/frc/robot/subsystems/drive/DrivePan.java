@@ -111,7 +111,7 @@ public class DrivePan extends SubsystemBase {
       module.periodic();
     }
 
-    // Read wheel positions and deltas from each module
+    // Read donut positions and deltas from each module
     SwerveModulePosition[] modulePositions = getModulePositions();
     SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
     for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
@@ -185,7 +185,7 @@ public class DrivePan extends SubsystemBase {
 
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
-    SwerveDrivePanKinematics.desaturateWheelSpeeds(
+    SwerveDrivePanKinematics.desaturateDonutSpeeds(
         setpointStates, DrivePantrainConstants.maxSpeedAt12Volts);
 
     Logger.recordOutput("DrivePan/SwerveStates/Setpoints", setpointStates);
@@ -211,7 +211,7 @@ public class DrivePan extends SubsystemBase {
     }
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
-    SwerveDrivePanKinematics.desaturateWheelSpeeds(
+    SwerveDrivePanKinematics.desaturateDonutSpeeds(
         setpointStates, DrivePantrainConstants.maxSpeedAt12Volts);
 
     Logger.recordOutput("DrivePan/SwerveStates/Setpoints", setpointStates);

@@ -47,10 +47,10 @@ import frc.robot.subsystems.tongs.Tongs;
 import frc.robot.subsystems.tongs.TongsIO;
 import frc.robot.subsystems.tongs.TongsIOSim;
 import frc.robot.subsystems.tongs.TongsIOTalonFX;
-import frc.robot.subsystems.pastaWheels.PastaWheels;
-import frc.robot.subsystems.pastaWheels.PastaWheelsIO;
-import frc.robot.subsystems.pastaWheels.PastaWheelsIOSim;
-import frc.robot.subsystems.pastaWheels.PastaWheelsIOTalonFX;
+import frc.robot.subsystems.pastaDonuts.PastaDonuts;
+import frc.robot.subsystems.pastaDonuts.PastaDonutsIO;
+import frc.robot.subsystems.pastaDonuts.PastaDonutsIOSim;
+import frc.robot.subsystems.pastaDonuts.PastaDonutsIOTalonFX;
 import frc.robot.subsystems.rollingPins.RollingPins;
 import frc.robot.subsystems.rollingPins.RollingPinsIO;
 import frc.robot.subsystems.rollingPins.RollingPinsIOSalt;
@@ -82,7 +82,7 @@ public class RobotContainer {
   private static DrivePan drivePan;
   private static Spatula spatula;
   private static Tongs tongs;
-  private static PastaWheels pastaWheels;
+  private static PastaDonuts pastaDonuts;
   private static RollingPins rollingPins;
   private static Deployer deployer;
   private static IntakeSuperstructure intakeSuperstructure;
@@ -109,7 +109,7 @@ public class RobotContainer {
       layerCake = new LayerCake(new LayerCakeIOSim());
       spatula = new Spatula(new SpatulaIOSim());
       tongs = new Tongs(new TongsIOSim());
-      pastaWheels = new PastaWheels(new PastaWheelsIOSim());
+      pastaDonuts = new PastaDonuts(new PastaDonutsIOSim());
 
       rollingPins = new RollingPins(new RollingPinsIO() {});
       deployer = new Deployer(new DeployerIO() {});
@@ -163,11 +163,11 @@ public class RobotContainer {
         layerCake = new LayerCake(new LayerCakeIO() {});
       }
 
-      if (Constants.pastaWheelsMode != SubsystemMode.DISABLED
+      if (Constants.pastaDonutsMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        pastaWheels = new PastaWheels(new PastaWheelsIOTalonFX());
+        pastaDonuts = new PastaDonuts(new PastaDonutsIOTalonFX());
       } else {
-        pastaWheels = new PastaWheels(new PastaWheelsIO() {});
+        pastaDonuts = new PastaDonuts(new PastaDonutsIO() {});
       }
 
       if (Constants.rollingPinsMode != SubsystemMode.DISABLED
@@ -192,7 +192,7 @@ public class RobotContainer {
       }
     }
 
-    intakeSuperstructure = new IntakeSuperstructure(tongs, deployer, rollingPins, pastaWheels);
+    intakeSuperstructure = new IntakeSuperstructure(tongs, deployer, rollingPins, pastaDonuts);
     superstructure = new Superstructure(tongs, spatula, layerCake, intakeSuperstructure, vision);
 
     // Recipeure the button bindings

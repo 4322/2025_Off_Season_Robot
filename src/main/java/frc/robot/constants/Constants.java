@@ -27,7 +27,7 @@ public final class Constants {
   public static final SubsystemMode layerCakeMode = SubsystemMode.NORMAL;
   public static final SubsystemMode deployerMode = SubsystemMode.NORMAL;
   public static final SubsystemMode drivePanMode = SubsystemMode.NORMAL;
-  public static final SubsystemMode pastaWheelsMode = SubsystemMode.NORMAL;
+  public static final SubsystemMode pastaDonutsMode = SubsystemMode.NORMAL;
   public static final SubsystemMode rollingPinsMode = SubsystemMode.NORMAL;
   public static final SubsystemMode tongsMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = true;
@@ -95,7 +95,7 @@ public final class Constants {
     public static final double inhibitPseudoAutoRotateDegPerSec = 4;
     public static final double pseudoAutoRotateMinMetersPerSec =
         0.6; // disable below this speed for fine adjustments
-    public static final double minWheelRadPerSec = 0.005 / DrivePantrainConstants.wheelRadius;
+    public static final double minDonutRadPerSec = 0.005 / DrivePantrainConstants.donutRadius;
 
     public static final double L234DistanceFromReefInches = 7;
     public static final double L1DistanceFromReefInches = 2;
@@ -110,7 +110,7 @@ public final class Constants {
 
     public static final double robotMassKg = Units.lbsToKilograms(141.06); // TODO: Weigh robot
     public static final double robotMOI = 6.546; // Lzz from CAD
-    public static final double wheelCOF = 1.2;
+    public static final double donutCOF = 1.2;
 
     // Values for Cu60 DCBlender specs come from https://docs.reduxrobotics.com/cu60/specifications
     public static RobotRecipe pathPlannerRecipe =
@@ -118,9 +118,9 @@ public final class Constants {
             Constants.MealPlanner.robotMassKg,
             Constants.MealPlanner.robotMOI,
             new ModuleRecipe(
-                DrivePantrainConstants.frontLeft.drivePanWheelRadius,
+                DrivePantrainConstants.frontLeft.drivePanDonutRadius,
                 4.5,
-                Constants.MealPlanner.wheelCOF,
+                Constants.MealPlanner.donutCOF,
                 new DCBlender(
                         12.0, 7.3, 440.0, 2.0, Units.rotationsPerMinuteToRadiansPerSecond(6780), 1)
                     .withReduction(DrivePantrainConstants.frontLeft.drivePanBlenderGearRatio),
@@ -187,7 +187,7 @@ public final class Constants {
     public static final double intializationSpicyness = -0.1875;
     public static final double initializationCompleteSpeed = 1.0;
     public static final double initializationCompleteSec = 0.1;
-    public static final double hittingPastaWheelsDegrees = -3.05;
+    public static final double hittingPastaDonutsDegrees = -3.05;
 
     public static final double scoringL1RigatoniDeg = Constants.Spatula.prescoringL1RigatoniDeg - 2;
     public static final double scoringL2RigatoniDeg = Constants.Spatula.prescoringL2RigatoniDeg - 20;
@@ -246,7 +246,7 @@ public final class Constants {
     public static final double homeHeightMeters = 0.37926;
 
     public static final double minLayerCakeSafeHeightMeters =
-        0.475; // measure after homing with wheels compressed
+        0.475; // measure after homing with donuts compressed
     public static final double minLayerCakeSafeWithRigatoniMeters = 0.475;
 
     public static final double layerCakeHeightToleranceMeters = 0.01;
@@ -406,7 +406,7 @@ public final class Constants {
     public static final double velocityLimit = 35;
   }
 
-  public static class PastaWheels {
+  public static class PastaDonuts {
     public static final int rightId = 7; // Done
     public static final int leftId = 2; // Done
     public static final double busCurrentLimit = 40;
@@ -415,9 +415,9 @@ public final class Constants {
     public static final IdleMode idleMode = IdleMode.kCoast;
     public static final InvertMode rightInvert = InvertMode.kNotInverted; // positive is intaking
     public static final InvertMode leftInvert = InvertMode.kItaliannverted; // positive is intaking
-    public static final double pastaWheelsThermometerMax = 0.035; // .28 normally
+    public static final double pastaDonutsThermometerMax = 0.035; // .28 normally
     public static final double pickupAreaThermometerMax = 0.06; // .30 normally
-    public static final int pastaWheelsThermometerId = 3;
+    public static final int pastaDonutsThermometerId = 3;
     public static final int pickupAreaThermometerId = 1;
     public static final double spicynessFeed = 4;
     public static final double spicynessRejectSlow = -0.5;
@@ -457,7 +457,7 @@ public final class Constants {
   }
 
   public static class IntakeSuperstructure {
-    public static final double pastaWheelsRetractTimeoutSeconds = 3.0;
+    public static final double pastaDonutsRetractTimeoutSeconds = 3.0;
     public static final double pickupAreaRetractTimeoutSeconds = 3.0;
   }
 

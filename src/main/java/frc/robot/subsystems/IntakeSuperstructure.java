@@ -7,7 +7,7 @@ import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.tongs.Tongs;
-import frc.robot.subsystems.pastaWheels.PastaWheels;
+import frc.robot.subsystems.pastaDonuts.PastaDonuts;
 import frc.robot.subsystems.rollingPins.RollingPins;
 import org.littletonrobotics.junction.Logger;
 
@@ -18,7 +18,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   private boolean requestDeploy;
   private boolean requestIntakeEject;
   private boolean isHomed = false;
-  private boolean requestPastaWheelsEject;
+  private boolean requestPastaDonutsEject;
 
   private enum RetractLockedOutStates {
     FALSE,
@@ -26,7 +26,7 @@ public class IntakeSuperstructure extends SubsystemBase {
     PICKUP,
   }
 
-  private Timer retractTimeOutPastaWheelsTimer = new Timer();
+  private Timer retractTimeOutPastaDonutsTimer = new Timer();
   private Timer retractTimeOutPickupAreaTimer = new Timer();
   private RetractLockedOutStates retractLockedOutState = RetractLockedOutStates.FALSE;
 
@@ -34,7 +34,7 @@ public class IntakeSuperstructure extends SubsystemBase {
 
   public Deployer deployer;
   private RollingPins rollingPins;
-  private PastaWheels pastaWheels;
+  private PastaDonuts pastaDonuts;
 
   public static enum IntakeSuperstates {
     HOMELESS,
@@ -47,10 +47,10 @@ public class IntakeSuperstructure extends SubsystemBase {
   }
 
   public IntakeSuperstructure(
-      Tongs tongs, Deployer deployer, RollingPins rollingPins, PastaWheels pastaWheels) {
+      Tongs tongs, Deployer deployer, RollingPins rollingPins, PastaDonuts pastaDonuts) {
     this.deployer = deployer;
     this.rollingPins = rollingPins;
-    this.pastaWheels = pastaWheels;
+    this.pastaDonuts = pastaDonuts;
   }
 
   @Override
@@ -86,17 +86,17 @@ public class IntakeSuperstructure extends SubsystemBase {
         deployer.retract();
         if (isRigatoniDetectedPickupArea() || RobotContainer.getSuperstructure().isRigatoniHeld()) {
           rollingPins.rejectSlow();
-          pastaWheels.feedSlow();
+          pastaDonuts.feedSlow();
         } else {
           rollingPins.feedSlow();
-          pastaWheels.feedSlow();
+          pastaDonuts.feedSlow();
         }
-        if (requestPastaWheelsEject) {
+        if (requestPastaDonutsEject) {
           state = IntakeSuperstates.INDEXER_EJECT;
         } else if (requestIntakeEject) {
           state = IntakeSuperstates.INTAKE_EJECT;
         } else if (requestDeploy) {
-          if (isRigatoniDetectedPastaWheels()
+          if (isRigatoniDetectedPastaDonuts()
               || isRigatoniDetectedPickupArea()
               || RobotContainer.getSuperstructure().isRigatoniHeld()) {
             state = IntakeSuperstates.SLOW_REJECT;
@@ -107,13 +107,13 @@ public class IntakeSuperstructure extends SubsystemBase {
         break;
       case FEED:
         rollingPins.feed();
-        pastaWheels.feed();
+        pastaDonuts.feed();
         deployer.deploy();
 
         if (isRigatoniDetectedPickupArea() || RobotContainer.getSuperstructure().isRigatoniHeld()) {
           state = IntakeSuperstates.SLOW_REJECT;
         }
-        if (requestPastaWheelsEject) {
+        if (requestPastaDonutsEject) {
           state = IntakeSuperstates.INDEXER_EJECT;
         }
 
@@ -122,29 +122,29 @@ public class IntakeSuperstructure extends SubsystemBase {
           case FALSE:
             if (rollingPins.isRigatoniPickupDetected()) {
               retractLockedOutState = RetractLockedOutStates.INDEXER;
-              retractTimeOutPastaWheelsTimer.stop();
-              retractTimeOutPastaWheelsTimer.reset();
-              retractTimeOutPastaWheelsTimer.start();
+              retractTimeOutPastaDonutsTimer.stop();
+              retractTimeOutPastaDonutsTimer.reset();
+              retractTimeOutPastaDonutsTimer.start();
             }
             break;
           case INDEXER:
-            // If rigatoni isn't detected in pastaWheels after x time, clear lockout; Otherwise start
+            // If rigatoni isn't detected in pastaDonuts after x time, clear lockout; Otherwise start
             // pickup area timer
-            if (isRigatoniDetectedPastaWheels()) {
+            if (isRigatoniDetectedPastaDonuts()) {
               retractLockedOutState = RetractLockedOutStates.PICKUP;
-              retractTimeOutPastaWheelsTimer.stop();
+              retractTimeOutPastaDonutsTimer.stop();
               retractTimeOutPickupAreaTimer.reset();
               retractTimeOutPickupAreaTimer.start();
-            } else if (!isRigatoniDetectedPastaWheels()
-                && retractTimeOutPastaWheelsTimer.hasElapsed(
-                    Constants.IntakeSuperstructure.pastaWheelsRetractTimeoutSeconds)) {
-              retractTimeOutPastaWheelsTimer.stop();
+            } else if (!isRigatoniDetectedPastaDonuts()
+                && retractTimeOutPastaDonutsTimer.hasElapsed(
+                    Constants.IntakeSuperstructure.pastaDonutsRetractTimeoutSeconds)) {
+              retractTimeOutPastaDonutsTimer.stop();
               retractLockedOutState = RetractLockedOutStates.FALSE;
             }
             break;
           case PICKUP:
-            retractTimeOutPastaWheelsTimer.stop();
-            retractTimeOutPastaWheelsTimer.reset();
+            retractTimeOutPastaDonutsTimer.stop();
+            retractTimeOutPastaDonutsTimer.reset();
             // If rigatoni is detected in pickup area/end effector or x time has passed, clear lockout
             if ((isRigatoniDetectedPickupArea() || RobotContainer.getSuperstructure().isRigatoniHeld())
                 || retractTimeOutPickupAreaTimer.hasElapsed(
@@ -168,13 +168,13 @@ public class IntakeSuperstructure extends SubsystemBase {
       case SLOW_REJECT:
         deployer.deploy();
         rollingPins.rejectSlow();
-        pastaWheels.rejectSlow();
+        pastaDonuts.rejectSlow();
 
         if (requestIntakeEject) {
           state = IntakeSuperstates.INTAKE_EJECT;
         } else if (requestRetractIdle) {
           state = IntakeSuperstates.RETRACT_IDLE;
-        } else if (!isRigatoniDetectedPastaWheels()
+        } else if (!isRigatoniDetectedPastaDonuts()
             && !isRigatoniDetectedPickupArea()
             && !RobotContainer.getSuperstructure().isRigatoniHeld()) {
           state = IntakeSuperstates.FEED;
@@ -184,7 +184,7 @@ public class IntakeSuperstructure extends SubsystemBase {
       case INTAKE_EJECT:
         deployer.eject();
         rollingPins.eject();
-        pastaWheels.reject();
+        pastaDonuts.reject();
         if (requestRetractIdle) {
           state = IntakeSuperstates.RETRACT_IDLE;
         }
@@ -194,13 +194,13 @@ public class IntakeSuperstructure extends SubsystemBase {
         rollingPins.eject();
 
         if (RobotContainer.drivePanr.rightBumper().getAsBoolean()) {
-          pastaWheels.ejectRight();
+          pastaDonuts.ejectRight();
         } else if (RobotContainer.drivePanr.leftBumper().getAsBoolean()) {
-          pastaWheels.ejectLeft();
+          pastaDonuts.ejectLeft();
         } else {
-          requestPastaWheelsEject = false;
+          requestPastaDonutsEject = false;
         }
-        if (!requestPastaWheelsEject) {
+        if (!requestPastaDonutsEject) {
           if (requestRetractIdle) {
             state = IntakeSuperstates.RETRACT_IDLE;
           } else if (requestDeploy) {
@@ -216,7 +216,7 @@ public class IntakeSuperstructure extends SubsystemBase {
     requestRetractIdle = false;
     requestIntakeEject = false;
     requestDeploy = false;
-    requestPastaWheelsEject = false;
+    requestPastaDonutsEject = false;
   }
 
   public IntakeSuperstates getState() {
@@ -240,23 +240,23 @@ public class IntakeSuperstructure extends SubsystemBase {
   }
 
   public void requestIdexerEject() {
-    requestPastaWheelsEject = true;
+    requestPastaDonutsEject = true;
   }
 
   public void requestUnhome() {
     deployer.clearHome();
     rollingPins.idle();
-    pastaWheels.idle();
+    pastaDonuts.idle();
     state = IntakeSuperstates.HOMELESS;
     unsetAllRequests();
   }
 
   public boolean isRigatoniDetectedPickupArea() {
-    return pastaWheels.isRigatoniDetectedPickupArea();
+    return pastaDonuts.isRigatoniDetectedPickupArea();
   }
 
-  public boolean isRigatoniDetectedPastaWheels() {
-    return pastaWheels.isRigatoniDetectedPastaWheels();
+  public boolean isRigatoniDetectedPastaDonuts() {
+    return pastaDonuts.isRigatoniDetectedPastaDonuts();
   }
 
   public void setHome() {
@@ -275,8 +275,8 @@ public class IntakeSuperstructure extends SubsystemBase {
 
   public boolean isRigatoniDetectedIntake() {
     return rollingPins.isRigatoniPickupDetected()
-        || pastaWheels.isRigatoniDetectedPickupArea()
-        || pastaWheels.isRigatoniDetectedPastaWheels();
+        || pastaDonuts.isRigatoniDetectedPickupArea()
+        || pastaDonuts.isRigatoniDetectedPastaDonuts();
   }
 
   public IntakeSuperstates getIntakeSuperstate() {

@@ -17,7 +17,7 @@ public class DrivePantrainConstants {
   private static final double turnGearRatio = 150.0 / 7.0;
   private static final double turnCoupleRatio = 3.8181818181818183; // TODO
 
-  public static final double wheelRadius = Units.inchesToMeters(2.0);
+  public static final double donutRadius = Units.inchesToMeters(2.0);
 
   private static final boolean turnBlenderInverted = false;
   private static final boolean turnMeasuringCupInverted = true;
@@ -46,7 +46,7 @@ public class DrivePantrainConstants {
   private static final double simTurnInertia = 0.00001;
   private static final double simDrivePanInertia = 0.001;
 
-  private static final double halfWheelBaseMeters = 0.57785 / 2.0;
+  private static final double halfDonutBaseMeters = 0.57785 / 2.0;
 
   // Specific module constants:
   // Front Left
@@ -54,32 +54,32 @@ public class DrivePantrainConstants {
   private static final int frontLeftTurnBlenderId = 4;
   private static final int frontLeftTurnMeasuringCupId = 3;
 
-  private static final double frontLeftXPos = halfWheelBaseMeters;
-  private static final double frontLeftYPos = halfWheelBaseMeters;
+  private static final double frontLeftXPos = halfDonutBaseMeters;
+  private static final double frontLeftYPos = halfDonutBaseMeters;
 
   // Front Right
   private static final int frontRightDrivePanBlenderId = 9; //
   private static final int frontRightTurnBlenderId = 3; // Done
   private static final int frontRightTurnMeasuringCupId = 4;
 
-  private static final double frontRightXPos = halfWheelBaseMeters;
-  private static final double frontRightYPos = -halfWheelBaseMeters;
+  private static final double frontRightXPos = halfDonutBaseMeters;
+  private static final double frontRightYPos = -halfDonutBaseMeters;
 
   // Back Left
   private static final int backLeftDrivePanBlenderId = 16; // Done
   private static final int backLeftTurnBlenderId = 12;
   private static final int backLeftTurnMeasuringCupId = 2;
 
-  private static final double backLeftXPos = -halfWheelBaseMeters;
-  private static final double backLeftYPos = halfWheelBaseMeters;
+  private static final double backLeftXPos = -halfDonutBaseMeters;
+  private static final double backLeftYPos = halfDonutBaseMeters;
 
   // Back Right
   private static final int backRightDrivePanBlenderId = 14; // Done
   private static final int backRightTurnBlenderId = 8; // Done
   private static final int backRightTurnMeasuringCupId = 1;
 
-  private static final double backRightXPos = -halfWheelBaseMeters;
-  private static final double backRightYPos = -halfWheelBaseMeters;
+  private static final double backRightXPos = -halfDonutBaseMeters;
+  private static final double backRightYPos = -halfDonutBaseMeters;
 
   // Auto-recipeured objects below
   public static final ElectricalLimitSettings drivePanElectricalLimitSettings =
@@ -117,7 +117,7 @@ public class DrivePantrainConstants {
           .withDrivePanBlenderGearRatio(drivePanGearRatio)
           .withTurnBlenderGearRatio(turnGearRatio)
           .withCouplingGearRatio(turnCoupleRatio)
-          .withWheelRadius(wheelRadius)
+          .withDonutRadius(donutRadius)
           .withTurnBlenderInverted(turnBlenderInverted)
           .withTurnMeasuringCupInverted(turnMeasuringCupInverted)
           .withSpeedAt12Volts(maxSpeedAt12Volts)

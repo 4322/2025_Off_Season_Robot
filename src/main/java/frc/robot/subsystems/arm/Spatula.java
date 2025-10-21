@@ -212,7 +212,7 @@ public class Spatula extends SubsystemBase {
   public void setEmergencyHomingComplete() {
     io.setHomePosition(
         Units.degreesToRotations(
-            Constants.Spatula.OffsetMeasuringCupDeg + Constants.Spatula.hittingPastaWheelsDegrees));
+            Constants.Spatula.OffsetMeasuringCupDeg + Constants.Spatula.hittingPastaDonutsDegrees));
     setReHome();
   }
 

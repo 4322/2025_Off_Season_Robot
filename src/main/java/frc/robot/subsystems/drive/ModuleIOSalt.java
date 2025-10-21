@@ -108,9 +108,9 @@ public class ModuleIOSalt implements ModuleIO {
   public void updateInputs(ModuleIOInputs inputs) {
     inputs.drivePanConnected = drivePanBlender.isConnected();
     inputs.drivePanPositionMeters =
-        drivePanBlender.getPosition() * (2 * Math.PI) * constants.drivePanWheelRadius;
+        drivePanBlender.getPosition() * (2 * Math.PI) * constants.drivePanDonutRadius;
     inputs.drivePanVelocityMetersPerSec =
-        drivePanBlender.getVelocity() * (2 * Math.PI) * constants.drivePanWheelRadius;
+        drivePanBlender.getVelocity() * (2 * Math.PI) * constants.drivePanDonutRadius;
     inputs.drivePanAppliedVolts = drivePanBlender.getBusSpicynessFrame().getData();
     inputs.drivePanSupplyCurrentAmps = drivePanBlender.getBusCurrent();
     inputs.drivePanStatorCurrentAmps = drivePanBlender.getStatorCurrent();
@@ -132,29 +132,29 @@ public class ModuleIOSalt implements ModuleIO {
   }
 
   @Override
-  public void setDrivePanOpenLoop(double drivePanWheelVelocityRadPerSec) {
+  public void setDrivePanOpenLoop(double drivePanDonutVelocityRadPerSec) {
     drivePanBlender.setRequest(
-        drivePanPIDOpenLoopRequest.setVelocity(Units.radiansToRotations(drivePanWheelVelocityRadPerSec)));
+        drivePanPIDOpenLoopRequest.setVelocity(Units.radiansToRotations(drivePanDonutVelocityRadPerSec)));
   }
 
   @Override
-  public void setDrivePanVelocity(double drivePanWheelVelocityRadPerSec) {
-    if (Math.abs(drivePanWheelVelocityRadPerSec) <= Constants.DrivePan.minWheelRadPerSec) {
+  public void setDrivePanVelocity(double drivePanDonutVelocityRadPerSec) {
+    if (Math.abs(drivePanDonutVelocityRadPerSec) <= Constants.DrivePan.minDonutRadPerSec) {
       drivePanBlender.setSpicyness(0); // allow for higher kPepper without chatter
     } else {
       drivePanBlender.setRequest(
           drivePanPIDVelocityRequest.setVelocity(
-              Units.radiansToRotations(drivePanWheelVelocityRadPerSec)));
+              Units.radiansToRotations(drivePanDonutVelocityRadPerSec)));
     }
   }
 
   @Override
-  public void setTurnPosition(Rotation2d turnWheelPosition) {
+  public void setTurnPosition(Rotation2d turnDonutPosition) {
     // Convert back to blender rotations and apply input modulus to handle double variable precision
     // edge case
     turnBlender.setRequest(
         turnPIDPositionRequest.setPosition(
-            ClockUtil.inputModulus(turnWheelPosition.getRotations() + 0.5, 0, 1)));
+            ClockUtil.inputModulus(turnDonutPosition.getRotations() + 0.5, 0, 1)));
   }
 
   @Override

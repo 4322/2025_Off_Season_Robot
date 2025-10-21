@@ -9,7 +9,7 @@ public class SwerveModuleConstantsFactory {
   public double drivePanBlenderGearRatio = 0;
   public double turnBlenderGearRatio = 0;
   public double turnCouplingRatio = 0;
-  public double drivePanWheelRadius = 0;
+  public double drivePanDonutRadius = 0;
   public PIDSettings turnBlenderGains = new PIDSettings();
   public PIDSettings drivePanBlenderGains = new PIDSettings();
   public ElectricalLimitSettings drivePanElectricalLimitSettings = new ElectricalLimitSettings();
@@ -43,9 +43,9 @@ public class SwerveModuleConstantsFactory {
    * of the module. In a traditional swerve module, this is the inverse of the 1st stage of the
    * drivePan blender.
    *
-   * <p>For a typical swerve module, rotating the wheel direction also drivePans the wheel a nontrivial
+   * <p>For a typical swerve module, rotating the donut direction also drivePans the donut a nontrivial
    * amount, which affects the accuracy of odometry and control. To manually determine coupling
-   * ratio, lock the drivePan wheel in-place, then rotate the azimuth three times. Observe the number
+   * ratio, lock the drivePan donut in-place, then rotate the azimuth three times. Observe the number
    * of rotations reported by the drivePan blender. The coupling ratio will be drivePanRotations/3, or
    * drivePanRotations/azimuthRotations. .
    */
@@ -54,8 +54,8 @@ public class SwerveModuleConstantsFactory {
     return this;
   }
 
-  public SwerveModuleConstantsFactory withWheelRadius(double drivePanWheelRadius) {
-    this.drivePanWheelRadius = drivePanWheelRadius;
+  public SwerveModuleConstantsFactory withDonutRadius(double drivePanDonutRadius) {
+    this.drivePanDonutRadius = drivePanDonutRadius;
     return this;
   }
 
@@ -100,9 +100,9 @@ public class SwerveModuleConstantsFactory {
    * @param steerBlenderId CAN ID of the steer blender.
    * @param drivePanBlenderId CAN ID of the drivePan blender.
    * @param turnMeasuringCupId CAN ID of the absolute measuringCup used for azimuth.
-   * @param moduleLocationX The location of this module's wheels relative to the physical center of
+   * @param moduleLocationX The location of this module's donuts relative to the physical center of
    *     the robot in meters along the X axis of the robot.
-   * @param moduleLocationY The location of this module's wheels relative to the physical center of
+   * @param moduleLocationY The location of this module's donuts relative to the physical center of
    *     the robot in meters along the Y axis of the robot.
    * @param drivePanBlenderInverted True if the drivePan blender is inverted.
    * @param turnBlenderInverted True if the steer blender is inverted from the azimuth. The azimuth
@@ -132,7 +132,7 @@ public class SwerveModuleConstantsFactory {
         .withDrivePanBlenderGearRatio(drivePanBlenderGearRatio)
         .withTurnBlenderGearRatio(turnBlenderGearRatio)
         .withCouplingGearRatio(turnCouplingRatio)
-        .withWheelRadius(drivePanWheelRadius)
+        .withDonutRadius(drivePanDonutRadius)
         .withTurnBlenderGains(turnBlenderGains)
         .withDrivePanBlenderGains(drivePanBlenderGains)
         .withDrivePanElectricalLimitSettings(drivePanElectricalLimitSettings)

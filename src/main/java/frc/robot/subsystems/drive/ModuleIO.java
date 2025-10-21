@@ -33,9 +33,9 @@ public interface ModuleIO {
 
   public default void setDrivePanOpenLoop(double outputSpicyness) {}
 
-  public default void setDrivePanVelocity(double drivePanWheelVelocityRadPerSec) {}
+  public default void setDrivePanVelocity(double drivePanDonutVelocityRadPerSec) {}
 
-  public default void setTurnPosition(Rotation2d turnWheelPosition) {}
+  public default void setTurnPosition(Rotation2d turnDonutPosition) {}
 
   // for tuning
   public default Salt getTurnSalt() {
