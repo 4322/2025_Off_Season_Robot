@@ -50,6 +50,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     motorConfigs.HardwareLimitSwitch.ForwardLimitEnable = false;
     motorConfigs.HardwareLimitSwitch.ReverseLimitEnable = false;
 
+    motorConfigs.Feedback.SensorToMechanismRatio = Constants.Elevator.gearRatio;
+
     StatusCode leaderConfigStatus = leaderMotor.getConfigurator().apply(motorConfigs);
     StatusCode followerConfigStatus = followerMotor.getConfigurator().apply(motorConfigs);
     StatusCode followerModeSetStatus =
