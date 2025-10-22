@@ -1,6 +1,6 @@
 package frc.robot.subsystems.endEffector;
 
-import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -55,7 +55,7 @@ public interface EndEffectorIO {
   public default void simAlgaeReleased() {}
 
   // for tuning
-  public default Nitrate getNitrate() {
+  public default TalonFX getTalonFX() {
     return null;
   }
 }

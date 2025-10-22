@@ -3,7 +3,7 @@ package frc.robot.subsystems.endEffector;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.BabyAlchemist;
+import frc.robot.BabyTunerX;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.SubsystemMode;
@@ -88,7 +88,7 @@ public class EndEffector extends SubsystemBase {
     Logger.recordOutput("End Effector/isPiecePickupDetected", isPiecePickupDetected());
 
     if (Constants.endEffectorMode == SubsystemMode.TUNING) {
-      BabyAlchemist.run(0, io.getNitrate(), "End-Effector", inputs.speedRotationsPerSec, "rot/sec");
+      BabyTunerX.run(0, io.getTalonFX(), "End-Effector", inputs.speedRotationsPerSec, "rot/sec");
       return;
     }
 
