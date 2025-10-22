@@ -4,8 +4,6 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.reduxrobotics.sensors.canandcolor.Canandcolor;
-import com.reduxrobotics.sensors.canandcolor.CanandcolorSettings;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 
@@ -30,8 +28,6 @@ public class RollersIOTalonFX implements RollersIO {
 
     StatusCode feederConfigStatus = rollersMotor.getConfigurator().apply(motorConfigs);
 
-    
-
     if (feederConfigStatus != StatusCode.OK) {
       DriverStation.reportError(
           "Talon "
@@ -40,8 +36,6 @@ public class RollersIOTalonFX implements RollersIO {
               + feederConfigStatus.getDescription(),
           false);
     }
-
-
   }
 
   @Override
@@ -53,7 +47,6 @@ public class RollersIOTalonFX implements RollersIO {
     inputs.statorCurrentAmps = rollersMotor.getStatorCurrent().getValueAsDouble();
     inputs.motorTempCelcius = rollersMotor.getDeviceTemp().getValueAsDouble();
     inputs.speedRotationsPerSec = rollersMotor.getVelocity().getValueAsDouble();
-
   }
 
   @Override
@@ -72,5 +65,10 @@ public class RollersIOTalonFX implements RollersIO {
   @Override
   public void enableBrakeMode(boolean enable) {
     rollersMotor.setNeutralMode(enable ? NeutralModeValue.Brake : NeutralModeValue.Coast);
+  }
+
+  @Override
+  public TalonFX getTalonFX() {
+    return rollersMotor;
   }
 }
