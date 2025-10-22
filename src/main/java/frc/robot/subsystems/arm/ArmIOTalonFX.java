@@ -42,10 +42,12 @@ public class ArmIOTalonFX implements ArmIO {
     motorConfig.Slot0.kP = Constants.Arm.kP;
     motorConfig.Slot0.kD = Constants.Arm.kD;
     motorConfig.Slot0.kI = Constants.Arm.kI;
+    motorConfig.Slot0.kG = Constants.Arm.kG;
 
     motorConfig.Slot1.kP = Constants.Arm.kP;
     motorConfig.Slot1.kD = Constants.Arm.kD;
     motorConfig.Slot1.kI = Constants.Arm.kI;
+    motorConfig.Slot1.kG = Constants.Arm.kG;
 
     motorConfig.HardwareLimitSwitch.ForwardLimitEnable = false;
     motorConfig.HardwareLimitSwitch.ReverseLimitEnable = false;
@@ -77,10 +79,6 @@ public class ArmIOTalonFX implements ArmIO {
     inputs.SupplyCurrentAmps = armMotor.getSupplyCurrent().getValueAsDouble();
     inputs.StatorCurrentAmps = armMotor.getStatorCurrent().getValueAsDouble();
     inputs.motorTempCelsius = armMotor.getDeviceTemp().getValueAsDouble();
-    inputs.tempCelcius =
-        new double[] {
-          armMotor.getDeviceTemp().getValueAsDouble(),
-        };
   }
 
   @Override

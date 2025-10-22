@@ -1,7 +1,8 @@
 package frc.robot.subsystems.arm;
 
-import com.ctre.phoenix6.hardware.TalonFX;
 import org.littletonrobotics.junction.AutoLog;
+
+import com.ctre.phoenix6.hardware.TalonFX;
 
 public interface ArmIO {
   @AutoLog
@@ -15,7 +16,6 @@ public interface ArmIO {
     public double SupplyCurrentAmps = 0.0;
     public double StatorCurrentAmps = 0.0;
     public double motorTempCelsius = 0.0;
-    public double[] tempCelcius = new double[] {};
     public double controllerTempCelsius = 0.0;
     public double PositionDegrees =
         0.0; // 0 is vertical to front of robot. Posititve clockwise looking from the left
