@@ -130,6 +130,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     lastRequestedPosRotations = metersToRotations(heightMeters);
     leaderMotor.setControl(
         new MotionMagicVoltage(lastRequestedPosRotations).withSlot(1).withEnableFOC(true));
+        
   }
 
   @Override
