@@ -152,7 +152,7 @@ public final class Constants {
 
     public static final double sensorToArm = 85 / 10.0;
     public static final double motorShaftToSensorShaft = 60 / 10.0;
-    public static final double gearRatio = sensorToArm;
+    public static final double gearRatio = sensorToArm * motorShaftToSensorShaft;
     public static final double motionMagicJerk = 0;
     public static final double peakForwardVoltage = 12.0;
     public static final double peakReverseVoltage = -12.0;
