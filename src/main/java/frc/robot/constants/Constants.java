@@ -221,8 +221,8 @@ public final class Constants {
   }
 
   public static class Elevator {
-    public static final int frontMotorID = 1; 
-    public static final int backMotorID = -1; //TODO
+    public static final int frontMotorID = 1;
+    public static final int backMotorID = -1; // TODO
 
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
