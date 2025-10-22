@@ -24,14 +24,14 @@ public class ElevatorIOSim implements ElevatorIO {
     double velocity = (position - prevPos) * 50;
 
     inputs.requestedPosMeters = requestedPosition;
-    inputs.leaderheightMeters = position;
+    inputs.leaderHeightMeters = position;
     inputs.followerHeightMeters = position;
 
     inputs.leaderVoltage = voltage;
     inputs.followerVoltage = voltage;
 
     inputs.followerVelocityMetersPerSecond = velocity;
-    inputs.velMetersPerSecond = velocity;
+    inputs.leaderVelocityMetersPerSecond = velocity;
   }
 
   @Override

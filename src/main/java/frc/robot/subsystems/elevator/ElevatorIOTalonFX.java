@@ -7,7 +7,6 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.elevator.ElevatorIO.ElevatorIOInputs;
@@ -43,15 +42,13 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     motorConfigs.Slot1.GravityType = GravityTypeValue.Elevator_Static;
 
     motorConfigs.MotionMagic.MotionMagicAcceleration =
-    metersToRotations(Constants.Elevator.fastAccelerationMetersPerSec2);
+        metersToRotations(Constants.Elevator.fastAccelerationMetersPerSec2);
     motorConfigs.MotionMagic.MotionMagicCruiseVelocity =
-    metersToRotations(Constants.Elevator.fastVelocityMetersPerSec);
+        metersToRotations(Constants.Elevator.fastVelocityMetersPerSec);
     motorConfigs.MotionMagic.MotionMagicJerk = Constants.Elevator.motionMagicJerk;
 
     motorConfigs.HardwareLimitSwitch.ForwardLimitEnable = false;
     motorConfigs.HardwareLimitSwitch.ReverseLimitEnable = false;
-
-    motorConfigs.Feedback.SensorToMechanismRatio = Constants.Elevator.gearRatio;
 
     StatusCode leaderConfigStatus = leaderMotor.getConfigurator().apply(motorConfigs);
     StatusCode followerConfigStatus = followerMotor.getConfigurator().apply(motorConfigs);
@@ -95,24 +92,22 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     inputs.requestedPosMeters = lastRequestedPosMeters;
     inputs.requestedPosRotations = lastRequestedPosRotations;
 
-    inputs.leaderheightMeters = rotationsToMeters(leaderMotor.getPosition().getValueAsDouble());
+    inputs.leaderHeightMeters = rotationsToMeters(leaderMotor.getPosition().getValueAsDouble());
     inputs.followerHeightMeters = rotationsToMeters(followerMotor.getPosition().getValueAsDouble());
 
-    inputs.followerVelocityMetersPerSecond = rotationsToMeters(followerMotor.getVelocity().getValueAsDouble());
-    inputs.velMetersPerSecond = rotationsToMeters(leaderMotor.getVelocity().getValueAsDouble());
+    inputs.followerVelocityMetersPerSecond =
+        rotationsToMeters(followerMotor.getVelocity().getValueAsDouble());
+    inputs.leaderVelocityMetersPerSecond =
+        rotationsToMeters(leaderMotor.getVelocity().getValueAsDouble());
 
-    // inputs.leaderSupplyAmps = leaderMotor.getBusCurrent().getValueAsDouble();
-    // inputs.followerSupplyAmps = followerMotor.getBusCurrent().getValueAsDouble();
+    inputs.leaderSupplyAmps = leaderMotor.getSupplyCurrent().getValueAsDouble();
+    inputs.followerSupplyAmps = followerMotor.getSupplyCurrent().getValueAsDouble();
 
     inputs.leaderStatorAmps = leaderMotor.getStatorCurrent().getValueAsDouble();
     inputs.followerStatorAmps = followerMotor.getStatorCurrent().getValueAsDouble();
 
-    inputs.leadertempCelcius = leaderMotor.getDeviceTemp().getValueAsDouble();
-    inputs.followertempCelcius = followerMotor.getDeviceTemp().getValueAsDouble();
-
-    // inputs.leaderControllerTempCelcius = leaderMotor.getControllerTemperatureFrame().getValue();
-    // inputs.followerControllerTempCelcius =
-    // followerMotor.getControllerTemperatureFrame().getValue();
+    inputs.leaderTempCelcius = leaderMotor.getDeviceTemp().getValueAsDouble();
+    inputs.followerTempCelcius = followerMotor.getDeviceTemp().getValueAsDouble();
 
     inputs.leaderVoltage = leaderMotor.getMotorVoltage().getValueAsDouble();
     inputs.leaderEncoderRotations = leaderMotor.getPosition().getValueAsDouble();
@@ -131,15 +126,14 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
   @Override
   public void requestSlowHeightMeters(double heightMeters) {
-
     lastRequestedPosMeters = heightMeters;
     lastRequestedPosRotations = metersToRotations(heightMeters);
-    leaderMotor.setControl(new MotionMagicVoltage(lastRequestedPosRotations));
+    leaderMotor.setControl(
+        new MotionMagicVoltage(lastRequestedPosRotations).withSlot(1).withEnableFOC(true));
   }
 
   @Override
   public void requestHeightMeters(double heightMeters) {
-
     lastRequestedPosMeters = heightMeters;
     lastRequestedPosRotations = metersToRotations(heightMeters);
     leaderMotor.setControl(
@@ -156,7 +150,6 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   @Override
   public void stop() {
     leaderMotor.stopMotor();
-    followerMotor.stopMotor();
     lastRequestedPosMeters = -1;
     lastRequestedPosRotations = -1;
   }

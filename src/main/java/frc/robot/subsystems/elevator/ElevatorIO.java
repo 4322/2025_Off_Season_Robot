@@ -10,13 +10,13 @@ public interface ElevatorIO {
     public double requestedPosMeters;
     public double requestedPosRotations;
 
-    public double leaderheightMeters = 0.0;
+    public double leaderHeightMeters = 0.0;
     public double leaderVoltage = 0.0;
     public boolean leaderConnected = false;
-    public double velMetersPerSecond = 0.0;
+    public double leaderVelocityMetersPerSecond = 0.0;
     public double leaderSupplyAmps = 0.0;
     public double leaderStatorAmps = 0.0;
-    public double leadertempCelcius = 0.0;
+    public double leaderTempCelcius = 0.0;
     public double leaderEncoderRotations = 0.0;
     public double kGeffort;
     public double kPeffort;
@@ -32,7 +32,7 @@ public interface ElevatorIO {
     public double followerVelocityMetersPerSecond = 0.0;
     public double followerSupplyAmps = 0.0;
     public double followerStatorAmps = 0.0;
-    public double followertempCelcius = 0.0;
+    public double followerTempCelcius = 0.0;
     public double followerEncoderRotations = 0.0;
   }
 

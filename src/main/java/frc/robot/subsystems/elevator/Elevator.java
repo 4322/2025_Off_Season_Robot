@@ -36,7 +36,7 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("Elevator/TargetHeight", requestedHeightMeters);
 
     if (isHomed) {
-      if (Math.abs(inputs.leaderheightMeters - inputs.followerHeightMeters)
+      if (Math.abs(inputs.leaderHeightMeters - inputs.followerHeightMeters)
           <= Constants.Elevator.syncToleranceMeters) {
         inSync = true;
       } else if (!isMoving()) {
@@ -49,7 +49,7 @@ public class Elevator extends SubsystemBase {
           break;
         case TUNING:
           Double newPos =
-              BabyTunerX.run(0, io.getTalonFX(), "Elevator", inputs.leaderheightMeters, "meters");
+              BabyTunerX.run(0, io.getTalonFX(), "Elevator", inputs.leaderHeightMeters, "meters");
           if (newPos != null) {
             io.requestHeightMeters(newPos);
             requestedHeightMeters = newPos;
@@ -194,7 +194,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getElevatorHeightMeters() {
-    return inputs.leaderheightMeters;
+    return inputs.leaderHeightMeters;
   }
 
   public void setHomePosition() {
@@ -208,7 +208,7 @@ public class Elevator extends SubsystemBase {
     isHomed = false;
     io.setVoltage(Constants.Elevator.intializationVoltage);
     requestedHeightMeters = 0;
-    return inputs.velMetersPerSecond;
+    return inputs.leaderVelocityMetersPerSecond;
   }
 
   public void setEmergencyHomingComplete() {
@@ -229,7 +229,8 @@ public class Elevator extends SubsystemBase {
 
   public boolean isMoving() {
     return !atSetpoint()
-        || Math.abs(inputs.velMetersPerSecond) > Constants.Elevator.initializationCompleteSpeed;
+        || Math.abs(inputs.leaderVelocityMetersPerSecond)
+            > Constants.Elevator.initializationCompleteSpeed;
   }
 
   public void safeBargeRetract() {
