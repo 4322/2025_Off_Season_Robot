@@ -36,7 +36,7 @@ public class RollersIOTalonFX implements RollersIO {
       DriverStation.reportError(
           "Talon "
               + rollersMotor.getDeviceID()
-              + " error (End Effector): "
+              + " error (Rollers): "
               + feederConfigStatus.getDescription(),
           false);
     }
