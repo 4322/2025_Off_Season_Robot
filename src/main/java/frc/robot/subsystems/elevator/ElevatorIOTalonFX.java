@@ -98,7 +98,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     inputs.leaderheightMeters = rotationsToMeters(leaderMotor.getPosition().getValueAsDouble());
     inputs.followerHeightMeters = rotationsToMeters(followerMotor.getPosition().getValueAsDouble());
 
-    inputs.followerVelocityMetersPerSecond = followerMotor.getVelocity().getValueAsDouble();
+    inputs.followerVelocityMetersPerSecond = rotationsToMeters(followerMotor.getVelocity().getValueAsDouble());
     inputs.velMetersPerSecond = rotationsToMeters(leaderMotor.getVelocity().getValueAsDouble());
 
     // inputs.leaderSupplyAmps = leaderMotor.getBusCurrent().getValueAsDouble();
