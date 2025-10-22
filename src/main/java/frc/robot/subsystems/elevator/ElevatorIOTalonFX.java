@@ -31,10 +31,14 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     motorConfigs.Slot0.kD = Constants.Elevator.fast_kD;
     motorConfigs.Slot0.kP = Constants.Elevator.fast_kP;
     motorConfigs.Slot0.kI = Constants.Elevator.fast_kI;
+    motorConfigs.Slot0.kG = Constants.Elevator.kG;
+
+
 
     motorConfigs.Slot1.kD = Constants.Elevator.slow_kD;
     motorConfigs.Slot1.kP = Constants.Elevator.slow_kP;
     motorConfigs.Slot1.kI = Constants.Elevator.slow_kI;
+    motorConfigs.Slot1.kG = Constants.Elevator.kG;
 
     motorConfigs.MotionMagic.MotionMagicAcceleration =
         (Constants.Elevator.fastAccelerationMetersPerSec2
