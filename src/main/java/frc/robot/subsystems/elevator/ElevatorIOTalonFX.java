@@ -6,6 +6,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.elevator.ElevatorIO.ElevatorIOInputs;
@@ -84,7 +85,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
-    // Implementation for updating inputs from the Nitrate hardware
+    // Implementation for updating inputs from the TalonFX hardware
     inputs.leaderConnected = leaderMotor.isConnected();
     inputs.followerConnected = followerMotor.isConnected();
 
