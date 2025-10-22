@@ -1,7 +1,8 @@
 package frc.robot.subsystems.arm;
 
-import com.ctre.phoenix6.hardware.TalonFX;
 import org.littletonrobotics.junction.AutoLog;
+
+import com.ctre.phoenix6.hardware.TalonFX;
 
 public interface ArmIO {
   @AutoLog
@@ -45,6 +46,8 @@ public interface ArmIO {
   public default void requestSlowPosition(double requestSetpoint) {}
 
   public default void setManualInitialization() {}
+
+  public default void enableBrakeMode(boolean enable) {}
 
   public default TalonFX getKrakenFX() {
     return null;

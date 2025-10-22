@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,7 +15,6 @@ import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
-import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -482,14 +484,14 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void CoastMotors() {
-    arm.stop();
-    elevator.stop();
+    arm.enableBrakeMode(false);
+    elevator.enableBrakeMode(false);
     intakeSuperstructure.deployer.stop(IdleMode.kCoast);
   }
 
   public void BreakMotors() {
-    arm.stop();
-    elevator.stop();
+    arm.enableBrakeMode(true);
+    elevator.enableBrakeMode(true);
     intakeSuperstructure.deployer.stop(IdleMode.kBrake);
   }
 

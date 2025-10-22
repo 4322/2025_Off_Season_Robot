@@ -1,7 +1,8 @@
 package frc.robot.subsystems.elevator;
 
-import com.ctre.phoenix6.hardware.TalonFX;
 import org.littletonrobotics.junction.AutoLog;
+
+import com.ctre.phoenix6.hardware.TalonFX;
 
 public interface ElevatorIO {
   @AutoLog
@@ -53,6 +54,10 @@ public interface ElevatorIO {
   // public default Nitrate getNitrate() {
   //   return null;
   // }
+
+  public default void enableBrakeMode(boolean enable) {
+
+  }
 
   public default TalonFX getTalonFX() {
     return null;
