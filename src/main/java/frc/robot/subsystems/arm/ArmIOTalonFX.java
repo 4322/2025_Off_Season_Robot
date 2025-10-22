@@ -7,6 +7,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
@@ -54,10 +55,10 @@ public class ArmIOTalonFX implements ArmIO {
     motorConfig.Feedback.SensorToMechanismRatio = Constants.Arm.gearRatio;
 
     motorConfig.MotionMagic.MotionMagicAcceleration =
-        Constants.Arm.accelerationLimitCoral / (Math.PI * Constants.Arm.gearRatio);
+        Constants.Arm.accelerationLimitCoral;
     motorConfig.MotionMagic.MotionMagicCruiseVelocity =
-        Constants.Arm.deaccelerationLimitCoral / (Math.PI * Constants.Arm.gearRatio);
-
+        Constants.Arm.velocityLimitCoral;
+        
     motorConfig.MotionMagic.MotionMagicJerk = Constants.Arm.motionMagicJerk;
 
     motorConfig.HardwareLimitSwitch.ForwardLimitEnable = false;

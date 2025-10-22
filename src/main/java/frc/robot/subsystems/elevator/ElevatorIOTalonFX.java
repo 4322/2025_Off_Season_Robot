@@ -7,6 +7,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.elevator.ElevatorIO.ElevatorIOInputs;
@@ -46,7 +47,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
                 / (Math.PI * Constants.Elevator.beltPulleyPitchDiameterMeters))
             * Constants.Elevator.gearRatio;
     motorConfigs.MotionMagic.MotionMagicCruiseVelocity =
-        (Constants.Elevator.fastDecelerationMetersPerSec2
+        (Constants.Elevator.fastVelocityMetersPerSec
                 / (Math.PI * Constants.Elevator.beltPulleyPitchDiameterMeters))
             * Constants.Elevator.gearRatio;
     motorConfigs.MotionMagic.MotionMagicJerk = Constants.Elevator.motionMagicJerk;
