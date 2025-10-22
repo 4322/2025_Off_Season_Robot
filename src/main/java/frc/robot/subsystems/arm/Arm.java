@@ -55,7 +55,7 @@ public class Arm extends SubsystemBase {
             break;
           case TUNING:
             Double newPos =
-                BabyTunerX.run(0, io.getKrakenFX(), "Arm", inputs.PositionDegrees, "degrees");
+                BabyTunerX.run(0, io.getTalonFX(), "Arm", inputs.PositionDegrees, "degrees");
             if (newPos != null) {
               io.requestPositionCoral(newPos);
             }
