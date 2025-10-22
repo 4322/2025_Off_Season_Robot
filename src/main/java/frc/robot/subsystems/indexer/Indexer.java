@@ -6,6 +6,8 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.SubsystemMode;
 import org.littletonrobotics.junction.Logger;
 
+import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 public class Indexer extends SubsystemBase {
   private IndexerIO io;
   private IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
@@ -76,12 +78,9 @@ public class Indexer extends SubsystemBase {
 
   public void idle() {
     currentAction = IndexerStatus.START;
-    io.stop();
+    io.stopNitrate(IdleMode.kCoast);
   }
 
-  public void enableBrakeMode(boolean enable) {
-    io.enableBrakeMode(enable);
-  }
 
   public boolean isCoralDetectedIndexer() {
     return inputs.indexerSensorTriggered;
