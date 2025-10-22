@@ -134,7 +134,9 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     lastRequestedPosMeters = heightMeters;
     lastRequestedPosRotations = metersToRotations(heightMeters);
-    leaderMotor.setControl(new MotionMagicVoltage(lastRequestedPosRotations));
+    leaderMotor.setControl(  new MotionMagicVoltage(lastRequestedPosRotations).withSlot(1).withEnableFOC(true));
+    followerMotor.setControl(
+          new MotionMagicVoltage(lastRequestedPosRotations).withSlot(1).withEnableFOC(true));
   }
 
   @Override
@@ -144,6 +146,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     lastRequestedPosRotations = metersToRotations(heightMeters);
     leaderMotor.setControl(
         new MotionMagicVoltage(lastRequestedPosRotations).withSlot(0).withEnableFOC(true));
+        followerMotor.setControl(
+          new MotionMagicVoltage(lastRequestedPosRotations).withSlot(0).withEnableFOC(true));
   }
 
   @Override
@@ -156,7 +160,6 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   @Override
   public void stop() {
     leaderMotor.stopMotor();
-    followerMotor.stopMotor();
     lastRequestedPosMeters = -1;
     lastRequestedPosRotations = -1;
   }
