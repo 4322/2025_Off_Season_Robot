@@ -43,13 +43,9 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     motorConfigs.Slot1.GravityType = GravityTypeValue.Elevator_Static;
 
     motorConfigs.MotionMagic.MotionMagicAcceleration =
-        (Constants.Elevator.fastAccelerationMetersPerSec2
-                / (Math.PI * Constants.Elevator.beltPulleyPitchDiameterMeters))
-            * Constants.Elevator.gearRatio;
+    metersToRotations(Constants.Elevator.fastAccelerationMetersPerSec2);
     motorConfigs.MotionMagic.MotionMagicCruiseVelocity =
-        (Constants.Elevator.fastVelocityMetersPerSec
-                / (Math.PI * Constants.Elevator.beltPulleyPitchDiameterMeters))
-            * Constants.Elevator.gearRatio;
+    metersToRotations(Constants.Elevator.fastVelocityMetersPerSec);
     motorConfigs.MotionMagic.MotionMagicJerk = Constants.Elevator.motionMagicJerk;
 
     motorConfigs.HardwareLimitSwitch.ForwardLimitEnable = false;
