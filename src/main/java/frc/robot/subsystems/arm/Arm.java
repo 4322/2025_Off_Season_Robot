@@ -3,6 +3,7 @@ package frc.robot.subsystems.arm;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BabyTunerX;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure.Level;
@@ -52,14 +53,13 @@ public class Arm extends SubsystemBase {
             double x = -RobotContainer.driver.getRightX();
             io.setVoltage(x * x * x * 12.0);
             break;
-            // case TUNING:
-            //   Double newPos =
-            //       BabyAlchemist.run(0, io.getKrakenFX(), "Arm", inputs.PositionDegrees,
-            // "degrees");
-            //   if (newPos != null) {
-            //     io.requestPositionCoral(newPos);
-            //   }
-            //   break;
+          case TUNING:
+            Double newPos =
+                BabyTunerX.run(0, io.getTalonFX(), "Arm", inputs.PositionDegrees, "degrees");
+            if (newPos != null) {
+              io.requestPositionCoral(newPos);
+            }
+            break;
           case DISABLED:
             break;
           case NORMAL:

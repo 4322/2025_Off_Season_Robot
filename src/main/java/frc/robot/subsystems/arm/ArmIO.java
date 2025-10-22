@@ -48,7 +48,7 @@ public interface ArmIO {
 
   public default void enableBrakeMode(boolean enable) {}
 
-  public default TalonFX getKrakenFX() {
+  public default TalonFX getTalonFX() {
     return null;
   } // for tuning
 }

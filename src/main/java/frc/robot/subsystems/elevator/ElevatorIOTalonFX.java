@@ -6,7 +6,6 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.elevator.ElevatorIO.ElevatorIOInputs;
@@ -83,7 +82,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
       DriverStation.reportError(
           "Talon "
               + followerMotor.getDeviceID()
-              + " error (Left Elevator): "
+              + " error (setting follower mode): "
               + followerModeSetStatus.getDescription(),
           false);
     }
