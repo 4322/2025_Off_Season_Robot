@@ -75,8 +75,8 @@ public class ArmIOTalonFX implements ArmIO {
   }
 
   @Override
-  public void setHomePosition(double degrees) {
-    armMotor.setPosition(degrees);
+  public void setHomePosition(double rotations) {
+    armMotor.setPosition(rotations);
     stopArmMotor();
   }
 
