@@ -5,19 +5,17 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.arm.ArmIO.ArmIOInputs;
 
 public class ArmIOTalonFX implements ArmIO {
   private TalonFX armMotor;
   private double lastRequestedPosDeg;
 
   private TalonFXConfiguration motorConfig = new TalonFXConfiguration();
-
-  private double setpointMechanismRot;
 
   public ArmIOTalonFX() {
     armMotor = new TalonFX(Constants.Arm.armMotorId);
@@ -42,11 +40,13 @@ public class ArmIOTalonFX implements ArmIO {
     motorConfig.Slot0.kD = Constants.Arm.kD;
     motorConfig.Slot0.kI = Constants.Arm.kI;
     motorConfig.Slot0.kG = Constants.Arm.kG;
+    motorConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
 
     motorConfig.Slot1.kP = Constants.Arm.kP;
     motorConfig.Slot1.kD = Constants.Arm.kD;
     motorConfig.Slot1.kI = Constants.Arm.kI;
     motorConfig.Slot1.kG = Constants.Arm.kG;
+    motorConfig.Slot1.GravityType = GravityTypeValue.Arm_Cosine;
 
     motorConfig.HardwareLimitSwitch.ForwardLimitEnable = false;
     motorConfig.HardwareLimitSwitch.ReverseLimitEnable = false;
