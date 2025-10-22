@@ -237,7 +237,7 @@ public class Arm extends SubsystemBase {
     return inputs.PositionDegrees;
   }
 
-  public void enableBrakeMode(boolean enable){
+  public void enableBrakeMode(boolean enable) {
     io.enableBrakeMode(enable);
   }
 }

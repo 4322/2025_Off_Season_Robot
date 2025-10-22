@@ -117,7 +117,7 @@ public class ArmIOTalonFX implements ArmIO {
     armMotor.stopMotor();
     lastRequestedPosDeg = -1;
   }
-  
+
   @Override
   public void enableBrakeMode(boolean enable) {
     armMotor.setNeutralMode(enable ? NeutralModeValue.Brake : NeutralModeValue.Coast);
