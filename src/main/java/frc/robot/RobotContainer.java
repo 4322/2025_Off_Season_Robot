@@ -54,6 +54,7 @@ import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
 import frc.robot.subsystems.rollers.RollersIONitrate;
+import frc.robot.subsystems.rollers.RollersIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
@@ -172,7 +173,7 @@ public class RobotContainer {
 
       if (Constants.rollersMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        rollers = new Rollers(new RollersIONitrate());
+        rollers = new Rollers(new RollersIOTalonFX());
       } else {
         rollers = new Rollers(new RollersIO() {});
       }

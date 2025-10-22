@@ -456,6 +456,8 @@ public final class Constants {
     public static final double currentDetectionMaxAccumulationSeconds = 1;
     public static final double velocityDetectionDeltaThresholdRotationsPerSecond = 6;
     public static final double velocityDetectionMaxAccumulationSeconds = 1;
+
+    public static final InvertedValue motorInvertPhoenix = InvertedValue.Clockwise_Positive;
   }
 
   public static class IntakeSuperstructure {

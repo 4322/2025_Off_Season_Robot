@@ -54,7 +54,7 @@ public class IndexerIOTalonFX implements IndexerIO {
       DriverStation.reportError(
           "Talon "
               + indexerMotorLeft.getDeviceID()
-              + " error (End Effector): "
+              + " error (Indexer Left): "
               + feederConfigStatusLeft.getDescription(),
           false);
     }
@@ -63,7 +63,7 @@ public class IndexerIOTalonFX implements IndexerIO {
       DriverStation.reportError(
           "Talon "
               + indexerMotorRight.getDeviceID()
-              + " error (End Effector): "
+              + " error (Indexer Right): "
               + feederConfigStatusRight.getDescription(),
           false);
     }
@@ -125,7 +125,7 @@ public class IndexerIOTalonFX implements IndexerIO {
 
   @Override
   public void setVoltage(double voltage) {
-    if (voltage != previousRequestedVoltage || Constants.continuousNitrateRequestsEnabled) {
+    if (voltage != previousRequestedVoltage) {
       previousRequestedVoltage = voltage;
       indexerMotorRight.setVoltage(voltage);
       indexerMotorLeft.setVoltage(voltage);
