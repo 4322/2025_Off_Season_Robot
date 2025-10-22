@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BabyTunerX;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
@@ -46,15 +47,14 @@ public class Elevator extends SubsystemBase {
         case OPEN_LOOP:
           io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
           break;
-          // case TUNING:
-          //   Double newPos =
-          //       BabyAlchemist.run(
-          //           0, io.getNitrate(), "Elevator", inputs.leaderheightMeters, "meters");
-          //   if (newPos != null) {
-          //     io.requestHeightMeters(newPos);
-          //     requestedHeightMeters = newPos;
-          //   }
-          //   break;
+        case TUNING:
+          Double newPos =
+              BabyTunerX.run(0, io.getTalonFX(), "Elevator", inputs.leaderheightMeters, "meters");
+          if (newPos != null) {
+            io.requestHeightMeters(newPos);
+            requestedHeightMeters = newPos;
+          }
+          break;
         case DISABLED:
           break;
         case NORMAL:
