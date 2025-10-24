@@ -30,7 +30,6 @@ public final class Constants {
   public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = true;
-  public static final boolean enableArmSensor = true;
   public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING_WITH_DRIVER;
   public static final boolean tuneAutoRotate = false;
   public static final boolean continuousNitrateRequestsEnabled = true;
@@ -142,7 +141,7 @@ public final class Constants {
   }
 
   public static class Arm {
-    public static final int armMotorId = 10; // Done
+    public static final int armMotorId = 19; // Done
     public static final int armEncoderId = 10; // Done
 
     public static final InvertMode motorInvert =
@@ -170,8 +169,8 @@ public final class Constants {
     public static final double minArmSafeWithCoralDeg = 54;
     public static final double maxArmSafeDeg = 245.0;
 
-    public static final double setpointToleranceDegrees = enableArmSensor ? 0.5 : 0.75;
-    public static final double setpointToleranceDegreesEject = enableArmSensor ? 5 : 0.75;
+    public static final double setpointToleranceDegrees = 0.5;
+    public static final double setpointToleranceDegreesEject = 0.5;
     public static final double syncToleranceDegrees = 1.0;
     public static final double bufferDeg =
         setpointToleranceDegrees * 4; // Degrees of buffer zone for min safe angle
@@ -221,8 +220,8 @@ public final class Constants {
   }
 
   public static class Elevator {
-    public static final int frontMotorID = 1;
-    public static final int backMotorID = -1; // TODO
+    public static final int frontMotorID = 21;
+    public static final int backMotorID = 15;
 
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
@@ -302,7 +301,7 @@ public final class Constants {
 
   // TODO all of these are placeholder values
   public static class EndEffector {
-    public static final int motorId = 13;
+    public static final int motorId = 22;
     public static final int sensorId = 2;
 
     public static final double maxAlgaeHoldVolts = 1.2;
@@ -431,7 +430,7 @@ public final class Constants {
   }
 
   public static class Rollers {
-    public static final int motorId = 11; // Done
+    public static final int motorId = 20; // Done
 
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 60;
