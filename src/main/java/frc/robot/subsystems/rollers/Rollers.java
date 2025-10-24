@@ -92,8 +92,4 @@ public class Rollers extends SubsystemBase {
   public boolean isCoralPickupDetected() {
     return isCoralPickupDetected;
   }
-
-  public void enableBrakeMode(boolean enable) {
-    io.enableBrakeMode(enable);
-  }
 }

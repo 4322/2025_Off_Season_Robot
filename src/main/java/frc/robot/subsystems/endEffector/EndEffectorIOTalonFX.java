@@ -2,6 +2,7 @@ package frc.robot.subsystems.endEffector;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
@@ -104,7 +105,7 @@ public class EndEffectorIOTalonFX implements EndEffectorIO {
   public void setVoltage(double voltage) {
     if (voltage != previousRequestedVoltage || Constants.continuousNitrateRequestsEnabled) {
       previousRequestedVoltage = voltage;
-      endEffectorMotor.setVoltage(voltage);
+      endEffectorMotor.setControl(new VoltageOut(voltage).withEnableFOC(true));
     }
   }
 

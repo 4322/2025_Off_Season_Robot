@@ -2,6 +2,7 @@ package frc.robot.subsystems.rollers;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -40,7 +41,6 @@ public class RollersIOTalonFX implements RollersIO {
 
   @Override
   public void updateInputs(RollersIOInputs inputs) {
-
     inputs.connected = rollersMotor.isConnected();
     inputs.appliedVoltage = rollersMotor.getMotorVoltage().getValueAsDouble();
     inputs.busCurrentAmps = rollersMotor.getSupplyCurrent().getValueAsDouble();
@@ -53,18 +53,13 @@ public class RollersIOTalonFX implements RollersIO {
   public void setVoltage(double voltage) {
     if (voltage != previousRequestedVoltage) {
       previousRequestedVoltage = voltage;
-      rollersMotor.setVoltage(voltage);
+      rollersMotor.setControl(new VoltageOut(voltage).withEnableFOC(true));
     }
   }
 
   @Override
   public void stop() {
     rollersMotor.stopMotor();
-  }
-
-  @Override
-  public void enableBrakeMode(boolean enable) {
-    rollersMotor.setNeutralMode(enable ? NeutralModeValue.Brake : NeutralModeValue.Coast);
   }
 
   @Override
