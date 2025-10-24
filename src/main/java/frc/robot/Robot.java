@@ -192,7 +192,6 @@ public class Robot extends LoggedRobot {
             new WPILOGWriter(Constants.logPath)); // Log to a USB stick is ("/U/logs")
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
 
-        new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
         RobotController.setBrownoutVoltage(Constants.brownoutVoltage);
         MessageLogger.openLog(Constants.logPath);
 
