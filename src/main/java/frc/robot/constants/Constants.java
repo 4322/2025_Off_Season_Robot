@@ -141,12 +141,11 @@ public final class Constants {
   }
 
   public static class Arm {
-    public static final int armMotorId = 19; // Done
-    public static final int armEncoderId = 10; // Done
+    public static final int armMotorId = 19;
 
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // positive is up toward scoring side
-    public static final InvertedValue motorInversion = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue motorInversion = InvertedValue.CounterClockwise_Positive;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
 
     public static final double sensorToArm = 85 / 10.0;
@@ -162,7 +161,7 @@ public final class Constants {
     public static final double algaeGroundDeg = 69.0;
 
     public static final double ejectDeg = 51.0;
-    public static final double climbingDeg = 25.0; // TODO: Set to actual angle
+    public static final double climbingDeg = 25.0;
 
     public static final double minArmSafeDeg = 47;
     public static final double minArmSafeDegAfterScore = 47;
@@ -170,7 +169,7 @@ public final class Constants {
     public static final double maxArmSafeDeg = 245.0;
 
     public static final double setpointToleranceDegrees = 0.5;
-    public static final double setpointToleranceDegreesEject = 0.5;
+    public static final double setpointToleranceDegreesEject = 5.0;
     public static final double syncToleranceDegrees = 1.0;
     public static final double bufferDeg =
         setpointToleranceDegrees * 4; // Degrees of buffer zone for min safe angle
@@ -226,20 +225,17 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
     public static final InvertMode motorBackInvert = InvertMode.kInverted; // positive is up
-    public static final InvertedValue motorInversion = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue motorInversion = InvertedValue.CounterClockwise_Positive;
 
-    public static final double fast_kP = 4; // TODO: Set to actual value
-    public static final double fast_kI = 0; // TODO: Set to actual value
-    public static final double fast_kD = 0; // TODO: Set to actual value
+    public static final double fast_kP = 4;
+    public static final double fast_kI = 0;
+    public static final double fast_kD = 0;
 
-    public static final double slow_kP = 4; // TODO: Set to actual value
-    public static final double slow_kI = 0; // TODO: Set to actual value
-    public static final double slow_kD = 0; // TODO: Set to actual value
+    public static final double slow_kP = 4;
+    public static final double slow_kI = 0;
+    public static final double slow_kD = 0;
 
-    public static final double kG = 0.4; // TODO: Set to actual value
-
-    public static final double iSat = 1000; // TODO
-    public static final double iZone = 1000; // TODO
+    public static final double kG = 0.4;
 
     public static final double maxElevatorHeightMeters = 1.3068401092;
     public static final double homeHeightMeters = 0.37926;
@@ -299,7 +295,6 @@ public final class Constants {
     public static final double bufferHeightMeters = elevatorHeightToleranceMeters * 2;
   }
 
-  // TODO all of these are placeholder values
   public static class EndEffector {
     public static final int motorId = 22;
     public static final int sensorId = 2;
@@ -340,8 +335,7 @@ public final class Constants {
     public static final double whiteDetectRed = 180;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert = InvertMode.kNotInverted; // positive is intaking
-    public static final InvertedValue motorInvertPhoenix =
-        InvertedValue.Clockwise_Positive; // TODO check if this is right
+    public static final InvertedValue motorInvertPhoenix = InvertedValue.CounterClockwise_Positive;
 
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
@@ -365,7 +359,7 @@ public final class Constants {
   }
 
   public static class Deployer {
-    public static final int deployerMotorId = 15; // Done
+    public static final int deployerMotorId = 15;
     public static final double deployVoltage = 3.0;
 
     public static final double statorCurrentLimit = 80;
@@ -382,8 +376,8 @@ public final class Constants {
     public static final double retractkI = 0;
     public static final double retractkD = 0;
 
-    public static final double iSat = 1000; // TODO
-    public static final double iZone = 1000; // TODO
+    public static final double iSat = 1000;
+    public static final double iZone = 1000;
 
     public static final int deployerMotorEncoderId = 0; // not currently installed
     public static final InvertMode motorEncoderInverted =
@@ -424,13 +418,13 @@ public final class Constants {
     public static final double voltageRejectSlow = -0.5;
     public static final double voltageFeedSlow = 0.5;
     public static final double voltageReject = -8;
-    public static final InvertedValue leftMotorInvertPhoenix =
+    public static final InvertedValue rightMotorInvertPhoenix =
         InvertedValue.CounterClockwise_Positive;
-    public static final InvertedValue rightMotorInvertPhoenix = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue leftMotorInvertPhoenix = InvertedValue.Clockwise_Positive;
   }
 
   public static class Rollers {
-    public static final int motorId = 20; // Done
+    public static final int motorId = 20;
 
     public static final double busCurrentLimitTime = 0;
     public static final double statorCurrentLimit = 60;
@@ -438,6 +432,7 @@ public final class Constants {
 
     public static final IdleMode idleMode = IdleMode.kCoast;
     public static final InvertMode invert = InvertMode.kNotInverted;
+    public static final InvertedValue motorInvertPhoenix = InvertedValue.CounterClockwise_Positive;
 
     public static final double voltageFeed = 9;
     public static final double voltageFeedSlow = 0;
@@ -455,8 +450,6 @@ public final class Constants {
     public static final double currentDetectionMaxAccumulationSeconds = 1;
     public static final double velocityDetectionDeltaThresholdRotationsPerSecond = 6;
     public static final double velocityDetectionMaxAccumulationSeconds = 1;
-
-    public static final InvertedValue motorInvertPhoenix = InvertedValue.Clockwise_Positive;
   }
 
   public static class IntakeSuperstructure {
