@@ -225,7 +225,8 @@ public final class Constants {
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorFrontInvert = InvertMode.kNotInverted; // positive is up
     public static final InvertMode motorBackInvert = InvertMode.kInverted; // positive is up
-    public static final InvertedValue motorInversion = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue leaderInversion = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue followerInversion = InvertedValue.CounterClockwise_Positive;
 
     public static final double fast_kP = 4;
     public static final double fast_kI = 0;

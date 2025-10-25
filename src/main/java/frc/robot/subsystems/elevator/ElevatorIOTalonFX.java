@@ -25,7 +25,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     motorConfigs.CurrentLimits.StatorCurrentLimit = Constants.Elevator.statorCurrentLimitAmps;
     motorConfigs.CurrentLimits.SupplyCurrentLimit = Constants.Elevator.supplyCurrentLimitAmps;
 
-    motorConfigs.MotorOutput.Inverted = Constants.Elevator.motorInversion;
+    motorConfigs.MotorOutput.Inverted = Constants.Elevator.leaderInversion;
     motorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     motorConfigs.Slot0.kD = Constants.Elevator.fast_kD;
@@ -50,9 +50,10 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     motorConfigs.HardwareLimitSwitch.ReverseLimitEnable = false;
 
     StatusCode leaderConfigStatus = leaderMotor.getConfigurator().apply(motorConfigs);
+    motorConfigs.MotorOutput.Inverted = Constants.Elevator.followerInversion;
     StatusCode followerConfigStatus = followerMotor.getConfigurator().apply(motorConfigs);
     StatusCode followerModeSetStatus =
-        followerMotor.setControl(new Follower(Constants.Elevator.backMotorID, true));
+        followerMotor.setControl(new Follower(Constants.Elevator.frontMotorID, true));
 
     if (leaderConfigStatus != StatusCode.OK) {
       DriverStation.reportError(
