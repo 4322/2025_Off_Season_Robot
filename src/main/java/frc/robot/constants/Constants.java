@@ -235,7 +235,7 @@ public final class Constants {
     public static final double kG = 0.35;
 
     public static final double maxElevatorHeightMeters = 1.3068401092;
-    public static final double homeHeightMeters = 0.37926;
+    public static final double homeHeightMeters = 0.4826474; // on wood (on craddle = 0.37926)
 
     public static final double minElevatorSafeHeightMeters =
         0.475; // measure after homing with wheels compressed
