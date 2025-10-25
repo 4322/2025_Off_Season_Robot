@@ -206,7 +206,8 @@ public final class Constants {
 
     public static final double kP = 200;
     public static final double kI = 0;
-    public static final double kD = 4;
+    public static final double kDCoral = 4;
+    public static final double kDAlgae = 18;
 
     public static final double accelerationLimitCoral = 8.0; // TODO: Find a way to use this!
     public static final double velocityLimitCoral = 3.0; // TODO: Find a way to use this!

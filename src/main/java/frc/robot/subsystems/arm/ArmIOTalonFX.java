@@ -37,13 +37,13 @@ public class ArmIOTalonFX implements ArmIO {
     motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     motorConfig.Slot0.kP = Constants.Arm.kP;
-    motorConfig.Slot0.kD = Constants.Arm.kD;
+    motorConfig.Slot0.kD = Constants.Arm.kDCoral;
     motorConfig.Slot0.kI = Constants.Arm.kI;
     motorConfig.Slot0.kG = Constants.Arm.kGCoral;
     motorConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
 
     motorConfig.Slot1.kP = Constants.Arm.kP;
-    motorConfig.Slot1.kD = Constants.Arm.kD;
+    motorConfig.Slot1.kD = Constants.Arm.kDAlgae;
     motorConfig.Slot1.kI = Constants.Arm.kI;
     motorConfig.Slot1.kG = Constants.Arm.kGAlgae;
     motorConfig.Slot1.GravityType = GravityTypeValue.Arm_Cosine;
