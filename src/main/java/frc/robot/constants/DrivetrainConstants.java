@@ -28,12 +28,11 @@ public class DrivetrainConstants {
   public static final double driveSupplyCurrentTime = 0.0;
   public static final double driveStatorCurrentLimit = 100;
 
-  public static final double turnSupplyCurrentLimit = 30.0;
+  public static final double turnSupplyCurrentLimit = 40.0;
   public static final double turnSupplyCurrentTime = 0.0;
-  public static final double turnStatorCurrentLimit = 50;
+  public static final double turnStatorCurrentLimit = 100;
 
-  private static final double drivekP =
-      0.25; // higher chatters trying to acheive 0 velocity when stopped
+  private static final double drivekP = 1.0;
   private static final double drivekD = 0;
   private static final double drivekS = 0.2;
   private static final double drivekV = 0.95;
@@ -95,11 +94,18 @@ public class DrivetrainConstants {
           .setStatorCurrentLimit(turnStatorCurrentLimit);
 
   // drive slew rate not working
-  private static final PIDSettings drivePIDSettings =
+  private static final PIDSettings drivePIDSettingsSlot0 =
       PIDSettings.defaultSettings(PIDConfigSlot.kSlot0)
           .setPID(drivekP, 0, drivekD)
           .setStaticFeedforward(drivekS)
-          .setVelocityFeedforward(drivekV);
+          .setVelocityFeedforward(drivekV)
+          .setRampLimit(Double.POSITIVE_INFINITY);
+  private static final PIDSettings drivePIDSettingsSlot1 =
+      PIDSettings.defaultSettings(PIDConfigSlot.kSlot1)
+          .setPID(0, 0, 0)
+          .setStaticFeedforward(drivekS)
+          .setVelocityFeedforward(drivekV)
+          .setRampLimit(Double.POSITIVE_INFINITY);
   private static final PIDSettings turnPIDSettings =
       PIDSettings.defaultSettings(PIDConfigSlot.kSlot0)
           .setPID(turnkP, 0, turnkD)
@@ -111,7 +117,8 @@ public class DrivetrainConstants {
 
   private static final SwerveModuleConstantsFactory moduleCreator =
       new SwerveModuleConstantsFactory()
-          .withDriveMotorGains(drivePIDSettings)
+          .withDriveMotorGainsSlot0(drivePIDSettingsSlot0)
+          .withDriveMotorGainsSlot1(drivePIDSettingsSlot1)
           .withTurnMotorGains(turnPIDSettings)
           .withDriveElectricalLimitSettings(driveElectricalLimitSettings)
           .withTurnElectricalLimitSettings(turnElectricalLimitSettings)

@@ -77,7 +77,7 @@ public class Indexer extends SubsystemBase {
 
   public void idle() {
     currentAction = IndexerStatus.START;
-    io.stop(IdleMode.kCoast);
+    io.stopNitrate(IdleMode.kCoast);
   }
 
   public boolean isCoralDetectedIndexer() {

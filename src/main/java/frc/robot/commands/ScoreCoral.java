@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
@@ -43,6 +44,7 @@ public class ScoreCoral extends Command {
   private Rotation2d robotReefAngle;
   private ReefStatus reefStatus;
   private Pose2d safeDistPose = new Pose2d();
+  private Pose2d driveBackPose = new Pose2d();
 
   private boolean chainedAlgaeMode;
 
@@ -234,10 +236,6 @@ public class ScoreCoral extends Command {
     Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
     Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
 
-    if (RobotContainer.isScoringTriggerHeld()) {
-      superstructure.requestScoreCoral(level);
-    }
-
     if (superstructure.isAutoOperationMode()) {
 
       if (state == ScoreState.SAFE_DISTANCE) {
@@ -294,9 +292,15 @@ public class ScoreCoral extends Command {
                           : -FieldConstants.KeypointPoses.safeDistFromBranchScoringPos,
                       0,
                       new Rotation2d()));
+          driveBackPose =
+              safeDistPose.transformBy(
+                  new Transform2d(
+                      -FieldConstants.KeypointPoses.extraDriveBackDistance, 0, new Rotation2d()));
 
           currentPoseRequest = () -> safeDistPose;
-          if (!driveToPose.isScheduled()) {
+          // Scheduling and cancelling command in same loop won't work so need to check for
+          // isFinished first
+          if (!driveToPose.isScheduled() && !isFinished()) {
             driveToPose.schedule();
           }
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
@@ -315,10 +319,17 @@ public class ScoreCoral extends Command {
         case DRIVE_IN:
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (driveToPose.atGoal()) {
+          } else if (driveToPose.atGoal()
+              || (level == Level.L1
+                  && (RobotContainer.isScoringTriggerHeld() // Driver override
+                      || (drive.getRobotRelativeSpeeds()
+                                  .vxMetersPerSecond // Robot not moving and pretty close to reef
+                              < Constants.AutoScoring.notMovingVelocityThreshold
+                          && driveToPose.withinTolerance(
+                              Constants.AutoScoring.atReefFaceL1Tolerance))))) {
             if (level == Level.L4) {
               times.start();
-              if (times.hasElapsed(0.1)) {
+              if (times.hasElapsed(0.05)) {
                 superstructure.requestScoreCoral(level);
                 times.stop();
                 times.reset();
@@ -326,16 +337,17 @@ public class ScoreCoral extends Command {
             } else {
               superstructure.requestScoreCoral(level);
             }
+
             if (superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()
                 && !superstructure.isCoralHeld()
                 && level == Level.L1) {
-              currentPoseRequest = () -> safeDistPose;
+              currentPoseRequest = () -> driveBackPose;
               state = ScoreState.DRIVEBACK;
 
             } else if (level != Level.L1
                 && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL) {
-              currentPoseRequest = () -> safeDistPose;
+              currentPoseRequest = () -> driveBackPose;
               state = ScoreState.DRIVEBACK;
             }
           } else if (level == Level.L4) {
@@ -345,16 +357,20 @@ public class ScoreCoral extends Command {
 
           break;
         case DRIVEBACK:
-          if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
-            state = ScoreState.HOLD_POSITION;
-          }
-          if (driveToPose.atGoal()) {
+          if (driveToPose.atGoal() || isInSafeArea()) {
             running = false;
+          }
+          // Only don't do drive back if robot is stuck against other robot while driving back
+          else if (scoreButtonReleased()
+              && !DriverStation.isAutonomous()
+              && Math.abs(drive.getRobotRelativeSpeeds().vxMetersPerSecond)
+                  < Constants.AutoScoring.notMovingVelocityThreshold) {
+            state = ScoreState.HOLD_POSITION;
           }
 
           break;
         case HOLD_POSITION:
-          if (driveToPose.isScheduled() && !DriverStation.isAutonomous()) {
+          if (!DriverStation.isAutonomous()) {
             driveToPose.cancel();
           }
           if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
@@ -365,11 +381,13 @@ public class ScoreCoral extends Command {
       }
 
     } else {
-      if (driveToPose.isScheduled()) {
-        driveToPose.cancel();
-      }
+      driveToPose.cancel();
 
+      drive.requestAutoRotateMode(robotReefAngle);
       superstructure.requestPrescoreCoral(level);
+      if (RobotContainer.isScoringTriggerHeld()) {
+        superstructure.requestScoreCoral(level);
+      }
     }
   }
 
@@ -381,15 +399,18 @@ public class ScoreCoral extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    driveToPose.cancel();
+
     if (!chainedAlgaeMode) {
       superstructure.requestIdle();
     }
     superstructure.enableGlobalPose();
     running = false;
+    drive.requestFieldRelativeMode();
 
-    if (driveToPose.isScheduled()) {
-      driveToPose.cancel();
-    }
+    // Reset chained more ONLY AFTER command finishes so it won't be stuck in this mode forever
+    this.chainedAlgaeMode = false;
+
     Logger.recordOutput("ScoreCoral/state", "Done");
   }
 
@@ -398,6 +419,10 @@ public class ScoreCoral extends Command {
         && !driver.x().getAsBoolean()
         && !driver.y().getAsBoolean()
         && !driver.b().getAsBoolean();
+  }
+
+  public void chainAlgae(boolean requestChainAlgae) {
+    this.chainedAlgaeMode = requestChainAlgae;
   }
 
   public boolean isInSafeArea() {

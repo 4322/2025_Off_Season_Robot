@@ -1,6 +1,6 @@
 package frc.robot.subsystems.endEffector;
 
-import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -11,7 +11,7 @@ public interface EndEffectorIO {
     public boolean motorConnected = false;
     public double statorCurrentAmps = 0.0;
     public double busCurrentAmps = 0.0;
-    public double MotortempCelcius = 0.0;
+    public double motorTempCelcius = 0.0;
     public double speedRotationsPerSec = 0.0;
     public double appliedVolts = 0.0;
     public double controllerTempCelcius = 0.0;
@@ -39,7 +39,11 @@ public interface EndEffectorIO {
 
   public default void setVoltage(double voltage) {}
 
-  public default void stop(IdleMode idleMode) {}
+  public default void stopNitrate(IdleMode idleMode) {}
+
+  public default void stop() {}
+
+  public default void enableBrakeMode(boolean enable) {}
 
   // For sim mode
   public default void simCoralHeld() {}
@@ -51,7 +55,7 @@ public interface EndEffectorIO {
   public default void simAlgaeReleased() {}
 
   // for tuning
-  public default Nitrate getNitrate() {
+  public default TalonFX getTalonFX() {
     return null;
   }
 }

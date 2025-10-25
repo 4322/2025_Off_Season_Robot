@@ -6,8 +6,6 @@ import com.reduxrobotics.canand.MessageLogger;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
@@ -192,7 +190,6 @@ public class Robot extends LoggedRobot {
             new WPILOGWriter(Constants.logPath)); // Log to a USB stick is ("/U/logs")
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
 
-        new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
         RobotController.setBrownoutVoltage(Constants.brownoutVoltage);
         MessageLogger.openLog(Constants.logPath);
 

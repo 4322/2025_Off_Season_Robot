@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,11 +12,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.autonomous.AutonomousSelector;
 import frc.robot.commands.AlgaeIntakeGround;
 import frc.robot.commands.AlgaeScoreCommand;
-import frc.robot.commands.CoastCommand;
 import frc.robot.commands.DescoreAlgae;
 import frc.robot.commands.DriveManual;
 import frc.robot.commands.DriveToPose;
 import frc.robot.commands.Eject;
+import frc.robot.commands.EmergencyInitilization;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.SwitchOperationModeCommand;
 import frc.robot.constants.Constants;
@@ -29,8 +28,8 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
-import frc.robot.subsystems.arm.ArmIONitrate;
 import frc.robot.subsystems.arm.ArmIOSim;
+import frc.robot.subsystems.arm.ArmIOTalonFX;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.deployer.DeployerIO;
 import frc.robot.subsystems.deployer.DeployerIONitrate;
@@ -42,23 +41,24 @@ import frc.robot.subsystems.drive.ModuleIONitrate;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIONitrate;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.elevator.ElevatorIOTalonFX;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorIO;
-import frc.robot.subsystems.endEffector.EndEffectorIONitrate;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
+import frc.robot.subsystems.endEffector.EndEffectorIOTalonFX;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIONitrate;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.RollersIO;
-import frc.robot.subsystems.rollers.RollersIONitrate;
+import frc.robot.subsystems.rollers.RollersIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
+import frc.robot.util.OrangeSequentialCommandGroup;
 import frc.robot.util.ReefStatus;
 
 /**
@@ -74,6 +74,11 @@ public class RobotContainer {
   private static Vision vision;
   private static ReefStatus reefStatus;
   private static DriveToPose drivetopose;
+  private static ScoreCoral lastScoreCoral;
+  private static ScoreCoral scoreL1Coral;
+  private static ScoreCoral scoreL2Coral;
+  private static ScoreCoral scoreL3Coral;
+  private static ScoreCoral scoreL4Coral;
   private static Drive drive;
   private static Arm arm;
   private static EndEffector endEffector;
@@ -83,6 +88,7 @@ public class RobotContainer {
   private static IntakeSuperstructure intakeSuperstructure;
   private static Superstructure superstructure;
   private static Elevator elevator;
+  public boolean requestedAlgaeDescore;
 
   public static AutonomousSelector autonomousSelector;
 
@@ -112,6 +118,7 @@ public class RobotContainer {
 
       if (Constants.driveMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
+
         GyroIOBoron gyro = new GyroIOBoron();
         drive =
             new Drive(
@@ -144,14 +151,14 @@ public class RobotContainer {
 
       if (Constants.armMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        arm = new Arm(new ArmIONitrate());
+        arm = new Arm(new ArmIOTalonFX());
       } else {
         arm = new Arm(new ArmIO() {});
       }
 
       if (Constants.elevatorMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        elevator = new Elevator(new ElevatorIONitrate());
+        elevator = new Elevator(new ElevatorIOTalonFX());
       } else {
         elevator = new Elevator(new ElevatorIO() {});
       }
@@ -165,14 +172,14 @@ public class RobotContainer {
 
       if (Constants.rollersMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        rollers = new Rollers(new RollersIONitrate());
+        rollers = new Rollers(new RollersIOTalonFX());
       } else {
         rollers = new Rollers(new RollersIO() {});
       }
 
       if (Constants.endEffectorMode != SubsystemMode.DISABLED
           && Constants.currentMode == Constants.RobotMode.REAL) {
-        endEffector = new EndEffector(new EndEffectorIONitrate());
+        endEffector = new EndEffector(new EndEffectorIOTalonFX());
       } else {
         endEffector = new EndEffector(new EndEffectorIO() {});
       }
@@ -200,6 +207,12 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     drive.setDefaultCommand(new DriveManual(drive));
+
+    scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false);
+    scoreL2Coral = new ScoreCoral(superstructure, Level.L2, drive, false);
+    scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
+    scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
+    lastScoreCoral = scoreL1Coral;
     // The commands deal with the on False logic if the button is no longer held
 
     driver
@@ -215,9 +228,13 @@ public class RobotContainer {
                     })
                 .ignoringDisable(true));
 
-    driver.povUp().whileTrue(new Eject(intakeSuperstructure, superstructure)); // Intake Eject
+    driver
+        .povUp()
+        .whileTrue(new Eject(intakeSuperstructure, superstructure, drive)); // Intake Eject
 
-    driver.povDown().whileTrue(new Eject(intakeSuperstructure, superstructure)); // Score Eject
+    driver
+        .povDown()
+        .whileTrue(new Eject(intakeSuperstructure, superstructure, drive)); // Score Eject
 
     // Prescore/Descore Levels
     driver
@@ -227,8 +244,10 @@ public class RobotContainer {
                 () -> {
                   if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
                     new AlgaeIntakeGround(superstructure).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    new ScoreCoral(superstructure, Level.L1, drive, false).schedule();
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
+                      && !lastScoreCoral.isScheduled()) {
+                    scoreL1Coral.schedule();
+                    lastScoreCoral = scoreL1Coral;
                   }
                 }));
     driver
@@ -236,10 +255,18 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new DescoreAlgae(superstructure, Level.L2, drive).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    new ScoreCoral(superstructure, Level.L2, drive, false).schedule();
+                  if (!endEffector.hasCoral()
+                      && !endEffector.hasAlgae()
+                      && !lastScoreCoral.isScheduled()) {
+                    new DescoreAlgae(superstructure, drive).schedule();
+                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
+                      && !lastScoreCoral.isScheduled()) {
+                    new OrangeSequentialCommandGroup(
+                            scoreL2Coral,
+                            new DescoreAlgae(superstructure, drive)
+                                .onlyIf(() -> driver.y().getAsBoolean()))
+                        .schedule();
+                    lastScoreCoral = scoreL2Coral;
                   }
                 }));
     driver
@@ -247,12 +274,19 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new DescoreAlgae(superstructure, Level.L3, drive).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())) {
-                    new ScoreCoral(superstructure, Level.L3, drive, false).schedule();
+                  if (lastScoreCoral.isScheduled()) {
+                    lastScoreCoral.chainAlgae(true);
+                  } else {
+                    if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                      new DescoreAlgae(superstructure, drive).schedule();
+                    } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
+                        && !lastScoreCoral.isScheduled()) {
+                      scoreL3Coral.schedule();
+                      lastScoreCoral = scoreL3Coral;
+                    }
                   }
                 }));
+
     driver
         .b()
         .onTrue(
@@ -260,17 +294,23 @@ public class RobotContainer {
                 () -> {
                   if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
                     new AlgaeScoreCommand(superstructure, drive).schedule();
-                  } else if (endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new ScoreCoral(superstructure, Level.L4, drive, false).schedule();
+                  } else if (endEffector.hasCoral()
+                      && !endEffector.hasAlgae()
+                      && !lastScoreCoral.isScheduled()) {
+                    new OrangeSequentialCommandGroup(
+                            scoreL4Coral,
+                            new DescoreAlgae(superstructure, drive)
+                                .onlyIf(() -> driver.y().getAsBoolean()))
+                        .schedule();
+                    lastScoreCoral = scoreL4Coral;
                   }
                 }));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
     driver
         .back()
         .onTrue(
-            new CoastCommand(arm, elevator, deployer, superstructure)
-                .onlyIf(() -> DriverStation.isDisabled())
-                .ignoringDisable(true));
+            new EmergencyInitilization(
+                superstructure, intakeSuperstructure, arm, elevator, deployer, drive));
 
     driver
         .leftTrigger()

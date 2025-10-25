@@ -22,6 +22,7 @@ import frc.robot.subsystems.vision.VisionIO.SingleTagPoseObservation;
 import frc.robot.util.GeomUtil;
 import frc.robot.util.PolynomialRegression;
 import frc.robot.util.ReefStatus;
+import frc.robot.util.ReefStatus.AlgaeLevel;
 import frc.robot.util.ReefStatus.ClosestReefPipe;
 import frc.robot.util.ReefStatus.L1Zone;
 import java.util.LinkedList;
@@ -38,6 +39,7 @@ public class Vision extends SubsystemBase {
   private double robotToReefFace;
   public ClosestReefPipe closestReefPipe;
   public L1Zone l1Zone;
+  public AlgaeLevel algaeLevel;
   public int tagId;
 
   private PolynomialRegression xyStdDevModel =
@@ -160,6 +162,8 @@ public class Vision extends SubsystemBase {
                             visionRobotPose.getY(),
                             disambiguatedRobotPose.getZ()),
                         new Rotation3d(visionRobotPose.getRotation()));
+
+                Logger.recordOutput("Vision/TrigGlobalPose", disambiguatedRobotPose.toPose2d());
               }
             }
 
@@ -404,7 +408,6 @@ public class Vision extends SubsystemBase {
     }
     Translation2d robotTranslation = drive.getPose().getTranslation();
     double reefCenterToRobotDeg = robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
-
     if (-30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 30) {
       robotToReefFace = 180;
       if (-27 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 27) {
@@ -416,9 +419,14 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.AB.idRed
               : FieldConstants.ReefFaceTag.GH.idBlue;
+      if (Robot.alliance == DriverStation.Alliance.Red) {
+        algaeLevel = AlgaeLevel.L3;
+      } else {
+        algaeLevel = AlgaeLevel.L2;
+      }
     } else if (30 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 90) {
       robotToReefFace = -120;
-      if (33 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 87) {
+      if (27 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 87) {
         reefFaceAmbiguity = false;
       } else {
         reefFaceAmbiguity = true;
@@ -427,9 +435,14 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.CD.idRed
               : FieldConstants.ReefFaceTag.IJ.idBlue;
+      if (Robot.alliance == DriverStation.Alliance.Red) {
+        algaeLevel = AlgaeLevel.L2;
+      } else {
+        algaeLevel = AlgaeLevel.L3;
+      }
     } else if (90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 150) {
       robotToReefFace = -60;
-      if (93 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 147) {
+      if (87 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 147) {
         reefFaceAmbiguity = false;
       } else {
         reefFaceAmbiguity = true;
@@ -438,11 +451,16 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.EF.idRed
               : FieldConstants.ReefFaceTag.KL.idBlue;
+
+      if (Robot.alliance == DriverStation.Alliance.Red) {
+        algaeLevel = AlgaeLevel.L3;
+      } else {
+        algaeLevel = AlgaeLevel.L2;
+      }
     } else if ((150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 180)
         || (-150 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -180)) {
       robotToReefFace = 0;
-      if ((153 < reefCenterToRobotDeg && reefCenterToRobotDeg <= 177)
-          || (-147 >= reefCenterToRobotDeg && reefCenterToRobotDeg >= -183)) {
+      if ((153 <= reefCenterToRobotDeg) || (-147 >= reefCenterToRobotDeg)) {
         reefFaceAmbiguity = false;
       } else {
         reefFaceAmbiguity = true;
@@ -451,9 +469,14 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.GH.idRed
               : FieldConstants.ReefFaceTag.AB.idBlue;
+      if (Robot.alliance == DriverStation.Alliance.Red) {
+        algaeLevel = AlgaeLevel.L2;
+      } else {
+        algaeLevel = AlgaeLevel.L3;
+      }
     } else if (-150 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -90) {
       robotToReefFace = 60;
-      if (-153 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -87) {
+      if (-147 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -87) {
         reefFaceAmbiguity = false;
       } else {
         reefFaceAmbiguity = true;
@@ -462,9 +485,14 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.IJ.idRed
               : FieldConstants.ReefFaceTag.CD.idBlue;
+      if (Robot.alliance == DriverStation.Alliance.Red) {
+        algaeLevel = AlgaeLevel.L3;
+      } else {
+        algaeLevel = AlgaeLevel.L2;
+      }
     } else if (-90 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -30) {
       robotToReefFace = 120;
-      if (-93 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -27) {
+      if (-87 < reefCenterToRobotDeg && reefCenterToRobotDeg <= -27) {
         reefFaceAmbiguity = false;
       } else {
         reefFaceAmbiguity = true;
@@ -473,8 +501,12 @@ public class Vision extends SubsystemBase {
           Robot.alliance == DriverStation.Alliance.Red
               ? FieldConstants.ReefFaceTag.KL.idRed
               : FieldConstants.ReefFaceTag.EF.idBlue;
+      if (Robot.alliance == DriverStation.Alliance.Red) {
+        algaeLevel = AlgaeLevel.L2;
+      } else {
+        algaeLevel = AlgaeLevel.L3;
+      }
     }
-
     Translation2d convertedRobotTrans =
         robotTranslation.rotateAround(
             reefCenterPoint,
@@ -506,6 +538,7 @@ public class Vision extends SubsystemBase {
         Rotation2d.fromDegrees(robotToReefFace),
         closestReefPipe,
         l1Zone,
+        algaeLevel,
         tagId);
   }
 }

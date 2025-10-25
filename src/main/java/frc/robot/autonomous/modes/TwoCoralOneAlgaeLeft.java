@@ -31,7 +31,7 @@ public class TwoCoralOneAlgaeLeft extends OrangeSequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () -> {
-              superstructure.requestOperationMode(Superstructure.OperationMode.AUTO);
+              superstructure.requestOperationMode(Superstructure.OperationMode.TeleAUTO);
               PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
               if (Robot.alliance == Alliance.Red) {
                 path = path.flipPath();
@@ -42,7 +42,7 @@ public class TwoCoralOneAlgaeLeft extends OrangeSequentialCommandGroup {
         new ScoreCoral(superstructure, Level.L4, drive, false),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         AutoBuilder.followPath(Robot.JulietToIndiaJuliet),
-        new DescoreAlgae(superstructure, Level.L3, drive),
+        new DescoreAlgae(superstructure, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.ALGAE_IDLE),
         AutoBuilder.followPath(Robot.IndiaJulietToLeftBarge),
         new AlgaePrescoreAuto(superstructure, drive),

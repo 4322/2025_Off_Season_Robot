@@ -1,6 +1,6 @@
 package frc.robot.subsystems.rollers;
 
-import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -20,10 +20,12 @@ public interface RollersIO {
 
   public default void setVoltage(double voltage) {}
 
-  public default void stop(IdleMode mode) {}
+  public default void stopNitrate(IdleMode mode) {}
+
+  public default void stop() {}
 
   // for tuning
-  public default Nitrate getNitrate() {
+  public default TalonFX getTalonFX() {
     return null;
   }
 }

@@ -14,6 +14,8 @@ import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ClockUtil;
+import frc.robot.util.ReefStatus;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveManual extends Command {
   private Drive drive;
@@ -78,30 +80,52 @@ public class DriveManual extends Command {
         if (Constants.enableReefLock
             && RobotContainer.getSuperstructure().isCoralHeld()
             && Math.abs(rot) < 0.01) {
-          Translation2d reefCenterPoint;
+          if (!RobotContainer.getSuperstructure().isAutoOperationMode()) {
+            ReefStatus reefStatus = RobotContainer.getSuperstructure().getReefStatus();
+            double newReefLockDeg = reefStatus.getClosestRobotAngle().getDegrees();
 
-          if (Robot.alliance == DriverStation.Alliance.Red) {
-            reefCenterPoint = FieldConstants.KeypointPoses.redReefCenter;
+            // Lock heading to reef face first time we engage mode
+            if (!firstReefLock) {
+              firstReefLock = true;
+              currentReefLockDeg = newReefLockDeg;
+            }
+
+            if (currentReefLockDeg != newReefLockDeg && !reefStatus.getReefFaceAmbiguity()) {
+              currentReefLockDeg = newReefLockDeg;
+            }
+
           } else {
-            reefCenterPoint = FieldConstants.KeypointPoses.blueReefCenter;
-          }
-          Translation2d robotTranslation = drive.getPose().getTranslation();
-          double reefCenterToRobotDeg =
-              robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
-          // Lock heading to reef face first time we engage mode
-          if (!firstReefLock) {
-            firstReefLock = true;
-            currentReefLockDeg = (reefCenterToRobotDeg + 180);
-          }
+            Translation2d reefCenterPoint;
 
-          if (currentReefLockDeg != reefCenterToRobotDeg) {
-            currentReefLockDeg = (reefCenterToRobotDeg + 180);
-          }
+            if (Robot.alliance == DriverStation.Alliance.Red) {
+              reefCenterPoint = FieldConstants.KeypointPoses.redReefCenter;
+            } else {
+              reefCenterPoint = FieldConstants.KeypointPoses.blueReefCenter;
+            }
+            Translation2d robotTranslation = drive.getPose().getTranslation();
+            double reefCenterToRobotDeg =
+                robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
+            double newReefLockDeg = (reefCenterToRobotDeg + 180);
 
-          rot =
-              autoRotateController.calculate(drive.getRotation().getDegrees(), currentReefLockDeg);
-          if (autoRotateController.atSetpoint()) {
-            rot = 0;
+            double RotationDeg = (currentReefLockDeg - newReefLockDeg);
+
+            Logger.recordOutput("WhatTheTolorance?", RotationDeg);
+            // Lock heading to reef face first time we engage mode
+            if (!firstReefLock) {
+              firstReefLock = true;
+              currentReefLockDeg = newReefLockDeg;
+            }
+            if ((RotationDeg > Constants.Drive.reefLockToleranceDegrees
+                    || RotationDeg < -Constants.Drive.reefLockToleranceDegrees)
+                && Math.hypot(dx, dy) > 0.01) {
+              currentReefLockDeg = newReefLockDeg;
+            }
+            rot =
+                autoRotateController.calculate(
+                    drive.getRotation().getDegrees(), currentReefLockDeg);
+            if (autoRotateController.atSetpoint()) {
+              rot = 0;
+            }
           }
         } else if (firstReefLock) {
           firstReefLock = false;
@@ -126,6 +150,6 @@ public class DriveManual extends Command {
         }
         break;
     }
-    drive.runVelocity(new ChassisSpeeds(dx, dy, rot), true);
+    drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
   }
 }

@@ -1,7 +1,6 @@
 package frc.robot.subsystems.elevator;
 
-import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.ctre.phoenix6.hardware.TalonFX;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ElevatorIO {
@@ -11,13 +10,13 @@ public interface ElevatorIO {
     public double requestedPosMeters;
     public double requestedPosRotations;
 
-    public double leaderheightMeters = 0.0;
+    public double leaderHeightMeters = 0.0;
     public double leaderVoltage = 0.0;
     public boolean leaderConnected = false;
     public double leaderVelocityMetersPerSecond = 0.0;
     public double leaderSupplyAmps = 0.0;
     public double leaderStatorAmps = 0.0;
-    public double leadertempCelcius = 0.0;
+    public double leaderTempCelcius = 0.0;
     public double leaderEncoderRotations = 0.0;
     public double kGeffort;
     public double kPeffort;
@@ -33,7 +32,7 @@ public interface ElevatorIO {
     public double followerVelocityMetersPerSecond = 0.0;
     public double followerSupplyAmps = 0.0;
     public double followerStatorAmps = 0.0;
-    public double followertempCelcius = 0.0;
+    public double followerTempCelcius = 0.0;
     public double followerEncoderRotations = 0.0;
   }
 
@@ -47,9 +46,17 @@ public interface ElevatorIO {
 
   public default void setPosition(double elevatorPositionMeters) {}
 
-  public default void stop(IdleMode idleMode) {}
+  // public default void stop(IdleMode idleMode) {}
 
-  public default Nitrate getNitrate() {
+  public default void stop() {}
+
+  // public default Nitrate getNitrate() {
+  //   return null;
+  // }
+
+  public default void enableBrakeMode(boolean enable) {}
+
+  public default TalonFX getTalonFX() {
     return null;
   } // for tuning
 }

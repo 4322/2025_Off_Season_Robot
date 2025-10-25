@@ -168,6 +168,7 @@ public class DeployerIONitrate implements DeployerIO {
   public void stop(IdleMode idleMode) {
     requestedPosDeg = -1;
     deployerMotor.stop(idleMode);
+    deployerMotor.setVoltage(0); // work around stop not working
   }
 
   @Override

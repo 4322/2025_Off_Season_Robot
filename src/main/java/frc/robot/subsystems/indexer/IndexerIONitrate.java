@@ -159,10 +159,12 @@ public class IndexerIONitrate implements IndexerIO {
   }
 
   @Override
-  public void stop(IdleMode mode) {
+  public void stopNitrate(IdleMode mode) {
     prevRequestedVoltage = -999;
     indexerMotorRight.stop(mode);
     indexerMotorLeft.stop(mode);
+    indexerMotorRight.setVoltage(0); // work around stop not working
+    indexerMotorLeft.setVoltage(0);
   }
 
   @Override

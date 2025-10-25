@@ -5,7 +5,6 @@ import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
-import com.reduxrobotics.motorcontrol.nitrate.settings.PIDSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
@@ -52,12 +51,8 @@ public class ModuleIONitrate implements ModuleIO {
     driveConfig.setFeedbackSensorSettings(
         FeedbackSensorSettings.defaultSettings()
             .setSensorToMechanismRatio(constants.driveMotorGearRatio));
-    driveConfig.setPIDSettings(constants.driveMotorGains, PIDConfigSlot.kSlot0);
-    driveConfig.setPIDSettings(
-        PIDSettings.defaultSettings(PIDConfigSlot.kSlot1)
-            .setStaticFeedforward(constants.driveMotorGains.getStaticFeedforward().get())
-            .setVelocityFeedforward(constants.driveMotorGains.getVelocityFeedforward().get()),
-        PIDConfigSlot.kSlot1);
+    driveConfig.setPIDSettings(constants.driveMotorGainsSlot0, PIDConfigSlot.kSlot0);
+    driveConfig.setPIDSettings(constants.driveMotorGainsSlot1, PIDConfigSlot.kSlot1);
     driveConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.1, 5);
 
