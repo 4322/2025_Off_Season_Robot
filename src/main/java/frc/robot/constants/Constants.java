@@ -209,10 +209,8 @@ public final class Constants {
     public static final double kDCoral = 4;
     public static final double kDAlgae = 18;
 
-    public static final double accelerationLimitCoral = 8.0; // TODO: Find a way to use this!
-    public static final double velocityLimitCoral = 3.0; // TODO: Find a way to use this!
-    public static final double accelerationLimitAlgae = 4.0;
-    public static final double velocityLimitAlgae = 1.5;
+    public static final double accelerationLimit = 8.0;
+    public static final double velocityLimit = 3.0;
   }
 
   public static class Elevator {

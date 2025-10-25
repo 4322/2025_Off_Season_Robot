@@ -53,8 +53,8 @@ public class ArmIOTalonFX implements ArmIO {
 
     motorConfig.Feedback.SensorToMechanismRatio = Constants.Arm.gearRatio;
 
-    motorConfig.MotionMagic.MotionMagicAcceleration = Constants.Arm.accelerationLimitAlgae;
-    motorConfig.MotionMagic.MotionMagicCruiseVelocity = Constants.Arm.velocityLimitAlgae;
+    motorConfig.MotionMagic.MotionMagicAcceleration = Constants.Arm.accelerationLimit;
+    motorConfig.MotionMagic.MotionMagicCruiseVelocity = Constants.Arm.velocityLimit;
     motorConfig.MotionMagic.MotionMagicJerk = Constants.Arm.motionMagicJerk;
 
     return armMotor.getConfigurator().apply(motorConfig);
