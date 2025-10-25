@@ -150,6 +150,6 @@ public class DriveManual extends Command {
         }
         break;
     }
-    drive.runVelocity(new ChassisSpeeds(dx, dy, rot), true);
+    drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
   }
 }

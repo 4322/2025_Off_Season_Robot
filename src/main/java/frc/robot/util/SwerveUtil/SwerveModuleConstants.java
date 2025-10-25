@@ -17,7 +17,8 @@ public class SwerveModuleConstants {
   public double turnCouplingRatio = 0;
   public double driveWheelRadius = 0;
   public PIDSettings turnMotorGains = new PIDSettings();
-  public PIDSettings driveMotorGains = new PIDSettings();
+  public PIDSettings driveMotorGainsSlot0 = new PIDSettings();
+  public PIDSettings driveMotorGainsSlot1 = new PIDSettings();
   public ElectricalLimitSettings driveElectricalLimitSettings = new ElectricalLimitSettings();
   public ElectricalLimitSettings turnElectricalLimitSettings = new ElectricalLimitSettings();
   public double maxSpeedAt12Volts = 0;
@@ -108,8 +109,13 @@ public class SwerveModuleConstants {
     return this;
   }
 
-  public SwerveModuleConstants withDriveMotorGains(PIDSettings driveMotorGains) {
-    this.driveMotorGains = driveMotorGains;
+  public SwerveModuleConstants withDriveMotorGainsSlot0(PIDSettings driveMotorGains) {
+    this.driveMotorGainsSlot0 = driveMotorGains;
+    return this;
+  }
+
+  public SwerveModuleConstants withDriveMotorGainsSlot1(PIDSettings driveMotorGains) {
+    this.driveMotorGainsSlot1 = driveMotorGains;
     return this;
   }
 

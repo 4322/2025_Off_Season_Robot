@@ -94,11 +94,18 @@ public class DrivetrainConstants {
           .setStatorCurrentLimit(turnStatorCurrentLimit);
 
   // drive slew rate not working
-  private static final PIDSettings drivePIDSettings =
+  private static final PIDSettings drivePIDSettingsSlot0 =
       PIDSettings.defaultSettings(PIDConfigSlot.kSlot0)
           .setPID(drivekP, 0, drivekD)
           .setStaticFeedforward(drivekS)
-          .setVelocityFeedforward(drivekV);
+          .setVelocityFeedforward(drivekV)
+          .setRampLimit(Double.POSITIVE_INFINITY);
+  private static final PIDSettings drivePIDSettingsSlot1 =
+      PIDSettings.defaultSettings(PIDConfigSlot.kSlot1)
+          .setPID(0, 0, 0)
+          .setStaticFeedforward(drivekS)
+          .setVelocityFeedforward(drivekV)
+          .setRampLimit(Double.POSITIVE_INFINITY);
   private static final PIDSettings turnPIDSettings =
       PIDSettings.defaultSettings(PIDConfigSlot.kSlot0)
           .setPID(turnkP, 0, turnkD)
@@ -110,7 +117,8 @@ public class DrivetrainConstants {
 
   private static final SwerveModuleConstantsFactory moduleCreator =
       new SwerveModuleConstantsFactory()
-          .withDriveMotorGains(drivePIDSettings)
+          .withDriveMotorGainsSlot0(drivePIDSettingsSlot0)
+          .withDriveMotorGainsSlot1(drivePIDSettingsSlot1)
           .withTurnMotorGains(turnPIDSettings)
           .withDriveElectricalLimitSettings(driveElectricalLimitSettings)
           .withTurnElectricalLimitSettings(turnElectricalLimitSettings)
