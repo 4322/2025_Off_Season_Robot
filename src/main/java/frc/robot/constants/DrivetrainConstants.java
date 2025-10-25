@@ -28,9 +28,9 @@ public class DrivetrainConstants {
   public static final double driveSupplyCurrentTime = 0.0;
   public static final double driveStatorCurrentLimit = 100;
 
-  public static final double turnSupplyCurrentLimit = 30.0;
+  public static final double turnSupplyCurrentLimit = 40.0;
   public static final double turnSupplyCurrentTime = 0.0;
-  public static final double turnStatorCurrentLimit = 50;
+  public static final double turnStatorCurrentLimit = 100;
 
   private static final double drivekP = 1.0;
   private static final double drivekD = 0;
