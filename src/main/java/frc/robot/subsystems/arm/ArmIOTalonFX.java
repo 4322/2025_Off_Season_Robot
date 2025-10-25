@@ -39,13 +39,13 @@ public class ArmIOTalonFX implements ArmIO {
     motorConfig.Slot0.kP = Constants.Arm.kP;
     motorConfig.Slot0.kD = Constants.Arm.kD;
     motorConfig.Slot0.kI = Constants.Arm.kI;
-    motorConfig.Slot0.kG = Constants.Arm.kG;
+    motorConfig.Slot0.kG = Constants.Arm.kGCoral;
     motorConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
 
     motorConfig.Slot1.kP = Constants.Arm.kP;
     motorConfig.Slot1.kD = Constants.Arm.kD;
     motorConfig.Slot1.kI = Constants.Arm.kI;
-    motorConfig.Slot1.kG = Constants.Arm.kG;
+    motorConfig.Slot1.kG = Constants.Arm.kGAlgae;
     motorConfig.Slot1.GravityType = GravityTypeValue.Arm_Cosine;
 
     motorConfig.HardwareLimitSwitch.ForwardLimitEnable = false;
@@ -53,8 +53,8 @@ public class ArmIOTalonFX implements ArmIO {
 
     motorConfig.Feedback.SensorToMechanismRatio = Constants.Arm.gearRatio;
 
-    motorConfig.MotionMagic.MotionMagicAcceleration = Constants.Arm.accelerationLimitCoral;
-    motorConfig.MotionMagic.MotionMagicCruiseVelocity = Constants.Arm.velocityLimitCoral;
+    motorConfig.MotionMagic.MotionMagicAcceleration = Constants.Arm.accelerationLimitAlgae;
+    motorConfig.MotionMagic.MotionMagicCruiseVelocity = Constants.Arm.velocityLimitAlgae;
     motorConfig.MotionMagic.MotionMagicJerk = Constants.Arm.motionMagicJerk;
 
     return armMotor.getConfigurator().apply(motorConfig);

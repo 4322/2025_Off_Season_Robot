@@ -145,7 +145,7 @@ public final class Constants {
 
     public static final InvertMode motorInvert =
         InvertMode.kNotInverted; // positive is up toward scoring side
-    public static final InvertedValue motorInversion = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue motorInversion = InvertedValue.Clockwise_Positive;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
 
     public static final double sensorToArm = 85 / 10.0;
@@ -176,10 +176,8 @@ public final class Constants {
     public static final double supplyCurrentLimitAmps = 40;
     public static final double statorCurrentLimitAmps = 100;
 
-    public static final double kG = 0.4;
-
-    public static final double iSat = 0.002;
-    public static final double iZone = 0.0138;
+    public static final double kGCoral = 0.33;
+    public static final double kGAlgae = 0.5;
 
     public static final double intializationVoltage = -0.1875;
     public static final double initializationCompleteSpeed = 1.0;
@@ -208,14 +206,12 @@ public final class Constants {
 
     public static final double kP = 200;
     public static final double kI = 0;
-    public static final double kD = 0;
+    public static final double kD = 4;
 
-    public static final double accelerationLimitCoral = 2.5;
-    public static final double deaccelerationLimitCoral = 1.5;
-    public static final double velocityLimitCoral = 1.0;
-    public static final double accelerationLimitAlgae = 2.5;
-    public static final double deaccelerationLimitAlgae = 1.5;
-    public static final double velocityLimitAlgae = 1.0;
+    public static final double accelerationLimitCoral = 8.0; // TODO: Find a way to use this!
+    public static final double velocityLimitCoral = 3.0; // TODO: Find a way to use this!
+    public static final double accelerationLimitAlgae = 4.0;
+    public static final double velocityLimitAlgae = 1.5;
   }
 
   public static class Elevator {
@@ -236,7 +232,7 @@ public final class Constants {
     public static final double slow_kI = 0;
     public static final double slow_kD = 0;
 
-    public static final double kG = 0.4;
+    public static final double kG = 0.35;
 
     public static final double maxElevatorHeightMeters = 1.3068401092;
     public static final double homeHeightMeters = 0.37926;
@@ -300,7 +296,7 @@ public final class Constants {
     public static final int motorId = 22;
     public static final int sensorId = 2;
 
-    public static final double maxAlgaeHoldVolts = 1.2;
+    public static final double maxAlgaeHoldVolts = 1.0;
     public static final double minAlgaeHoldVolts = 0.9;
     public static final double coralHoldVolts = 0.45;
 
@@ -336,7 +332,7 @@ public final class Constants {
     public static final double whiteDetectRed = 180;
     public static final IdleMode motorIdleMode = IdleMode.kBrake;
     public static final InvertMode motorInvert = InvertMode.kNotInverted; // positive is intaking
-    public static final InvertedValue motorInvertPhoenix = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue motorInvertPhoenix = InvertedValue.Clockwise_Positive;
 
     // TODO tune these
     public static final double currentDetectionDebounceTimeSeconds =
@@ -433,7 +429,7 @@ public final class Constants {
 
     public static final IdleMode idleMode = IdleMode.kCoast;
     public static final InvertMode invert = InvertMode.kNotInverted;
-    public static final InvertedValue motorInvertPhoenix = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue motorInvertPhoenix = InvertedValue.Clockwise_Positive;
 
     public static final double voltageFeed = 9;
     public static final double voltageFeedSlow = 0;
