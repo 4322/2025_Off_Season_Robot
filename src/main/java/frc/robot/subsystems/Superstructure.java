@@ -31,6 +31,7 @@ public class Superstructure extends SubsystemBase {
   private Timer coralPickupTimer = new Timer();
   private boolean coralElevatorPickUp = false;
   private boolean scoreBackSide = false;
+  private boolean requestDropCoralRepickup = false;
 
   public enum Superstates {
     HOMELESS,
@@ -48,7 +49,8 @@ public class Superstructure extends SubsystemBase {
     SCORE_CORAL,
     SAFE_SCORE_ALGAE_RETRACT,
     PRECLIMB,
-    CLIMB
+    CLIMB,
+    DROP_CORAL_REPICKUP,
   }
 
   public static enum Level {
@@ -150,6 +152,8 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.PRECLIMB;
         } else if (endEffector.hasCoral()) {
           state = Superstates.CORAL_HELD;
+        } else if (requestDropCoralRepickup && !endEffector.hasAlgae()) {
+          state = Superstates.DROP_CORAL_REPICKUP;
         } else {
           endEffector.idle();
           elevator.idle();
@@ -342,6 +346,12 @@ public class Superstructure extends SubsystemBase {
       case CLIMB:
         // TODO
         break;
+      case DROP_CORAL_REPICKUP:
+        endEffector.dropCoral();
+        if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
+          state = Superstates.IDLE;
+        }
+        break;
     }
   }
 
@@ -358,6 +368,7 @@ public class Superstructure extends SubsystemBase {
     requestPreClimb = false;
     requestClimb = false;
     requestIntakeAlgaeFloor = false;
+    requestDropCoralRepickup = false;
   }
 
   public void requestOperationMode(OperationMode mode) {
@@ -406,6 +417,11 @@ public class Superstructure extends SubsystemBase {
     unsetAllRequests();
     requestDescoreAlgae = true;
     this.level = level;
+  }
+
+  public void requestDropCoralRepickup() {
+    unsetAllRequests();
+    requestDropCoralRepickup = true;
   }
 
   public void requestPrescoreCoral(Level level) {

@@ -414,6 +414,7 @@ public class RobotContainer {
               new InstantCommand(
                   () -> {
                     intakeSuperstructure.requestIdexerEject();
+                    superstructure.requestDropCoralRepickup();
                   }));
       driver
           .rightBumper()
@@ -421,6 +422,7 @@ public class RobotContainer {
               new InstantCommand(
                   () -> {
                     intakeSuperstructure.requestIdexerEject();
+                    superstructure.requestDropCoralRepickup();
                   }));
     }
   }

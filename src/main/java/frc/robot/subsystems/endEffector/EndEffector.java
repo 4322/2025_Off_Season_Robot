@@ -24,6 +24,7 @@ public class EndEffector extends SubsystemBase {
   private boolean requestEject;
   private boolean holdAlgae;
   private boolean holdCoral;
+  private boolean dropCoral;
 
   private boolean coralHeld = false;
   private boolean algaeHeld = false;
@@ -44,7 +45,8 @@ public class EndEffector extends SubsystemBase {
     INTAKING_CORAL, // This and below state used to give delay before reducing intake voltage to
     // allow a piece to fully come in
     INTAKING_ALGAE,
-    EJECT
+    EJECT,
+    DROP_REPICKUP,
   }
 
   private EndEffectorStates state = EndEffectorStates.IDLE;
@@ -200,6 +202,9 @@ public class EndEffector extends SubsystemBase {
         } else if (inputs.sensorProximity > Constants.EndEffector.coralProximityThreshold) {
           state = EndEffectorStates.IDLE;
           coralHeld = false;
+        } else if (dropCoral) {
+          state = EndEffectorStates.DROP_REPICKUP;
+          coralHeld = false;
         }
         break;
       case RELEASE_ALGAE:
@@ -274,12 +279,25 @@ public class EndEffector extends SubsystemBase {
           }
         }
         break;
+      case DROP_REPICKUP:
+        io.setVoltage(Constants.EndEffector.ejectVolts);
+        if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+          state = EndEffectorStates.IDLE;
+          coralHeld = false;
+          algaeHeld = false;
+        }
+        break;
     }
   }
 
   public void idle() {
     unsetAllRequests();
     requestIdle = true;
+  }
+
+  public void dropCoral() {
+    unsetAllRequests();
+    dropCoral = true;
   }
 
   public void intakeAlgae() {
@@ -349,6 +367,7 @@ public class EndEffector extends SubsystemBase {
     requestEject = false;
     holdAlgae = false;
     holdCoral = false;
+    dropCoral = false;
   }
 
   public boolean isPiecePickupDetected() {
