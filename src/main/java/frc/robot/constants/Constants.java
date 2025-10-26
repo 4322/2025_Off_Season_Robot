@@ -483,8 +483,8 @@ public final class Constants {
   }
 
   public static class AutoScoring {
-    public static final double drivekP = 2.0;
-    public static final double drivekD = 0.05;
+    public static final double drivekP = 0;
+    public static final double drivekD = 0;
 
     public static final double driveMaxVelocity = 2.3;
     public static final double driveMaxVelocitySlow = 1.27;
@@ -499,8 +499,8 @@ public final class Constants {
 
     public static final double algaeSafeDistTolerance = 0.127;
 
-    public static final double ffMinRadius = 0.1;
-    public static final double ffMaxRadius = 0.8;
+    public static final double ffMinRadius = 0.02;
+    public static final double ffMaxRadius = 0.05;
 
     // Used to see if robot is up against reef or stuck against alliance partner during drive back
     public static final double notMovingVelocityThreshold = 0.0254;
