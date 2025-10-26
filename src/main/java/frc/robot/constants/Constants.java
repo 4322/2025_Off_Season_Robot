@@ -6,6 +6,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -487,7 +488,7 @@ public final class Constants {
 
     public static final double driveMaxVelocity = 2.3;
     public static final double driveMaxVelocitySlow = 1.27;
-    public static final double driveMaxAcceleration = 1.5;
+    public static final double driveMaxAcceleration = 4;
 
     public static final double thetaMaxVelocity = 360;
     public static final double thetaMaxVelocitySlow = 90;
