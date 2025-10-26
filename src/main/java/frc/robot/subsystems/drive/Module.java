@@ -106,6 +106,11 @@ public class Module {
     return new SwerveModulePosition(getPositionMeters(), getAngle());
   }
 
+  /** Returns the module position (turn angle and drive position). */
+  public double getDriveStatorCurrent() {
+    return inputs.driveStatorCurrentAmps;
+  }
+
   /** Returns the module state (turn angle and drive velocity). */
   public SwerveModuleState getState() {
     return new SwerveModuleState(getVelocityMetersPerSec(), getAngle());
