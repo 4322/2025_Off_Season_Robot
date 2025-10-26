@@ -99,7 +99,8 @@ public final class Constants {
     public static final double L1DistanceFromReefInches = 2;
 
     // to adjust for slippage cause by uneven weight distribution
-    public static final double[] modulePositionScaling = new double[] {0.8, 1, 1, 1};
+    public static final double[] modulePositionScaling =
+        new double[] {0, 1, 1, 1}; // module 0 slips
   }
 
   public static class PathPlanner {

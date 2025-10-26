@@ -254,9 +254,7 @@ public class Drive extends SubsystemBase {
     SwerveModulePosition[] states = new SwerveModulePosition[4];
     for (int i = 0; i < 4; i++) {
       states[i] = modules[i].getPosition();
-      if (modules[i].getDriveStatorCurrent() > 30) {
-        states[i].distanceMeters *= Constants.Drive.modulePositionScaling[i];
-      }
+      states[i].distanceMeters *= Constants.Drive.modulePositionScaling[i];
     }
     return states;
   }
