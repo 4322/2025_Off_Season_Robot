@@ -84,8 +84,8 @@ public final class Constants {
 
     public static final double angularErrorToleranceDeg = 1.25;
     public static final double angularErrorToleranceDegPerSec = 20.0;
-    public static final double driveDeadband = 0;
-    public static final double rotDeadband = 0;
+    public static final double driveDeadband = 0.1;
+    public static final double rotDeadband = 0.1;
     public static final double reefLockToleranceDegrees = 1;
 
     public static final double pseudoAutoRotatekP = 6;
