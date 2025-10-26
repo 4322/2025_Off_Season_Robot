@@ -73,7 +73,7 @@ public class DriveManual extends Command {
       dx *= -DrivetrainConstants.maxSpeedAt12Volts;
       dy *= -DrivetrainConstants.maxSpeedAt12Volts;
     }
-    double rot = omega * omega * omega * 12.0;
+    double rot = Math.signum(omega) * omega * omega * 12.0;
 
     switch (drive.getManualDriveMode()) {
       case FIELD_RELATIVE:
