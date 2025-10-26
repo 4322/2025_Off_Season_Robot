@@ -63,14 +63,11 @@ public class ClockUtil {
         : (lowerBound < val && higherBound > val);
   }
 
-  /**
-   * Returns modulus of input with inclusive minimumInput and exclusive maximumInput.
-   *
-   * <p>Ex: [minimumInput, maximumInput)
-   */
-  public static double inputModulus(double input, double minimumInput, double maximumInput) {
+  /** Returns bounded value between min and max inputs */
+  public static double inputModulus(
+      double input, double minimumInput, double maximumInput, boolean minInclusive) {
     if (input == minimumInput || input == maximumInput) {
-      return minimumInput;
+      return minInclusive ? minimumInput : maximumInput;
     }
 
     double modulus = maximumInput - minimumInput;

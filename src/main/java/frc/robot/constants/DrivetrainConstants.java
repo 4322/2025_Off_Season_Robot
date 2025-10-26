@@ -112,7 +112,7 @@ public class DrivetrainConstants {
           .setMotionProfileAccelLimit(turnAccelerationLimit)
           .setMotionProfileDeaccelLimit(turnDeaccelerationLimit)
           .setMotionProfileVelocityLimit(turnVelocityLimit)
-          .setMinwrapConfig(new MinwrapConfig.Enabled())
+          .setMinwrapConfig(new MinwrapConfig.Disabled())
           .setRampLimit(Double.POSITIVE_INFINITY);
 
   private static final SwerveModuleConstantsFactory moduleCreator =

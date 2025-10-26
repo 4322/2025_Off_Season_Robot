@@ -26,6 +26,7 @@ public class ModuleIONitrate implements ModuleIO {
   private final Nitrate turnMotor;
   private final Canandmag turnEncoder;
   private final SwerveModuleConstants constants;
+  private double unboundedTurnPosition;
 
   private final PIDVelocityRequest drivePIDOpenLoopRequest =
       new PIDVelocityRequest(PIDConfigSlot.kSlot1, 0);
@@ -65,7 +66,7 @@ public class ModuleIONitrate implements ModuleIO {
     turnConfig.setFeedbackSensorSettings(
         FeedbackSensorSettings.defaultSettings()
             .setFeedbackSensor(
-                new FeedbackSensor.CanandmagAbsolute(
+                new FeedbackSensor.CanandmagRelative(
                     constants.turnEncoderId, constants.turnMotorGearRatio)));
     turnConfig.setElectricalLimitSettings(constants.turnElectricalLimitSettings);
     turnConfig.setPIDSettings(constants.turnMotorGains, PIDConfigSlot.kSlot0);
@@ -97,6 +98,17 @@ public class ModuleIONitrate implements ModuleIO {
               + " (Swerve turn encoder) failed to configure",
           false);
     }
+
+    /*
+    boolean turnPositionSetStatus = turnMotor.setPosition(turnEncoder.getAbsPosition(), 0.1, 5);
+    if (!turnPositionSetStatus) {
+      DriverStation.reportError(
+          "Nitrate "
+              + turnMotor.getAddress().getDeviceId()
+              + " (Swerve turn motor) failed to initialize turn position",
+          false);
+    }
+    */
   }
 
   @Override
@@ -113,7 +125,14 @@ public class ModuleIONitrate implements ModuleIO {
     inputs.driveControllerTempCelsius = driveMotor.getControllerTemperatureFrame().getData();
 
     inputs.turnConnected = turnMotor.isConnected();
-    inputs.turnPosition = Rotation2d.fromRotations(turnMotor.getPosition() - 0.5);
+    unboundedTurnPosition = turnMotor.getPosition();
+    inputs.turnPosition =
+        Rotation2d.fromRotations(
+            ClockUtil.inputModulus(
+                unboundedTurnPosition,
+                -0.5,
+                0.5,
+                false)); // Convert to (-0.5, 0.5] for WPI swerve math
     inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnMotor.getVelocity());
     inputs.turnAppliedVolts = driveMotor.getBusVoltageFrame().getData();
     inputs.turnSupplyCurrentAmps = turnMotor.getBusCurrent();
@@ -145,11 +164,11 @@ public class ModuleIONitrate implements ModuleIO {
 
   @Override
   public void setTurnPosition(Rotation2d turnWheelPosition) {
-    // Convert back to motor rotations and apply input modulus to handle double variable precision
-    // edge case
+    double deltaTurnRotations =
+        ClockUtil.inputModulus(
+            turnWheelPosition.getRotations() - unboundedTurnPosition, -0.5, 0.5, false);
     turnMotor.setRequest(
-        turnPIDPositionRequest.setPosition(
-            ClockUtil.inputModulus(turnWheelPosition.getRotations() + 0.5, 0, 1)));
+        turnPIDPositionRequest.setPosition(unboundedTurnPosition + deltaTurnRotations));
   }
 
   @Override
