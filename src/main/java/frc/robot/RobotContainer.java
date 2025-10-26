@@ -3,8 +3,11 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -89,6 +92,7 @@ public class RobotContainer {
   private static Superstructure superstructure;
   private static Elevator elevator;
   public boolean requestedAlgaeDescore;
+  private Timer batteryLowStopTimer = new Timer();
 
   public static AutonomousSelector autonomousSelector;
 
@@ -207,6 +211,25 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     drive.setDefaultCommand(new DriveManual(drive));
+
+    if (RobotController.getBatteryVoltage() <= 12.00
+        && superstructure.getState() == Superstructure.Superstates.IDLE
+        && intakeSuperstructure.getIntakeSuperstate()
+            == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
+        && Constants.testingOnPracticeFeild) {
+      driver.setRumble(GenericHID.RumbleType.kBothRumble, 10.0);
+      batteryLowStopTimer.start();
+      if (batteryLowStopTimer.hasElapsed(5)) {
+        batteryLowStopTimer.stop();
+        batteryLowStopTimer.reset();
+        DriverStation.reportError(
+            "Battery voltage is critically low (" + RobotController.getBatteryVoltage() + "V)",
+            false);
+      }
+    } else {
+      batteryLowStopTimer.stop();
+      batteryLowStopTimer.reset();
+    }
 
     scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false);
     scoreL2Coral = new ScoreCoral(superstructure, Level.L2, drive, false);
