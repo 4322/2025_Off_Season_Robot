@@ -99,8 +99,8 @@ public class ModuleIONitrate implements ModuleIO {
           false);
     }
 
-    /*
-    boolean turnPositionSetStatus = turnMotor.setPosition(turnEncoder.getAbsPosition(), 0.1, 5);
+    boolean turnPositionSetStatus =
+        turnMotor.setPosition(turnEncoder.getAbsPosition() - 0.5, 0.1, 5);
     if (!turnPositionSetStatus) {
       DriverStation.reportError(
           "Nitrate "
@@ -108,7 +108,6 @@ public class ModuleIONitrate implements ModuleIO {
               + " (Swerve turn motor) failed to initialize turn position",
           false);
     }
-    */
   }
 
   @Override
