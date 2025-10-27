@@ -124,7 +124,6 @@ public class DriveToPose extends Command {
   public void initialize() {
     // Reset all controllers
     Pose2d currentPose = drive.getPose();
-    lastTargetPose = currentPose;
     driveController.reset(
         currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation()),
         Math.min(
@@ -148,6 +147,7 @@ public class DriveToPose extends Command {
         new TrapezoidProfile.Constraints(
             slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
             driveMaxAcceleration.get()));
+    lastTargetPose = poseSupplier.get();
     Logger.recordOutput("DriveToPose/ProfileAcc", driveMaxAcceleration.get());
   }
 
@@ -199,6 +199,7 @@ public class DriveToPose extends Command {
           new TrapezoidProfile.Constraints(
               slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
               driveMaxAcceleration.get()));
+      lastTargetPose = targetPose;
       Logger.recordOutput("DriveToPose/ProfileAcc", driveMaxAcceleration.get());
     }
 
