@@ -488,6 +488,7 @@ public final class Constants {
     public static final double driveMaxVelocity = 2.3;
     public static final double driveMaxVelocitySlow = 1.27;
     public static final double driveMaxAcceleration = 4;
+    public static final double driveMaxDeceleration = 2;
 
     public static final double thetaMaxVelocity = 360;
     public static final double thetaMaxVelocitySlow = 90;

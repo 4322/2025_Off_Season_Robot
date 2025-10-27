@@ -37,6 +37,8 @@ public class DriveToPose extends Command {
   private double driveErrorAbs;
   private double thetaErrorAbs;
   private Translation2d lastSetpointTranslation;
+  private Pose2d lastTargetPose;
+  private double pathDistance;
 
   private static final LoggedTunableNumber driveKp = new LoggedTunableNumber("DriveToPose/DriveKp");
   private static final LoggedTunableNumber driveKd = new LoggedTunableNumber("DriveToPose/DriveKd");
@@ -48,6 +50,8 @@ public class DriveToPose extends Command {
       new LoggedTunableNumber("DriveToPose/DriveMaxVelocitySlow");
   private static final LoggedTunableNumber driveMaxAcceleration =
       new LoggedTunableNumber("DriveToPose/DriveMaxAcceleration");
+  private static final LoggedTunableNumber driveMaxDeceleration =
+      new LoggedTunableNumber("DriveToPose/driveMaxDeceleration");
   private static final LoggedTunableNumber thetaMaxVelocity =
       new LoggedTunableNumber("DriveToPose/ThetaMaxVelocity");
   private static final LoggedTunableNumber thetaMaxVelocitySlow =
@@ -76,6 +80,7 @@ public class DriveToPose extends Command {
     driveMaxVelocity.initDefault(Constants.AutoScoring.driveMaxVelocity);
     driveMaxVelocitySlow.initDefault(Constants.AutoScoring.driveMaxVelocitySlow);
     driveMaxAcceleration.initDefault(Constants.AutoScoring.driveMaxAcceleration);
+    driveMaxDeceleration.initDefault(Constants.AutoScoring.driveMaxDeceleration);
 
     thetaMaxVelocity.initDefault(Constants.AutoScoring.thetaMaxVelocity);
     thetaMaxVelocitySlow.initDefault(Constants.AutoScoring.thetaMaxVelocitySlow);
@@ -119,6 +124,7 @@ public class DriveToPose extends Command {
   public void initialize() {
     // Reset all controllers
     Pose2d currentPose = drive.getPose();
+    lastTargetPose = currentPose;
     driveController.reset(
         currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation()),
         Math.min(
@@ -136,6 +142,12 @@ public class DriveToPose extends Command {
                 .getX()));
     thetaController.reset(currentPose.getRotation().getDegrees(), drive.getYawVelocity());
     lastSetpointTranslation = drive.getPose().getTranslation();
+    pathDistance = currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation());
+    // use acceleration at start of new path
+    driveController.setConstraints(
+        new TrapezoidProfile.Constraints(
+            slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
+            driveMaxAcceleration.get()));
   }
 
   @Override
@@ -146,6 +158,7 @@ public class DriveToPose extends Command {
     if (driveMaxVelocity.hasChanged(hashCode())
         || driveMaxVelocitySlow.hasChanged(hashCode())
         || driveMaxAcceleration.hasChanged(hashCode())
+        || driveMaxDeceleration.hasChanged(hashCode())
         || driveTolerance.hasChanged(hashCode())
         || driveToleranceSlow.hasChanged(hashCode())
         || thetaMaxVelocity.hasChanged(hashCode())
@@ -177,9 +190,25 @@ public class DriveToPose extends Command {
     Pose2d currentPose = drive.getPose();
     Pose2d targetPose = poseSupplier.get();
 
+    if (!targetPose.equals(lastTargetPose)) {
+      pathDistance = currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation());
+      // use acceleration at start of new path
+      driveController.setConstraints(
+          new TrapezoidProfile.Constraints(
+              slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
+              driveMaxAcceleration.get()));
+    }
+
     // Calculate drive speed
     double currentDistance =
         currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation());
+    if (currentDistance <= pathDistance / 2) {
+      // use deceleration after path mid-point
+      driveController.setConstraints(
+          new TrapezoidProfile.Constraints(
+              slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
+              driveMaxDeceleration.get()));
+    }
     double ffScaler =
         MathUtil.clamp(
             (currentDistance - ffMinRadius.get()) / (ffMaxRadius.get() - ffMinRadius.get()),
