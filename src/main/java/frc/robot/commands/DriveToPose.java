@@ -148,6 +148,7 @@ public class DriveToPose extends Command {
         new TrapezoidProfile.Constraints(
             slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
             driveMaxAcceleration.get()));
+    Logger.recordOutput("DriveToPose/ProfileAcc", driveMaxAcceleration.get());
   }
 
   @Override
@@ -184,6 +185,7 @@ public class DriveToPose extends Command {
               slowMode ? thetaMaxVelocitySlow.get() : thetaMaxVelocity.get(),
               thetaMaxAcceleration.get()));
       thetaController.setTolerance(slowMode ? thetaToleranceSlow.get() : thetaTolerance.get());
+      Logger.recordOutput("DriveToPose/ProfileAcc", driveMaxAcceleration.get());
     }
 
     // Get current and target pose
@@ -197,6 +199,7 @@ public class DriveToPose extends Command {
           new TrapezoidProfile.Constraints(
               slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
               driveMaxAcceleration.get()));
+      Logger.recordOutput("DriveToPose/ProfileAcc", driveMaxAcceleration.get());
     }
 
     // Calculate drive speed
@@ -208,6 +211,7 @@ public class DriveToPose extends Command {
           new TrapezoidProfile.Constraints(
               slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
               driveMaxDeceleration.get()));
+      Logger.recordOutput("DriveToPose/ProfileAcc", driveMaxDeceleration.get());
     }
     double ffScaler =
         MathUtil.clamp(
