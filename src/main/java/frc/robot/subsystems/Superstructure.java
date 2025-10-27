@@ -51,6 +51,7 @@ public class Superstructure extends SubsystemBase {
     PRECLIMB,
     CLIMB,
     DROP_CORAL_REPICKUP,
+    WOOD_BLOCK
   }
 
   public static enum Level {
@@ -97,7 +98,11 @@ public class Superstructure extends SubsystemBase {
   public void periodic() {
 
     if (DriverStation.isDisabled() && ishomed) {
-      state = Superstates.DISABLED;
+      if (elevator.getElevatorHeightMeters() >= (Constants.Elevator.homeHeightMeters - 0.01)) {
+        state = Superstates.WOOD_BLOCK;
+      } else if (elevator.getElevatorHeightMeters() < Constants.Elevator.homeHeightMeters) {
+        state = Superstates.DISABLED;
+      }
     }
 
     // The home button can only be activated when the robot is disabled, so accept it from any state
@@ -124,7 +129,11 @@ public class Superstructure extends SubsystemBase {
         elevator.reset();
         arm.reset();
         break;
-
+      case WOOD_BLOCK:
+        elevator.reset();
+        arm.reset();
+        DriverStation.reportWarning("Superstructure in WOOD_BLOCK state: Remove Wood Block", false);
+        break;
       case DISABLED:
         elevator.reset();
         arm.reset();
