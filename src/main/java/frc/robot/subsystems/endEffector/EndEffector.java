@@ -282,9 +282,8 @@ public class EndEffector extends SubsystemBase {
       case DROP_REPICKUP:
         io.setVoltage(Constants.EndEffector.ejectVolts);
         if ((!inputs.isCoralProximityDetected && !inputs.isAlgaeProximityDetected)) {
+          dropCoral = false;
           state = EndEffectorStates.IDLE;
-          coralHeld = false;
-          algaeHeld = false;
         }
         break;
     }

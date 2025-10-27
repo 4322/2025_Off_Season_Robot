@@ -352,6 +352,7 @@ public class Superstructure extends SubsystemBase {
         endEffector.dropCoral();
         if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
           state = Superstates.IDLE;
+          unsetAllRequests();
         }
         break;
     }
