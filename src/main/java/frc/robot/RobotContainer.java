@@ -213,13 +213,15 @@ public class RobotContainer {
     drive.setDefaultCommand(new DriveManual(drive));
 
     if (RobotController.getBatteryVoltage() <= 12.00
-        && superstructure.getState() == Superstructure.Superstates.IDLE
-        && intakeSuperstructure.getIntakeSuperstate()
-            == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
+            && (superstructure.getState() == Superstructure.Superstates.IDLE
+                || superstructure.getState() == Superstructure.Superstates.CORAL_HELD)
+            && intakeSuperstructure.getIntakeSuperstate()
+                == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
         && Constants.testingOnPracticeFeild) {
       driver.setRumble(GenericHID.RumbleType.kBothRumble, 10.0);
       batteryLowStopTimer.start();
       if (batteryLowStopTimer.hasElapsed(5)) {
+        driver.setRumble(GenericHID.RumbleType.kBothRumble, 20.0);
         batteryLowStopTimer.stop();
         batteryLowStopTimer.reset();
         DriverStation.reportError(
@@ -229,6 +231,10 @@ public class RobotContainer {
     } else {
       batteryLowStopTimer.stop();
       batteryLowStopTimer.reset();
+    }
+
+    if (RobotController.getBatteryVoltage() > 12.00) {
+      driver.setRumble(GenericHID.RumbleType.kBothRumble, 0.0);
     }
 
     scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false);
