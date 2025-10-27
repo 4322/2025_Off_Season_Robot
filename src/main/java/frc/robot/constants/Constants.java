@@ -5,8 +5,8 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
-import edu.wpi.first.math.geometry.Rotation2d;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -518,7 +518,7 @@ public final class Constants {
 
     public static final int NUMBER_OF_GAME_PIECE_TYPES =
         SimulatedGamePieceConstants.GamePieceType.values().length;
-    static final double TRACKED_OBJECT_TOLERANCE_METERS = 0.12;
+    public static final double TRACKED_OBJECT_TOLERANCE_METERS = 0.12;
     public static final Rotation2d LOLLIPOP_TOLERANCE = Rotation2d.fromDegrees(3.5);
     public static final boolean SHOULD_IGNORE_LOLLIPOP_CORAL = false;
   }

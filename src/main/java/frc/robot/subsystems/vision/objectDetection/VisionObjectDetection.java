@@ -78,6 +78,20 @@ public class VisionObjectDetection extends SubsystemBase {
     return visionObjectDetectionInputs.hasTarget[targetGamePiece.id];
   }
 
+  public Translation2d[] getObjectPositionsOnField(
+      SimulatedGamePieceConstants.GamePieceType targetGamePiece) {
+    final Rotation3d[] visibleObjectsRotations = getTargetObjectsRotations(targetGamePiece);
+    final Translation2d[] objectsPositionsOnField =
+        new Translation2d[visibleObjectsRotations.length];
+
+    for (int i = 0; i < visibleObjectsRotations.length; i++)
+      objectsPositionsOnField[i] = calculateObjectPositionFromRotation(visibleObjectsRotations[i]);
+
+    Logger.recordOutput(
+        "ObjectDetectionCamera/Visible" + targetGamePiece.name(), objectsPositionsOnField);
+    return objectsPositionsOnField;
+  }
+
   public Translation2d[] getObjectPositionsRelativeToCamera(
       SimulatedGamePieceConstants.GamePieceType targetGamePiece) {
     final Rotation3d[] visibleObjectsRotations = getTargetObjectsRotations(targetGamePiece);
@@ -130,7 +144,7 @@ public class VisionObjectDetection extends SubsystemBase {
     final double cameraHeight = robotCenterToCamera.getZ(); // Camera height above the ground
     final double objectPitchSin = Math.sin(objectRotation.getY());
     final double objectYaw = objectRotation.getZ();
-    
+
     // TODO rotate by yaw
     if (Math.abs(objectPitchSin) < 0.000001) {
       return new Translation2d(); // Return a default or zero position
@@ -138,7 +152,8 @@ public class VisionObjectDetection extends SubsystemBase {
 
     final double xTransform = cameraHeight / objectPitchSin;
 
-    final Transform3d objectRotationToGround = new Transform3d(xTransform, 0, objectYaw, new Rotation3d());
+    final Transform3d objectRotationToGround =
+        new Transform3d(xTransform, 0, objectYaw, new Rotation3d());
     return objectRotationToGround.getTranslation().toTranslation2d();
   }
 

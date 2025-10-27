@@ -2,8 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -62,10 +62,10 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
-import frc.robot.util.OrangeSequentialCommandGroup;
-import frc.robot.util.ReefStatus;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOPhoton;
+import frc.robot.util.OrangeSequentialCommandGroup;
+import frc.robot.util.ReefStatus;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -198,7 +198,7 @@ public class RobotContainer {
       } else {
         deployer = new Deployer(new DeployerIO() {});
       }
-      
+
       if (Constants.visionObjectDetectionEnabled) {
         visionObjectDetection =
             new VisionObjectDetection(
@@ -208,7 +208,7 @@ public class RobotContainer {
     }
 
     intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
-    superstructure = new Superstructure(endEffector, arm, elevator, intakeSuperstructure);
+    superstructure = new Superstructure(endEffector, arm, elevator, intakeSuperstructure, vision);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -224,10 +224,10 @@ public class RobotContainer {
     drive.setDefaultCommand(new DriveManual(drive));
 
     if (RobotController.getBatteryVoltage() <= 12.00
-            && (superstructure.getState() == Superstructure.Superstates.IDLE
-                || superstructure.getState() == Superstructure.Superstates.CORAL_HELD)
-            && intakeSuperstructure.getIntakeSuperstate()
-                == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
+        && (superstructure.getState() == Superstructure.Superstates.IDLE
+            || superstructure.getState() == Superstructure.Superstates.CORAL_HELD)
+        && intakeSuperstructure.getIntakeSuperstate()
+            == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
         && Constants.testingOnPracticeFeild) {
       driver.setRumble(GenericHID.RumbleType.kBothRumble, 10.0);
       batteryLowStopTimer.start();
