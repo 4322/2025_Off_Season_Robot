@@ -534,7 +534,7 @@ public class Superstructure extends SubsystemBase {
     vision.enableSingleTagSingleCam(tagID, cameraToUse);
   }
 
-  public Pose2d getEstimatedRobotPose() {
+  public Pose2d getRobotPoseEstimate() {
     return drive.getPose();
   }
 }

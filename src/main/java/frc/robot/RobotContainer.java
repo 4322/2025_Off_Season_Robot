@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.autonomous.AutonomousSelector;
 import frc.robot.commands.AlgaeIntakeGround;
 import frc.robot.commands.AlgaeScoreCommand;
+import frc.robot.commands.CoralIntake;
 import frc.robot.commands.DescoreAlgae;
 import frc.robot.commands.DriveManual;
 import frc.robot.commands.DriveToPose;
@@ -355,17 +356,7 @@ public class RobotContainer {
     driver
         .leftTrigger()
         .onTrue(
-            new InstantCommand(
-                    () -> {
-                      if (intakeSuperstructure.getIntakeSuperstate()
-                              != IntakeSuperstructure.IntakeSuperstates.HOMELESS
-                          && intakeSuperstructure.getIntakeSuperstate()
-                              != IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE) {
-                        intakeSuperstructure.requestRetractIdle();
-                      } else {
-                        intakeSuperstructure.requestIntake();
-                      }
-                    })
+            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection, superstructure)
                 .onlyIf(
                     () ->
                         intakeSuperstructure.getIntakeSuperstate()
