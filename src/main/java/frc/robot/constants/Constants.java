@@ -483,7 +483,7 @@ public final class Constants {
   }
 
   public static class AutoScoring {
-    public static final double drivekP = 0;
+    public static final double drivekP = 2;
     public static final double drivekD = 0;
 
     public static final double driveMaxVelocity = 2.3;
