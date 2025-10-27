@@ -30,7 +30,7 @@ public final class Constants {
   public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = true;
-  public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING_WITH_DRIVER;
+  public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVE_AUTO;
   public static final boolean tuneAutoRotate = false;
   public static final boolean continuousNitrateRequestsEnabled = true;
   public static final boolean enableReefLock = true;
@@ -62,7 +62,8 @@ public final class Constants {
 
   public static enum DriveTuningMode {
     DRIVING_FIXED_VELOCITY,
-    DRIVING_WITH_DRIVER,
+    DRIVE_AUTO,
+    DRIVE_MANUAL,
     TURNING
   }
 
