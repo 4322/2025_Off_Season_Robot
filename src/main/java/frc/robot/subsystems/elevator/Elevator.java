@@ -1,11 +1,12 @@
 package frc.robot.subsystems.elevator;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.BabyAlchemist;
+import frc.robot.BabyTunerX;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
+import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.util.ClockUtil;
 import org.littletonrobotics.junction.Logger;
 
@@ -15,8 +16,13 @@ public class Elevator extends SubsystemBase {
   private double requestedHeightMeters = 0.0;
   private double prevHeightMeters = 0.0;
   private double newElevatorHeight;
+  private double currentScoreHeight;
   private boolean isSlow = false;
   private boolean isHomed;
+  Superstructure superstructure = RobotContainer.getSuperstructure();
+  private double minSafeArmDegree = 0.0;
+  private double minElevatorHeight = 0.0;
+  private boolean inSync = true;
 
   public Elevator(ElevatorIO ELVIO) {
     this.io = ELVIO;
@@ -30,35 +36,53 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("Elevator/TargetHeight", requestedHeightMeters);
 
     if (isHomed) {
+      if (Math.abs(inputs.leaderHeightMeters - inputs.followerHeightMeters)
+          <= Constants.Elevator.syncToleranceMeters) {
+        inSync = true;
+      } else if (!isMoving()) {
+        inSync = false;
+      }
+      Logger.recordOutput("Elevator/inSync", inSync);
       switch (Constants.elevatorMode) {
         case OPEN_LOOP:
-          io.setVoltage(-RobotContainer.driver.getLeftY() * 12.0);
+          io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
           break;
         case TUNING:
-          Double newPos = BabyAlchemist.run(io.getNitrate());
+          Double newPos =
+              BabyTunerX.run(0, io.getTalonFX(), "Elevator", inputs.leaderHeightMeters, "meters");
           if (newPos != null) {
             io.requestHeightMeters(newPos);
+            requestedHeightMeters = newPos;
           }
           break;
         case DISABLED:
           break;
         case NORMAL:
           double armAngle = RobotContainer.getSuperstructure().getArmAngle();
-          // TODO: Safety logic unsafe when going from coral held to score L2, FIX
-          if (armAngle > Constants.Arm.bufferDeg
-              && requestedHeightMeters < Constants.Elevator.minElevatorSafeHeightMeters
-              && armAngle < (Constants.Arm.minArmSafeDeg - Constants.Arm.bufferDeg)) {
-            newElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
+
+          if (RobotContainer.getSuperstructure().isCoralHeld()) {
+            minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
+            minElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralMeters;
+          } else {
+            minSafeArmDegree = Constants.Arm.minArmSafeDeg;
+            minElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
+          }
+
+          if (RobotContainer.getSuperstructure().getState() != Superstates.END_EFFECTOR_CORAL_PICKUP
+              && requestedHeightMeters < minElevatorHeight
+              && armAngle < (minSafeArmDegree - Constants.Arm.bufferDeg)) {
+            newElevatorHeight = minElevatorHeight;
           } else {
             newElevatorHeight = requestedHeightMeters;
           }
-          if (prevHeightMeters != newElevatorHeight) {
+
+          if (prevHeightMeters != newElevatorHeight || Constants.continuousNitrateRequestsEnabled) {
             if (isSlow) {
               io.requestSlowHeightMeters(newElevatorHeight);
             } else {
               io.requestHeightMeters(newElevatorHeight);
             }
-            prevHeightMeters = requestedHeightMeters;
+            prevHeightMeters = newElevatorHeight;
           }
           break;
       }
@@ -83,6 +107,11 @@ public class Elevator extends SubsystemBase {
   public void algaeGround() {
     requestedHeightMeters = Constants.Elevator.algaeGroundHeightMeters;
     isSlow = false;
+  }
+
+  public void reset() {
+    isSlow = false;
+    prevHeightMeters = -1;
   }
 
   public void algaeReef(Level level) {
@@ -127,18 +156,26 @@ public class Elevator extends SubsystemBase {
     switch (level) {
       case L1:
         requestedHeightMeters = Constants.Elevator.scoreCoralL1HeightMeters;
+        currentScoreHeight = Constants.Elevator.scoreCoralL1HeightMeters;
         break;
       case L2:
         requestedHeightMeters = Constants.Elevator.scoreCoralL2HeightMeters;
+        currentScoreHeight = Constants.Elevator.scoreCoralL2HeightMeters;
         break;
       case L3:
         requestedHeightMeters = Constants.Elevator.scoreCoralL3HeightMeters;
+        currentScoreHeight = Constants.Elevator.scoreCoralL3HeightMeters;
         break;
       case L4:
         requestedHeightMeters = Constants.Elevator.scoreCoralL4HeightMeters;
+        currentScoreHeight = Constants.Elevator.scoreCoralL4HeightMeters;
         break;
     }
-    isSlow = true;
+    isSlow = false;
+  }
+
+  public double releaseCoralSetpoint() {
+    return currentScoreHeight + 0.001;
   }
 
   public void pickupCoral() {
@@ -157,18 +194,43 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getElevatorHeightMeters() {
-    return inputs.leaderheightMeters;
+    return inputs.leaderHeightMeters;
   }
 
   public void setHomePosition() {
     io.setPosition(Constants.Elevator.homeHeightMeters);
     isHomed = true;
     isSlow = false;
+    idle(); // must have a valid initial position request when enabled
   }
 
-  public void stop(IdleMode idleMode) {
-    io.stop(idleMode);
+  public double emergencyHoming() {
+    isHomed = false;
+    io.setVoltage(Constants.Elevator.intializationVoltage);
+    requestedHeightMeters = 0;
+    return inputs.leaderVelocityMetersPerSecond;
+  }
+
+  public void setEmergencyHomingComplete() {
+    io.setPosition(Constants.Elevator.maxElevatorHeightMeters);
+    setReHome();
+  }
+
+  public void setReHome() {
+    isHomed = true;
+    idle();
+  }
+
+  public void stop() {
+    io.stop();
+    reset();
     isSlow = false;
+  }
+
+  public boolean isMoving() {
+    return !atSetpoint()
+        || Math.abs(inputs.leaderVelocityMetersPerSecond)
+            > Constants.Elevator.initializationCompleteSpeed;
   }
 
   public void safeBargeRetract() {
@@ -179,5 +241,9 @@ public class Elevator extends SubsystemBase {
   public void eject() {
     requestedHeightMeters = Constants.Elevator.ejectHeightMeters;
     isSlow = false;
+  }
+
+  public void enableBrakeMode(boolean enable) {
+    io.enableBrakeMode(enable);
   }
 }

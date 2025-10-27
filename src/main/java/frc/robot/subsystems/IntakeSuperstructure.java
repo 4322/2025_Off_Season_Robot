@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -14,10 +15,10 @@ public class IntakeSuperstructure extends SubsystemBase {
 
   private boolean requestHomed;
   private boolean requestRetractIdle;
-  private boolean requestFeed;
-  private boolean requestReject;
+  private boolean requestDeploy;
   private boolean requestIntakeEject;
-  private boolean requestUnhome;
+  private boolean isHomed = false;
+  private boolean requestIndexerEject;
 
   private enum RetractLockedOutStates {
     FALSE,
@@ -29,18 +30,20 @@ public class IntakeSuperstructure extends SubsystemBase {
   private Timer retractTimeOutPickupAreaTimer = new Timer();
   private RetractLockedOutStates retractLockedOutState = RetractLockedOutStates.FALSE;
 
-  private IntakeSuperstates state = IntakeSuperstates.UNHOMED;
+  private IntakeSuperstates state = IntakeSuperstates.HOMELESS;
 
   public Deployer deployer;
   private Rollers rollers;
   private Indexer indexer;
 
   public static enum IntakeSuperstates {
-    UNHOMED,
+    HOMELESS,
+    DISABLED,
     RETRACT_IDLE,
     FEED,
     SLOW_REJECT,
-    INTAKE_EJECT
+    INTAKE_EJECT,
+    INDEXER_EJECT
   }
 
   public IntakeSuperstructure(
@@ -57,34 +60,49 @@ public class IntakeSuperstructure extends SubsystemBase {
     if (requestHomed) {
       deployer.setHome();
       requestHomed = false;
-      state = IntakeSuperstates.RETRACT_IDLE;
+      isHomed = true;
+      if (DriverStation.isEnabled()) {
+        state = IntakeSuperstates.RETRACT_IDLE;
+      } else {
+        state = IntakeSuperstates.DISABLED;
+      }
+    }
+
+    if (DriverStation.isDisabled() && isHomed) {
+      state = IntakeSuperstates.DISABLED;
     }
 
     Logger.recordOutput("IntakeSuperstructure/State", state.toString());
 
     switch (state) {
-      case UNHOMED:
+      case HOMELESS:
+        break;
+      case DISABLED:
+        if (DriverStation.isEnabled()) {
+          state = IntakeSuperstates.RETRACT_IDLE;
+        }
         break;
       case RETRACT_IDLE:
         deployer.retract();
-
-        if (isCoralDetectedIndexer()
-            || isCoralDetectedPickupArea()
-            || RobotContainer.getSuperstructure().isCoralHeld()) {
+        if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {
           rollers.rejectSlow();
-          indexer.rejectSlow();
+          indexer.feedSlow();
         } else {
           rollers.feedSlow();
           indexer.feedSlow();
         }
-        if (requestIntakeEject) {
+        if (requestIndexerEject) {
+          state = IntakeSuperstates.INDEXER_EJECT;
+        } else if (requestIntakeEject) {
           state = IntakeSuperstates.INTAKE_EJECT;
-        }
-        if (requestFeed) {
-          state = IntakeSuperstates.FEED;
-        }
-        if (requestReject) {
-          state = IntakeSuperstates.SLOW_REJECT;
+        } else if (requestDeploy) {
+          if (isCoralDetectedIndexer()
+              || isCoralDetectedPickupArea()
+              || RobotContainer.getSuperstructure().isCoralHeld()) {
+            state = IntakeSuperstates.SLOW_REJECT;
+          } else {
+            state = IntakeSuperstates.FEED;
+          }
         }
         break;
       case FEED:
@@ -92,64 +110,102 @@ public class IntakeSuperstructure extends SubsystemBase {
         indexer.feed();
         deployer.deploy();
 
-        if (rollers.isCoralPickupDetected()
-            && retractLockedOutState == RetractLockedOutStates.FALSE) {
-          retractLockedOutState = RetractLockedOutStates.INDEXER;
-          retractTimeOutIndexerTimer.reset();
-          retractTimeOutIndexerTimer.start();
-        } else if (isCoralDetectedIndexer()
-            && retractLockedOutState == RetractLockedOutStates.INDEXER) {
-          retractLockedOutState = RetractLockedOutStates.PICKUP;
-          retractTimeOutIndexerTimer.stop();
-          retractTimeOutPickupAreaTimer.reset();
-          retractTimeOutPickupAreaTimer.start();
-        } else if ((!isCoralDetectedIndexer() && !isCoralDetectedPickupArea())
-            && retractTimeOutIndexerTimer.hasElapsed(
-                Constants.IntakeSuperstructure.indexerRetractTimeoutSeconds)) {
-          retractTimeOutIndexerTimer.stop();
-          retractLockedOutState = RetractLockedOutStates.FALSE;
-        } else if ((isCoralDetectedPickupArea()
+        if (isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld()) {
+          state = IntakeSuperstates.SLOW_REJECT;
+        }
+        if (requestIndexerEject) {
+          state = IntakeSuperstates.INDEXER_EJECT;
+        }
+
+        switch (retractLockedOutState) {
+            // Default case, starts lockout timer when coral is detected in rollers
+          case FALSE:
+            if (rollers.isCoralPickupDetected()) {
+              retractLockedOutState = RetractLockedOutStates.INDEXER;
+              retractTimeOutIndexerTimer.stop();
+              retractTimeOutIndexerTimer.reset();
+              retractTimeOutIndexerTimer.start();
+            }
+            break;
+          case INDEXER:
+            // If coral isn't detected in indexer after x time, clear lockout; Otherwise start
+            // pickup area timer
+            if (isCoralDetectedIndexer()) {
+              retractLockedOutState = RetractLockedOutStates.PICKUP;
+              retractTimeOutIndexerTimer.stop();
+              retractTimeOutPickupAreaTimer.reset();
+              retractTimeOutPickupAreaTimer.start();
+            } else if (!isCoralDetectedIndexer()
+                && retractTimeOutIndexerTimer.hasElapsed(
+                    Constants.IntakeSuperstructure.indexerRetractTimeoutSeconds)) {
+              retractTimeOutIndexerTimer.stop();
+              retractLockedOutState = RetractLockedOutStates.FALSE;
+            }
+            break;
+          case PICKUP:
+            retractTimeOutIndexerTimer.stop();
+            retractTimeOutIndexerTimer.reset();
+            // If coral is detected in pickup area/end effector or x time has passed, clear lockout
+            if ((isCoralDetectedPickupArea() || RobotContainer.getSuperstructure().isCoralHeld())
                 || retractTimeOutPickupAreaTimer.hasElapsed(
-                    Constants.IntakeSuperstructure.pickupAreaRetractTimeoutSeconds))
-            && retractLockedOutState == RetractLockedOutStates.PICKUP) {
-          retractTimeOutPickupAreaTimer.stop();
-          retractLockedOutState = RetractLockedOutStates.FALSE;
+                    Constants.IntakeSuperstructure.pickupAreaRetractTimeoutSeconds)) {
+              retractTimeOutPickupAreaTimer.stop();
+              retractLockedOutState = RetractLockedOutStates.FALSE;
+            }
+            break;
         }
-        if (requestRetractIdle && retractLockedOutState == RetractLockedOutStates.FALSE) {
+
+        if (requestIntakeEject) {
+          state = IntakeSuperstates.INTAKE_EJECT;
+        } else if (requestRetractIdle && retractLockedOutState == RetractLockedOutStates.FALSE) {
           state = IntakeSuperstates.RETRACT_IDLE;
-        }
-        if (isCoralDetectedIndexer()
-            || isCoralDetectedPickupArea()
+        } else if (isCoralDetectedPickupArea()
             || RobotContainer.getSuperstructure().isCoralHeld()) {
           state = IntakeSuperstates.SLOW_REJECT;
         }
-        if (requestIntakeEject) {
-          state = IntakeSuperstates.INTAKE_EJECT;
-        }
+
         break;
       case SLOW_REJECT:
         deployer.deploy();
-        rollers.reject();
-        indexer.reject();
+        rollers.rejectSlow();
+        indexer.rejectSlow();
 
-        if (!isCoralDetectedIndexer()
+        if (requestIntakeEject) {
+          state = IntakeSuperstates.INTAKE_EJECT;
+        } else if (requestRetractIdle) {
+          state = IntakeSuperstates.RETRACT_IDLE;
+        } else if (!isCoralDetectedIndexer()
             && !isCoralDetectedPickupArea()
             && !RobotContainer.getSuperstructure().isCoralHeld()) {
           state = IntakeSuperstates.FEED;
         }
-        if (requestRetractIdle) {
-          state = IntakeSuperstates.RETRACT_IDLE;
-        }
-        if (requestIntakeEject) {
-          state = IntakeSuperstates.INTAKE_EJECT;
-        }
+
         break;
       case INTAKE_EJECT:
         deployer.eject();
-        rollers.reject();
+        rollers.eject();
         indexer.reject();
         if (requestRetractIdle) {
           state = IntakeSuperstates.RETRACT_IDLE;
+        }
+        break;
+      case INDEXER_EJECT:
+        deployer.deploy();
+        rollers.eject();
+
+        if (RobotContainer.driver.rightBumper().getAsBoolean()) {
+          indexer.ejectRight();
+        } else if (RobotContainer.driver.leftBumper().getAsBoolean()) {
+          indexer.ejectLeft();
+        } else {
+          requestIndexerEject = false;
+        }
+        if (!requestIndexerEject) {
+          if (requestRetractIdle) {
+            state = IntakeSuperstates.RETRACT_IDLE;
+          } else if (requestDeploy) {
+            state = IntakeSuperstates.FEED;
+          }
         }
         break;
     }
@@ -158,9 +214,9 @@ public class IntakeSuperstructure extends SubsystemBase {
   private void unsetAllRequests() {
     // don't clear requestHomed since it must be processed
     requestRetractIdle = false;
-    requestFeed = false;
-    requestReject = false;
     requestIntakeEject = false;
+    requestDeploy = false;
+    requestIndexerEject = false;
   }
 
   public IntakeSuperstates getState() {
@@ -175,11 +231,7 @@ public class IntakeSuperstructure extends SubsystemBase {
   public void requestIntake() {
     // Transitions to Feeding or Rejecting based on if coral in robot
     unsetAllRequests();
-    if (isCoralDetectedPickupArea()) {
-      requestReject = true;
-    } else {
-      requestFeed = true;
-    }
+    requestDeploy = true;
   }
 
   public void requestEject() {
@@ -187,13 +239,16 @@ public class IntakeSuperstructure extends SubsystemBase {
     requestIntakeEject = true;
   }
 
+  public void requestIdexerEject() {
+    requestIndexerEject = true;
+  }
+
   public void requestUnhome() {
     deployer.clearHome();
     rollers.idle();
     indexer.idle();
-    state = IntakeSuperstates.UNHOMED;
+    state = IntakeSuperstates.HOMELESS;
     unsetAllRequests();
-    requestUnhome = true;
   }
 
   public boolean isCoralDetectedPickupArea() {
@@ -204,8 +259,18 @@ public class IntakeSuperstructure extends SubsystemBase {
     return indexer.isCoralDetectedIndexer();
   }
 
-  public void homeButtonActivated() {
+  public void setHome() {
     requestHomed = true;
+  }
+
+  public void setReHome() {
+    deployer.setReHome();
+    isHomed = true;
+    if (DriverStation.isEnabled()) {
+      state = IntakeSuperstates.RETRACT_IDLE;
+    } else {
+      state = IntakeSuperstates.DISABLED;
+    }
   }
 
   public boolean isCoralDetectedIntake() {
@@ -213,6 +278,8 @@ public class IntakeSuperstructure extends SubsystemBase {
         || indexer.isCoralDetectedPickupArea()
         || indexer.isCoralDetectedIndexer();
   }
-} // TODO check usage of reject vs. reject slow and eject vs eject slow
-  // TODO add manual homing procedure
-// Review logic
+
+  public IntakeSuperstates getIntakeSuperstate() {
+    return state;
+  }
+}

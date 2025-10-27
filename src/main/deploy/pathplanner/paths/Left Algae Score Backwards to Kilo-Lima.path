@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.0,
+        "y": 7.4
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.751442018793652,
+        "y": 7.373187130354533
+      },
+      "isLocked": false,
+      "linkedName": "LeftAlgaeScoreBackwards"
+    },
+    {
+      "anchor": {
+        "x": 3.380532786885246,
+        "y": 5.973002049180327
+      },
+      "prevControl": {
+        "x": 3.812090163934426,
+        "y": 6.464497950819672
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "KiloLimaOut"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -57.98423034806081
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

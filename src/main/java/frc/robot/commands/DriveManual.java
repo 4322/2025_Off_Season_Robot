@@ -1,25 +1,39 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.LoggedTunableNumber;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.constants.DrivetrainConstants;
+import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ClockUtil;
+import frc.robot.util.ReefStatus;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveManual extends Command {
   private Drive drive;
   private PIDController autoRotateController =
       new PIDController(Constants.Drive.autoRotatekP, 0, Constants.Drive.autoRotatekD);
+  private boolean firstReefLock;
+  private double currentReefLockDeg;
+
+  private static final LoggedTunableNumber rotKp =
+      new LoggedTunableNumber("AutoRotate/RotateKp", Constants.Drive.autoRotatekP);
+  private static final LoggedTunableNumber rotKd =
+      new LoggedTunableNumber("AutoRotate/RotateKd", Constants.Drive.autoRotatekD);
 
   public DriveManual(Drive drive) {
     this.drive = drive;
 
-    autoRotateController.enableContinuousInput(-Math.PI, Math.PI);
+    autoRotateController.enableContinuousInput(-180, 180);
+    autoRotateController.setTolerance(Constants.Drive.angularErrorToleranceDeg);
     addRequirements(drive);
   }
 
@@ -30,6 +44,10 @@ public class DriveManual extends Command {
     double omega =
         ClockUtil.cartesianDeadband(
             -RobotContainer.driver.getRightX(), Constants.Drive.rotDeadband);
+
+    if (Constants.armMode == SubsystemMode.OPEN_LOOP) {
+      omega = 0;
+    }
 
     // Apply polar deadband
     double[] polarDriveCoord = ClockUtil.polarDeadband(x, y, Constants.Drive.driveDeadband);
@@ -55,18 +73,83 @@ public class DriveManual extends Command {
       dx *= -DrivetrainConstants.maxSpeedAt12Volts;
       dy *= -DrivetrainConstants.maxSpeedAt12Volts;
     }
-    double rot = omega * omega * omega * 12.0;
+    double rot = Math.signum(omega) * omega * omega * 12.0;
 
     switch (drive.getManualDriveMode()) {
       case FIELD_RELATIVE:
-        drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
+        if (Constants.enableReefLock
+            && RobotContainer.getSuperstructure().isCoralHeld()
+            && Math.abs(rot) < 0.01) {
+          if (!RobotContainer.getSuperstructure().isAutoOperationMode()) {
+            ReefStatus reefStatus = RobotContainer.getSuperstructure().getReefStatus();
+            double newReefLockDeg = reefStatus.getClosestRobotAngle().getDegrees();
+
+            // Lock heading to reef face first time we engage mode
+            if (!firstReefLock) {
+              firstReefLock = true;
+              currentReefLockDeg = newReefLockDeg;
+            }
+
+            if (currentReefLockDeg != newReefLockDeg && !reefStatus.getReefFaceAmbiguity()) {
+              currentReefLockDeg = newReefLockDeg;
+            }
+
+          } else {
+            Translation2d reefCenterPoint;
+
+            if (Robot.alliance == DriverStation.Alliance.Red) {
+              reefCenterPoint = FieldConstants.KeypointPoses.redReefCenter;
+            } else {
+              reefCenterPoint = FieldConstants.KeypointPoses.blueReefCenter;
+            }
+            Translation2d robotTranslation = drive.getPose().getTranslation();
+            double reefCenterToRobotDeg =
+                robotTranslation.minus(reefCenterPoint).getAngle().getDegrees();
+            double newReefLockDeg = (reefCenterToRobotDeg + 180);
+
+            double RotationDeg = (currentReefLockDeg - newReefLockDeg);
+
+            Logger.recordOutput("WhatTheTolorance?", RotationDeg);
+            // Lock heading to reef face first time we engage mode
+            if (!firstReefLock) {
+              firstReefLock = true;
+              currentReefLockDeg = newReefLockDeg;
+            }
+            if ((RotationDeg > Constants.Drive.reefLockToleranceDegrees
+                    || RotationDeg < -Constants.Drive.reefLockToleranceDegrees)
+                && Math.hypot(dx, dy) > 0.01) {
+              currentReefLockDeg = newReefLockDeg;
+            }
+            rot =
+                autoRotateController.calculate(
+                    drive.getRotation().getDegrees(), currentReefLockDeg);
+            if (autoRotateController.atSetpoint()) {
+              rot = 0;
+            }
+          }
+        } else if (firstReefLock) {
+          firstReefLock = false;
+        }
         break;
       case AUTO_ROTATE:
+        if (rotKp.hasChanged(0) || rotKd.hasChanged(0)) {
+          autoRotateController.setP(rotKp.get());
+          autoRotateController.setD(rotKd.get());
+        }
+
+        // Clear first reef lock if we exited field relative state while in reef lock mode
+        if (firstReefLock) {
+          firstReefLock = false;
+        }
+
         rot =
             autoRotateController.calculate(
-                drive.getRotation().getRadians(), drive.getTargetAngleRad());
-        drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
+                drive.getRotation().getDegrees(), drive.getTargetAngle().getDegrees());
+        if (autoRotateController.atSetpoint()) {
+          rot = 0;
+        }
         break;
     }
+    drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
   }
 }

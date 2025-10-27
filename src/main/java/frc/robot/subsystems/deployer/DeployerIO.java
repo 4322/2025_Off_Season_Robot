@@ -12,7 +12,7 @@ public interface DeployerIO {
     public boolean connected = false;
     public double statorCurrentAmps = 0.0;
     public double busCurrentAmps = 0.0;
-    public double tempCelcius = 0.0;
+    public double motorTempCelcius = 0.0;
     public double speedRotationsPerSec = 0.0;
     public double appliedVolts = 0.0;
     public double angleDeg = 0.0;
@@ -20,8 +20,9 @@ public interface DeployerIO {
     public double kGeffort;
     public double kPeffort;
     public double totalEffort;
+    public double controllerTempCelcius = 0.0;
 
-    public double prevRequestedPositionDeg = 0.0;
+    public double requestedPosDeg = 0.0;
   }
 
   public default void updateInputs(DeployerIOInputs inputs) {}

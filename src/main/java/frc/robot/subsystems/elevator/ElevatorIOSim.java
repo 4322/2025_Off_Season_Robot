@@ -1,7 +1,5 @@
 package frc.robot.subsystems.elevator;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-
 public class ElevatorIOSim implements ElevatorIO {
   private double requestedVoltage = 0;
   private double requestedPosition = 0;
@@ -26,7 +24,7 @@ public class ElevatorIOSim implements ElevatorIO {
     double velocity = (position - prevPos) * 50;
 
     inputs.requestedPosMeters = requestedPosition;
-    inputs.leaderheightMeters = position;
+    inputs.leaderHeightMeters = position;
     inputs.followerHeightMeters = position;
 
     inputs.leaderVoltage = voltage;
@@ -44,7 +42,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
   @Override
   public void setPosition(double position) {
-    stop(IdleMode.kBrake);
+    stop();
     this.position = position;
   }
 
@@ -63,7 +61,7 @@ public class ElevatorIOSim implements ElevatorIO {
   }
 
   @Override
-  public void stop(IdleMode idleMode) {
+  public void stop() {
     requestedPosition = undefinedPosition;
     requestedVoltage = undefinedVoltage;
   }

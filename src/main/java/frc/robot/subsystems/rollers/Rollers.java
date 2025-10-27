@@ -1,8 +1,9 @@
 package frc.robot.subsystems.rollers;
 
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BabyTunerX;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.util.DeltaDebouncer;
 import org.littletonrobotics.junction.Logger;
 
@@ -34,7 +35,6 @@ public class Rollers extends SubsystemBase {
     IDLE,
     FEED,
     FEED_SLOW,
-    REJECT,
     REJECT_SLOW,
     EJECT
   }
@@ -50,7 +50,7 @@ public class Rollers extends SubsystemBase {
 
     io.updateInputs(inputs);
     Logger.recordOutput("Rollers/currentAction", currentAction.toString());
-
+    Logger.processInputs("Rollers", inputs);
     currentDetectionTriggered = currentDetectionDebouncer.calculate(inputs.statorCurrentAmps);
     velocityDetectionTriggered = velocityDetectionDebouncer.calculate(inputs.speedRotationsPerSec);
     isCoralPickupDetected = currentDetectionTriggered && velocityDetectionTriggered;
@@ -58,6 +58,10 @@ public class Rollers extends SubsystemBase {
     Logger.recordOutput("Rollers/isCoralPickupDetected", isCoralPickupDetected);
     Logger.recordOutput("Rollers/currentDetectionTriggered", currentDetectionTriggered);
     Logger.recordOutput("Rollers/velocityDetectionTriggered", velocityDetectionTriggered);
+
+    if (Constants.rollersMode == SubsystemMode.TUNING) {
+      BabyTunerX.run(0, io.getTalonFX(), "Rollers", inputs.speedRotationsPerSec, "rot/sec");
+    }
   }
 
   public void feed() {
@@ -70,9 +74,9 @@ public class Rollers extends SubsystemBase {
     io.setVoltage(Constants.Rollers.voltageFeedSlow);
   }
 
-  public void reject() {
-    currentAction = RollersStatus.REJECT;
-    io.setVoltage(Constants.Rollers.voltageReject);
+  public void eject() {
+    currentAction = RollersStatus.EJECT;
+    io.setVoltage(Constants.Rollers.voltageEject);
   }
 
   public void rejectSlow() {
@@ -82,7 +86,7 @@ public class Rollers extends SubsystemBase {
 
   public void idle() {
     currentAction = RollersStatus.IDLE;
-    io.stop(IdleMode.kCoast);
+    io.stop();
   }
 
   public boolean isCoralPickupDetected() {

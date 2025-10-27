@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.893210227272728,
+        "y": 3.8504971590909087
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.248614358993865,
+        "y": 3.907767174842758
+      },
+      "isLocked": false,
+      "linkedName": "GulfIn"
+    },
+    {
+      "anchor": {
+        "x": 6.182386363636364,
+        "y": 3.990099431818182
+      },
+      "prevControl": {
+        "x": 5.93281804015731,
+        "y": 3.9754143401993263
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Gulf-HotelOut"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

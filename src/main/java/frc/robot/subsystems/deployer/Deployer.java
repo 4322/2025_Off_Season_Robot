@@ -13,14 +13,15 @@ public class Deployer extends SubsystemBase {
   private DeployerIOInputsAutoLogged inputs = new DeployerIOInputsAutoLogged();
   // TODO go through states and make sure safe if disabled since code is still running
   private enum DeployerStatus {
-    START,
+    STOP,
     DEPLOY,
     RETRACT,
     EJECT
   }
 
-  private DeployerStatus currentAction = DeployerStatus.START;
+  private DeployerStatus currentAction = DeployerStatus.STOP;
   private boolean isHomed = false;
+  private double requestedPosDeg;
 
   public Deployer(DeployerIO io) {
     this.io = io;
@@ -38,7 +39,8 @@ public class Deployer extends SubsystemBase {
           io.setVoltage(-RobotContainer.driver.getRightY() * 12.0);
           break;
         case TUNING:
-          Double newPos = BabyAlchemist.run(io.getNitrate());
+          Double newPos =
+              BabyAlchemist.run(0, io.getNitrate(), "Deployer", inputs.angleDeg, "degrees");
           if (newPos != null) {
             io.setPositionSlot0(newPos);
           }
@@ -46,6 +48,9 @@ public class Deployer extends SubsystemBase {
         case DISABLED:
           break;
         case NORMAL:
+          if (Constants.continuousNitrateRequestsEnabled && currentAction != DeployerStatus.STOP) {
+            io.setPosition(requestedPosDeg);
+          }
           break;
       }
     }
@@ -54,43 +59,61 @@ public class Deployer extends SubsystemBase {
   public void deploy() {
     if (!isHomed
         || Constants.deployerMode != SubsystemMode.NORMAL
-        || currentAction == DeployerStatus.DEPLOY) {
+        || (currentAction == DeployerStatus.DEPLOY
+            && !Constants.continuousNitrateRequestsEnabled)) {
       return;
     }
     currentAction = DeployerStatus.DEPLOY;
-    io.setPosition(Constants.Deployer.deployPositionDegrees);
+    requestedPosDeg = Constants.Deployer.deployPositionDegrees;
+    io.setPosition(requestedPosDeg);
   }
 
   public void retract() {
     if (!isHomed
         || Constants.deployerMode != SubsystemMode.NORMAL
-        || currentAction == DeployerStatus.RETRACT) {
+        || (currentAction == DeployerStatus.RETRACT
+            && !Constants.continuousNitrateRequestsEnabled)) {
       return;
     }
     currentAction = DeployerStatus.RETRACT;
-    io.setPosition(Constants.Deployer.retractPositionDegrees);
+    requestedPosDeg = Constants.Deployer.retractPositionDegrees;
+    io.setPosition(requestedPosDeg);
   }
 
   public void eject() {
     if (!isHomed
         || Constants.deployerMode != SubsystemMode.NORMAL
-        || currentAction == DeployerStatus.EJECT) {
+        || (currentAction == DeployerStatus.EJECT && !Constants.continuousNitrateRequestsEnabled)) {
       return;
     }
     currentAction = DeployerStatus.EJECT;
-    io.setPosition(Constants.Deployer.ejectPositionDegrees);
+    requestedPosDeg = Constants.Deployer.ejectPositionDegrees;
+    io.setPosition(requestedPosDeg);
   }
 
   public void setHome() {
     io.setHome();
+    setReHome();
+  }
+
+  public void setReHome() {
     isHomed = true;
+    // must have a valid initial position request when enabled
+    requestedPosDeg = Constants.Deployer.retractPositionDegrees;
   }
 
   public void clearHome() {
     isHomed = false;
+    currentAction = DeployerStatus.STOP;
+  }
+
+  public double emergencyHoming() {
+    io.setVoltage(Constants.Deployer.intializationVoltage);
+    return inputs.speedRotationsPerSec;
   }
 
   public void stop(IdleMode mode) {
+    currentAction = DeployerStatus.STOP;
     io.stop(mode);
   }
 }

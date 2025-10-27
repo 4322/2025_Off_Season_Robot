@@ -57,6 +57,9 @@
 *.tar.gz
 *.rar
 
+# Avoid ignoring Jama jar file (.jar files are usually ignored)
+!jama-1.0.3.jar
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 

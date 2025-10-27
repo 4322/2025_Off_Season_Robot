@@ -2,7 +2,9 @@ package frc.robot.subsystems.indexer;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BabyAlchemist;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.SubsystemMode;
 import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
@@ -16,6 +18,8 @@ public class Indexer extends SubsystemBase {
     EJECT,
     EJECT_SLOW,
     REJECT,
+    REJECT_LEFT,
+    REJECT_RIGHT,
     REJECT_SLOW
   }
 
@@ -30,6 +34,13 @@ public class Indexer extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Indexer", inputs);
     Logger.recordOutput("Indexer/currentAction", currentAction.toString());
+
+    if (Constants.indexerMode == SubsystemMode.TUNING) {
+      BabyAlchemist.run(
+          0, io.getLeftNitrate(), "Indexer", inputs.leftSpeedRotationsPerSec, "rot/sec");
+      BabyAlchemist.run(
+          1, io.getRightNitrate(), "Indexer", inputs.leftSpeedRotationsPerSec, "rot/sec");
+    }
   }
 
   public void feed() {
@@ -52,9 +63,21 @@ public class Indexer extends SubsystemBase {
     io.setVoltage(Constants.Indexer.voltageRejectSlow);
   }
 
+  public void ejectLeft() {
+    currentAction = IndexerStatus.REJECT_LEFT;
+    io.setLeftMotorVoltage(Constants.Indexer.voltageReject);
+    io.setRightMotorVoltage(Constants.Indexer.voltageFeed);
+  }
+
+  public void ejectRight() {
+    currentAction = IndexerStatus.REJECT_RIGHT;
+    io.setRightMotorVoltage(Constants.Indexer.voltageReject);
+    io.setLeftMotorVoltage(Constants.Indexer.voltageFeed);
+  }
+
   public void idle() {
     currentAction = IndexerStatus.START;
-    io.stop(IdleMode.kCoast);
+    io.stopNitrate(IdleMode.kCoast);
   }
 
   public boolean isCoralDetectedIndexer() {

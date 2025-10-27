@@ -1,7 +1,6 @@
 package frc.robot.subsystems.arm;
 
-import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
-import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+import com.ctre.phoenix6.hardware.TalonFX;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
@@ -10,14 +9,17 @@ public interface ArmIO {
     public double requestedPosDeg;
     public double voltage = 0.0;
     public double velocityDegSec = 0.0;
-    public double encoderRotations = 0.0;
+    public double encoderArmRotations = 0.0;
     public boolean armConnected = false;
     public boolean armEncoderConnected = false;
     public double SupplyCurrentAmps = 0.0;
     public double StatorCurrentAmps = 0.0;
-    public double TempCelsius = 0.0;
+    public double motorTempCelsius = 0.0;
+    public double controllerTempCelsius = 0.0;
     public double PositionDegrees =
         0.0; // 0 is vertical to front of robot. Posititve clockwise looking from the left
+
+    // ASk if we still need the PID debugging frames
     public double kGeffort;
     public double kPeffort;
     public double kIeffort;
@@ -25,15 +27,17 @@ public interface ArmIO {
     public double feedbackError;
   }
 
-  public default void setHomePosition() {}
+  public default void setHomePosition(double rotations) {}
 
   public default void updateInputs(ArmIOInputs inputs) {}
 
   public default void setArmOpenLoop(double outputVoltage) {}
 
-  public default void requestPosition(double requestedSetpoint) {}
+  public default void requestPositionCoral(double requestedSetpoint) {}
 
-  public default void stopArmMotor(IdleMode idlemode) {}
+  public default void requestPositionAlgae(double requestedSetpoint) {}
+
+  public default void stopArmMotor() {}
 
   public default void setVoltage(double volts) {}
 
@@ -41,7 +45,9 @@ public interface ArmIO {
 
   public default void setManualInitialization() {}
 
-  public default Nitrate getNitrate() {
+  public default void enableBrakeMode(boolean enable) {}
+
+  public default TalonFX getTalonFX() {
     return null;
   } // for tuning
 }

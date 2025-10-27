@@ -1,5 +1,6 @@
 package frc.robot.subsystems.indexer;
 
+import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -13,6 +14,7 @@ public interface IndexerIO {
     public double leftStatorCurrentAmps = 0.0;
     public double leftTempCelcius = 0.0;
     public double leftSpeedRotationsPerSec = 0.0;
+    public double leftControllerTempCelcius = 0.0;
 
     public boolean rightConnected = false;
     public double rightAppliedVoltage = 0.0;
@@ -20,6 +22,7 @@ public interface IndexerIO {
     public double rightStatorCurrentAmps = 0.0;
     public double rightTempCelcius = 0.0;
     public double rightSpeedRotationsPerSec = 0.0;
+    public double rightControllerTempCelcius = 0.0;
 
     public boolean indexerSensorConnected = false;
     public boolean indexerSensorTriggered = false;
@@ -34,5 +37,22 @@ public interface IndexerIO {
 
   public default void setVoltage(double voltage) {}
 
-  public default void stop(IdleMode mode) {}
+  public default void stopNitrate(IdleMode mode) {}
+
+  public default void stop() {}
+
+  public default void setLeftMotorVoltage(double voltage) {}
+
+  public default void setRightMotorVoltage(double voltage) {}
+
+  public default void enableBrakeMode(boolean enable) {}
+
+  // for tuning
+  public default Nitrate getRightNitrate() {
+    return null;
+  }
+
+  public default Nitrate getLeftNitrate() {
+    return null;
+  }
 }

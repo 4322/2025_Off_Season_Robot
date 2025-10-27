@@ -3,6 +3,8 @@ package frc.robot.subsystems.indexer;
 import com.reduxrobotics.motorcontrol.nitrate.Nitrate;
 import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.ElectricalLimitSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
+import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.MotorType;
@@ -32,7 +34,7 @@ public class IndexerIONitrate implements IndexerIO {
 
     initMotorConfig();
     NitrateSettings motorRightConfigStatus =
-        indexerMotorRight.setSettings(motorRightConfig, 0.02, 5);
+        indexerMotorRight.setSettings(motorRightConfig, 0.1, 5);
     if (!motorRightConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
@@ -40,7 +42,7 @@ public class IndexerIONitrate implements IndexerIO {
               + " error (Indexer Motor); Did not receive settings",
           false);
     }
-    NitrateSettings motorLeftConfigStatus = indexerMotorLeft.setSettings(motorLeftConfig, 0.02, 5);
+    NitrateSettings motorLeftConfigStatus = indexerMotorLeft.setSettings(motorLeftConfig, 0.1, 5);
     if (!motorLeftConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Nitrate "
@@ -51,7 +53,7 @@ public class IndexerIONitrate implements IndexerIO {
 
     configSensor();
     CanandcolorSettings indexerSensorConfigStatus =
-        indexerSensor.setSettings(indexerSensorConfig, 0.02, 5);
+        indexerSensor.setSettings(indexerSensorConfig, 0.1, 5);
     if (!indexerSensorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandcolor "
@@ -61,7 +63,7 @@ public class IndexerIONitrate implements IndexerIO {
     }
 
     CanandcolorSettings pickupAreaSensorConfigStatus =
-        pickupAreaSensor.setSettings(pickupAreaSensorConfig, 0.02, 5);
+        pickupAreaSensor.setSettings(pickupAreaSensorConfig, 0.1, 5);
     if (!pickupAreaSensorConfigStatus.isEmpty()) {
       DriverStation.reportError(
           "Canandcolor "
@@ -73,29 +75,40 @@ public class IndexerIONitrate implements IndexerIO {
 
   private void initMotorConfig() {
     motorLeftConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
             .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
             .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit));
 
     motorRightConfig.setElectricalLimitSettings(
-        new ElectricalLimitSettings()
+        ElectricalLimitSettings.defaultSettings()
             .setBusCurrentLimit(Constants.Indexer.busCurrentLimit)
             .setBusCurrentLimitTime(Constants.Indexer.busCurrentLimitTime)
             .setStatorCurrentLimit(Constants.Indexer.statorCurrentLimit));
 
     motorLeftConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.Indexer.idleMode)
             .setInvert(Constants.Indexer.leftInvert));
 
     motorRightConfig.setOutputSettings(
-        new OutputSettings()
+        OutputSettings.defaultSettings()
             .setIdleMode(Constants.Indexer.idleMode)
             .setInvert(Constants.Indexer.rightInvert));
+
+    motorLeftConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
+
+    motorRightConfig.setFeedbackSensorSettings(FeedbackSensorSettings.defaultSettings());
+
+    motorLeftConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
+
+    motorRightConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
   }
 
-  private void configSensor() {}
+  private void configSensor() {
+    indexerSensorConfig.setColorFramePeriod(0); // reduce CAN bus traffic
+    pickupAreaSensorConfig.setColorFramePeriod(0);
+  }
 
   @Override
   public void updateInputs(IndexerIOInputs inputs) {
@@ -105,6 +118,7 @@ public class IndexerIONitrate implements IndexerIO {
     inputs.leftBusCurrentAmps = indexerMotorLeft.getBusCurrent();
     inputs.leftStatorCurrentAmps = indexerMotorLeft.getStatorCurrent();
     inputs.leftTempCelcius = indexerMotorLeft.getMotorTemperatureFrame().getValue();
+    inputs.leftControllerTempCelcius = indexerMotorLeft.getControllerTemperatureFrame().getValue();
     inputs.leftSpeedRotationsPerSec = indexerMotorLeft.getVelocity();
 
     inputs.rightConnected = indexerMotorRight.isConnected();
@@ -112,6 +126,8 @@ public class IndexerIONitrate implements IndexerIO {
     inputs.rightBusCurrentAmps = indexerMotorRight.getBusCurrent();
     inputs.rightStatorCurrentAmps = indexerMotorRight.getStatorCurrent();
     inputs.rightTempCelcius = indexerMotorRight.getMotorTemperatureFrame().getValue();
+    inputs.rightControllerTempCelcius =
+        indexerMotorRight.getControllerTemperatureFrame().getValue();
     inputs.rightSpeedRotationsPerSec = indexerMotorRight.getVelocity();
 
     inputs.indexerSensorConnected = indexerSensor.isConnected();
@@ -127,17 +143,37 @@ public class IndexerIONitrate implements IndexerIO {
 
   @Override
   public void setVoltage(double voltage) {
-    if (voltage != prevRequestedVoltage) {
+    if (voltage != prevRequestedVoltage || Constants.continuousNitrateRequestsEnabled) {
       indexerMotorRight.setVoltage(voltage);
       indexerMotorLeft.setVoltage(voltage);
       prevRequestedVoltage = voltage;
     }
   }
 
+  public void setLeftMotorVoltage(double voltage) {
+    indexerMotorLeft.setVoltage(voltage);
+  }
+
+  public void setRightMotorVoltage(double voltage) {
+    indexerMotorRight.setVoltage(voltage);
+  }
+
   @Override
-  public void stop(IdleMode mode) {
+  public void stopNitrate(IdleMode mode) {
     prevRequestedVoltage = -999;
     indexerMotorRight.stop(mode);
     indexerMotorLeft.stop(mode);
+    indexerMotorRight.setVoltage(0); // work around stop not working
+    indexerMotorLeft.setVoltage(0);
+  }
+
+  @Override
+  public Nitrate getRightNitrate() {
+    return indexerMotorRight;
+  }
+
+  @Override
+  public Nitrate getLeftNitrate() {
+    return indexerMotorLeft;
   }
 }

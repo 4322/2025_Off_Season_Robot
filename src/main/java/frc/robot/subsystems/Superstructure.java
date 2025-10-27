@@ -5,10 +5,15 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.Drive;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
+import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
+import frc.robot.util.ReefStatus;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import org.littletonrobotics.junction.Logger;
@@ -26,9 +31,15 @@ public class Superstructure extends SubsystemBase {
   private boolean requestScoreCoral = false;
   private boolean requestPreClimb = false;
   private boolean requestClimb = false;
+  private boolean ishomed = false;
+  private Timer coralPickupTimer = new Timer();
+  private boolean coralElevatorPickUp = false;
+  private boolean scoreBackSide = false;
+  private boolean requestDropCoralRepickup = false;
 
   public enum Superstates {
-    UNHOMED,
+    HOMELESS,
+    DISABLED,
     IDLE,
     EJECT,
     ALGAE_IDLE,
@@ -42,7 +53,9 @@ public class Superstructure extends SubsystemBase {
     SCORE_CORAL,
     SAFE_SCORE_ALGAE_RETRACT,
     PRECLIMB,
-    CLIMB
+    CLIMB,
+    DROP_CORAL_REPICKUP,
+    WOOD_BLOCK
   }
 
   public static enum Level {
@@ -55,13 +68,14 @@ public class Superstructure extends SubsystemBase {
   Level level = Level.L1;
 
   public static enum OperationMode {
-    AUTO,
+    TeleAUTO,
     MANUAL,
   }
 
-  OperationMode mode = OperationMode.AUTO;
+  OperationMode mode = OperationMode.TeleAUTO;
 
-  Superstates state = Superstates.UNHOMED;
+  Superstates state = Superstates.HOMELESS;
+  Superstates prevState = Superstates.HOMELESS;
 
   private EndEffector endEffector;
   private Arm arm;
@@ -70,6 +84,7 @@ public class Superstructure extends SubsystemBase {
   private Vision vision;
   private VisionObjectDetection visionObjectDetection;
   private IntakeSuperstructure intakeSuperstructure;
+  private Vision vision;
 
   // Add this variable to track the previous state of the home button
 
@@ -77,50 +92,88 @@ public class Superstructure extends SubsystemBase {
       EndEffector endEffector,
       Arm arm,
       Elevator elevator,
-      frc.robot.subsystems.drive.Drive drive2,
-      Vision vision,
-      IntakeSuperstructure intakeSuperstructure) {
+      IntakeSuperstructure intakeSuperstructure,
+      Vision vision) {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
     this.intakeSuperstructure = intakeSuperstructure;
+    this.vision = vision;
   }
 
   @Override
   public void periodic() {
 
+    if (DriverStation.isDisabled() && ishomed) {
+      if (elevator.getElevatorHeightMeters() >= (Constants.Elevator.homeHeightMeters - 0.01)) {
+        state = Superstates.WOOD_BLOCK;
+      } else if (elevator.getElevatorHeightMeters() < Constants.Elevator.homeHeightMeters) {
+        state = Superstates.DISABLED;
+      }
+    }
+
     // The home button can only be activated when the robot is disabled, so accept it from any state
     if (requestHomed) {
       elevator.setHomePosition();
       arm.setHomePosition();
-      intakeSuperstructure.deployer.setHome();
+      intakeSuperstructure.setHome();
       requestHomed = false;
-      state = Superstates.IDLE;
+      ishomed = true;
+      state = Superstates.DISABLED;
     }
 
     Logger.recordOutput("Superstructure/currentState", state.toString());
+    Logger.recordOutput("Superstructure/currentAutoState", mode.toString());
     Logger.recordOutput("Superstructure/requestedLevel", level);
 
+    if (requestEject) {
+      state = Superstates.EJECT;
+    }
+
+    prevState = state;
     switch (state) {
-      case UNHOMED:
+      case HOMELESS:
+        elevator.reset();
+        arm.reset();
+        break;
+      case WOOD_BLOCK:
+        elevator.reset();
+        arm.reset();
+        DriverStation.reportWarning("Superstructure in WOOD_BLOCK state: Remove Wood Block", false);
+        break;
+      case DISABLED:
+        elevator.reset();
+        arm.reset();
+        if (DriverStation.isEnabled()) {
+          state = Superstates.IDLE;
+          elevator.reset();
+          arm.reset();
+        }
         break;
       case IDLE:
-        endEffector.idle();
-        elevator.idle();
-        arm.idle();
-
         if (requestEject) {
           state = Superstates.EJECT;
-        } else if (intakeSuperstructure.isCoralDetectedPickupArea()
-            && arm.atSetpoint()
-            && elevator.atSetpoint()) {
-          state = Superstates.END_EFFECTOR_CORAL_PICKUP;
+        } else if (intakeSuperstructure.isCoralDetectedPickupArea()) {
+          endEffector.idle();
+          elevator.idle();
+          arm.idle();
+          if (arm.atSetpoint() && elevator.atSetpoint()) {
+            state = Superstates.END_EFFECTOR_CORAL_PICKUP;
+          }
         } else if (requestIntakeAlgaeFloor) {
           state = Superstates.INTAKE_ALGAE_FLOOR;
         } else if (requestDescoreAlgae) {
           state = Superstates.DESCORE_ALGAE;
         } else if (requestPreClimb && DriverStation.getMatchTime() < 30.0) {
           state = Superstates.PRECLIMB;
+        } else if (endEffector.hasCoral()) {
+          state = Superstates.CORAL_HELD;
+        } else if (requestDropCoralRepickup && !endEffector.hasAlgae()) {
+          state = Superstates.DROP_CORAL_REPICKUP;
+        } else {
+          endEffector.idle();
+          elevator.idle();
+          arm.idle();
         }
 
         break;
@@ -146,7 +199,7 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.EJECT;
         } else if (!endEffector.hasAlgae()) {
           state = Superstates.IDLE;
-        } else if (requestAlgaePrescore && arm.atSetpoint() && elevator.atSetpoint()) {
+        } else if (requestAlgaePrescore) {
           state = Superstates.ALGAE_PRESCORE;
         }
 
@@ -154,25 +207,25 @@ public class Superstructure extends SubsystemBase {
       case ALGAE_PRESCORE:
         elevator.scoreAlgae();
         if (elevator.atSetpoint()) {
-          arm.scoreAlgae();
+          arm.scoreAlgae(scoreBackSide);
         }
 
         if (requestIdle) {
-          state = Superstates.ALGAE_IDLE;
-        } else if (requestAlgaeScore && arm.atSetpoint() && elevator.atSetpoint()) {
+          if (elevator.getElevatorHeightMeters()
+              >= Constants.Elevator.safeBargeRetractHeightMeters) {
+            state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
+          } else {
+            state = Superstates.ALGAE_IDLE;
+          }
+        } else if (requestAlgaeScore && arm.atSetpoint()) {
           state = Superstates.ALGAE_SCORE;
         }
 
         break;
       case ALGAE_SCORE:
         endEffector.releaseAlgae();
-
         if (requestIdle) {
-          if (!endEffector.hasAlgae()) {
-            state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
-          } else if (endEffector.hasAlgae()) {
-            state = Superstates.ALGAE_IDLE;
-          }
+          state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
         }
 
         break;
@@ -181,10 +234,12 @@ public class Superstructure extends SubsystemBase {
         arm.algaeGround();
         endEffector.intakeAlgae();
 
-        if (endEffector.hasAlgae()) {
-          state = Superstates.ALGAE_IDLE;
-        } else if (requestIdle) {
-          state = Superstates.IDLE;
+        if (requestIdle) {
+          if (endEffector.hasAlgae()) {
+            state = Superstates.ALGAE_IDLE;
+          } else {
+            state = Superstates.IDLE;
+          }
         }
 
         break;
@@ -202,13 +257,35 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case END_EFFECTOR_CORAL_PICKUP:
-        elevator.pickupCoral();
+        Logger.recordOutput("Superstructure/CoralStopIsDisabled", coralElevatorPickUp);
+        arm.idle();
         endEffector.intakeCoral();
 
-        if (endEffector.hasCoral()) {
-          state = Superstates.CORAL_HELD;
-        } else if (!endEffector.hasCoral() && !intakeSuperstructure.isCoralDetectedPickupArea()) {
-          state = Superstates.IDLE;
+        if (!coralElevatorPickUp) {
+          coralPickupTimer.start();
+        }
+
+        if (coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
+          elevator.pickupCoral();
+          coralElevatorPickUp = true;
+        }
+
+        if (coralPickupTimer.hasElapsed(Constants.Elevator.coralDetectionHeightThresholdSecs)) {
+          if (endEffector.hasCoral()) {
+            coralElevatorPickUp = false;
+            coralPickupTimer.stop();
+            coralPickupTimer.reset();
+            state = Superstates.CORAL_HELD;
+            coralElevatorPickUp = false;
+          } else if (!endEffector.hasCoral()
+              && !intakeSuperstructure.isCoralDetectedPickupArea()
+              && arm.atSetpoint()
+              && getElevatorHeight() >= Constants.Elevator.minElevatorSafeHeightMeters) {
+            coralElevatorPickUp = false;
+            coralPickupTimer.stop();
+            coralPickupTimer.reset();
+            state = Superstates.IDLE;
+          }
         }
 
         break;
@@ -223,17 +300,23 @@ public class Superstructure extends SubsystemBase {
           state = Superstates.IDLE;
         } else if (requestPrescoreCoral) {
           state = Superstates.PRESCORE_CORAL;
+        } else if (requestDropCoralRepickup) {
+          state = Superstates.DROP_CORAL_REPICKUP;
         }
         break;
       case PRESCORE_CORAL:
         arm.prescoreCoral(level);
         elevator.prescoreCoral(level);
-
         if (requestScoreCoral && arm.atSetpoint() && elevator.atSetpoint()) {
           state = Superstates.SCORE_CORAL;
-        } else if (requestIdle && endEffector.hasCoral()) {
-          state = Superstates.CORAL_HELD;
+        } else if (requestIdle) {
+          if (endEffector.hasCoral()) {
+            state = Superstates.CORAL_HELD;
+          } else {
+            state = Superstates.IDLE;
+          }
         }
+
         break;
       case SCORE_CORAL:
         arm.scoreCoral(level);
@@ -242,19 +325,25 @@ public class Superstructure extends SubsystemBase {
           if (arm.atSetpoint() && elevator.atSetpoint()) {
             endEffector.releaseCoralL1();
           }
-        } else {
+        } else if ((arm.getAngleDegrees() <= arm.scoreReleaseSetpoint())) {
           endEffector.releaseCoralNormal();
+        } else {
+          if (elevator.atSetpoint() && arm.atSetpoint()) {
+            endEffector.releaseCoralNormal();
+          }
         }
 
-        if (!endEffector.hasCoral() && arm.atSetpoint() && elevator.atSetpoint()) {
-          state = Superstates.IDLE;
-
-        } else if (endEffector.hasCoral() && arm.atSetpoint() && elevator.atSetpoint()) {
-          state = Superstates.CORAL_HELD;
+        if (requestIdle) {
+          if (endEffector.hasCoral()) {
+            state = Superstates.CORAL_HELD;
+          } else {
+            state = Superstates.IDLE;
+          }
+        } else if (requestDescoreAlgae && !endEffector.hasCoral()) {
+          state = Superstates.DESCORE_ALGAE;
         }
         break;
       case SAFE_SCORE_ALGAE_RETRACT:
-        endEffector.idle();
         arm.safeBargeRetract();
         if (arm.atSetpoint()) {
           elevator.safeBargeRetract();
@@ -275,6 +364,13 @@ public class Superstructure extends SubsystemBase {
       case CLIMB:
         // TODO
         break;
+      case DROP_CORAL_REPICKUP:
+        endEffector.dropCoral();
+        if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
+          state = Superstates.IDLE;
+          unsetAllRequests();
+        }
+        break;
     }
   }
 
@@ -285,19 +381,29 @@ public class Superstructure extends SubsystemBase {
     requestAlgaeScore = false;
     requestIntakeAlgaeFloor = false;
     requestDescoreAlgae = false;
+    requestAlgaePrescore = false;
     requestPrescoreCoral = false;
     requestScoreCoral = false;
     requestPreClimb = false;
     requestClimb = false;
     requestIntakeAlgaeFloor = false;
+    requestDropCoralRepickup = false;
   }
 
   public void requestOperationMode(OperationMode mode) {
     this.mode = mode;
   }
 
+  public boolean armAtSetpoint() {
+    return arm.atSetpoint();
+  }
+
+  public boolean elevatorAtSetpoint() {
+    return elevator.atSetpoint();
+  }
+
   public boolean isAutoOperationMode() {
-    return mode == OperationMode.AUTO;
+    return mode == OperationMode.TeleAUTO;
   }
 
   public void requestIdle() {
@@ -310,9 +416,10 @@ public class Superstructure extends SubsystemBase {
     requestEject = true;
   }
 
-  public void requestAlgaePrescore() {
+  public void requestAlgaePrescore(boolean prescoreBackSide) {
     unsetAllRequests();
     requestAlgaePrescore = true;
+    this.scoreBackSide = prescoreBackSide;
   }
 
   public void requestAlgaeScore() {
@@ -329,6 +436,11 @@ public class Superstructure extends SubsystemBase {
     unsetAllRequests();
     requestDescoreAlgae = true;
     this.level = level;
+  }
+
+  public void requestDropCoralRepickup() {
+    unsetAllRequests();
+    requestDropCoralRepickup = true;
   }
 
   public void requestPrescoreCoral(Level level) {
@@ -353,6 +465,20 @@ public class Superstructure extends SubsystemBase {
     requestClimb = true;
   }
 
+  public void requestUnhome() {
+    endEffector.idle(); // let any algae pop-out, coral must have already been ejected
+    unsetAllRequests();
+    state = Superstates.HOMELESS;
+  }
+
+  public void requestReHome() {
+    ishomed = true;
+    elevator.setReHome();
+    arm.setReHome();
+    intakeSuperstructure.setReHome();
+    state = Superstates.IDLE;
+  }
+
   public boolean isCoralHeld() {
     return endEffector.hasCoral();
   }
@@ -369,13 +495,17 @@ public class Superstructure extends SubsystemBase {
     return arm.getAngleDegrees();
   }
 
-  public Superstates getState() {
-    return state;
+  public EndEffectorStates getEndEffectorState() {
+    return endEffector.getState();
   }
 
-  public void getReefStatus() {
-    // TODO when get vision working
-    // return visionPoseEstimation.getReefStatus()
+  // Return the state executed in the current periodic cycle
+  public Superstates getState() {
+    return prevState;
+  }
+
+  public ReefStatus getReefStatus() {
+    return vision.getReefStatus();
   }
 
   public IntakeSuperstructure getIntakeSuperstructure() {
@@ -387,18 +517,24 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void CoastMotors() {
-    arm.stop(IdleMode.kCoast);
-    elevator.stop(IdleMode.kCoast);
+    arm.enableBrakeMode(false);
+    elevator.enableBrakeMode(false);
     intakeSuperstructure.deployer.stop(IdleMode.kCoast);
   }
 
   public void BreakMotors() {
-    arm.stop(IdleMode.kBrake);
-    elevator.stop(IdleMode.kBrake);
+    arm.enableBrakeMode(true);
+    elevator.enableBrakeMode(true);
     intakeSuperstructure.deployer.stop(IdleMode.kBrake);
   }
 
-  // Other Methods are related to Vision Pose Estimation
+  public void enableGlobalPose() {
+    vision.enableGlobalPose();
+  }
+
+  public void enableSingleTag(int tagID, SingleTagCamera cameraToUse) {
+    vision.enableSingleTagSingleCam(tagID, cameraToUse);
+  }
 
   public static Pose2d getVisionPoseEstimate2d() {
     // TODO get vision pose estimate from vision and return it here

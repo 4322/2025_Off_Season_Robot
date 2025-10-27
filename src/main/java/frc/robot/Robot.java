@@ -1,10 +1,13 @@
 package frc.robot;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.reduxrobotics.canand.MessageLogger;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -38,6 +41,52 @@ public class Robot extends LoggedRobot {
   private Timer homeButtonTimer = new Timer();
   private DigitalInput coastButton = new DigitalInput(Constants.dioCoastButton);
   private Timer coastButtonTimer = new Timer();
+
+  // Mirrored paths
+
+  public static PathPlannerPath ThreeCoralStartToJuliet;
+  public static PathPlannerPath JulietToFeed;
+  public static PathPlannerPath KiloToFeed;
+  public static PathPlannerPath FeedToKilo;
+  public static PathPlannerPath FeedToLima;
+
+  // Mirrors of the above
+  public static PathPlannerPath ThreeCoralStartToEcho;
+  public static PathPlannerPath EchoToFeed;
+  public static PathPlannerPath FeedToDelta;
+  public static PathPlannerPath DeltaToFeed;
+  public static PathPlannerPath FeedToCharlie;
+
+  // Non mirrored paths
+  public static PathPlannerPath Leave;
+
+  public static PathPlannerPath ThreeCoralStartPushToJuliet;
+
+  public static PathPlannerPath CenterStartToGulf;
+  public static PathPlannerPath GulfToGulfHotel;
+  public static PathPlannerPath GulfHotelToCenterBarge;
+  public static PathPlannerPath CenterBargeToCenterAlgaeScore;
+  public static PathPlannerPath CenterAlgaeScoreToLeave;
+
+  public static PathPlannerPath JulietToIndiaJuliet;
+  public static PathPlannerPath IndiaJulietToLeftBarge;
+  public static PathPlannerPath LeftBargeToLeftAlgaeScore;
+  public static PathPlannerPath LeftAlgaeScoreToFeed;
+
+  public static PathPlannerPath GulfHotelToCenterEject;
+
+  public static PathPlannerPath CenterAlgaeScoreBackwardsToIndiaJuliet;
+  public static PathPlannerPath CenterAlgaeScoreBackwardsToLeave;
+  public static PathPlannerPath CenterBargeBackwardsToCenterAlgaeScoreBackwards;
+  public static PathPlannerPath GulfHotelToCenterBargeBackwards;
+  public static PathPlannerPath IndiaJulietToCenterBargeBackwards;
+  public static PathPlannerPath IndiaJulietToLeftBargeBackwards;
+  public static PathPlannerPath KiloLimaToLeftBargeBackwards;
+  public static PathPlannerPath LeftAlgaeScoreBackwardsToKiloLima;
+  public static PathPlannerPath LeftAlgaeScoreBackwardsToLeave;
+  public static PathPlannerPath LeftBargeBackwardsToLeftAlgaeScoreBackwards;
+
+  public static PathPlannerPath CenterBargeBackwardsToLeave;
 
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
@@ -77,12 +126,42 @@ public class Robot extends LoggedRobot {
         }
 
         // ensure that there is enough space on the roboRIO to log data
+        // delete Redux logs first
         if (directory.getFreeSpace() < Constants.minFreeSpace) {
           files = directory.listFiles();
           if (files != null) {
             // Sorting the files by name will ensure that the oldest files are deleted first
             files = Arrays.stream(files).sorted().toArray(File[]::new);
+            long bytesToDelete = Constants.minFreeSpace - directory.getFreeSpace();
 
+            for (File file : files) {
+              if (file.getName().endsWith(".rdxlog")) {
+                try {
+                  bytesToDelete -= Files.size(file.toPath());
+                } catch (IOException e) {
+                  DriverStation.reportError("Failed to get size of file " + file.getName(), false);
+                  continue;
+                }
+                if (file.delete()) {
+                  DriverStation.reportWarning(
+                      "Deleted " + file.getName() + " to free up space", false);
+                } else {
+                  DriverStation.reportError("Failed to delete " + file.getName(), false);
+                }
+                if (bytesToDelete <= 0) {
+                  break;
+                }
+              }
+            }
+          }
+        }
+
+        // delete akit logs if we still don't have enough space
+        if (directory.getFreeSpace() < Constants.minFreeSpace) {
+          files = directory.listFiles();
+          if (files != null) {
+            // Sorting the files by name will ensure that the oldest files are deleted first
+            files = Arrays.stream(files).sorted().toArray(File[]::new);
             long bytesToDelete = Constants.minFreeSpace - directory.getFreeSpace();
 
             for (File file : files) {
@@ -110,7 +189,10 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(
             new WPILOGWriter(Constants.logPath)); // Log to a USB stick is ("/U/logs")
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-        new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+
+        RobotController.setBrownoutVoltage(Constants.brownoutVoltage);
+        MessageLogger.openLog(Constants.logPath);
+
         break;
       case SIM:
         // Running a physics simulator, log to NT
@@ -131,12 +213,76 @@ public class Robot extends LoggedRobot {
     Logger.start();
     Logger.disableConsoleCapture();
 
+    try {
+      Leave = PathPlannerPath.fromPathFile("Leave");
+
+      CenterStartToGulf = PathPlannerPath.fromPathFile("Center Start to Gulf");
+      GulfToGulfHotel = PathPlannerPath.fromPathFile("Gulf to Gulf-Hotel");
+      GulfHotelToCenterBarge = PathPlannerPath.fromPathFile("Gulf-Hotel to Center Barge");
+      CenterBargeToCenterAlgaeScore =
+          PathPlannerPath.fromPathFile("Center Barge to Center Algae Score");
+      CenterAlgaeScoreToLeave = PathPlannerPath.fromPathFile("Center Algae Score to Leave");
+
+      ThreeCoralStartToJuliet = PathPlannerPath.fromPathFile("Three Coral Start to Juliet");
+      ThreeCoralStartPushToJuliet =
+          PathPlannerPath.fromPathFile("Three Coral Start Push to Juliet");
+      JulietToFeed = PathPlannerPath.fromPathFile("Juliet to Feed");
+      FeedToKilo = PathPlannerPath.fromPathFile("Feed to Kilo");
+      KiloToFeed = PathPlannerPath.fromPathFile("Kilo to Feed");
+      FeedToLima = PathPlannerPath.fromPathFile("Feed to Lima");
+
+      ThreeCoralStartToEcho =
+          PathPlannerPath.fromPathFile("Three Coral Start to Juliet").mirrorPath();
+      EchoToFeed = PathPlannerPath.fromPathFile("Juliet to Feed").mirrorPath();
+      FeedToDelta = PathPlannerPath.fromPathFile("Feed to Kilo").mirrorPath();
+      DeltaToFeed = PathPlannerPath.fromPathFile("Kilo to Feed").mirrorPath();
+      FeedToCharlie = PathPlannerPath.fromPathFile("Feed to Lima").mirrorPath();
+
+      JulietToIndiaJuliet = PathPlannerPath.fromPathFile("Juliet to India-Juliet");
+      IndiaJulietToLeftBarge = PathPlannerPath.fromPathFile("India-Juliet to Left Barge");
+      LeftBargeToLeftAlgaeScore = PathPlannerPath.fromPathFile("Left Barge to Left Algae Score");
+      LeftAlgaeScoreToFeed = PathPlannerPath.fromPathFile("Left Algae Score to Feed");
+
+      GulfHotelToCenterEject = PathPlannerPath.fromPathFile("Gulf-Hotel to Center Eject");
+
+      CenterAlgaeScoreBackwardsToIndiaJuliet =
+          PathPlannerPath.fromPathFile("Center Algae Score Backwards to India-Juliet");
+      CenterAlgaeScoreBackwardsToLeave =
+          PathPlannerPath.fromPathFile("Center Algae Score Backwards to Leave");
+      CenterBargeBackwardsToCenterAlgaeScoreBackwards =
+          PathPlannerPath.fromPathFile("Center Barge Backwards To Center Algae Score Backwards");
+      GulfHotelToCenterBargeBackwards =
+          PathPlannerPath.fromPathFile("Gulf-Hotel to Center Barge Backwards");
+      IndiaJulietToCenterBargeBackwards =
+          PathPlannerPath.fromPathFile("India-Juliet to Center Barge Backwards");
+      IndiaJulietToLeftBargeBackwards =
+          PathPlannerPath.fromPathFile("India-Juliet to Left Barge Backwards");
+      KiloLimaToLeftBargeBackwards =
+          PathPlannerPath.fromPathFile("Kilo-Lima to Left Barge Backwards");
+      LeftAlgaeScoreBackwardsToKiloLima =
+          PathPlannerPath.fromPathFile("Left Algae Score Backwards to Kilo-Lima");
+      LeftAlgaeScoreBackwardsToLeave =
+          PathPlannerPath.fromPathFile("Left Algae Score Backwards to Leave");
+      LeftBargeBackwardsToLeftAlgaeScoreBackwards =
+          PathPlannerPath.fromPathFile("Left Barge Backwards to Left Algae Score Backwards");
+
+      CenterBargeBackwardsToLeave = PathPlannerPath.fromPathFile("Center Barge Backwards to Leave");
+
+    } catch (Exception e) {
+      DriverStation.reportError("Failed to load PathPlanner paths", true);
+    }
+
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+    robotContainer.configureAutonomousSelector();
+
+    CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
+
     allianceUpdateTimer.start();
 
-    if (Constants.currentMode == Constants.RobotMode.SIM) {
+    if (Constants.currentMode == Constants.RobotMode.SIM
+        || Constants.currentMode == Constants.RobotMode.REPLAY) {
       // enable subsystems in sim mode
       RobotContainer.getSuperstructure().homeButtonActivated();
     }
@@ -145,9 +291,33 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
+
+    /* roboRIO settings to optimize Java memory use:
+      echo "vm.overcommit_memory=1" >> /etc/sysctl.conf
+      echo "vm.vfs_cache_pressure=1000" >> /etc/sysctl.conf
+      echo "vm.swappiness=100" >> /etc/sysctl.conf
+      sync
+      power cycle the RIO
+
+      To restiore default settings, edit /etc/sysctl.conf to set the
+      following values:
+        vm.overcommit_memory=2
+        vm.vfs_cache_pressure=100
+        vm.swappiness=60
+        power cycle the RIO
+
+      To stop the web server to save memory:
+      /etc/init.d/systemWebServer stop; update-rc.d -f systemWebServer remove; sync
+      chmod a-x /usr/local/natinst/etc/init.d/systemWebServer; sync
+
+      To restart the web server in order to image the RIO:
+      chmod a+x /usr/local/natinst/etc/init.d/systemWebServer; sync
+      power cycle the RIO
+    */
+
     // Optionally switch the thread to high priority to improve loop
     // timing (see the template project documentation for details)
-    // Threads.setCurrentThreadPriority(true, 99);
+    Threads.setCurrentThreadPriority(true, 99);
 
     // Runs the Scheduler. This is responsible for polling buttons, adding
     // newly-scheduled commands, running already-scheduled commands, removing
@@ -170,7 +340,10 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    // close previous Redux log and open a new unique one
+    MessageLogger.openLog(Constants.logPath);
+  }
 
   /** This function is called periodically when disabled. */
   @Override
@@ -196,6 +369,10 @@ public class Robot extends LoggedRobot {
       // button is pressed in
     }
 
+    if (coastButtonTimer.hasElapsed(0.1)) {
+      RobotContainer.getSuperstructure().CoastMotors();
+    }
+
     if (coastButtonTimer.hasElapsed(10)) {
       DriverStation.reportWarning("Break Mode Trying To Activate", false);
       RobotContainer.getSuperstructure().BreakMotors();
@@ -212,6 +389,7 @@ public class Robot extends LoggedRobot {
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
+      Logger.recordOutput("AutoName", autonomousCommand.getName());
     }
   }
 
