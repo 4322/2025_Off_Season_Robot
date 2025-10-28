@@ -106,10 +106,10 @@ public final class Constants {
   }
 
   public static class PathPlanner {
-    public static final double translationkP = 0;
+    public static final double translationkP = 6;
     public static final double translationkD = 0;
 
-    public static final double rotkP = 0.0;
+    public static final double rotkP = 1;
     public static final double rotkD = 0.0;
 
     public static final double robotMassKg = Units.lbsToKilograms(141.06); // TODO: Weigh robot
