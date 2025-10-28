@@ -217,7 +217,6 @@ public class RobotContainer {
             || superstructure.getState() == Superstructure.Superstates.CORAL_HELD)
         && intakeSuperstructure.getIntakeSuperstate()
             == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
-        && Constants.testingOnPracticeFeild
         && !DriverStation.isFMSAttached()) {
       driver.setRumble(GenericHID.RumbleType.kBothRumble, 10.0);
       batteryLowStopTimer.start();
