@@ -152,7 +152,7 @@ public class ModuleIONitrate implements ModuleIO {
 
     if (Constants.debugPIDModeEnabled) {
       inputs.kPeffort = driveMotor.getPIDDebugFrames().kPControlEffortFrame.getValue();
-      inputs.kVeffort = driveMotor.getPIDDebugFrames().kGControlEffortFrame.getValue();
+      inputs.kVeffort = driveMotor.getPIDDebugFrames().kVControlEffortFrame.getValue();
       inputs.totalEffort = driveMotor.getPIDDebugFrames().totalControlEffortFrame.getValue();
     }
   }
