@@ -1,23 +1,16 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
-
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants.GamePieceType;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class CoralIntake extends Command {
 
@@ -40,7 +33,6 @@ public class CoralIntake extends Command {
     this.drive = drive;
     this.visionObjectDetection = visionObjectDetection;
     driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
-
   }
 
   @Override
@@ -61,8 +53,7 @@ public class CoralIntake extends Command {
     if (driveToPoseTarget != null) {
       Logger.recordOutput("CoralIntakeCommand/driveToPoseTarget", driveToPoseTarget);
     }
-    
-    
+
     if (coralPosition != null && !driveToPose.isScheduled()) {
       coralPose2d = new Pose2d(coralPosition, new Rotation2d());
       currentPoseRequest = () -> driveToPoseTarget;
