@@ -7,6 +7,7 @@ package frc.robot.subsystems.vision.objectDetection;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 // import frc.trigon.robot.commands.commandfactories.CoralCollectionCommands;
 import frc.robot.subsystems.drive.Drive;
@@ -96,7 +97,7 @@ public class VisionObjectDetection extends SubsystemBase {
   public Rotation3d[] getTargetObjectsRotations(
       SimulatedGamePieceConstants.GamePieceType targetGamePiece) {
     if (targetGamePiece == SimulatedGamePieceConstants.GamePieceType.CORAL
-        && Constants.VisionObjectDetection.SHOULD_IGNORE_LOLLIPOP_CORAL) {
+        && Constants.VisionObjectDetection.shouldIgnoreLollipopCoral) {
       ArrayList<Rotation3d> rotations = new ArrayList<>();
       for (Rotation3d rotation :
           objectDetectionCameraInputs.visibleObjectRotations[targetGamePiece.id]) {
@@ -139,8 +140,24 @@ public class VisionObjectDetection extends SubsystemBase {
     for (Rotation3d algaeYaw :
         getTargetObjectsRotations(SimulatedGamePieceConstants.GamePieceType.ALGAE)) {
       final double difference = Math.abs(algaeYaw.toRotation2d().minus(objectYaw).getDegrees());
-      if (difference < Constants.VisionObjectDetection.LOLLIPOP_TOLERANCE.getDegrees()) return true;
+      if (difference < Constants.VisionObjectDetection.lollipopTolerance.getDegrees()) return true;
     }
     return false;
   }
+
+  public Translation2d calculateDistanceFromTrackedCoral() {
+        Pose2d robotPose = drive.getPose();
+        final Translation2d trackedObjectPositionOnField = calculateBestObjectPositionOnField(
+            SimulatedGamePieceConstants.GamePieceType.CORAL);
+        if (trackedObjectPositionOnField == null)
+            return null;
+
+        final Translation2d difference = robotPose.getTranslation().minus(trackedObjectPositionOnField);
+        final Translation2d robotToTrackedCoralDistance = difference.rotateBy(robotPose.getRotation().unaryMinus());
+        Logger.recordOutput("VisionObjectDetection/TrackedCoralDistance", robotToTrackedCoralDistance);
+        return robotToTrackedCoralDistance;
+    }
+
+
+
 }

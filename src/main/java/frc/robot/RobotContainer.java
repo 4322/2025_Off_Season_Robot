@@ -203,14 +203,14 @@ public class RobotContainer {
         visionObjectDetection =
             new VisionObjectDetection(
                 "VisionObjectDetectionCamera",
-                new Transform3d(),
+                Constants.VisionObjectDetection.robotCenterToCamera,
                 drive,
                 new VisionObjectDetectionIOPhoton());
       } else {
         visionObjectDetection =
             new VisionObjectDetection(
                 "VisionObjectDetectionCamera",
-                new Transform3d(),
+                Constants.VisionObjectDetection.robotCenterToCamera,
                 drive,
                 new VisionObjectDetectionIO() {});
       }

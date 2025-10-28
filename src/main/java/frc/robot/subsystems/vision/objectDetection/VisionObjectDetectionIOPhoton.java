@@ -40,16 +40,16 @@ public class VisionObjectDetectionIOPhoton implements VisionObjectDetectionIO {
   }
 
   private void updateNoNewResultInputs(VisionObjectDetectionInputs inputs) {
-    inputs.hasTarget = new boolean[Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES];
+    inputs.hasTarget = new boolean[Constants.VisionObjectDetection.numberOfGamePieceTypes];
     inputs.visibleObjectRotations =
-        new Rotation3d[Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES][0];
+        new Rotation3d[Constants.VisionObjectDetection.numberOfGamePieceTypes][0];
   }
 
   private void updateHasNewResultInputs(
       VisionObjectDetectionInputs inputs, PhotonPipelineResult result) {
     final List<Rotation3d>[] visibleObjectsRotations =
-        new List[Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES];
-    for (int i = 0; i < Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES; i++) {
+        new List[Constants.VisionObjectDetection.numberOfGamePieceTypes];
+    for (int i = 0; i < Constants.VisionObjectDetection.numberOfGamePieceTypes; i++) {
       visibleObjectsRotations[i] = new ArrayList<>();
     }
     Arrays.fill(inputs.hasTarget, false);
@@ -64,7 +64,7 @@ public class VisionObjectDetectionIOPhoton implements VisionObjectDetectionIO {
           extractRotation3d(currentTarget));
     }
 
-    for (int i = 0; i < Constants.VisionObjectDetection.NUMBER_OF_GAME_PIECE_TYPES; i++) {
+    for (int i = 0; i < Constants.VisionObjectDetection.numberOfGamePieceTypes; i++) {
       inputs.visibleObjectRotations[i] = toArray(visibleObjectsRotations[i]);
     }
   }

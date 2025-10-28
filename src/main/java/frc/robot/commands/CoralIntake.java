@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
@@ -23,6 +24,7 @@ public class CoralIntake extends Command {
   private Pose2d coralPose2d;
   private DriveToPose driveToPose;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
+  private Rotation2d targetAngle;
 
   public CoralIntake(
       IntakeSuperstructure intakeSuperstructure,
@@ -55,10 +57,19 @@ public class CoralIntake extends Command {
     }
 
     if (coralPosition != null && !driveToPose.isScheduled()) {
-      coralPose2d = new Pose2d(coralPosition, new Rotation2d());
+      if (Constants.VisionObjectDetection.enableAutoAlign) {
+        targetAngle = visionObjectDetection.calculateDistanceFromTrackedCoral().getAngle().plus(Rotation2d.k180deg).unaryMinus();
+        coralPose2d =
+            new Pose2d(
+                coralPosition,
+                targetAngle);
+      } else {
+        coralPose2d = new Pose2d(coralPosition, new Rotation2d());
+      }
+      
       currentPoseRequest = () -> driveToPoseTarget;
       driveToPose.schedule();
-      // TODO Math/methods for turning towards coral
+      
     } else {
       coralPosition = visionObjectDetection.calculateBestObjectPositionOnField(GamePieceType.CORAL);
     }

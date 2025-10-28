@@ -517,10 +517,12 @@ public final class Constants {
 
   public static class VisionObjectDetection {
 
-    public static final int NUMBER_OF_GAME_PIECE_TYPES =
+    public static final int numberOfGamePieceTypes =
         SimulatedGamePieceConstants.GamePieceType.values().length;
-    public static final double TRACKED_OBJECT_TOLERANCE_METERS = 0.12;
-    public static final Rotation2d LOLLIPOP_TOLERANCE = Rotation2d.fromDegrees(3.5);
-    public static final boolean SHOULD_IGNORE_LOLLIPOP_CORAL = false;
+    public static final double trackedObjectToleranceMeters = 0.12;
+    public static final Rotation2d lollipopTolerance = Rotation2d.fromDegrees(3.5);
+    public static final boolean shouldIgnoreLollipopCoral = false;
+    public static final Transform3d robotCenterToCamera = new Transform3d(-0.23495, 0.22080, -0.23495, new Rotation3d());
+    public static final boolean enableAutoAlign = true;
   }
 }
