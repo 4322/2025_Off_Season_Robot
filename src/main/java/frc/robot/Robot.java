@@ -59,6 +59,7 @@ public class Robot extends LoggedRobot {
 
   // Non mirrored paths
   public static PathPlannerPath Leave;
+  public static PathPlannerPath TestLeave;
 
   public static PathPlannerPath ThreeCoralStartPushToJuliet;
 
@@ -215,6 +216,7 @@ public class Robot extends LoggedRobot {
 
     try {
       Leave = PathPlannerPath.fromPathFile("Leave");
+      TestLeave = PathPlannerPath.fromPathFile("Test Leave");
 
       CenterStartToGulf = PathPlannerPath.fromPathFile("Center Start to Gulf");
       GulfToGulfHotel = PathPlannerPath.fromPathFile("Gulf to Gulf-Hotel");
