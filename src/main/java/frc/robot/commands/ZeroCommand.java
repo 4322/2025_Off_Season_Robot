@@ -10,12 +10,10 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 
 public class ZeroCommand extends Command {
-  private final Superstructure superstructure;
   private final Drive drive;
   public boolean isSlow = false;
 
   public ZeroCommand(Superstructure superstructure, Drive drive) {
-    this.superstructure = superstructure;
     this.drive = drive;
     addRequirements(superstructure);
   }

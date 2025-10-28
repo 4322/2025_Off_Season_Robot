@@ -45,6 +45,7 @@ public class ScoreCoral extends Command {
   private ReefStatus reefStatus;
   private Pose2d safeDistPose = new Pose2d();
   private Pose2d driveBackPose = new Pose2d();
+  private boolean forceReef;
 
   private boolean chainedAlgaeMode;
 
@@ -56,6 +57,18 @@ public class ScoreCoral extends Command {
   }
 
   ScoreState state = ScoreState.SAFE_DISTANCE;
+
+  // for use in auto when we know where we want to score
+  public ScoreCoral(
+      Superstructure superstructure,
+      Superstructure.Level level,
+      Drive drive,
+      boolean chainedAlgaeMode,
+      ReefStatus reefStatus) {
+    this(superstructure, level, drive, chainedAlgaeMode);
+    this.reefStatus = reefStatus;
+    forceReef = true;
+  }
 
   public ScoreCoral(
       Superstructure superstructure,
@@ -70,19 +83,6 @@ public class ScoreCoral extends Command {
     addRequirements(superstructure);
   }
 
-  public ScoreCoral(
-      DriveToPose driveToPose,
-      Supplier<Pose2d> currentPoseRequest,
-      Superstructure superstructure,
-      Superstructure.Level level,
-      Drive drive) {
-    this.currentPoseRequest = currentPoseRequest;
-    this.superstructure = superstructure;
-    this.level = level;
-    this.drive = drive;
-    this.driveToPose = driveToPose;
-  }
-
   @Override
   public void initialize() {
     running = true;
@@ -90,8 +90,10 @@ public class ScoreCoral extends Command {
     times.reset();
     state = ScoreState.SAFE_DISTANCE;
 
-    // Fill in poses of all possible scoring locations for the level requested
-    reefStatus = superstructure.getReefStatus();
+    if (!forceReef) {
+      // Fill in poses of all possible scoring locations for the level requested
+      reefStatus = superstructure.getReefStatus();
+    }
     robotReefAngle = reefStatus.getClosestRobotAngle();
 
     if (level == Level.L1) {
