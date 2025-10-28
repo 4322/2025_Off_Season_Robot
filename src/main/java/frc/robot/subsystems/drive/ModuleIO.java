@@ -15,6 +15,9 @@ public interface ModuleIO {
     public double driveStatorCurrentAmps = 0.0;
     public double driveTempCelsius = 0.0;
     public double driveControllerTempCelsius = 0.0;
+    public double kPeffort = 0.0;
+    public double kVeffort = 0.0;
+    public double totalEffort = 0.0;
 
     public boolean turnConnected = false;
     public boolean turnEncoderConnected = false;

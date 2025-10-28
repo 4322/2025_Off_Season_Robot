@@ -6,9 +6,11 @@ import frc.robot.autonomous.modes.OneCoralOneAlgaeCenter;
 import frc.robot.autonomous.modes.OneCoralOneAlgaeEjectCenter;
 import frc.robot.autonomous.modes.OneCoralTwoAlgaeCenter;
 import frc.robot.autonomous.modes.OneCoralTwoAlgaeLeft;
+import frc.robot.autonomous.modes.TestLeave;
 import frc.robot.autonomous.modes.ThreeCoralLeft;
 import frc.robot.autonomous.modes.ThreeCoralRight;
 import frc.robot.autonomous.modes.TwoCoralOneAlgaeLeft;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
@@ -46,6 +48,9 @@ public class AutonomousSelector {
     autonomousSelector.addOption(
         "ONE_CORAL_ONE_ALGAE_EJECT_CENTER",
         new OneCoralOneAlgaeEjectCenter(drive, superstructure, intakeSuperstructure, vision));
+    if (Constants.wantDriveTestAutos) {
+      autonomousSelector.addOption("TEST_LEAVE", new TestLeave(drive, superstructure));
+    }
   }
 
   public OrangeSequentialCommandGroup get() {

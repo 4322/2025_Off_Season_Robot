@@ -229,7 +229,7 @@ public class RobotContainer {
             || superstructure.getState() == Superstructure.Superstates.CORAL_HELD)
         && intakeSuperstructure.getIntakeSuperstate()
             == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
-        && Constants.testingOnPracticeFeild) {
+        && !DriverStation.isFMSAttached()) {
       driver.setRumble(GenericHID.RumbleType.kBothRumble, 10.0);
       batteryLowStopTimer.start();
       if (batteryLowStopTimer.hasElapsed(5)) {
@@ -445,6 +445,10 @@ public class RobotContainer {
 
   public static Superstructure getSuperstructure() {
     return superstructure;
+  }
+
+  public static IntakeSuperstructure getIntakeSuperstructure() {
+    return intakeSuperstructure;
   }
 
   /**

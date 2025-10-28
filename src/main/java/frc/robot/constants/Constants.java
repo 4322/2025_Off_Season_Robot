@@ -32,7 +32,7 @@ public final class Constants {
   public static final SubsystemMode rollersMode = SubsystemMode.NORMAL;
   public static final SubsystemMode endEffectorMode = SubsystemMode.NORMAL;
   public static final boolean visionEnabled = true;
-  public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVING_WITH_DRIVER;
+  public static final DriveTuningMode driveTuningMode = DriveTuningMode.DRIVE_AUTO;
   public static final boolean tuneAutoRotate = false;
   public static final boolean continuousNitrateRequestsEnabled = true;
   public static final boolean enableReefLock = true;
@@ -40,7 +40,7 @@ public final class Constants {
   public static final boolean enableDriveToPoseTuning = false;
   public static final boolean debugPIDModeEnabled = false;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
-  public static final boolean testingOnPracticeFeild = true;
+  public static final boolean wantDriveTestAutos = true;
 
   public static final String logPath = "/home/lvuser/logs";
   public static final long minFreeSpace = 1000000000; // 1 GB
@@ -65,7 +65,8 @@ public final class Constants {
 
   public static enum DriveTuningMode {
     DRIVING_FIXED_VELOCITY,
-    DRIVING_WITH_DRIVER,
+    DRIVE_AUTO,
+    DRIVE_MANUAL,
     TURNING
   }
 
@@ -104,14 +105,14 @@ public final class Constants {
 
     // to adjust for slippage cause by uneven weight distribution
     public static final double[] modulePositionScaling =
-        new double[] {0, 1, 1, 1}; // module 0 slips
+        new double[] {0.856, 0.941, 1, 0.912}; // module 0 slips
   }
 
   public static class PathPlanner {
-    public static final double translationkP = 0;
+    public static final double translationkP = 6;
     public static final double translationkD = 0;
 
-    public static final double rotkP = 0.0;
+    public static final double rotkP = 1;
     public static final double rotkD = 0.0;
 
     public static final double robotMassKg = Units.lbsToKilograms(141.06); // TODO: Weigh robot
