@@ -9,6 +9,7 @@ import frc.robot.LoggedTunableNumber;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.DriveTuningMode;
 import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.FieldConstants;
@@ -150,6 +151,11 @@ public class DriveManual extends Command {
         }
         break;
     }
-    drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
+    if (Constants.driveMode == SubsystemMode.TUNING
+        && Constants.driveTuningMode == DriveTuningMode.DRIVE_MANUAL) {
+      drive.runVelocity(new ChassisSpeeds(dx, dy, rot), true);
+    } else {
+      drive.runOpenLoop(new ChassisSpeeds(dx, dy, rot), true);
+    }
   }
 }

@@ -5,6 +5,7 @@ import com.reduxrobotics.motorcontrol.nitrate.NitrateSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FeedbackSensorSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.FramePeriodSettings;
 import com.reduxrobotics.motorcontrol.nitrate.settings.OutputSettings;
+import com.reduxrobotics.motorcontrol.nitrate.types.EnabledDebugFrames;
 import com.reduxrobotics.motorcontrol.nitrate.types.FeedbackSensor;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
@@ -54,7 +55,13 @@ public class ModuleIONitrate implements ModuleIO {
             .setSensorToMechanismRatio(constants.driveMotorGearRatio));
     driveConfig.setPIDSettings(constants.driveMotorGainsSlot0, PIDConfigSlot.kSlot0);
     driveConfig.setPIDSettings(constants.driveMotorGainsSlot1, PIDConfigSlot.kSlot1);
-    driveConfig.setFramePeriodSettings(FramePeriodSettings.defaultSettings());
+    driveConfig.setFramePeriodSettings(
+        FramePeriodSettings.defaultSettings()
+            .setEnabledPIDDebugFrames(
+                new EnabledDebugFrames()
+                    .setKvControlEffort(Constants.debugPIDModeEnabled)
+                    .setKpControlEffort(Constants.debugPIDModeEnabled)
+                    .setTotalControlEffort(Constants.debugPIDModeEnabled)));
     NitrateSettings driveConfigStatus = driveMotor.setSettings(driveConfig, 0.1, 5);
 
     NitrateSettings turnConfig = new NitrateSettings();
@@ -142,6 +149,12 @@ public class ModuleIONitrate implements ModuleIO {
     inputs.turnEncoderConnected = turnEncoder.isConnected();
     inputs.turnEncoderAbsPosition = turnEncoder.getAbsPosition();
     inputs.turnEncoderPosition = turnEncoder.getPosition();
+
+    if (Constants.debugPIDModeEnabled) {
+      inputs.kPeffort = driveMotor.getPIDDebugFrames().kPControlEffortFrame.getValue();
+      inputs.kVeffort = driveMotor.getPIDDebugFrames().kGControlEffortFrame.getValue();
+      inputs.totalEffort = driveMotor.getPIDDebugFrames().totalControlEffortFrame.getValue();
+    }
   }
 
   @Override

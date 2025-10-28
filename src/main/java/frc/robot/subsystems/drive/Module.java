@@ -51,7 +51,7 @@ public class Module {
         BabyAlchemist.run(
             index,
             io.getDriveNitrate(),
-            "Drive XBox",
+            Constants.driveTuningMode.toString(),
             inputs.driveVelocityMetersPerSec,
             "meters/sec");
       }
@@ -61,7 +61,8 @@ public class Module {
   public void runClosedLoopDrive(SwerveModuleState state) {
     if (Constants.driveMode == SubsystemMode.NORMAL
         || (Constants.driveMode == SubsystemMode.TUNING
-            && Constants.driveTuningMode == DriveTuningMode.DRIVING_WITH_DRIVER)) {
+            && (Constants.driveTuningMode == DriveTuningMode.DRIVE_AUTO
+                || Constants.driveTuningMode == DriveTuningMode.DRIVE_MANUAL))) {
       // Optimize velocity setpoint
       state.optimize(getAngle());
       state.cosineScale(getAngle());
@@ -75,7 +76,8 @@ public class Module {
   public void runOpenLoopDrive(SwerveModuleState state) {
     if (Constants.driveMode == SubsystemMode.NORMAL
         || (Constants.driveMode == SubsystemMode.TUNING
-            && Constants.driveTuningMode == DriveTuningMode.DRIVING_WITH_DRIVER)) {
+            && (Constants.driveTuningMode == DriveTuningMode.DRIVE_AUTO
+                || Constants.driveTuningMode == DriveTuningMode.DRIVE_MANUAL))) {
       // Optimize velocity setpoint
       state.optimize(getAngle());
       state.cosineScale(getAngle());
