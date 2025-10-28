@@ -37,6 +37,8 @@ public class VisionObjectDetection extends SubsystemBase {
     public void periodic() {
         visionObjectDetectionIO.updateInputs(objectDetectionCameraInputs);
         Logger.processInputs(hostname, objectDetectionCameraInputs);
+        Logger.recordOutput("ObjectDetectionCamera/HasTargetsCoral", hasTargets(SimulatedGamePieceConstants.GamePieceType.CORAL));
+
     }
 
     /**
@@ -72,10 +74,11 @@ public class VisionObjectDetection extends SubsystemBase {
         final Rotation3d[] visibleObjectsRotations = getTargetObjectsRotations(targetGamePiece);
         final Translation2d[] objectsPositionsOnField = new Translation2d[visibleObjectsRotations.length];
 
-        for (int i = 0; i < visibleObjectsRotations.length; i++)
+        for (int i = 0; i < visibleObjectsRotations.length; i++) {
             objectsPositionsOnField[i] = calculateObjectPositionFromRotation(visibleObjectsRotations[i]);
-
-        Logger.recordOutput("ObjectDetectionCamera/Visible" + targetGamePiece.name(), objectsPositionsOnField);
+            Logger.recordOutput("ObjectDetectionCamera/Visible" + targetGamePiece.name(), new Pose2d(objectsPositionsOnField[i], new Rotation2d()));
+        }
+        
         return objectsPositionsOnField;
     }
 

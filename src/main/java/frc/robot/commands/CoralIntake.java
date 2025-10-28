@@ -2,6 +2,11 @@ package frc.robot.commands;
 
 import static frc.robot.RobotContainer.driver;
 
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -21,8 +26,10 @@ public class CoralIntake extends Command {
   private VisionObjectDetection visionObjectDetection;
   private Superstructure superstructure;
   private Translation2d coralPosition;
-  private Transform2d coralTransform;
+  private Pose2d driveToPoseTarget;
+  private Pose2d coralPose2d;
   private DriveToPose driveToPose;
+  private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
 
   public CoralIntake(
       IntakeSuperstructure intakeSuperstructure,
@@ -32,6 +39,7 @@ public class CoralIntake extends Command {
     this.intakeSuperstructure = intakeSuperstructure;
     this.drive = drive;
     this.visionObjectDetection = visionObjectDetection;
+    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
 
   }
 
@@ -43,11 +51,21 @@ public class CoralIntake extends Command {
 
   @Override
   public void execute() {
-   
-    if (coralPosition != null && driveToPose == null) {
-      coralTransform = new Transform2d(coralPosition, Rotation2d.kZero);
-      driveToPose =
-          new DriveToPose(drive, () -> superstructure.getRobotPoseEstimate().plus(coralTransform));
+    driveToPoseTarget = currentPoseRequest.get();
+    Logger.recordOutput("CoralIntakeCommand/coralPostionExists", coralPosition != null);
+    Logger.recordOutput("CoralIntakeCommand/driveToPoseExists", driveToPose != null);
+    Logger.recordOutput("CoralIntakeCommand/atGoal", driveToPose != null && driveToPose.atGoal());
+    if (coralPosition != null) {
+      Logger.recordOutput("CoralIntakeCommand/coralPosition", coralPosition);
+    }
+    if (driveToPoseTarget != null) {
+      Logger.recordOutput("CoralIntakeCommand/driveToPoseTarget", driveToPoseTarget);
+    }
+    
+    
+    if (coralPosition != null && !driveToPose.isScheduled()) {
+      coralPose2d = new Pose2d(coralPosition, new Rotation2d());
+      currentPoseRequest = () -> driveToPoseTarget;
       driveToPose.schedule();
       // TODO Math/methods for turning towards coral
     } else {
