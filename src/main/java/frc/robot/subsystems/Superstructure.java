@@ -26,7 +26,6 @@ public class Superstructure extends SubsystemBase {
   private boolean requestPrescoreCoral = false;
   private boolean requestScoreCoral = false;
   private boolean requestPreClimb = false;
-  private boolean requestClimb = false;
   private boolean ishomed = false;
   private Timer coralPickupTimer = new Timer();
   private boolean coralElevatorPickUp = false;
@@ -378,7 +377,6 @@ public class Superstructure extends SubsystemBase {
     requestPrescoreCoral = false;
     requestScoreCoral = false;
     requestPreClimb = false;
-    requestClimb = false;
     requestIntakeAlgaeFloor = false;
     requestDropCoralRepickup = false;
   }
@@ -451,11 +449,6 @@ public class Superstructure extends SubsystemBase {
   public void requestPreClimb() {
     unsetAllRequests();
     requestPreClimb = true;
-  }
-
-  public void requestClimb() {
-    unsetAllRequests();
-    requestClimb = true;
   }
 
   public void requestUnhome() {

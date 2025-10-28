@@ -13,7 +13,6 @@ public class LoggedTunableNumber {
 
   private final String key;
   private boolean hasDefault = false;
-  private double defaultValue;
   private LoggedNetworkNumber dashboardNumber;
   private Map<Integer, Double> lastHasChangedValues = new HashMap<>();
 
@@ -45,7 +44,6 @@ public class LoggedTunableNumber {
   public void initDefault(double defaultValue) {
     if (!hasDefault) {
       hasDefault = true;
-      this.defaultValue = defaultValue;
       dashboardNumber = new LoggedNetworkNumber(key, defaultValue);
     }
   }

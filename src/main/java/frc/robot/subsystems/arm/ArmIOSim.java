@@ -1,7 +1,5 @@
 package frc.robot.subsystems.arm;
 
-import frc.robot.subsystems.arm.ArmIO.ArmIOInputs;
-
 public class ArmIOSim implements ArmIO {
 
   private double requestedVoltage = 0;

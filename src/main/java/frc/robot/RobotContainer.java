@@ -62,7 +62,6 @@ import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.util.OrangeSequentialCommandGroup;
-import frc.robot.util.ReefStatus;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -75,7 +74,6 @@ public class RobotContainer {
   private static CommandXboxController sim1;
 
   private static Vision vision;
-  private static ReefStatus reefStatus;
   private static DriveToPose drivetopose;
   private static ScoreCoral lastScoreCoral;
   private static ScoreCoral scoreL1Coral;

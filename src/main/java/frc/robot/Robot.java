@@ -38,7 +38,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
-  private Command buzz;
   private RobotContainer robotContainer;
 
   public static Alliance alliance = DriverStation.Alliance.Blue;

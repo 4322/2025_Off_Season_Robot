@@ -13,12 +13,8 @@ import frc.robot.subsystems.elevator.Elevator;
 // Never invoke this command while the arm is striaght up or on the back side of the robot!
 
 public class EmergencyInitilization extends Command {
-  private final Superstructure superstructure;
   private final IntakeSuperstructure intakeSuperstructure;
-  private final Arm arm;
-  private final Elevator elevator;
   private final Deployer deployer;
-  private final Drive drive;
   private boolean deployerDone;
   private final Timer deployerStoppedTimer = new Timer();
   private boolean wasHomed;
@@ -30,12 +26,8 @@ public class EmergencyInitilization extends Command {
       Elevator elevator,
       Deployer deployer,
       Drive drive) {
-    this.superstructure = superstructure;
     this.intakeSuperstructure = intakeSuperstructure;
-    this.arm = arm;
-    this.elevator = elevator;
     this.deployer = deployer;
-    this.drive = drive;
     // break out of everything
     addRequirements(superstructure, intakeSuperstructure, arm, elevator, deployer, drive);
   }
