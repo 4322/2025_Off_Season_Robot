@@ -1,11 +1,14 @@
 package frc.robot;
 
+import static frc.robot.RobotContainer.driver;
+
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.reduxrobotics.canand.MessageLogger;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
@@ -13,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.RobotMode;
+import frc.robot.subsystems.IntakeSuperstructure;
+import frc.robot.subsystems.Superstructure;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,6 +38,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
+  private Command buzz;
   private RobotContainer robotContainer;
 
   public static Alliance alliance = DriverStation.Alliance.Blue;
@@ -41,6 +47,7 @@ public class Robot extends LoggedRobot {
   private Timer homeButtonTimer = new Timer();
   private DigitalInput coastButton = new DigitalInput(Constants.dioCoastButton);
   private Timer coastButtonTimer = new Timer();
+  private Timer batteryLowStopTimer = new Timer();
 
   // Mirrored paths
 
@@ -293,6 +300,34 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
+
+    buzz = robotContainer.getBuzz();
+
+    if (RobotController.getBatteryVoltage() <= 12.00
+        && (RobotContainer.getSuperstructure().getState() == Superstructure.Superstates.IDLE
+            || (RobotContainer.getSuperstructure().getState()
+                    == Superstructure.Superstates.CORAL_HELD)
+                && RobotContainer.getIntakeSuperstructure().getIntakeSuperstate()
+                    == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
+                && !DriverStation.isFMSAttached())) {
+      driver.setRumble(GenericHID.RumbleType.kBothRumble, 10.0);
+      batteryLowStopTimer.start();
+      if (batteryLowStopTimer.hasElapsed(5)) {
+        driver.setRumble(GenericHID.RumbleType.kBothRumble, 20.0);
+        batteryLowStopTimer.stop();
+        batteryLowStopTimer.reset();
+        DriverStation.reportError(
+            "Battery voltage is critically low (" + RobotController.getBatteryVoltage() + "V)",
+            false);
+      }
+    } else {
+      batteryLowStopTimer.stop();
+      batteryLowStopTimer.reset();
+    }
+
+    if (RobotController.getBatteryVoltage() > 12.00) {
+      driver.setRumble(GenericHID.RumbleType.kBothRumble, 0.0);
+    }
 
     /* roboRIO settings to optimize Java memory use:
       echo "vm.overcommit_memory=1" >> /etc/sysctl.conf

@@ -95,6 +95,7 @@ public class RobotContainer {
   private Timer batteryLowStopTimer = new Timer();
 
   public static AutonomousSelector autonomousSelector;
+  public static AutonomousSelector selector;
 
   /** The container for the robot. Contains subsystems, IO devices, and commands. */
   public RobotContainer() {
@@ -445,6 +446,10 @@ public class RobotContainer {
     return superstructure;
   }
 
+  public static IntakeSuperstructure getIntakeSuperstructure() {
+    return intakeSuperstructure;
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -452,6 +457,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autonomousSelector.get();
+  }
+
+  public Command getBuzz() {
+    return selector.get();
   }
 
   public void configureAutonomousSelector() {
