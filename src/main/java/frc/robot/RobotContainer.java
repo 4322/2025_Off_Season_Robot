@@ -64,6 +64,7 @@ import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
+import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIO;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOPhoton;
 import frc.robot.util.OrangeSequentialCommandGroup;
 import frc.robot.util.ReefStatus;
@@ -205,6 +206,9 @@ public class RobotContainer {
             new VisionObjectDetection(
                 new VisionObjectDetectionIOPhoton(),
                 new Transform3d() /*Transform3d robotCenterToCamera */);
+      }
+      else {
+        visionObjectDetection = new VisionObjectDetection(new VisionObjectDetectionIO() {}, new Transform3d());
       }
     }
 
