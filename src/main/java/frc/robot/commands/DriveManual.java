@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -18,6 +16,7 @@ import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ClockUtil;
 import frc.robot.util.ReefStatus;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveManual extends Command {
   private Drive drive;
@@ -30,7 +29,6 @@ public class DriveManual extends Command {
       new LoggedTunableNumber("AutoRotate/RotateKp", Constants.Drive.autoRotatekP);
   private static final LoggedTunableNumber rotKd =
       new LoggedTunableNumber("AutoRotate/RotateKd", Constants.Drive.autoRotatekD);
-
 
   public DriveManual(Drive drive) {
     this.drive = drive;

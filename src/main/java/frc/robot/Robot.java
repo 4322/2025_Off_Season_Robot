@@ -301,8 +301,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
 
-    buzz = robotContainer.getBuzz();
-
     if (RobotController.getBatteryVoltage() <= 12.00
         && (RobotContainer.getSuperstructure().getState() == Superstructure.Superstates.IDLE
             || (RobotContainer.getSuperstructure().getState()
