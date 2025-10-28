@@ -12,6 +12,7 @@ import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
+import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants.GamePieceType;
 
 public class CoralIntake extends Command {
 
@@ -22,7 +23,6 @@ public class CoralIntake extends Command {
   private Translation2d coralPosition;
   private Transform2d coralTransform;
   private DriveToPose driveToPose;
-  private Timer rumbleTimer = new Timer();
 
   public CoralIntake(
       IntakeSuperstructure intakeSuperstructure,
@@ -33,43 +33,37 @@ public class CoralIntake extends Command {
     this.drive = drive;
     this.visionObjectDetection = visionObjectDetection;
 
-    rumbleTimer.reset();
-    rumbleTimer.stop();
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    coralPosition = visionObjectDetection.calculateBestObjectPositionOnField(GamePieceType.CORAL);
+    intakeSuperstructure.requestIntake();
+  }
 
   @Override
   public void execute() {
-    coralPosition = visionObjectDetection.getClosestCoralPositionRelativeToCamera();
-    intakeSuperstructure.requestIntake();
-    coralPosition = visionObjectDetection.getClosestCoralPositionRelativeToCamera();
-    if (coralPosition != null) {
+   
+    if (coralPosition != null && driveToPose == null) {
       coralTransform = new Transform2d(coralPosition, Rotation2d.kZero);
       driveToPose =
-          new DriveToPose(drive, superstructure.getRobotPoseEstimate().plus(coralTransform));
-      if (!rumbleTimer.isRunning()) {
-        rumbleTimer.reset();
-        rumbleTimer.start();
-        driver.setRumble(RumbleType.kBothRumble, 1);
-      } else {
-
-      }
+          new DriveToPose(drive, () -> superstructure.getRobotPoseEstimate().plus(coralTransform));
+      driveToPose.schedule();
       // TODO Math/methods for turning towards coral
+    } else {
+      coralPosition = visionObjectDetection.calculateBestObjectPositionOnField(GamePieceType.CORAL);
     }
   }
 
   @Override
   public boolean isFinished() {
     return (driveToPose != null && driveToPose.atGoal())
-        || !(driver.getLeftTriggerAxis() > 0.5)
         || intakeSuperstructure.isCoralDetectedIndexer();
   }
 
   @Override
   public void end(boolean interrupted) {
     intakeSuperstructure.requestRetractIdle();
-    driver.setRumble(RumbleType.kBothRumble, 0);
+    driveToPose.cancel();
   }
 }

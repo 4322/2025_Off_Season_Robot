@@ -277,6 +277,10 @@ public class Drive extends SubsystemBase {
     return poseEstimator.getEstimatedPosition();
   }
 
+  public Pose2d getPoseAtTimestamp(double timestampSeconds) {
+    return poseEstimator.sampleAt(timestampSeconds).orElse(null);
+  }
+
   public Rotation2d getRotation() {
     return getPose().getRotation();
   }

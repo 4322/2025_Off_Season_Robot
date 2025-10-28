@@ -204,11 +204,14 @@ public class RobotContainer {
       if (Constants.visionObjectDetectionEnabled) {
         visionObjectDetection =
             new VisionObjectDetection(
-                new VisionObjectDetectionIOPhoton(),
-                new Transform3d() /*Transform3d robotCenterToCamera */);
+              "VisionObjectDetectionCamera",
+              new Transform3d(),
+              drive,
+                new VisionObjectDetectionIOPhoton()
+                );
       }
       else {
-        visionObjectDetection = new VisionObjectDetection(new VisionObjectDetectionIO() {}, new Transform3d());
+        visionObjectDetection = new VisionObjectDetection("VisionObjectDetectionCamera", new Transform3d(), drive, new VisionObjectDetectionIO() {}); 
       }
     }
 
