@@ -32,6 +32,8 @@ public class VisionObjectDetection extends SubsystemBase {
   @Override
   public void periodic() {
     visionObjectDetectionIO.updateInputs(visionObjectDetectionInputs);
+    Logger.processInputs("VisionObjectDetection", visionObjectDetectionInputs);
+    
     Logger.recordOutput(
         "VisionObjectDetection/getClosestCoralPositionRelativeToCamera()",
         getClosestCoralPositionRelativeToCamera());
@@ -41,7 +43,6 @@ public class VisionObjectDetection extends SubsystemBase {
     Logger.recordOutput(
         "VisionObjectDetection/hasAlgae",
         hasTargets(SimulatedGamePieceConstants.GamePieceType.ALGAE));
-    Logger.processInputs("VisionObjectDetection", visionObjectDetectionInputs);
   }
 
   /**
