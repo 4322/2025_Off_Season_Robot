@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.autonomous.AutonomousSelector;
+import frc.robot.autonomous.annoying.Selector;
 import frc.robot.commands.AlgaeIntakeGround;
 import frc.robot.commands.AlgaeScoreCommand;
 import frc.robot.commands.DescoreAlgae;
@@ -95,7 +96,7 @@ public class RobotContainer {
   private Timer batteryLowStopTimer = new Timer();
 
   public static AutonomousSelector autonomousSelector;
-  public static AutonomousSelector selector;
+  public static Selector selector;
 
   /** The container for the robot. Contains subsystems, IO devices, and commands. */
   public RobotContainer() {
