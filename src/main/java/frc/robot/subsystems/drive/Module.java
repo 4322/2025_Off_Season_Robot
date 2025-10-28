@@ -51,7 +51,7 @@ public class Module {
         BabyAlchemist.run(
             index,
             io.getDriveNitrate(),
-            "Drive XBox",
+            Constants.driveTuningMode.toString(),
             inputs.driveVelocityMetersPerSec,
             "meters/sec");
       }
