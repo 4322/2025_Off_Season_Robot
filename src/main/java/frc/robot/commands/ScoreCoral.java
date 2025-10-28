@@ -70,19 +70,6 @@ public class ScoreCoral extends Command {
     addRequirements(superstructure);
   }
 
-  public ScoreCoral(
-      DriveToPose driveToPose,
-      Supplier<Pose2d> currentPoseRequest,
-      Superstructure superstructure,
-      Superstructure.Level level,
-      Drive drive) {
-    this.currentPoseRequest = currentPoseRequest;
-    this.superstructure = superstructure;
-    this.level = level;
-    this.drive = drive;
-    this.driveToPose = driveToPose;
-  }
-
   @Override
   public void initialize() {
     running = true;
