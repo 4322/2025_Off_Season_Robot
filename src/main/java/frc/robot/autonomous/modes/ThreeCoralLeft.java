@@ -36,7 +36,7 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
         new ReefStatus(
             false,
             false,
-            new Rotation2d(Units.degreesToRadians(60)),
+            new Rotation2d(Units.degreesToRadians(-60)),
             ClosestReefPipe.LEFT,
             L1Zone.MIDDLE,
             AlgaeLevel.L2,
@@ -46,7 +46,7 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
         new ReefStatus(
             false,
             false,
-            new Rotation2d(Units.degreesToRadians(60)),
+            new Rotation2d(Units.degreesToRadians(-60)),
             ClosestReefPipe.RIGHT,
             L1Zone.MIDDLE,
             AlgaeLevel.L2,
