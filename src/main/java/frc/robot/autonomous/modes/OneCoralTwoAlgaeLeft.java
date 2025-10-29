@@ -2,16 +2,15 @@ package frc.robot.autonomous.modes;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 import frc.robot.commands.DescoreAlgae;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.auto.AlgaePrescoreAuto;
 import frc.robot.commands.auto.AlgaeScoreAuto;
-import frc.robot.constants.Constants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.drive.Drive;
@@ -21,31 +20,35 @@ public class OneCoralTwoAlgaeLeft extends OrangeSequentialCommandGroup {
 
   public OneCoralTwoAlgaeLeft(Drive drive, Superstructure superstructure) {
 
+    PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
+    Pose2d startPoseBlue = path.getStartingHolonomicPose().get();
+    path = path.flipPath();
+    Pose2d startPoseRed = path.getStartingHolonomicPose().get();
+
+    setName("ONE_CORAL_TWO_ALGAE_LEFT");
     addCommands(
         new InstantCommand(
             () -> {
               superstructure.requestOperationMode(Superstructure.OperationMode.TeleAUTO);
-              PathPlannerPath path = Robot.CenterStartToGulf;
-              if (Robot.alliance == Alliance.Red) {
-                path = path.flipPath();
+              if (Robot.alliance == Alliance.Blue) {
+                drive.resetPose(startPoseBlue);
+              } else {
+                drive.resetPose(startPoseRed);
               }
-              drive.resetPose(path.getStartingHolonomicPose().get());
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
         new ScoreCoral(superstructure, Level.L4, drive, true),
         new DescoreAlgae(superstructure, drive),
         new ParallelCommandGroup(
-            AutoBuilder.followPath(Robot.IndiaJulietToLeftBargeBackwards),
+            AutoBuilder.followPath(Robot.IJ_ToCenterAlgaeScore),
             new AlgaePrescoreAuto(superstructure, drive)),
-        AutoBuilder.followPath(Robot.LeftBargeBackwardsToLeftAlgaeScoreBackwards),
         new AlgaeScoreAuto(superstructure, drive),
-        new WaitCommand(Constants.Auto.algaeScoreDelay),
         AutoBuilder.followPath(Robot.LeftAlgaeScoreBackwardsToKiloLima),
         new DescoreAlgae(superstructure, drive),
         AutoBuilder.followPath(Robot.KiloLimaToLeftBargeBackwards),
         new AlgaePrescoreAuto(superstructure, drive),
         AutoBuilder.followPath(Robot.LeftBargeBackwardsToLeftAlgaeScoreBackwards),
-        new WaitCommand(Constants.Auto.algaeScoreDelay),
+        new AlgaeScoreAuto(superstructure, drive),
         AutoBuilder.followPath(Robot.LeftAlgaeScoreBackwardsToLeave));
   }
 }

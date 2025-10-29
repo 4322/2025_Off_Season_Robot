@@ -53,7 +53,6 @@ public class Robot extends LoggedRobot {
   public static PathPlannerPath ThreeCoralStartToJuliet;
   public static PathPlannerPath JulietToFeed;
   public static PathPlannerPath KiloToFeed;
-  public static PathPlannerPath FeedToKilo;
   public static PathPlannerPath FeedToLima;
 
   // Mirrors of the above
@@ -71,29 +70,23 @@ public class Robot extends LoggedRobot {
 
   public static PathPlannerPath CenterStartToGulf;
   public static PathPlannerPath GulfToGulfHotel;
-  public static PathPlannerPath GulfHotelToCenterBarge;
   public static PathPlannerPath CenterBargeToCenterAlgaeScore;
   public static PathPlannerPath CenterAlgaeScoreToLeave;
 
   public static PathPlannerPath JulietToIndiaJuliet;
-  public static PathPlannerPath IndiaJulietToLeftBarge;
   public static PathPlannerPath LeftBargeToLeftAlgaeScore;
   public static PathPlannerPath LeftAlgaeScoreToFeed;
 
-  public static PathPlannerPath GulfHotelToCenterEject;
-
-  public static PathPlannerPath CenterAlgaeScoreBackwardsToIndiaJuliet;
+  public static PathPlannerPath RightAlgaeScoreToIJ;
   public static PathPlannerPath CenterAlgaeScoreBackwardsToLeave;
-  public static PathPlannerPath CenterBargeBackwardsToCenterAlgaeScoreBackwards;
-  public static PathPlannerPath GulfHotelToCenterBargeBackwards;
-  public static PathPlannerPath IndiaJulietToCenterBargeBackwards;
-  public static PathPlannerPath IndiaJulietToLeftBargeBackwards;
+  public static PathPlannerPath GH_ToRightAlgaeScore;
+  public static PathPlannerPath IJ_ToCenterAlgaeScore;
   public static PathPlannerPath KiloLimaToLeftBargeBackwards;
   public static PathPlannerPath LeftAlgaeScoreBackwardsToKiloLima;
   public static PathPlannerPath LeftAlgaeScoreBackwardsToLeave;
   public static PathPlannerPath LeftBargeBackwardsToLeftAlgaeScoreBackwards;
 
-  public static PathPlannerPath CenterBargeBackwardsToLeave;
+  public static PathPlannerPath RightAlgaeScoreToLeave;
 
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
@@ -226,7 +219,6 @@ public class Robot extends LoggedRobot {
 
       CenterStartToGulf = PathPlannerPath.fromPathFile("Center Start to Gulf");
       GulfToGulfHotel = PathPlannerPath.fromPathFile("Gulf to Gulf-Hotel");
-      GulfHotelToCenterBarge = PathPlannerPath.fromPathFile("Gulf-Hotel to Center Barge");
       CenterBargeToCenterAlgaeScore =
           PathPlannerPath.fromPathFile("Center Barge to Center Algae Score");
       CenterAlgaeScoreToLeave = PathPlannerPath.fromPathFile("Center Algae Score to Leave");
@@ -235,7 +227,6 @@ public class Robot extends LoggedRobot {
       ThreeCoralStartPushToJuliet =
           PathPlannerPath.fromPathFile("Three Coral Start Push to Juliet");
       JulietToFeed = PathPlannerPath.fromPathFile("Juliet to Feed");
-      FeedToKilo = PathPlannerPath.fromPathFile("Feed to Kilo");
       KiloToFeed = PathPlannerPath.fromPathFile("Kilo to Feed");
       FeedToLima = PathPlannerPath.fromPathFile("Feed to Lima");
 
@@ -247,24 +238,14 @@ public class Robot extends LoggedRobot {
       FeedToCharlie = PathPlannerPath.fromPathFile("Feed to Lima").mirrorPath();
 
       JulietToIndiaJuliet = PathPlannerPath.fromPathFile("Juliet to India-Juliet");
-      IndiaJulietToLeftBarge = PathPlannerPath.fromPathFile("India-Juliet to Left Barge");
       LeftBargeToLeftAlgaeScore = PathPlannerPath.fromPathFile("Left Barge to Left Algae Score");
       LeftAlgaeScoreToFeed = PathPlannerPath.fromPathFile("Left Algae Score to Feed");
 
-      GulfHotelToCenterEject = PathPlannerPath.fromPathFile("Gulf-Hotel to Center Eject");
-
-      CenterAlgaeScoreBackwardsToIndiaJuliet =
-          PathPlannerPath.fromPathFile("Center Algae Score Backwards to India-Juliet");
+      RightAlgaeScoreToIJ = PathPlannerPath.fromPathFile("Right Algae Score to IJ");
       CenterAlgaeScoreBackwardsToLeave =
           PathPlannerPath.fromPathFile("Center Algae Score Backwards to Leave");
-      CenterBargeBackwardsToCenterAlgaeScoreBackwards =
-          PathPlannerPath.fromPathFile("Center Barge Backwards To Center Algae Score Backwards");
-      GulfHotelToCenterBargeBackwards =
-          PathPlannerPath.fromPathFile("Gulf-Hotel to Center Barge Backwards");
-      IndiaJulietToCenterBargeBackwards =
-          PathPlannerPath.fromPathFile("India-Juliet to Center Barge Backwards");
-      IndiaJulietToLeftBargeBackwards =
-          PathPlannerPath.fromPathFile("India-Juliet to Left Barge Backwards");
+      GH_ToRightAlgaeScore = PathPlannerPath.fromPathFile("GH to Right Algae Score");
+      IJ_ToCenterAlgaeScore = PathPlannerPath.fromPathFile("IJ to Center Algae Score");
       KiloLimaToLeftBargeBackwards =
           PathPlannerPath.fromPathFile("Kilo-Lima to Left Barge Backwards");
       LeftAlgaeScoreBackwardsToKiloLima =
@@ -274,7 +255,7 @@ public class Robot extends LoggedRobot {
       LeftBargeBackwardsToLeftAlgaeScoreBackwards =
           PathPlannerPath.fromPathFile("Left Barge Backwards to Left Algae Score Backwards");
 
-      CenterBargeBackwardsToLeave = PathPlannerPath.fromPathFile("Center Barge Backwards to Leave");
+      RightAlgaeScoreToLeave = PathPlannerPath.fromPathFile("Right Algae Score to Leave");
 
     } catch (Exception e) {
       DriverStation.reportError("Failed to load PathPlanner paths", true);

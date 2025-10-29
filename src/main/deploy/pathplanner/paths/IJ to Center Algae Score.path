@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.344772727272727,
-        "y": 5.428
+        "x": 5.617133608217593,
+        "y": 5.887319516782408
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.946046232808079,
-        "y": 4.903159365934593
+        "x": 6.5717900028935174,
+        "y": 6.18203197337963
       },
       "isLocked": false,
-      "linkedName": "India-JulietOut"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.01280737704918,
-        "y": 5.445543032786884
+        "x": 7.712847222222222,
+        "y": 6.117569082754629
       },
       "prevControl": {
-        "x": 5.736062576871059,
-        "y": 5.40584350937391
+        "x": 6.436102422044101,
+        "y": 6.077869559341655
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center Barge Backwards"
+      "linkedName": "CenterBarge2"
     }
   ],
   "rotationTargets": [],
