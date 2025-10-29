@@ -2,6 +2,7 @@ package frc.robot.autonomous.modes;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -51,16 +52,18 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
             AlgaeLevel.L2,
             Robot.alliance == Alliance.Blue ? 19 : 6);
 
+    PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
+    if (Robot.alliance == Alliance.Red) {
+      path = path.flipPath();
+    }
+    Pose2d startPose = path.getStartingHolonomicPose().get();
+
     setName("THREE_CORAL_LEFT");
     addCommands(
         new InstantCommand(
             () -> {
               superstructure.requestOperationMode(Superstructure.OperationMode.TeleAUTO);
-              PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
-              if (Robot.alliance == Alliance.Red) {
-                path = path.flipPath();
-              }
-              drive.resetPose(path.getStartingHolonomicPose().get());
+              drive.resetPose(startPose);
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
         new InstantCommand(() -> Logger.recordOutput("Auto", "Finished path")),
