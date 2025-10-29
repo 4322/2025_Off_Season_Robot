@@ -43,8 +43,11 @@ public class CoralIntake extends Command {
 
   @Override
   public void execute() {
-    if (Constants.VisionObjectDetection.coralIntakeMode != CoralIntakeMode.MANUAL && coralPosition != null && !driveToPose.isScheduled()) {
-      if (Constants.VisionObjectDetection.coralIntakeMode == CoralIntakeMode.AUTO_ALIGN_DRIVE && coralPosition != null) {
+    if (Constants.VisionObjectDetection.coralIntakeMode != CoralIntakeMode.MANUAL
+        && coralPosition != null
+        && !driveToPose.isScheduled()) {
+      if (Constants.VisionObjectDetection.coralIntakeMode == CoralIntakeMode.AUTO_ALIGN_DRIVE
+          && coralPosition != null) {
         targetAngle =
             coralPosition
                 .minus(drive.getPose().getTranslation())
@@ -56,13 +59,12 @@ public class CoralIntake extends Command {
       }
 
       currentPoseRequest = () -> driveToPoseTarget;
-      
+
       if (Constants.VisionObjectDetection.coralIntakeMode != CoralIntakeMode.AUTO_ALIGN) {
         driveToPose.schedule();
       } else {
         drive.requestAutoRotateMode(targetAngle);
       }
-      
 
     } else if (coralPosition == null) {
       coralPosition = visionObjectDetection.calculateBestObjectPositionOnField(GamePieceType.CORAL);
