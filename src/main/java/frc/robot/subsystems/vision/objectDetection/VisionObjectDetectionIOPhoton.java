@@ -10,16 +10,16 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-public class VisionObjectDetectionIOPhoton implements VisionObjectDetectionIO {
+public class VisionObjectDetectionIOPhoton extends VisionObjectDetectionIO {
   private final PhotonCamera photonCamera;
 
-  public VisionObjectDetectionIOPhoton() {
+  public VisionObjectDetectionIOPhoton(String hostname) {
     PhotonCamera.setVersionCheckEnabled(false);
-    photonCamera = new PhotonCamera(Constants.VisionObjectDetection.hostname);
+    photonCamera = new PhotonCamera(hostname);
   }
 
   @Override
-  public void updateInputs(VisionObjectDetectionInputs inputs) {
+  protected void updateInputs(VisionObjectDetectionInputsAutoLogged inputs) {
     if (!photonCamera.isConnected()) {
       updateNoNewResultInputs(inputs);
       return;
@@ -39,34 +39,31 @@ public class VisionObjectDetectionIOPhoton implements VisionObjectDetectionIO {
     return unreadResults.isEmpty() ? null : unreadResults.get(unreadResults.size() - 1);
   }
 
-  private void updateNoNewResultInputs(VisionObjectDetectionInputs inputs) {
+  private void updateNoNewResultInputs(VisionObjectDetectionInputsAutoLogged inputs) {
     inputs.hasTarget = new boolean[Constants.VisionObjectDetection.numberOfGamePieceTypes];
     inputs.visibleObjectRotations =
         new Rotation3d[Constants.VisionObjectDetection.numberOfGamePieceTypes][0];
   }
 
   private void updateHasNewResultInputs(
-      VisionObjectDetectionInputs inputs, PhotonPipelineResult result) {
+      VisionObjectDetectionInputsAutoLogged inputs, PhotonPipelineResult result) {
     final List<Rotation3d>[] visibleObjectsRotations =
         new List[Constants.VisionObjectDetection.numberOfGamePieceTypes];
-    for (int i = 0; i < Constants.VisionObjectDetection.numberOfGamePieceTypes; i++) {
+    for (int i = 0; i < Constants.VisionObjectDetection.numberOfGamePieceTypes; i++)
       visibleObjectsRotations[i] = new ArrayList<>();
-    }
     Arrays.fill(inputs.hasTarget, false);
     inputs.latestResultTimestamp = result.getTimestampSeconds();
 
     for (PhotonTrackedTarget currentTarget : result.getTargets()) {
       if (currentTarget.getDetectedObjectClassID() == -1) continue;
 
-      inputs.hasTarget[currentTarget.getDetectedObjectClassID()] =
-          true; // TODO manually set id in gui?
+      inputs.hasTarget[currentTarget.getDetectedObjectClassID()] = true;
       visibleObjectsRotations[currentTarget.getDetectedObjectClassID()].add(
           extractRotation3d(currentTarget));
     }
 
-    for (int i = 0; i < Constants.VisionObjectDetection.numberOfGamePieceTypes; i++) {
+    for (int i = 0; i < Constants.VisionObjectDetection.numberOfGamePieceTypes; i++)
       inputs.visibleObjectRotations[i] = toArray(visibleObjectsRotations[i]);
-    }
   }
 
   private Rotation3d[] toArray(List<Rotation3d> list) {

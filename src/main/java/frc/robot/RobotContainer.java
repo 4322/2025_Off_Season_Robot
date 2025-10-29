@@ -204,7 +204,7 @@ public class RobotContainer {
                 Constants.VisionObjectDetection.hostname,
                 Constants.VisionObjectDetection.robotCenterToCamera,
                 drive,
-                new VisionObjectDetectionIOPhoton());
+                new VisionObjectDetectionIOPhoton(Constants.VisionObjectDetection.hostname));
       } else {
         visionObjectDetection =
             new VisionObjectDetection(
