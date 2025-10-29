@@ -2,7 +2,6 @@
  * Code based off of FRC Team 5990 Trigon's object detection code
  * https://github.com/Programming-TRIGON/RobotCode2025/tree/main/src/main/java/frc/trigon/robot/misc/objectdetectioncamera
  */
-// TODO auto drive to piece commmand; Drive while rotating; test if driving without rotating works
 package frc.robot.subsystems.vision.objectDetection;
 
 import edu.wpi.first.math.geometry.*;
