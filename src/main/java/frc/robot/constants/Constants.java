@@ -536,6 +536,6 @@ public final class Constants {
       AUTO_ALIGN_DRIVE
     }
 
-    public static final CoralIntakeMode coralIntakeMode = CoralIntakeMode.MANUAL;
+    public static final CoralIntakeMode coralIntakeMode = CoralIntakeMode.AUTO_ALIGN;
   }
 }
