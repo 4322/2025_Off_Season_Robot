@@ -53,17 +53,20 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
             Robot.alliance == Alliance.Blue ? 19 : 6);
 
     PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
-    if (Robot.alliance == Alliance.Red) {
-      path = path.flipPath();
-    }
-    Pose2d startPose = path.getStartingHolonomicPose().get();
+    Pose2d startPoseBlue = path.getStartingHolonomicPose().get();
+    path = path.flipPath();
+    Pose2d startPoseRed = path.getStartingHolonomicPose().get();
 
     setName("THREE_CORAL_LEFT");
     addCommands(
         new InstantCommand(
             () -> {
               superstructure.requestOperationMode(Superstructure.OperationMode.TeleAUTO);
-              drive.resetPose(startPose);
+              if (Robot.alliance == Alliance.Blue) {
+                drive.resetPose(startPoseBlue);
+              } else {
+                drive.resetPose(startPoseRed);
+              }
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
         new InstantCommand(() -> Logger.recordOutput("Auto", "Finished path")),
