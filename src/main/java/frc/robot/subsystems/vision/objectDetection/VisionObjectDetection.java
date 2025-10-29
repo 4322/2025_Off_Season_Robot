@@ -41,9 +41,15 @@ public class VisionObjectDetection extends SubsystemBase {
     visionObjectDetectionIO.updateInputs(visionObjectDetectionInputs);
     Logger.processInputs(hostname, visionObjectDetectionInputs);
     Logger.recordOutput("VisionObjectDetection/working", true);
-    Logger.recordOutput(
-        "VisionObjectDetection/calculateBestCoralPositionOnField",
-        calculateBestObjectPositionOnField(SimulatedGamePieceConstants.GamePieceType.CORAL));
+    if (calculateBestObjectPositionOnField(SimulatedGamePieceConstants.GamePieceType.CORAL)
+        != null) {
+
+      Logger.recordOutput(
+          "VisionObjectDetection/calculateBestCoralPositionOnField",
+          new Pose2d(
+              calculateBestObjectPositionOnField(SimulatedGamePieceConstants.GamePieceType.CORAL),
+              new Rotation2d()));
+    }
     Logger.recordOutput(
         "VisionObjectDetection/hasCoral",
         hasTargets(SimulatedGamePieceConstants.GamePieceType.CORAL));

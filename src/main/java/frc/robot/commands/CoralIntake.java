@@ -68,6 +68,7 @@ public class CoralIntake extends Command {
       } else {
         coralPose2d = new Pose2d(coralPosition, new Rotation2d());
       }
+      driveToPoseTarget = coralPose2d;
 
       currentPoseRequest = () -> driveToPoseTarget;
       driveToPose.schedule();

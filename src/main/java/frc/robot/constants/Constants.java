@@ -525,6 +525,6 @@ public final class Constants {
     public static final Transform3d robotCenterToCamera =
         new Transform3d(
             -0.23495, 0.22080, -0.23495, new Rotation3d(0, Units.degreesToRadians(40), 0));
-    public static final boolean enableAutoAlign = true;
+    public static final boolean enableAutoAlign = false;
   }
 }
