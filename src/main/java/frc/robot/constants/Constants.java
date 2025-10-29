@@ -522,7 +522,9 @@ public final class Constants {
     public static final double trackedObjectToleranceMeters = 0.12;
     public static final Rotation2d lollipopTolerance = Rotation2d.fromDegrees(3.5);
     public static final boolean shouldIgnoreLollipopCoral = false;
-    public static final Transform3d robotCenterToCamera = new Transform3d(-0.23495, 0.22080, -0.23495, new Rotation3d(0, Units.degreesToRadians(40), 0));
+    public static final Transform3d robotCenterToCamera =
+        new Transform3d(
+            -0.23495, 0.22080, -0.23495, new Rotation3d(0, Units.degreesToRadians(40), 0));
     public static final boolean enableAutoAlign = true;
   }
 }

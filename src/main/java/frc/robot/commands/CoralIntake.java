@@ -58,18 +58,20 @@ public class CoralIntake extends Command {
 
     if (coralPosition != null && !driveToPose.isScheduled()) {
       if (Constants.VisionObjectDetection.enableAutoAlign) {
-        targetAngle = visionObjectDetection.calculateDistanceFromTrackedCoral().getAngle().plus(Rotation2d.k180deg).unaryMinus();
-        coralPose2d =
-            new Pose2d(
-                coralPosition,
-                targetAngle);
+        targetAngle =
+            visionObjectDetection
+                .calculateDistanceFromTrackedCoral()
+                .getAngle()
+                .plus(Rotation2d.k180deg)
+                .unaryMinus();
+        coralPose2d = new Pose2d(coralPosition, targetAngle);
       } else {
         coralPose2d = new Pose2d(coralPosition, new Rotation2d());
       }
-      
+
       currentPoseRequest = () -> driveToPoseTarget;
       driveToPose.schedule();
-      
+
     } else {
       coralPosition = visionObjectDetection.calculateBestObjectPositionOnField(GamePieceType.CORAL);
     }

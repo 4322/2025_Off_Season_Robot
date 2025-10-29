@@ -7,7 +7,6 @@ package frc.robot.subsystems.vision.objectDetection;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 // import frc.trigon.robot.commands.commandfactories.CoralCollectionCommands;
 import frc.robot.subsystems.drive.Drive;
@@ -20,7 +19,7 @@ import org.littletonrobotics.junction.Logger;
  * apriltags, most likely game pieces.
  */
 public class VisionObjectDetection extends SubsystemBase {
-  private final VisionObjectDetectionInputsAutoLogged objectDetectionCameraInputs =
+  private final VisionObjectDetectionInputsAutoLogged visionObjectDetectionInputs =
       new VisionObjectDetectionInputsAutoLogged();
   private final VisionObjectDetectionIO visionObjectDetectionIO;
   private final String hostname;
@@ -40,8 +39,8 @@ public class VisionObjectDetection extends SubsystemBase {
 
   @Override
   public void periodic() {
-    visionObjectDetectionIO.updateInputs(objectDetectionCameraInputs);
-    Logger.processInputs(hostname, objectDetectionCameraInputs);
+    visionObjectDetectionIO.updateInputs(visionObjectDetectionInputs);
+    Logger.processInputs(hostname, visionObjectDetectionInputs);
     Logger.recordOutput(
         "ObjectDetectionCamera/HasTargetsCoral",
         hasTargets(SimulatedGamePieceConstants.GamePieceType.CORAL));
@@ -75,7 +74,7 @@ public class VisionObjectDetection extends SubsystemBase {
   }
 
   public boolean hasTargets(SimulatedGamePieceConstants.GamePieceType targetGamePiece) {
-    return objectDetectionCameraInputs.hasTarget[targetGamePiece.id];
+    return visionObjectDetectionInputs.hasTarget[targetGamePiece.id];
   }
 
   public Translation2d[] getObjectPositionsOnField(
@@ -100,12 +99,12 @@ public class VisionObjectDetection extends SubsystemBase {
         && Constants.VisionObjectDetection.shouldIgnoreLollipopCoral) {
       ArrayList<Rotation3d> rotations = new ArrayList<>();
       for (Rotation3d rotation :
-          objectDetectionCameraInputs.visibleObjectRotations[targetGamePiece.id]) {
+          visionObjectDetectionInputs.visibleObjectRotations[targetGamePiece.id]) {
         if (!isLollipop(rotation.toRotation2d())) rotations.add(rotation);
       }
       return rotations.toArray(new Rotation3d[0]);
     }
-    return objectDetectionCameraInputs.visibleObjectRotations[targetGamePiece.id];
+    return visionObjectDetectionInputs.visibleObjectRotations[targetGamePiece.id];
   }
 
   /**
@@ -119,7 +118,7 @@ public class VisionObjectDetection extends SubsystemBase {
    */
   private Translation2d calculateObjectPositionFromRotation(Rotation3d objectRotation) {
     final Pose2d robotPoseAtResultTimestamp =
-        drive.getPoseAtTimestamp(objectDetectionCameraInputs.latestResultTimestamp);
+        drive.getPoseAtTimestamp(visionObjectDetectionInputs.latestResultTimestamp);
     if (robotPoseAtResultTimestamp == null) return new Translation2d();
     final Pose3d cameraPose = new Pose3d(robotPoseAtResultTimestamp).plus(robotCenterToCamera);
     final Pose3d objectRotationStart = cameraPose.plus(new Transform3d(0, 0, 0, objectRotation));
@@ -146,18 +145,15 @@ public class VisionObjectDetection extends SubsystemBase {
   }
 
   public Translation2d calculateDistanceFromTrackedCoral() {
-        Pose2d robotPose = drive.getPose();
-        final Translation2d trackedObjectPositionOnField = calculateBestObjectPositionOnField(
-            SimulatedGamePieceConstants.GamePieceType.CORAL);
-        if (trackedObjectPositionOnField == null)
-            return null;
+    Pose2d robotPose = drive.getPose();
+    final Translation2d trackedObjectPositionOnField =
+        calculateBestObjectPositionOnField(SimulatedGamePieceConstants.GamePieceType.CORAL);
+    if (trackedObjectPositionOnField == null) return null;
 
-        final Translation2d difference = robotPose.getTranslation().minus(trackedObjectPositionOnField);
-        final Translation2d robotToTrackedCoralDistance = difference.rotateBy(robotPose.getRotation().unaryMinus());
-        Logger.recordOutput("VisionObjectDetection/TrackedCoralDistance", robotToTrackedCoralDistance);
-        return robotToTrackedCoralDistance;
-    }
-
-
-
+    final Translation2d difference = robotPose.getTranslation().minus(trackedObjectPositionOnField);
+    final Translation2d robotToTrackedCoralDistance =
+        difference.rotateBy(robotPose.getRotation().unaryMinus());
+    Logger.recordOutput("VisionObjectDetection/TrackedCoralDistance", robotToTrackedCoralDistance);
+    return robotToTrackedCoralDistance;
+  }
 }
