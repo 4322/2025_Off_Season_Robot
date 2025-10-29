@@ -528,6 +528,14 @@ public final class Constants {
     public static final Transform3d robotCenterToCamera =
         new Transform3d(
             -0.2208, -0.23495, 0.98315, new Rotation3d(0, Units.degreesToRadians(40), 0));
-    public static final boolean enableAutoAlign = false;
+
+    public static enum CoralIntakeMode {
+      MANUAL,
+      AUTO_ALIGN,
+      AUTO_DRIVE,
+      AUTO_ALIGN_DRIVE
+    }
+    
+    public static final CoralIntakeMode coralIntakeMode = CoralIntakeMode.MANUAL;
   }
 }

@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.VisionObjectDetection.CoralIntakeMode;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
@@ -42,8 +43,8 @@ public class CoralIntake extends Command {
 
   @Override
   public void execute() {
-    if (coralPosition != null && !driveToPose.isScheduled()) {
-      if (Constants.VisionObjectDetection.enableAutoAlign) {
+    if (Constants.VisionObjectDetection.coralIntakeMode != CoralIntakeMode.MANUAL && coralPosition != null && !driveToPose.isScheduled()) {
+      if (Constants.VisionObjectDetection.coralIntakeMode == CoralIntakeMode.AUTO_ALIGN_DRIVE && coralPosition != null) {
         targetAngle =
             coralPosition
                 .minus(drive.getPose().getTranslation())
@@ -55,7 +56,13 @@ public class CoralIntake extends Command {
       }
 
       currentPoseRequest = () -> driveToPoseTarget;
-      driveToPose.schedule();
+      
+      if (Constants.VisionObjectDetection.coralIntakeMode != CoralIntakeMode.AUTO_ALIGN) {
+        driveToPose.schedule();
+      } else {
+        drive.requestAutoRotateMode(targetAngle);
+      }
+      
 
     } else if (coralPosition == null) {
       coralPosition = visionObjectDetection.calculateBestObjectPositionOnField(GamePieceType.CORAL);
@@ -71,5 +78,6 @@ public class CoralIntake extends Command {
   public void end(boolean interrupted) {
     intakeSuperstructure.requestRetractIdle();
     driveToPose.cancel();
+    drive.requestFieldRelativeMode();
   }
 }
