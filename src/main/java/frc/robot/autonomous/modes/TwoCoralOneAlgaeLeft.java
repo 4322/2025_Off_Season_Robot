@@ -15,6 +15,8 @@ import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.auto.AlgaePrescoreAuto;
 import frc.robot.commands.auto.AlgaeScoreAuto;
 import frc.robot.commands.auto.CoralIntakeManualAuto;
+import frc.robot.constants.FieldConstants.ReefFaceRobotHeading;
+import frc.robot.constants.FieldConstants.ReefFaceTag;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
@@ -38,11 +40,15 @@ public class TwoCoralOneAlgaeLeft extends OrangeSequentialCommandGroup {
         new ReefStatus(
             false,
             false,
-            new Rotation2d(Units.degreesToRadians(-60)),
+            new Rotation2d(
+                Units.degreesToRadians(
+                    Robot.alliance == Alliance.Blue
+                        ? ReefFaceRobotHeading.KL.blue
+                        : ReefFaceRobotHeading.KL.red)),
             ClosestReefPipe.LEFT,
             L1Zone.MIDDLE,
             AlgaeLevel.L2,
-            Robot.alliance == Alliance.Blue ? 19 : 6);
+            Robot.alliance == Alliance.Blue ? ReefFaceTag.KL.idBlue : ReefFaceTag.KL.idRed);
 
     PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
     Pose2d startPoseBlue = path.getStartingHolonomicPose().get();

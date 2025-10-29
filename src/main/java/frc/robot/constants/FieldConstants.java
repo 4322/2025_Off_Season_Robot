@@ -200,6 +200,23 @@ public class FieldConstants {
     public final int idRed;
   }
 
+  public static enum ReefFaceRobotHeading {
+    AB(0, 180),
+    CD(60, -120),
+    EF(120, -60),
+    GH(180, 0),
+    IJ(-120, 60),
+    KL(-60, 120);
+
+    ReefFaceRobotHeading(int blue, int red) {
+      this.blue = blue;
+      this.red = red;
+    }
+
+    public final int blue;
+    public final int red;
+  }
+
   public static final double aprilTagWidth = Units.inchesToMeters(6.50);
   public static final int aprilTagCount = 22;
   public static final AprilTagFieldLayout aprilTagFieldLayout =
