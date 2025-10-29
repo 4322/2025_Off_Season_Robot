@@ -2,6 +2,7 @@ package frc.robot.autonomous.modes;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -18,15 +19,22 @@ import frc.robot.util.OrangeSequentialCommandGroup;
 public class OneCoralTwoAlgaeCenter extends OrangeSequentialCommandGroup {
 
   public OneCoralTwoAlgaeCenter(Drive drive, Superstructure superstructure) {
+
+    PathPlannerPath path = Robot.CenterStartToGulf;
+    Pose2d startPoseBlue = path.getStartingHolonomicPose().get();
+    path = path.flipPath();
+    Pose2d startPoseRed = path.getStartingHolonomicPose().get();
+
+    setName("ONE_CORAL_TWO_ALGAE_CENTER");
     addCommands(
         new InstantCommand(
             () -> {
               superstructure.requestOperationMode(Superstructure.OperationMode.TeleAUTO);
-              PathPlannerPath path = Robot.CenterStartToGulf;
-              if (Robot.alliance == Alliance.Red) {
-                path = path.flipPath();
+              if (Robot.alliance == Alliance.Blue) {
+                drive.resetPose(startPoseBlue);
+              } else {
+                drive.resetPose(startPoseRed);
               }
-              drive.resetPose(path.getStartingHolonomicPose().get());
             }),
         new ScoreCoral(superstructure, Level.L4, drive, true),
         new DescoreAlgae(superstructure, drive),
@@ -37,7 +45,7 @@ public class OneCoralTwoAlgaeCenter extends OrangeSequentialCommandGroup {
         AutoBuilder.followPath(Robot.RightAlgaeScoreToIJ),
         new DescoreAlgae(superstructure, drive),
         new ParallelCommandGroup(
-            AutoBuilder.followPath(Robot.IJ_ToCenterBarge),
+            AutoBuilder.followPath(Robot.IJ_ToCenterAlgaeScore),
             new AlgaePrescoreAuto(superstructure, drive)),
         new AlgaeScoreAuto(superstructure, drive),
         AutoBuilder.followPath(Robot.CenterAlgaeScoreToLeave));

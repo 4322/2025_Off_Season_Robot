@@ -44,7 +44,7 @@ public class TwoCoralOneAlgaeLeft extends OrangeSequentialCommandGroup {
         AutoBuilder.followPath(Robot.JulietToIndiaJuliet),
         new DescoreAlgae(superstructure, drive),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.ALGAE_IDLE),
-        AutoBuilder.followPath(Robot.IndiaJulietToLeftBarge),
+        AutoBuilder.followPath(Robot.IJ_ToCenterAlgaeScore),
         new AlgaePrescoreAuto(superstructure, drive),
         new WaitUntilCommand(
             () -> superstructure.armAtSetpoint() && superstructure.elevatorAtSetpoint()),

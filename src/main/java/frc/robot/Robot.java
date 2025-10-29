@@ -75,15 +75,13 @@ public class Robot extends LoggedRobot {
   public static PathPlannerPath CenterAlgaeScoreToLeave;
 
   public static PathPlannerPath JulietToIndiaJuliet;
-  public static PathPlannerPath IndiaJulietToLeftBarge;
   public static PathPlannerPath LeftBargeToLeftAlgaeScore;
   public static PathPlannerPath LeftAlgaeScoreToFeed;
 
   public static PathPlannerPath RightAlgaeScoreToIJ;
   public static PathPlannerPath CenterAlgaeScoreBackwardsToLeave;
   public static PathPlannerPath GH_ToRightAlgaeScore;
-  public static PathPlannerPath IJ_ToCenterBarge;
-  public static PathPlannerPath IndiaJulietToLeftBargeBackwards;
+  public static PathPlannerPath IJ_ToCenterAlgaeScore;
   public static PathPlannerPath KiloLimaToLeftBargeBackwards;
   public static PathPlannerPath LeftAlgaeScoreBackwardsToKiloLima;
   public static PathPlannerPath LeftAlgaeScoreBackwardsToLeave;
@@ -242,7 +240,6 @@ public class Robot extends LoggedRobot {
       FeedToCharlie = PathPlannerPath.fromPathFile("Feed to Lima").mirrorPath();
 
       JulietToIndiaJuliet = PathPlannerPath.fromPathFile("Juliet to India-Juliet");
-      IndiaJulietToLeftBarge = PathPlannerPath.fromPathFile("India-Juliet to Left Barge");
       LeftBargeToLeftAlgaeScore = PathPlannerPath.fromPathFile("Left Barge to Left Algae Score");
       LeftAlgaeScoreToFeed = PathPlannerPath.fromPathFile("Left Algae Score to Feed");
 
@@ -250,9 +247,7 @@ public class Robot extends LoggedRobot {
       CenterAlgaeScoreBackwardsToLeave =
           PathPlannerPath.fromPathFile("Center Algae Score Backwards to Leave");
       GH_ToRightAlgaeScore = PathPlannerPath.fromPathFile("GH to Right Algae Score");
-      IJ_ToCenterBarge = PathPlannerPath.fromPathFile("IJ to Center Barge");
-      IndiaJulietToLeftBargeBackwards =
-          PathPlannerPath.fromPathFile("India-Juliet to Left Barge Backwards");
+      IJ_ToCenterAlgaeScore = PathPlannerPath.fromPathFile("IJ to Center Algae Score");
       KiloLimaToLeftBargeBackwards =
           PathPlannerPath.fromPathFile("Kilo-Lima to Left Barge Backwards");
       LeftAlgaeScoreBackwardsToKiloLima =
