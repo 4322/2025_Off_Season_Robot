@@ -98,7 +98,7 @@ public class VisionObjectDetection extends SubsystemBase {
     for (int i = 0; i < visibleObjectsRotations.length; i++) {
       objectsPositionsOnField[i] = calculateObjectPositionFromRotation(visibleObjectsRotations[i]);
       Logger.recordOutput(
-          "ObjectDetectionCamera/Visible" + targetGamePiece.name(),
+          "VisionObjectDetection/Visible" + targetGamePiece.name(),
           new Pose2d(objectsPositionsOnField[i], new Rotation2d()));
     }
 
