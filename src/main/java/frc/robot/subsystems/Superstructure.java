@@ -1,19 +1,16 @@
 package frc.robot.subsystems;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
-import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.util.ReefStatus;
 import org.littletonrobotics.junction.Logger;
 
@@ -78,9 +75,7 @@ public class Superstructure extends SubsystemBase {
   private EndEffector endEffector;
   private Arm arm;
   private Elevator elevator;
-  private Drive drive;
   private Vision vision;
-  private VisionObjectDetection visionObjectDetection;
   private IntakeSuperstructure intakeSuperstructure;
 
   // Add this variable to track the previous state of the home button
@@ -525,9 +520,5 @@ public class Superstructure extends SubsystemBase {
 
   public void enableSingleTag(int tagID, SingleTagCamera cameraToUse) {
     vision.enableSingleTagSingleCam(tagID, cameraToUse);
-  }
-
-  public Pose2d getRobotPoseEstimate() {
-    return drive.getPose();
   }
 }
