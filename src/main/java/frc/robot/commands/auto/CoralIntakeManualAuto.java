@@ -24,7 +24,7 @@ public class CoralIntakeManualAuto extends Command {
 
   @Override
   public boolean isFinished() {
-    return (intakeSuperstructure.isCoralDetectedIndexer() && isAutoEnd)
+    return (intakeSuperstructure.isCoralDetectedPickupArea() && isAutoEnd)
         || !DriverStation.isAutonomousEnabled();
   }
 

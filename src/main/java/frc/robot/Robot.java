@@ -53,16 +53,13 @@ public class Robot extends LoggedRobot {
   public static PathPlannerPath ThreeCoralStartToJuliet;
   public static PathPlannerPath JulietToFeed;
   public static PathPlannerPath KiloToFeed;
-  public static PathPlannerPath FeedToLima;
 
   // Mirrors of the above
   public static PathPlannerPath ThreeCoralStartToEcho;
   public static PathPlannerPath EchoToFeed;
-  public static PathPlannerPath FeedToDelta;
   public static PathPlannerPath DeltaToFeed;
-  public static PathPlannerPath FeedToCharlie;
 
-  // Non mirrored paths
+  // Non-mirrored paths
   public static PathPlannerPath Leave;
   public static PathPlannerPath TestLeave;
 
@@ -228,14 +225,11 @@ public class Robot extends LoggedRobot {
           PathPlannerPath.fromPathFile("Three Coral Start Push to Juliet");
       JulietToFeed = PathPlannerPath.fromPathFile("Juliet to Feed");
       KiloToFeed = PathPlannerPath.fromPathFile("Kilo to Feed");
-      FeedToLima = PathPlannerPath.fromPathFile("Feed to Lima");
 
       ThreeCoralStartToEcho =
           PathPlannerPath.fromPathFile("Three Coral Start to Juliet").mirrorPath();
       EchoToFeed = PathPlannerPath.fromPathFile("Juliet to Feed").mirrorPath();
-      FeedToDelta = PathPlannerPath.fromPathFile("Feed to Kilo").mirrorPath();
       DeltaToFeed = PathPlannerPath.fromPathFile("Kilo to Feed").mirrorPath();
-      FeedToCharlie = PathPlannerPath.fromPathFile("Feed to Lima").mirrorPath();
 
       JulietToIndiaJuliet = PathPlannerPath.fromPathFile("Juliet to India-Juliet");
       LeftBargeToLeftAlgaeScore = PathPlannerPath.fromPathFile("Left Barge to Left Algae Score");
