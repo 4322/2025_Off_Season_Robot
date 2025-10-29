@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.719136284722222,
-        "y": 6.1597290943287035
+        "x": 6.4,
+        "y": 4.01
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.986344039351851,
-        "y": 6.368432798032408
+        "x": 6.651329410230052,
+        "y": 4.2270106300964025
       },
       "isLocked": false,
-      "linkedName": "Center Barge Backwards"
+      "linkedName": "Gulf-HotelOut"
     },
     {
       "anchor": {
-        "x": 5.858330801504629,
-        "y": 6.1597290943287035
+        "x": 7.7111584924768515,
+        "y": 5.095305266203703
       },
       "prevControl": {
-        "x": 6.553738064236112,
-        "y": 6.369422743055555
+        "x": 7.163007560099341,
+        "y": 5.07826088053577
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "India-JulietOut"
+      "linkedName": "Center Barge Backwards"
     }
   ],
   "rotationTargets": [],
@@ -41,8 +41,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": -119.99999999999999
+    "velocity": 0,
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
