@@ -362,8 +362,8 @@ public class RobotContainer {
 
     driver
         .leftTrigger()
-        .onTrue(
-            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection, superstructure)
+        .whileTrue(
+            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
                 .onlyIf(
                     () ->
                         intakeSuperstructure.getIntakeSuperstate()

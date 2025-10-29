@@ -6,22 +6,18 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSuperstructure;
-import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants.GamePieceType;
 import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class CoralIntake extends Command {
 
   private IntakeSuperstructure intakeSuperstructure;
   private Drive drive;
   private VisionObjectDetection visionObjectDetection;
-  private Superstructure superstructure;
   private Translation2d coralPosition;
-  private Pose2d driveToPoseTarget;
-  private Pose2d coralPose2d;
+  private Pose2d driveToPoseTarget = Pose2d.kZero;
   private DriveToPose driveToPose;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
   private Rotation2d targetAngle;
@@ -29,12 +25,13 @@ public class CoralIntake extends Command {
   public CoralIntake(
       IntakeSuperstructure intakeSuperstructure,
       Drive drive,
-      VisionObjectDetection visionObjectDetection,
-      Superstructure superstructure) {
+      VisionObjectDetection visionObjectDetection) {
     this.intakeSuperstructure = intakeSuperstructure;
     this.drive = drive;
     this.visionObjectDetection = visionObjectDetection;
     driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
+
+    addRequirements(intakeSuperstructure);
   }
 
   @Override
@@ -45,43 +42,29 @@ public class CoralIntake extends Command {
 
   @Override
   public void execute() {
-    driveToPoseTarget = currentPoseRequest.get();
-    Logger.recordOutput("CoralIntakeCommand/coralPositionExists", coralPosition != null);
-    Logger.recordOutput("CoralIntakeCommand/driveToPoseExists", driveToPose != null);
-    Logger.recordOutput("CoralIntakeCommand/atGoal", driveToPose != null && driveToPose.atGoal());
-    if (coralPosition != null) {
-      Logger.recordOutput("CoralIntakeCommand/coralPosition", coralPosition);
-    }
-    if (driveToPoseTarget != null) {
-      Logger.recordOutput("CoralIntakeCommand/driveToPoseTarget", driveToPoseTarget);
-    }
-
     if (coralPosition != null && !driveToPose.isScheduled()) {
       if (Constants.VisionObjectDetection.enableAutoAlign) {
         targetAngle =
-            visionObjectDetection
-                .calculateDistanceFromTrackedCoral()
+            coralPosition
+                .minus(drive.getPose().getTranslation())
                 .getAngle()
-                .plus(Rotation2d.k180deg)
-                .unaryMinus();
-        coralPose2d = new Pose2d(coralPosition, targetAngle);
+                .plus(Rotation2d.k180deg);
+        driveToPoseTarget = new Pose2d(coralPosition, targetAngle);
       } else {
-        coralPose2d = new Pose2d(coralPosition, new Rotation2d());
+        driveToPoseTarget = new Pose2d(coralPosition, drive.getRotation());
       }
-      driveToPoseTarget = coralPose2d;
 
       currentPoseRequest = () -> driveToPoseTarget;
       driveToPose.schedule();
 
-    } else {
+    } else if (coralPosition == null) {
       coralPosition = visionObjectDetection.calculateBestObjectPositionOnField(GamePieceType.CORAL);
     }
   }
 
   @Override
   public boolean isFinished() {
-    return (driveToPose != null && driveToPose.atGoal())
-        || intakeSuperstructure.isCoralDetectedIndexer();
+    return intakeSuperstructure.isCoralDetectedIndexer();
   }
 
   @Override

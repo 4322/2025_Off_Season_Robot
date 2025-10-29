@@ -7,16 +7,11 @@ package frc.robot.subsystems.vision.objectDetection;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
-// import frc.trigon.robot.commands.commandfactories.CoralCollectionCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants;
 import java.util.ArrayList;
 import org.littletonrobotics.junction.Logger;
 
-/**
- * An object detection camera is a class that represents a camera that detects objects other than
- * apriltags, most likely game pieces.
- */
 public class VisionObjectDetection extends SubsystemBase {
   private final VisionObjectDetectionInputsAutoLogged visionObjectDetectionInputs =
       new VisionObjectDetectionInputsAutoLogged();
@@ -24,6 +19,7 @@ public class VisionObjectDetection extends SubsystemBase {
   private final String hostname;
   private final Transform3d robotCenterToCamera;
   private Drive drive;
+  private Translation2d bestCoralPosition;
 
   public VisionObjectDetection(
       String hostname,
@@ -40,22 +36,17 @@ public class VisionObjectDetection extends SubsystemBase {
   public void periodic() {
     visionObjectDetectionIO.updateInputs(visionObjectDetectionInputs);
     Logger.processInputs(hostname, visionObjectDetectionInputs);
-    Logger.recordOutput("VisionObjectDetection/working", true);
-    if (calculateBestObjectPositionOnField(SimulatedGamePieceConstants.GamePieceType.CORAL)
-        != null) {
 
-      Logger.recordOutput(
-          "VisionObjectDetection/calculateBestCoralPositionOnField",
-          new Pose2d(
-              calculateBestObjectPositionOnField(SimulatedGamePieceConstants.GamePieceType.CORAL),
-              new Rotation2d()));
+    if (Constants.enableObjectDetectionDebug) {
+      bestCoralPosition =
+          calculateBestObjectPositionOnField(SimulatedGamePieceConstants.GamePieceType.CORAL);
+
+      if (bestCoralPosition != null) {
+        Logger.recordOutput(
+            "VisionObjectDetection/bestCoralFieldPos",
+            new Pose2d(bestCoralPosition, new Rotation2d()));
+      }
     }
-    Logger.recordOutput(
-        "VisionObjectDetection/hasCoral",
-        hasTargets(SimulatedGamePieceConstants.GamePieceType.CORAL));
-    Logger.recordOutput(
-        "VisionObjectDetection/hasAlgae",
-        hasTargets(SimulatedGamePieceConstants.GamePieceType.ALGAE));
   }
 
   /**
@@ -70,9 +61,10 @@ public class VisionObjectDetection extends SubsystemBase {
       SimulatedGamePieceConstants.GamePieceType targetGamePiece) {
     final Translation2d[] targetObjectsTranslation = getObjectPositionsOnField(targetGamePiece);
     final Translation2d currentRobotTranslation = drive.getPose().getTranslation();
-    if (targetObjectsTranslation.length == 0) return null;
-    Translation2d bestObjectTranslation = targetObjectsTranslation[0];
 
+    if (targetObjectsTranslation.length == 0) return null;
+
+    Translation2d bestObjectTranslation = targetObjectsTranslation[0];
     for (int i = 1; i < targetObjectsTranslation.length; i++) {
       final Translation2d currentObjectTranslation = targetObjectsTranslation[i];
       final double bestObjectDifference =
@@ -154,18 +146,5 @@ public class VisionObjectDetection extends SubsystemBase {
       if (difference < Constants.VisionObjectDetection.lollipopTolerance.getDegrees()) return true;
     }
     return false;
-  }
-
-  public Translation2d calculateDistanceFromTrackedCoral() {
-    Pose2d robotPose = drive.getPose();
-    final Translation2d trackedObjectPositionOnField =
-        calculateBestObjectPositionOnField(SimulatedGamePieceConstants.GamePieceType.CORAL);
-    if (trackedObjectPositionOnField == null) return null;
-
-    final Translation2d difference = robotPose.getTranslation().minus(trackedObjectPositionOnField);
-    final Translation2d robotToTrackedCoralDistance =
-        difference.rotateBy(robotPose.getRotation().unaryMinus());
-    Logger.recordOutput("VisionObjectDetection/TrackedCoralDistance", robotToTrackedCoralDistance);
-    return robotToTrackedCoralDistance;
   }
 }
