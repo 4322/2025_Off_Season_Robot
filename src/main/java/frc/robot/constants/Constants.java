@@ -38,7 +38,7 @@ public final class Constants {
   public static final boolean enableDriveToPoseTuning = false;
   public static final boolean debugPIDModeEnabled = false;
   public static final RobotMode currentMode = RobotBase.isReal() ? RobotMode.REAL : RobotMode.SIM;
-  public static final boolean wantDriveTestAutos = true;
+  public static final boolean wantDriveTestAutos = false;
 
   public static final String logPath = "/home/lvuser/logs";
   public static final long minFreeSpace = 1000000000; // 1 GB
