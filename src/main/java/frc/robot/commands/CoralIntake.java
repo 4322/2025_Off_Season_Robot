@@ -46,7 +46,7 @@ public class CoralIntake extends Command {
   @Override
   public void execute() {
     driveToPoseTarget = currentPoseRequest.get();
-    Logger.recordOutput("CoralIntakeCommand/coralPostionExists", coralPosition != null);
+    Logger.recordOutput("CoralIntakeCommand/coralPositionExists", coralPosition != null);
     Logger.recordOutput("CoralIntakeCommand/driveToPoseExists", driveToPose != null);
     Logger.recordOutput("CoralIntakeCommand/atGoal", driveToPose != null && driveToPose.atGoal());
     if (coralPosition != null) {

@@ -48,7 +48,7 @@ public final class Constants {
   public static final int dioHomeButton = 1;
   public static final int dioCoastButton = 0;
   public static final double homeButtonDelaySec = 2.0;
-  public static final boolean visionObjectDetectionEnabled = false;
+  public static final boolean visionObjectDetectionEnabled = true;
   public static final double coastButtonDelaySec = 10.0;
 
   public static final double brownoutVoltage = 5.75;

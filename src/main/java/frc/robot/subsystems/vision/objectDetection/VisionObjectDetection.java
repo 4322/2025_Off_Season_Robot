@@ -40,6 +40,7 @@ public class VisionObjectDetection extends SubsystemBase {
   public void periodic() {
     visionObjectDetectionIO.updateInputs(visionObjectDetectionInputs);
     Logger.processInputs(hostname, visionObjectDetectionInputs);
+    Logger.recordOutput("VisionObjectDetection/working", true);
     Logger.recordOutput(
         "VisionObjectDetection/calculateBestCoralPositionOnField",
         calculateBestObjectPositionOnField(SimulatedGamePieceConstants.GamePieceType.CORAL));
