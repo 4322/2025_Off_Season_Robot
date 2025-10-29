@@ -216,10 +216,10 @@ public class RobotContainer {
         && intakeSuperstructure.getIntakeSuperstate()
             == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
         && !DriverStation.isFMSAttached()) {
-      driver.setRumble(GenericHID.RumbleType.kBothRumble, 10.0);
+      driver.setRumble(GenericHID.RumbleType.kBothRumble, 0);
       batteryLowStopTimer.start();
       if (batteryLowStopTimer.hasElapsed(5)) {
-        driver.setRumble(GenericHID.RumbleType.kBothRumble, 20.0);
+        driver.setRumble(GenericHID.RumbleType.kBothRumble, 0);
         batteryLowStopTimer.stop();
         batteryLowStopTimer.reset();
         DriverStation.reportError(
