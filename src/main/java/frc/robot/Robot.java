@@ -53,7 +53,6 @@ public class Robot extends LoggedRobot {
   public static PathPlannerPath ThreeCoralStartToJuliet;
   public static PathPlannerPath JulietToFeed;
   public static PathPlannerPath KiloToFeed;
-  public static PathPlannerPath FeedToKilo;
   public static PathPlannerPath FeedToLima;
 
   // Mirrors of the above
@@ -228,7 +227,6 @@ public class Robot extends LoggedRobot {
       ThreeCoralStartPushToJuliet =
           PathPlannerPath.fromPathFile("Three Coral Start Push to Juliet");
       JulietToFeed = PathPlannerPath.fromPathFile("Juliet to Feed");
-      FeedToKilo = PathPlannerPath.fromPathFile("Feed to Kilo");
       KiloToFeed = PathPlannerPath.fromPathFile("Kilo to Feed");
       FeedToLima = PathPlannerPath.fromPathFile("Feed to Lima");
 
