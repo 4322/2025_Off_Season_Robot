@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.992000000000001,
-        "y": 5.234
+        "x": 4.992,
+        "y": 5.72
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.49475,
-        "y": 5.858
+        "x": 4.494755067489165,
+        "y": 6.344004038121786
       },
       "isLocked": false,
-      "linkedName": "JulietIn"
+      "linkedName": null
     },
     {
       "anchor": {
