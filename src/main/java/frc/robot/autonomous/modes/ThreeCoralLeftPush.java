@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
 import frc.robot.commands.ScoreCoral;
-import frc.robot.commands.auto.CoralIntakeManualAuto;
 import frc.robot.constants.FieldConstants.ReefFaceRobotHeading;
 import frc.robot.constants.FieldConstants.ReefFaceTag;
 import frc.robot.subsystems.IntakeSuperstructure;
@@ -103,7 +102,7 @@ public class ThreeCoralLeftPush extends OrangeSequentialCommandGroup {
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
-            new CoralIntakeManualAuto(intakeSuperstructure, true),
+            //new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.KiloToFeed)),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3));
   }

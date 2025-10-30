@@ -97,9 +97,6 @@ public class CoralIntake extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    if (!DriverStation.isAutonomous()) {
-      intakeSuperstructure.requestRetractIdle();
-    }
 
     driveToPose.cancel();
     drive.requestFieldRelativeMode();

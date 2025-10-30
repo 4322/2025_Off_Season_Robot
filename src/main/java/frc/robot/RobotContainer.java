@@ -16,6 +16,7 @@ import frc.robot.autonomous.AutonomousSelector;
 import frc.robot.commands.AlgaeIntakeGround;
 import frc.robot.commands.AlgaeScoreCommand;
 import frc.robot.commands.CoralIntake;
+import frc.robot.commands.CoralIntakeManual;
 import frc.robot.commands.DescoreAlgae;
 import frc.robot.commands.DriveManual;
 import frc.robot.commands.DriveToPose;
@@ -364,11 +365,20 @@ public class RobotContainer {
     driver
         .leftTrigger()
         .whileTrue(
-            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
+            new CoralIntakeManual(intakeSuperstructure, false)
                 .onlyIf(
                     () ->
                         intakeSuperstructure.getIntakeSuperstate()
                             != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
+
+    driver.povLeft().whileTrue(
+      new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
+          .onlyIf(
+              () ->
+                  intakeSuperstructure.getIntakeSuperstate()
+                      != IntakeSuperstructure.IntakeSuperstates.HOMELESS)
+
+    );
 
     if (Constants.enableDriveToPoseTuning) {
       driver
