@@ -529,7 +529,10 @@ public final class Constants {
     public static final boolean shouldIgnoreLollipopCoral = false;
     public static final Transform3d robotCenterToCamera =
         new Transform3d(
-            -0.2208, -0.23495, 0.98315, new Rotation3d(0, Units.degreesToRadians(40), Units.degreesToRadians(180)));
+            -0.2208,
+            -0.23495,
+            0.98315,
+            new Rotation3d(0, Units.degreesToRadians(40), Units.degreesToRadians(180)));
 
     public static enum CoralIntakeMode {
       MANUAL,
