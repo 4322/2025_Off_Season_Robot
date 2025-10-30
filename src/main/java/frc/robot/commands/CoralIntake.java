@@ -51,7 +51,6 @@ public class CoralIntake extends Command {
             coralPosition
                 .minus(drive.getPose().getTranslation())
                 .getAngle()
-                .plus(drive.getPose().getRotation())
                 .plus(Rotation2d.k180deg);
         targetAngle =
             new Rotation2d(
