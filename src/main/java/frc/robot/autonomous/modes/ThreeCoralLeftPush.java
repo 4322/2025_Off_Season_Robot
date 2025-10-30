@@ -8,31 +8,31 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
-import frc.robot.commands.CoralIntake;
 import frc.robot.commands.ScoreCoral;
+import frc.robot.commands.auto.CoralIntakeManualAuto;
 import frc.robot.constants.FieldConstants.ReefFaceRobotHeading;
 import frc.robot.constants.FieldConstants.ReefFaceTag;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
+import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.util.OrangeSequentialCommandGroup;
 import frc.robot.util.ReefStatus;
 import frc.robot.util.ReefStatus.AlgaeLevel;
 import frc.robot.util.ReefStatus.ClosestReefPipe;
 import frc.robot.util.ReefStatus.L1Zone;
 
-public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
-  public ThreeCoralLeft(
+public class ThreeCoralLeftPush extends OrangeSequentialCommandGroup {
+  public ThreeCoralLeftPush(
       Drive drive,
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,
-      Vision vision,
-      VisionObjectDetection visionObjectDetection) {
+      Vision vision) {
 
     ReefStatus reefCoral1 =
         new ReefStatus(
@@ -76,12 +76,12 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
             AlgaeLevel.L2,
             Robot.alliance == Alliance.Blue ? ReefFaceTag.KL.idBlue : ReefFaceTag.KL.idRed);
 
-    PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
+    PathPlannerPath path = Robot.ThreeCoralStartPushToJuliet;
     Pose2d startPoseBlue = path.getStartingHolonomicPose().get();
     path = path.flipPath();
     Pose2d startPoseRed = path.getStartingHolonomicPose().get();
 
-    setName("THREE_CORAL_LEFT");
+    setName("THREE_CORAL_LEFT_PUSH");
     addCommands(
         new InstantCommand(
             () -> {
@@ -92,6 +92,7 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
                 drive.resetPose(startPoseRed);
               }
             }),
+        AutoBuilder.followPath(Robot.ThreeCoralStartPushToJuliet),
         new ParallelCommandGroup(
             new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1),
             AutoBuilder.followPath(Robot.JulietToFeed1)
@@ -99,11 +100,11 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
                     () ->
                         superstructure.getEndEffectorState()
                             == EndEffectorStates.RELEASE_CORAL_NORMAL)),
-        new ParallelCommandGroup(
-            AutoBuilder.followPath(Robot.JulietToFeed2),
-            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
-        new CoralIntake(intakeSuperstructure, drive, visionObjectDetection),
+        new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
+        new ParallelCommandGroup(
+            new CoralIntakeManualAuto(intakeSuperstructure, true),
+            AutoBuilder.followPath(Robot.KiloToFeed)),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3));
   }
 }

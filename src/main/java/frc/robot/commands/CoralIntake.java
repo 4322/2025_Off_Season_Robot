@@ -24,17 +24,14 @@ public class CoralIntake extends Command {
   private DriveToPose driveToPose;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
   private Rotation2d targetAngle;
-  private boolean autoRetract;
 
   public CoralIntake(
       IntakeSuperstructure intakeSuperstructure,
       Drive drive,
-      VisionObjectDetection visionObjectDetection,
-      boolean autoRetract) {
+      VisionObjectDetection visionObjectDetection) {
     this.intakeSuperstructure = intakeSuperstructure;
     this.drive = drive;
     this.visionObjectDetection = visionObjectDetection;
-    this.autoRetract = autoRetract;
     driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get(), false);
 
     addRequirements(intakeSuperstructure);
@@ -100,7 +97,7 @@ public class CoralIntake extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    if (autoRetract) {
+    if (!DriverStation.isAutonomous()) {
       intakeSuperstructure.requestRetractIdle();
     }
 

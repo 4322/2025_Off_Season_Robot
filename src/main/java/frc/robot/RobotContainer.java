@@ -361,32 +361,15 @@ public class RobotContainer {
             new EmergencyInitilization(
                 superstructure, intakeSuperstructure, arm, elevator, deployer, drive));
 
-    if (intakeSuperstructure.getState() == IntakeSuperstates.RETRACT_IDLE) {
-      driver
-          .leftTrigger()
-          .whileTrue(
-              new CoralIntake(intakeSuperstructure, drive, visionObjectDetection, true)
-                  .onlyIf(
-                      () ->
-                          intakeSuperstructure.getIntakeSuperstate()
-                              != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
-    } else {
-      driver
-          .leftTrigger()
-          .onTrue(
-              new InstantCommand(
-                  () -> {
-                    intakeSuperstructure.requestRetractIdle();
-                  }));
-    }
     driver
-        .povLeft()
+        .leftTrigger()
         .whileTrue(
-            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection, false)
+            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
                 .onlyIf(
                     () ->
                         intakeSuperstructure.getIntakeSuperstate()
-                            == IntakeSuperstructure.IntakeSuperstates.HOMELESS));
+                            != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
+
     if (Constants.enableDriveToPoseTuning) {
       driver
           .povRight()
