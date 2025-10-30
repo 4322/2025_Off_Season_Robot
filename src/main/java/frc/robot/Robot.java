@@ -1,10 +1,22 @@
 package frc.robot;
 
-import static frc.robot.RobotContainer.driver;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.Optional;
+
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.reduxrobotics.canand.MessageLogger;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -14,21 +26,11 @@ import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.RobotMode;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Optional;
-import org.littletonrobotics.junction.LogFileUtil;
-import org.littletonrobotics.junction.LoggedRobot;
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
-import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -283,7 +285,7 @@ public class Robot extends LoggedRobot {
                     == Superstructure.Superstates.CORAL_HELD)
                 && RobotContainer.getIntakeSuperstructure().getIntakeSuperstate()
                     == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
-                && !DriverStation.isFMSAttached())) {
+                && !DriverStation.isFMSAttached()) && Constants.buzz) {
       driver.setRumble(GenericHID.RumbleType.kBothRumble, 0);
       batteryLowStopTimer.start();
       if (batteryLowStopTimer.hasElapsed(5)) {
