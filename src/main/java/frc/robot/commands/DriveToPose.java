@@ -210,7 +210,7 @@ public class DriveToPose extends Command {
     // Calculate drive speed
     double currentDistance =
         currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation());
-    if (currentDistance <= pathDistance / 2) {
+    if (currentDistance <= Math.min(pathDistance / 2, 0.75)) {
       // use deceleration after path mid-point
       driveController.setConstraints(
           new TrapezoidProfile.Constraints(
