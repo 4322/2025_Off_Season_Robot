@@ -380,7 +380,7 @@ public class RobotContainer {
                       vision.enableSingleTagSingleCam(
                           FieldConstants.ReefFaceTag.AB.idRed, SingleTagCamera.LEFT);
                     }
-                    drivetopose = new DriveToPose(drive, new Pose2d(scoringPos, rotation));
+                    drivetopose = new DriveToPose(drive, new Pose2d(scoringPos, rotation), false);
                     drivetopose.schedule();
                   }));
 

@@ -26,6 +26,7 @@ public class DriveToPose extends Command {
   private final Drive drive;
   private final boolean slowMode;
   private final Supplier<Pose2d> poseSupplier;
+  private final boolean highMode;
 
   private boolean running = false;
   private final ProfiledPIDController driveController =
@@ -52,6 +53,8 @@ public class DriveToPose extends Command {
       new LoggedTunableNumber("DriveToPose/DriveMaxAcceleration");
   private static final LoggedTunableNumber driveMaxDeceleration =
       new LoggedTunableNumber("DriveToPose/driveMaxDeceleration");
+  private static final LoggedTunableNumber driveMaxDecelerationHigh =
+      new LoggedTunableNumber("DriveToPose/driveMaxDecelerationL4");
   private static final LoggedTunableNumber thetaMaxVelocity =
       new LoggedTunableNumber("DriveToPose/ThetaMaxVelocity");
   private static final LoggedTunableNumber thetaMaxVelocitySlow =
@@ -81,6 +84,7 @@ public class DriveToPose extends Command {
     driveMaxVelocitySlow.initDefault(Constants.AutoScoring.driveMaxVelocitySlow);
     driveMaxAcceleration.initDefault(Constants.AutoScoring.driveMaxAcceleration);
     driveMaxDeceleration.initDefault(Constants.AutoScoring.driveMaxDeceleration);
+    driveMaxDecelerationHigh.initDefault(Constants.AutoScoring.driveMaxDecelerationHigh);
 
     thetaMaxVelocity.initDefault(Constants.AutoScoring.thetaMaxVelocity);
     thetaMaxVelocitySlow.initDefault(Constants.AutoScoring.thetaMaxVelocitySlow);
@@ -97,25 +101,27 @@ public class DriveToPose extends Command {
   }
 
   /** Drives to the specified pose under full software control. */
-  public DriveToPose(Drive drive, Pose2d pose) {
-    this(drive, false, pose);
+  public DriveToPose(Drive drive, Pose2d pose, boolean highMode) {
+    this(drive, false, pose, highMode);
   }
 
   /** Drives to the specified pose under full software control. */
-  public DriveToPose(Drive drive, boolean slowMode, Pose2d pose) {
-    this(drive, slowMode, () -> pose);
+  public DriveToPose(Drive drive, boolean slowMode, Pose2d pose, boolean highMode) {
+    this(drive, slowMode, () -> pose, highMode);
   }
 
   /** Drives to the specified pose under full software control. */
-  public DriveToPose(Drive drive, Supplier<Pose2d> poseSupplier) {
-    this(drive, false, poseSupplier);
+  public DriveToPose(Drive drive, Supplier<Pose2d> poseSupplier, boolean highMode) {
+    this(drive, false, poseSupplier, highMode);
   }
 
   /** Drives to the specified pose under full software control. */
-  public DriveToPose(Drive drive, boolean slowMode, Supplier<Pose2d> poseSupplier) {
+  public DriveToPose(
+      Drive drive, boolean slowMode, Supplier<Pose2d> poseSupplier, boolean highMode) {
     this.drive = drive;
     this.slowMode = slowMode;
     this.poseSupplier = poseSupplier;
+    this.highMode = highMode;
     addRequirements(drive);
     thetaController.enableContinuousInput(-180, 180);
   }
@@ -148,7 +154,6 @@ public class DriveToPose extends Command {
             slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
             driveMaxAcceleration.get()));
     lastTargetPose = poseSupplier.get();
-    Logger.recordOutput("DriveToPose/ProfileAcc", driveMaxAcceleration.get());
   }
 
   @Override
@@ -160,6 +165,7 @@ public class DriveToPose extends Command {
         || driveMaxVelocitySlow.hasChanged(hashCode())
         || driveMaxAcceleration.hasChanged(hashCode())
         || driveMaxDeceleration.hasChanged(hashCode())
+        || driveMaxDecelerationHigh.hasChanged(hashCode())
         || driveTolerance.hasChanged(hashCode())
         || driveToleranceSlow.hasChanged(hashCode())
         || thetaMaxVelocity.hasChanged(hashCode())
@@ -185,7 +191,6 @@ public class DriveToPose extends Command {
               slowMode ? thetaMaxVelocitySlow.get() : thetaMaxVelocity.get(),
               thetaMaxAcceleration.get()));
       thetaController.setTolerance(slowMode ? thetaToleranceSlow.get() : thetaTolerance.get());
-      Logger.recordOutput("DriveToPose/ProfileAcc", driveMaxAcceleration.get());
     }
 
     // Get current and target pose
@@ -198,9 +203,8 @@ public class DriveToPose extends Command {
       driveController.setConstraints(
           new TrapezoidProfile.Constraints(
               slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
-              driveMaxAcceleration.get()));
+              highMode ? driveMaxDecelerationHigh.get() : driveMaxDeceleration.get()));
       lastTargetPose = targetPose;
-      Logger.recordOutput("DriveToPose/ProfileAcc", driveMaxAcceleration.get());
     }
 
     // Calculate drive speed
@@ -211,8 +215,7 @@ public class DriveToPose extends Command {
       driveController.setConstraints(
           new TrapezoidProfile.Constraints(
               slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
-              driveMaxDeceleration.get()));
-      Logger.recordOutput("DriveToPose/ProfileAcc", driveMaxDeceleration.get());
+              highMode ? driveMaxDecelerationHigh.get() : driveMaxDeceleration.get()));
     }
     double ffScaler =
         MathUtil.clamp(
