@@ -14,6 +14,7 @@ import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.util.OrangeSequentialCommandGroup;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -26,7 +27,8 @@ public class AutonomousSelector {
       Drive drive,
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,
-      Vision vision) {
+      Vision vision,
+      VisionObjectDetection objectDetection) {
     autonomousSelector.addDefaultOption("DO_NOTHING", new DoNothing(superstructure));
     autonomousSelector.addOption("LEAVE", new Leave(drive, superstructure));
     autonomousSelector.addOption(
@@ -35,7 +37,7 @@ public class AutonomousSelector {
         "ONE_CORAL_TWO_ALGAE_LEFT", new OneCoralTwoAlgaeLeft(drive, superstructure));
     autonomousSelector.addOption(
         "THREE_CORAL_LEFT",
-        new ThreeCoralLeft(drive, superstructure, intakeSuperstructure, vision));
+        new ThreeCoralLeft(drive, superstructure, intakeSuperstructure, vision, objectDetection));
     autonomousSelector.addOption(
         "THREE_CORAL_RIGHT",
         new ThreeCoralRight(drive, superstructure, intakeSuperstructure, vision));
