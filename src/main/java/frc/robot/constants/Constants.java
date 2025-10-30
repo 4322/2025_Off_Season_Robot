@@ -173,6 +173,7 @@ public final class Constants {
     public static final double minArmSafeDegAfterScore = 47;
     public static final double minArmSafeWithCoralDeg = 54;
     public static final double maxArmSafeDeg = 245.0;
+    public static final double maxArmDegToLowerElevator = 185.0;
 
     public static final double setpointToleranceDegrees = 0.7;
     public static final double setpointToleranceDegreesEject = 5.0;

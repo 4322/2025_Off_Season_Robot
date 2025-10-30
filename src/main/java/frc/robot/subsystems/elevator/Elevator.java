@@ -60,6 +60,11 @@ public class Elevator extends SubsystemBase {
         case NORMAL:
           double armAngle = RobotContainer.getSuperstructure().getArmAngle();
 
+          if (armAngle > Constants.Arm.maxArmDegToLowerElevator
+              && requestedHeightMeters < prevHeightMeters) {
+            return; // unsafe to lower elevator when arm is on the backside
+          }
+
           if (RobotContainer.getSuperstructure().isCoralHeld()) {
             minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
             minElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralMeters;
