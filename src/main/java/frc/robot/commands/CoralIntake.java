@@ -5,12 +5,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
-import frc.robot.constants.Constants.VisionObjectDetection.CoralIntakeMode;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
+import frc.robot.util.ClockUtil;
 import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants.GamePieceType;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class CoralIntake extends Command {
 
@@ -37,34 +38,51 @@ public class CoralIntake extends Command {
 
   @Override
   public void initialize() {
-    coralPosition = visionObjectDetection.calculateBestObjectPositionOnField(GamePieceType.CORAL);
-    intakeSuperstructure.requestIntake();
+    coralPosition = null;
+    targetAngle = null;
   }
 
   @Override
   public void execute() {
-    if (Constants.VisionObjectDetection.coralIntakeMode != CoralIntakeMode.MANUAL
-        && coralPosition != null
-        && !driveToPose.isScheduled()) {
-      targetAngle =
-          coralPosition.minus(drive.getPose().getTranslation()).getAngle().plus(Rotation2d.k180deg);
-      if (Constants.VisionObjectDetection.coralIntakeMode == CoralIntakeMode.AUTO_ALIGN_DRIVE) {
-
-        driveToPoseTarget = new Pose2d(coralPosition, targetAngle);
-      } else {
-        driveToPoseTarget = new Pose2d(coralPosition, drive.getRotation());
-      }
-
-      currentPoseRequest = () -> driveToPoseTarget;
-
-      if (Constants.VisionObjectDetection.coralIntakeMode != CoralIntakeMode.AUTO_ALIGN) {
-        driveToPose.schedule();
-      } else {
-        drive.requestAutoRotateMode(targetAngle);
-      }
-
-    } else if (coralPosition == null) {
+    if (coralPosition == null) {
       coralPosition = visionObjectDetection.calculateBestObjectPositionOnField(GamePieceType.CORAL);
+      if (coralPosition != null) {
+        targetAngle =
+            coralPosition
+                .minus(drive.getPose().getTranslation())
+                .getAngle()
+                .plus(drive.getPose().getRotation())
+                .plus(Rotation2d.k180deg);
+        targetAngle =
+            new Rotation2d(
+                ClockUtil.inputModulus(targetAngle.getRadians(), -Math.PI, Math.PI, false));
+        intakeSuperstructure.requestIntake();
+        Logger.recordOutput("CoralIntake/coralPosition", coralPosition);
+        Logger.recordOutput(
+            "CoralIntake/coralAngleBotRelativeDeg",
+            coralPosition.minus(drive.getPose().getTranslation()).getAngle().getDegrees());
+        Logger.recordOutput(
+            "CoralIntake/driveHeadingDeg", drive.getPose().getRotation().getDegrees());
+        Logger.recordOutput("CoralIntake/targetAngleDeg", targetAngle.getDegrees());
+
+        switch (Constants.VisionObjectDetection.coralIntakeMode) {
+          case MANUAL:
+            break;
+          case AUTO_ALIGN:
+            drive.requestAutoRotateMode(targetAngle);
+            break;
+          case AUTO_ALIGN_DRIVE:
+            driveToPoseTarget = new Pose2d(coralPosition, targetAngle);
+            currentPoseRequest = () -> driveToPoseTarget;
+            driveToPose.schedule();
+            break;
+          case AUTO_DRIVE:
+            driveToPoseTarget = new Pose2d(coralPosition, drive.getRotation());
+            currentPoseRequest = () -> driveToPoseTarget;
+            driveToPose.schedule();
+            break;
+        }
+      }
     }
   }
 
