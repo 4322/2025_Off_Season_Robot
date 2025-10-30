@@ -533,6 +533,7 @@ public final class Constants {
             -0.23495,
             0.98315,
             new Rotation3d(0, Units.degreesToRadians(40), Units.degreesToRadians(180)));
+    public static final double coralIntakeOffset = Units.inchesToMeters(16); // TODO
 
     public static enum CoralIntakeMode {
       MANUAL,

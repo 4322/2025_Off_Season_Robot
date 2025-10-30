@@ -79,7 +79,7 @@ public class TwoCoralOneAlgaeLeft extends OrangeSequentialCommandGroup {
         new AlgaeScoreAuto(superstructure, drive),
         new WaitUntilCommand(() -> !superstructure.isAlgaeHeld()),
         new ParallelCommandGroup(
-            //new CoralIntakeManualAuto(intakeSuperstructure, drive, vision, false),
+            // new CoralIntakeManualAuto(intakeSuperstructure, drive, vision, false),
             AutoBuilder.followPath(Robot.LeftAlgaeScoreToFeed)),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2));
   }

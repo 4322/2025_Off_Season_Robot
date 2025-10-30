@@ -28,8 +28,8 @@ import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
-import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.IntakeSuperstructure.IntakeSuperstates;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
@@ -361,24 +361,32 @@ public class RobotContainer {
             new EmergencyInitilization(
                 superstructure, intakeSuperstructure, arm, elevator, deployer, drive));
 
-        if (intakeSuperstructure.getState() == IntakeSuperstates.RETRACT_IDLE) {
-                driver
-        .leftTrigger()
+    if (intakeSuperstructure.getState() == IntakeSuperstates.RETRACT_IDLE) {
+      driver
+          .leftTrigger()
+          .whileTrue(
+              new CoralIntake(intakeSuperstructure, drive, visionObjectDetection, true)
+                  .onlyIf(
+                      () ->
+                          intakeSuperstructure.getIntakeSuperstate()
+                              != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
+    } else {
+      driver
+          .leftTrigger()
+          .onTrue(
+              new InstantCommand(
+                  () -> {
+                    intakeSuperstructure.requestRetractIdle();
+                  }));
+    }
+    driver
+        .povLeft()
         .whileTrue(
-            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection, true)
+            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection, false)
                 .onlyIf(
                     () ->
                         intakeSuperstructure.getIntakeSuperstate()
-                            != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
-        } else {
-          driver.leftTrigger().onTrue( new InstantCommand(() -> {
-            intakeSuperstructure.requestRetractIdle();
-          }));
-        }
-    driver.povLeft().whileTrue(
-      new CoralIntake(intakeSuperstructure, drive, visionObjectDetection, false)
-      .onlyIf(() -> intakeSuperstructure.getIntakeSuperstate() == IntakeSuperstructure.IntakeSuperstates.HOMELESS)
-    );
+                            == IntakeSuperstructure.IntakeSuperstates.HOMELESS));
     if (Constants.enableDriveToPoseTuning) {
       driver
           .povRight()

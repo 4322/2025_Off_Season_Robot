@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -71,7 +72,13 @@ public class CoralIntake extends Command {
             drive.requestAutoRotateMode(targetAngle);
             break;
           case AUTO_ALIGN_DRIVE:
-            driveToPoseTarget = new Pose2d(coralPosition, targetAngle);
+            driveToPoseTarget =
+                new Pose2d(coralPosition, targetAngle)
+                    .transformBy(
+                        new Transform2d(
+                            new Translation2d(
+                                -Constants.VisionObjectDetection.coralIntakeOffset, 0),
+                            new Rotation2d()));
             currentPoseRequest = () -> driveToPoseTarget;
             driveToPose.schedule();
             break;
