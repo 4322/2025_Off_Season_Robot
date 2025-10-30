@@ -78,16 +78,16 @@ public class ThreeCoralLeftPush extends OrangeSequentialCommandGroup {
               }
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartPushToJuliet),
-        new ScoreCoral(superstructure, Level.L4, drive, false),
+        new ScoreCoral(superstructure, Level.L4, drive, false, false),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.JulietToFeed)),
-        new ScoreCoral(superstructure, Level.L4, drive, false, reefCoral2),
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
             new CoralIntakeManualAuto(intakeSuperstructure, true),
             AutoBuilder.followPath(Robot.KiloToFeed)),
-        new ScoreCoral(superstructure, Level.L4, drive, false, reefCoral3));
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3));
   }
 }

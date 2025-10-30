@@ -46,6 +46,7 @@ public class ScoreCoral extends Command {
   private Pose2d safeDistPose = new Pose2d();
   private Pose2d driveBackPose = new Pose2d();
   private boolean forceReef;
+  private boolean noDriveBackAuto;
 
   private boolean chainedAlgaeMode;
 
@@ -64,8 +65,9 @@ public class ScoreCoral extends Command {
       Superstructure.Level level,
       Drive drive,
       boolean chainedAlgaeMode,
+      boolean noDriveBack,
       ReefStatus reefStatus) {
-    this(superstructure, level, drive, chainedAlgaeMode);
+    this(superstructure, level, drive, chainedAlgaeMode, noDriveBack);
     this.reefStatus = reefStatus;
     forceReef = true;
   }
@@ -74,11 +76,13 @@ public class ScoreCoral extends Command {
       Superstructure superstructure,
       Superstructure.Level level,
       Drive drive,
-      boolean chainedAlgaeMode) {
+      boolean chainedAlgaeMode,
+      boolean noDriveBack) {
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
     this.chainedAlgaeMode = chainedAlgaeMode;
+    this.noDriveBackAuto = noDriveBack;
     driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get(), level == Level.L4);
     addRequirements(superstructure);
   }
@@ -304,7 +308,7 @@ public class ScoreCoral extends Command {
           }
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (isInSafeArea() || driveToPose.atGoal()) {
+          } else if (isInPrescoreArea() || driveToPose.atGoal()) {
 
             superstructure.requestPrescoreCoral(level);
             if (superstructure.getState() == Superstates.PRESCORE_CORAL
@@ -346,7 +350,11 @@ public class ScoreCoral extends Command {
 
             } else if (level != Level.L1
                 && superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL) {
-              currentPoseRequest = () -> driveBackPose;
+              if (noDriveBackAuto) {
+                driveToPose.cancel();
+              } else {
+                currentPoseRequest = () -> driveBackPose;
+              }
               state = ScoreState.DRIVEBACK;
             }
           } else if (level == Level.L4) {
@@ -356,7 +364,7 @@ public class ScoreCoral extends Command {
 
           break;
         case DRIVEBACK:
-          if (driveToPose.atGoal() || isInSafeArea()) {
+          if ((!noDriveBackAuto && driveToPose.atGoal()) || isInSafeArea()) {
             running = false;
           }
           // Only don't do drive back if robot is stuck against other robot while driving back
@@ -437,7 +445,7 @@ public class ScoreCoral extends Command {
                   robotReefAngle.rotateBy(Rotation2d.k180deg).unaryMinus());
       return (convertedRobotTrans.getX()
               - FieldConstants.KeypointPoses.leftReefBranchFaceRed.getX())
-          > FieldConstants.KeypointPoses.reefSafeDistance;
+          >= FieldConstants.KeypointPoses.reefSafeDistance;
     } else {
       convertedRobotTrans =
           drive
@@ -448,7 +456,38 @@ public class ScoreCoral extends Command {
                   robotReefAngle.rotateBy(Rotation2d.k180deg).unaryMinus());
       return (convertedRobotTrans.getX()
               - FieldConstants.KeypointPoses.leftReefBranchFaceBlue.getX())
-          > FieldConstants.KeypointPoses.reefSafeDistance;
+          >= FieldConstants.KeypointPoses.reefSafeDistance;
     }
+  }
+
+  public boolean isInPrescoreArea() {
+    // Convert robot translation to reef face 0 degrees and compare x coordinates
+    Translation2d convertedRobotTrans;
+    double distanceFromReef;
+    if (Robot.alliance == DriverStation.Alliance.Red) {
+      convertedRobotTrans =
+          drive
+              .getPose()
+              .getTranslation()
+              .rotateAround(
+                  FieldConstants.KeypointPoses.redReefCenter,
+                  robotReefAngle.rotateBy(Rotation2d.k180deg).unaryMinus());
+
+      distanceFromReef =
+          convertedRobotTrans.getX() - FieldConstants.KeypointPoses.leftReefBranchFaceRed.getX();
+    } else {
+      convertedRobotTrans =
+          drive
+              .getPose()
+              .getTranslation()
+              .rotateAround(
+                  FieldConstants.KeypointPoses.blueReefCenter,
+                  robotReefAngle.rotateBy(Rotation2d.k180deg).unaryMinus());
+
+      distanceFromReef =
+          convertedRobotTrans.getX() - FieldConstants.KeypointPoses.leftReefBranchFaceBlue.getX();
+    }
+    return distanceFromReef >= FieldConstants.KeypointPoses.reefSafeDistance
+        && distanceFromReef <= FieldConstants.KeypointPoses.reefPrescoreSafeDistance;
   }
 }

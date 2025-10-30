@@ -37,7 +37,7 @@ public class OneCoralTwoAlgaeLeft extends OrangeSequentialCommandGroup {
               }
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
-        new ScoreCoral(superstructure, Level.L4, drive, true),
+        new ScoreCoral(superstructure, Level.L4, drive, true, false),
         new DescoreAlgae(superstructure, drive),
         new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.IJ_ToCenterAlgaeScore),

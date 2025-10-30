@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.992,
-        "y": 5.72
+        "x": 4.447,
+        "y": 6.284
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.525457175925925,
-        "y": 6.051708622685185
+        "x": 4.197301885758004,
+        "y": 6.2717178282054356
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "JulietToFeed1"
     },
     {
       "anchor": {
-        "x": 3.535220992476851,
-        "y": 6.326855107060185
+        "x": 2.901732954545454,
+        "y": 6.662485795454545
       },
       "prevControl": {
-        "x": 4.0607653356481475,
-        "y": 6.081931061921296
+        "x": 3.3703977272727266,
+        "y": 6.51291193181818
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": -44.70916097764944
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -46,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -29.315941330291025
+    "velocity": 2.0,
+    "rotation": -26.131
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": -120.35811545876669
+    "velocity": 1.0,
+    "rotation": -26.131000544938434
   },
   "useDefaultConstraints": true
 }

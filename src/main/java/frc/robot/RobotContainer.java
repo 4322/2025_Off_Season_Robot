@@ -256,10 +256,10 @@ public class RobotContainer {
       driver.setRumble(GenericHID.RumbleType.kBothRumble, 0.0);
     }
 
-    scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false);
-    scoreL2Coral = new ScoreCoral(superstructure, Level.L2, drive, false);
-    scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false);
-    scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false);
+    scoreL1Coral = new ScoreCoral(superstructure, Level.L1, drive, false, false);
+    scoreL2Coral = new ScoreCoral(superstructure, Level.L2, drive, false, false);
+    scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false, false);
+    scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false, false);
     lastScoreCoral = scoreL1Coral;
     // The commands deal with the on False logic if the button is no longer held
 
@@ -469,6 +469,7 @@ public class RobotContainer {
 
   public void configureAutonomousSelector() {
     autonomousSelector =
-        new AutonomousSelector(drive, superstructure, intakeSuperstructure, vision, visionObjectDetection);
+        new AutonomousSelector(
+            drive, superstructure, intakeSuperstructure, vision, visionObjectDetection);
   }
 }

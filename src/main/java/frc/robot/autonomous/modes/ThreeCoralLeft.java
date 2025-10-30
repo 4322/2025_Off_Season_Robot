@@ -7,7 +7,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.Robot;
 import frc.robot.commands.CoralIntake;
 import frc.robot.commands.ScoreCoral;
@@ -16,8 +18,8 @@ import frc.robot.constants.FieldConstants.ReefFaceTag;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
-import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.util.OrangeSequentialCommandGroup;
@@ -25,7 +27,6 @@ import frc.robot.util.ReefStatus;
 import frc.robot.util.ReefStatus.AlgaeLevel;
 import frc.robot.util.ReefStatus.ClosestReefPipe;
 import frc.robot.util.ReefStatus.L1Zone;
-import org.littletonrobotics.junction.Logger;
 
 public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
   public ThreeCoralLeft(
@@ -34,6 +35,20 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
       IntakeSuperstructure intakeSuperstructure,
       Vision vision,
       VisionObjectDetection visionObjectDetection) {
+
+    ReefStatus reefCoral1 =
+        new ReefStatus(
+            false,
+            false,
+            new Rotation2d(
+                Units.degreesToRadians(
+                    Robot.alliance == Alliance.Blue
+                        ? ReefFaceRobotHeading.IJ.blue
+                        : ReefFaceRobotHeading.IJ.red)),
+            ClosestReefPipe.RIGHT,
+            L1Zone.MIDDLE,
+            AlgaeLevel.L2,
+            Robot.alliance == Alliance.Blue ? ReefFaceTag.IJ.idBlue : ReefFaceTag.IJ.idRed);
 
     ReefStatus reefCoral2 =
         new ReefStatus(
@@ -79,15 +94,13 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
                 drive.resetPose(startPoseRed);
               }
             }),
-        AutoBuilder.followPath(Robot.ThreeCoralStartToJuliet),
-        new InstantCommand(() -> Logger.recordOutput("Auto", "Finished path")),
-        new ScoreCoral(superstructure, Level.L4, drive, false),
-        new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
-        AutoBuilder.followPath(Robot.JulietToFeed),
+        new ParallelCommandGroup(
+            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1),
+            AutoBuilder.followPath(Robot.JulietToFeed1).onlyIf(() -> superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL)),
+        new ParallelCommandGroup(AutoBuilder.followPath(Robot.JulietToFeed2),
+            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
         new CoralIntake(intakeSuperstructure, drive, visionObjectDetection),
-        new ScoreCoral(superstructure, Level.L4, drive, false, reefCoral2),
-        new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
-        new CoralIntake(intakeSuperstructure, drive, visionObjectDetection),
-        new ScoreCoral(superstructure, Level.L4, drive, false, reefCoral3));
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3));
   }
 }
