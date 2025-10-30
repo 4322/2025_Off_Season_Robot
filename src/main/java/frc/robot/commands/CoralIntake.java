@@ -8,7 +8,6 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
-import frc.robot.util.ClockUtil;
 import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants.GamePieceType;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
