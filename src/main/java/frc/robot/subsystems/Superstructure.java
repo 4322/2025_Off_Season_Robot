@@ -216,7 +216,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case ALGAE_SCORE:
         endEffector.releaseAlgae();
-        if (requestIdle) {
+        if (requestIdle && scoreBackSide && !endEffector.hasAlgae()) {
+          state = Superstates.IDLE;
+        } else if (requestIdle) {
           state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
         }
 
