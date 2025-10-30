@@ -29,7 +29,6 @@ import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
-import frc.robot.subsystems.IntakeSuperstructure.IntakeSuperstates;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
@@ -371,14 +370,14 @@ public class RobotContainer {
                         intakeSuperstructure.getIntakeSuperstate()
                             != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
 
-    driver.povLeft().whileTrue(
-      new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
-          .onlyIf(
-              () ->
-                  intakeSuperstructure.getIntakeSuperstate()
-                      != IntakeSuperstructure.IntakeSuperstates.HOMELESS)
-
-    );
+    driver
+        .povLeft()
+        .whileTrue(
+            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
+                .onlyIf(
+                    () ->
+                        intakeSuperstructure.getIntakeSuperstate()
+                            != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
 
     if (Constants.enableDriveToPoseTuning) {
       driver
