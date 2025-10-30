@@ -83,7 +83,7 @@ public class CoralIntake extends Command {
 
   @Override
   public boolean isFinished() {
-    return intakeSuperstructure.isCoralDetectedIndexer();
+    return intakeSuperstructure.isCoralDetectedPickupArea();
   }
 
   @Override
