@@ -277,6 +277,13 @@ public class Drive extends SubsystemBase {
     return poseEstimator.getEstimatedPosition();
   }
 
+  public boolean driveMoving() {
+    ChassisSpeeds speeds = getRobotRelativeSpeeds();
+    return Math.abs(speeds.vxMetersPerSecond) > 0.02 ||
+           Math.abs(speeds.vyMetersPerSecond) > 0.02 ||
+           Math.abs(speeds.omegaRadiansPerSecond) > 0.02;
+  }
+
   public Pose2d getPoseAtTimestamp(double timestampSeconds) {
     return poseEstimator.sampleAt(timestampSeconds).orElse(null);
   }

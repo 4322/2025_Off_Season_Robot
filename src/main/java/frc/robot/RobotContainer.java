@@ -477,6 +477,10 @@ public class RobotContainer {
     return intakeSuperstructure;
   }
 
+  public static Drive getDrive() {
+    return drive;
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

@@ -285,20 +285,24 @@ public class Robot extends LoggedRobot {
                     == Superstructure.Superstates.CORAL_HELD)
                 && RobotContainer.getIntakeSuperstructure().getIntakeSuperstate()
                     == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
-                && !DriverStation.isFMSAttached()) && Constants.buzz) {
-      driver.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+                && !DriverStation.isFMSAttached()) && Constants.buzz && !RobotContainer.getDrive().driveMoving()) {
       batteryLowStopTimer.start();
-      if (batteryLowStopTimer.hasElapsed(5)) {
+      if ((batteryLowStopTimer.hasElapsed(5.3))) {
+        DriverStation.reportError(
+          "Battery voltage is critically low (" + RobotController.getBatteryVoltage() + "V)",
+          false);
         driver.setRumble(GenericHID.RumbleType.kBothRumble, 0);
         batteryLowStopTimer.stop();
         batteryLowStopTimer.reset();
-        DriverStation.reportError(
-            "Battery voltage is critically low (" + RobotController.getBatteryVoltage() + "V)",
-            false);
+      } else if (batteryLowStopTimer.hasElapsed(5)) {
+        driver.setRumble(GenericHID.RumbleType.kBothRumble, 10);
+      } else{
+        driver.setRumble(GenericHID.RumbleType.kBothRumble, 0);
       }
     } else {
       batteryLowStopTimer.stop();
       batteryLowStopTimer.reset();
+      driver.setRumble(GenericHID.RumbleType.kBothRumble, 0);
     }
 
     if (RobotController.getBatteryVoltage() > 12.00) {
