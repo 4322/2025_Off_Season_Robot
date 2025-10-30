@@ -62,23 +62,26 @@ public class Elevator extends SubsystemBase {
 
           if (armAngle > Constants.Arm.maxArmDegToLowerElevator
               && requestedHeightMeters < prevHeightMeters) {
-            return; // unsafe to lower elevator when arm is on the backside
-          }
-
-          if (RobotContainer.getSuperstructure().isCoralHeld()) {
-            minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
-            minElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralMeters;
+            newElevatorHeight =
+                prevHeightMeters; // unsafe to lower elevator when arm is on the backside
           } else {
-            minSafeArmDegree = Constants.Arm.minArmSafeDeg;
-            minElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
-          }
 
-          if (RobotContainer.getSuperstructure().getState() != Superstates.END_EFFECTOR_CORAL_PICKUP
-              && requestedHeightMeters < minElevatorHeight
-              && armAngle < (minSafeArmDegree - Constants.Arm.bufferDeg)) {
-            newElevatorHeight = minElevatorHeight;
-          } else {
-            newElevatorHeight = requestedHeightMeters;
+            if (RobotContainer.getSuperstructure().isCoralHeld()) {
+              minSafeArmDegree = Constants.Arm.minArmSafeWithCoralDeg;
+              minElevatorHeight = Constants.Elevator.minElevatorSafeWithCoralMeters;
+            } else {
+              minSafeArmDegree = Constants.Arm.minArmSafeDeg;
+              minElevatorHeight = Constants.Elevator.minElevatorSafeHeightMeters;
+            }
+
+            if (RobotContainer.getSuperstructure().getState()
+                    != Superstates.END_EFFECTOR_CORAL_PICKUP
+                && requestedHeightMeters < minElevatorHeight
+                && armAngle < (minSafeArmDegree - Constants.Arm.bufferDeg)) {
+              newElevatorHeight = minElevatorHeight;
+            } else {
+              newElevatorHeight = requestedHeightMeters;
+            }
           }
 
           if (prevHeightMeters != newElevatorHeight || Constants.continuousNitrateRequestsEnabled) {
