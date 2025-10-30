@@ -8,8 +8,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.Robot;
 import frc.robot.commands.CoralIntake;
 import frc.robot.commands.ScoreCoral;
@@ -96,8 +94,13 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
             }),
         new ParallelCommandGroup(
             new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1),
-            AutoBuilder.followPath(Robot.JulietToFeed1).onlyIf(() -> superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL)),
-        new ParallelCommandGroup(AutoBuilder.followPath(Robot.JulietToFeed2),
+            AutoBuilder.followPath(Robot.JulietToFeed1)
+                .onlyIf(
+                    () ->
+                        superstructure.getEndEffectorState()
+                            == EndEffectorStates.RELEASE_CORAL_NORMAL)),
+        new ParallelCommandGroup(
+            AutoBuilder.followPath(Robot.JulietToFeed2),
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
         new CoralIntake(intakeSuperstructure, drive, visionObjectDetection),

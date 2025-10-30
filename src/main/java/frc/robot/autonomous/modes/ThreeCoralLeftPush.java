@@ -19,6 +19,7 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.Superstructure.Superstates;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.OrangeSequentialCommandGroup;
 import frc.robot.util.ReefStatus;
@@ -32,6 +33,20 @@ public class ThreeCoralLeftPush extends OrangeSequentialCommandGroup {
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,
       Vision vision) {
+
+    ReefStatus reefCoral1 =
+        new ReefStatus(
+            false,
+            false,
+            new Rotation2d(
+                Units.degreesToRadians(
+                    Robot.alliance == Alliance.Blue
+                        ? ReefFaceRobotHeading.IJ.blue
+                        : ReefFaceRobotHeading.IJ.red)),
+            ClosestReefPipe.RIGHT,
+            L1Zone.MIDDLE,
+            AlgaeLevel.L2,
+            Robot.alliance == Alliance.Blue ? ReefFaceTag.IJ.idBlue : ReefFaceTag.IJ.idRed);
 
     ReefStatus reefCoral2 =
         new ReefStatus(
@@ -78,11 +93,13 @@ public class ThreeCoralLeftPush extends OrangeSequentialCommandGroup {
               }
             }),
         AutoBuilder.followPath(Robot.ThreeCoralStartPushToJuliet),
-        new ScoreCoral(superstructure, Level.L4, drive, false, false),
-        new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
-            new CoralIntakeManualAuto(intakeSuperstructure, true),
-            AutoBuilder.followPath(Robot.JulietToFeed)),
+            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1),
+            AutoBuilder.followPath(Robot.JulietToFeed1)
+                .onlyIf(
+                    () ->
+                        superstructure.getEndEffectorState()
+                            == EndEffectorStates.RELEASE_CORAL_NORMAL)),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
         new WaitUntilCommand(() -> superstructure.getState() == Superstates.IDLE),
         new ParallelCommandGroup(
