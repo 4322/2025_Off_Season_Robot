@@ -51,11 +51,7 @@ public class CoralIntake extends Command {
             coralPosition
                 .minus(drive.getPose().getTranslation())
                 .getAngle()
-                .plus(drive.getPose().getRotation())
                 .plus(Rotation2d.k180deg);
-        targetAngle =
-            new Rotation2d(
-                ClockUtil.inputModulus(targetAngle.getRadians(), -Math.PI, Math.PI, false));
         intakeSuperstructure.requestIntake();
         Logger.recordOutput("CoralIntake/coralPosition", coralPosition);
         Logger.recordOutput(
