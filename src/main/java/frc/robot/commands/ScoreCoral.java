@@ -79,7 +79,7 @@ public class ScoreCoral extends Command {
     this.level = level;
     this.drive = drive;
     this.chainedAlgaeMode = chainedAlgaeMode;
-    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get());
+    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get(), level == Level.L4);
     addRequirements(superstructure);
   }
 

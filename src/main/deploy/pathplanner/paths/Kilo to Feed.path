@@ -4,15 +4,15 @@
     {
       "anchor": {
         "x": 3.978,
-        "y": 5.24375
+        "y": 5.72
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6952499999999997,
-        "y": 5.585
+        "x": 3.6952510420348883,
+        "y": 6.061250863397652
       },
       "isLocked": false,
-      "linkedName": "KiloIn"
+      "linkedName": null
     },
     {
       "anchor": {

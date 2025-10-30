@@ -179,6 +179,7 @@ public final class Constants {
     public static final double minArmSafeDegAfterScore = 47;
     public static final double minArmSafeWithCoralDeg = 54;
     public static final double maxArmSafeDeg = 245.0;
+    public static final double maxArmDegToLowerElevator = 185.0;
 
     public static final double setpointToleranceDegrees = 0.7;
     public static final double setpointToleranceDegreesEject = 5.0;
@@ -495,7 +496,8 @@ public final class Constants {
     public static final double driveMaxVelocity = 2.3;
     public static final double driveMaxVelocitySlow = 1.27;
     public static final double driveMaxAcceleration = 4;
-    public static final double driveMaxDeceleration = 1.25;
+    public static final double driveMaxDeceleration = 1.2;
+    public static final double driveMaxDecelerationHigh = 0.7;
 
     public static final double thetaMaxVelocity = 360;
     public static final double thetaMaxVelocitySlow = 90;
