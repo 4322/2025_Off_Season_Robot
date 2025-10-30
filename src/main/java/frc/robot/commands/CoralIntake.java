@@ -46,13 +46,10 @@ public class CoralIntake extends Command {
     if (Constants.VisionObjectDetection.coralIntakeMode != CoralIntakeMode.MANUAL
         && coralPosition != null
         && !driveToPose.isScheduled()) {
-      if (Constants.VisionObjectDetection.coralIntakeMode == CoralIntakeMode.AUTO_ALIGN_DRIVE
-          && coralPosition != null) {
-        targetAngle =
-            coralPosition
-                .minus(drive.getPose().getTranslation())
-                .getAngle()
-                .plus(Rotation2d.k180deg);
+      targetAngle =
+          coralPosition.minus(drive.getPose().getTranslation()).getAngle().plus(Rotation2d.k180deg);
+      if (Constants.VisionObjectDetection.coralIntakeMode == CoralIntakeMode.AUTO_ALIGN_DRIVE) {
+
         driveToPoseTarget = new Pose2d(coralPosition, targetAngle);
       } else {
         driveToPoseTarget = new Pose2d(coralPosition, drive.getRotation());
