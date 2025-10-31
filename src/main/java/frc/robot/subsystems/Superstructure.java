@@ -1,20 +1,19 @@
 package frc.robot.subsystems;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
-import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.util.ReefStatus;
-import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
@@ -80,7 +79,7 @@ public class Superstructure extends SubsystemBase {
   private Elevator elevator;
   private Vision vision;
   private IntakeSuperstructure intakeSuperstructure;
-  private VisionObjectDetection objectDetection;
+  private Drive drive;
 
   // Add this variable to track the previous state of the home button
 
@@ -90,13 +89,13 @@ public class Superstructure extends SubsystemBase {
       Elevator elevator,
       IntakeSuperstructure intakeSuperstructure,
       Vision vision,
-      VisionObjectDetection objectDetection) {
+      Drive drive) {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
     this.intakeSuperstructure = intakeSuperstructure;
     this.vision = vision;
-    this.objectDetection = objectDetection;
+    this.drive = drive;
   }
 
   @Override
@@ -225,7 +224,19 @@ public class Superstructure extends SubsystemBase {
         if (requestIdle && scoreBackSide && !endEffector.hasAlgae()) {
           state = Superstates.IDLE;
         } else if (requestIdle) {
-          state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
+          if (Robot.alliance == DriverStation.Alliance.Blue) {
+            if (drive.getPose().getX() < Constants.Drive.algaeSafeRetractDistanceXPlaceBlue) {
+              state = Superstates.IDLE;
+            } else {
+              state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
+            }
+          } else {
+            if (drive.getPose().getX() > Constants.Drive.algaeSafeRetractDistanceXPlaceRed) {
+              state = Superstates.IDLE;
+            } else {
+              state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
+            }
+          }
         }
 
         break;
@@ -528,10 +539,5 @@ public class Superstructure extends SubsystemBase {
 
   public void enableSingleTag(int tagID, SingleTagCamera cameraToUse) {
     vision.enableSingleTagSingleCam(tagID, cameraToUse);
-  }
-
-  public Translation2d getClosestCoral() {
-    return objectDetection.calculateBestObjectPositionOnField(
-        SimulatedGamePieceConstants.GamePieceType.CORAL);
   }
 }

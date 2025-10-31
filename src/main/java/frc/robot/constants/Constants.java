@@ -90,6 +90,9 @@ public final class Constants {
     public static final double autoRotatekP = 0.11;
     public static final double autoRotatekD = 0.005;
 
+    public static final double algaeSafeRetractDistanceXPlaceBlue = 7.5;
+    public static final double algaeSafeRetractDistanceXPlaceRed = 10.261;
+
     public static final double angularErrorToleranceDeg = 1.25;
     public static final double angularErrorToleranceDegPerSec = 20.0;
     public static final double driveDeadband = 0.1;
@@ -535,7 +538,7 @@ public final class Constants {
             -0.23495,
             0.98315,
             new Rotation3d(0, Units.degreesToRadians(40), Units.degreesToRadians(180)));
-    public static final double coralIntakeOffset = Units.inchesToMeters(16); // TODO
+    public static final double coralIntakeOffset = Units.inchesToMeters(13);
 
     public static enum CoralIntakeMode {
       MANUAL,
