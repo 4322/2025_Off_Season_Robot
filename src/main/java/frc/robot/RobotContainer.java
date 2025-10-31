@@ -216,7 +216,7 @@ public class RobotContainer {
     }
 
     intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
-    superstructure = new Superstructure(endEffector, arm, elevator, intakeSuperstructure, vision);
+    superstructure = new Superstructure(endEffector, arm, elevator, intakeSuperstructure, vision, drive);
 
     // Configure the button bindings
     configureButtonBindings();
