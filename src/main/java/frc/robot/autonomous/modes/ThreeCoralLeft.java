@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Robot;
 import frc.robot.commands.CoralIntake;
 import frc.robot.commands.ScoreCoral;
@@ -17,9 +16,9 @@ import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
+import frc.robot.util.OrangeParallelCommandGroup;
 import frc.robot.util.OrangeSequentialCommandGroup;
 import frc.robot.util.ReefStatus;
 import frc.robot.util.ReefStatus.AlgaeLevel;
@@ -92,17 +91,12 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
                 drive.resetPose(startPoseRed);
               }
             }),
-        new ParallelCommandGroup(
-            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1),
-            AutoBuilder.followPath(Robot.JulietToFeed1)
-                .onlyIf(
-                    () ->
-                        superstructure.getEndEffectorState()
-                            == EndEffectorStates.RELEASE_CORAL_NORMAL)),
-        new ParallelCommandGroup(
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral1),
+        AutoBuilder.followPath(Robot.JulietToFeed1),
+        new OrangeParallelCommandGroup(
             AutoBuilder.followPath(Robot.JulietToFeed2),
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
-        new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral2),
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
         new CoralIntake(intakeSuperstructure, drive, visionObjectDetection),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3));
   }
