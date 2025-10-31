@@ -143,11 +143,6 @@ public class Superstructure extends SubsystemBase {
         elevator.reset();
         arm.reset();
         DriverStation.reportWarning("Superstructure in WOOD_BLOCK state: Remove Wood Block", false);
-        if (DriverStation.isEnabled()) {
-          state = Superstates.IDLE;
-          elevator.reset();
-          arm.reset();
-        }
         break;
       case DISABLED:
         elevator.reset();
