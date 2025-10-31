@@ -34,6 +34,8 @@ public class Superstructure extends SubsystemBase {
   private boolean scoreBackSide = false;
   private boolean requestDropCoralRepickup = false;
 
+  private boolean woodBlockRemoved = false;
+
   public enum Superstates {
     HOMELESS,
     DISABLED,
@@ -102,9 +104,11 @@ public class Superstructure extends SubsystemBase {
   public void periodic() {
 
     if (DriverStation.isDisabled() && ishomed) {
-      if (elevator.getElevatorHeightMeters() >= (Constants.Elevator.homeHeightMeters - 0.01)) {
+      if (elevator.getElevatorHeightMeters() >= (Constants.Elevator.homeHeightMeters - 0.01) 
+          && !woodBlockRemoved) {
         state = Superstates.WOOD_BLOCK;
       } else if (elevator.getElevatorHeightMeters() < Constants.Elevator.homeHeightMeters) {
+        woodBlockRemoved = true;
         state = Superstates.DISABLED;
       }
     }
