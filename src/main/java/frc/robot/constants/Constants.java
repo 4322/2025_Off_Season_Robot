@@ -6,6 +6,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -89,6 +90,9 @@ public final class Constants {
   public static class Drive {
     public static final double autoRotatekP = 0.11;
     public static final double autoRotatekD = 0.005;
+
+    public static final double algaeSafeRetractDistanceXPlaceBlue = 7.5;
+    public static final double algaeSafeRetractDistanceXPlaceRed = 10.261;
 
     public static final double angularErrorToleranceDeg = 1.25;
     public static final double angularErrorToleranceDegPerSec = 20.0;

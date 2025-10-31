@@ -1,18 +1,22 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
-import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public static final Timer startTimer = new Timer();
@@ -31,6 +35,7 @@ public class Superstructure extends SubsystemBase {
   private boolean coralElevatorPickUp = false;
   private boolean scoreBackSide = false;
   private boolean requestDropCoralRepickup = false;
+  
 
   public enum Superstates {
     HOMELESS,
@@ -77,6 +82,7 @@ public class Superstructure extends SubsystemBase {
   private Elevator elevator;
   private Vision vision;
   private IntakeSuperstructure intakeSuperstructure;
+  private Drive drive;
 
   // Add this variable to track the previous state of the home button
 
@@ -85,17 +91,20 @@ public class Superstructure extends SubsystemBase {
       Arm arm,
       Elevator elevator,
       IntakeSuperstructure intakeSuperstructure,
-      Vision vision) {
+      Vision vision, 
+      Drive drive) {
     this.endEffector = endEffector;
     this.arm = arm;
     this.elevator = elevator;
     this.intakeSuperstructure = intakeSuperstructure;
     this.vision = vision;
+    this.drive = drive;
   }
 
   @Override
   public void periodic() {
 
+   
     if (DriverStation.isDisabled() && ishomed) {
       if (elevator.getElevatorHeightMeters() >= (Constants.Elevator.homeHeightMeters - 0.01)) {
         state = Superstates.WOOD_BLOCK;
@@ -219,8 +228,21 @@ public class Superstructure extends SubsystemBase {
         if (requestIdle && scoreBackSide && !endEffector.hasAlgae()) {
           state = Superstates.IDLE;
         } else if (requestIdle) {
-          state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
-        }
+            if (Robot.alliance == DriverStation.Alliance.Blue) {
+              if (drive.getPose().getX() < Constants.Drive.algaeSafeRetractDistanceXPlaceBlue) {
+                state = Superstates.IDLE;
+              } else {
+                state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
+                  }
+            } else {
+              if (drive.getPose().getX() > Constants.Drive.algaeSafeRetractDistanceXPlaceRed) {
+                state = Superstates.IDLE;
+              } else {
+                state = Superstates.SAFE_SCORE_ALGAE_RETRACT;
+                  }
+            }
+            }
+        
 
         break;
       case INTAKE_ALGAE_FLOOR: // Needs to move up then arm out then back down
@@ -348,7 +370,7 @@ public class Superstructure extends SubsystemBase {
               state = Superstates.ALGAE_IDLE;
             }
           }
-        }
+        } 
 
         break;
       case PRECLIMB:
