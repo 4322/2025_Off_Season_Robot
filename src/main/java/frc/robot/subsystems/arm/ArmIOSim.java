@@ -1,5 +1,7 @@
 package frc.robot.subsystems.arm;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 public class ArmIOSim implements ArmIO {
 
   private double requestedVoltage = 0;
@@ -69,24 +71,28 @@ public class ArmIOSim implements ArmIO {
   }
 
   private void simVolts() {
-    if (requestedVoltage == undefinedVoltage) {
-      voltage = 0;
-    } else if (voltage < requestedVoltage) {
-      voltage += (requestedVoltage - voltage) * fastRate;
-    } else {
-      voltage -= (voltage - requestedVoltage) * fastRate;
+    if (DriverStation.isEnabled()) {
+      if (requestedVoltage == undefinedVoltage) {
+        voltage = 0;
+      } else if (voltage < requestedVoltage) {
+        voltage += (requestedVoltage - voltage) * fastRate;
+      } else {
+        voltage -= (voltage - requestedVoltage) * fastRate;
+      }
+      position += 100 * voltage / 12.0 / 50.0;
     }
-    position += 100 * voltage / 12.0 / 50.0;
   }
 
   private void simPos() {
-    if (requestedPosition == undefinedPosition) {
-      return;
-    }
-    if (position < requestedPosition) {
-      position += (requestedPosition - position) * rate;
-    } else {
-      position -= (position - requestedPosition) * rate;
+    if (DriverStation.isEnabled()) {
+      if (requestedPosition == undefinedPosition) {
+        return;
+      }
+      if (position < requestedPosition) {
+        position += (requestedPosition - position) * rate;
+      } else {
+        position -= (position - requestedPosition) * rate;
+      }
     }
   }
 }

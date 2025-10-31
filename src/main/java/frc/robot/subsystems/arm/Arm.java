@@ -104,6 +104,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void setHomePosition() {
+    inputs.PositionDegrees = 0;
     io.setHomePosition(Units.degreesToRotations(Constants.Arm.OffsetEncoderDeg));
     isHomed = true;
     idle(); // must have a valid initial position request when enabled
@@ -210,9 +211,9 @@ public class Arm extends SubsystemBase {
   }
 
   public void setEmergencyHomingComplete() {
+    inputs.PositionDegrees = Constants.Arm.hittingIndexerDegrees;
     io.setHomePosition(
-        Units.degreesToRotations(
-            Constants.Arm.OffsetEncoderDeg + Constants.Arm.hittingIndexerDegrees));
+        Units.degreesToRotations(Constants.Arm.OffsetEncoderDeg + inputs.PositionDegrees));
     setReHome();
   }
 

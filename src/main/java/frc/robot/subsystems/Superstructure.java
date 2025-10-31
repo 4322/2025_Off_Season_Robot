@@ -28,13 +28,11 @@ public class Superstructure extends SubsystemBase {
   private boolean requestPrescoreCoral = false;
   private boolean requestScoreCoral = false;
   private boolean requestPreClimb = false;
-  private boolean ishomed = false;
   private Timer coralPickupTimer = new Timer();
   private boolean coralElevatorPickUp = false;
   private boolean scoreBackSide = false;
   private boolean requestDropCoralRepickup = false;
-
-  private boolean woodBlockRemoved = false;
+  private Timer woodBlockTimer = new Timer();
 
   public enum Superstates {
     HOMELESS,
@@ -103,25 +101,14 @@ public class Superstructure extends SubsystemBase {
   @Override
   public void periodic() {
 
-    if (DriverStation.isDisabled() && ishomed) {
-      if (elevator.getElevatorHeightMeters() >= (Constants.Elevator.homeHeightMeters - 0.01)
-          && !woodBlockRemoved) {
-        state = Superstates.WOOD_BLOCK;
-      } else if (elevator.getElevatorHeightMeters() < Constants.Elevator.homeHeightMeters) {
-        woodBlockRemoved = true;
-        state = Superstates.DISABLED;
-      }
-    }
-
     // The home button can only be activated when the robot is disabled, so accept it from any state
     if (requestHomed) {
-      woodBlockRemoved = false;
       elevator.setHomePosition();
       arm.setHomePosition();
       intakeSuperstructure.setHome();
       requestHomed = false;
-      ishomed = true;
-      state = Superstates.DISABLED;
+      state = Superstates.WOOD_BLOCK;
+      woodBlockTimer.restart();
     }
 
     Logger.recordOutput("Superstructure/currentState", state.toString());
@@ -141,7 +128,14 @@ public class Superstructure extends SubsystemBase {
       case WOOD_BLOCK:
         elevator.reset();
         arm.reset();
-        DriverStation.reportWarning("Superstructure in WOOD_BLOCK state: Remove Wood Block", false);
+        if (elevator.getElevatorHeightMeters() < (Constants.Elevator.homeHeightMeters - 0.01)
+            || Constants.currentMode == Constants.RobotMode.SIM
+            || Constants.currentMode == Constants.RobotMode.REPLAY) {
+          state = Superstates.DISABLED;
+        } else if (woodBlockTimer.hasElapsed(3)) {
+          DriverStation.reportWarning("Remove Wood Block", false);
+          woodBlockTimer.restart();
+        }
         break;
       case DISABLED:
         elevator.reset();
@@ -482,7 +476,6 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void requestReHome() {
-    ishomed = true;
     elevator.setReHome();
     arm.setReHome();
     intakeSuperstructure.setReHome();

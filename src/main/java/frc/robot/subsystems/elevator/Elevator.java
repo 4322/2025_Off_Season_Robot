@@ -206,7 +206,8 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setHomePosition() {
-    io.setPosition(Constants.Elevator.homeHeightMeters);
+    inputs.leaderHeightMeters = inputs.followerHeightMeters = Constants.Elevator.homeHeightMeters;
+    io.setPosition(inputs.leaderHeightMeters);
     isHomed = true;
     isSlow = false;
     idle(); // must have a valid initial position request when enabled
@@ -220,7 +221,9 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setEmergencyHomingComplete() {
-    io.setPosition(Constants.Elevator.maxElevatorHeightMeters);
+    inputs.leaderHeightMeters =
+        inputs.followerHeightMeters = Constants.Elevator.maxElevatorHeightMeters;
+    io.setPosition(inputs.leaderHeightMeters);
     setReHome();
   }
 
