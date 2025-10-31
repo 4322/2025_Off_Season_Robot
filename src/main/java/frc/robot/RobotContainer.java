@@ -216,7 +216,9 @@ public class RobotContainer {
     }
 
     intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
-    superstructure = new Superstructure(endEffector, arm, elevator, intakeSuperstructure, vision);
+    superstructure =
+        new Superstructure(
+            endEffector, arm, elevator, intakeSuperstructure, vision, visionObjectDetection);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -374,15 +376,6 @@ public class RobotContainer {
                         intakeSuperstructure.requestIntake();
                       }
                     })
-                .onlyIf(
-                    () ->
-                        intakeSuperstructure.getIntakeSuperstate()
-                            != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
-
-    driver
-        .povLeft()
-        .whileTrue(
-            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
                 .onlyIf(
                     () ->
                         intakeSuperstructure.getIntakeSuperstate()

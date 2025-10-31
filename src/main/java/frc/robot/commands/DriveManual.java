@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -24,6 +25,7 @@ public class DriveManual extends Command {
       new PIDController(Constants.Drive.autoRotatekP, 0, Constants.Drive.autoRotatekD);
   private boolean firstReefLock;
   private double currentReefLockDeg;
+  private Rotation2d closestCoralAngle;
 
   private static final LoggedTunableNumber rotKp =
       new LoggedTunableNumber("AutoRotate/RotateKp", Constants.Drive.autoRotatekP);
@@ -128,9 +130,32 @@ public class DriveManual extends Command {
               rot = 0;
             }
           }
-        } else if (firstReefLock) {
+          if (closestCoralAngle != null) {
+            closestCoralAngle = null;
+          }
+        } else if (!RobotContainer.getSuperstructure().isCoralHeld()
+            && RobotContainer.driver.povLeft().getAsBoolean()) {
+          if (closestCoralAngle == null) {
+            closestCoralAngle =
+                RobotContainer.getSuperstructure()
+                    .getClosestCoral()
+                    .minus(drive.getPose().getTranslation())
+                    .getAngle();
+          } else {
+            double velocityMag = Math.hypot(dx, dy);
+            Translation2d rotatedVelocity = new Translation2d(velocityMag, closestCoralAngle);
+            dx = rotatedVelocity.getX();
+            dy = rotatedVelocity.getY();
+          }
+
+          if (firstReefLock) {
+            firstReefLock = false;
+          }
+        } else if (firstReefLock || closestCoralAngle != null) {
           firstReefLock = false;
+          closestCoralAngle = null;
         }
+
         break;
       case AUTO_ROTATE:
         if (rotKp.hasChanged(0) || rotKd.hasChanged(0)) {
@@ -141,6 +166,9 @@ public class DriveManual extends Command {
         // Clear first reef lock if we exited field relative state while in reef lock mode
         if (firstReefLock) {
           firstReefLock = false;
+        }
+        if (closestCoralAngle != null) {
+          closestCoralAngle = null;
         }
 
         rot =
