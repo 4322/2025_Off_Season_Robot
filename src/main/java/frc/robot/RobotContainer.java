@@ -386,7 +386,7 @@ public class RobotContainer {
                 .onlyIf(
                     () ->
                         intakeSuperstructure.getIntakeSuperstate()
-                            != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
+                            != IntakeSuperstructure.IntakeSuperstates.HOMELESS && !endEffector.hasCoral() && !intakeSuperstructure.isCoralDetectedPickupArea()));
 
     if (Constants.enableDriveToPoseTuning) {
       driver
