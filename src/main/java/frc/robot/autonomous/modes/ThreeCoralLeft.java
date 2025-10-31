@@ -16,6 +16,7 @@ import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.util.OrangeParallelCommandGroup;
@@ -91,12 +92,17 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
                 drive.resetPose(startPoseRed);
               }
             }),
-        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral1),
-        AutoBuilder.followPath(Robot.JulietToFeed1),
+        new OrangeParallelCommandGroup(
+            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1),
+            AutoBuilder.followPath(Robot.JulietToFeed1)
+                .onlyIf(
+                    () ->
+                        superstructure.getEndEffectorState()
+                            == EndEffectorStates.RELEASE_CORAL_NORMAL)),
         new OrangeParallelCommandGroup(
             AutoBuilder.followPath(Robot.JulietToFeed2),
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
-        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
+        new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral2),
         new CoralIntake(intakeSuperstructure, drive, visionObjectDetection),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3));
   }
