@@ -216,7 +216,8 @@ public class RobotContainer {
     }
 
     intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
-    superstructure = new Superstructure(endEffector, arm, elevator, intakeSuperstructure, vision, drive);
+    superstructure =
+        new Superstructure(endEffector, arm, elevator, intakeSuperstructure, vision, drive);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -386,7 +387,9 @@ public class RobotContainer {
                 .onlyIf(
                     () ->
                         intakeSuperstructure.getIntakeSuperstate()
-                            != IntakeSuperstructure.IntakeSuperstates.HOMELESS && !endEffector.hasCoral() && !intakeSuperstructure.isCoralDetectedPickupArea()));
+                                != IntakeSuperstructure.IntakeSuperstates.HOMELESS
+                            && !endEffector.hasCoral()
+                            && !intakeSuperstructure.isCoralDetectedPickupArea()));
 
     if (Constants.enableDriveToPoseTuning) {
       driver
