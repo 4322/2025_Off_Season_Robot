@@ -212,72 +212,52 @@ public class Robot extends LoggedRobot {
     Logger.start();
     Logger.disableConsoleCapture();
 
-    String filename = "";
-
     try {
-      filename = "Leave";
-      Leave = PathPlannerPath.fromPathFile(filename);
-      filename = "Test Leave";
-      TestLeave = PathPlannerPath.fromPathFile(filename);
+      Leave = PathPlannerPath.fromPathFile("Leave");
+      TestLeave = PathPlannerPath.fromPathFile("Test Leave");
 
-      filename = "Center Start to Gulf";
-      CenterStartToGulf = PathPlannerPath.fromPathFile(filename);
-      filename = "Gulf to Gulf-Hotel";
-      GulfToGulfHotel = PathPlannerPath.fromPathFile(filename);
-      filename = "Center Barge to Center Algae Score";
-      CenterBargeToCenterAlgaeScore = PathPlannerPath.fromPathFile(filename);
-      filename = "Center Algae Score to Leave";
-      CenterAlgaeScoreToLeave = PathPlannerPath.fromPathFile(filename);
+      CenterStartToGulf = PathPlannerPath.fromPathFile("Center Start to Gulf");
+      GulfToGulfHotel = PathPlannerPath.fromPathFile("Gulf to Gulf-Hotel");
+      CenterBargeToCenterAlgaeScore =
+          PathPlannerPath.fromPathFile("Center Barge to Center Algae Score");
+      CenterAlgaeScoreToLeave = PathPlannerPath.fromPathFile("Center Algae Score to Leave");
 
-      filename = "Three Coral Start to Juliet";
-      ThreeCoralStartToJuliet = PathPlannerPath.fromPathFile(filename);
-      filename = "Three Coral Start Push to Juliet";
-      ThreeCoralStartPushToJuliet = PathPlannerPath.fromPathFile(filename);
-      filename = "Juliet to Feed 1";
-      JulietToFeed1 = PathPlannerPath.fromPathFile(filename);
-      filename = "Juliet to Feed 2";
-      JulietToFeed2 = PathPlannerPath.fromPathFile(filename);
-      filename = "Kilo to Feed";
-      KiloToFeed = PathPlannerPath.fromPathFile(filename);
+      ThreeCoralStartToJuliet = PathPlannerPath.fromPathFile("Three Coral Start to Juliet");
+      ThreeCoralStartPushToJuliet =
+          PathPlannerPath.fromPathFile("Three Coral Start Push to Juliet");
+      JulietToFeed1 = PathPlannerPath.fromPathFile("Juliet to Feed 1");
+      JulietToFeed2 = PathPlannerPath.fromPathFile("Juliet to Feed 2");
+      KiloToFeed = PathPlannerPath.fromPathFile("Kilo to Feed");
 
-      filename = "Three Coral Start to Juliet";
-      ThreeCoralStartToEcho = PathPlannerPath.fromPathFile(filename).mirrorPath();
-      filename = "Juliet to Feed 1";
-      EchoToFeed1 = PathPlannerPath.fromPathFile(filename);
-      filename = "Juliet to Feed 2";
-      EchoToFeed2 = PathPlannerPath.fromPathFile(filename);
-      filename = "Kilo to Feed";
-      DeltaToFeed = PathPlannerPath.fromPathFile(filename).mirrorPath();
+      ThreeCoralStartToEcho =
+          PathPlannerPath.fromPathFile("Three Coral Start to Juliet").mirrorPath();
+      EchoToFeed1 = PathPlannerPath.fromPathFile("Juliet to Feed 1");
+      EchoToFeed2 = PathPlannerPath.fromPathFile("Juliet to Feed 2");
+      DeltaToFeed = PathPlannerPath.fromPathFile("Kilo to Feed").mirrorPath();
 
-      filename = "Juliet to India-Juliet";
-      JulietToIndiaJuliet = PathPlannerPath.fromPathFile(filename);
-      filename = "Left Barge to Left Algae Score";
-      LeftBargeToLeftAlgaeScore = PathPlannerPath.fromPathFile(filename);
-      filename = "Left Algae Score to Feed";
-      LeftAlgaeScoreToFeed = PathPlannerPath.fromPathFile(filename);
+      JulietToIndiaJuliet = PathPlannerPath.fromPathFile("Juliet to India-Juliet");
+      LeftBargeToLeftAlgaeScore = PathPlannerPath.fromPathFile("Left Barge to Left Algae Score");
+      LeftAlgaeScoreToFeed = PathPlannerPath.fromPathFile("Left Algae Score to Feed");
 
-      filename = "Right Algae Score to IJ";
-      RightAlgaeScoreToIJ = PathPlannerPath.fromPathFile(filename);
-      filename = "Center Algae Score Backwards to Leave";
-      CenterAlgaeScoreBackwardsToLeave = PathPlannerPath.fromPathFile(filename);
-      filename = "GH to Right Algae Score";
-      GH_ToRightAlgaeScore = PathPlannerPath.fromPathFile(filename);
-      filename = "IJ to Center Algae Score";
-      IJ_ToCenterAlgaeScore = PathPlannerPath.fromPathFile(filename);
-      filename = "Kilo-Lima to Left Barge Backwards";
-      KiloLimaToLeftBargeBackwards = PathPlannerPath.fromPathFile(filename);
-      filename = "Left Algae Score Backwards to Kilo-Lima";
-      LeftAlgaeScoreBackwardsToKiloLima = PathPlannerPath.fromPathFile(filename);
-      filename = "Left Algae Score Backwards to Leave";
-      LeftAlgaeScoreBackwardsToLeave = PathPlannerPath.fromPathFile(filename);
-      filename = "Left Barge Backwards to Left Algae Score Backwards";
-      LeftBargeBackwardsToLeftAlgaeScoreBackwards = PathPlannerPath.fromPathFile(filename);
+      RightAlgaeScoreToIJ = PathPlannerPath.fromPathFile("Right Algae Score to IJ");
+      CenterAlgaeScoreBackwardsToLeave =
+          PathPlannerPath.fromPathFile("Center Algae Score Backwards to Leave");
+      GH_ToRightAlgaeScore = PathPlannerPath.fromPathFile("GH to Right Algae Score");
+      IJ_ToCenterAlgaeScore = PathPlannerPath.fromPathFile("IJ to Center Algae Score");
+      KiloLimaToLeftBargeBackwards =
+          PathPlannerPath.fromPathFile("Kilo-Lima to Left Barge Backwards");
+      LeftAlgaeScoreBackwardsToKiloLima =
+          PathPlannerPath.fromPathFile("Left Algae Score Backwards to Kilo-Lima");
+      LeftAlgaeScoreBackwardsToLeave =
+          PathPlannerPath.fromPathFile("Left Algae Score Backwards to Leave");
+      LeftBargeBackwardsToLeftAlgaeScoreBackwards =
+          PathPlannerPath.fromPathFile("Left Barge Backwards to Left Algae Score Backwards");
 
-      filename = "Right Algae Score to Leave";
-      RightAlgaeScoreToLeave = PathPlannerPath.fromPathFile(filename);
+      RightAlgaeScoreToLeave = PathPlannerPath.fromPathFile("Right Algae Score to Leave");
 
     } catch (Exception e) {
-      DriverStation.reportError("Failed to load PathPlanner path " + filename, true);
+      DriverStation.reportError("Failed to load PathPlanner path - " + e.getMessage(), true);
+      System.exit(1);
     }
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
@@ -300,31 +280,32 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
 
-    if (RobotController.getBatteryVoltage() <= 12.00
-        && (RobotContainer.getSuperstructure().getState() == Superstructure.Superstates.IDLE
-            || (RobotContainer.getSuperstructure().getState()
-                    == Superstructure.Superstates.CORAL_HELD)
-                && RobotContainer.getIntakeSuperstructure().getIntakeSuperstate()
-                    == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
-                && !DriverStation.isFMSAttached())
-        && Constants.buzz) {
-      driver.setRumble(GenericHID.RumbleType.kBothRumble, 0);
-      batteryLowStopTimer.start();
-      if (batteryLowStopTimer.hasElapsed(5)) {
+    if (Constants.buzz) {
+      if (RobotController.getBatteryVoltage() <= 12.00
+          && (RobotContainer.getSuperstructure().getState() == Superstructure.Superstates.IDLE
+              || (RobotContainer.getSuperstructure().getState()
+                      == Superstructure.Superstates.CORAL_HELD)
+                  && RobotContainer.getIntakeSuperstructure().getIntakeSuperstate()
+                      == IntakeSuperstructure.IntakeSuperstates.RETRACT_IDLE
+                  && !DriverStation.isFMSAttached())) {
         driver.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+        batteryLowStopTimer.start();
+        if (batteryLowStopTimer.hasElapsed(5)) {
+          driver.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+          batteryLowStopTimer.stop();
+          batteryLowStopTimer.reset();
+          DriverStation.reportError(
+              "Battery voltage is critically low (" + RobotController.getBatteryVoltage() + "V)",
+              false);
+        }
+      } else {
         batteryLowStopTimer.stop();
         batteryLowStopTimer.reset();
-        DriverStation.reportError(
-            "Battery voltage is critically low (" + RobotController.getBatteryVoltage() + "V)",
-            false);
       }
-    } else {
-      batteryLowStopTimer.stop();
-      batteryLowStopTimer.reset();
-    }
 
-    if (RobotController.getBatteryVoltage() > 12.00) {
-      driver.setRumble(GenericHID.RumbleType.kBothRumble, 0.0);
+      if (RobotController.getBatteryVoltage() > 12.00) {
+        driver.setRumble(GenericHID.RumbleType.kBothRumble, 0.0);
+      }
     }
 
     /* roboRIO settings to optimize Java memory use:
