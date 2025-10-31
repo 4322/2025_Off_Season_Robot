@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
 import frc.robot.commands.CoralIntake;
 import frc.robot.commands.ScoreCoral;
@@ -94,16 +95,23 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
             }),
         new OrangeParallelCommandGroup(
             new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1),
-            AutoBuilder.followPath(Robot.JulietToFeed1)
-                .onlyIf(
+            new OrangeSequentialCommandGroup(
+                new WaitUntilCommand(
                     () ->
                         superstructure.getEndEffectorState()
-                            == EndEffectorStates.RELEASE_CORAL_NORMAL)),
+                            == EndEffectorStates.RELEASE_CORAL_NORMAL),
+                AutoBuilder.followPath(Robot.JulietToFeed1))),
         new OrangeParallelCommandGroup(
             AutoBuilder.followPath(Robot.JulietToFeed2),
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
-        new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral2),
-        new CoralIntake(intakeSuperstructure, drive, visionObjectDetection),
+        new OrangeParallelCommandGroup(
+            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral2),
+            new OrangeSequentialCommandGroup(
+                new WaitUntilCommand(
+                    () ->
+                        superstructure.getEndEffectorState()
+                            == EndEffectorStates.RELEASE_CORAL_NORMAL),
+                new CoralIntake(intakeSuperstructure, drive, visionObjectDetection))),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3));
   }
 }
