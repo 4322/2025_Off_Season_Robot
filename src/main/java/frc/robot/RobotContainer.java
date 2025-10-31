@@ -362,7 +362,7 @@ public class RobotContainer {
                 superstructure, intakeSuperstructure, arm, elevator, deployer, drive));
 
     driver
-        .leftTrigger()
+        .povLeft()
         .onTrue(
             new InstantCommand(
                     () -> {
@@ -381,7 +381,7 @@ public class RobotContainer {
                             != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
 
     driver
-        .povLeft()
+        .leftBumper()
         .whileTrue(
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
                 .onlyIf(
