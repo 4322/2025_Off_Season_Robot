@@ -117,6 +117,7 @@ public class Superstructure extends SubsystemBase {
 
     // The home button can only be activated when the robot is disabled, so accept it from any state
     if (requestHomed) {
+      woodBlockRemoved = false;
       elevator.setHomePosition();
       arm.setHomePosition();
       intakeSuperstructure.setHome();
