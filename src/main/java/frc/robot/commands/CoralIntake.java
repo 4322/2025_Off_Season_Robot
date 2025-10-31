@@ -73,8 +73,8 @@ public class CoralIntake extends Command {
                 new Pose2d(coralPosition, targetAngle)
                     .transformBy(
                         new Transform2d(
-                            new Translation2d(-Constants.VisionObjectDetection.coralIntakeOffset, 0)
-                                .rotateBy(targetAngle),
+                            new Translation2d(
+                                -Constants.VisionObjectDetection.coralIntakeOffset, 0),
                             new Rotation2d()));
             currentPoseRequest = () -> driveToPoseTarget;
             driveToPose.schedule();
