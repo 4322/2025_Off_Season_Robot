@@ -120,6 +120,7 @@ public class DescoreAlgae extends Command {
                 && driveToPose.withinTolerance(Constants.AutoScoring.algaeSafeDistTolerance)) {
               state = ScoreState.DRIVE_IN;
               currentPoseRequest = () -> targetScoringPose;
+              driveToPose.resetGoal();
             }
           }
           break;
@@ -128,6 +129,7 @@ public class DescoreAlgae extends Command {
             state = ScoreState.HOLD_POSITION;
           } else if (superstructure.isAlgaeHeld()) {
             currentPoseRequest = () -> driveBackPose;
+            driveToPose.resetGoal();
             state = ScoreState.DRIVEBACK;
           }
           break;

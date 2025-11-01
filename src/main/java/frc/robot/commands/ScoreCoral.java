@@ -315,6 +315,7 @@ public class ScoreCoral extends Command {
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()) {
               currentPoseRequest = () -> targetScoringPose;
+              driveToPose.resetGoal();
               state = ScoreState.DRIVE_IN;
             }
           }
@@ -338,6 +339,7 @@ public class ScoreCoral extends Command {
                 && !superstructure.isCoralHeld()
                 && level == Level.L1) {
               currentPoseRequest = () -> driveBackPose;
+              driveToPose.resetGoal();
               state = ScoreState.DRIVEBACK;
 
             } else if (level != Level.L1
@@ -346,6 +348,7 @@ public class ScoreCoral extends Command {
                 driveToPose.cancel();
               } else {
                 currentPoseRequest = () -> driveBackPose;
+                driveToPose.resetGoal();
               }
               state = ScoreState.DRIVEBACK;
             }

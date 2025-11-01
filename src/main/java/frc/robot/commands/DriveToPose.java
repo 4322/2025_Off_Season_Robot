@@ -292,6 +292,10 @@ public class DriveToPose extends Command {
     return reachedGoal && thetaErrorAbs < thetaController.getPositionTolerance();
   }
 
+  public void resetGoal() {
+    reachedGoal = false;
+  }
+
   /** Checks if the robot pose is within the allowed drive tolerance. */
   public boolean withinTolerance(double driveTolerance) {
     return running && Math.abs(driveErrorAbs) < driveTolerance;
