@@ -49,44 +49,23 @@ public class Robot extends LoggedRobot {
   private Timer batteryLowStopTimer = new Timer();
 
   // Mirrored paths
-
   public static PathPlannerPath ThreeCoralStartToJuliet;
-  public static PathPlannerPath CustomThreeCoralStartToJuliet;
   public static PathPlannerPath JulietToFeed1;
   public static PathPlannerPath JulietToFeed2;
-  public static PathPlannerPath KiloToFeed;
 
   // Mirrors of the above
   public static PathPlannerPath ThreeCoralStartToEcho;
   public static PathPlannerPath EchoToFeed1;
   public static PathPlannerPath EchoToFeed2;
-  public static PathPlannerPath DeltaToFeed;
 
   // Non-mirrored paths
   public static PathPlannerPath Leave;
   public static PathPlannerPath TestLeave;
-
-  public static PathPlannerPath ThreeCoralStartPushToJuliet;
-
   public static PathPlannerPath CenterStartToGulf;
-  public static PathPlannerPath GulfToGulfHotel;
-  public static PathPlannerPath CenterBargeToCenterAlgaeScore;
   public static PathPlannerPath CenterAlgaeScoreToLeave;
-
-  public static PathPlannerPath JulietToIndiaJuliet;
-  public static PathPlannerPath LeftBargeToLeftAlgaeScore;
-  public static PathPlannerPath LeftAlgaeScoreToFeed;
-
   public static PathPlannerPath RightAlgaeScoreToIJ;
-  public static PathPlannerPath CenterAlgaeScoreBackwardsToLeave;
   public static PathPlannerPath GH_ToRightAlgaeScore;
   public static PathPlannerPath IJ_ToCenterAlgaeScore;
-  public static PathPlannerPath KiloLimaToLeftBargeBackwards;
-  public static PathPlannerPath LeftAlgaeScoreBackwardsToKiloLima;
-  public static PathPlannerPath LeftAlgaeScoreBackwardsToLeave;
-  public static PathPlannerPath LeftBargeBackwardsToLeftAlgaeScoreBackwards;
-
-  public static PathPlannerPath RightAlgaeScoreToLeave;
 
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
@@ -218,45 +197,20 @@ public class Robot extends LoggedRobot {
       TestLeave = PathPlannerPath.fromPathFile("Test Leave");
 
       CenterStartToGulf = PathPlannerPath.fromPathFile("Center Start to Gulf");
-      GulfToGulfHotel = PathPlannerPath.fromPathFile("Gulf to Gulf-Hotel");
-      CenterBargeToCenterAlgaeScore =
-          PathPlannerPath.fromPathFile("Center Barge to Center Algae Score");
       CenterAlgaeScoreToLeave = PathPlannerPath.fromPathFile("Center Algae Score to Leave");
 
       ThreeCoralStartToJuliet = PathPlannerPath.fromPathFile("Three Coral Start to Juliet");
-      CustomThreeCoralStartToJuliet =
-          PathPlannerPath.fromPathFile("Custom Three Coral Start to Juliet");
-      ThreeCoralStartPushToJuliet =
-          PathPlannerPath.fromPathFile("Three Coral Start Push to Juliet");
       JulietToFeed1 = PathPlannerPath.fromPathFile("Juliet to Feed 1");
       JulietToFeed2 = PathPlannerPath.fromPathFile("Juliet to Feed 2");
-      KiloToFeed = PathPlannerPath.fromPathFile("Kilo to Feed");
 
       ThreeCoralStartToEcho =
           PathPlannerPath.fromPathFile("Three Coral Start to Juliet").mirrorPath();
       EchoToFeed1 = PathPlannerPath.fromPathFile("Juliet to Feed 1").mirrorPath();
       EchoToFeed2 = PathPlannerPath.fromPathFile("Juliet to Feed 2").mirrorPath();
-      DeltaToFeed = PathPlannerPath.fromPathFile("Kilo to Feed").mirrorPath();
-
-      JulietToIndiaJuliet = PathPlannerPath.fromPathFile("Juliet to India-Juliet");
-      LeftBargeToLeftAlgaeScore = PathPlannerPath.fromPathFile("Left Barge to Left Algae Score");
-      LeftAlgaeScoreToFeed = PathPlannerPath.fromPathFile("Left Algae Score to Feed");
 
       RightAlgaeScoreToIJ = PathPlannerPath.fromPathFile("Right Algae Score to IJ");
-      CenterAlgaeScoreBackwardsToLeave =
-          PathPlannerPath.fromPathFile("Center Algae Score Backwards to Leave");
       GH_ToRightAlgaeScore = PathPlannerPath.fromPathFile("GH to Right Algae Score");
       IJ_ToCenterAlgaeScore = PathPlannerPath.fromPathFile("IJ to Center Algae Score");
-      KiloLimaToLeftBargeBackwards =
-          PathPlannerPath.fromPathFile("Kilo-Lima to Left Barge Backwards");
-      LeftAlgaeScoreBackwardsToKiloLima =
-          PathPlannerPath.fromPathFile("Left Algae Score Backwards to Kilo-Lima");
-      LeftAlgaeScoreBackwardsToLeave =
-          PathPlannerPath.fromPathFile("Left Algae Score Backwards to Leave");
-      LeftBargeBackwardsToLeftAlgaeScoreBackwards =
-          PathPlannerPath.fromPathFile("Left Barge Backwards to Left Algae Score Backwards");
-
-      RightAlgaeScoreToLeave = PathPlannerPath.fromPathFile("Right Algae Score to Leave");
 
     } catch (Exception e) {
       DriverStation.reportError("Failed to load PathPlanner path - " + e.getMessage(), true);
