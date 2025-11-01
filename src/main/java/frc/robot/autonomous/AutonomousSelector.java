@@ -26,16 +26,19 @@ public class AutonomousSelector {
       IntakeSuperstructure intakeSuperstructure,
       Vision vision,
       VisionObjectDetection objectDetection) {
-    autonomousSelector.addDefaultOption("DO_NOTHING", new DoNothing(superstructure));
+    autonomousSelector.addOption("DO_NOTHING", new DoNothing(superstructure));
     autonomousSelector.addOption("LEAVE", new Leave(drive, superstructure));
     autonomousSelector.addOption(
         "ONE_CORAL_TWO_ALGAE_CENTER", new OneCoralTwoAlgaeCenter(drive, superstructure));
     autonomousSelector.addOption(
-        "THREE_CORAL_LEFT",
+        "THREE_CORAL_FAR_LEFT",
         new ThreeCoralLeft(drive, superstructure, intakeSuperstructure, vision, objectDetection));
     autonomousSelector.addOption(
+        "THREE_CORAL_LEFT",
+        new ThreeCoralLeft(drive, superstructure, intakeSuperstructure, vision, objectDetection));
+    autonomousSelector.addDefaultOption(
         "THREE_CORAL_RIGHT",
-        new ThreeCoralRight(drive, superstructure, intakeSuperstructure, vision));
+        new ThreeCoralRight(drive, superstructure, intakeSuperstructure, vision, objectDetection));
     if (Constants.wantDriveTestAutos) {
       autonomousSelector.addOption("TEST_LEAVE", new TestLeave(drive, superstructure));
     }
