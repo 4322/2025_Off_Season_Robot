@@ -40,6 +40,7 @@ public class DriveToPose extends Command {
   private Translation2d lastSetpointTranslation;
   private Pose2d lastTargetPose;
   private double pathDistance;
+  private boolean reachedGoal;
 
   private static final LoggedTunableNumber driveKp = new LoggedTunableNumber("DriveToPose/DriveKp");
   private static final LoggedTunableNumber driveKd = new LoggedTunableNumber("DriveToPose/DriveKd");
@@ -154,6 +155,7 @@ public class DriveToPose extends Command {
             slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
             driveMaxAcceleration.get()));
     lastTargetPose = poseSupplier.get();
+    reachedGoal = false;
   }
 
   @Override
@@ -205,6 +207,11 @@ public class DriveToPose extends Command {
               slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
               highMode ? driveMaxDecelerationHigh.get() : driveMaxDeceleration.get()));
       lastTargetPose = targetPose;
+      reachedGoal = false;
+    } else {
+        if (!reachedGoal && driveErrorAbs < driveController.getPositionTolerance()) {
+            reachedGoal = true;
+        } 
     }
 
     // Calculate drive speed
@@ -229,7 +236,9 @@ public class DriveToPose extends Command {
     double driveVelocityScalar =
         driveController.getSetpoint().velocity * ffScaler
             + driveController.calculate(driveErrorAbs, 0.0);
-    if (currentDistance < driveController.getPositionTolerance()) driveVelocityScalar = 0.0;
+    if (reachedGoal) {
+        driveVelocityScalar = 0.0;
+    }
     lastSetpointTranslation =
         new Pose2d(
                 targetPose.getTranslation(),
@@ -271,6 +280,7 @@ public class DriveToPose extends Command {
   @Override
   public void end(boolean interrupted) {
     running = false;
+    reachedGoal = false;
     drive.runVelocity(new ChassisSpeeds(), true);
     Logger.recordOutput("DriveToPose/DriveToPoseSetpoint", new Pose2d() {});
     Logger.recordOutput("DriveToPose/DriveToPoseGoal", new Pose2d() {});
@@ -278,7 +288,7 @@ public class DriveToPose extends Command {
 
   /** Checks if the robot is at the final pose. */
   public boolean atGoal() {
-    return driveErrorAbs < driveController.getPositionTolerance()
+    return reachedGoal
         && thetaErrorAbs < thetaController.getPositionTolerance();
   }
 
