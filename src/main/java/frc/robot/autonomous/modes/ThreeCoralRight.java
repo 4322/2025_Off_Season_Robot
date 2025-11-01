@@ -43,7 +43,7 @@ public class ThreeCoralRight extends OrangeSequentialCommandGroup {
                   ? Rotation2d.fromDegrees(ReefFaceRobotHeading.EF.blue)
                   : Rotation2d.fromDegrees(ReefFaceRobotHeading.EF.red);
             },
-            ClosestReefPipe.RIGHT,
+            ClosestReefPipe.LEFT,
             L1Zone.MIDDLE,
             AlgaeLevel.L2,
             () -> {
@@ -59,7 +59,7 @@ public class ThreeCoralRight extends OrangeSequentialCommandGroup {
                   ? Rotation2d.fromDegrees(ReefFaceRobotHeading.CD.blue)
                   : Rotation2d.fromDegrees(ReefFaceRobotHeading.CD.red);
             },
-            ClosestReefPipe.LEFT,
+            ClosestReefPipe.RIGHT,
             L1Zone.MIDDLE,
             AlgaeLevel.L2,
             () -> {
@@ -75,7 +75,7 @@ public class ThreeCoralRight extends OrangeSequentialCommandGroup {
                   ? Rotation2d.fromDegrees(ReefFaceRobotHeading.CD.blue)
                   : Rotation2d.fromDegrees(ReefFaceRobotHeading.CD.red);
             },
-            ClosestReefPipe.RIGHT,
+            ClosestReefPipe.LEFT,
             L1Zone.MIDDLE,
             AlgaeLevel.L2,
             () -> {
