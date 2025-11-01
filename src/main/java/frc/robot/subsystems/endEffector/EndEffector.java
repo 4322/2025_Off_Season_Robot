@@ -115,8 +115,9 @@ public class EndEffector extends SubsystemBase {
           algaeHeld = false;
         } else {
           io.setVoltage(Constants.EndEffector.algaeIntakeVolts);
-          intakingTimer.start();
           state = EndEffectorStates.INTAKING_ALGAE;
+          intakingTimer.stop();
+          intakingTimer.reset();
         }
 
         break;
@@ -127,6 +128,8 @@ public class EndEffector extends SubsystemBase {
           // detection tuned (if we end
           // up doing)
           state = EndEffectorStates.INTAKING_CORAL;
+          intakingTimer.stop();
+          intakingTimer.reset();
           coralHeld = true;
         }
         if (requestIdle) {
