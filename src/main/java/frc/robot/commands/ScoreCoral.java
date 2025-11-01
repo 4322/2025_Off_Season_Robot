@@ -332,7 +332,16 @@ public class ScoreCoral extends Command {
                           && driveToPose.withinTolerance(
                               Constants.AutoScoring.atReefFaceL1Tolerance))))) {
 
-            superstructure.requestScoreCoral(level);
+            if (level == Level.L4) {
+              times.start();
+              if (times.hasElapsed(0.1)) {
+                superstructure.requestScoreCoral(level);
+                times.stop();
+                times.reset();
+              }
+            } else {
+              superstructure.requestScoreCoral(level);
+            }
 
             if (superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()
