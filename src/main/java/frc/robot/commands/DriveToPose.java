@@ -199,21 +199,6 @@ public class DriveToPose extends Command {
     Pose2d currentPose = drive.getPose();
     Pose2d targetPose = poseSupplier.get();
 
-    if (!targetPose.equals(lastTargetPose)) {
-      pathDistance = currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation());
-      // use acceleration at start of new path
-      driveController.setConstraints(
-          new TrapezoidProfile.Constraints(
-              slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
-              highMode ? driveMaxDecelerationHigh.get() : driveMaxDeceleration.get()));
-      lastTargetPose = targetPose;
-      reachedGoal = false;
-    } else {
-        if (!reachedGoal && driveErrorAbs < driveController.getPositionTolerance()) {
-            reachedGoal = true;
-        } 
-    }
-
     // Calculate drive speed
     double currentDistance =
         currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation());
@@ -230,6 +215,22 @@ public class DriveToPose extends Command {
             0.0,
             1.0);
     driveErrorAbs = currentDistance;
+
+    if (!targetPose.equals(lastTargetPose)) {
+      pathDistance = currentPose.getTranslation().getDistance(poseSupplier.get().getTranslation());
+      // use acceleration at start of new path
+      driveController.setConstraints(
+          new TrapezoidProfile.Constraints(
+              slowMode ? driveMaxVelocitySlow.get() : driveMaxVelocity.get(),
+              highMode ? driveMaxDecelerationHigh.get() : driveMaxDeceleration.get()));
+      lastTargetPose = targetPose;
+      reachedGoal = false;
+    } else {
+      if (!reachedGoal && driveErrorAbs < driveController.getPositionTolerance()) {
+        reachedGoal = true;
+      }
+    }
+
     driveController.reset(
         lastSetpointTranslation.getDistance(targetPose.getTranslation()),
         driveController.getSetpoint().velocity);
@@ -237,7 +238,7 @@ public class DriveToPose extends Command {
         driveController.getSetpoint().velocity * ffScaler
             + driveController.calculate(driveErrorAbs, 0.0);
     if (reachedGoal) {
-        driveVelocityScalar = 0.0;
+      driveVelocityScalar = 0.0;
     }
     lastSetpointTranslation =
         new Pose2d(
@@ -288,8 +289,7 @@ public class DriveToPose extends Command {
 
   /** Checks if the robot is at the final pose. */
   public boolean atGoal() {
-    return reachedGoal
-        && thetaErrorAbs < thetaController.getPositionTolerance();
+    return reachedGoal && thetaErrorAbs < thetaController.getPositionTolerance();
   }
 
   /** Checks if the robot pose is within the allowed drive tolerance. */
