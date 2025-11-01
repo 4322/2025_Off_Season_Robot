@@ -234,8 +234,8 @@ public class Robot extends LoggedRobot {
 
       ThreeCoralStartToEcho =
           PathPlannerPath.fromPathFile("Three Coral Start to Juliet").mirrorPath();
-      EchoToFeed1 = PathPlannerPath.fromPathFile("Juliet to Feed 1");
-      EchoToFeed2 = PathPlannerPath.fromPathFile("Juliet to Feed 2");
+      EchoToFeed1 = PathPlannerPath.fromPathFile("Juliet to Feed 1").mirrorPath();
+      EchoToFeed2 = PathPlannerPath.fromPathFile("Juliet to Feed 2").mirrorPath();
       DeltaToFeed = PathPlannerPath.fromPathFile("Kilo to Feed").mirrorPath();
 
       JulietToIndiaJuliet = PathPlannerPath.fromPathFile("Juliet to India-Juliet");

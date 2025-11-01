@@ -30,15 +30,15 @@ public class AutonomousSelector {
     autonomousSelector.addOption("LEAVE", new Leave(drive, superstructure));
     autonomousSelector.addOption(
         "ONE_CORAL_TWO_ALGAE_CENTER", new OneCoralTwoAlgaeCenter(drive, superstructure));
-    autonomousSelector.addDefaultOption(
+    autonomousSelector.addOption(
         "FAR_THREE_CORAL_LEFT",
         new ThreeCoralLeft(drive, superstructure, intakeSuperstructure, vision, objectDetection));
     autonomousSelector.addOption(
         "CUSTOM_THREE_CORAL_LEFT",
         new ThreeCoralLeft(drive, superstructure, intakeSuperstructure, vision, objectDetection));
-    autonomousSelector.addOption(
+    autonomousSelector.addDefaultOption(
         "THREE_CORAL_RIGHT",
-        new ThreeCoralRight(drive, superstructure, intakeSuperstructure, vision));
+        new ThreeCoralRight(drive, superstructure, intakeSuperstructure, vision, objectDetection));
     if (Constants.wantDriveTestAutos) {
       autonomousSelector.addOption("TEST_LEAVE", new TestLeave(drive, superstructure));
     }
