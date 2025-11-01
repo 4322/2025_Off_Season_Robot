@@ -115,7 +115,7 @@ public class EndEffector extends SubsystemBase {
           algaeHeld = false;
         } else {
           io.setVoltage(Constants.EndEffector.algaeIntakeVolts);
-          if (inputs.sensorProximity < Constants.EndEffector.algaeProximityThreshold) {
+          if (inputs.isAlgaeProximityDetected) {
             state = EndEffectorStates.INTAKING_ALGAE;
             intakingTimer.stop();
             intakingTimer.reset();
@@ -126,14 +126,10 @@ public class EndEffector extends SubsystemBase {
         break;
       case INTAKE_CORAL:
         io.setVoltage(Constants.EndEffector.coralIntakeVolts);
-        if (inputs
-            .isCoralProximityDetected /*|| isPiecePickupDetected*/) { // TODO until we have current
-          // detection tuned (if we end
-          // up doing)
+        if (inputs.isCoralProximityDetected) {
           state = EndEffectorStates.INTAKING_CORAL;
           intakingTimer.stop();
           intakingTimer.reset();
-          coralHeld = true;
         }
         if (requestIdle) {
           state = EndEffectorStates.IDLE;
@@ -150,9 +146,9 @@ public class EndEffector extends SubsystemBase {
                 < Constants.EndEffector.algaeProximityThresholdIntake) {
               state = EndEffectorStates.HOLD_ALGAE;
               algaeHeld = true;
+              intakingTimer.stop();
+              intakingTimer.reset();
             }
-            intakingTimer.stop();
-            intakingTimer.reset();
           }
 
         } else {
@@ -163,6 +159,7 @@ public class EndEffector extends SubsystemBase {
         if (intakingTimer.isRunning()) {
           if (intakingTimer.hasElapsed(Constants.EndEffector.coralIntakingDelaySeconds)) {
             state = EndEffectorStates.HOLD_CORAL;
+            coralHeld = true;
             intakingTimer.stop();
             intakingTimer.reset();
           }
