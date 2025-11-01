@@ -104,9 +104,8 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
         new OrangeParallelCommandGroup(
             AutoBuilder.followPath(Robot.JulietToFeed2),
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
-        new OrangeParallelCommandGroup(
-            new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
-            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection),
-            new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3)));
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
+        new CoralIntake(intakeSuperstructure, drive, visionObjectDetection),
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3));
   }
 }
