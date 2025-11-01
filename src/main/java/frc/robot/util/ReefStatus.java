@@ -1,14 +1,15 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import java.util.function.Supplier;
 
 public class ReefStatus {
   private boolean reefFaceAmbiguity;
   private boolean reefPipeAmbiguity;
-  private Rotation2d closestRobotToReefFaceAngle;
+  private Supplier<Rotation2d> closestRobotToReefFaceAngle;
   private ClosestReefPipe closestReefPipe;
   private L1Zone closestL1Zone;
-  private int tagId;
+  private Supplier<Integer> tagId;
   private AlgaeLevel algaeLevel;
 
   public enum L1Zone {
@@ -30,6 +31,23 @@ public class ReefStatus {
   public ReefStatus(
       boolean reefFaceAmbiguity,
       boolean reefPipeAmbiguity,
+      Supplier<Rotation2d> closestReefFaceAngle,
+      ClosestReefPipe closestReefPipe,
+      L1Zone closestL1Zone,
+      AlgaeLevel algaeLevel,
+      Supplier<Integer> tagId) {
+    this.reefFaceAmbiguity = reefFaceAmbiguity;
+    this.reefPipeAmbiguity = reefPipeAmbiguity;
+    this.closestRobotToReefFaceAngle = closestReefFaceAngle;
+    this.closestReefPipe = closestReefPipe;
+    this.closestL1Zone = closestL1Zone;
+    this.tagId = tagId;
+    this.algaeLevel = algaeLevel;
+  }
+
+  public ReefStatus(
+      boolean reefFaceAmbiguity,
+      boolean reefPipeAmbiguity,
       Rotation2d closestReefFaceAngle,
       ClosestReefPipe closestReefPipe,
       L1Zone closestL1Zone,
@@ -37,10 +55,10 @@ public class ReefStatus {
       int tagId) {
     this.reefFaceAmbiguity = reefFaceAmbiguity;
     this.reefPipeAmbiguity = reefPipeAmbiguity;
-    this.closestRobotToReefFaceAngle = closestReefFaceAngle;
+    this.closestRobotToReefFaceAngle = () -> closestReefFaceAngle;
     this.closestReefPipe = closestReefPipe;
     this.closestL1Zone = closestL1Zone;
-    this.tagId = tagId;
+    this.tagId = () -> tagId;
     this.algaeLevel = algaeLevel;
   }
 
@@ -53,7 +71,7 @@ public class ReefStatus {
   }
 
   public Rotation2d getClosestRobotAngle() {
-    return closestRobotToReefFaceAngle;
+    return closestRobotToReefFaceAngle.get();
   }
 
   public ClosestReefPipe getClosestReefPipe() {
@@ -69,6 +87,6 @@ public class ReefStatus {
   }
 
   public int getFaceTagId() {
-    return tagId;
+    return tagId.get();
   }
 }

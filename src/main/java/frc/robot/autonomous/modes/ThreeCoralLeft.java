@@ -4,7 +4,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -39,43 +38,49 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
         new ReefStatus(
             false,
             false,
-            new Rotation2d(
-                Units.degreesToRadians(
-                    Robot.alliance == Alliance.Blue
-                        ? ReefFaceRobotHeading.IJ.blue
-                        : ReefFaceRobotHeading.IJ.red)),
+            () -> {
+              return Robot.alliance == Alliance.Blue
+                  ? Rotation2d.fromDegrees(ReefFaceRobotHeading.IJ.blue)
+                  : Rotation2d.fromDegrees(ReefFaceRobotHeading.IJ.red);
+            },
             ClosestReefPipe.RIGHT,
             L1Zone.MIDDLE,
             AlgaeLevel.L2,
-            Robot.alliance == Alliance.Blue ? ReefFaceTag.IJ.idBlue : ReefFaceTag.IJ.idRed);
+            () -> {
+              return Robot.alliance == Alliance.Blue ? ReefFaceTag.IJ.idBlue : ReefFaceTag.IJ.idRed;
+            });
 
     ReefStatus reefCoral2 =
         new ReefStatus(
             false,
             false,
-            new Rotation2d(
-                Units.degreesToRadians(
-                    Robot.alliance == Alliance.Blue
-                        ? ReefFaceRobotHeading.KL.blue
-                        : ReefFaceRobotHeading.KL.red)),
+            () -> {
+              return Robot.alliance == Alliance.Blue
+                  ? Rotation2d.fromDegrees(ReefFaceRobotHeading.KL.blue)
+                  : Rotation2d.fromDegrees(ReefFaceRobotHeading.KL.red);
+            },
             ClosestReefPipe.LEFT,
             L1Zone.MIDDLE,
             AlgaeLevel.L2,
-            Robot.alliance == Alliance.Blue ? ReefFaceTag.KL.idBlue : ReefFaceTag.KL.idRed);
+            () -> {
+              return Robot.alliance == Alliance.Blue ? ReefFaceTag.KL.idBlue : ReefFaceTag.KL.idRed;
+            });
 
     ReefStatus reefCoral3 =
         new ReefStatus(
             false,
             false,
-            new Rotation2d(
-                Units.degreesToRadians(
-                    Robot.alliance == Alliance.Blue
-                        ? ReefFaceRobotHeading.KL.blue
-                        : ReefFaceRobotHeading.KL.red)),
+            () -> {
+              return Robot.alliance == Alliance.Blue
+                  ? Rotation2d.fromDegrees(ReefFaceRobotHeading.KL.blue)
+                  : Rotation2d.fromDegrees(ReefFaceRobotHeading.KL.red);
+            },
             ClosestReefPipe.RIGHT,
             L1Zone.MIDDLE,
             AlgaeLevel.L2,
-            Robot.alliance == Alliance.Blue ? ReefFaceTag.KL.idBlue : ReefFaceTag.KL.idRed);
+            () -> {
+              return Robot.alliance == Alliance.Blue ? ReefFaceTag.KL.idBlue : ReefFaceTag.KL.idRed;
+            });
 
     PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
     Pose2d startPoseBlue = path.getStartingHolonomicPose().get();
