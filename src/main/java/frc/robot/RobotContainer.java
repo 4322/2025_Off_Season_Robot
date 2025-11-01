@@ -65,6 +65,7 @@ import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIO;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOPhoton;
+import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
 import frc.robot.util.OrangeSequentialCommandGroup;
 
 /**
@@ -120,6 +121,12 @@ public class RobotContainer {
 
       rollers = new Rollers(new RollersIO() {});
       deployer = new Deployer(new DeployerIO() {});
+      visionObjectDetection =
+          new VisionObjectDetection(
+              Constants.VisionObjectDetection.hostname,
+              Constants.VisionObjectDetection.robotCenterToCamera,
+              drive,
+              new VisionObjectDetectionIOSim() {});
 
     } else {
 
@@ -198,7 +205,8 @@ public class RobotContainer {
         deployer = new Deployer(new DeployerIO() {});
       }
 
-      if (Constants.visionObjectDetectionEnabled) {
+      if (Constants.visionObjectDetectionEnabled
+          && Constants.currentMode == Constants.RobotMode.REAL) {
         visionObjectDetection =
             new VisionObjectDetection(
                 Constants.VisionObjectDetection.hostname,
