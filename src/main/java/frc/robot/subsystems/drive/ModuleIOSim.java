@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.util.SwerveUtil.SwerveModuleConstants;
 
 public class ModuleIOSim implements ModuleIO {
@@ -52,16 +53,26 @@ public class ModuleIOSim implements ModuleIO {
 
   @Override
   public void setDriveOpenLoop(double driveWheelVelocityRadPerSec) {
-    driveVelMetersPerSec = driveWheelVelocityRadPerSec * constants.driveWheelRadius;
+    if (DriverStation.isEnabled()) {
+      driveVelMetersPerSec = driveWheelVelocityRadPerSec * constants.driveWheelRadius;
+    } else {
+      driveVelMetersPerSec = 0;
+    }
   }
 
   @Override
   public void setDriveVelocity(double driveWheelVelocityRadPerSec) {
-    driveVelMetersPerSec = driveWheelVelocityRadPerSec * constants.driveWheelRadius;
+    if (DriverStation.isEnabled()) {
+      driveVelMetersPerSec = driveWheelVelocityRadPerSec * constants.driveWheelRadius;
+    } else {
+      driveVelMetersPerSec = 0;
+    }
   }
 
   @Override
   public void setTurnPosition(Rotation2d turnWheelPosition) {
-    turnPos = turnWheelPosition;
+    if (DriverStation.isEnabled()) {
+      turnPos = turnWheelPosition;
+    }
   }
 }

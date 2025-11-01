@@ -99,14 +99,15 @@ public class VisionObjectDetection extends SubsystemBase {
 
   public Rotation3d[] getTargetObjectsRotations(
       SimulatedGamePieceConstants.GamePieceType targetGamePiece) {
-    if (targetGamePiece == SimulatedGamePieceConstants.GamePieceType.CORAL
-        && Constants.VisionObjectDetection.shouldIgnoreLollipopCoral) {
-      ArrayList<Rotation3d> rotations = new ArrayList<>();
-      for (Rotation3d rotation :
-          visionObjectDetectionInputs.visibleObjectRotations[targetGamePiece.id]) {
-        if (!isLollipop(rotation.toRotation2d())) rotations.add(rotation);
+    if (Constants.VisionObjectDetection.shouldIgnoreLollipopCoral) {
+      if (targetGamePiece == SimulatedGamePieceConstants.GamePieceType.CORAL) {
+        ArrayList<Rotation3d> rotations = new ArrayList<>();
+        for (Rotation3d rotation :
+            visionObjectDetectionInputs.visibleObjectRotations[targetGamePiece.id]) {
+          if (!isLollipop(rotation.toRotation2d())) rotations.add(rotation);
+        }
+        return rotations.toArray(new Rotation3d[0]);
       }
-      return rotations.toArray(new Rotation3d[0]);
     }
     return visionObjectDetectionInputs.visibleObjectRotations[targetGamePiece.id];
   }

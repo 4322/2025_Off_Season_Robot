@@ -1,5 +1,7 @@
 package frc.robot.subsystems.elevator;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 public class ElevatorIOSim implements ElevatorIO {
   private double requestedVoltage = 0;
   private double requestedPosition = 0;
@@ -67,24 +69,28 @@ public class ElevatorIOSim implements ElevatorIO {
   }
 
   private void simVolts() {
-    if (requestedVoltage == undefinedVoltage) {
-      voltage = 0;
-    } else if (voltage < requestedVoltage) {
-      voltage += (requestedVoltage - voltage) * fastRate;
-    } else {
-      voltage -= (voltage - requestedVoltage) * fastRate;
+    if (DriverStation.isEnabled()) {
+      if (requestedVoltage == undefinedVoltage) {
+        voltage = 0;
+      } else if (voltage < requestedVoltage) {
+        voltage += (requestedVoltage - voltage) * fastRate;
+      } else {
+        voltage -= (voltage - requestedVoltage) * fastRate;
+      }
+      position += voltage / 12.0 / 50.0;
     }
-    position += voltage / 12.0 / 50.0;
   }
 
   private void simPos() {
-    if (requestedPosition == undefinedPosition) {
-      return;
-    }
-    if (position < requestedPosition) {
-      position += (requestedPosition - position) * rate;
-    } else {
-      position -= (position - requestedPosition) * rate;
+    if (DriverStation.isEnabled()) {
+      if (requestedPosition == undefinedPosition) {
+        return;
+      }
+      if (position < requestedPosition) {
+        position += (requestedPosition - position) * rate;
+      } else {
+        position -= (position - requestedPosition) * rate;
+      }
     }
   }
 }
