@@ -115,6 +115,8 @@ public final class Constants {
     // to adjust for slippage cause by uneven weight distribution
     public static final double[] modulePositionScaling =
         new double[] {0.856, 0.941, 1, 0.912}; // module 0 slips
+    public static final double[] modulePositionScalingSIM =
+        new double[] {1, 1, 1, 1}; // module 0 slips
   }
 
   public static class PathPlanner {
