@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.RobotMode;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.util.OdometryValues;
 import java.util.ArrayList;
@@ -254,7 +255,7 @@ public class Drive extends SubsystemBase {
     SwerveModulePosition[] states = new SwerveModulePosition[4];
     for (int i = 0; i < 4; i++) {
       states[i] = modules[i].getPosition();
-      if (!(Constants.currentMode == Constants.currentMode.SIM)) {
+      if (!(Constants.currentMode == RobotMode.SIM)) {
         states[i].distanceMeters *= Constants.Drive.modulePositionScaling[i];
       }
     }
