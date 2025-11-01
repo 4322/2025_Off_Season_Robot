@@ -389,7 +389,7 @@ public class RobotContainer {
                             != IntakeSuperstructure.IntakeSuperstates.HOMELESS));
 
     driver
-        .leftBumper()
+        .leftTrigger()
         .whileTrue(
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
                 .onlyIf(
