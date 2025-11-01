@@ -83,7 +83,7 @@ public class CustomThreeCoralLeft extends OrangeSequentialCommandGroup {
               return Robot.alliance == Alliance.Blue ? ReefFaceTag.KL.idBlue : ReefFaceTag.KL.idRed;
             });
 
-    PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
+    PathPlannerPath path = Robot.CustomThreeCoralStartToJuliet;
     Pose2d startPoseBlue = path.getStartingHolonomicPose().get();
     path = path.flipPath();
     Pose2d startPoseRed = path.getStartingHolonomicPose().get();
