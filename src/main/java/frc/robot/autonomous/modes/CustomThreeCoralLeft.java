@@ -27,8 +27,8 @@ import frc.robot.util.ReefStatus.AlgaeLevel;
 import frc.robot.util.ReefStatus.ClosestReefPipe;
 import frc.robot.util.ReefStatus.L1Zone;
 
-public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
-  public ThreeCoralLeft(
+public class CustomThreeCoralLeft extends OrangeSequentialCommandGroup {
+  public CustomThreeCoralLeft(
       Drive drive,
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,
@@ -77,12 +77,12 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
             AlgaeLevel.L2,
             Robot.alliance == Alliance.Blue ? ReefFaceTag.KL.idBlue : ReefFaceTag.KL.idRed);
 
-    PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
+    PathPlannerPath path = Robot.CustomThreeCoralStartToJuliet;
     Pose2d startPoseBlue = path.getStartingHolonomicPose().get();
     path = path.flipPath();
     Pose2d startPoseRed = path.getStartingHolonomicPose().get();
 
-    setName("FAR_THREE_CORAL_LEFT");
+    setName("CUSTOM_THREE_CORAL_LEFT");
     addCommands(
         new InstantCommand(
             () -> {
