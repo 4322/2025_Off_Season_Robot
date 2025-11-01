@@ -87,7 +87,7 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
     path = path.flipPath();
     Pose2d startPoseRed = path.getStartingHolonomicPose().get();
 
-    setName("FAR_THREE_CORAL_LEFT");
+    setName("THREE_CORAL_FAR_LEFT");
     addCommands(
         new InstantCommand(
             () -> {

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.061754176610981,
-        "y": 5.594749999999999
+        "x": 5.814036885245901,
+        "y": 6.260706967213114
       },
       "isLocked": false,
       "linkedName": null
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -128.79655209830824
+    "rotation": -150.19523908534148
   },
   "useDefaultConstraints": true
 }

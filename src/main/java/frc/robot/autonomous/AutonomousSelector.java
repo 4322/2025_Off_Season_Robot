@@ -31,10 +31,10 @@ public class AutonomousSelector {
     autonomousSelector.addOption(
         "ONE_CORAL_TWO_ALGAE_CENTER", new OneCoralTwoAlgaeCenter(drive, superstructure));
     autonomousSelector.addOption(
-        "FAR_THREE_CORAL_LEFT",
+        "THREE_CORAL_FAR_LEFT",
         new ThreeCoralLeft(drive, superstructure, intakeSuperstructure, vision, objectDetection));
     autonomousSelector.addOption(
-        "CUSTOM_THREE_CORAL_LEFT",
+        "THREE_CORAL_LEFT",
         new ThreeCoralLeft(drive, superstructure, intakeSuperstructure, vision, objectDetection));
     autonomousSelector.addDefaultOption(
         "THREE_CORAL_RIGHT",

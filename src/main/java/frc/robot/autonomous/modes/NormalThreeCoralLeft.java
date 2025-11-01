@@ -26,8 +26,8 @@ import frc.robot.util.ReefStatus.AlgaeLevel;
 import frc.robot.util.ReefStatus.ClosestReefPipe;
 import frc.robot.util.ReefStatus.L1Zone;
 
-public class CustomThreeCoralLeft extends OrangeSequentialCommandGroup {
-  public CustomThreeCoralLeft(
+public class NormalThreeCoralLeft extends OrangeSequentialCommandGroup {
+  public NormalThreeCoralLeft(
       Drive drive,
       Superstructure superstructure,
       IntakeSuperstructure intakeSuperstructure,
@@ -87,7 +87,7 @@ public class CustomThreeCoralLeft extends OrangeSequentialCommandGroup {
     path = path.flipPath();
     Pose2d startPoseRed = path.getStartingHolonomicPose().get();
 
-    setName("CUSTOM_THREE_CORAL_LEFT");
+    setName("THREE_CORAL_LEFT");
     addCommands(
         new InstantCommand(
             () -> {
