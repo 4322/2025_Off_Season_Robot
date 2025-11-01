@@ -256,8 +256,7 @@ public class Drive extends SubsystemBase {
       states[i] = modules[i].getPosition();
       if (!(Constants.currentMode == Constants.currentMode.REAL)) {
         states[i].distanceMeters /= Constants.Drive.modulePositionScalingSIM[i];
-      }
-      else{      
+      } else {
         states[i].distanceMeters *= Constants.Drive.modulePositionScaling[i];
       }
     }
