@@ -97,7 +97,7 @@ public class EndEffector extends SubsystemBase {
 
     switch (state) {
       case IDLE:
-      // End effector doesn't do anything
+        // End effector doesn't do anything
         io.stop();
         if (requestIntakeAlgae) {
           state = EndEffectorStates.INTAKE_ALGAE;
@@ -112,7 +112,8 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case INTAKE_ALGAE:
-      // Intake algae voltage; Transitions to INTAKING_ALGAE once algae is detected to be pressed against end effector
+        // Intake algae voltage; Transitions to INTAKING_ALGAE once algae is detected to be pressed
+        // against end effector
         if (requestIdle) {
           state = EndEffectorStates.IDLE;
           algaeHeld = false;
@@ -123,12 +124,11 @@ public class EndEffector extends SubsystemBase {
             intakingTimer.stop();
             intakingTimer.reset();
           }
-          
         }
 
         break;
       case INTAKE_CORAL:
-      // Intake coral voltage; Transitions to INTAKING_CORAL once coral is touching end effector
+        // Intake coral voltage; Transitions to INTAKING_CORAL once coral is touching end effector
         io.setVoltage(Constants.EndEffector.coralIntakeVolts);
         if (inputs.isCoralProximityDetected) {
           state = EndEffectorStates.INTAKING_CORAL;
@@ -141,7 +141,8 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case INTAKING_ALGAE:
-      // Intake algae voltage; Waits algaeIntakingDelaySeconds, then checks whether algae is held or not
+        // Intake algae voltage; Waits algaeIntakingDelaySeconds, then checks whether algae is held
+        // or not
         if (intakingTimer.isRunning()) {
           if (intakingTimer.hasElapsed(Constants.EndEffector.algaeIntakingDelaySeconds)) {
             if (inputs.sensorProximity > Constants.EndEffector.algaeProximityThreshold) {
@@ -161,7 +162,7 @@ public class EndEffector extends SubsystemBase {
         }
         break;
       case INTAKING_CORAL:
-      // Intake coral voltage; Waits coralIntakingDelaySeconds then goes to HOLD_CORAL
+        // Intake coral voltage; Waits coralIntakingDelaySeconds then goes to HOLD_CORAL
         if (intakingTimer.isRunning()) {
           if (intakingTimer.hasElapsed(Constants.EndEffector.coralIntakingDelaySeconds)) {
             state = EndEffectorStates.HOLD_CORAL;
