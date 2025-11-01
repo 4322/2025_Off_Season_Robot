@@ -115,9 +115,12 @@ public class EndEffector extends SubsystemBase {
           algaeHeld = false;
         } else {
           io.setVoltage(Constants.EndEffector.algaeIntakeVolts);
-          state = EndEffectorStates.INTAKING_ALGAE;
-          intakingTimer.stop();
-          intakingTimer.reset();
+          if (inputs.sensorProximity < Constants.EndEffector.algaeProximityThreshold) {
+            state = EndEffectorStates.INTAKING_ALGAE;
+            intakingTimer.stop();
+            intakingTimer.reset();
+          }
+          
         }
 
         break;
@@ -140,7 +143,7 @@ public class EndEffector extends SubsystemBase {
       case INTAKING_ALGAE:
         if (intakingTimer.isRunning()) {
           if (intakingTimer.hasElapsed(Constants.EndEffector.algaeIntakingDelaySeconds)) {
-            if (inputs.sensorProximity > Constants.EndEffector.algaeProximityThresholdIntake) {
+            if (inputs.sensorProximity > Constants.EndEffector.algaeProximityThreshold) {
               algaeHeld = false;
               state = EndEffectorStates.IDLE;
             } else if (inputs.sensorProximity
