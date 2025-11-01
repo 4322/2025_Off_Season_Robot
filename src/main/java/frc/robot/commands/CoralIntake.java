@@ -1,18 +1,21 @@
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants.GamePieceType;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class CoralIntake extends Command {
 
@@ -24,6 +27,7 @@ public class CoralIntake extends Command {
   private DriveToPose driveToPose;
   private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
   private Rotation2d targetAngle;
+  private Timer ejectAutoTimer = new Timer();
 
   public CoralIntake(
       IntakeSuperstructure intakeSuperstructure,
@@ -41,6 +45,8 @@ public class CoralIntake extends Command {
   public void initialize() {
     coralPosition = null;
     targetAngle = null;
+    ejectAutoTimer.stop();
+    ejectAutoTimer.reset();
   }
 
   @Override
@@ -82,7 +88,18 @@ public class CoralIntake extends Command {
             driveToPoseTarget = new Pose2d(coralPosition, drive.getRotation());
             currentPoseRequest = () -> driveToPoseTarget;
             driveToPose.schedule();
-            break;
+
+            if (driveToPose.atGoal() && DriverStation.isAutonomous()) {
+              ejectAutoTimer.start();
+              if (ejectAutoTimer.hasElapsed(1.2)){
+                intakeSuperstructure.requestIntake();
+                ejectAutoTimer.stop();
+                ejectAutoTimer.reset();
+              } else if (ejectAutoTimer.hasElapsed(1)){
+                intakeSuperstructure.requestEject();
+                }
+              }
+              break;  
         }
       }
     }
