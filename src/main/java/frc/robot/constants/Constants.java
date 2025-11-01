@@ -6,6 +6,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.InvertMode;
 import com.reduxrobotics.motorcontrol.nitrate.types.PIDFeedforwardMode;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -114,8 +115,6 @@ public final class Constants {
     // to adjust for slippage cause by uneven weight distribution
     public static final double[] modulePositionScaling =
         new double[] {0.856, 0.941, 1, 0.912}; // module 0 slips
-    public static final double[] modulePositionScalingSIM =
-        new double[] {1, 1, 1, 1}; // module 0 slips
   }
 
   public static class PathPlanner {
