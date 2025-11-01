@@ -1,9 +1,5 @@
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -16,6 +12,8 @@ import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants.GamePieceType;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class CoralIntake extends Command {
 
@@ -91,15 +89,15 @@ public class CoralIntake extends Command {
 
             if (driveToPose.atGoal() && DriverStation.isAutonomous()) {
               ejectAutoTimer.start();
-              if (ejectAutoTimer.hasElapsed(1.2)){
+              if (ejectAutoTimer.hasElapsed(1.2)) {
                 intakeSuperstructure.requestIntake();
                 ejectAutoTimer.stop();
                 ejectAutoTimer.reset();
-              } else if (ejectAutoTimer.hasElapsed(1)){
+              } else if (ejectAutoTimer.hasElapsed(1)) {
                 intakeSuperstructure.requestEject();
-                }
               }
-              break;  
+            }
+            break;
         }
       }
     }
