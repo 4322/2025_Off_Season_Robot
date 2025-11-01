@@ -182,13 +182,15 @@ public class IntakeSuperstructure extends SubsystemBase {
 
         break;
       case INTAKE_EJECT:
-        deployer.eject();
         rollers.eject();
         indexer.reject();
         if (requestRetractIdle) {
           state = IntakeSuperstates.RETRACT_IDLE;
+        } else if (requestDeploy) {
+          state = IntakeSuperstates.FEED;
         }
         break;
+
       case INDEXER_EJECT:
         deployer.deploy();
         rollers.eject();

@@ -58,47 +58,61 @@ public class CoralIntake extends Command {
                 .getAngle()
                 .plus(Rotation2d.k180deg);
         intakeSuperstructure.requestIntake();
-        Logger.recordOutput("CoralIntake/coralPosition", coralPosition);
-        Logger.recordOutput(
-            "CoralIntake/coralAngleBotRelativeDeg",
-            coralPosition.minus(drive.getPose().getTranslation()).getAngle().getDegrees());
-        Logger.recordOutput(
-            "CoralIntake/driveHeadingDeg", drive.getPose().getRotation().getDegrees());
-        Logger.recordOutput("CoralIntake/targetAngleDeg", targetAngle.getDegrees());
+      }
+    }
 
-        switch (Constants.VisionObjectDetection.coralIntakeMode) {
-          case MANUAL:
-            break;
-          case AUTO_ALIGN:
-            drive.requestAutoRotateMode(targetAngle);
-            break;
-          case AUTO_ALIGN_DRIVE:
-            driveToPoseTarget =
-                new Pose2d(coralPosition, targetAngle)
-                    .transformBy(
-                        new Transform2d(
-                            new Translation2d(Constants.VisionObjectDetection.coralIntakeOffset, 0),
-                            new Rotation2d()));
-            currentPoseRequest = () -> driveToPoseTarget;
-            driveToPose.schedule();
-            break;
-          case AUTO_DRIVE:
-            driveToPoseTarget = new Pose2d(coralPosition, drive.getRotation());
-            currentPoseRequest = () -> driveToPoseTarget;
-            driveToPose.schedule();
+    if (coralPosition != null) {
+      Logger.recordOutput("CoralIntake/coralPosition", coralPosition);
+      Logger.recordOutput(
+          "CoralIntake/coralAngleBotRelativeDeg",
+          coralPosition.minus(drive.getPose().getTranslation()).getAngle().getDegrees());
+      Logger.recordOutput(
+          "CoralIntake/driveHeadingDeg", drive.getPose().getRotation().getDegrees());
+      Logger.recordOutput("CoralIntake/targetAngleDeg", targetAngle.getDegrees());
 
-            if (driveToPose.atGoal() && DriverStation.isAutonomous()) {
-              ejectAutoTimer.start();
-              if (ejectAutoTimer.hasElapsed(1.2)) {
-                intakeSuperstructure.requestIntake();
-                ejectAutoTimer.stop();
-                ejectAutoTimer.reset();
-              } else if (ejectAutoTimer.hasElapsed(1)) {
-                intakeSuperstructure.requestEject();
-              }
+      switch (Constants.VisionObjectDetection.coralIntakeMode) {
+        case MANUAL:
+          break;
+        case AUTO_ALIGN:
+          drive.requestAutoRotateMode(targetAngle);
+          break;
+        case AUTO_ALIGN_DRIVE:
+          driveToPoseTarget =
+              new Pose2d(coralPosition, targetAngle)
+                  .transformBy(
+                      new Transform2d(
+                          new Translation2d(Constants.VisionObjectDetection.coralIntakeOffset, 0),
+                          new Rotation2d()));
+          currentPoseRequest = () -> driveToPoseTarget;
+          driveToPose.schedule();
+
+          if (driveToPose.atGoal()) {
+            ejectAutoTimer.start();
+            if (ejectAutoTimer.hasElapsed(1.2)) {
+              intakeSuperstructure.requestIntake();
+              ejectAutoTimer.stop();
+              ejectAutoTimer.reset();
+            } else if (ejectAutoTimer.hasElapsed(1)) {
+              intakeSuperstructure.requestEject();
             }
-            break;
-        }
+          }
+          break;
+        case AUTO_DRIVE:
+          driveToPoseTarget = new Pose2d(coralPosition, drive.getRotation());
+          currentPoseRequest = () -> driveToPoseTarget;
+          driveToPose.schedule();
+
+          if (driveToPose.atGoal()) {
+            ejectAutoTimer.start();
+            if (ejectAutoTimer.hasElapsed(1.05)) {
+              intakeSuperstructure.requestIntake();
+              ejectAutoTimer.stop();
+              ejectAutoTimer.reset();
+            } else if (ejectAutoTimer.hasElapsed(1)) {
+              intakeSuperstructure.requestEject();
+            }
+          }
+          break;
       }
     }
   }
