@@ -104,8 +104,7 @@ public class EndEffector extends SubsystemBase {
         } else if (requestIntakeCoral) {
           state = EndEffectorStates.INTAKE_CORAL;
         } else if (inputs.isCoralProximityDetected) {
-          state = EndEffectorStates.HOLD_CORAL;
-          coralHeld = true;
+          state = EndEffectorStates.INTAKE_CORAL;
         } else if (requestEject) {
           unsetAllRequests();
           state = EndEffectorStates.EJECT;
