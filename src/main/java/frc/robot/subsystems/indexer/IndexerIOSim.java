@@ -18,16 +18,13 @@ public class IndexerIOSim implements IndexerIO {
     inputs.pickupAreaSensorProximity = 0.0; // not used
   }
 
-
   public void simCoralDetectedInPickupArea() {
     coralDetectedInPickupArea = true;
   }
 
-
   public void simCoralNOTDetectedInPickupArea() {
     coralDetectedInPickupArea = false;
   }
-
 
   public void simCoralDetectedInIndexer() {
     coralDetectedInIndexer = true;

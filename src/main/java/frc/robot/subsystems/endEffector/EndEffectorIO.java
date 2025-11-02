@@ -45,7 +45,6 @@ public interface EndEffectorIO {
 
   public default void enableBrakeMode(boolean enable) {}
 
- 
   // for tuning
   public default TalonFX getTalonFX() {
     return null;
