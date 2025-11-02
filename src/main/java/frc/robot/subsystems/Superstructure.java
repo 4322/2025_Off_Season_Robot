@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import com.reduxrobotics.motorcontrol.nitrate.types.IdleMode;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -537,5 +540,13 @@ public class Superstructure extends SubsystemBase {
 
   public void enableSingleTag(int tagID, SingleTagCamera cameraToUse) {
     vision.enableSingleTagSingleCam(tagID, cameraToUse);
+  }
+
+  public Pose2d getPose() {
+    return drive.getPose();
+  }
+
+  public Translation3d calculateIntakeOffset() {
+    return Constants.IntakeSuperstructure.intakeOffsetFromRobot;
   }
 }
