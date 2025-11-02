@@ -218,7 +218,6 @@ public class Robot extends LoggedRobot {
       GH_ToRightAlgaeScore = PathPlannerPath.fromPathFile("GH to Right Algae Score");
       IJ_ToCenterAlgaeScore = PathPlannerPath.fromPathFile("IJ to Center Algae Score");
 
-
     } catch (Exception e) {
       DriverStation.reportError("Failed to load PathPlanner path - " + e.getMessage(), true);
       System.exit(1);
