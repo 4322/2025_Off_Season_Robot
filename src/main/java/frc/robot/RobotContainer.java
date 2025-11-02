@@ -28,6 +28,7 @@ import frc.robot.constants.Constants.SubsystemMode;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.IntakeSuperstructure;
+import frc.robot.subsystems.Simulator;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.arm.Arm;
@@ -95,6 +96,13 @@ public class RobotContainer {
   private static IntakeSuperstructure intakeSuperstructure;
   private static Superstructure superstructure;
   private static Elevator elevator;
+
+  EndEffectorIOSim endEffectorIOSim;
+  IndexerIOSim indexerIOSim;
+  VisionObjectDetectionIOSim visionObjectDetectionIOSim;
+  ArmIOSim armIOSim;
+  ElevatorIOSim elevatorIOSim;
+
   public boolean requestedAlgaeDescore;
   private Timer batteryLowStopTimer = new Timer();
 
@@ -114,10 +122,10 @@ public class RobotContainer {
       vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
       sim1 = new CommandXboxController(1);
 
-      elevator = new Elevator(new ElevatorIOSim());
-      arm = new Arm(new ArmIOSim());
-      endEffector = new EndEffector(new EndEffectorIOSim());
-      indexer = new Indexer(new IndexerIOSim());
+      elevator = new Elevator(elevatorIOSim = new ElevatorIOSim());
+      arm = new Arm(armIOSim = new ArmIOSim());
+      endEffector = new EndEffector(endEffectorIOSim = new EndEffectorIOSim());
+      indexer = new Indexer(indexerIOSim = new IndexerIOSim());
 
       rollers = new Rollers(new RollersIO() {});
       deployer = new Deployer(new DeployerIO() {});
@@ -126,7 +134,9 @@ public class RobotContainer {
               Constants.VisionObjectDetection.hostname,
               Constants.VisionObjectDetection.robotCenterToCamera,
               drive,
-              new VisionObjectDetectionIOSim() {});
+              visionObjectDetectionIOSim = new VisionObjectDetectionIOSim() {});
+      new Simulator(
+          endEffectorIOSim, indexerIOSim, visionObjectDetectionIOSim, armIOSim, elevatorIOSim);
 
     } else {
 
