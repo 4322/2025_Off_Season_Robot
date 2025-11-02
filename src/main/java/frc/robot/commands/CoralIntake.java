@@ -87,12 +87,15 @@ public class CoralIntake extends Command {
           driveToPose.schedule();
 
           if (driveToPose.atGoal()) {
-            ejectAutoTimer.start();
-            if (ejectAutoTimer.hasElapsed(1.2)) {
+            ejectAutoTimer
+                .start(); // If it is at goal we want to start the timer for how long we continue
+            // intaking
+            if (ejectAutoTimer.hasElapsed(
+                1.2)) { // After 0.2 seconds we intake coral again so that it can pick it back up
               intakeSuperstructure.requestIntake();
               ejectAutoTimer.stop();
               ejectAutoTimer.reset();
-            } else if (ejectAutoTimer.hasElapsed(1)) {
+            } else if (ejectAutoTimer.hasElapsed(1)) { // After 1 second we eject coral
               intakeSuperstructure.requestEject();
             }
           }
