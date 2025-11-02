@@ -271,44 +271,32 @@ public class Superstructure extends SubsystemBase {
         arm.idle();
         endEffector.intakeCoral();
 
-        // Essentially: Start timer if not started, after delay seconds, have elevator pickup coral and set coralElevatorPickup to true
         if (!coralElevatorPickUp) {
-          if (!coralPickupTimer.isRunning()) {
-            coralPickupTimer.reset();
-            coralPickupTimer.start();
-          } else {
-            if (coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
-              coralElevatorPickUp = true;
-              elevator.pickupCoral();
-              coralPickupTimer.reset();
-              coralPickupTimer.stop();
-            } 
-          }
-          
-        } else {
-        // After elevator is down, wait until elevator is at setpoint and start timer again.
-        // Once timer is done, check whether there is coral in end effector 
-          if (coralPickupTimer.isRunning() && coralPickupTimer.hasElapsed(Constants.Elevator.coralDetectionHeightThresholdSecs)) {
-            if (endEffector.hasCoral()) {
-              coralElevatorPickUp = false;
-              coralPickupTimer.stop();
-              coralPickupTimer.reset();
-              state = Superstates.CORAL_HELD;
-              coralElevatorPickUp = false;
-            } else if (!endEffector.hasCoral()
-                && !intakeSuperstructure.isCoralDetectedPickupArea()
-                && arm.atSetpoint()
-                && getElevatorHeight() >= Constants.Elevator.minElevatorSafeHeightMeters) {
-              coralElevatorPickUp = false;
-              coralPickupTimer.stop();
-              coralPickupTimer.reset();
-              state = Superstates.IDLE;
-            }
-          } else if (elevatorAtSetpoint()) {
-            coralPickupTimer.start();
-          }
+          coralPickupTimer.start();
         }
 
+        if (coralPickupTimer.hasElapsed(Constants.EndEffector.coralGrabDelaySeconds)) {
+          elevator.pickupCoral();
+          coralElevatorPickUp = true;
+        }
+
+        if (coralPickupTimer.hasElapsed(Constants.Elevator.coralDetectionHeightThresholdSecs)) {
+          if (endEffector.hasCoral()) {
+            coralElevatorPickUp = false;
+            coralPickupTimer.stop();
+            coralPickupTimer.reset();
+            state = Superstates.CORAL_HELD;
+            coralElevatorPickUp = false;
+          } else if (!endEffector.hasCoral()
+              && !intakeSuperstructure.isCoralDetectedPickupArea()
+              && arm.atSetpoint()
+              && getElevatorHeight() >= Constants.Elevator.minElevatorSafeHeightMeters) {
+            coralElevatorPickUp = false;
+            coralPickupTimer.stop();
+            coralPickupTimer.reset();
+            state = Superstates.IDLE;
+          }
+        }
 
         break;
       case CORAL_HELD:

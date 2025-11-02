@@ -282,7 +282,7 @@ public final class Constants {
     public static final double initializationCompleteSpeed = 0.01;
     public static final double initializationCompleteSec = 0.1;
 
-    public static final double coralDetectionHeightThresholdSecs = 0.2;
+    public static final double coralDetectionHeightThresholdSecs = 0.4;
     public static final double ejectHeightMeters = minElevatorSafeWithCoralMeters;
 
     public static final double safeBargeRetractHeightMeters = 0.773472037;
