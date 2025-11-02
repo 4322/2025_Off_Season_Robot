@@ -50,6 +50,8 @@ public class ScoreCoral extends Command {
 
   private boolean chainedAlgaeMode;
 
+  private static int coralNumber = 0;
+
   public enum ScoreState {
     SAFE_DISTANCE,
     DRIVE_IN,
@@ -89,6 +91,7 @@ public class ScoreCoral extends Command {
 
   @Override
   public void initialize() {
+    coralNumber++;
     running = true;
     times.stop();
     times.reset();
@@ -335,7 +338,7 @@ public class ScoreCoral extends Command {
 
             if (level == Level.L4) {
               times.start();
-              if (times.hasElapsed(0.1)) {
+              if (times.hasElapsed(DriverStation.isAutonomous() && coralNumber == 1 ? 0.6 : 0.1)) {
                 superstructure.requestScoreCoral(level);
                 times.stop();
                 times.reset();

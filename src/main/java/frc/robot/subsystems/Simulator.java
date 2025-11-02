@@ -49,7 +49,7 @@ public class Simulator extends SubsystemBase {
     new SimulatedEvent(0.5, SimulatedEventType.END_EFFECTOR_DETECT_CORAL),
     new SimulatedEvent(0.7, SimulatedEventType.CORAL_NOT_IN_PICKUP_AREA),
     // new SimulatedEvent(1.4, SimulatedEventType.END_EFFECTOR_NO_CORAL), // drop before DRIVE_IN
-    new SimulatedEvent(1.6, SimulatedEventType.END_EFFECTOR_NO_CORAL), // drop during DRIVE_IN
+    // new SimulatedEvent(1.6, SimulatedEventType.END_EFFECTOR_NO_CORAL), // drop during DRIVE_IN
     new SimulatedEvent(3.2, SimulatedEventType.END_EFFECTOR_NO_CORAL),
     new SimulatedEvent(4.7, SimulatedEventType.END_EFFECTOR_DETECT_ALGAE),
     new SimulatedEvent(8, SimulatedEventType.END_EFFECTOR_NO_ALGAE),
