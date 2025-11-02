@@ -13,7 +13,7 @@ public class ArmIOSim implements ArmIO {
   private double undefinedPosition = -1;
 
   private double slowRate = 0.02;
-  private double fastRate = 0.05;
+  private double fastRate = 0.2;
   private double rate;
 
   @Override
@@ -60,7 +60,7 @@ public class ArmIOSim implements ArmIO {
   @Override
   public void requestPositionAlgae(double degrees) {
     requestedPosition = degrees;
-    rate = slowRate;
+    rate = fastRate;
     requestedVoltage = undefinedVoltage;
   }
 
