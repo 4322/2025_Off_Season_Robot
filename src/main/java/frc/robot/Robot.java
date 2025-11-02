@@ -211,12 +211,13 @@ public class Robot extends LoggedRobot {
       ThreeCoralStartToEcho =
           PathPlannerPath.fromPathFile("Three Coral Start to Juliet").mirrorPath();
       EchoToFeed1 = PathPlannerPath.fromPathFile("Juliet to Feed 1").mirrorPath();
-      EchoToFeed2 = PathPlannerPath.fromPathFile("Juliet to Feed 2").mirrorPath();
+      EchoToFeed2 = PathPlannerPath.fromPathFile("Juliet to Feed 2 Right").mirrorPath();
       DeltatoFeed = PathPlannerPath.fromPathFile("Kilo to Feed").mirrorPath();
 
       RightAlgaeScoreToIJ = PathPlannerPath.fromPathFile("Right Algae Score to IJ");
       GH_ToRightAlgaeScore = PathPlannerPath.fromPathFile("GH to Right Algae Score");
       IJ_ToCenterAlgaeScore = PathPlannerPath.fromPathFile("IJ to Center Algae Score");
+
 
     } catch (Exception e) {
       DriverStation.reportError("Failed to load PathPlanner path - " + e.getMessage(), true);
