@@ -335,7 +335,7 @@ public class ScoreCoral extends Command {
 
             if (level == Level.L4) {
               times.start();
-              if (times.hasElapsed(DriverStation.isAutonomous() ? 0.4 : 0.1)) {
+              if (times.hasElapsed(0.1)) {
                 superstructure.requestScoreCoral(level);
                 times.stop();
                 times.reset();
