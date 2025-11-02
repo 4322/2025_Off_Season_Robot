@@ -55,4 +55,12 @@ public interface IndexerIO {
   public default Nitrate getLeftNitrate() {
     return null;
   }
+
+  public default void simCoralDetectedInPickupArea() {}
+
+  public default void simCoralNOTDetectedInPickupArea() {}
+
+  public default void simCoralDetectedInIndexer() {}
+
+  public default void simCoralNOTDetectedInIndexer() {}
 }
