@@ -45,15 +45,7 @@ public interface EndEffectorIO {
 
   public default void enableBrakeMode(boolean enable) {}
 
-  // For sim mode
-  public default void simCoralHeld() {}
-
-  public default void simAlgaeHeld() {}
-
-  public default void simCoralReleased() {}
-
-  public default void simAlgaeReleased() {}
-
+ 
   // for tuning
   public default TalonFX getTalonFX() {
     return null;

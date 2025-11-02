@@ -311,31 +311,26 @@ public class EndEffector extends SubsystemBase {
   public void intakeAlgae() {
     unsetAllRequests();
     requestIntakeAlgae = true;
-    io.simAlgaeHeld();
   }
 
   public void intakeCoral() {
     unsetAllRequests();
     requestIntakeCoral = true;
-    io.simCoralHeld();
   }
 
   public void releaseAlgae() {
     unsetAllRequests();
     requestReleaseAlgae = true;
-    io.simAlgaeReleased();
   }
 
   public void releaseCoralNormal() {
     unsetAllRequests();
     requestReleaseCoralNormal = true;
-    io.simCoralReleased();
   }
 
   public void releaseCoralL1() {
     unsetAllRequests();
     requestReleaseCoralL1 = true;
-    io.simCoralReleased();
   }
 
   public void holdAlgae() {

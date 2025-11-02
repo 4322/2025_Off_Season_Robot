@@ -56,11 +56,5 @@ public interface IndexerIO {
     return null;
   }
 
-  public default void simCoralDetectedInPickupArea() {}
-
-  public default void simCoralNOTDetectedInPickupArea() {}
-
-  public default void simCoralDetectedInIndexer() {}
-
-  public default void simCoralNOTDetectedInIndexer() {}
+ 
 }
