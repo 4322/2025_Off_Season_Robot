@@ -230,8 +230,6 @@ public class EndEffector extends SubsystemBase {
           algaeHeld = false;
           releasingTimer.stop();
           releasingTimer.reset();
-        } else if (inputs.isAlgaeProximityDetected) {
-          state = EndEffectorStates.HOLD_ALGAE;
         }
         break;
       case RELEASE_CORAL_NORMAL:

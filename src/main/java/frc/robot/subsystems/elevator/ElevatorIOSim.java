@@ -12,7 +12,7 @@ public class ElevatorIOSim implements ElevatorIO {
   private double undefinedPosition = -1;
 
   private double slowRate = 0.02;
-  private double fastRate = 0.05;
+  private double fastRate = 0.2;
   private double rate;
 
   @Override
