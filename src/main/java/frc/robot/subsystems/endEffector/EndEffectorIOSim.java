@@ -16,19 +16,16 @@ public class EndEffectorIOSim implements EndEffectorIO {
     inputs.sensorProximity = sensorReading;
   }
 
-
   public void simCoralHeld() {
     coralDetected = true;
     sensorReading = Constants.EndEffector.coralProximityThreshold - 0.1;
   }
-
 
   public void simAlgaeHeld() {
     algaeDetected = true;
     sensorReading = Constants.EndEffector.algaeProximityThresholdIntake - 0.1;
   }
 
-  
   public void simCoralReleased() {
     coralDetected = false;
     sensorReading = Constants.EndEffector.coralProximityThreshold + 0.1;

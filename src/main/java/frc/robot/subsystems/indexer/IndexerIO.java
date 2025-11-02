@@ -55,6 +55,4 @@ public interface IndexerIO {
   public default Nitrate getLeftNitrate() {
     return null;
   }
-
- 
 }
