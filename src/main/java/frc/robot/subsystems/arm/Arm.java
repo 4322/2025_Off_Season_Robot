@@ -80,12 +80,14 @@ public class Arm extends SubsystemBase {
             if (requestedSetpoint < minSafeArmDegree
                 && elevatorHeight < (minElevatorHeight - Constants.Elevator.bufferHeightMeters)
                 && getAngleDegrees()
-                    > (Constants.Arm.coralHoldDeg + 0.1)) { // So if the requested setpoint is under the min
+                    > (minSafeArmDegree
+                        - Constants.Arm
+                            .bufferDeg)) { // So if the requested setpoint is under the min
               // safe angle and the elevator is too low the arm
               // will go to min safe angle
               newSetpoint = minSafeArmDegree;
             } else if (requestedSetpoint > Constants.Arm.armIdleDeg
-                && getAngleDegrees() < (minSafeArmDegree - Constants.Arm.bufferDeg)
+                && getAngleDegrees() < (Constants.Arm.coralHoldDeg + 0.1)
                 && elevatorHeight < (minElevatorHeight - Constants.Elevator.bufferHeightMeters)) {
               newSetpoint = Constants.Arm.armIdleDeg;
             } // So we dont move arm when in cradle
