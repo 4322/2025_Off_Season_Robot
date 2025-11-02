@@ -1,7 +1,5 @@
 package frc.robot.autonomous;
 
-import frc.robot.autonomous.modes.DoNothing;
-import frc.robot.autonomous.modes.Leave;
 import frc.robot.autonomous.modes.OneCoralTwoAlgaeCenter;
 import frc.robot.autonomous.modes.TestLeave;
 import frc.robot.autonomous.modes.ThreeCoralLeft;
@@ -26,9 +24,7 @@ public class AutonomousSelector {
       IntakeSuperstructure intakeSuperstructure,
       Vision vision,
       VisionObjectDetection objectDetection) {
-    autonomousSelector.addDefaultOption("DO_NOTHING", new DoNothing(superstructure));
-    autonomousSelector.addOption("LEAVE", new Leave(drive, superstructure));
-    autonomousSelector.addOption(
+    autonomousSelector.addDefaultOption(
         "ONE_CORAL_TWO_ALGAE_CENTER", new OneCoralTwoAlgaeCenter(drive, superstructure));
     autonomousSelector.addOption(
         "THREE_CORAL_LEFT",

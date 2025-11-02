@@ -1,11 +1,12 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
+import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
 
@@ -44,7 +45,9 @@ public class Simulator extends SubsystemBase {
 
   private SimulatedEvent[] scenario = {
     // drop coral while driving in for 1 coral, 2 algae center auto
-    new SimulatedEvent(0.9, SimulatedEventType.CORAL_NOT_IN_PICKUP_AREA),
+    new SimulatedEvent(0.0, SimulatedEventType.CORAL_IN_PICKUP_AREA),
+    new SimulatedEvent(0.4, SimulatedEventType.END_EFFECTOR_DETECT_CORAL),
+    new SimulatedEvent(0.5, SimulatedEventType.CORAL_NOT_IN_PICKUP_AREA),
     new SimulatedEvent(1, SimulatedEventType.END_EFFECTOR_NO_CORAL)
   };
 
@@ -62,7 +65,10 @@ public class Simulator extends SubsystemBase {
   @Override
   public void periodic() {
     if (nextEventIdx < scenario.length) {
-      if (DriverStation.getMatchTime() >= scenario[nextEventIdx].eventTime) {
+      Logger.recordOutput("Sim/MatchTime", Robot.matchTimer.get());
+      Logger.recordOutput("Sim/NextEventTime", scenario[nextEventIdx].eventTime);
+      Logger.recordOutput("Sim/NextEventType", scenario[nextEventIdx].eventType);
+      if (Robot.matchTimer.get() >= scenario[nextEventIdx].eventTime) {
         switch (scenario[nextEventIdx].eventType) {
           case END_EFFECTOR_NO_CORAL:
             endEffectorIOSim.simCoralReleased();
