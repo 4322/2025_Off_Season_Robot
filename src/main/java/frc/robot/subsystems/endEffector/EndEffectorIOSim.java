@@ -4,7 +4,7 @@ import frc.robot.constants.Constants;
 
 public class EndEffectorIOSim implements EndEffectorIO {
   // Preload for beginning of auto
-  private boolean coralDetected = true;
+  private boolean coralDetected = false;
   private double sensorReading = Constants.EndEffector.coralProximityThreshold - 0.1;
 
   private boolean algaeDetected = false;
