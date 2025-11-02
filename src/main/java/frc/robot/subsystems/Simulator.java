@@ -43,12 +43,13 @@ public class Simulator extends SubsystemBase {
     }
   }
 
-  private SimulatedEvent[] scenario = {
+  private SimulatedEvent[] auto1Coral2AlgaeCenter = {
     // drop coral while driving in for 1 coral, 2 algae center auto
     new SimulatedEvent(0.0, SimulatedEventType.CORAL_IN_PICKUP_AREA),
-    new SimulatedEvent(0.4, SimulatedEventType.END_EFFECTOR_DETECT_CORAL),
-    new SimulatedEvent(0.5, SimulatedEventType.CORAL_NOT_IN_PICKUP_AREA),
-    new SimulatedEvent(1, SimulatedEventType.END_EFFECTOR_NO_CORAL)
+    new SimulatedEvent(0.5, SimulatedEventType.END_EFFECTOR_DETECT_CORAL),
+    new SimulatedEvent(0.7, SimulatedEventType.CORAL_NOT_IN_PICKUP_AREA),
+    new SimulatedEvent(5.5, SimulatedEventType.END_EFFECTOR_NO_CORAL),
+    new SimulatedEvent(8, SimulatedEventType.END_EFFECTOR_DETECT_ALGAE)
   };
 
   int nextEventIdx = 0;
@@ -64,12 +65,12 @@ public class Simulator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (nextEventIdx < scenario.length) {
+    if (nextEventIdx < auto1Coral2AlgaeCenter.length) {
       Logger.recordOutput("Sim/MatchTime", Robot.matchTimer.get());
-      Logger.recordOutput("Sim/NextEventTime", scenario[nextEventIdx].eventTime);
-      Logger.recordOutput("Sim/NextEventType", scenario[nextEventIdx].eventType);
-      if (Robot.matchTimer.get() >= scenario[nextEventIdx].eventTime) {
-        switch (scenario[nextEventIdx].eventType) {
+      Logger.recordOutput("Sim/NextEventTime", auto1Coral2AlgaeCenter[nextEventIdx].eventTime);
+      Logger.recordOutput("Sim/NextEventType", auto1Coral2AlgaeCenter[nextEventIdx].eventType);
+      if (Robot.matchTimer.get() >= auto1Coral2AlgaeCenter[nextEventIdx].eventTime) {
+        switch (auto1Coral2AlgaeCenter[nextEventIdx].eventType) {
           case END_EFFECTOR_NO_CORAL:
             endEffectorIOSim.simCoralReleased();
             break;
