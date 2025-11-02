@@ -100,8 +100,6 @@ public class RobotContainer {
   EndEffectorIOSim endEffectorIOSim;
   IndexerIOSim indexerIOSim;
   VisionObjectDetectionIOSim visionObjectDetectionIOSim;
-  ArmIOSim armIOSim;
-  ElevatorIOSim elevatorIOSim;
 
   public boolean requestedAlgaeDescore;
   private Timer batteryLowStopTimer = new Timer();
@@ -122,8 +120,8 @@ public class RobotContainer {
       vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
       sim1 = new CommandXboxController(1);
 
-      elevator = new Elevator(elevatorIOSim = new ElevatorIOSim());
-      arm = new Arm(armIOSim = new ArmIOSim());
+      elevator = new Elevator(new ElevatorIOSim());
+      arm = new Arm(new ArmIOSim());
       endEffector = new EndEffector(endEffectorIOSim = new EndEffectorIOSim());
       indexer = new Indexer(indexerIOSim = new IndexerIOSim());
 
@@ -135,8 +133,7 @@ public class RobotContainer {
               Constants.VisionObjectDetection.robotCenterToCamera,
               drive,
               visionObjectDetectionIOSim = new VisionObjectDetectionIOSim() {});
-      new Simulator(
-          endEffectorIOSim, indexerIOSim, visionObjectDetectionIOSim, armIOSim, elevatorIOSim);
+      new Simulator(endEffectorIOSim, indexerIOSim, visionObjectDetectionIOSim);
 
     } else {
 
