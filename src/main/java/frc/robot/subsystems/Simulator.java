@@ -1,11 +1,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
+import java.util.*;
 import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
@@ -27,37 +29,82 @@ public class Simulator extends SubsystemBase {
     CORAL_NOT_VISIBLE
   }
 
+  private enum EventStatus {
+    ENABLED,
+    DISABLED
+  }
+
   private class SimulatedEvent {
     private double eventTime;
+    private EventStatus eventStatus;
+    private String eventName;
     private SimulatedEventType eventType;
     private Translation2d position;
 
-    SimulatedEvent(double eventTime, SimulatedEventType eventType) {
-      this(eventTime, eventType, null);
+    SimulatedEvent(
+        double eventTime, String eventName, SimulatedEventType eventType, EventStatus eventStatus) {
+      this(eventTime, eventName, eventType, eventStatus, null);
     }
 
-    SimulatedEvent(double eventTime, SimulatedEventType eventType, Translation2d position) {
+    SimulatedEvent(
+        double eventTime,
+        String eventName,
+        SimulatedEventType eventType,
+        EventStatus eventStatus,
+        Translation2d position) {
       this.eventTime = eventTime;
+      this.eventName = eventName;
       this.eventType = eventType;
+      this.eventStatus = eventStatus;
       this.position = position;
     }
   }
 
-  private SimulatedEvent[] auto1Coral2AlgaeCenter = {
-    // drop coral while driving in for 1 coral, 2 algae center auto
-    new SimulatedEvent(0.0, SimulatedEventType.CORAL_IN_PICKUP_AREA),
-    new SimulatedEvent(0.5, SimulatedEventType.END_EFFECTOR_DETECT_CORAL),
-    new SimulatedEvent(0.7, SimulatedEventType.CORAL_NOT_IN_PICKUP_AREA),
-    // new SimulatedEvent(1.4, SimulatedEventType.END_EFFECTOR_NO_CORAL), // drop before DRIVE_IN
-    // new SimulatedEvent(1.6, SimulatedEventType.END_EFFECTOR_NO_CORAL), // drop during DRIVE_IN
-    new SimulatedEvent(3.2, SimulatedEventType.END_EFFECTOR_NO_CORAL),
-    new SimulatedEvent(4.7, SimulatedEventType.END_EFFECTOR_DETECT_ALGAE),
-    new SimulatedEvent(8, SimulatedEventType.END_EFFECTOR_NO_ALGAE),
-    new SimulatedEvent(11.3, SimulatedEventType.END_EFFECTOR_DETECT_ALGAE),
-    new SimulatedEvent(15.1, SimulatedEventType.END_EFFECTOR_NO_ALGAE)
-  };
+  private List<SimulatedEvent> auto1Coral2AlgaeCenter =
+      List.of(
+          new SimulatedEvent(
+              0.0, "Preload ready", SimulatedEventType.CORAL_IN_PICKUP_AREA, EventStatus.ENABLED),
+          new SimulatedEvent(
+              0.5,
+              "Preload pickup",
+              SimulatedEventType.END_EFFECTOR_DETECT_CORAL,
+              EventStatus.ENABLED),
+          new SimulatedEvent(
+              0.7,
+              "Cradle empty",
+              SimulatedEventType.CORAL_NOT_IN_PICKUP_AREA,
+              EventStatus.ENABLED),
+          new SimulatedEvent(
+              1.4,
+              "SAFE_DISTANCE drop",
+              SimulatedEventType.END_EFFECTOR_NO_CORAL,
+              EventStatus.DISABLED),
+          new SimulatedEvent(
+              1.6, "DRIVE_IN drop", SimulatedEventType.END_EFFECTOR_NO_CORAL, EventStatus.DISABLED),
+          new SimulatedEvent(
+              3.2, "Score coral", SimulatedEventType.END_EFFECTOR_NO_CORAL, EventStatus.ENABLED),
+          new SimulatedEvent(
+              4.7,
+              "Pickup algae 1",
+              SimulatedEventType.END_EFFECTOR_DETECT_ALGAE,
+              EventStatus.ENABLED),
+          new SimulatedEvent(
+              8.0, "Score algae 1", SimulatedEventType.END_EFFECTOR_NO_ALGAE, EventStatus.ENABLED),
+          new SimulatedEvent(
+              11.3,
+              "Pickup algae 2",
+              SimulatedEventType.END_EFFECTOR_DETECT_ALGAE,
+              EventStatus.ENABLED),
+          new SimulatedEvent(
+              15.1,
+              "Score algae 2",
+              SimulatedEventType.END_EFFECTOR_NO_ALGAE,
+              EventStatus.ENABLED));
 
-  int nextEventIdx = 0;
+  private List<SimulatedEvent> scenario = auto1Coral2AlgaeCenter;
+
+  private Iterator<SimulatedEvent> iterator;
+  private SimulatedEvent nextEvent;
 
   public Simulator(
       EndEffectorIOSim endEffectorIOSim,
@@ -71,40 +118,57 @@ public class Simulator extends SubsystemBase {
   @Override
   public void periodic() {
     Logger.recordOutput("Sim/MatchTime", Robot.matchTimer.get());
-    if (nextEventIdx < auto1Coral2AlgaeCenter.length) {
-      if (Robot.matchTimer.get() >= auto1Coral2AlgaeCenter[nextEventIdx].eventTime) {
-        Logger.recordOutput("Sim/NextEventType", auto1Coral2AlgaeCenter[nextEventIdx].eventType);
-        switch (auto1Coral2AlgaeCenter[nextEventIdx].eventType) {
-          case END_EFFECTOR_NO_CORAL:
-            endEffectorIOSim.simCoralReleased();
-            break;
-          case END_EFFECTOR_NO_ALGAE:
-            endEffectorIOSim.simAlgaeReleased();
-            break;
-          case END_EFFECTOR_DETECT_CORAL:
-            endEffectorIOSim.simCoralHeld();
-            break;
-          case END_EFFECTOR_DETECT_ALGAE:
-            endEffectorIOSim.simAlgaeHeld();
-            break;
-          case CORAL_IN_PICKUP_AREA:
-            indexerIOSim.simCoralDetectedInPickupArea();
-            break;
-          case CORAL_NOT_IN_PICKUP_AREA:
-            indexerIOSim.simCoralNOTDetectedInPickupArea();
-            break;
-          case CORAL_IN_INDEXER:
-            indexerIOSim.simCoralDetectedInIndexer();
-            break;
-          case CORAL_NOT_IN_INDEXER:
-            indexerIOSim.simCoralNOTDetectedInIndexer();
-            break;
-          case CORAL_VISIBLE:
-            break;
-          case CORAL_NOT_VISIBLE:
-            break;
+    if (DriverStation.isEnabled()) {
+      if (iterator == null) {
+        System.out.println("Select DISABLED for at least 2 aeconds before enabling!");
+        System.exit(1);
+      }
+    } else {
+      // start/restart scenario
+      iterator = scenario.iterator();
+      nextEvent = iterator.next();
+    }
+    if (nextEvent != null) {
+      if (Robot.matchTimer.get() >= nextEvent.eventTime) {
+        if (nextEvent.eventStatus == EventStatus.ENABLED) {
+          Logger.recordOutput("Sim/EventName", nextEvent.eventName);
+          Logger.recordOutput("Sim/EventType", nextEvent.eventType);
+          switch (nextEvent.eventType) {
+            case END_EFFECTOR_NO_CORAL:
+              endEffectorIOSim.simCoralReleased();
+              break;
+            case END_EFFECTOR_NO_ALGAE:
+              endEffectorIOSim.simAlgaeReleased();
+              break;
+            case END_EFFECTOR_DETECT_CORAL:
+              endEffectorIOSim.simCoralHeld();
+              break;
+            case END_EFFECTOR_DETECT_ALGAE:
+              endEffectorIOSim.simAlgaeHeld();
+              break;
+            case CORAL_IN_PICKUP_AREA:
+              indexerIOSim.simCoralDetectedInPickupArea();
+              break;
+            case CORAL_NOT_IN_PICKUP_AREA:
+              indexerIOSim.simCoralNOTDetectedInPickupArea();
+              break;
+            case CORAL_IN_INDEXER:
+              indexerIOSim.simCoralDetectedInIndexer();
+              break;
+            case CORAL_NOT_IN_INDEXER:
+              indexerIOSim.simCoralNOTDetectedInIndexer();
+              break;
+            case CORAL_VISIBLE:
+              break;
+            case CORAL_NOT_VISIBLE:
+              break;
+          }
         }
-        nextEventIdx++;
+        if (iterator.hasNext()) {
+          nextEvent = iterator.next();
+        } else {
+          nextEvent = null;
+        }
       }
     }
   }
