@@ -126,43 +126,47 @@ public class Simulator extends SubsystemBase {
               new Translation2d(15.5, 1.63),
               EventStatus.ENABLED),
           new SimulatedEvent(
-              15.0, "Coral 2 indexer", SimulatedEventType.CORAL_IN_INDEXER, EventStatus.ENABLED),
+              6.5, "Coral 2 indexer", SimulatedEventType.CORAL_IN_INDEXER, EventStatus.ENABLED),
           new SimulatedEvent(
-              16.0, "Coral 2 ready", SimulatedEventType.CORAL_IN_PICKUP_AREA, EventStatus.ENABLED),
+              6.6, "Coral 2 ready", SimulatedEventType.CORAL_IN_PICKUP_AREA, EventStatus.ENABLED),
           new SimulatedEvent(
-              17.0,
+              6.6, "Indexer clear", SimulatedEventType.CORAL_NOT_IN_INDEXER, EventStatus.ENABLED),
+          new SimulatedEvent(
+              6.8,
               "Coral 2 picked up",
               SimulatedEventType.END_EFFECTOR_DETECT_CORAL,
               EventStatus.ENABLED),
           new SimulatedEvent(
-              17.2,
+              7.0,
               "Cradle empty",
               SimulatedEventType.CORAL_NOT_IN_PICKUP_AREA,
               EventStatus.ENABLED),
           new SimulatedEvent(
-              20.0, "Score coral 2", SimulatedEventType.END_EFFECTOR_NO_CORAL, EventStatus.ENABLED),
+              9.55, "Score coral 2", SimulatedEventType.END_EFFECTOR_NO_CORAL, EventStatus.ENABLED),
           new SimulatedEvent(
-              22.0,
+              9.75,
               "See coral 3",
               SimulatedEventType.CORAL_VISIBLE,
-              new Translation2d(16.0, 1.9),
+              new Translation2d(15.8, 1.9),
               EventStatus.ENABLED),
           new SimulatedEvent(
-              27.0, "Coral 3 indexer", SimulatedEventType.CORAL_IN_INDEXER, EventStatus.ENABLED),
+              12.3, "Coral 3 indexer", SimulatedEventType.CORAL_IN_INDEXER, EventStatus.ENABLED),
           new SimulatedEvent(
-              28.0, "Coral 3 ready", SimulatedEventType.CORAL_IN_PICKUP_AREA, EventStatus.ENABLED),
+              12.4, "Coral 3 ready", SimulatedEventType.CORAL_IN_PICKUP_AREA, EventStatus.ENABLED),
           new SimulatedEvent(
-              29.0,
+              12.5, "Indexer clear", SimulatedEventType.CORAL_NOT_IN_INDEXER, EventStatus.ENABLED),
+          new SimulatedEvent(
+              12.6,
               "Coral 3 picked up",
               SimulatedEventType.END_EFFECTOR_DETECT_CORAL,
               EventStatus.ENABLED),
           new SimulatedEvent(
-              29.2,
+              12.8,
               "Cradle empty",
               SimulatedEventType.CORAL_NOT_IN_PICKUP_AREA,
               EventStatus.ENABLED),
           new SimulatedEvent(
-              32.0,
+              15.5,
               "Score coral 3",
               SimulatedEventType.END_EFFECTOR_NO_CORAL,
               EventStatus.ENABLED));
