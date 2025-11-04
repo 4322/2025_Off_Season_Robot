@@ -62,7 +62,7 @@ public class CoralIntake extends Command {
     }
 
     if (coralPosition != null) {
-      Logger.recordOutput("CoralIntake/coralPosition", coralPosition);
+      Logger.recordOutput("CoralIntake/coralPosition", new Pose2d(coralPosition, Rotation2d.kZero));
       Logger.recordOutput(
           "CoralIntake/coralAngleBotRelativeDeg",
           coralPosition.minus(drive.getPose().getTranslation()).getAngle().getDegrees());

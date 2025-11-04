@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
@@ -43,15 +45,15 @@ public class Simulator extends SubsystemBase {
 
     SimulatedEvent(
         double eventTime, String eventName, SimulatedEventType eventType, EventStatus eventStatus) {
-      this(eventTime, eventName, eventType, eventStatus, null);
+      this(eventTime, eventName, eventType, null, eventStatus);
     }
 
     SimulatedEvent(
         double eventTime,
         String eventName,
         SimulatedEventType eventType,
-        EventStatus eventStatus,
-        Translation2d position) {
+        Translation2d position,
+        EventStatus eventStatus) {
       this.eventTime = eventTime;
       this.eventName = eventName;
       this.eventType = eventType;
@@ -101,10 +103,75 @@ public class Simulator extends SubsystemBase {
               SimulatedEventType.END_EFFECTOR_NO_ALGAE,
               EventStatus.ENABLED));
 
-  private List<SimulatedEvent> scenario = auto1Coral2AlgaeCenter;
+  private List<SimulatedEvent> auto3CoralLeftRed =
+      List.of(
+          new SimulatedEvent(
+              0.0, "Preload ready", SimulatedEventType.CORAL_IN_PICKUP_AREA, EventStatus.ENABLED),
+          new SimulatedEvent(
+              0.5,
+              "Preload pickup",
+              SimulatedEventType.END_EFFECTOR_DETECT_CORAL,
+              EventStatus.ENABLED),
+          new SimulatedEvent(
+              0.7,
+              "Cradle empty",
+              SimulatedEventType.CORAL_NOT_IN_PICKUP_AREA,
+              EventStatus.ENABLED),
+          new SimulatedEvent(
+              3.9, "Score coral 1", SimulatedEventType.END_EFFECTOR_NO_CORAL, EventStatus.ENABLED),
+          new SimulatedEvent(
+              5.4,
+              "See coral 2",
+              SimulatedEventType.CORAL_VISIBLE,
+              new Translation2d(15.5, 1.63),
+              EventStatus.ENABLED),
+          new SimulatedEvent(
+              15.0, "Coral 2 indexer", SimulatedEventType.CORAL_IN_INDEXER, EventStatus.ENABLED),
+          new SimulatedEvent(
+              16.0, "Coral 2 ready", SimulatedEventType.CORAL_IN_PICKUP_AREA, EventStatus.ENABLED),
+          new SimulatedEvent(
+              17.0,
+              "Coral 2 picked up",
+              SimulatedEventType.END_EFFECTOR_DETECT_CORAL,
+              EventStatus.ENABLED),
+          new SimulatedEvent(
+              17.2,
+              "Cradle empty",
+              SimulatedEventType.CORAL_NOT_IN_PICKUP_AREA,
+              EventStatus.ENABLED),
+          new SimulatedEvent(
+              20.0, "Score coral 2", SimulatedEventType.END_EFFECTOR_NO_CORAL, EventStatus.ENABLED),
+          new SimulatedEvent(
+              22.0,
+              "See coral 3",
+              SimulatedEventType.CORAL_VISIBLE,
+              new Translation2d(16.0, 1.9),
+              EventStatus.ENABLED),
+          new SimulatedEvent(
+              27.0, "Coral 3 indexer", SimulatedEventType.CORAL_IN_INDEXER, EventStatus.ENABLED),
+          new SimulatedEvent(
+              28.0, "Coral 3 ready", SimulatedEventType.CORAL_IN_PICKUP_AREA, EventStatus.ENABLED),
+          new SimulatedEvent(
+              29.0,
+              "Coral 3 picked up",
+              SimulatedEventType.END_EFFECTOR_DETECT_CORAL,
+              EventStatus.ENABLED),
+          new SimulatedEvent(
+              29.2,
+              "Cradle empty",
+              SimulatedEventType.CORAL_NOT_IN_PICKUP_AREA,
+              EventStatus.ENABLED),
+          new SimulatedEvent(
+              32.0,
+              "Score coral 3",
+              SimulatedEventType.END_EFFECTOR_NO_CORAL,
+              EventStatus.ENABLED));
+
+  private List<SimulatedEvent> scenario = auto3CoralLeftRed;
 
   private Iterator<SimulatedEvent> iterator;
   private SimulatedEvent nextEvent;
+  private Timer disabledTimer = new Timer();
 
   public Simulator(
       EndEffectorIOSim endEffectorIOSim,
@@ -123,10 +190,13 @@ public class Simulator extends SubsystemBase {
         System.out.println("Select DISABLED for at least 2 aeconds before enabling!");
         System.exit(1);
       }
-    } else {
-      // start/restart scenario
-      iterator = scenario.iterator();
-      nextEvent = iterator.next();
+    } else if (DriverStation.isDSAttached()) {
+      disabledTimer.start();
+      if (disabledTimer.hasElapsed(2)) {
+        // start/restart scenario when disabled
+        iterator = scenario.iterator();
+        nextEvent = iterator.next();
+      }
     }
     if (nextEvent != null) {
       if (Robot.matchTimer.get() >= nextEvent.eventTime) {
@@ -159,8 +229,11 @@ public class Simulator extends SubsystemBase {
               indexerIOSim.simCoralNOTDetectedInIndexer();
               break;
             case CORAL_VISIBLE:
+              visionObjectDetectionIOSim.coralDetected(
+                  nextEvent.position, WPIUtilJNI.now() * 1.0e-6);
               break;
             case CORAL_NOT_VISIBLE:
+              visionObjectDetectionIOSim.noCoral();
               break;
           }
         }
