@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.autonomous.AutonomousSelector.AutoName;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
@@ -15,19 +16,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
 
-  Scenario scenario = Scenario.THREE_CORAL;
-  Side side = Side.LEFT;
-
-  private enum Scenario {
-    TELEOP,
-    ONE_CORAL_TWO_ALGAE_CENTER,
-    THREE_CORAL
-  }
-
-  private enum Side {
-    LEFT,
-    RIGHT
-  }
+  public static AutoName simulatedAuto = AutoName.THREE_CORAL_LEFT;
 
   private enum SimulatedEventType {
     END_EFFECTOR_DETECT_CORAL,
@@ -74,7 +63,7 @@ public class Simulator extends SubsystemBase {
   }
 
   private List<SimulatedEvent> buildScenario() {
-    switch (scenario) {
+    switch (simulatedAuto) {
       case ONE_CORAL_TWO_ALGAE_CENTER:
         return List.of(
             new SimulatedEvent(
@@ -122,7 +111,8 @@ public class Simulator extends SubsystemBase {
                 SimulatedEventType.END_EFFECTOR_NO_ALGAE,
                 EventStatus.ENABLED));
 
-      case THREE_CORAL:
+      case THREE_CORAL_LEFT:
+      case THREE_CORAL_RIGHT:
         return List.of(
             new SimulatedEvent(
                 0.0, "Preload ready", SimulatedEventType.CORAL_IN_PICKUP_AREA, EventStatus.ENABLED),
@@ -147,8 +137,9 @@ public class Simulator extends SubsystemBase {
                 SimulatedEventType.CORAL_VISIBLE,
                 new Translation2d(
                     Robot.alliance == Alliance.Blue ? 2.3 : 15.5,
-                    (Robot.alliance == Alliance.Blue && side == Side.RIGHT)
-                            || (Robot.alliance == Alliance.Red && side == Side.LEFT)
+                    (Robot.alliance == Alliance.Blue && simulatedAuto == AutoName.THREE_CORAL_RIGHT)
+                            || (Robot.alliance == Alliance.Red
+                                && simulatedAuto == AutoName.THREE_CORAL_LEFT)
                         ? 1.63
                         : 6.5),
                 EventStatus.ENABLED),
@@ -179,8 +170,9 @@ public class Simulator extends SubsystemBase {
                 SimulatedEventType.CORAL_VISIBLE,
                 new Translation2d(
                     Robot.alliance == Alliance.Blue ? 2.0 : 15.8,
-                    (Robot.alliance == Alliance.Blue && side == Side.RIGHT)
-                            || (Robot.alliance == Alliance.Red && side == Side.LEFT)
+                    (Robot.alliance == Alliance.Blue && simulatedAuto == AutoName.THREE_CORAL_RIGHT)
+                            || (Robot.alliance == Alliance.Red
+                                && simulatedAuto == AutoName.THREE_CORAL_LEFT)
                         ? 1.9
                         : 6.3),
                 EventStatus.ENABLED),
