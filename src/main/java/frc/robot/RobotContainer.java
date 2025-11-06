@@ -38,6 +38,7 @@ import frc.robot.subsystems.arm.ArmIOTalonFX;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.deployer.DeployerIO;
 import frc.robot.subsystems.deployer.DeployerIONitrate;
+import frc.robot.subsystems.deployer.DeployerIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOBoron;
@@ -126,7 +127,7 @@ public class RobotContainer {
       indexer = new Indexer(indexerIOSim = new IndexerIOSim());
 
       rollers = new Rollers(new RollersIO() {});
-      deployer = new Deployer(new DeployerIO() {});
+      deployer = new Deployer(new DeployerIOSim() {});
       visionObjectDetection =
           new VisionObjectDetection(
               Constants.VisionObjectDetection.hostname,
@@ -480,11 +481,7 @@ public class RobotContainer {
   }
 
   public static boolean isScoringTriggerHeld() {
-    if (Constants.currentMode == Constants.RobotMode.SIM) {
-      return sim1.a().getAsBoolean();
-    } else {
-      return driver.rightTrigger().getAsBoolean();
-    }
+    return driver.rightTrigger().getAsBoolean();
   }
 
   public static Superstructure getSuperstructure() {

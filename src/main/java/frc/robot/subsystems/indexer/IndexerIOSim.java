@@ -2,8 +2,8 @@ package frc.robot.subsystems.indexer;
 
 public class IndexerIOSim implements IndexerIO {
 
-  private boolean coralDetectedInPickupArea = true;
-  private boolean coralDetectedInIndexer = false;
+  private boolean coralDetectedInPickupArea;
+  private boolean coralDetectedInIndexer;
 
   @Override
   public void updateInputs(IndexerIOInputs inputs) {
@@ -12,10 +12,8 @@ public class IndexerIOSim implements IndexerIO {
 
     inputs.indexerSensorConnected = true;
     inputs.pickupAreaSensorConnected = true;
-    inputs.pickupAreaSensorTriggered =
-        coralDetectedInPickupArea; // coral always available for pickup
+    inputs.pickupAreaSensorTriggered = coralDetectedInPickupArea;
     inputs.indexerSensorTriggered = coralDetectedInIndexer;
-    inputs.pickupAreaSensorProximity = 0.0; // not used
   }
 
   public void simCoralDetectedInPickupArea() {

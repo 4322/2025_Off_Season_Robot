@@ -51,14 +51,69 @@ public class Simulator extends SubsystemBase {
     CORAL_NOT_IN_INDEXER,
     CORAL_VISIBLE,
     CORAL_NOT_VISIBLE,
+    PRESS_A,
+    HOLD_A,
+    RELEASE_A,
+    PRESS_B,
     HOLD_B,
     RELEASE_B,
-    PRESS_LEFT_POV
+    PRESS_X,
+    HOLD_X,
+    RELEASE_X,
+    PRESS_Y,
+    HOLD_Y,
+    RELEASE_Y,
+    PRESS_LEFT_BUMPER,
+    HOLD_LEFT_BUMPER,
+    RELEASE_LEFT_BUMPER,
+    PRESS_RIGHT_BUMPER,
+    HOLD_RIGHT_BUMPER,
+    RELEASE_RIGHT_BUMPER,
+    RELEASE_POV,
+    PRESS_UP_POV,
+    HOLD_UP_POV,
+    PRESS_RIGHT_POV,
+    HOLD_RIGHT_POV,
+    PRESS_DOWN_POV,
+    HOLD_DOWN_POV,
+    PRESS_LEFT_POV,
+    HOLD_LEFT_POV,
+    PRESS_LEFT_TRIGGER,
+    HOLD_LEFT_TRIGGER,
+    RELEASE_LEFT_TRIGGER,
+    PRESS_RIGHT_TRIGGER,
+    HOLD_RIGHT_TRIGGER,
+    RELEASE_RIGHT_TRIGGER
   }
 
   private enum EventStatus {
     ACTIVE,
     INACTIVE
+  }
+
+  private enum POVDirection {
+    NONE(-1),
+    UP(0),
+    RIGHT(90),
+    DOWN(180),
+    LEFT(270);
+
+    public final int value;
+
+    private POVDirection(int value) {
+      this.value = value;
+    }
+  }
+
+  private enum ControllerAxis {
+    LEFT(2),
+    RIGHT(3);
+
+    public final int value;
+
+    private ControllerAxis(int value) {
+      this.value = value;
+    }
   }
 
   private class SimEvent {
@@ -185,12 +240,18 @@ public class Simulator extends SubsystemBase {
         return List.of(
             new SimEvent(
                 t, "Start pose", EventType.SET_POSE, new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
-            new SimEvent(t, "Preload ready", EventType.CORAL_IN_PICKUP_AREA),
-            new SimEvent(t += 0.3, "Preload pickup", EventType.END_EFFECTOR_DETECT_CORAL),
+            new SimEvent(t += 0.5, "Deploy intake", EventType.PRESS_LEFT_POV),
+            new SimEvent(t += 0.1, "Coral indexer", EventType.CORAL_IN_INDEXER),
+            new SimEvent(t += 0.05, "Coral ready", EventType.CORAL_IN_PICKUP_AREA),
+            new SimEvent(t += 0.05, "Indexer clear", EventType.CORAL_NOT_IN_INDEXER),
+            new SimEvent(t += 0.2, "Coral picked up", EventType.END_EFFECTOR_DETECT_CORAL),
             new SimEvent(t += 0.2, "Cradle empty", EventType.CORAL_NOT_IN_PICKUP_AREA),
+            new SimEvent(t += 0.1, "Retract intake", EventType.PRESS_LEFT_POV),
             new SimEvent(t += 0.1, "Drive to reef", EventType.HOLD_B),
-            new SimEvent(t += 1.6, "Score coral", EventType.END_EFFECTOR_NO_CORAL),
-            new SimEvent(t += 0.0, "Score complete", EventType.RELEASE_B));
+            new SimEvent(t += 3.0, "Score coral L4", EventType.HOLD_RIGHT_TRIGGER),
+            new SimEvent(t += 0.1, "Coral released", EventType.END_EFFECTOR_NO_CORAL),
+            new SimEvent(t += 0.1, "Release score trigger", EventType.RELEASE_RIGHT_TRIGGER),
+            new SimEvent(t += 0.1, "Score complete", EventType.RELEASE_B));
 
       default:
         return List.of();
@@ -208,6 +269,9 @@ public class Simulator extends SubsystemBase {
   int hidPort = hid.getPort();
   int activeButtonBitmask;
   int momentaryButtonBitmask;
+  boolean releasePOV;
+  boolean releaseLeftTrigger;
+  boolean releaseRightTrigger;
 
   private final Drive drive;
   private final EndEffectorIOSim endEffectorIOSim;
@@ -240,6 +304,21 @@ public class Simulator extends SubsystemBase {
         disabledTimer.start();
       }
     } else {
+      // can only release buttons when enabled
+      releaseMomentaryButtons();
+      if (releasePOV) {
+        holdPOV(POVDirection.NONE);
+        releasePOV = false;
+      }
+      if (releaseLeftTrigger) {
+        releaseTrigger(ControllerAxis.LEFT);
+        releaseLeftTrigger = false;
+      }
+      if (releaseRightTrigger) {
+        releaseTrigger(ControllerAxis.RIGHT);
+        releaseRightTrigger = false;
+      }
+
       if (events == null) {
         if (!disabledTimer.hasElapsed(2)) {
           // wait for alliance color update
@@ -262,7 +341,6 @@ public class Simulator extends SubsystemBase {
       }
     }
 
-    releaseMomentaryButtons();
     while (nextEvent != null && matchTimer.get() >= nextEvent.eventTime) {
       if (nextEvent.eventStatus == EventStatus.ACTIVE) {
         Logger.recordOutput("Sim/EventName", nextEvent.eventName);
@@ -302,13 +380,104 @@ public class Simulator extends SubsystemBase {
           case CORAL_NOT_VISIBLE:
             visionObjectDetectionIOSim.noCoral();
             break;
+          case PRESS_A:
+            pressButton(XboxController.Button.kA);
+            break;
+          case HOLD_A:
+            holdButton(XboxController.Button.kA);
+            break;
+          case RELEASE_A:
+            releaseButton(XboxController.Button.kA);
+            break;
+          case PRESS_B:
+            pressButton(XboxController.Button.kB);
+            break;
           case HOLD_B:
             holdButton(XboxController.Button.kB);
             break;
           case RELEASE_B:
             releaseButton(XboxController.Button.kB);
+            break;
+          case PRESS_X:
+            pressButton(XboxController.Button.kX);
+            break;
+          case HOLD_X:
+            holdButton(XboxController.Button.kX);
+            break;
+          case RELEASE_X:
+            releaseButton(XboxController.Button.kX);
+            break;
+          case PRESS_Y:
+            pressButton(XboxController.Button.kY);
+            break;
+          case HOLD_Y:
+            holdButton(XboxController.Button.kY);
+            break;
+          case RELEASE_Y:
+            releaseButton(XboxController.Button.kY);
+            break;
+          case PRESS_LEFT_BUMPER:
+            pressButton(XboxController.Button.kLeftBumper);
+            break;
+          case HOLD_LEFT_BUMPER:
+            holdButton(XboxController.Button.kLeftBumper);
+            break;
+          case RELEASE_LEFT_BUMPER:
+            releaseButton(XboxController.Button.kLeftBumper);
+            break;
+          case PRESS_RIGHT_BUMPER:
+            pressButton(XboxController.Button.kRightBumper);
+            break;
+          case HOLD_RIGHT_BUMPER:
+            holdButton(XboxController.Button.kRightBumper);
+            break;
+          case RELEASE_RIGHT_BUMPER:
+            releaseButton(XboxController.Button.kRightBumper);
+            break;
+          case RELEASE_POV:
+            holdPOV(POVDirection.NONE);
+            break;
+          case PRESS_UP_POV:
+            pressPOV(POVDirection.UP);
+            break;
+          case HOLD_UP_POV:
+            holdPOV(POVDirection.UP);
+            break;
+          case PRESS_RIGHT_POV:
+            pressPOV(POVDirection.RIGHT);
+            break;
+          case HOLD_RIGHT_POV:
+            holdPOV(POVDirection.RIGHT);
+            break;
+          case PRESS_DOWN_POV:
+            pressPOV(POVDirection.DOWN);
+            break;
+          case HOLD_DOWN_POV:
+            holdPOV(POVDirection.DOWN);
+            break;
           case PRESS_LEFT_POV:
-            // TODO
+            pressPOV(POVDirection.LEFT);
+            break;
+          case HOLD_LEFT_POV:
+            holdPOV(POVDirection.LEFT);
+            break;
+          case PRESS_LEFT_TRIGGER:
+            pressTrigger(ControllerAxis.LEFT);
+            break;
+          case HOLD_LEFT_TRIGGER:
+            holdTrigger(ControllerAxis.LEFT);
+            break;
+          case RELEASE_LEFT_TRIGGER:
+            releaseTrigger(ControllerAxis.LEFT);
+            break;
+          case PRESS_RIGHT_TRIGGER:
+            pressTrigger(ControllerAxis.RIGHT);
+            break;
+          case HOLD_RIGHT_TRIGGER:
+            holdTrigger(ControllerAxis.RIGHT);
+            break;
+          case RELEASE_RIGHT_TRIGGER:
+            releaseTrigger(ControllerAxis.RIGHT);
             break;
         }
       }
@@ -343,6 +512,35 @@ public class Simulator extends SubsystemBase {
     activeButtonBitmask &= ~momentaryButtonBitmask;
     momentaryButtonBitmask = 0;
     DriverStationSim.setJoystickButtons(hidPort, activeButtonBitmask);
+    DriverStationSim.notifyNewData();
+  }
+
+  private void holdPOV(POVDirection direction) {
+    DriverStationSim.setJoystickPOV(hidPort, 0, direction.value);
+    DriverStationSim.notifyNewData();
+  }
+
+  private void pressPOV(POVDirection direction) {
+    holdPOV(direction);
+    releasePOV = true;
+  }
+
+  private void holdTrigger(ControllerAxis axis) {
+    DriverStationSim.setJoystickAxis(hidPort, axis.value, 1.0);
+    DriverStationSim.notifyNewData();
+  }
+
+  private void pressTrigger(ControllerAxis axis) {
+    holdTrigger(axis);
+    if (axis == ControllerAxis.LEFT) {
+      releaseLeftTrigger = true;
+    } else {
+      releaseRightTrigger = true;
+    }
+  }
+
+  private void releaseTrigger(ControllerAxis axis) {
+    DriverStationSim.setJoystickAxis(hidPort, axis.value, 0.0);
     DriverStationSim.notifyNewData();
   }
 }
