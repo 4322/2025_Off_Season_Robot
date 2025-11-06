@@ -69,8 +69,6 @@ public class Robot extends LoggedRobot {
   public static PathPlannerPath GH_ToRightAlgaeScore;
   public static PathPlannerPath IJ_ToCenterAlgaeScore;
 
-  public static Timer matchTimer = new Timer(); // for sim use
-
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME); // Set a metadata value
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -321,8 +319,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     // close previous Redux log and open a new unique one
-    matchTimer.stop();
-    matchTimer.reset();
     MessageLogger.openLog(Constants.logPath);
   }
 
@@ -365,7 +361,6 @@ public class Robot extends LoggedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    matchTimer.start();
     autonomousCommand = robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -386,7 +381,6 @@ public class Robot extends LoggedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    matchTimer.start();
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
