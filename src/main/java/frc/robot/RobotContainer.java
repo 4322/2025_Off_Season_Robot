@@ -133,7 +133,7 @@ public class RobotContainer {
               Constants.VisionObjectDetection.robotCenterToCamera,
               drive,
               visionObjectDetectionIOSim = new VisionObjectDetectionIOSim(drive));
-      new Simulator(endEffectorIOSim, indexerIOSim, visionObjectDetectionIOSim);
+      new Simulator(drive, endEffectorIOSim, indexerIOSim, visionObjectDetectionIOSim);
 
     } else {
 
