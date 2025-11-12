@@ -156,6 +156,7 @@ public class DriveToPose extends Command {
             driveMaxAcceleration.get()));
     lastTargetPose = poseSupplier.get();
     reachedGoal = false;
+    onInitialize();
   }
 
   @Override
@@ -276,6 +277,7 @@ public class DriveToPose extends Command {
         new Pose2d(
             lastSetpointTranslation, new Rotation2d(thetaController.getSetpoint().position)));
     Logger.recordOutput("DriveToPose/DriveToPoseGoal", targetPose);
+    onExecute();
   }
 
   @Override
@@ -285,6 +287,7 @@ public class DriveToPose extends Command {
     drive.runVelocity(new ChassisSpeeds(), true);
     Logger.recordOutput("DriveToPose/DriveToPoseSetpoint", new Pose2d() {});
     Logger.recordOutput("DriveToPose/DriveToPoseGoal", new Pose2d() {});
+    onEnd(interrupted);
   }
 
   /** Checks if the robot is at the final pose. */
@@ -305,4 +308,10 @@ public class DriveToPose extends Command {
   public boolean isRunning() {
     return running;
   }
+
+  protected void onInitialize() {}
+
+  protected void onExecute() {}
+
+  protected void onEnd(boolean interrupted) {}
 }

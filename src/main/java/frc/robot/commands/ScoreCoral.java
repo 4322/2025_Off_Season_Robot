@@ -23,7 +23,7 @@ import frc.robot.util.ReefStatus;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-public class ScoreCoral extends Command {
+public class ScoreCoral extends DriveToPose {
 
   private Superstructure.Level level;
   private final Superstructure superstructure;
@@ -80,6 +80,7 @@ public class ScoreCoral extends Command {
       Drive drive,
       boolean chainedAlgaeMode,
       boolean noDriveBack) {
+        super(drive, () -> currentPoseRequest.get(), level == Level.L4);
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
