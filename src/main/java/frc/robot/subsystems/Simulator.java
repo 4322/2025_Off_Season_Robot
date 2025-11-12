@@ -83,7 +83,13 @@ public class Simulator extends SubsystemBase {
     RELEASE_LEFT_TRIGGER,
     PRESS_RIGHT_TRIGGER,
     HOLD_RIGHT_TRIGGER,
-    RELEASE_RIGHT_TRIGGER
+    RELEASE_RIGHT_TRIGGER,
+    PRESS_LEFT_STICK,
+    HOLD_LEFT_STICK,
+    RELEASE_LEFT_STICK,
+    PRESS_RIGHT_STICK,
+    HOLD_RIGHT_STICK,
+    RELEASE_RIGHT_STICK
   }
 
   private enum EventStatus {
@@ -478,6 +484,24 @@ public class Simulator extends SubsystemBase {
             break;
           case RELEASE_RIGHT_TRIGGER:
             releaseTrigger(ControllerAxis.RIGHT);
+            break;
+          case PRESS_LEFT_STICK:
+            pressButton(XboxController.Button.kLeftStick);
+            break;
+          case HOLD_LEFT_STICK:
+            holdButton(XboxController.Button.kLeftStick);
+            break;
+          case RELEASE_LEFT_STICK:
+            releaseButton(XboxController.Button.kLeftStick);
+            break;
+          case PRESS_RIGHT_STICK:
+            pressButton(XboxController.Button.kRightStick);
+            break;
+          case HOLD_RIGHT_STICK:
+            holdButton(XboxController.Button.kRightStick);
+            break;
+          case RELEASE_RIGHT_STICK:
+            releaseButton(XboxController.Button.kRightStick);
             break;
         }
       }
