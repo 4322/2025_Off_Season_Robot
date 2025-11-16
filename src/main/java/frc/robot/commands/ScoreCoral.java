@@ -23,7 +23,7 @@ import frc.robot.util.ReefStatus;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-public class ScoreCoral extends Command {
+public class ScoreCoral extends DriveToPose {
 
   private Superstructure.Level level;
   private final Superstructure superstructure;
