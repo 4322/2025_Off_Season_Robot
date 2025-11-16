@@ -36,7 +36,7 @@ public class OneCoralTwoAlgaeCenter extends OrangeSequentialCommandGroup {
                 drive.resetPose(startPoseRed);
               }
             }),
-        new ScoreCoral(superstructure, Level.L4, drive, true, false),
+        new ScoreCoral(superstructure, Level.L4, true, false),
         new DescoreAlgae(superstructure, drive),
         new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.GH_ToRightAlgaeScore),
