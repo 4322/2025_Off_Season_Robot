@@ -2,13 +2,17 @@ package frc.robot.autonomous.modes;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
 import frc.robot.commands.CoralIntake;
+import frc.robot.commands.SafeReefRetract;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.constants.FieldConstants.ReefFaceRobotHeading;
 import frc.robot.constants.FieldConstants.ReefFaceTag;
@@ -19,14 +23,12 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
-import frc.robot.util.OrangeParallelCommandGroup;
-import frc.robot.util.OrangeSequentialCommandGroup;
 import frc.robot.util.ReefStatus;
 import frc.robot.util.ReefStatus.AlgaeLevel;
 import frc.robot.util.ReefStatus.ClosestReefPipe;
 import frc.robot.util.ReefStatus.L1Zone;
 
-public class ThreeCoralRight extends OrangeSequentialCommandGroup {
+public class ThreeCoralRight extends SequentialCommandGroup {
   public ThreeCoralRight(
       Drive drive,
       Superstructure superstructure,
@@ -98,21 +100,21 @@ public class ThreeCoralRight extends OrangeSequentialCommandGroup {
                 drive.resetPose(startPoseRed);
               }
             }),
-        new OrangeParallelCommandGroup(
-            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1),
-            new OrangeSequentialCommandGroup(
+        new ParallelCommandGroup(
+            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1).andThen(new SafeReefRetract(superstructure)),
+            new SequentialCommandGroup(
                 new WaitUntilCommand(
                     () ->
                         superstructure.getEndEffectorState()
                             == EndEffectorStates.RELEASE_CORAL_NORMAL),
                 AutoBuilder.followPath(Robot.EchoToFeed1))),
-        new OrangeParallelCommandGroup(
+        new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.EchoToFeed2),
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
-        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
-        new OrangeParallelCommandGroup(
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2).andThen(new SafeReefRetract(superstructure)),
+        new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.DeltatoFeed),
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
-        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3));
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3).andThen(new SafeReefRetract(superstructure)));
   }
 }

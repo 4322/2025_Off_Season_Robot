@@ -314,9 +314,9 @@ public class ScoreCoral extends DriveToPose {
           currentPoseRequest = () -> safeDistPose;
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
-          if (!isScheduled() && !isFinished()) {
-            super.execute(); // let DriveToPose start its trajectory
-          }
+          
+            super.execute();
+        
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (isInPrescoreArea() || atGoal()) {
@@ -326,12 +326,13 @@ public class ScoreCoral extends DriveToPose {
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()) {
               currentPoseRequest = () -> targetScoringPose;
-              super.execute(); 
+                  
               state = ScoreState.DRIVE_IN;
             }
           }
           break;
         case DRIVE_IN:
+        super.execute();
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (atGoal()
@@ -379,6 +380,7 @@ public class ScoreCoral extends DriveToPose {
 
           break;
         case DRIVEBACK:
+        super.execute();
           if ((!noDriveBackAuto && atGoal()) || isInSafeArea()) {
             running = false;
           }

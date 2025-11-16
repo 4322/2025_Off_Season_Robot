@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.autonomous.AutonomousSelector;
 import frc.robot.commands.AlgaeIntakeGround;
@@ -21,6 +22,7 @@ import frc.robot.commands.DriveManual;
 import frc.robot.commands.DriveToPose;
 import frc.robot.commands.Eject;
 import frc.robot.commands.EmergencyInitilization;
+import frc.robot.commands.SafeReefRetract;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.SwitchOperationModeCommand;
 import frc.robot.constants.Constants;
@@ -68,7 +70,6 @@ import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIO;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOPhoton;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
-import frc.robot.util.OrangeSequentialCommandGroup;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -314,7 +315,7 @@ public class RobotContainer {
                     scoreL1Coral.schedule();
                     lastScoreCoral = scoreL1Coral;
                   }
-                }));
+                }).andThen((new SafeReefRetract(superstructure))));
     driver
         .x()
         .onTrue(
@@ -326,14 +327,14 @@ public class RobotContainer {
                     new DescoreAlgae(superstructure, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
                       && !lastScoreCoral.isScheduled()) {
-                    new OrangeSequentialCommandGroup(
+                    new SequentialCommandGroup(
                             scoreL2Coral,
                             new DescoreAlgae(superstructure, drive)
                                 .onlyIf(() -> driver.y().getAsBoolean()))
                         .schedule();
                     lastScoreCoral = scoreL2Coral;
                   }
-                }));
+                }).andThen((new SafeReefRetract(superstructure))));
     driver
         .y()
         .onTrue(
@@ -347,10 +348,11 @@ public class RobotContainer {
                     } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
                         && !lastScoreCoral.isScheduled()) {
                       scoreL3Coral.schedule();
+              
                       lastScoreCoral = scoreL3Coral;
                     }
                   }
-                }));
+                }).andThen((new SafeReefRetract(superstructure))));
 
     driver
         .b()
@@ -362,14 +364,14 @@ public class RobotContainer {
                   } else if (endEffector.hasCoral()
                       && !endEffector.hasAlgae()
                       && !lastScoreCoral.isScheduled()) {
-                    new OrangeSequentialCommandGroup(
+                    new SequentialCommandGroup(
                             scoreL4Coral,
                             new DescoreAlgae(superstructure, drive)
                                 .onlyIf(() -> driver.y().getAsBoolean()))
                         .schedule();
                     lastScoreCoral = scoreL4Coral;
                   }
-                }));
+                }).andThen((new SafeReefRetract(superstructure))));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
     driver
         .back()
