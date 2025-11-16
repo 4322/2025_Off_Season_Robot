@@ -72,18 +72,23 @@ public class ScoreCoral extends DriveToPose {
     forceReef = true;
   }
 
+  /* mutable supplier we can redirect after super() returns */
+
   public ScoreCoral(
       Superstructure superstructure,
-      Superstructure.Level level,
+      Level level,
       Drive drive,
       boolean chainedAlgaeMode,
       boolean noDriveBack) {
+
+    /* DriveToPose registers “drive” for us */
+    super(drive, new Pose2d(), level == Level.L4);
+
     this.superstructure = superstructure;
     this.level = level;
+    this.drive = drive;
     this.chainedAlgaeMode = chainedAlgaeMode;
     this.noDriveBackAuto = noDriveBack;
- 
-    addRequirements(superstructure);
   }
 
   @Override
@@ -331,8 +336,7 @@ public class ScoreCoral extends DriveToPose {
                       || (drive.getRobotRelativeSpeeds()
                                   .vxMetersPerSecond // Robot not moving and pretty close to reef
                               < Constants.AutoScoring.notMovingVelocityThreshold
-                          && withinTolerance(
-                              Constants.AutoScoring.atReefFaceL1Tolerance))))) {
+                          && withinTolerance(Constants.AutoScoring.atReefFaceL1Tolerance))))) {
 
             if (level == Level.L4) {
               times.start();
@@ -360,7 +364,7 @@ public class ScoreCoral extends DriveToPose {
                 cancel();
               } else {
                 currentPoseRequest = () -> driveBackPose;
-               resetGoal();
+                resetGoal();
               }
               state = ScoreState.DRIVEBACK;
             }
@@ -385,7 +389,7 @@ public class ScoreCoral extends DriveToPose {
           break;
         case HOLD_POSITION:
           if (!DriverStation.isAutonomous()) {
-           cancel();
+            cancel();
           }
           if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
             state = ScoreState.SAFE_DISTANCE;
@@ -413,7 +417,7 @@ public class ScoreCoral extends DriveToPose {
 
   @Override
   public void end(boolean interrupted) {
-   cancel();
+    cancel();
 
     if (!chainedAlgaeMode) {
       superstructure.requestIdle();
