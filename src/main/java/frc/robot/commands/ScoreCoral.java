@@ -31,7 +31,9 @@ public class ScoreCoral extends DriveToPose {
   public boolean running;
   public Timer times = new Timer();
   private Pose2d targetScoringPose;
-  private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
+
+  public static Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
+
 
   private Pose2d leftBranchScoringPos;
   private Pose2d rightBranchScoringPose;
@@ -76,15 +78,16 @@ public class ScoreCoral extends DriveToPose {
   /* mutable supplier we can redirect after super() returns */
 
   public ScoreCoral(
-    
       Superstructure superstructure,
       Level level,
       Drive drive,
       boolean chainedAlgaeMode,
       boolean noDriveBack) {
 
+    
+
     /* DriveToPose registers “drive” for us */
-    super(drive, new Pose2d(), level == Level.L4);
+    super(drive, currentPoseRequest.get(), level == Level.L4);
 
     this.superstructure = superstructure;
     this.level = level;
