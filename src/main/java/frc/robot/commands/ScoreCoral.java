@@ -74,9 +74,6 @@ public class ScoreCoral extends Command {
     forceReef = true;
   }
 
-<<<<<<< HEAD
-  /* mutable supplier we can redirect after super() returns */
-
 =======
 >>>>>>> 7bcf850a (Revert "chnaged back")
   public ScoreCoral(
@@ -86,13 +83,6 @@ public class ScoreCoral extends Command {
       Drive drive,
       boolean chainedAlgaeMode,
       boolean noDriveBack) {
-<<<<<<< HEAD
-
-    /* DriveToPose registers “drive” for us */
-    super(drive, new Pose2d(), level == Level.L4);
-
-=======
->>>>>>> 7bcf850a (Revert "chnaged back")
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
