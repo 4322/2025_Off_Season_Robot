@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -8,9 +10,9 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
@@ -20,15 +22,12 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
-public class ScoreCoral extends Command {
+public class ScoreCoral extends DriveToPose {
 
   private Superstructure.Level level;
   private final Superstructure superstructure;
   private final Drive drive;
-  private DriveToPose driveToPose;
   public boolean running;
   public Timer times = new Timer();
   private Pose2d targetScoringPose;
@@ -74,36 +73,29 @@ public class ScoreCoral extends Command {
     forceReef = true;
   }
 
-<<<<<<< HEAD
   /* mutable supplier we can redirect after super() returns */
 
-=======
->>>>>>> 7bcf850a (Revert "chnaged back")
   public ScoreCoral(
     
       Superstructure superstructure,
-      Superstructure.Level level,
+      Level level,
       Drive drive,
       boolean chainedAlgaeMode,
       boolean noDriveBack) {
-<<<<<<< HEAD
 
     /* DriveToPose registers “drive” for us */
     super(drive, new Pose2d(), level == Level.L4);
 
-=======
->>>>>>> 7bcf850a (Revert "chnaged back")
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
     this.chainedAlgaeMode = chainedAlgaeMode;
     this.noDriveBackAuto = noDriveBack;
-    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get(), level == Level.L4);
-    addRequirements(superstructure);
   }
 
   @Override
-  public void initialize() {
+  public void initialize() { // let DriveToPose start its trajectory
+
     coralNumber++;
     running = true;
     times.stop();
@@ -255,7 +247,7 @@ public class ScoreCoral extends Command {
   @Override
   public void execute() {
     Logger.recordOutput("ScoreCoral/state", state);
-    Logger.recordOutput("ScoreCoral/atGoal", driveToPose.atGoal());
+    Logger.recordOutput("ScoreCoral/atGoal", atGoal());
     Logger.recordOutput("ScoreCoral/isInSafeArea", isInSafeArea());
 
     if (superstructure.isAutoOperationMode()) {
@@ -320,19 +312,19 @@ public class ScoreCoral extends Command {
           currentPoseRequest = () -> safeDistPose;
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
-          if (!driveToPose.isScheduled() && !isFinished()) {
-            driveToPose.schedule();
+          if (!isScheduled() && !isFinished()) {
+            super.execute(); // let DriveToPose start its trajectory
           }
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (isInPrescoreArea() || driveToPose.atGoal()) {
+          } else if (isInPrescoreArea() || atGoal()) {
 
             superstructure.requestPrescoreCoral(level);
             if (superstructure.getState() == Superstates.PRESCORE_CORAL
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()) {
               currentPoseRequest = () -> targetScoringPose;
-              driveToPose.resetGoal();
+              super.execute(); 
               state = ScoreState.DRIVE_IN;
             }
           }
@@ -340,14 +332,13 @@ public class ScoreCoral extends Command {
         case DRIVE_IN:
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (driveToPose.atGoal()
+          } else if (atGoal()
               || (level == Level.L1
                   && (RobotContainer.isScoringTriggerHeld() // Driver override
                       || (drive.getRobotRelativeSpeeds()
                                   .vxMetersPerSecond // Robot not moving and pretty close to reef
                               < Constants.AutoScoring.notMovingVelocityThreshold
-                          && driveToPose.withinTolerance(
-                              Constants.AutoScoring.atReefFaceL1Tolerance))))) {
+                          && withinTolerance(Constants.AutoScoring.atReefFaceL1Tolerance))))) {
 
             if (level == Level.L4) {
               times.start();
@@ -365,17 +356,17 @@ public class ScoreCoral extends Command {
                 && !superstructure.isCoralHeld()
                 && level == Level.L1) {
               currentPoseRequest = () -> driveBackPose;
-              driveToPose.resetGoal();
+              resetGoal();
               state = ScoreState.DRIVEBACK;
 
             } else if (level != Level.L1
                 && (superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL
                     || superstructure.getEndEffectorState() == EndEffectorStates.IDLE)) {
               if (noDriveBackAuto) {
-                driveToPose.cancel();
+                cancel();
               } else {
                 currentPoseRequest = () -> driveBackPose;
-                driveToPose.resetGoal();
+                resetGoal();
               }
               state = ScoreState.DRIVEBACK;
             }
@@ -386,7 +377,7 @@ public class ScoreCoral extends Command {
 
           break;
         case DRIVEBACK:
-          if ((!noDriveBackAuto && driveToPose.atGoal()) || isInSafeArea()) {
+          if ((!noDriveBackAuto && atGoal()) || isInSafeArea()) {
             running = false;
           }
           // Only don't do drive back if robot is stuck against other robot while driving back
@@ -400,7 +391,7 @@ public class ScoreCoral extends Command {
           break;
         case HOLD_POSITION:
           if (!DriverStation.isAutonomous()) {
-            driveToPose.cancel();
+            cancel();
           }
           if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
             state = ScoreState.SAFE_DISTANCE;
@@ -410,7 +401,7 @@ public class ScoreCoral extends Command {
       }
 
     } else {
-      driveToPose.cancel();
+      cancel();
 
       drive.requestAutoRotateMode(robotReefAngle);
       superstructure.requestPrescoreCoral(level);
@@ -428,7 +419,7 @@ public class ScoreCoral extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    driveToPose.cancel();
+    cancel();
 
     if (!chainedAlgaeMode) {
       superstructure.requestIdle();
