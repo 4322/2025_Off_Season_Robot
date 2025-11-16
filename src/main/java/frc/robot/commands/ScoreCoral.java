@@ -75,6 +75,7 @@ public class ScoreCoral extends DriveToPose {
   /* mutable supplier we can redirect after super() returns */
 
   public ScoreCoral(
+    
       Superstructure superstructure,
       Level level,
       Drive drive,
