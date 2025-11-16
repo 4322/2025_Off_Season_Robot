@@ -73,11 +73,7 @@ public class ScoreCoral extends DriveToPose {
     forceReef = true;
   }
 
-<<<<<<< HEAD
  
-=======
-  /* mutable supplier we can redirect after super() returns */
->>>>>>> 337682582cd68a0396ccc989ec0959d0f87b430f
 
   public ScoreCoral(
       Superstructure superstructure,
@@ -87,11 +83,7 @@ public class ScoreCoral extends DriveToPose {
       boolean noDriveBack) {
 
     /* DriveToPose registers “drive” for us */
-<<<<<<< HEAD
     super(drive, new Pose2d(currentPoseRequest.get()), level == Level.L4);
-=======
-    super(drive, new Pose2d(), level == Level.L4);
->>>>>>> 337682582cd68a0396ccc989ec0959d0f87b430f
 
     this.superstructure = superstructure;
     this.level = level;
