@@ -75,7 +75,7 @@ public class ScoreCoral extends DriveToPose {
     forceReef = true;
   }
 
-  /* mutable supplier we can redirect after super() returns */
+  
 
   public ScoreCoral(
       Superstructure superstructure,
@@ -83,10 +83,6 @@ public class ScoreCoral extends DriveToPose {
       Drive drive,
       boolean chainedAlgaeMode,
       boolean noDriveBack) {
-
-    
-
-    /* DriveToPose registers “drive” for us */
     super(drive, currentPoseRequest.get(), level == Level.L4);
 
     this.superstructure = superstructure;
@@ -316,6 +312,7 @@ public class ScoreCoral extends DriveToPose {
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
           if (!isScheduled() && !isFinished()) {
+            super.initialize(); 
             super.execute(); // let DriveToPose start its trajectory
           }
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
@@ -327,6 +324,7 @@ public class ScoreCoral extends DriveToPose {
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()) {
               currentPoseRequest = () -> targetScoringPose;
+              super.initialize();
               super.execute(); 
               state = ScoreState.DRIVE_IN;
             }
@@ -393,9 +391,6 @@ public class ScoreCoral extends DriveToPose {
 
           break;
         case HOLD_POSITION:
-          if (!DriverStation.isAutonomous()) {
-            cancel();
-          }
           if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
             state = ScoreState.SAFE_DISTANCE;
             running = false;
