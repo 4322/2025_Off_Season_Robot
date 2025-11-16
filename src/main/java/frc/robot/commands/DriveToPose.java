@@ -106,7 +106,6 @@ public class DriveToPose extends Command {
     this(drive, false, pose, highMode);
   }
 
-  
   /** Drives to the specified pose under full software control. */
   public DriveToPose(Drive drive, boolean slowMode, Pose2d pose, boolean highMode) {
     this(drive, slowMode, () -> pose, highMode);

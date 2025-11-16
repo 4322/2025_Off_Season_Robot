@@ -74,10 +74,7 @@ public class ScoreCoral extends Command {
     forceReef = true;
   }
 
-=======
->>>>>>> 7bcf850a (Revert "chnaged back")
   public ScoreCoral(
-    
       Superstructure superstructure,
       Superstructure.Level level,
       Drive drive,
