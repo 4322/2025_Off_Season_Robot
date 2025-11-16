@@ -2,10 +2,12 @@ package frc.robot.autonomous.modes;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
 import frc.robot.commands.CoralIntake;
@@ -26,7 +28,7 @@ import frc.robot.util.ReefStatus.AlgaeLevel;
 import frc.robot.util.ReefStatus.ClosestReefPipe;
 import frc.robot.util.ReefStatus.L1Zone;
 
-public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
+public class ThreeCoralLeft extends SequentialCommandGroup {
   public ThreeCoralLeft(
       Drive drive,
       Superstructure superstructure,
@@ -99,7 +101,7 @@ public class ThreeCoralLeft extends OrangeSequentialCommandGroup {
               }
             }),
         new OrangeParallelCommandGroup(
-            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1),
+            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1).andThen(),
             new OrangeSequentialCommandGroup(
                 new WaitUntilCommand(
                     () ->

@@ -73,6 +73,8 @@ public class ScoreCoral extends DriveToPose {
     this(superstructure, level, drive, chainedAlgaeMode, noDriveBack);
     this.reefStatus = reefStatus;
     forceReef = true;
+
+  addRequirements(superstructure);
   }
 
   
@@ -105,6 +107,7 @@ public class ScoreCoral extends DriveToPose {
       // Fill in poses of all possible scoring locations for the level requested
       reefStatus = superstructure.getReefStatus();
     }
+    super.initialize();
     robotReefAngle = reefStatus.getClosestRobotAngle();
 
     if (level == Level.L1) {
@@ -312,7 +315,6 @@ public class ScoreCoral extends DriveToPose {
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
           if (!isScheduled() && !isFinished()) {
-            super.initialize(); 
             super.execute(); // let DriveToPose start its trajectory
           }
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
@@ -324,7 +326,6 @@ public class ScoreCoral extends DriveToPose {
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()) {
               currentPoseRequest = () -> targetScoringPose;
-              super.initialize();
               super.execute(); 
               state = ScoreState.DRIVE_IN;
             }
@@ -364,7 +365,7 @@ public class ScoreCoral extends DriveToPose {
                 && (superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL
                     || superstructure.getEndEffectorState() == EndEffectorStates.IDLE)) {
               if (noDriveBackAuto) {
-                cancel();
+                running = false;
               } else {
                 currentPoseRequest = () -> driveBackPose;
                 resetGoal();
@@ -394,7 +395,7 @@ public class ScoreCoral extends DriveToPose {
           if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
             state = ScoreState.SAFE_DISTANCE;
             running = false;
-          }
+          } 
           break;
       }
 
@@ -471,6 +472,7 @@ public class ScoreCoral extends DriveToPose {
     }
   }
 
+  
   public boolean isInPrescoreArea() {
     // Convert robot translation to reef face 0 degrees and compare x coordinates
     Translation2d convertedRobotTrans;
