@@ -307,71 +307,75 @@ public class RobotContainer {
         .a()
         .onTrue(
             new InstantCommand(
-                () -> {
-                  if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                    new AlgaeIntakeGround(superstructure).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
-                      && !lastScoreCoral.isScheduled()) {
-                    scoreL1Coral.schedule();
-                    lastScoreCoral = scoreL1Coral;
-                  }
-                }).andThen((new SafeReefRetract(superstructure))));
+                    () -> {
+                      if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                        new AlgaeIntakeGround(superstructure).schedule();
+                      } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
+                          && !lastScoreCoral.isScheduled()) {
+                        scoreL1Coral.schedule();
+                        lastScoreCoral = scoreL1Coral;
+                      }
+                    })
+                .andThen((new SafeReefRetract(superstructure))));
     driver
         .x()
         .onTrue(
             new InstantCommand(
-                () -> {
-                  if (!endEffector.hasCoral()
-                      && !endEffector.hasAlgae()
-                      && !lastScoreCoral.isScheduled()) {
-                    new DescoreAlgae(superstructure, drive).schedule();
-                  } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
-                      && !lastScoreCoral.isScheduled()) {
-                    new SequentialCommandGroup(
-                            scoreL2Coral,
-                            new DescoreAlgae(superstructure, drive)
-                                .onlyIf(() -> driver.y().getAsBoolean()))
-                        .schedule();
-                    lastScoreCoral = scoreL2Coral;
-                  }
-                }).andThen((new SafeReefRetract(superstructure))));
+                    () -> {
+                      if (!endEffector.hasCoral()
+                          && !endEffector.hasAlgae()
+                          && !lastScoreCoral.isScheduled()) {
+                        new DescoreAlgae(superstructure, drive).schedule();
+                      } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
+                          && !lastScoreCoral.isScheduled()) {
+                        new SequentialCommandGroup(
+                                scoreL2Coral,
+                                new DescoreAlgae(superstructure, drive)
+                                    .onlyIf(() -> driver.y().getAsBoolean()))
+                            .schedule();
+                        lastScoreCoral = scoreL2Coral;
+                      }
+                    })
+                .andThen((new SafeReefRetract(superstructure))));
     driver
         .y()
         .onTrue(
             new InstantCommand(
-                () -> {
-                  if (lastScoreCoral.isScheduled()) {
-                    lastScoreCoral.chainAlgae(true);
-                  } else {
-                    if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                      new DescoreAlgae(superstructure, drive).schedule();
-                    } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
-                        && !lastScoreCoral.isScheduled()) {
-                      scoreL3Coral.schedule();
-              
-                      lastScoreCoral = scoreL3Coral;
-                    }
-                  }
-                }).andThen((new SafeReefRetract(superstructure))));
+                    () -> {
+                      if (lastScoreCoral.isScheduled()) {
+                        lastScoreCoral.chainAlgae(true);
+                      } else {
+                        if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
+                          new DescoreAlgae(superstructure, drive).schedule();
+                        } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
+                            && !lastScoreCoral.isScheduled()) {
+                          scoreL3Coral.schedule();
+
+                          lastScoreCoral = scoreL3Coral;
+                        }
+                      }
+                    })
+                .andThen((new SafeReefRetract(superstructure))));
 
     driver
         .b()
         .onTrue(
             new InstantCommand(
-                () -> {
-                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    new AlgaeScoreCommand(superstructure, drive).schedule();
-                  } else if (endEffector.hasCoral()
-                      && !endEffector.hasAlgae()
-                      && !lastScoreCoral.isScheduled()) {
-                    new SequentialCommandGroup(
-                            scoreL4Coral,
-                            new DescoreAlgae(superstructure, drive)
-                                .onlyIf(() -> driver.y().getAsBoolean()))
-                        .schedule();
-                    lastScoreCoral = scoreL4Coral;
-                  }
-                }).andThen((new SafeReefRetract(superstructure))));
+                    () -> {
+                      if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                        new AlgaeScoreCommand(superstructure, drive).schedule();
+                      } else if (endEffector.hasCoral()
+                          && !endEffector.hasAlgae()
+                          && !lastScoreCoral.isScheduled()) {
+                        new SequentialCommandGroup(
+                                scoreL4Coral,
+                                new DescoreAlgae(superstructure, drive)
+                                    .onlyIf(() -> driver.y().getAsBoolean()))
+                            .schedule();
+                        lastScoreCoral = scoreL4Coral;
+                      }
+                    })
+                .andThen((new SafeReefRetract(superstructure))));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
     driver
         .back()

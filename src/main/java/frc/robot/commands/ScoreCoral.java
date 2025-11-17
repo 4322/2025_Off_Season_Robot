@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
+import static frc.robot.RobotContainer.driver;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,7 +10,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
@@ -22,6 +19,8 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends DriveToPose {
 
@@ -33,7 +32,6 @@ public class ScoreCoral extends DriveToPose {
   private Pose2d targetScoringPose;
 
   public static Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
-
 
   private Pose2d leftBranchScoringPos;
   private Pose2d rightBranchScoringPose;
@@ -74,10 +72,8 @@ public class ScoreCoral extends DriveToPose {
     this.reefStatus = reefStatus;
     forceReef = true;
 
-  addRequirements(superstructure);
+    addRequirements(superstructure);
   }
-
-  
 
   public ScoreCoral(
       Superstructure superstructure,
@@ -314,9 +310,9 @@ public class ScoreCoral extends DriveToPose {
           currentPoseRequest = () -> safeDistPose;
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
-          
-            super.execute();
-        
+
+          super.execute();
+
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (isInPrescoreArea() || atGoal()) {
@@ -326,13 +322,13 @@ public class ScoreCoral extends DriveToPose {
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()) {
               currentPoseRequest = () -> targetScoringPose;
-                  
+
               state = ScoreState.DRIVE_IN;
             }
           }
           break;
         case DRIVE_IN:
-        super.execute();
+          super.execute();
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (atGoal()
@@ -380,7 +376,7 @@ public class ScoreCoral extends DriveToPose {
 
           break;
         case DRIVEBACK:
-        super.execute();
+          super.execute();
           if ((!noDriveBackAuto && atGoal()) || isInSafeArea()) {
             running = false;
           }
@@ -397,7 +393,7 @@ public class ScoreCoral extends DriveToPose {
           if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
             state = ScoreState.SAFE_DISTANCE;
             running = false;
-          } 
+          }
           break;
       }
 
@@ -474,7 +470,6 @@ public class ScoreCoral extends DriveToPose {
     }
   }
 
-  
   public boolean isInPrescoreArea() {
     // Convert robot translation to reef face 0 degrees and compare x coordinates
     Translation2d convertedRobotTrans;

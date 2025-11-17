@@ -2,7 +2,6 @@ package frc.robot.autonomous.modes;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -101,7 +100,8 @@ public class ThreeCoralRight extends SequentialCommandGroup {
               }
             }),
         new ParallelCommandGroup(
-            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1).andThen(new SafeReefRetract(superstructure)),
+            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1)
+                .andThen(new SafeReefRetract(superstructure)),
             new SequentialCommandGroup(
                 new WaitUntilCommand(
                     () ->
@@ -111,10 +111,12 @@ public class ThreeCoralRight extends SequentialCommandGroup {
         new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.EchoToFeed2),
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
-        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2).andThen(new SafeReefRetract(superstructure)),
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2)
+            .andThen(new SafeReefRetract(superstructure)),
         new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.DeltatoFeed),
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
-        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3).andThen(new SafeReefRetract(superstructure)));
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3)
+            .andThen(new SafeReefRetract(superstructure)));
   }
 }

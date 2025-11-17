@@ -1,10 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.Iterator;
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -22,6 +17,9 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
+import java.util.Iterator;
+import java.util.List;
+import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
 
@@ -34,7 +32,8 @@ public class Simulator extends SubsystemBase {
     DROP_CORAL1_EARLY,
     DROP_CORAL1_LATE,
     DROP_CORAL2_LATE,
-    DROP_ALGAE1_EARLY
+    DROP_ALGAE1_EARLY,
+    RELEASE_TRIGGER_EARLY
   }
 
   private enum TeleopScenario {
@@ -260,8 +259,12 @@ public class Simulator extends SubsystemBase {
             new SimEvent(t += 3.0, "Score coral L4", EventType.HOLD_RIGHT_TRIGGER),
             new SimEvent(t += 0.1, "Coral released", EventType.END_EFFECTOR_NO_CORAL),
             new SimEvent(t += 0.1, "Release score trigger", EventType.RELEASE_RIGHT_TRIGGER),
+            new SimEvent(
+                t += 0.2,
+                "Back away from reef",
+                EventType.SET_POSE,
+                new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
             new SimEvent(t += 0.1, "Score complete", EventType.RELEASE_B));
-
       default:
         return List.of();
     }

@@ -3,16 +3,16 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Superstructure;
 
-public class SafeReefRetract extends Command{
-    private final Superstructure superstructure;
-    private ScoreCoral scoreCoral;
+public class SafeReefRetract extends Command {
+  private final Superstructure superstructure;
+  private ScoreCoral scoreCoral;
 
-    public SafeReefRetract(Superstructure superstructure){
-        this.superstructure = superstructure;
-        addRequirements(superstructure);
-    }
+  public SafeReefRetract(Superstructure superstructure) {
+    this.superstructure = superstructure;
+    addRequirements(superstructure);
+  }
 
-    @Override
+  @Override
   public boolean isFinished() {
     return scoreCoral.isInSafeArea();
   }
@@ -21,7 +21,4 @@ public class SafeReefRetract extends Command{
   public void end(boolean interrupted) {
     superstructure.requestIdle();
   }
-
-
-    
 }
