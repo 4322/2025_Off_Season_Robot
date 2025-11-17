@@ -32,7 +32,7 @@ public class ScoreCoral extends DriveToPose {
   public boolean running;
   public Timer times = new Timer();
   private Pose2d targetScoringPose;
-  private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
+  private static Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
 
   private Pose2d leftBranchScoringPos;
   private Pose2d rightBranchScoringPose;
@@ -86,8 +86,6 @@ public class ScoreCoral extends DriveToPose {
     this.drive = drive;
     this.chainedAlgaeMode = chainedAlgaeMode;
     this.noDriveBackAuto = noDriveBack;
-    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get(), level == Level.L4);
-    addRequirements(superstructure);
   }
 
   @Override
@@ -308,8 +306,8 @@ public class ScoreCoral extends DriveToPose {
           currentPoseRequest = () -> safeDistPose;
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
-          if (!driveToPose.isScheduled() && !isFinished()) {
-            driveToPose.schedule();
+          if (!isScheduled() && !isFinished()) {
+            super.execute();
           }
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
