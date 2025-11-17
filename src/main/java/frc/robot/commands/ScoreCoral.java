@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
@@ -31,7 +32,7 @@ public class ScoreCoral extends DriveToPose {
   public boolean running;
   public Timer times = new Timer();
   private Pose2d targetScoringPose;
-  private static Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
+  private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
 
   private Pose2d leftBranchScoringPos;
   private Pose2d rightBranchScoringPose;
@@ -79,14 +80,13 @@ public class ScoreCoral extends DriveToPose {
       Drive drive,
       boolean chainedAlgaeMode,
       boolean noDriveBack) {
-
-    super(drive, () -> currentPoseRequest.get(), level == Level.L4);
-
+        super(drive, () -> currentPoseRequest.get(), level == Level.L4);
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
     this.chainedAlgaeMode = chainedAlgaeMode;
     this.noDriveBackAuto = noDriveBack;
+    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get(), level == Level.L4);
     addRequirements(superstructure);
   }
 
@@ -308,8 +308,8 @@ public class ScoreCoral extends DriveToPose {
           currentPoseRequest = () -> safeDistPose;
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
-          if (!isScheduled() && !isFinished()) {
-            super.execute();
+          if (!driveToPose.isScheduled() && !isFinished()) {
+            driveToPose.schedule();
           }
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
