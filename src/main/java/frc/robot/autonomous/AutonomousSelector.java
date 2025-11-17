@@ -1,11 +1,7 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.autonomous.modes.DoNothing;
-import frc.robot.autonomous.modes.Leave;
-import frc.robot.autonomous.modes.OneCoralTwoAlgaeCenter;
 import frc.robot.autonomous.modes.TestLeave;
-import frc.robot.autonomous.modes.ThreeCoralLeft;
 import frc.robot.autonomous.modes.ThreeCoralRight;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.RobotMode;

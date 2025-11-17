@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,6 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
@@ -19,8 +22,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends DriveToPose {
 
@@ -31,7 +32,7 @@ public class ScoreCoral extends DriveToPose {
   public Timer times = new Timer();
   private Pose2d targetScoringPose;
 
-  public static Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
+  public Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
 
   private Pose2d leftBranchScoringPos;
   private Pose2d rightBranchScoringPose;
@@ -68,7 +69,14 @@ public class ScoreCoral extends DriveToPose {
       boolean chainedAlgaeMode,
       boolean noDriveBack,
       ReefStatus reefStatus) {
-    this(superstructure, level, drive, chainedAlgaeMode, noDriveBack);
+
+    this(
+        superstructure,
+        level,
+        drive,
+        chainedAlgaeMode,
+        noDriveBack,
+        () -> new Pose2d());
     this.reefStatus = reefStatus;
     forceReef = true;
 
@@ -80,9 +88,12 @@ public class ScoreCoral extends DriveToPose {
       Level level,
       Drive drive,
       boolean chainedAlgaeMode,
-      boolean noDriveBack) {
-    super(drive, currentPoseRequest.get(), level == Level.L4);
+      boolean noDriveBack,
+      Supplier<Pose2d> currentPoseRequest) {
 
+    super(drive, currentPoseRequest, level == Level.L4);
+
+    this.currentPoseRequest = currentPoseRequest;
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
@@ -90,7 +101,25 @@ public class ScoreCoral extends DriveToPose {
     this.noDriveBackAuto = noDriveBack;
   }
 
-  @Override
+  public ScoreCoral(
+      Superstructure superstructure,
+      Level level,
+      Drive drive,
+      boolean chainedAlgaeMode,
+      boolean noDriveBack) {
+
+    this(
+        superstructure,
+        level,
+        drive,
+        chainedAlgaeMode,
+        noDriveBack,
+        () -> new Pose2d());
+  }
+
+ 
+  
+    @Override
   public void initialize() { // let DriveToPose start its trajectory
 
     coralNumber++;
@@ -307,7 +336,7 @@ public class ScoreCoral extends DriveToPose {
                   new Transform2d(
                       -FieldConstants.KeypointPoses.extraDriveBackDistance, 0, new Rotation2d()));
 
-          currentPoseRequest = () -> safeDistPose;
+          updateGoal(() -> safeDistPose);
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
 
@@ -321,6 +350,7 @@ public class ScoreCoral extends DriveToPose {
             if (superstructure.getState() == Superstates.PRESCORE_CORAL
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()) {
+              updateGoal(() -> targetScoringPose);
               currentPoseRequest = () -> targetScoringPose;
 
               state = ScoreState.DRIVE_IN;
@@ -354,6 +384,7 @@ public class ScoreCoral extends DriveToPose {
                 && superstructure.elevatorAtSetpoint()
                 && !superstructure.isCoralHeld()
                 && level == Level.L1) {
+              updateGoal(() -> driveBackPose);
               currentPoseRequest = () -> driveBackPose;
               resetGoal();
               state = ScoreState.DRIVEBACK;
@@ -364,6 +395,7 @@ public class ScoreCoral extends DriveToPose {
               if (noDriveBackAuto) {
                 running = false;
               } else {
+                updateGoal(() -> driveBackPose);
                 currentPoseRequest = () -> driveBackPose;
                 resetGoal();
               }
@@ -499,5 +531,9 @@ public class ScoreCoral extends DriveToPose {
     }
     return distanceFromReef >= FieldConstants.KeypointPoses.reefSafeDistance
         && distanceFromReef <= FieldConstants.KeypointPoses.reefPrescoreSafeDistance;
+  }
+
+  public void updateGoal(Supplier<Pose2d> newGoal) {
+    currentPoseRequest = newGoal;
   }
 }

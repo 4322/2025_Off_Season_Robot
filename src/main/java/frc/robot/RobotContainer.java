@@ -70,6 +70,7 @@ import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIO;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOPhoton;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
+import frc.robot.util.ReefStatus;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -88,6 +89,8 @@ public class RobotContainer {
   private static ScoreCoral scoreL1Coral;
   private static ScoreCoral scoreL2Coral;
   private static ScoreCoral scoreL3Coral;
+  private static SafeReefRetract safeReefRetract;
+  private static ReefStatus reefStatus;
   private static ScoreCoral scoreL4Coral;
   private static Drive drive;
   private static Arm arm;
@@ -235,6 +238,7 @@ public class RobotContainer {
     intakeSuperstructure = new IntakeSuperstructure(endEffector, deployer, rollers, indexer);
     superstructure =
         new Superstructure(endEffector, arm, elevator, intakeSuperstructure, vision, drive);
+    reefStatus = superstructure.getReefStatus();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -279,6 +283,8 @@ public class RobotContainer {
     scoreL3Coral = new ScoreCoral(superstructure, Level.L3, drive, false, false);
     scoreL4Coral = new ScoreCoral(superstructure, Level.L4, drive, false, false);
     lastScoreCoral = scoreL1Coral;
+    safeReefRetract = new SafeReefRetract(superstructure, drive);
+
     // The commands deal with the on False logic if the button is no longer held
 
     driver
@@ -316,7 +322,7 @@ public class RobotContainer {
                         lastScoreCoral = scoreL1Coral;
                       }
                     })
-                .andThen((new SafeReefRetract(superstructure))));
+                .andThen(new SafeReefRetract(superstructure, drive)));
     driver
         .x()
         .onTrue(
@@ -336,7 +342,7 @@ public class RobotContainer {
                         lastScoreCoral = scoreL2Coral;
                       }
                     })
-                .andThen((new SafeReefRetract(superstructure))));
+                .andThen(new SafeReefRetract(superstructure, drive)));
     driver
         .y()
         .onTrue(
@@ -355,7 +361,7 @@ public class RobotContainer {
                         }
                       }
                     })
-                .andThen((new SafeReefRetract(superstructure))));
+                .andThen(new SafeReefRetract(superstructure, drive)));
 
     driver
         .b()
@@ -375,7 +381,8 @@ public class RobotContainer {
                         lastScoreCoral = scoreL4Coral;
                       }
                     })
-                .andThen((new SafeReefRetract(superstructure))));
+                .andThen(new SafeReefRetract(superstructure, drive)));
+
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
     driver
         .back()
@@ -505,6 +512,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autonomousSelector.get();
+  }
+
+  public ScoreCoral getScoreCoral() {
+    return lastScoreCoral;
   }
 
   public void configureAutonomousSelector() {

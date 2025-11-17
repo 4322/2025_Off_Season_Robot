@@ -48,7 +48,8 @@
 //             L1Zone.MIDDLE,
 //             AlgaeLevel.L2,
 //             () -> {
-//               return Robot.alliance == Alliance.Blue ? ReefFaceTag.IJ.idBlue : ReefFaceTag.IJ.idRed;
+//               return Robot.alliance == Alliance.Blue ? ReefFaceTag.IJ.idBlue :
+// ReefFaceTag.IJ.idRed;
 //             });
 
 //     ReefStatus reefCoral2 =
@@ -64,7 +65,8 @@
 //             L1Zone.MIDDLE,
 //             AlgaeLevel.L2,
 //             () -> {
-//               return Robot.alliance == Alliance.Blue ? ReefFaceTag.KL.idBlue : ReefFaceTag.KL.idRed;
+//               return Robot.alliance == Alliance.Blue ? ReefFaceTag.KL.idBlue :
+// ReefFaceTag.KL.idRed;
 //             });
 
 //     ReefStatus reefCoral3 =
@@ -80,7 +82,8 @@
 //             L1Zone.MIDDLE,
 //             AlgaeLevel.L2,
 //             () -> {
-//               return Robot.alliance == Alliance.Blue ? ReefFaceTag.KL.idBlue : ReefFaceTag.KL.idRed;
+//               return Robot.alliance == Alliance.Blue ? ReefFaceTag.KL.idBlue :
+// ReefFaceTag.KL.idRed;
 //             });
 
 //     PathPlannerPath path = Robot.ThreeCoralStartToJuliet;
@@ -104,7 +107,8 @@
 //         new SequentialCommandGroup(
 //             new WaitUntilCommand(
 //                 () ->
-//                     superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL),
+//                     superstructure.getEndEffectorState() ==
+// EndEffectorStates.RELEASE_CORAL_NORMAL),
 //             AutoBuilder.followPath(Robot.JulietToFeed1)),
 //         new ParallelCommandGroup(
 //             AutoBuilder.followPath(Robot.JulietToFeed2),

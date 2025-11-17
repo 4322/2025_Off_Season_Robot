@@ -99,23 +99,22 @@ public class ThreeCoralRight extends SequentialCommandGroup {
                 drive.resetPose(startPoseRed);
               }
             }),
-            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1)
-                .andThen(new SafeReefRetract(superstructure)),
-            new SequentialCommandGroup(
-                new WaitUntilCommand(
-                    () ->
-                        superstructure.getEndEffectorState()
-                            == EndEffectorStates.RELEASE_CORAL_NORMAL),
-                AutoBuilder.followPath(Robot.EchoToFeed1)),
+        new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1)
+            .andThen(new SafeReefRetract(superstructure, drive)),
+        new SequentialCommandGroup(
+            new WaitUntilCommand(
+                () ->
+                    superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL),
+            AutoBuilder.followPath(Robot.EchoToFeed1)),
         new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.EchoToFeed2),
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2)
-            .andThen(new SafeReefRetract(superstructure)),
+            .andThen(new SafeReefRetract(superstructure, drive)),
         new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.DeltatoFeed),
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3)
-            .andThen(new SafeReefRetract(superstructure)));
+            .andThen(new SafeReefRetract(superstructure, drive)));
   }
 }
