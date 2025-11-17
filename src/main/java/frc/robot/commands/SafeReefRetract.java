@@ -7,7 +7,7 @@ public class SafeReefRetract extends Command {
   private final Superstructure superstructure;
   private ScoreCoral scoreCoral;
 
-  public SafeReefRetract(Superstructure superstructure) {
+  public SafeReefRetract(ScoreCoral scoreCoral, Superstructure superstructure) {
     this.superstructure = superstructure;
     addRequirements(superstructure);
   }

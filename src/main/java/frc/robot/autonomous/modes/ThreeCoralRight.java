@@ -99,7 +99,6 @@ public class ThreeCoralRight extends SequentialCommandGroup {
                 drive.resetPose(startPoseRed);
               }
             }),
-        new ParallelCommandGroup(
             new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1)
                 .andThen(new SafeReefRetract(superstructure)),
             new SequentialCommandGroup(
@@ -107,7 +106,7 @@ public class ThreeCoralRight extends SequentialCommandGroup {
                     () ->
                         superstructure.getEndEffectorState()
                             == EndEffectorStates.RELEASE_CORAL_NORMAL),
-                AutoBuilder.followPath(Robot.EchoToFeed1))),
+                AutoBuilder.followPath(Robot.EchoToFeed1)),
         new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.EchoToFeed2),
             new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),

@@ -53,15 +53,15 @@ public class AutonomousSelector {
       VisionObjectDetection objectDetection) {
     autos =
         List.of(
-            new Auto(AutoName.DO_NOTHING, new DoNothing(superstructure)),
-            new Auto(AutoName.LEAVE, new Leave(drive, superstructure)),
-            new Auto(
-                AutoName.ONE_CORAL_TWO_ALGAE_CENTER,
-                new OneCoralTwoAlgaeCenter(drive, superstructure)),
-            new Auto(
-                AutoName.THREE_CORAL_LEFT,
-                new ThreeCoralLeft(
-                    drive, superstructure, intakeSuperstructure, vision, objectDetection)),
+            // new Auto(AutoName.DO_NOTHING, new DoNothing(superstructure)),
+            // new Auto(AutoName.LEAVE, new Leave(drive, superstructure)),
+            // new Auto(
+            //     AutoName.ONE_CORAL_TWO_ALGAE_CENTER,
+            //     new OneCoralTwoAlgaeCenter(drive, superstructure)),
+            // new Auto(
+            //     AutoName.THREE_CORAL_LEFT,
+            //     new ThreeCoralLeft(
+            //         drive, superstructure, intakeSuperstructure, vision, objectDetection)),
             new Auto(
                 AutoName.THREE_CORAL_RIGHT,
                 new ThreeCoralRight(
