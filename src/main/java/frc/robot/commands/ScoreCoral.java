@@ -387,7 +387,7 @@ public class ScoreCoral extends DriveToPose {
           break;
         case HOLD_POSITION:
           if (!DriverStation.isAutonomous()) {
-            super.cancel();
+            running = false;
           }
           if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
             state = ScoreState.SAFE_DISTANCE;
@@ -397,7 +397,7 @@ public class ScoreCoral extends DriveToPose {
       }
 
     } else {
-      super.cancel();
+      running = false;
 
       drive.requestAutoRotateMode(robotReefAngle);
       superstructure.requestPrescoreCoral(level);
@@ -415,7 +415,7 @@ public class ScoreCoral extends DriveToPose {
 
   @Override
   public void end(boolean interrupted) {
-    super.cancel();
+    running = false;
 
     if (!chainedAlgaeMode) {
       superstructure.requestIdle();
