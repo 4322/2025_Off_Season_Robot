@@ -1,6 +1,7 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.autonomous.modes.OneCoralTwoAlgaeCenter;
 import frc.robot.autonomous.modes.TestLeave;
 import frc.robot.autonomous.modes.ThreeCoralRight;
 import frc.robot.constants.Constants;
@@ -51,9 +52,9 @@ public class AutonomousSelector {
         List.of(
             // new Auto(AutoName.DO_NOTHING, new DoNothing(superstructure)),
             // new Auto(AutoName.LEAVE, new Leave(drive, superstructure)),
-            // new Auto(
-            //     AutoName.ONE_CORAL_TWO_ALGAE_CENTER,
-            //     new OneCoralTwoAlgaeCenter(drive, superstructure)),
+            new Auto(
+                AutoName.ONE_CORAL_TWO_ALGAE_CENTER,
+                new OneCoralTwoAlgaeCenter(drive, superstructure)),
             // new Auto(
             //     AutoName.THREE_CORAL_LEFT,
             //     new ThreeCoralLeft(

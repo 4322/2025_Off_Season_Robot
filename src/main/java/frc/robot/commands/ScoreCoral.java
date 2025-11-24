@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
+import static frc.robot.RobotContainer.driver;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,7 +10,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
@@ -22,6 +19,8 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends DriveToPose {
 
@@ -43,8 +42,8 @@ public class ScoreCoral extends DriveToPose {
 
   private Rotation2d robotReefAngle;
   private ReefStatus reefStatus;
-  private Pose2d safeDistPose = new Pose2d();
-  private Pose2d driveBackPose = new Pose2d();
+  private Pose2d safeDistPose;
+  private Pose2d driveBackPose;
   private boolean forceReef;
   private boolean noDriveBackAuto;
 
@@ -70,13 +69,7 @@ public class ScoreCoral extends DriveToPose {
       boolean noDriveBack,
       ReefStatus reefStatus) {
 
-    this(
-        superstructure,
-        level,
-        drive,
-        chainedAlgaeMode,
-        noDriveBack,
-        () -> new Pose2d());
+    this(superstructure, level, drive, chainedAlgaeMode, noDriveBack, () -> new Pose2d());
     this.reefStatus = reefStatus;
     forceReef = true;
 
@@ -108,18 +101,10 @@ public class ScoreCoral extends DriveToPose {
       boolean chainedAlgaeMode,
       boolean noDriveBack) {
 
-    this(
-        superstructure,
-        level,
-        drive,
-        chainedAlgaeMode,
-        noDriveBack,
-        () -> new Pose2d());
+    this(superstructure, level, drive, chainedAlgaeMode, noDriveBack, () -> new Pose2d());
   }
 
- 
-  
-    @Override
+  @Override
   public void initialize() { // let DriveToPose start its trajectory
 
     coralNumber++;
@@ -336,7 +321,8 @@ public class ScoreCoral extends DriveToPose {
                   new Transform2d(
                       -FieldConstants.KeypointPoses.extraDriveBackDistance, 0, new Rotation2d()));
 
-          updateGoal(() -> safeDistPose);
+          this.currentPoseRequest = () -> safeDistPose;
+
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
 
@@ -350,8 +336,7 @@ public class ScoreCoral extends DriveToPose {
             if (superstructure.getState() == Superstates.PRESCORE_CORAL
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()) {
-              updateGoal(() -> targetScoringPose);
-              currentPoseRequest = () -> targetScoringPose;
+              this.currentPoseRequest = () -> targetScoringPose;
 
               state = ScoreState.DRIVE_IN;
             }
@@ -384,8 +369,7 @@ public class ScoreCoral extends DriveToPose {
                 && superstructure.elevatorAtSetpoint()
                 && !superstructure.isCoralHeld()
                 && level == Level.L1) {
-              updateGoal(() -> driveBackPose);
-              currentPoseRequest = () -> driveBackPose;
+              this.currentPoseRequest = () -> driveBackPose;
               resetGoal();
               state = ScoreState.DRIVEBACK;
 
@@ -395,8 +379,7 @@ public class ScoreCoral extends DriveToPose {
               if (noDriveBackAuto) {
                 running = false;
               } else {
-                updateGoal(() -> driveBackPose);
-                currentPoseRequest = () -> driveBackPose;
+                this.currentPoseRequest = () -> driveBackPose;
                 resetGoal();
               }
               state = ScoreState.DRIVEBACK;
@@ -430,7 +413,6 @@ public class ScoreCoral extends DriveToPose {
       }
 
     } else {
-      cancel();
 
       drive.requestAutoRotateMode(robotReefAngle);
       superstructure.requestPrescoreCoral(level);
@@ -448,7 +430,6 @@ public class ScoreCoral extends DriveToPose {
 
   @Override
   public void end(boolean interrupted) {
-    cancel();
 
     if (!chainedAlgaeMode) {
       superstructure.requestIdle();
@@ -531,9 +512,5 @@ public class ScoreCoral extends DriveToPose {
     }
     return distanceFromReef >= FieldConstants.KeypointPoses.reefSafeDistance
         && distanceFromReef <= FieldConstants.KeypointPoses.reefPrescoreSafeDistance;
-  }
-
-  public void updateGoal(Supplier<Pose2d> newGoal) {
-    currentPoseRequest = newGoal;
   }
 }
