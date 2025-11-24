@@ -328,7 +328,7 @@ public class Simulator extends SubsystemBase {
       if (events == null) {
         if (!disabledTimer.hasElapsed(2)) {
           // wait for alliance color update
-          System.out.println("Select DISABLED for at least 2 aeconds before enabling!");
+          System.out.println("Select DISABLED for at least 2 seconds before enabling!");
           System.exit(1);
         }
         autoEvents = buildAutoScenario();
