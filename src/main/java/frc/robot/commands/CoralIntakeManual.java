@@ -1,10 +1,9 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
-
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.subsystems.IntakeSuperstructure;
 
 public class CoralIntakeManual extends Command {
@@ -12,6 +11,8 @@ public class CoralIntakeManual extends Command {
   private Timer rumbleTimer = new Timer();
   private boolean autoEnd;
 
+
+  
   public CoralIntakeManual(IntakeSuperstructure intakeSuperstructure, boolean autoEnd) {
     this.intakeSuperstructure = intakeSuperstructure;
     addRequirements(intakeSuperstructure);
