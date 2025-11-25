@@ -34,7 +34,8 @@ public class CoralIntake extends Command {
     this.intakeSuperstructure = intakeSuperstructure;
     this.drive = drive;
     this.visionObjectDetection = visionObjectDetection;
-    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get(), false);
+    driveToPose = new DriveToPose(drive, false);
+    driveToPose.setPoseSupplier(() -> currentPoseRequest.get());
 
     addRequirements(intakeSuperstructure);
   }

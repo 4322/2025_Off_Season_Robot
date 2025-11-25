@@ -69,7 +69,7 @@ public class ScoreCoral extends DriveToPose {
       boolean noDriveBack,
       ReefStatus reefStatus) {
 
-    this(superstructure, level, drive, chainedAlgaeMode, noDriveBack, () -> new Pose2d());
+    this(superstructure, level, drive, chainedAlgaeMode, noDriveBack);
     this.reefStatus = reefStatus;
     forceReef = true;
 
@@ -81,27 +81,17 @@ public class ScoreCoral extends DriveToPose {
       Level level,
       Drive drive,
       boolean chainedAlgaeMode,
-      boolean noDriveBack,
-      Supplier<Pose2d> currentPoseRequest) {
+      boolean noDriveBack) {
 
-    super(drive, currentPoseRequest, level == Level.L4);
+    super(drive, level == Level.L4);
 
-    this.currentPoseRequest = currentPoseRequest;
+    setPoseSupplier(() -> currentPoseRequest.get());
+
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
     this.chainedAlgaeMode = chainedAlgaeMode;
     this.noDriveBackAuto = noDriveBack;
-  }
-
-  public ScoreCoral(
-      Superstructure superstructure,
-      Level level,
-      Drive drive,
-      boolean chainedAlgaeMode,
-      boolean noDriveBack) {
-
-    this(superstructure, level, drive, chainedAlgaeMode, noDriveBack, () -> new Pose2d());
   }
 
   @Override

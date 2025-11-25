@@ -47,7 +47,8 @@ public class DescoreAlgae extends Command {
     this.superstructure = superstructure;
     this.drive = drive;
 
-    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get(), false);
+    driveToPose = new DriveToPose(drive, false);
+    driveToPose.setPoseSupplier(() -> currentPoseRequest.get());
     addRequirements(superstructure);
   }
 
