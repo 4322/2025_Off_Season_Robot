@@ -26,9 +26,9 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
       inputs.hasTarget = new boolean[Constants.VisionObjectDetection.numberOfGamePieceTypes];
       inputs.visibleObjectRotations =
           new Rotation3d[Constants.VisionObjectDetection.numberOfGamePieceTypes][0];
+          inputs.objectDetected = false;
     } else {
       inputs.hasTarget = new boolean[Constants.VisionObjectDetection.numberOfGamePieceTypes];
-      inputs.objectDetected = true;
       inputs.hasTarget[GamePieceType.CORAL.id] = true;
       inputs.visibleObjectRotations =
           new Rotation3d[Constants.VisionObjectDetection.numberOfGamePieceTypes][0];
@@ -37,6 +37,12 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
           calculateRotationFromObjectPosition(coralPosition);
     }
     inputs.latestResultTimestamp = latestTimestamp;
+
+    if (isCoralDetectedInFrame() == true) {
+      inputs.objectDetected = true;
+    } else {
+      inputs.objectDetected = false;
+    }
   }
 
   /**
@@ -97,4 +103,8 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
   public void noCoral() {
     coralPosition = null;
   }
+
+  public boolean isCoralDetectedInFrame() {
+    return true;
+  } 
 }
