@@ -28,6 +28,7 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
           new Rotation3d[Constants.VisionObjectDetection.numberOfGamePieceTypes][0];
     } else {
       inputs.hasTarget = new boolean[Constants.VisionObjectDetection.numberOfGamePieceTypes];
+      inputs.objectDetected = true;
       inputs.hasTarget[GamePieceType.CORAL.id] = true;
       inputs.visibleObjectRotations =
           new Rotation3d[Constants.VisionObjectDetection.numberOfGamePieceTypes][0];

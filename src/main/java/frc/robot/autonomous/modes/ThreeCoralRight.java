@@ -108,12 +108,14 @@ public class ThreeCoralRight extends SequentialCommandGroup {
             AutoBuilder.followPath(Robot.EchoToFeed1)),
         new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.EchoToFeed2),
-            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
+            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
+                .onlyIf(() -> visionObjectDetection.objectDetetcted())),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2)
             .andThen(new SafeReefRetract(superstructure, drive)),
         new ParallelCommandGroup(
             AutoBuilder.followPath(Robot.DeltatoFeed),
-            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
+            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
+                .onlyIf(() -> visionObjectDetection.objectDetetcted())),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3)
             .andThen(new SafeReefRetract(superstructure, drive)));
   }

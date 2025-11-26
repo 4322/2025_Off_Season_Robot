@@ -40,6 +40,7 @@ public class VisionObjectDetectionIOPhoton extends VisionObjectDetectionIO {
   }
 
   private void updateNoNewResultInputs(VisionObjectDetectionInputsAutoLogged inputs) {
+    inputs.objectDetected = false;
     inputs.hasTarget = new boolean[Constants.VisionObjectDetection.numberOfGamePieceTypes];
     inputs.visibleObjectRotations =
         new Rotation3d[Constants.VisionObjectDetection.numberOfGamePieceTypes][0];
@@ -47,6 +48,7 @@ public class VisionObjectDetectionIOPhoton extends VisionObjectDetectionIO {
 
   private void updateHasNewResultInputs(
       VisionObjectDetectionInputsAutoLogged inputs, PhotonPipelineResult result) {
+    inputs.objectDetected = true;
     final List<Rotation3d>[] visibleObjectsRotations =
         new List[Constants.VisionObjectDetection.numberOfGamePieceTypes];
     for (int i = 0; i < Constants.VisionObjectDetection.numberOfGamePieceTypes; i++)
