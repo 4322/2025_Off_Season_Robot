@@ -17,12 +17,13 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
+import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import java.util.*;
 import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
 
-  public static final AutoName simulatedAuto = AutoName.ONE_CORAL_TWO_ALGAE_CENTER;
+  public static final AutoName simulatedAuto = AutoName.THREE_CORAL_RIGHT;
   private final Anomaly anomaly = Anomaly.DROP_CORAL1_LATE;
   private final TeleopScenario teleopScenario = TeleopScenario.SCORE_L4;
 
@@ -567,4 +568,5 @@ public class Simulator extends SubsystemBase {
     DriverStationSim.setJoystickAxis(hidPort, axis.value, 0.0);
     DriverStationSim.notifyNewData();
   }
+  //private void moveStick()
 }
