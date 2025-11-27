@@ -45,7 +45,6 @@ public class ScoreCoral extends DriveToPose {
   private Pose2d driveBackPose = new Pose2d();
   private boolean forceReef;
   private boolean noDriveBackAuto;
-  private boolean execute = false;
   private boolean chainedAlgaeMode;
 
   private static int coralNumber = 0;
@@ -78,8 +77,8 @@ public class ScoreCoral extends DriveToPose {
       Drive drive,
       boolean chainedAlgaeMode,
       boolean noDriveBack) {
-    super(drive, () -> new Pose2d(), level == Level.L4);
-    super.initPose(() -> new Pose2d());
+    super(drive, false, level == Level.L4);
+    super.initPose(() -> currentPoseRequest.get());
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
@@ -261,6 +260,7 @@ public class ScoreCoral extends DriveToPose {
       // Rotate joystick to be relative to robot 0 degrees
       joystickAngle = joystickAngle.rotateBy(robotReefAngle.unaryMinus());
       // Override Code
+      super.execute();
       if (level == Level.L1) {
 
         if (joystickMag > 0.75) {
@@ -292,10 +292,6 @@ public class ScoreCoral extends DriveToPose {
       // States for what the score drive in and out does
       switch (state) {
         case SAFE_DISTANCE:
-        if (!execute) {
-          super.execute();
-          execute = true;          
-        }
           safeDistPose =
               targetScoringPose.transformBy(
                   new Transform2d(

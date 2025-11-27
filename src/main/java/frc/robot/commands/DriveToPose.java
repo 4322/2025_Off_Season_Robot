@@ -125,6 +125,13 @@ public class DriveToPose extends Command {
     addRequirements(drive);
     thetaController.enableContinuousInput(-180, 180);
   }
+
+  public DriveToPose(Drive drive, boolean slowMode, boolean highMode) {
+    this.drive = drive;
+    this.highMode = highMode;
+    this.slowMode = slowMode;
+  }
+
   public void initPose(Supplier<Pose2d> poseSupplier) {
     this.poseSupplier = poseSupplier;
   }
