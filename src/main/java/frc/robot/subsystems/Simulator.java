@@ -1,5 +1,10 @@
 package frc.robot.subsystems;
 
+import java.util.Iterator;
+import java.util.List;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -17,9 +22,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
-import java.util.Iterator;
-import java.util.List;
-import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
 
@@ -91,7 +93,8 @@ public class Simulator extends SubsystemBase {
     RELEASE_LEFT_STICK,
     PRESS_RIGHT_STICK,
     HOLD_RIGHT_STICK,
-    RELEASE_RIGHT_STICK
+    RELEASE_RIGHT_STICK,
+    MOVE_JOYSTICK
   }
 
   private enum EventStatus {
@@ -509,6 +512,9 @@ public class Simulator extends SubsystemBase {
           case RELEASE_RIGHT_STICK:
             releaseButton(XboxController.Button.kRightStick);
             break;
+          case MOVE_JOYSTICK:
+            moveJoystick(0.5, -0.5);
+            break;
         }
       }
       if (iterator.hasNext()) {
@@ -548,6 +554,12 @@ public class Simulator extends SubsystemBase {
   private void holdPOV(POVDirection direction) {
     DriverStationSim.setJoystickPOV(hidPort, 0, direction.value);
     DriverStationSim.notifyNewData();
+  }
+
+  private void moveJoystick(double x, double y) {
+  DriverStationSim.setJoystickAxis(hidPort, 0, x); // Move X axis
+  DriverStationSim.setJoystickAxis(hidPort, 1, y); // Move Y axis
+  DriverStationSim.notifyNewData();
   }
 
   private void pressPOV(POVDirection direction) {
