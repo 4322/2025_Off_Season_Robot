@@ -45,7 +45,7 @@ public class ScoreCoral extends DriveToPose {
   private Pose2d driveBackPose = new Pose2d();
   private boolean forceReef;
   private boolean noDriveBackAuto;
-
+  private boolean execute = false;
   private boolean chainedAlgaeMode;
 
   private static int coralNumber = 0;
@@ -78,8 +78,8 @@ public class ScoreCoral extends DriveToPose {
       Drive drive,
       boolean chainedAlgaeMode,
       boolean noDriveBack) {
-    super(drive, new Pose2d(), level == Level.L4);
-
+    super(drive, () -> new Pose2d(), level == Level.L4);
+    super.initPose(() -> new Pose2d());
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
@@ -95,6 +95,7 @@ public class ScoreCoral extends DriveToPose {
     running = true;
     times.stop();
     times.reset();
+    super.initialize();
     state = ScoreState.SAFE_DISTANCE;
 
     if (!forceReef) {
@@ -291,6 +292,10 @@ public class ScoreCoral extends DriveToPose {
       // States for what the score drive in and out does
       switch (state) {
         case SAFE_DISTANCE:
+        if (!execute) {
+          super.execute();
+          execute = true;          
+        }
           safeDistPose =
               targetScoringPose.transformBy(
                   new Transform2d(
@@ -359,7 +364,7 @@ public class ScoreCoral extends DriveToPose {
                 && (superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL
                     || superstructure.getEndEffectorState() == EndEffectorStates.IDLE)) {
               if (noDriveBackAuto) {
-                super.cancel();
+                running = false;
               } else {
                 currentPoseRequest = () -> driveBackPose;
                 super.resetGoal();
