@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
@@ -19,10 +18,9 @@ import frc.robot.util.ReefStatus.AlgaeLevel;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-public class DescoreAlgae extends Command {
+public class DescoreAlgae extends DriveToPose {
   private final Superstructure superstructure;
   private final Drive drive;
-  private DriveToPose driveToPose;
   public boolean running;
   private AlgaeLevel reefLevel;
 
@@ -44,16 +42,16 @@ public class DescoreAlgae extends Command {
   private ScoreState state = ScoreState.SAFE_DISTANCE;
 
   public DescoreAlgae(Superstructure superstructure, Drive drive) {
+    super(drive, false, false);
+    super.initPose(() -> currentPoseRequest.get());
     this.superstructure = superstructure;
     this.drive = drive;
-
-    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get(), false);
     addRequirements(superstructure);
   }
 
   @Override
   public void initialize() {
-
+    super.initialize();
     running = true;
     state = ScoreState.SAFE_DISTANCE;
 
@@ -97,7 +95,7 @@ public class DescoreAlgae extends Command {
   @Override
   public void execute() {
     Logger.recordOutput("DescoreAlgae/State", state);
-    Logger.recordOutput("DescoreAlgae/atGoal", driveToPose.atGoal());
+    Logger.recordOutput("DescoreAlgae/atGoal", super.atGoal());
     Logger.recordOutput("DescoreAlgae/isInSafeArea", isInSafeArea());
     if (superstructure.isAutoOperationMode()) {
       switch (state) {
@@ -105,45 +103,44 @@ public class DescoreAlgae extends Command {
           currentPoseRequest = () -> safeDescorePose;
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
-          if (!driveToPose.isScheduled() && !isFinished()) {
-            driveToPose.schedule();
-          }
-
+          super.execute();
           if (descoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
-          } else if (isInSafeArea() || driveToPose.atGoal()) {
+          } else if (isInSafeArea() || super.atGoal()) {
             superstructure.requestDescoreAlgae(level);
 
             if (superstructure.getState() == Superstates.DESCORE_ALGAE
                 && superstructure.armAtSetpoint()
                 && superstructure.elevatorAtSetpoint()
-                && driveToPose.withinTolerance(Constants.AutoScoring.algaeSafeDistTolerance)) {
+                && super.withinTolerance(Constants.AutoScoring.algaeSafeDistTolerance)) {
               state = ScoreState.DRIVE_IN;
               currentPoseRequest = () -> targetScoringPose;
-              driveToPose.resetGoal();
+              super.resetGoal();
             }
           }
           break;
         case DRIVE_IN:
+          super.execute();
           if (descoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (superstructure.isAlgaeHeld()) {
             currentPoseRequest = () -> driveBackPose;
-            driveToPose.resetGoal();
+            super.resetGoal();
             state = ScoreState.DRIVEBACK;
           }
           break;
         case DRIVEBACK:
+          super.execute();
           if (descoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           }
-          if (driveToPose.atGoal() || isInSafeArea()) {
+          if (super.atGoal() || isInSafeArea()) {
             running = false;
           }
 
           break;
         case HOLD_POSITION:
-          driveToPose.cancel();
+          running = false;
           if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
             state = ScoreState.SAFE_DISTANCE;
             running = false;
@@ -151,7 +148,7 @@ public class DescoreAlgae extends Command {
           break;
       }
     } else {
-      driveToPose.cancel();
+      running = false;
 
       superstructure.requestDescoreAlgae(level);
     }
@@ -172,7 +169,7 @@ public class DescoreAlgae extends Command {
     superstructure.requestIdle();
     running = false;
 
-    driveToPose.cancel();
+    super.cancel();
 
     Logger.recordOutput("DescoreAlgae/State", "Done");
   }

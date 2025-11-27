@@ -260,7 +260,6 @@ public class ScoreCoral extends DriveToPose {
       // Rotate joystick to be relative to robot 0 degrees
       joystickAngle = joystickAngle.rotateBy(robotReefAngle.unaryMinus());
       // Override Code
-      super.execute();
       if (level == Level.L1) {
 
         if (joystickMag > 0.75) {
@@ -308,13 +307,10 @@ public class ScoreCoral extends DriveToPose {
           currentPoseRequest = () -> safeDistPose;
           // Scheduling and cancelling command in same loop won't work so need to check for
           // isFinished first
-          if (!super.isScheduled() && !isFinished()) {
-            super.schedule();
-          }
+          super.execute();
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (isInPrescoreArea() || super.atGoal()) {
-
             superstructure.requestPrescoreCoral(level);
             if (superstructure.getState() == Superstates.PRESCORE_CORAL
                 && superstructure.armAtSetpoint()
@@ -326,6 +322,7 @@ public class ScoreCoral extends DriveToPose {
           }
           break;
         case DRIVE_IN:
+          super.execute();
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (super.atGoal()
@@ -374,6 +371,7 @@ public class ScoreCoral extends DriveToPose {
 
           break;
         case DRIVEBACK:
+          super.execute();
           if ((!noDriveBackAuto && super.atGoal()) || isInSafeArea()) {
             running = false;
           }
