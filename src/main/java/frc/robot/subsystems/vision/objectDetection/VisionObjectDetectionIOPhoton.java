@@ -1,14 +1,16 @@
 package frc.robot.subsystems.vision.objectDetection;
 
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.util.Units;
-import frc.robot.constants.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.util.Units;
+import frc.robot.constants.Constants;
 
 public class VisionObjectDetectionIOPhoton extends VisionObjectDetectionIO {
   private final PhotonCamera photonCamera;

@@ -2,7 +2,6 @@ package frc.robot.autonomous.modes;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -11,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
 import frc.robot.commands.CoralIntake;
-import frc.robot.commands.SafeReefRetract;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.constants.FieldConstants.ReefFaceRobotHeading;
 import frc.robot.constants.FieldConstants.ReefFaceTag;
@@ -99,23 +97,20 @@ public class ThreeCoralRight extends SequentialCommandGroup {
                 drive.resetPose(startPoseRed);
               }
             }),
-        new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1)
-            .andThen(new SafeReefRetract(superstructure, drive)),
+        new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1),
         new SequentialCommandGroup(
             new WaitUntilCommand(
                 () ->
                     superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL),
             AutoBuilder.followPath(Robot.EchoToFeed1)),
         AutoBuilder.followPath(Robot.EchoToFeed2)
-    .onlyWhile(() -> !visionObjectDetection.objectDetetcted())
-    .andThen(new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
-    new CoralIntake(intakeSuperstructure, drive, visionObjectDetection),
-    new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2)
-        .andThen(new SafeReefRetract(superstructure, drive)),
-    AutoBuilder.followPath(Robot.DeltatoFeed)
-        .onlyWhile(() -> !visionObjectDetection.objectDetetcted())
-        .andThen(new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
-    new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3)
-        .andThen(new SafeReefRetract(superstructure, drive)));
+            .onlyWhile(() -> !visionObjectDetection.objectDetetcted()),
+        new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
+            .onlyIf(() -> visionObjectDetection.objectDetetcted()),
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
+        AutoBuilder.followPath(Robot.DeltatoFeed),
+        new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)
+            .onlyIf(() -> visionObjectDetection.objectDetetcted()),
+        new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3));
   }
 }
