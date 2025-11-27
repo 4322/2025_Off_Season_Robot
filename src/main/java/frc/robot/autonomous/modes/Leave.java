@@ -4,12 +4,12 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.util.OrangeSequentialCommandGroup;
 
-public class Leave extends OrangeSequentialCommandGroup {
+public class Leave extends SequentialCommandGroup {
   public Leave(Drive drive, Superstructure superstructure) {
     setName("LEAVE");
     addCommands(
