@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
+import static frc.robot.RobotContainer.driver;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,7 +10,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
@@ -22,6 +19,8 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends DriveToPose {
 

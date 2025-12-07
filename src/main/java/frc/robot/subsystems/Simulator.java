@@ -24,7 +24,7 @@ import org.littletonrobotics.junction.Logger;
 public class Simulator extends SubsystemBase {
 
   public static final AutoName simulatedAuto = AutoName.THREE_CORAL_RIGHT;
-  private final Anomaly anomaly = Anomaly.RELEASE_TRIGGER_EARLY;
+  private final Anomaly anomaly = Anomaly.NONE;
   private final TeleopScenario teleopScenario = TeleopScenario.SCORE_L4;
 
   private enum Anomaly {
@@ -257,6 +257,7 @@ public class Simulator extends SubsystemBase {
             new SimEvent(t += 0.2, "Cradle empty", EventType.CORAL_NOT_IN_PICKUP_AREA),
             new SimEvent(t += 0.1, "Retract intake", EventType.PRESS_LEFT_POV),
             new SimEvent(t += 0.1, "Drive to reef", EventType.HOLD_B),
+            new SimEvent(t += 0.1, "Chain Algae", EventType.HOLD_Y),
             new SimEvent(t += 3.0, "Score coral L4", EventType.HOLD_RIGHT_TRIGGER),
             new SimEvent(
                 t += 0.7,

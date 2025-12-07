@@ -36,7 +36,7 @@ public class SafeReefRetract extends Command {
 
   @Override
   public boolean isFinished() {
-    return isInSafeArea() && scoreButtonReleased();
+    return isInSafeArea();
   }
 
   @Override
