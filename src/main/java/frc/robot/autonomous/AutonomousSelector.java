@@ -14,14 +14,15 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
-import frc.robot.util.OrangeSequentialCommandGroup;
 import java.util.List;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 public class AutonomousSelector {
 
-  private LoggedDashboardChooser<OrangeSequentialCommandGroup> autonomousSelector =
-      new LoggedDashboardChooser<OrangeSequentialCommandGroup>("Autonomous");
+  private LoggedDashboardChooser<SequentialCommandGroup> autonomousSelector =
+      new LoggedDashboardChooser<SequentialCommandGroup>("Autonomous");
 
   public enum AutoName {
     DO_NOTHING,
@@ -34,9 +35,9 @@ public class AutonomousSelector {
 
   private class Auto {
     AutoName name;
-    OrangeSequentialCommandGroup command;
+    SequentialCommandGroup command;
 
-    private Auto(AutoName name, OrangeSequentialCommandGroup command) {
+    private Auto(AutoName name, SequentialCommandGroup command) {
       this.name = name;
       this.command = command;
     }
@@ -52,12 +53,12 @@ public class AutonomousSelector {
       Vision vision,
       VisionObjectDetection objectDetection) {
     autos =
-        List.of(
+        List.of(/* 
             new Auto(AutoName.DO_NOTHING, new DoNothing(superstructure)),
             new Auto(AutoName.LEAVE, new Leave(drive, superstructure)),
             new Auto(
                 AutoName.ONE_CORAL_TWO_ALGAE_CENTER,
-                new OneCoralTwoAlgaeCenter(drive, superstructure)),
+                new OneCoralTwoAlgaeCenter(drive, superstructure)),*/
             new Auto(
                 AutoName.THREE_CORAL_LEFT,
                 new ThreeCoralLeft(
@@ -80,7 +81,7 @@ public class AutonomousSelector {
     }
   }
 
-  public OrangeSequentialCommandGroup get() {
+  public SequentialCommandGroup get() {
     if (Constants.currentMode == RobotMode.SIM) {
       for (Auto nextAuto : autos) {
         if (nextAuto.name == Simulator.simulatedAuto) {

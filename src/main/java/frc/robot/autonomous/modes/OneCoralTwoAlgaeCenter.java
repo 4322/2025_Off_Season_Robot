@@ -16,7 +16,7 @@ import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.OrangeSequentialCommandGroup;
 
-public class OneCoralTwoAlgaeCenter extends OrangeSequentialCommandGroup {
+public class OneCoralTwoAlgaeCenter extends ParallelCommandGroup {
 
   public OneCoralTwoAlgaeCenter(Drive drive, Superstructure superstructure) {
 

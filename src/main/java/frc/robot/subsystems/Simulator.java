@@ -23,7 +23,7 @@ import org.littletonrobotics.junction.Logger;
 public class Simulator extends SubsystemBase {
 
   public static final AutoName simulatedAuto = AutoName.ONE_CORAL_TWO_ALGAE_CENTER;
-  private final Anomaly anomaly = Anomaly.DROP_CORAL1_LATE;
+  private final Anomaly anomaly = Anomaly.NONE;
   private final TeleopScenario teleopScenario = TeleopScenario.SCORE_L4;
 
   private enum Anomaly {
