@@ -1,10 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.Iterator;
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -22,11 +17,14 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
+import java.util.Iterator;
+import java.util.List;
+import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
 
   public static final AutoName simulatedAuto = AutoName.THREE_CORAL_RIGHT;
-  private final Anomaly anomaly = Anomaly.NONE;
+  private final Anomaly anomaly = Anomaly.RELEASE_TRIGGER_EARLY;
   private final TeleopScenario teleopScenario = TeleopScenario.SCORE_L4;
 
   private enum Anomaly {
@@ -260,13 +258,34 @@ public class Simulator extends SubsystemBase {
             new SimEvent(t += 0.1, "Retract intake", EventType.PRESS_LEFT_POV),
             new SimEvent(t += 0.1, "Drive to reef", EventType.HOLD_B),
             new SimEvent(t += 3.0, "Score coral L4", EventType.HOLD_RIGHT_TRIGGER),
-            new SimEvent(t += 0.1, "Coral released", EventType.END_EFFECTOR_NO_CORAL),
-            new SimEvent(t += 0.1, "Release score trigger", EventType.RELEASE_RIGHT_TRIGGER),
             new SimEvent(
-                t += 0.2,
-                "Back away from reef",
+                t += 0.7,
+                "Release Trigger Earily",
+                EventType.RELEASE_RIGHT_TRIGGER,
+                anomaly == Anomaly.RELEASE_TRIGGER_EARLY
+                    ? EventStatus.ACTIVE
+                    : EventStatus.INACTIVE),
+            new SimEvent(
+                t += 0.1,
+                "Coral released",
+                EventType.END_EFFECTOR_NO_CORAL,
+                anomaly == Anomaly.RELEASE_TRIGGER_EARLY
+                    ? EventStatus.INACTIVE
+                    : EventStatus.ACTIVE),
+            new SimEvent(
+                t += 0.7,
+                "Set new Pose",
                 EventType.SET_POSE,
-                new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
+                new Pose2d(13.474446, 3.3063179999999996, Rotation2d.k180deg),
+                anomaly == Anomaly.RELEASE_TRIGGER_EARLY
+                    ? EventStatus.ACTIVE
+                    : EventStatus.INACTIVE),
+            new SimEvent(t += 0.1, "Release score trigger", EventType.RELEASE_RIGHT_TRIGGER),
+            // new SimEvent(
+            //     t += 0.2,
+            //     "Back away from reef",
+            //     EventType.SET_POSE,
+            //     new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
             new SimEvent(t += 0.1, "Score complete", EventType.RELEASE_B));
       default:
         return List.of();
@@ -557,9 +576,9 @@ public class Simulator extends SubsystemBase {
   }
 
   private void moveJoystick(double x, double y) {
-  DriverStationSim.setJoystickAxis(hidPort, 0, x); // Move X axis
-  DriverStationSim.setJoystickAxis(hidPort, 1, y); // Move Y axis
-  DriverStationSim.notifyNewData();
+    DriverStationSim.setJoystickAxis(hidPort, 0, x); // Move X axis
+    DriverStationSim.setJoystickAxis(hidPort, 1, y); // Move Y axis
+    DriverStationSim.notifyNewData();
   }
 
   private void pressPOV(POVDirection direction) {
