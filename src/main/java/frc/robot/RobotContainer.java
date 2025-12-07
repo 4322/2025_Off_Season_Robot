@@ -21,6 +21,7 @@ import frc.robot.commands.DriveManual;
 import frc.robot.commands.DriveToPose;
 import frc.robot.commands.Eject;
 import frc.robot.commands.EmergencyInitilization;
+import frc.robot.commands.SafeReefRetract;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.SwitchOperationModeCommand;
 import frc.robot.constants.Constants;
@@ -68,8 +69,7 @@ import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIO;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOPhoton;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
-import frc.robot.util.OrangeSequentialCommandGroup;
-
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -311,7 +311,7 @@ public class RobotContainer {
                     new AlgaeIntakeGround(superstructure).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
                       && !lastScoreCoral.isScheduled()) {
-                    scoreL1Coral.schedule();
+                    scoreL1Coral.andThen(new SafeReefRetract(drive, superstructure)).schedule();
                     lastScoreCoral = scoreL1Coral;
                   }
                 }));
@@ -326,7 +326,7 @@ public class RobotContainer {
                     new DescoreAlgae(superstructure, drive).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
                       && !lastScoreCoral.isScheduled()) {
-                    new OrangeSequentialCommandGroup(
+                    new SequentialCommandGroup(
                             scoreL2Coral,
                             new DescoreAlgae(superstructure, drive)
                                 .onlyIf(() -> driver.y().getAsBoolean()))
@@ -343,10 +343,10 @@ public class RobotContainer {
                     lastScoreCoral.chainAlgae(true);
                   } else {
                     if (!endEffector.hasCoral() && !endEffector.hasAlgae()) {
-                      new DescoreAlgae(superstructure, drive).schedule();
+                      new DescoreAlgae(superstructure, drive).andThen(new SafeReefRetract(drive, superstructure)).schedule();
                     } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
                         && !lastScoreCoral.isScheduled()) {
-                      scoreL3Coral.schedule();
+                      scoreL3Coral.andThen(new SafeReefRetract(drive, superstructure)).schedule();
                       lastScoreCoral = scoreL3Coral;
                     }
                   }
@@ -362,11 +362,11 @@ public class RobotContainer {
                   } else if (endEffector.hasCoral()
                       && !endEffector.hasAlgae()
                       && !lastScoreCoral.isScheduled()) {
-                    new OrangeSequentialCommandGroup(
+                    new SequentialCommandGroup(
                             scoreL4Coral,
                             new DescoreAlgae(superstructure, drive)
                                 .onlyIf(() -> driver.y().getAsBoolean()))
-                        .schedule();
+                        .andThen(new SafeReefRetract(drive, superstructure)).schedule();
                     lastScoreCoral = scoreL4Coral;
                   }
                 }));

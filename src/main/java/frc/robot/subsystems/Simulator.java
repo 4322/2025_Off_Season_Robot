@@ -23,7 +23,7 @@ import org.littletonrobotics.junction.Logger;
 public class Simulator extends SubsystemBase {
 
   public static final AutoName simulatedAuto = AutoName.THREE_CORAL_RIGHT;
-  private final Anomaly anomaly = Anomaly.DROP_CORAL1_LATE;
+  private final Anomaly anomaly = Anomaly.RELASEA_TRIGGER_Early;
   private final TeleopScenario teleopScenario = TeleopScenario.SCORE_L4;
 
   private enum Anomaly {
@@ -31,7 +31,8 @@ public class Simulator extends SubsystemBase {
     DROP_CORAL1_EARLY,
     DROP_CORAL1_LATE,
     DROP_CORAL2_LATE,
-    DROP_ALGAE1_EARLY
+    DROP_ALGAE1_EARLY,
+    RELASEA_TRIGGER_Early
   }
 
   private enum TeleopScenario {
@@ -254,6 +255,14 @@ public class Simulator extends SubsystemBase {
             new SimEvent(t += 0.2, "Cradle empty", EventType.CORAL_NOT_IN_PICKUP_AREA),
             new SimEvent(t += 0.1, "Retract intake", EventType.PRESS_LEFT_POV),
             new SimEvent(t += 0.1, "Drive to reef", EventType.HOLD_B),
+            new SimEvent(
+                t += 0.5,
+                "Relase early",
+                EventType.RELEASE_B,
+                anomaly == Anomaly.RELASEA_TRIGGER_Early
+                    ? EventStatus.ACTIVE
+                    : EventStatus.INACTIVE),
+            new SimEvent(t += 0.1, "Score complete", EventType.HOLD_B),
             new SimEvent(t += 3.0, "Score coral L4", EventType.HOLD_RIGHT_TRIGGER),
             new SimEvent(t += 0.1, "Coral released", EventType.END_EFFECTOR_NO_CORAL),
             new SimEvent(t += 0.1, "Release score trigger", EventType.RELEASE_RIGHT_TRIGGER),
@@ -567,5 +576,9 @@ public class Simulator extends SubsystemBase {
     DriverStationSim.setJoystickAxis(hidPort, axis.value, 0.0);
     DriverStationSim.notifyNewData();
   }
-  // private void moveStick()
+
+  private void moveStick(XboxController.Axis axis) {
+    DriverStationSim.setJoystickAxis(hidPort, axis.value, 1);
+    DriverStationSim.notifyNewData();
+  }
 }
