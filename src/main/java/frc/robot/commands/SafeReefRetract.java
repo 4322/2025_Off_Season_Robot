@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import static frc.robot.RobotContainer.driver;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -10,6 +12,7 @@ import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ReefStatus;
+import org.littletonrobotics.junction.Logger;
 
 public class SafeReefRetract extends Command {
   private final Superstructure superstructure;
@@ -33,11 +36,13 @@ public class SafeReefRetract extends Command {
 
   @Override
   public boolean isFinished() {
-    return isInSafeArea();
+    return isInSafeArea() && scoreButtonReleased();
   }
 
   @Override
   public void end(boolean interrupted) {
+    Logger.recordOutput("SafeReefRetract/state", "Done");
+
     superstructure.requestIdle();
   }
 
@@ -67,5 +72,12 @@ public class SafeReefRetract extends Command {
               - FieldConstants.KeypointPoses.leftReefBranchFaceBlue.getX())
           >= FieldConstants.KeypointPoses.reefSafeDistance;
     }
+  }
+
+  public boolean scoreButtonReleased() {
+    return !driver.a().getAsBoolean()
+        && !driver.x().getAsBoolean()
+        && !driver.y().getAsBoolean()
+        && !driver.b().getAsBoolean();
   }
 }

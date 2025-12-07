@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.driver;
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,6 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import static frc.robot.RobotContainer.driver;
 import frc.robot.constants.Constants;
 import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Superstructure;
@@ -19,8 +22,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.VisionIO.SingleTagCamera;
 import frc.robot.util.ReefStatus;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class ScoreCoral extends DriveToPose {
 
@@ -421,9 +422,9 @@ public class ScoreCoral extends DriveToPose {
   @Override
   public void end(boolean interrupted) {
 
-    if (!chainedAlgaeMode) {
-      superstructure.requestIdle();
-    }
+    // if (!chainedAlgaeMode) {
+    //   superstructure.requestIdle();
+    // }
     superstructure.enableGlobalPose();
     running = false;
     drive.requestFieldRelativeMode();

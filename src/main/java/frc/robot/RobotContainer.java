@@ -318,7 +318,7 @@ public class RobotContainer {
                         new AlgaeIntakeGround(superstructure).schedule();
                       } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
                           && !lastScoreCoral.isScheduled()) {
-                        scoreL1Coral.schedule();
+                        scoreL1Coral.andThen(new SafeReefRetract(superstructure, drive)).schedule();
                         lastScoreCoral = scoreL1Coral;
                       }
                     })
@@ -337,12 +337,12 @@ public class RobotContainer {
                         new SequentialCommandGroup(
                                 scoreL2Coral,
                                 new DescoreAlgae(superstructure, drive)
-                                    .onlyIf(() -> driver.y().getAsBoolean()))
+                                    .onlyIf(() -> driver.y().getAsBoolean())).andThen(new SafeReefRetract(superstructure, drive))
                             .schedule();
                         lastScoreCoral = scoreL2Coral;
                       }
                     })
-                .andThen(new SafeReefRetract(superstructure, drive)));
+                );
     driver
         .y()
         .onTrue(
@@ -355,33 +355,33 @@ public class RobotContainer {
                           new DescoreAlgae(superstructure, drive).schedule();
                         } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
                             && !lastScoreCoral.isScheduled()) {
-                          scoreL3Coral.schedule();
+                          scoreL3Coral .andThen(new SafeReefRetract(superstructure, drive)).schedule();
 
                           lastScoreCoral = scoreL3Coral;
                         }
                       }
                     })
-                .andThen(new SafeReefRetract(superstructure, drive)));
+               );
 
     driver
         .b()
         .onTrue(
             new InstantCommand(
-                    () -> {
-                      if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                        new AlgaeScoreCommand(superstructure, drive).schedule();
-                      } else if (endEffector.hasCoral()
-                          && !endEffector.hasAlgae()
-                          && !lastScoreCoral.isScheduled()) {
-                        new SequentialCommandGroup(
-                                scoreL4Coral,
-                                new DescoreAlgae(superstructure, drive)
-                                    .onlyIf(() -> driver.y().getAsBoolean()))
-                            .schedule();
-                        lastScoreCoral = scoreL4Coral;
-                      }
-                    })
-                .andThen(new SafeReefRetract(superstructure, drive)));
+                () -> {
+                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                    new AlgaeScoreCommand(superstructure, drive).schedule();
+                  } else if (endEffector.hasCoral()
+                      && !endEffector.hasAlgae()
+                      && !lastScoreCoral.isScheduled()) {
+                    new SequentialCommandGroup(
+                            scoreL4Coral,
+                            new DescoreAlgae(superstructure, drive)
+                                .onlyIf(() -> driver.y().getAsBoolean()))
+                        .andThen(new SafeReefRetract(superstructure, drive))
+                        .schedule();
+                    lastScoreCoral = scoreL4Coral;
+                  }
+                }));
 
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
     driver

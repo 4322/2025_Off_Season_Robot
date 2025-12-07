@@ -260,18 +260,28 @@ public class Simulator extends SubsystemBase {
             new SimEvent(t += 3.0, "Score coral L4", EventType.HOLD_RIGHT_TRIGGER),
             new SimEvent(
                 t += 0.7,
-                "Release Trigger Earily",
-                EventType.RELEASE_RIGHT_TRIGGER,
+                "Set new Pose",
+                EventType.SET_POSE,
+                new Pose2d(13.474446, 3.3063179999999996, Rotation2d.k180deg),
                 anomaly == Anomaly.RELEASE_TRIGGER_EARLY
                     ? EventStatus.ACTIVE
                     : EventStatus.INACTIVE),
             new SimEvent(
-                t += 0.1,
-                "Coral released",
-                EventType.END_EFFECTOR_NO_CORAL,
+                t += 0.7,
+                "Release Trigger Earily",
+                EventType.RELEASE_B,
                 anomaly == Anomaly.RELEASE_TRIGGER_EARLY
-                    ? EventStatus.INACTIVE
-                    : EventStatus.ACTIVE),
+                    ? EventStatus.ACTIVE
+                    : EventStatus.INACTIVE),
+            new SimEvent(
+                t += 0.7,
+                "Set new Pose",
+                EventType.SET_POSE,
+                new Pose2d(13.474446, 3.3063179999999996, Rotation2d.k180deg),
+                anomaly == Anomaly.RELEASE_TRIGGER_EARLY
+                    ? EventStatus.ACTIVE
+                    : EventStatus.INACTIVE),
+            new SimEvent(t += 0.1, "Coral released", EventType.END_EFFECTOR_NO_CORAL),
             new SimEvent(
                 t += 0.7,
                 "Set new Pose",
@@ -281,11 +291,11 @@ public class Simulator extends SubsystemBase {
                     ? EventStatus.ACTIVE
                     : EventStatus.INACTIVE),
             new SimEvent(t += 0.1, "Release score trigger", EventType.RELEASE_RIGHT_TRIGGER),
-            // new SimEvent(
-            //     t += 0.2,
-            //     "Back away from reef",
-            //     EventType.SET_POSE,
-            //     new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
+            new SimEvent(
+                t += 0.7,
+                "Back away from reef",
+                EventType.SET_POSE,
+                new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
             new SimEvent(t += 0.1, "Score complete", EventType.RELEASE_B));
       default:
         return List.of();
