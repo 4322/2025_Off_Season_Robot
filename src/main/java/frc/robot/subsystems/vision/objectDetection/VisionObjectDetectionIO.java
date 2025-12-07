@@ -25,5 +25,7 @@ public class VisionObjectDetectionIO {
         new Rotation3d[Constants.VisionObjectDetection.numberOfGamePieceTypes][0];
 
     public double latestResultTimestamp = 0;
+
+    public boolean objectDetected = false;
   }
 }

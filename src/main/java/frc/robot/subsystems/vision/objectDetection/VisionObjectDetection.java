@@ -148,4 +148,8 @@ public class VisionObjectDetection extends SubsystemBase {
     }
     return false;
   }
+
+  public boolean objectDetected() {
+    return visionObjectDetectionInputs.objectDetected;
+  }
 }

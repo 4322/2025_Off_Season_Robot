@@ -1,9 +1,9 @@
 package frc.robot.autonomous;
 
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.autonomous.modes.DoNothing;
 import frc.robot.autonomous.modes.Leave;
 import frc.robot.autonomous.modes.OneCoralTwoAlgaeCenter;
-import frc.robot.autonomous.modes.TestLeave;
 import frc.robot.autonomous.modes.ThreeCoralLeft;
 import frc.robot.autonomous.modes.ThreeCoralRight;
 import frc.robot.constants.Constants;
@@ -16,8 +16,6 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import java.util.List;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class AutonomousSelector {
 
@@ -53,12 +51,12 @@ public class AutonomousSelector {
       Vision vision,
       VisionObjectDetection objectDetection) {
     autos =
-        List.of(/* 
+        List.of(
             new Auto(AutoName.DO_NOTHING, new DoNothing(superstructure)),
             new Auto(AutoName.LEAVE, new Leave(drive, superstructure)),
             new Auto(
                 AutoName.ONE_CORAL_TWO_ALGAE_CENTER,
-                new OneCoralTwoAlgaeCenter(drive, superstructure)),*/
+                new OneCoralTwoAlgaeCenter(drive, superstructure)),
             new Auto(
                 AutoName.THREE_CORAL_LEFT,
                 new ThreeCoralLeft(
@@ -75,7 +73,7 @@ public class AutonomousSelector {
         autonomousSelector.addOption(nextAuto.name.toString(), nextAuto.command);
       }
     }
-    /* 
+    /*
     if (Constants.wantDriveTestAutos) {
       autonomousSelector.addOption(
           AutoName.TEST_LEAVE.toString(), new TestLeave(drive, superstructure));

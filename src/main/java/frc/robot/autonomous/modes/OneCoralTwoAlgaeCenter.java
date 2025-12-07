@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.commands.DescoreAlgae;
 import frc.robot.commands.ScoreCoral;
@@ -14,9 +15,8 @@ import frc.robot.commands.auto.AlgaeScoreAuto;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Level;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.util.OrangeSequentialCommandGroup;
 
-public class OneCoralTwoAlgaeCenter extends ParallelCommandGroup {
+public class OneCoralTwoAlgaeCenter extends SequentialCommandGroup {
 
   public OneCoralTwoAlgaeCenter(Drive drive, Superstructure superstructure) {
 

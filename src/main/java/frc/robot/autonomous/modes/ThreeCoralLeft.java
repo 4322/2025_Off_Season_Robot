@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
@@ -21,8 +20,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffector.EndEffectorStates;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
-import frc.robot.util.OrangeParallelCommandGroup;
-import frc.robot.util.OrangeSequentialCommandGroup;
 import frc.robot.util.ReefStatus;
 import frc.robot.util.ReefStatus.AlgaeLevel;
 import frc.robot.util.ReefStatus.ClosestReefPipe;
@@ -100,21 +97,19 @@ public class ThreeCoralLeft extends SequentialCommandGroup {
                 drive.resetPose(startPoseRed);
               }
             }),
-        new ParallelCommandGroup(
-            new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1),
-            new SequentialCommandGroup(
-                new WaitUntilCommand(
-                    () ->
-                        superstructure.getEndEffectorState()
-                            == EndEffectorStates.RELEASE_CORAL_NORMAL),
-                AutoBuilder.followPath(Robot.JulietToFeed1))),
-        new ParallelCommandGroup(
-            AutoBuilder.followPath(Robot.JulietToFeed2),
-            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
+        new ScoreCoral(superstructure, Level.L4, drive, false, true, reefCoral1),
+        new SequentialCommandGroup(
+            new WaitUntilCommand(
+                () ->
+                    superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL),
+            AutoBuilder.followPath(Robot.JulietToFeed1)),
+        AutoBuilder.followPath(Robot.JulietToFeed2)
+            .onlyWhile(() -> !visionObjectDetection.objectDetected()),
+        new CoralIntake(intakeSuperstructure, drive, visionObjectDetection),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral2),
-        new ParallelCommandGroup(
-            AutoBuilder.followPath(Robot.KilotoFeed),
-            new CoralIntake(intakeSuperstructure, drive, visionObjectDetection)),
+        AutoBuilder.followPath(Robot.KilotoFeed)
+            .onlyWhile(() -> !visionObjectDetection.objectDetected()),
+        new CoralIntake(intakeSuperstructure, drive, visionObjectDetection),
         new ScoreCoral(superstructure, Level.L4, drive, false, false, reefCoral3));
   }
 }

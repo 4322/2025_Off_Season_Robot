@@ -17,6 +17,11 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
   private Translation2d coralPosition;
   private double latestTimestamp;
 
+  private Pose3d cameraPose = new Pose3d();
+  private double cameraLensToCoralPitch;
+  private double cameraLensToCoralYaw;
+  private boolean calculationsDone = false;
+
   public VisionObjectDetectionIOSim(Drive drive) {
     this.drive = drive;
   }
@@ -26,6 +31,7 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
       inputs.hasTarget = new boolean[Constants.VisionObjectDetection.numberOfGamePieceTypes];
       inputs.visibleObjectRotations =
           new Rotation3d[Constants.VisionObjectDetection.numberOfGamePieceTypes][0];
+      inputs.objectDetected = false;
     } else {
       inputs.hasTarget = new boolean[Constants.VisionObjectDetection.numberOfGamePieceTypes];
       inputs.hasTarget[GamePieceType.CORAL.id] = true;
@@ -95,5 +101,18 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
 
   public void noCoral() {
     coralPosition = null;
+  }
+
+  public boolean isCoralDetectedInFrame() {
+    if (calculationsDone) {
+      if ((Math.abs(cameraLensToCoralPitch) > cameraPose.getRotation().getY()
+          || Math.abs(cameraLensToCoralYaw) > cameraPose.getRotation().getX())) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
   }
 }
