@@ -259,7 +259,7 @@ public class Simulator extends SubsystemBase {
             new SimEvent(t += 0.2, "Cradle empty", EventType.CORAL_NOT_IN_PICKUP_AREA),
             new SimEvent(t += 0.1, "Retract intake", EventType.PRESS_LEFT_POV),
             new SimEvent(t += 0.1, "Drive to reef", EventType.HOLD_B),
-            new SimEvent(t += 3.0, "Score coral L4", EventType.HOLD_RIGHT_TRIGGER),
+            // new SimEvent(t += 3.0, "Score coral L4", EventType.HOLD_RIGHT_TRIGGER),
             new SimEvent(
                 t += 0.7,
                 "Set new Pose",
@@ -283,7 +283,8 @@ public class Simulator extends SubsystemBase {
                 anomaly == Anomaly.RELEASE_TRIGGER_EARLY
                     ? EventStatus.ACTIVE
                     : EventStatus.INACTIVE),
-            new SimEvent(t += 0.1, "Coral released", EventType.END_EFFECTOR_NO_CORAL),
+            new SimEvent(t += 0.5, "Chain Algae", EventType.HOLD_Y),
+            new SimEvent(t += 0.0, "Coral released", EventType.END_EFFECTOR_NO_CORAL),
             new SimEvent(
                 t += 0.7,
                 "Set new Pose",

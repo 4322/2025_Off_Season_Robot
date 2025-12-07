@@ -379,7 +379,8 @@ public class RobotContainer {
                             scoreL4Coral,
                             new DescoreAlgae(superstructure, drive)
                                 .onlyIf(() -> driver.y().getAsBoolean()))
-                        .andThen(new SafeReefRetract(superstructure, drive)).onlyIf(() -> !driver.y().getAsBoolean())
+                        .andThen(new SafeReefRetract(superstructure, drive))
+                        .onlyIf(() -> !driver.y().getAsBoolean())
                         .schedule();
                     lastScoreCoral = scoreL4Coral;
                   }
