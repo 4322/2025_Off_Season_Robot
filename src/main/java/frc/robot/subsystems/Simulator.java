@@ -21,6 +21,9 @@ import java.util.*;
 import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
+  /*
+   * Release b and drive back w/ coral intake
+   */
 
   public static final AutoName simulatedAuto = AutoName.ONE_CORAL_TWO_ALGAE_CENTER;
   private final Anomaly anomaly = Anomaly.NONE;

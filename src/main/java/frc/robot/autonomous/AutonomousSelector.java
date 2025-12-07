@@ -75,10 +75,11 @@ public class AutonomousSelector {
         autonomousSelector.addOption(nextAuto.name.toString(), nextAuto.command);
       }
     }
+    /* 
     if (Constants.wantDriveTestAutos) {
       autonomousSelector.addOption(
           AutoName.TEST_LEAVE.toString(), new TestLeave(drive, superstructure));
-    }
+    }*/
   }
 
   public SequentialCommandGroup get() {
