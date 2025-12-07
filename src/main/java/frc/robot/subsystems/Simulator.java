@@ -1,5 +1,10 @@
 package frc.robot.subsystems;
 
+import java.util.Iterator;
+import java.util.List;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -17,9 +22,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
-import java.util.Iterator;
-import java.util.List;
-import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
 
@@ -257,7 +259,6 @@ public class Simulator extends SubsystemBase {
             new SimEvent(t += 0.2, "Cradle empty", EventType.CORAL_NOT_IN_PICKUP_AREA),
             new SimEvent(t += 0.1, "Retract intake", EventType.PRESS_LEFT_POV),
             new SimEvent(t += 0.1, "Drive to reef", EventType.HOLD_B),
-            new SimEvent(t += 0.1, "Chain Algae", EventType.HOLD_Y),
             new SimEvent(t += 3.0, "Score coral L4", EventType.HOLD_RIGHT_TRIGGER),
             new SimEvent(
                 t += 0.7,
