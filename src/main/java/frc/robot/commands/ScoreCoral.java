@@ -70,6 +70,8 @@ public class ScoreCoral extends DriveToPose {
     this(superstructure, level, drive, chainedAlgaeMode, noDriveBack);
     this.reefStatus = reefStatus;
     forceReef = true;
+
+    addRequirements(superstructure, drive);
   }
 
   public ScoreCoral(
@@ -78,7 +80,10 @@ public class ScoreCoral extends DriveToPose {
       Drive drive,
       boolean chainedAlgaeMode,
       boolean noDriveBack) {
-    super(drive, () -> currentPoseRequest.get(), level == Level.L4);
+    super(drive, level == Level.L4);
+
+    setPoseSupplier(() -> currentPoseRequest.get());
+
     this.superstructure = superstructure;
     this.level = level;
     this.drive = drive;
@@ -234,6 +239,7 @@ public class ScoreCoral extends DriveToPose {
           break;
       }
     }
+    super.initialize();
   }
 
   @Override
@@ -302,11 +308,8 @@ public class ScoreCoral extends DriveToPose {
                       -FieldConstants.KeypointPoses.extraDriveBackDistance, 0, new Rotation2d()));
 
           currentPoseRequest = () -> safeDistPose;
-          // Scheduling and cancelling command in same loop won't work so need to check for
-          // isFinished first
-          if (!isScheduled() && !isFinished()) {
-            super.execute();
-          }
+          super.execute();
+
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (isInPrescoreArea() || super.atGoal()) {
@@ -320,8 +323,10 @@ public class ScoreCoral extends DriveToPose {
               state = ScoreState.DRIVE_IN;
             }
           }
+
           break;
         case DRIVE_IN:
+          super.execute();
           if (scoreButtonReleased() && !DriverStation.isAutonomous()) {
             state = ScoreState.HOLD_POSITION;
           } else if (super.atGoal()
@@ -355,9 +360,7 @@ public class ScoreCoral extends DriveToPose {
             } else if (level != Level.L1
                 && (superstructure.getEndEffectorState() == EndEffectorStates.RELEASE_CORAL_NORMAL
                     || superstructure.getEndEffectorState() == EndEffectorStates.IDLE)) {
-              if (noDriveBackAuto) {
-                super.cancel();
-              } else {
+              if (!noDriveBackAuto) {
                 currentPoseRequest = () -> driveBackPose;
                 super.resetGoal();
               }
@@ -370,6 +373,7 @@ public class ScoreCoral extends DriveToPose {
 
           break;
         case DRIVEBACK:
+          super.execute();
           if ((!noDriveBackAuto && super.atGoal()) || isInSafeArea()) {
             running = false;
           }
@@ -383,9 +387,6 @@ public class ScoreCoral extends DriveToPose {
 
           break;
         case HOLD_POSITION:
-          if (!DriverStation.isAutonomous()) {
-            super.cancel();
-          }
           if (!superstructure.isAutoOperationMode() || isInSafeArea()) {
             state = ScoreState.SAFE_DISTANCE;
             running = false;
@@ -394,7 +395,6 @@ public class ScoreCoral extends DriveToPose {
       }
 
     } else {
-      super.cancel();
 
       drive.requestAutoRotateMode(robotReefAngle);
       superstructure.requestPrescoreCoral(level);
@@ -412,7 +412,7 @@ public class ScoreCoral extends DriveToPose {
 
   @Override
   public void end(boolean interrupted) {
-    super.cancel();
+    super.end(interrupted);
 
     if (!chainedAlgaeMode) {
       superstructure.requestIdle();

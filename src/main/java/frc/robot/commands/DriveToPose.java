@@ -25,7 +25,7 @@ import org.littletonrobotics.junction.Logger;
 public class DriveToPose extends Command {
   private final Drive drive;
   private final boolean slowMode;
-  private final Supplier<Pose2d> poseSupplier;
+  private Supplier<Pose2d> poseSupplier;
   private final boolean highMode;
 
   private boolean running = false;
@@ -108,23 +108,25 @@ public class DriveToPose extends Command {
 
   /** Drives to the specified pose under full software control. */
   public DriveToPose(Drive drive, boolean slowMode, Pose2d pose, boolean highMode) {
-    this(drive, slowMode, () -> pose, highMode);
+    this(drive, slowMode, highMode);
   }
 
   /** Drives to the specified pose under full software control. */
-  public DriveToPose(Drive drive, Supplier<Pose2d> poseSupplier, boolean highMode) {
-    this(drive, false, poseSupplier, highMode);
+  public DriveToPose(Drive drive, boolean highMode) {
+    this(drive, false, highMode);
   }
 
   /** Drives to the specified pose under full software control. */
-  public DriveToPose(
-      Drive drive, boolean slowMode, Supplier<Pose2d> poseSupplier, boolean highMode) {
+  public DriveToPose(Drive drive, boolean slowMode, boolean highMode) {
     this.drive = drive;
     this.slowMode = slowMode;
-    this.poseSupplier = poseSupplier;
     this.highMode = highMode;
     addRequirements(drive);
     thetaController.enableContinuousInput(-180, 180);
+  }
+
+  public void setPoseSupplier(Supplier<Pose2d> poseSupplier) {
+    this.poseSupplier = poseSupplier;
   }
 
   @Override
