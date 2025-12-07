@@ -17,7 +17,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
-import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import java.util.*;
 import org.littletonrobotics.junction.Logger;
 
@@ -568,5 +567,5 @@ public class Simulator extends SubsystemBase {
     DriverStationSim.setJoystickAxis(hidPort, axis.value, 0.0);
     DriverStationSim.notifyNewData();
   }
-  //private void moveStick()
+  // private void moveStick()
 }

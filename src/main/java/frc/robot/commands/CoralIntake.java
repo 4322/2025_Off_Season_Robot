@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSuperstructure;
 import frc.robot.subsystems.drive.Drive;
@@ -15,15 +14,14 @@ import frc.robot.util.Trigon.simulatedfield.SimulatedGamePieceConstants.GamePiec
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-public class CoralIntake extends Command {
+public class CoralIntake extends DriveToPose {
 
   private IntakeSuperstructure intakeSuperstructure;
   private Drive drive;
   private VisionObjectDetection visionObjectDetection;
   private Translation2d coralPosition;
   private Pose2d driveToPoseTarget = Pose2d.kZero;
-  private DriveToPose driveToPose;
-  private Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
+  private static Supplier<Pose2d> currentPoseRequest = () -> new Pose2d();
   private Rotation2d targetAngle;
   private Timer ejectAutoTimer = new Timer();
 
@@ -31,16 +29,18 @@ public class CoralIntake extends Command {
       IntakeSuperstructure intakeSuperstructure,
       Drive drive,
       VisionObjectDetection visionObjectDetection) {
+    super(drive, false, false);
+    super.initPose(() -> currentPoseRequest.get());
     this.intakeSuperstructure = intakeSuperstructure;
     this.drive = drive;
     this.visionObjectDetection = visionObjectDetection;
-    driveToPose = new DriveToPose(drive, () -> currentPoseRequest.get(), false);
 
     addRequirements(intakeSuperstructure);
   }
 
   @Override
   public void initialize() {
+    super.initialize();
     coralPosition = null;
     targetAngle = null;
     ejectAutoTimer.stop();
@@ -83,10 +83,10 @@ public class CoralIntake extends Command {
                       new Transform2d(
                           new Translation2d(Constants.VisionObjectDetection.coralIntakeOffset, 0),
                           new Rotation2d()));
+          super.execute();
           currentPoseRequest = () -> driveToPoseTarget;
-          driveToPose.schedule();
 
-          if (driveToPose.atGoal()) {
+          if (super.atGoal()) {
             ejectAutoTimer
                 .start(); // If it is at goal we want to start the timer for how long we continue
             // intaking
@@ -103,9 +103,8 @@ public class CoralIntake extends Command {
         case AUTO_DRIVE:
           driveToPoseTarget = new Pose2d(coralPosition, drive.getRotation());
           currentPoseRequest = () -> driveToPoseTarget;
-          driveToPose.schedule();
-
-          if (driveToPose.atGoal()) {
+          super.execute();
+          if (super.atGoal()) {
             ejectAutoTimer.start();
             if (ejectAutoTimer.hasElapsed(1.05)) {
               intakeSuperstructure.requestIntake();
@@ -129,7 +128,7 @@ public class CoralIntake extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    driveToPose.cancel();
+    interrupted = true;
     drive.requestFieldRelativeMode();
   }
 }
