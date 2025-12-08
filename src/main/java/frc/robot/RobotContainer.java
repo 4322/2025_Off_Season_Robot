@@ -70,7 +70,6 @@ import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIO;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOPhoton;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
-import frc.robot.util.OrangeSequentialCommandGroup;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -332,7 +331,7 @@ public class RobotContainer {
                             scoreL2Coral,
                             new DescoreAlgae(superstructure, drive)
                                 .onlyIf(() -> driver.y().getAsBoolean()))
-                                .andThen(new SafeReefRetract(superstructure, drive))
+                        .andThen(new SafeReefRetract(superstructure, drive))
                         .schedule();
                     lastScoreCoral = scoreL2Coral;
                   }
@@ -359,20 +358,21 @@ public class RobotContainer {
         .b()
         .onTrue(
             new InstantCommand(
-                () -> {
-                  if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
-                    new AlgaeScoreCommand(superstructure, drive).schedule();
-                  } else if (endEffector.hasCoral()
-                      && !endEffector.hasAlgae()
-                      && !lastScoreCoral.isScheduled()) {
-                    new SequentialCommandGroup(
-                            scoreL4Coral,
-                            new DescoreAlgae(superstructure, drive)
-                                .onlyIf(() -> driver.y().getAsBoolean()))
-                        .schedule();
-                    lastScoreCoral = scoreL4Coral;
-                  }
-                }).andThen(new SafeReefRetract(superstructure, drive)));
+                    () -> {
+                      if (!endEffector.hasCoral() && endEffector.hasAlgae()) {
+                        new AlgaeScoreCommand(superstructure, drive).schedule();
+                      } else if (endEffector.hasCoral()
+                          && !endEffector.hasAlgae()
+                          && !lastScoreCoral.isScheduled()) {
+                        new SequentialCommandGroup(
+                                scoreL4Coral,
+                                new DescoreAlgae(superstructure, drive)
+                                    .onlyIf(() -> driver.y().getAsBoolean()))
+                            .schedule();
+                        lastScoreCoral = scoreL4Coral;
+                      }
+                    })
+                .andThen(new SafeReefRetract(superstructure, drive)));
     driver.leftStick().onTrue(new SwitchOperationModeCommand(superstructure));
     driver
         .back()

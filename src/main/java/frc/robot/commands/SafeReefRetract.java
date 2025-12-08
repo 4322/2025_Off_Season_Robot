@@ -13,35 +13,34 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ReefStatus;
 
 public class SafeReefRetract extends Command {
-    private final Superstructure superstructure;
-    private final Drive drive;
-    
-    private Rotation2d robotReefAngle;
-    private ReefStatus reefStatus;
+  private final Superstructure superstructure;
+  private final Drive drive;
 
-    public SafeReefRetract(Superstructure superstructure, Drive drive) {
-        this.superstructure = superstructure;
-        this.drive = drive;
+  private Rotation2d robotReefAngle;
+  private ReefStatus reefStatus;
 
-    }
+  public SafeReefRetract(Superstructure superstructure, Drive drive) {
+    this.superstructure = superstructure;
+    this.drive = drive;
+  }
 
-    @Override
-    public void initialize() {
-        reefStatus = superstructure.getReefStatus();
-        robotReefAngle = reefStatus.getClosestRobotAngle();
-    }
+  @Override
+  public void initialize() {
+    reefStatus = superstructure.getReefStatus();
+    robotReefAngle = reefStatus.getClosestRobotAngle();
+  }
 
-    @Override
-    public boolean isFinished() {
-        return isInSafeArea();
-    }
+  @Override
+  public boolean isFinished() {
+    return isInSafeArea();
+  }
 
-    @Override
-    public void end(boolean interrupted) {
-        superstructure.requestIdle();
-    }
+  @Override
+  public void end(boolean interrupted) {
+    superstructure.requestIdle();
+  }
 
-    public boolean isInSafeArea() {
+  public boolean isInSafeArea() {
     // Convert robot translation to reef face 0 degrees and compare x coordinates
     Translation2d convertedRobotTrans;
     if (Robot.alliance == DriverStation.Alliance.Red) {
@@ -69,10 +68,10 @@ public class SafeReefRetract extends Command {
     }
   }
 
-    public boolean scoreButtonReleased() {
-        return !driver.a().getAsBoolean()
-            && !driver.x().getAsBoolean()
-            && !driver.y().getAsBoolean()
-            && !driver.b().getAsBoolean();
-      }
+  public boolean scoreButtonReleased() {
+    return !driver.a().getAsBoolean()
+        && !driver.x().getAsBoolean()
+        && !driver.y().getAsBoolean()
+        && !driver.b().getAsBoolean();
+  }
 }
