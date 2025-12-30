@@ -323,14 +323,14 @@ public class RobotContainer {
                   if (!endEffector.hasCoral()
                       && !endEffector.hasAlgae()
                       && !lastScoreCoral.isScheduled()) {
-                    new DescoreAlgae(superstructure, drive).schedule();
+                    new DescoreAlgae(superstructure, drive).andThen(new SafeReefRetract(drive, superstructure)).schedule();
                   } else if ((endEffector.hasCoral() && !endEffector.hasAlgae())
                       && !lastScoreCoral.isScheduled()) {
                     new SequentialCommandGroup(
                             scoreL2Coral,
                             new DescoreAlgae(superstructure, drive)
                                 .onlyIf(() -> driver.y().getAsBoolean()))
-                        .schedule();
+                        .andThen(new SafeReefRetract(drive, superstructure)).schedule();
                     lastScoreCoral = scoreL2Coral;
                   }
                 }));
