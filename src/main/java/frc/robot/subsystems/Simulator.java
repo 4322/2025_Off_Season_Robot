@@ -546,10 +546,10 @@ public class Simulator extends SubsystemBase {
             releaseButton(XboxController.Button.kRightStick);
             break;
           case MOVE_JOYSTICK_DRIVE:
-            moveJoystickLeft(0.5, -0.5);
+            moveJoystickLeft(nextEvent.pose.getX(), nextEvent.pose.getY());
             break;
           case MOVE_JOYSTICK_TURN:
-            moveJoystickRight(0.5, -0.5);
+            moveJoystickRight(nextEvent.pose.getX(), nextEvent.pose.getY());
             break;
         }
       }
