@@ -94,7 +94,8 @@ public class Simulator extends SubsystemBase {
     PRESS_RIGHT_STICK,
     HOLD_RIGHT_STICK,
     RELEASE_RIGHT_STICK,
-    MOVE_JOYSTICK
+    MOVE_JOYSTICK_LEFT,
+    MOVE_JOYSTICK_RIGHT
   }
 
   private enum EventStatus {
@@ -544,8 +545,11 @@ public class Simulator extends SubsystemBase {
           case RELEASE_RIGHT_STICK:
             releaseButton(XboxController.Button.kRightStick);
             break;
-          case MOVE_JOYSTICK:
-            moveJoystick(0.5, -0.5);
+          case MOVE_JOYSTICK_LEFT:
+            moveJoystickLeft(0.5, -0.5);
+            break;
+          case MOVE_JOYSTICK_RIGHT:
+            moveJoystickRight(0.5, -0.5);
             break;
         }
       }
@@ -588,9 +592,15 @@ public class Simulator extends SubsystemBase {
     DriverStationSim.notifyNewData();
   }
 
-  private void moveJoystick(double x, double y) {
-    DriverStationSim.setJoystickAxis(hidPort, 0, x); // Move X axis
-    DriverStationSim.setJoystickAxis(hidPort, 1, y); // Move Y axis
+  private void moveJoystickLeft(double x, double y) {
+    DriverStationSim.setJoystickAxis(2, 0, -x); // Move X axis
+    DriverStationSim.setJoystickAxis(2, 1, -y); // Move Y axis
+    DriverStationSim.notifyNewData();
+  }
+
+  private void moveJoystickRight(double x, double y) {
+    DriverStationSim.setJoystickAxis(3, 0, -x); // Move X axis
+    DriverStationSim.setJoystickAxis(3, 1, -y); // Move Y axis
     DriverStationSim.notifyNewData();
   }
 
