@@ -28,6 +28,7 @@ public class Simulator extends SubsystemBase {
   public static final AutoName simulatedAuto = AutoName.THREE_CORAL_RIGHT;
   private final Anomaly anomaly = Anomaly.NONE;
   private final TeleopScenario teleopScenario = TeleopScenario.LOOK_FROM_APRILTAG;
+
   private enum Anomaly {
     NONE,
     DROP_CORAL1_EARLY,
@@ -305,7 +306,11 @@ public class Simulator extends SubsystemBase {
         return List.of(
             new SimEvent(
                 t, "Start pose", EventType.SET_POSE, new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
-            new SimEvent(t += 1.0, "Look away from AprilTag", EventType.MOVE_JOYSTICK_TURN));
+            new SimEvent(
+                t += 1.0,
+                "Look away from AprilTag",
+                EventType.MOVE_JOYSTICK_DRIVE,
+                new Pose2d(-1, 1, Rotation2d.k180deg)));
       default:
         return List.of();
     }
@@ -554,7 +559,7 @@ public class Simulator extends SubsystemBase {
             moveJoystickLeft(nextEvent.pose.getX(), nextEvent.pose.getY());
             break;
           case MOVE_JOYSTICK_TURN:
-            moveJoystickRight(3, 3);
+            moveJoystickRight(nextEvent.pose.getX(), nextEvent.pose.getY());
             break;
         }
       }
