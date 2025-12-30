@@ -1,16 +1,19 @@
 package frc.robot.subsystems;
 
+import java.util.Iterator;
+import java.util.List;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
-import edu.wpi.first.wpilibj.simulation.JoystickSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
@@ -19,20 +22,12 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
-import java.util.Iterator;
-import java.util.List;
-import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
 
   public static final AutoName simulatedAuto = AutoName.THREE_CORAL_RIGHT;
   private final Anomaly anomaly = Anomaly.NONE;
   private final TeleopScenario teleopScenario = TeleopScenario.LOOK_FROM_APRILTAG;
-  private final Joystick stick = new Joystick(0);
-  private final Joystick stickright = new Joystick(1);
-  private final JoystickSim joySimLeft = new JoystickSim(stick); // or new JoystickSim(0)
-  private final JoystickSim joySim = new JoystickSim(stick); // or new JoystickSim(0)
-
   private enum Anomaly {
     NONE,
     DROP_CORAL1_EARLY,
@@ -603,18 +598,12 @@ public class Simulator extends SubsystemBase {
   }
 
   private void moveJoystickLeft(double x, double y) {
-    joySim.setRawAxis(hidPort, 0);
-    joySim.setX(x);
-    joySim.setY(y);
     DriverStationSim.setJoystickAxis(hidPort, 0, -x); // Move X axis
     DriverStationSim.setJoystickAxis(hidPort, 1, -y); // Move Y axis
     DriverStationSim.notifyNewData();
   }
 
   private void moveJoystickRight(double x, double y) {
-    joySim.setRawAxis(hidPort, 4);
-    joySim.setX(x);
-    joySim.setY(y);
     DriverStationSim.setJoystickAxis(hidPort, 4, -x); // Move X axis
     DriverStationSim.setJoystickAxis(hidPort, 5, -y); // Move Y axis
     DriverStationSim.notifyNewData();
