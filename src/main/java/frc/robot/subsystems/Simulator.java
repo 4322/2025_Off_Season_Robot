@@ -1,5 +1,12 @@
 package frc.robot.subsystems;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -17,26 +24,28 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
-import java.util.*;
-import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
 
-  public static final AutoName simulatedAuto = AutoName.ONE_CORAL_TWO_ALGAE_CENTER;
-  private final Anomaly anomaly = Anomaly.DROP_CORAL1_LATE;
-  private final TeleopScenario teleopScenario = TeleopScenario.SCORE_L4;
+  public static final AutoName simulatedAuto = AutoName.THREE_CORAL_RIGHT;
+  private final Anomaly anomaly = Anomaly.NONE;
+  private final TeleopScenario teleopScenario = TeleopScenario.LOOK_FROM_APRILTAG;
+  private final Map<Integer, Double> axisvalues =  new HashMap<>();
+  private final Map<Integer, Double> POVvalues =  new HashMap<>();
 
   private enum Anomaly {
     NONE,
     DROP_CORAL1_EARLY,
     DROP_CORAL1_LATE,
     DROP_CORAL2_LATE,
-    DROP_ALGAE1_EARLY
+    DROP_ALGAE1_EARLY,
+    RELEASE_TRIGGER_EARLY
   }
 
   private enum TeleopScenario {
     NONE,
-    SCORE_L4
+    SCORE_L4,
+    LOOK_FROM_APRILTAG
   }
 
   private enum EventType {
@@ -89,7 +98,9 @@ public class Simulator extends SubsystemBase {
     RELEASE_LEFT_STICK,
     PRESS_RIGHT_STICK,
     HOLD_RIGHT_STICK,
-    RELEASE_RIGHT_STICK
+    RELEASE_RIGHT_STICK,
+    MOVE_JOYSTICK_DRIVE,
+    MOVE_JOYSTICK_TURN
   }
 
   private enum EventStatus {
@@ -254,11 +265,56 @@ public class Simulator extends SubsystemBase {
             new SimEvent(t += 0.2, "Cradle empty", EventType.CORAL_NOT_IN_PICKUP_AREA),
             new SimEvent(t += 0.1, "Retract intake", EventType.PRESS_LEFT_POV),
             new SimEvent(t += 0.1, "Drive to reef", EventType.HOLD_B),
-            new SimEvent(t += 3.0, "Score coral L4", EventType.HOLD_RIGHT_TRIGGER),
-            new SimEvent(t += 0.1, "Coral released", EventType.END_EFFECTOR_NO_CORAL),
+            // new SimEvent(t += 3.0, "Score coral L4", EventType.HOLD_RIGHT_TRIGGER),
+            new SimEvent(
+                t += 0.7,
+                "Set new Pose",
+                EventType.SET_POSE,
+                new Pose2d(13.474446, 3.3063179999999996, Rotation2d.k180deg),
+                anomaly == Anomaly.RELEASE_TRIGGER_EARLY
+                    ? EventStatus.ACTIVE
+                    : EventStatus.INACTIVE),
+            new SimEvent(
+                t += 0.7,
+                "Release Trigger Earily",
+                EventType.RELEASE_B,
+                anomaly == Anomaly.RELEASE_TRIGGER_EARLY
+                    ? EventStatus.ACTIVE
+                    : EventStatus.INACTIVE),
+            new SimEvent(
+                t += 0.7,
+                "Set new Pose",
+                EventType.SET_POSE,
+                new Pose2d(13.474446, 3.3063179999999996, Rotation2d.k180deg),
+                anomaly == Anomaly.RELEASE_TRIGGER_EARLY
+                    ? EventStatus.ACTIVE
+                    : EventStatus.INACTIVE),
+            new SimEvent(t += 0.5, "Chain Algae", EventType.HOLD_Y),
+            new SimEvent(t += 0.0, "Coral released", EventType.END_EFFECTOR_NO_CORAL),
+            new SimEvent(
+                t += 0.7,
+                "Set new Pose",
+                EventType.SET_POSE,
+                new Pose2d(13.474446, 3.3063179999999996, Rotation2d.k180deg),
+                anomaly == Anomaly.RELEASE_TRIGGER_EARLY
+                    ? EventStatus.ACTIVE
+                    : EventStatus.INACTIVE),
             new SimEvent(t += 0.1, "Release score trigger", EventType.RELEASE_RIGHT_TRIGGER),
+            new SimEvent(
+                t += 0.7,
+                "Back away from reef",
+                EventType.SET_POSE,
+                new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
             new SimEvent(t += 0.1, "Score complete", EventType.RELEASE_B));
-
+      case LOOK_FROM_APRILTAG:
+        return List.of(
+            new SimEvent(
+                t, "Start pose", EventType.SET_POSE, new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
+            new SimEvent(
+                t += 1.0,
+                "Look away from AprilTag",
+                EventType.MOVE_JOYSTICK_DRIVE,
+                new Pose2d(-1, 1, Rotation2d.k180deg)));
       default:
         return List.of();
     }
@@ -328,7 +384,7 @@ public class Simulator extends SubsystemBase {
       if (events == null) {
         if (!disabledTimer.hasElapsed(2)) {
           // wait for alliance color update
-          System.out.println("Select DISABLED for at least 2 seconds before enabling!");
+          System.out.println("Select DISABLED for at least 2 aeconds before enabling!");
           System.exit(1);
         }
         autoEvents = buildAutoScenario();
@@ -503,6 +559,12 @@ public class Simulator extends SubsystemBase {
           case RELEASE_RIGHT_STICK:
             releaseButton(XboxController.Button.kRightStick);
             break;
+          case MOVE_JOYSTICK_DRIVE:
+            moveJoystickLeft(nextEvent.pose.getX(), nextEvent.pose.getY());
+            break;
+          case MOVE_JOYSTICK_TURN:
+            moveJoystickRight(nextEvent.pose.getX(), nextEvent.pose.getY());
+            break;
         }
       }
       if (iterator.hasNext()) {
@@ -541,6 +603,18 @@ public class Simulator extends SubsystemBase {
 
   private void holdPOV(POVDirection direction) {
     DriverStationSim.setJoystickPOV(hidPort, 0, direction.value);
+    DriverStationSim.notifyNewData();
+  }
+
+  private void moveJoystickLeft(double x, double y) {
+    DriverStationSim.setJoystickAxis(hidPort, 0, -x); // Move X axis
+    DriverStationSim.setJoystickAxis(hidPort, 1, -y); // Move Y axis
+    DriverStationSim.notifyNewData();
+  }
+
+  private void moveJoystickRight(double x, double y) {
+    DriverStationSim.setJoystickAxis(hidPort, 4, -x); // Move X axis
+    DriverStationSim.setJoystickAxis(hidPort, 5, -y); // Move Y axis
     DriverStationSim.notifyNewData();
   }
 
