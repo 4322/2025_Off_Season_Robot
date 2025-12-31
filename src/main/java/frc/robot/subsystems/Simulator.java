@@ -1,12 +1,9 @@
 package frc.robot.subsystems;
 
-import java.util.Iterator;
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
-
+import java.util.HashMap;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import java.util.Map;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -22,12 +19,17 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetectionIOSim;
+import java.util.Iterator;
+import java.util.List;
+import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
 
   public static final AutoName simulatedAuto = AutoName.THREE_CORAL_RIGHT;
   private final Anomaly anomaly = Anomaly.NONE;
   private final TeleopScenario teleopScenario = TeleopScenario.LOOK_FROM_APRILTAG;
+  private final Map<Integer, Double> axisvalues =  new HashMap<>();
+  private final Map<Integer, Double> POVvalues =  new HashMap<>();
 
   private enum Anomaly {
     NONE,
