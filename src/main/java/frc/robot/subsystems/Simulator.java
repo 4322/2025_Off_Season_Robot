@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.sql.Driver;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -30,8 +31,8 @@ public class Simulator extends SubsystemBase {
   public static final AutoName simulatedAuto = AutoName.THREE_CORAL_RIGHT;
   private final Anomaly anomaly = Anomaly.NONE;
   private final TeleopScenario teleopScenario = TeleopScenario.LOOK_FROM_APRILTAG;
-  private final Map<Integer, Double> axisvalues =  new HashMap<>();
-  private final Map<Integer, Double> POVvalues =  new HashMap<>();
+  private final Map<Double, Double> axisvalues =  new HashMap<Double, Double>();
+  private final Map<Double, Double> POVvalues =  new HashMap<Double, Double>();
 
   private enum Anomaly {
     NONE,
@@ -355,6 +356,9 @@ public class Simulator extends SubsystemBase {
   @Override
   public void periodic() {
     Logger.recordOutput("Sim/MatchTime", matchTimer.get());
+
+    DriverStationSim.setJoystickAxisCount(hidPort, 6);
+
     if (!DriverStation.isEnabled()) {
       if (events != null) {
         events = null;
@@ -560,10 +564,19 @@ public class Simulator extends SubsystemBase {
             releaseButton(XboxController.Button.kRightStick);
             break;
           case MOVE_JOYSTICK_DRIVE:
-            moveJoystickLeft(nextEvent.pose.getX(), nextEvent.pose.getY());
+          setAxisValue(nextEvent.pose.getX(), nextEvent.pose.getY());
+          for (Map.Entry<Double, Double> entry : axisvalues.entrySet()) {
+            Logger.recordOutput("Sim/Axis" + entry.getKey(), entry.getValue());
+            moveJoystickLeft(entry.getKey(), entry.getValue());
+          }
+           
             break;
           case MOVE_JOYSTICK_TURN:
-            moveJoystickRight(nextEvent.pose.getX(), nextEvent.pose.getY());
+          setAxisValue(nextEvent.pose.getX(), nextEvent.pose.getY());
+          for (Map.Entry<Double, Double> entry : axisvalues.entrySet()) {
+            Logger.recordOutput("Sim/Axis" + entry.getKey(), entry.getValue());
+            moveJoystickRight(entry.getKey(), entry.getValue());
+          }
             break;
         }
       }
@@ -640,5 +653,9 @@ public class Simulator extends SubsystemBase {
   private void releaseTrigger(ControllerAxis axis) {
     DriverStationSim.setJoystickAxis(hidPort, axis.value, 0.0);
     DriverStationSim.notifyNewData();
+  }
+
+  private void setAxisValue(double x, double y) {
+    axisvalues.put(x, y);
   }
 }
