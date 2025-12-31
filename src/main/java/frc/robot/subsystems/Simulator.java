@@ -22,11 +22,28 @@ import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
 
-  public static final AutoName simulatedAuto = AutoName.ONE_CORAL_TWO_ALGAE_CENTER;
-  private final Anomaly anomaly = Anomaly.DROP_CORAL1_LATE;
-  private final TeleopScenario teleopScenario = TeleopScenario.SCORE_L4;
+  private static AutoName autoScenario;
+  private static TeleopScenario teleopScenario = TeleopScenario.SCORE_L4;
+  private final static List<TeleopScenario> teleopScenarios =
+      List.of(TeleopScenario.SCORE_L4, TeleopScenario.NONE);
+  private static List<TeleAnomaly> teleAnomalies;
+  public static List<AutoName> autoScenarios = List.of(AutoName.ONE_CORAL_TWO_ALGAE_CENTER);
+  private static List<AutoAnomaly> autoAnomalies;
+  private final static RegressTests regressTest =
+      RegressTests.TEST1;
+  private static double t = 0.0;
+  private enum RegressTests{
+    TEST1
+  } 
+  private enum TeleAnomaly {
+    NONE,
+    DROP_CORAL1_EARLY,
+    DROP_CORAL1_LATE,
+    DROP_CORAL2_LATE,
+    DROP_ALGAE1_EARLY
+  }
 
-  private enum Anomaly {
+  private enum AutoAnomaly {
     NONE,
     DROP_CORAL1_EARLY,
     DROP_CORAL1_LATE,
@@ -121,7 +138,42 @@ public class Simulator extends SubsystemBase {
       this.value = value;
     }
   }
+  private class RegressionTest {
+    private AutoName autoScenario;
+    private List<AutoAnomaly> autoAnomalies;
+    private TeleopScenario teleopScenario;
+    private List<TeleAnomaly> teleAnomalies;
+    private Alliance alliance;
 
+    RegressionTest(
+        AutoName autoScenario,
+        List<AutoAnomaly> autoAnomalies,
+        TeleopScenario teleopScenario,
+        List<TeleAnomaly> teleAnomalies,
+        Alliance alliance) {
+      this.autoScenario = autoScenario;
+      this.autoAnomalies = autoAnomalies;
+      this.teleopScenario = teleopScenario;
+      this.teleAnomalies = teleAnomalies;
+      this.alliance = alliance;
+    }
+    
+  }
+  private List<RegressionTest> regressionTestCases(){
+    switch (regressTest){
+      case TEST1:
+        return List.of(
+          new RegressionTest(
+              AutoName.ONE_CORAL_TWO_ALGAE_CENTER,
+              List.of(AutoAnomaly.NONE),
+              TeleopScenario.SCORE_L4,
+              List.of(TeleAnomaly.NONE),
+              Alliance.Blue)
+      );
+    default:
+      return List.of();
+  }
+}
   private class SimEvent {
     private double eventTime;
     private EventStatus eventStatus;
@@ -169,8 +221,7 @@ public class Simulator extends SubsystemBase {
   }
 
   private List<SimEvent> buildAutoScenario() {
-    double t = 0;
-    switch (simulatedAuto) {
+    switch (autoScenario) {
       case ONE_CORAL_TWO_ALGAE_CENTER:
         return List.of(
             new SimEvent(t, "Preload ready", EventType.CORAL_IN_PICKUP_AREA),
@@ -180,12 +231,16 @@ public class Simulator extends SubsystemBase {
                 t += 0.7,
                 "Early drop",
                 EventType.END_EFFECTOR_NO_CORAL,
-                anomaly == Anomaly.DROP_CORAL1_EARLY ? EventStatus.ACTIVE : EventStatus.INACTIVE),
+                aListContains(AutoAnomaly.DROP_CORAL1_EARLY)
+                    ? EventStatus.ACTIVE
+                    : EventStatus.INACTIVE),
             new SimEvent(
                 t += 0.2,
                 "Late drop",
                 EventType.END_EFFECTOR_NO_CORAL,
-                anomaly == Anomaly.DROP_CORAL1_LATE ? EventStatus.ACTIVE : EventStatus.INACTIVE),
+                aListContains(AutoAnomaly.DROP_CORAL1_LATE)
+                    ? EventStatus.ACTIVE
+                    : EventStatus.INACTIVE),
             new SimEvent(t += 1.6, "Score coral", EventType.END_EFFECTOR_NO_CORAL),
             new SimEvent(t += 1.5, "Pickup algae 1", EventType.END_EFFECTOR_DETECT_ALGAE),
             new SimEvent(t += 3.3, "Score algae 1", EventType.END_EFFECTOR_NO_ALGAE),
@@ -205,9 +260,9 @@ public class Simulator extends SubsystemBase {
                 EventType.CORAL_VISIBLE,
                 new Translation2d(
                     Robot.alliance == Alliance.Blue ? 2.3 : 15.5,
-                    (Robot.alliance == Alliance.Blue && simulatedAuto == AutoName.THREE_CORAL_RIGHT)
+                    (Robot.alliance == Alliance.Blue && autoScenario == AutoName.THREE_CORAL_RIGHT)
                             || (Robot.alliance == Alliance.Red
-                                && simulatedAuto == AutoName.THREE_CORAL_LEFT)
+                                && autoScenario == AutoName.THREE_CORAL_LEFT)
                         ? 1.63
                         : 6.5)),
             new SimEvent(t += 1.1, "Coral 2 indexer", EventType.CORAL_IN_INDEXER),
@@ -222,9 +277,9 @@ public class Simulator extends SubsystemBase {
                 EventType.CORAL_VISIBLE,
                 new Translation2d(
                     Robot.alliance == Alliance.Blue ? 2.0 : 15.8,
-                    (Robot.alliance == Alliance.Blue && simulatedAuto == AutoName.THREE_CORAL_RIGHT)
+                    (Robot.alliance == Alliance.Blue && autoScenario == AutoName.THREE_CORAL_RIGHT)
                             || (Robot.alliance == Alliance.Red
-                                && simulatedAuto == AutoName.THREE_CORAL_LEFT)
+                                && autoScenario == AutoName.THREE_CORAL_LEFT)
                         ? 1.9
                         : 6.3)),
             new SimEvent(t += 2.55, "Coral 3 indexer", EventType.CORAL_IN_INDEXER),
@@ -240,7 +295,6 @@ public class Simulator extends SubsystemBase {
   }
 
   private List<SimEvent> buildTeleopScenario() {
-    double t = 0;
     switch (teleopScenario) {
       case SCORE_L4:
         return List.of(
@@ -264,11 +318,15 @@ public class Simulator extends SubsystemBase {
     }
   }
 
+  private Iterator<RegressionTest> regressionTestIterator;
+  private RegressionTest nextRegressionTest;
   private List<SimEvent> autoEvents;
   private List<SimEvent> teleopEvents;
   private List<SimEvent> events;
   private Iterator<SimEvent> iterator;
   private SimEvent nextEvent;
+  private SimEvent nextEventT;
+  private SimEvent nextEventA;
   private final Timer disabledTimer = new Timer();
   private final Timer matchTimer = new Timer();
   XboxController hid = RobotContainer.driver.getHID(); // the real WPILib XboxController
@@ -299,220 +357,264 @@ public class Simulator extends SubsystemBase {
   @Override
   public void periodic() {
     Logger.recordOutput("Sim/MatchTime", matchTimer.get());
-    if (!DriverStation.isEnabled()) {
-      if (events != null) {
-        events = null;
-        nextEvent = null;
-        disabledTimer.stop();
-        disabledTimer.reset();
-      }
-      if (DriverStation.isDSAttached()) {
-        disabledTimer.start();
-      }
-    } else {
-      // can only release buttons when enabled
-      releaseMomentaryButtons();
-      if (releasePOV) {
-        holdPOV(POVDirection.NONE);
-        releasePOV = false;
-      }
-      if (releaseLeftTrigger) {
-        releaseTrigger(ControllerAxis.LEFT);
-        releaseLeftTrigger = false;
-      }
-      if (releaseRightTrigger) {
-        releaseTrigger(ControllerAxis.RIGHT);
-        releaseRightTrigger = false;
+    if(t == 0){
+          
+    regressionTestIterator = regressionTestCases().iterator();
+    }
+    if (regressionTestIterator !=  null){ 
+    /* 
+    if (nextRegressionTest == null && regressionTestIterator.hasNext()){
+      nextRegressionTest = regressionTestIterator.next();
+      autoScenario = nextRegressionTest.autoScenario;
+      autoAnomalies = nextRegressionTest.autoAnomalies;
+      teleopScenario = nextRegressionTest.teleopScenario;
+      teleAnomalies = nextRegressionTest.teleAnomalies;
+      Robot.alliance = nextRegressionTest.alliance;
+      t = 0.0;
+      nextEventA = null;
+      nextEventT = null;
+    }
+    */
+    while (nextEventA != null || nextEventT != null) {
+      Logger.recordOutput("Sim/MatchTime", matchTimer.get());      
+      if (!DriverStation.isEnabled()) {
+        if (events != null) {
+          events = null;
+          nextEvent = null;
+          disabledTimer.stop();
+          disabledTimer.reset();
+        }
+        if (DriverStation.isDSAttached()) {
+          disabledTimer.start();
+        }
+      } else {
+        // can only release buttons when enabled
+        releaseMomentaryButtons();
+        if (releasePOV) {
+          holdPOV(POVDirection.NONE);
+          releasePOV = false;
+        }
+        if (releaseLeftTrigger) {
+          releaseTrigger(ControllerAxis.LEFT);
+          releaseLeftTrigger = false;
+        }
+        if (releaseRightTrigger) {
+          releaseTrigger(ControllerAxis.RIGHT);
+          releaseRightTrigger = false;
+        }
+
+        if (events == null) {
+          if (!disabledTimer.hasElapsed(2)) {
+            System.out.println("Select DISABLED for at least 2 seconds before enabling!");
+            System.exit(1);
+          }
+          teleopEvents = buildTeleopScenario();
+          autoEvents = buildAutoScenario();
+          if (teleopEvents == null){
+            nextEventT = null;
+          }
+          if (autoEvents == null){
+            nextEventA = null;
+        }
+        if (events == null || DriverStation.isAutonomous() != currentModeAutonomous) {
+          currentModeAutonomous = DriverStation.isAutonomous();
+          events = currentModeAutonomous ? autoEvents : teleopEvents;
+          matchTimer.restart();
+          iterator = events.iterator();
+          if (iterator.hasNext()) {
+            nextEvent = iterator.next();
+          } else {
+            nextEvent = null;
+            if (events == autoEvents){
+              nextEventA = null;
+            }
+            if (events == teleopEvents){
+              nextEventT = null;
+          }
+          }
+        }
       }
 
-      if (events == null) {
-        if (!disabledTimer.hasElapsed(2)) {
-          // wait for alliance color update
-          System.out.println("Select DISABLED for at least 2 seconds before enabling!");
-          System.exit(1);
+      while (nextEvent != null && matchTimer.get() >= nextEvent.eventTime) {
+        if (nextEvent.eventStatus == EventStatus.ACTIVE) {
+          Logger.recordOutput("Sim/EventName", nextEvent.eventName);
+          Logger.recordOutput("Sim/EventType", nextEvent.eventType);
+          switch (nextEvent.eventType) {
+            case SET_POSE:
+              drive.resetPose(nextEvent.pose);
+              break;
+            case END_EFFECTOR_NO_CORAL:
+              endEffectorIOSim.simCoralReleased();
+              break;
+            case END_EFFECTOR_NO_ALGAE:
+              endEffectorIOSim.simAlgaeReleased();
+              break;
+            case END_EFFECTOR_DETECT_CORAL:
+              endEffectorIOSim.simCoralHeld();
+              break;
+            case END_EFFECTOR_DETECT_ALGAE:
+              endEffectorIOSim.simAlgaeHeld();
+              break;
+            case CORAL_IN_PICKUP_AREA:
+              indexerIOSim.simCoralDetectedInPickupArea();
+              break;
+            case CORAL_NOT_IN_PICKUP_AREA:
+              indexerIOSim.simCoralNOTDetectedInPickupArea();
+              break;
+            case CORAL_IN_INDEXER:
+              indexerIOSim.simCoralDetectedInIndexer();
+              break;
+            case CORAL_NOT_IN_INDEXER:
+              indexerIOSim.simCoralNOTDetectedInIndexer();
+              break;
+            case CORAL_VISIBLE:
+              visionObjectDetectionIOSim.coralDetected(
+                  nextEvent.pose.getTranslation(), WPIUtilJNI.now() * 1.0e-6);
+              break;
+            case CORAL_NOT_VISIBLE:
+              visionObjectDetectionIOSim.noCoral();
+              break;
+            case PRESS_A:
+              pressButton(XboxController.Button.kA);
+              break;
+            case HOLD_A:
+              holdButton(XboxController.Button.kA);
+              break;
+            case RELEASE_A:
+              releaseButton(XboxController.Button.kA);
+              break;
+            case PRESS_B:
+              pressButton(XboxController.Button.kB);
+              break;
+            case HOLD_B:
+              holdButton(XboxController.Button.kB);
+              break;
+            case RELEASE_B:
+              releaseButton(XboxController.Button.kB);
+              break;
+            case PRESS_X:
+              pressButton(XboxController.Button.kX);
+              break;
+            case HOLD_X:
+              holdButton(XboxController.Button.kX);
+              break;
+            case RELEASE_X:
+              releaseButton(XboxController.Button.kX);
+              break;
+            case PRESS_Y:
+              pressButton(XboxController.Button.kY);
+              break;
+            case HOLD_Y:
+              holdButton(XboxController.Button.kY);
+              break;
+            case RELEASE_Y:
+              releaseButton(XboxController.Button.kY);
+              break;
+            case PRESS_LEFT_BUMPER:
+              pressButton(XboxController.Button.kLeftBumper);
+              break;
+            case HOLD_LEFT_BUMPER:
+              holdButton(XboxController.Button.kLeftBumper);
+              break;
+            case RELEASE_LEFT_BUMPER:
+              releaseButton(XboxController.Button.kLeftBumper);
+              break;
+            case PRESS_RIGHT_BUMPER:
+              pressButton(XboxController.Button.kRightBumper);
+              break;
+            case HOLD_RIGHT_BUMPER:
+              holdButton(XboxController.Button.kRightBumper);
+              break;
+            case RELEASE_RIGHT_BUMPER:
+              releaseButton(XboxController.Button.kRightBumper);
+              break;
+            case RELEASE_POV:
+              holdPOV(POVDirection.NONE);
+              break;
+            case PRESS_UP_POV:
+              pressPOV(POVDirection.UP);
+              break;
+            case HOLD_UP_POV:
+              holdPOV(POVDirection.UP);
+              break;
+            case PRESS_RIGHT_POV:
+              pressPOV(POVDirection.RIGHT);
+              break;
+            case HOLD_RIGHT_POV:
+              holdPOV(POVDirection.RIGHT);
+              break;
+            case PRESS_DOWN_POV:
+              pressPOV(POVDirection.DOWN);
+              break;
+            case HOLD_DOWN_POV:
+              holdPOV(POVDirection.DOWN);
+              break;
+            case PRESS_LEFT_POV:
+              pressPOV(POVDirection.LEFT);
+              break;
+            case HOLD_LEFT_POV:
+              holdPOV(POVDirection.LEFT);
+              break;
+            case PRESS_LEFT_TRIGGER:
+              pressTrigger(ControllerAxis.LEFT);
+              break;
+            case HOLD_LEFT_TRIGGER:
+              holdTrigger(ControllerAxis.LEFT);
+              break;
+            case RELEASE_LEFT_TRIGGER:
+              releaseTrigger(ControllerAxis.LEFT);
+              break;
+            case PRESS_RIGHT_TRIGGER:
+              pressTrigger(ControllerAxis.RIGHT);
+              break;
+            case HOLD_RIGHT_TRIGGER:
+              holdTrigger(ControllerAxis.RIGHT);
+              break;
+            case RELEASE_RIGHT_TRIGGER:
+              releaseTrigger(ControllerAxis.RIGHT);
+              break;
+            case PRESS_LEFT_STICK:
+              pressButton(XboxController.Button.kLeftStick);
+              break;
+            case HOLD_LEFT_STICK:
+              holdButton(XboxController.Button.kLeftStick);
+              break;
+            case RELEASE_LEFT_STICK:
+              releaseButton(XboxController.Button.kLeftStick);
+              break;
+            case PRESS_RIGHT_STICK:
+              pressButton(XboxController.Button.kRightStick);
+              break;
+            case HOLD_RIGHT_STICK:
+              holdButton(XboxController.Button.kRightStick);
+              break;
+            case RELEASE_RIGHT_STICK:
+              releaseButton(XboxController.Button.kRightStick);
+              break;
+          }
         }
-        autoEvents = buildAutoScenario();
-        teleopEvents = buildTeleopScenario();
-      }
-      if (events == null || DriverStation.isAutonomous() != currentModeAutonomous) {
-        currentModeAutonomous = DriverStation.isAutonomous();
-        events = currentModeAutonomous ? autoEvents : teleopEvents;
-        matchTimer.restart();
-        iterator = events.iterator();
         if (iterator.hasNext()) {
           nextEvent = iterator.next();
         } else {
           nextEvent = null;
+          if (events == teleopEvents){
+            nextEventT = null;
+          }
+          if (events == null){
+            nextEventA = null;
+        }
         }
       }
     }
-
-    while (nextEvent != null && matchTimer.get() >= nextEvent.eventTime) {
-      if (nextEvent.eventStatus == EventStatus.ACTIVE) {
-        Logger.recordOutput("Sim/EventName", nextEvent.eventName);
-        Logger.recordOutput("Sim/EventType", nextEvent.eventType);
-        switch (nextEvent.eventType) {
-          case SET_POSE:
-            drive.resetPose(nextEvent.pose);
-            break;
-          case END_EFFECTOR_NO_CORAL:
-            endEffectorIOSim.simCoralReleased();
-            break;
-          case END_EFFECTOR_NO_ALGAE:
-            endEffectorIOSim.simAlgaeReleased();
-            break;
-          case END_EFFECTOR_DETECT_CORAL:
-            endEffectorIOSim.simCoralHeld();
-            break;
-          case END_EFFECTOR_DETECT_ALGAE:
-            endEffectorIOSim.simAlgaeHeld();
-            break;
-          case CORAL_IN_PICKUP_AREA:
-            indexerIOSim.simCoralDetectedInPickupArea();
-            break;
-          case CORAL_NOT_IN_PICKUP_AREA:
-            indexerIOSim.simCoralNOTDetectedInPickupArea();
-            break;
-          case CORAL_IN_INDEXER:
-            indexerIOSim.simCoralDetectedInIndexer();
-            break;
-          case CORAL_NOT_IN_INDEXER:
-            indexerIOSim.simCoralNOTDetectedInIndexer();
-            break;
-          case CORAL_VISIBLE:
-            visionObjectDetectionIOSim.coralDetected(
-                nextEvent.pose.getTranslation(), WPIUtilJNI.now() * 1.0e-6);
-            break;
-          case CORAL_NOT_VISIBLE:
-            visionObjectDetectionIOSim.noCoral();
-            break;
-          case PRESS_A:
-            pressButton(XboxController.Button.kA);
-            break;
-          case HOLD_A:
-            holdButton(XboxController.Button.kA);
-            break;
-          case RELEASE_A:
-            releaseButton(XboxController.Button.kA);
-            break;
-          case PRESS_B:
-            pressButton(XboxController.Button.kB);
-            break;
-          case HOLD_B:
-            holdButton(XboxController.Button.kB);
-            break;
-          case RELEASE_B:
-            releaseButton(XboxController.Button.kB);
-            break;
-          case PRESS_X:
-            pressButton(XboxController.Button.kX);
-            break;
-          case HOLD_X:
-            holdButton(XboxController.Button.kX);
-            break;
-          case RELEASE_X:
-            releaseButton(XboxController.Button.kX);
-            break;
-          case PRESS_Y:
-            pressButton(XboxController.Button.kY);
-            break;
-          case HOLD_Y:
-            holdButton(XboxController.Button.kY);
-            break;
-          case RELEASE_Y:
-            releaseButton(XboxController.Button.kY);
-            break;
-          case PRESS_LEFT_BUMPER:
-            pressButton(XboxController.Button.kLeftBumper);
-            break;
-          case HOLD_LEFT_BUMPER:
-            holdButton(XboxController.Button.kLeftBumper);
-            break;
-          case RELEASE_LEFT_BUMPER:
-            releaseButton(XboxController.Button.kLeftBumper);
-            break;
-          case PRESS_RIGHT_BUMPER:
-            pressButton(XboxController.Button.kRightBumper);
-            break;
-          case HOLD_RIGHT_BUMPER:
-            holdButton(XboxController.Button.kRightBumper);
-            break;
-          case RELEASE_RIGHT_BUMPER:
-            releaseButton(XboxController.Button.kRightBumper);
-            break;
-          case RELEASE_POV:
-            holdPOV(POVDirection.NONE);
-            break;
-          case PRESS_UP_POV:
-            pressPOV(POVDirection.UP);
-            break;
-          case HOLD_UP_POV:
-            holdPOV(POVDirection.UP);
-            break;
-          case PRESS_RIGHT_POV:
-            pressPOV(POVDirection.RIGHT);
-            break;
-          case HOLD_RIGHT_POV:
-            holdPOV(POVDirection.RIGHT);
-            break;
-          case PRESS_DOWN_POV:
-            pressPOV(POVDirection.DOWN);
-            break;
-          case HOLD_DOWN_POV:
-            holdPOV(POVDirection.DOWN);
-            break;
-          case PRESS_LEFT_POV:
-            pressPOV(POVDirection.LEFT);
-            break;
-          case HOLD_LEFT_POV:
-            holdPOV(POVDirection.LEFT);
-            break;
-          case PRESS_LEFT_TRIGGER:
-            pressTrigger(ControllerAxis.LEFT);
-            break;
-          case HOLD_LEFT_TRIGGER:
-            holdTrigger(ControllerAxis.LEFT);
-            break;
-          case RELEASE_LEFT_TRIGGER:
-            releaseTrigger(ControllerAxis.LEFT);
-            break;
-          case PRESS_RIGHT_TRIGGER:
-            pressTrigger(ControllerAxis.RIGHT);
-            break;
-          case HOLD_RIGHT_TRIGGER:
-            holdTrigger(ControllerAxis.RIGHT);
-            break;
-          case RELEASE_RIGHT_TRIGGER:
-            releaseTrigger(ControllerAxis.RIGHT);
-            break;
-          case PRESS_LEFT_STICK:
-            pressButton(XboxController.Button.kLeftStick);
-            break;
-          case HOLD_LEFT_STICK:
-            holdButton(XboxController.Button.kLeftStick);
-            break;
-          case RELEASE_LEFT_STICK:
-            releaseButton(XboxController.Button.kLeftStick);
-            break;
-          case PRESS_RIGHT_STICK:
-            pressButton(XboxController.Button.kRightStick);
-            break;
-          case HOLD_RIGHT_STICK:
-            holdButton(XboxController.Button.kRightStick);
-            break;
-          case RELEASE_RIGHT_STICK:
-            releaseButton(XboxController.Button.kRightStick);
-            break;
-        }
-      }
-      if (iterator.hasNext()) {
-        nextEvent = iterator.next();
-      } else {
-        nextEvent = null;
-      }
     }
   }
-
+  }
+  private static boolean aListContains(AutoAnomaly aAnomaly){
+    return autoAnomalies.contains(aAnomaly);
+  }
+  private static boolean tListContains(TeleAnomaly tAnomaly){
+    return teleAnomalies.contains(tAnomaly);
+  }
   private void holdButton(XboxController.Button button) {
     activeButtonBitmask |= 1 << (button.value - 1);
     DriverStationSim.setJoystickButtons(hidPort, activeButtonBitmask);
