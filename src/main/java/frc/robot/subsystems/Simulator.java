@@ -105,12 +105,6 @@ public class Simulator extends SubsystemBase {
     STOP_JOYSTICK
   }
 
-  public void initialize() {
-    axisvalues.put("Positionx", 0.0);
-    axisvalues.put("Positiony", 0.0);
-    POVvalues.put(0.0, -1.0);
-  }
-
   private enum EventStatus {
     ACTIVE,
     INACTIVE
@@ -139,6 +133,12 @@ public class Simulator extends SubsystemBase {
     private ControllerAxis(int value) {
       this.value = value;
     }
+  }
+
+  private void initialize() {
+    axisvalues.put("Positionx", 0.0);
+    axisvalues.put("Positiony", 0.0);
+    POVvalues.put(0.0, -1.0);
   }
 
   private class SimEvent {
@@ -351,6 +351,7 @@ public class Simulator extends SubsystemBase {
   boolean releaseRightTrigger;
   int POVPressed;
   boolean moveJoystick;
+  boolean start = true;
 
   private final Drive drive;
   private final EndEffectorIOSim endEffectorIOSim;
@@ -367,11 +368,20 @@ public class Simulator extends SubsystemBase {
     this.endEffectorIOSim = endEffectorIOSim;
     this.indexerIOSim = indexerIOSim;
     this.visionObjectDetectionIOSim = visionObjectDetectionIOSim;
-    initialize();
   }
 
   @Override
   public void periodic() {
+
+    if (start) {
+      initialize();
+      DriverStationSim.setJoystickAxisType(hidPort, 0, 0);
+      DriverStationSim.setJoystickAxisType(hidPort, 1, 1);
+      DriverStationSim.setJoystickAxisType(hidPort, 3, 3);
+      DriverStationSim.setJoystickAxisType(hidPort, 4, 4);
+      start = false;
+      DriverStationSim.notifyNewData();
+    }
 
     Logger.recordOutput("Sim/MatchTime", matchTimer.get());
     if (!DriverStationSim.getAutonomous()) {
