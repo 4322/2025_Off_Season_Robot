@@ -29,7 +29,7 @@ public class Simulator extends SubsystemBase {
   private final Anomaly anomaly = Anomaly.NONE;
   private final TeleopScenario teleopScenario = TeleopScenario.LOOK_FROM_APRILTAG;
   private final Map<String, Integer> axisvalues = new HashMap<String, Integer>();
-  private final Map<String, Integer> POVvalues = new HashMap<Double, Integer>();
+  private final Map<String, Integer> POVvalues = new HashMap<String, Integer>();
   private double x = 0.0;
   private double y = 0.0;
   boolean releasedbutton = true;
@@ -693,6 +693,4 @@ public class Simulator extends SubsystemBase {
     DriverStationSim.setJoystickAxis(hidPort, axis.value, 0.0);
     DriverStationSim.notifyNewData();
   }
-
-  
 }
