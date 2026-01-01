@@ -28,8 +28,8 @@ public class Simulator extends SubsystemBase {
   public static final AutoName simulatedAuto = AutoName.THREE_CORAL_RIGHT;
   private final Anomaly anomaly = Anomaly.NONE;
   private final TeleopScenario teleopScenario = TeleopScenario.LOOK_FROM_APRILTAG;
-  private final Map<String, Double> axisvalues = new HashMap<String, Double>();
-  private final Map<Double, Double> POVvalues = new HashMap<Double, Double>();
+  private final Map<String, Integer> axisvalues = new HashMap<String, Integer>();
+  private final Map<String, Integer> POVvalues = new HashMap<Double, Integer>();
   private double x = 0.0;
   private double y = 0.0;
   boolean releasedbutton = true;
@@ -136,9 +136,9 @@ public class Simulator extends SubsystemBase {
   }
 
   private void initialize() {
-    axisvalues.put("Positionx", 0.0);
-    axisvalues.put("Positiony", 0.0);
-    POVvalues.put(0.0, -1.0);
+    axisvalues.put("Positionx", 0);
+    axisvalues.put("Positiony", 0);
+    POVvalues.put("POV", -1);
   }
 
   private class SimEvent {
@@ -382,15 +382,14 @@ public class Simulator extends SubsystemBase {
       start = false;
       DriverStationSim.notifyNewData();
     }
-
-    Logger.recordOutput("Sim/MatchTime", matchTimer.get());
-    if (!DriverStationSim.getAutonomous()) {
+    if (moveJoystick) {
       DriverStationSim.setJoystickAxisCount(hidPort, 6);
       DriverStationSim.setJoystickAxis(
           hidPort, axisvalues.get("Positionx").intValue(), -x); // Move X axis
       DriverStationSim.setJoystickAxis(
           hidPort, axisvalues.get("Positiony").intValue(), -y); // Move Y axis
     }
+    Logger.recordOutput("Sim/MatchTime", matchTimer.get());
     if (!releasedbutton) {
       DriverStationSim.setJoystickPOV(hidPort, 0, POVPressed); // POV reset
     }
@@ -602,14 +601,14 @@ public class Simulator extends SubsystemBase {
             releaseButton(XboxController.Button.kRightStick);
             break;
           case MOVE_JOYSTICK_DRIVE:
-            setAxisValueX("leftX", 0);
-            setAxisValueY("leftY", 1);
+            axisvalues.replace("Positionx", 0);
+            axisvalues.replace("Positiony", 1);
             moveJoystick(nextEvent.pose.getX(), nextEvent.pose.getY());
 
             break;
           case MOVE_JOYSTICK_TURN:
-            setAxisValueY("rightX", 5);
-            setAxisValueX("rightY", 4);
+            axisvalues.replace("Positionx", 4);
+            axisvalues.replace("Positiony", 5);
             moveJoystick(nextEvent.pose.getX(), nextEvent.pose.getY());
 
             break;
@@ -675,8 +674,8 @@ public class Simulator extends SubsystemBase {
   }
 
   private void holdTrigger(ControllerAxis axis) {
-    setAxisValueX("Right", axis.value);
-    setAxisValueY("Left", axis.value);
+    axisvalues.replace("Positionx", axis.value);
+    axisvalues.replace("Positiony", axis.value);
     x = 1.0;
     y = 1.0;
   }
@@ -695,11 +694,5 @@ public class Simulator extends SubsystemBase {
     DriverStationSim.notifyNewData();
   }
 
-  private void setAxisValueX(String Positionx, double xAxis) {
-    axisvalues.put(Positionx, xAxis);
-  }
-
-  private void setAxisValueY(String Positiony, double yAxis) {
-    axisvalues.put(Positiony, yAxis);
-  }
+  
 }
