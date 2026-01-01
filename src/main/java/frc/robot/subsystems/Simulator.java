@@ -322,8 +322,7 @@ public class Simulator extends SubsystemBase {
                 t += 1.0,
                 "Look away from AprilTag",
                 EventType.MOVE_JOYSTICK_DRIVE,
-                new Pose2d(-1, 1, Rotation2d.k180deg)),
-            new SimEvent(t += 0.5, "Look away from AprilTag", EventType.STOP_JOYSTICK),
+                new Pose2d(0, -1, Rotation2d.k180deg)),
             new SimEvent(
                 t += 1.0,
                 "Look away from AprilTag",
@@ -612,7 +611,7 @@ public class Simulator extends SubsystemBase {
             moveJoystick(nextEvent.pose.getX(), nextEvent.pose.getY());
 
             break;
-          case STOP_JOYSTICK:
+          case STOP_JOYSTICK://You dont technically need to stop the joysticks ONLY if you are switching them off  
             stopJoystick();
             break;
         }
