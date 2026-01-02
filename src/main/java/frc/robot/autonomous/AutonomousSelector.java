@@ -83,11 +83,11 @@ public class AutonomousSelector {
   public OrangeSequentialCommandGroup get() {
     if (Constants.currentMode == RobotMode.SIM) {
       for (Auto nextAuto : autos) {
-        if (nextAuto.name == Simulator.simulatedAuto) {
+        if (nextAuto.name == Simulator.getAutoScenario()) {
           return nextAuto.command;
         }
       }
-      System.out.println("Simulated auto " + Simulator.simulatedAuto + " not found");
+      System.out.println("Simulated auto " + Simulator.getAutoScenario() + " not found");
       System.exit(1);
     }
     return autonomousSelector.get();
