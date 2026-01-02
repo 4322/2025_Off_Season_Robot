@@ -125,12 +125,12 @@ public class Simulator extends SubsystemBase {
   }
 
   private enum ControllerAxis {
-    LEFTX(0),
-    LEFTY(1),
-    LEFT(2),
-    RIGHT(3),
-    RIGHTX(4),
-    RIGHTY(5);
+    LEFT_X(0),
+    LEFT_Y(1),
+    LEFT_TRIGGER(2),
+    RIGHT_TRIGGER(3),
+    RIGHT_X(4),
+    RIGHT_Y(5);
 
     public final int value;
 
@@ -320,7 +320,7 @@ public class Simulator extends SubsystemBase {
                 t += 1.0,
                 "Look away from AprilTag",
                 EventType.MOVE_JOYSTICK_DRIVE,
-                new Pose2d(0, -1, Rotation2d.k180deg)),
+                new Pose2d(0, 1, Rotation2d.k180deg)),
             new SimEvent(
                 t += 1.0,
                 "Look away from AprilTag",
@@ -365,18 +365,20 @@ public class Simulator extends SubsystemBase {
     this.endEffectorIOSim = endEffectorIOSim;
     this.indexerIOSim = indexerIOSim;
     this.visionObjectDetectionIOSim = visionObjectDetectionIOSim;
-    DriverStationSim.setJoystickAxisCount(hidPort, 6);
-    DriverStationSim.notifyNewData();
   }
 
   @Override
   public void periodic() {
+    Logger.recordOutput("Sim/MatchTime", matchTimer.get());
+
+    DriverStationSim.setJoystickAxisCount(hidPort, 6);
+    DriverStationSim.notifyNewData();
 
     for (Map.Entry<Integer, Double> entry : axisValues.entrySet()) {
       DriverStationSim.setJoystickAxis(hidPort, entry.getKey(), entry.getValue());
-
+      DriverStationSim.notifyNewData();
     }
-    Logger.recordOutput("Sim/MatchTime", matchTimer.get());
+
     if (!releasedbutton) {
       DriverStationSim.setJoystickPOV(hidPort, 0, POVPressed); // POV reset
     }
@@ -401,11 +403,11 @@ public class Simulator extends SubsystemBase {
         releasedbutton = true;
       }
       if (releaseLeftTrigger) {
-        releaseTrigger(ControllerAxis.LEFT);
+        releaseTrigger(ControllerAxis.LEFT_TRIGGER);
         releaseLeftTrigger = false;
       }
       if (releaseRightTrigger) {
-        releaseTrigger(ControllerAxis.RIGHT);
+        releaseTrigger(ControllerAxis.RIGHT_TRIGGER);
         releaseRightTrigger = false;
       }
 
@@ -552,22 +554,22 @@ public class Simulator extends SubsystemBase {
             holdPOV(POVDirection.LEFT);
             break;
           case PRESS_LEFT_TRIGGER:
-            pressTrigger(ControllerAxis.LEFT);
+            pressTrigger(ControllerAxis.LEFT_TRIGGER);
             break;
           case HOLD_LEFT_TRIGGER:
-            holdTrigger(ControllerAxis.LEFT);
+            holdTrigger(ControllerAxis.LEFT_TRIGGER);
             break;
           case RELEASE_LEFT_TRIGGER:
-            releaseTrigger(ControllerAxis.LEFT);
+            releaseTrigger(ControllerAxis.LEFT_TRIGGER);
             break;
           case PRESS_RIGHT_TRIGGER:
-            pressTrigger(ControllerAxis.RIGHT);
+            pressTrigger(ControllerAxis.RIGHT_TRIGGER);
             break;
           case HOLD_RIGHT_TRIGGER:
-            holdTrigger(ControllerAxis.RIGHT);
+            holdTrigger(ControllerAxis.RIGHT_TRIGGER);
             break;
           case RELEASE_RIGHT_TRIGGER:
-            releaseTrigger(ControllerAxis.RIGHT);
+            releaseTrigger(ControllerAxis.RIGHT_TRIGGER);
             break;
           case PRESS_LEFT_STICK:
             pressButton(XboxController.Button.kLeftStick);
@@ -588,13 +590,13 @@ public class Simulator extends SubsystemBase {
             releaseButton(XboxController.Button.kRightStick);
             break;
           case MOVE_JOYSTICK_DRIVE:
-            setAxis(ControllerAxis.LEFTX, nextEvent.pose.getX());
-            setAxis(ControllerAxis.LEFTY, nextEvent.pose.getY());
+            setAxis(ControllerAxis.LEFT_X, nextEvent.pose.getX());
+            setAxis(ControllerAxis.LEFT_Y, nextEvent.pose.getY());
 
             break;
           case MOVE_JOYSTICK_TURN:
-            setAxis(ControllerAxis.RIGHTX, nextEvent.pose.getX());
-            setAxis(ControllerAxis.RIGHTY, nextEvent.pose.getY());
+            setAxis(ControllerAxis.RIGHT_X, nextEvent.pose.getX());
+            setAxis(ControllerAxis.RIGHT_Y, nextEvent.pose.getY());
 
             break;
           case STOP_JOYSTICK:
@@ -648,13 +650,13 @@ public class Simulator extends SubsystemBase {
   private void stopJoystick() {
     axisValues.putAll(
         Map.of(
-            ControllerAxis.LEFTX.value,
+            ControllerAxis.LEFT_X.value,
             0.0,
-            ControllerAxis.LEFTY.value,
+            ControllerAxis.LEFT_Y.value,
             0.0,
-            ControllerAxis.RIGHTX.value,
+            ControllerAxis.RIGHT_X.value,
             0.0,
-            ControllerAxis.RIGHTY.value,
+            ControllerAxis.RIGHT_Y.value,
             0.0));
   }
 
@@ -665,13 +667,13 @@ public class Simulator extends SubsystemBase {
   }
 
   private void holdTrigger(ControllerAxis axis) {
-    x = 1.0;
-    y = 1.0;
+    axisValues.put(axis.value, 1.0);
+    DriverStationSim.notifyNewData();
   }
 
   private void pressTrigger(ControllerAxis axis) {
     holdTrigger(axis);
-    if (axis == ControllerAxis.LEFT) {
+    if (axis == ControllerAxis.LEFT_TRIGGER) {
       releaseLeftTrigger = true;
     } else {
       releaseRightTrigger = true;
