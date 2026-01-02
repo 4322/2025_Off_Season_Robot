@@ -322,7 +322,7 @@ public class Simulator extends SubsystemBase {
                 EventType.MOVE_JOYSTICK_DRIVE,
                 new Pose2d(0, 1, Rotation2d.k180deg)),
             new SimEvent(
-                t += 1.0,
+                t += 0.1,
                 "Look away from AprilTag",
                 EventType.MOVE_JOYSTICK_TURN,
                 new Pose2d(-1, 1, Rotation2d.k180deg)),
@@ -590,13 +590,13 @@ public class Simulator extends SubsystemBase {
             releaseButton(XboxController.Button.kRightStick);
             break;
           case MOVE_JOYSTICK_DRIVE:
-            setAxis(ControllerAxis.LEFT_X, nextEvent.pose.getX());
-            setAxis(ControllerAxis.LEFT_Y, nextEvent.pose.getY());
+            setAxis(ControllerAxis.LEFT_X, nextEvent.pose.getY());
+            setAxis(ControllerAxis.LEFT_Y, nextEvent.pose.getX());
 
             break;
           case MOVE_JOYSTICK_TURN:
-            setAxis(ControllerAxis.RIGHT_X, nextEvent.pose.getX());
-            setAxis(ControllerAxis.RIGHT_Y, nextEvent.pose.getY());
+            setAxis(ControllerAxis.RIGHT_X, nextEvent.pose.getY());
+            setAxis(ControllerAxis.RIGHT_Y, nextEvent.pose.getX());
 
             break;
           case STOP_JOYSTICK:
