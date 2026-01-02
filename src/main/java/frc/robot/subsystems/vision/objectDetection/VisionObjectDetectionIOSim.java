@@ -17,6 +17,13 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
   private Translation2d coralPosition;
   private double latestTimestamp;
 
+  private double cameraLensToCoralPitch;
+  private Pose3d cameraPose = new Pose3d();
+
+  /* ---- 5.  yaw angle (robot CCW positive) ---------------------------------- */
+  private double cameraLensToCoralYaw;
+  private boolean calculationsDone = false;
+
   public VisionObjectDetectionIOSim(Drive drive) {
     this.drive = drive;
   }
@@ -26,6 +33,7 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
       inputs.hasTarget = new boolean[Constants.VisionObjectDetection.numberOfGamePieceTypes];
       inputs.visibleObjectRotations =
           new Rotation3d[Constants.VisionObjectDetection.numberOfGamePieceTypes][0];
+      inputs.objectDetected = false;
     } else {
       inputs.hasTarget = new boolean[Constants.VisionObjectDetection.numberOfGamePieceTypes];
       inputs.hasTarget[GamePieceType.CORAL.id] = true;
@@ -36,6 +44,12 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
           calculateRotationFromObjectPosition(coralPosition);
     }
     inputs.latestResultTimestamp = latestTimestamp;
+
+    if (isCoralDetectedInFrame() == true) {
+      inputs.objectDetected = true;
+    } else {
+      inputs.objectDetected = false;
+    }
   }
 
   /**
@@ -47,14 +61,14 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
    * position. Roll is implicitly zero.
    */
   public Rotation3d calculateRotationFromObjectPosition(Translation2d objectPosition) {
+
     /* ---- 1.  robot & camera pose at the time the picture was taken ---- */
     Pose2d robotPose = drive.getPoseAtTimestamp(latestTimestamp);
     if (robotPose == null) { // nothing to invert
       return new Rotation3d();
     }
     Logger.recordOutput("Sim/robotPoseAtTimestamp", robotPose);
-    Pose3d cameraPose =
-        new Pose3d(robotPose).plus(Constants.VisionObjectDetection.robotCenterToCamera);
+    cameraPose = new Pose3d(robotPose).plus(Constants.VisionObjectDetection.robotCenterToCamera);
     Logger.recordOutput("Sim/cameraPose", cameraPose);
 
     /* ---- 2.  3-D ground point ------------------------------------------------ */
@@ -74,15 +88,16 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
     /* ---- 4.  pitch angle (positive = camera looks up) ------------------------ */
     double cameraZ = cameraPose.getZ();
     double coralToCameraPitch = Math.atan2(cameraZ, groundDistance); // always positive
-    double cameraLensToCoralPitch = coralToCameraPitch - cameraPose.getRotation().getY();
+    cameraLensToCoralPitch = coralToCameraPitch - cameraPose.getRotation().getY();
 
     /* ---- 5.  yaw angle (robot CCW positive) ---------------------------------- */
     double yaw = Math.atan2(dy, dx);
-    double cameraLensToCoralYaw = yaw - cameraPose.getRotation().getZ();
+    cameraLensToCoralYaw = yaw - cameraPose.getRotation().getZ();
 
     Logger.recordOutput("Sim/yaw", Units.radiansToDegrees(cameraLensToCoralYaw));
     Logger.recordOutput("Sim/pitch", Units.radiansToDegrees(cameraLensToCoralPitch));
-
+    calculationsDone = true;
+    Logger.recordOutput("Sim/calculationsdone", calculationsDone);
     /* ---- 6.  assemble Rotation3d (roll = 0) ---------------------------------- */
     // negated pitch for WPILib convention
     return new Rotation3d(0.0, cameraLensToCoralPitch, cameraLensToCoralYaw);
@@ -95,5 +110,18 @@ public class VisionObjectDetectionIOSim extends VisionObjectDetectionIO {
 
   public void noCoral() {
     coralPosition = null;
+  }
+
+  public boolean isCoralDetectedInFrame() {
+    if (calculationsDone) {
+      if ((Math.abs(cameraLensToCoralPitch) > cameraPose.getRotation().getY())
+          || (Math.abs(cameraLensToCoralYaw) > cameraPose.getRotation().getX())) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
   }
 }
