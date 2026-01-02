@@ -403,7 +403,6 @@ public class Simulator extends SubsystemBase {
         setRegressTest();
         matchTimer.reset();
       }
-      Logger.recordOutput("Sim/MatchTime", matchTimer.get());
       // ask what scenario name? and scenario delays
       // Logger.recordOutput("Sim/", nextEvent.eventName);
       // add reset methods
