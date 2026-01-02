@@ -29,9 +29,6 @@ public class Simulator extends SubsystemBase {
   private final Anomaly anomaly = Anomaly.NONE;
   private final TeleopScenario teleopScenario = TeleopScenario.LOOK_FROM_APRILTAG;
   private final Map<Integer, Double> axisValues = new HashMap<Integer, Double>();
-  private final Map<Integer, Double> POVvalues = new HashMap<Integer, Double>();
-  private double x = 0.0;
-  private double y = 0.0;
   boolean releasedbutton = true;
 
   private enum Anomaly {
@@ -326,7 +323,34 @@ public class Simulator extends SubsystemBase {
                 "Look away from AprilTag",
                 EventType.MOVE_JOYSTICK_TURN,
                 new Pose2d(-1, 1, Rotation2d.k180deg)),
-            new SimEvent(t += 0.5, "Look away from AprilTag", EventType.STOP_JOYSTICK));
+            new SimEvent(t += 0.5, "Look away from AprilTag", EventType.STOP_JOYSTICK),
+            new SimEvent(
+                t += 1.0,
+                "Press POV UP",
+                EventType.HOLD_UP_POV,
+                new Pose2d(0, -1, Rotation2d.k180deg)),
+            new SimEvent(
+                t += 1.0,
+                "Press POV DOWN",
+                EventType.HOLD_DOWN_POV,
+                new Pose2d(0, -1, Rotation2d.k180deg)),
+            new SimEvent(
+                t += 1.0,
+                "Press POV LEFT",
+                EventType.HOLD_LEFT_POV,
+                new Pose2d(0, -1, Rotation2d.k180deg)),
+            new SimEvent(
+                t += 1.0,
+                "Press POV RIGHT",
+                EventType.HOLD_RIGHT_POV,
+                new Pose2d(0, -1, Rotation2d.k180deg)),
+            new SimEvent(
+                t += 1.0,
+                "Release POV RIGHT",
+                EventType.RELEASE_POV,
+                new Pose2d(0, -1, Rotation2d.k180deg)),
+            new SimEvent(t += 0.5, "Stop moving", EventType.HOLD_LEFT_TRIGGER),
+            new SimEvent(t += 0.5, "Stop moving", EventType.HOLD_RIGHT_TRIGGER));
       default:
         return List.of();
     }
@@ -347,8 +371,6 @@ public class Simulator extends SubsystemBase {
   boolean releaseLeftTrigger;
   boolean releaseRightTrigger;
   int POVPressed;
-  boolean moveJoystick;
-  boolean start = true;
 
   private final Drive drive;
   private final EndEffectorIOSim endEffectorIOSim;
@@ -639,8 +661,9 @@ public class Simulator extends SubsystemBase {
   }
 
   private void holdPOV(POVDirection direction) {
-    releasedbutton = false;
     POVPressed = direction.value;
+    DriverStationSim.notifyNewData();
+    releasedbutton = false;
   }
 
   public void setAxis(ControllerAxis axis, double value) {
