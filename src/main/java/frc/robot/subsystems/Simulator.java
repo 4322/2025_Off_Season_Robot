@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.autonomous.AutonomousSelector;
 import frc.robot.autonomous.AutonomousSelector.AutoName;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.endEffector.EndEffectorIOSim;
@@ -30,7 +31,7 @@ public class Simulator extends SubsystemBase {
   private static List<AutoAnomaly> autoAnomalies;
   private static double t = 0.0;
   private Command autonomousCommand;
-  private RobotContainer robotContainer;
+  private AutonomousSelector autonomousSelector;
 
   private enum RegressTests {
     TEST1
@@ -195,13 +196,13 @@ public class Simulator extends SubsystemBase {
       case TEST1:
         return List.of(
             new RegressionTest(
-                AutoName.ONE_CORAL_TWO_ALGAE_CENTER,
+                AutoName.LEAVE,
                 List.of(AutoAnomaly.NONE),
                 TeleopScenario.SCORE_L4,
                 List.of(TeleAnomaly.NONE),
                 Alliance.Blue),
             new RegressionTest(
-                AutoName.ONE_CORAL_TWO_ALGAE_CENTER,
+                AutoName.DO_NOTHING,
                 List.of(AutoAnomaly.NONE),
                 TeleopScenario.SCORE_L4,
                 List.of(TeleAnomaly.NONE),
@@ -361,12 +362,8 @@ public class Simulator extends SubsystemBase {
   private List<SimEvent> teleopEvents;
   private List<SimEvent> events;
   private Iterator<SimEvent> iterator;
-  private SimEvent nextEvent =
-      new SimEvent(
-          0,
-          "",
-          EventType
-              .SET_POSE); // needs discussion, but this allows for code to run properly and does not
+  private SimEvent
+      nextEvent; // needs discussion, but this allows for code to run properly and does not
   // affect anything
   private final Timer disabledTimer = new Timer();
   private final Timer matchTimer = new Timer();
@@ -402,13 +399,13 @@ public class Simulator extends SubsystemBase {
     Logger.recordOutput("Sim/MatchTime", matchTimer.get());
     Logger.recordOutput("Sim/Alliance", Robot.alliance.toString());
     if (!regressionTestCases().isEmpty() || regressionTestIterator != null) {
-      if (regressionTestIterator.hasNext() && nextEvent == null) {
+      if (regressionTestIterator.hasNext() && nextEvent == null && t != 0.0) {
         setRegressTest();
         matchTimer.reset();
       }
       Logger.recordOutput("Sim/MatchTime", matchTimer.get());
       // ask what scenario name? and scenario delays
-      Logger.recordOutput("Sim/", nextEvent.eventName);
+      // Logger.recordOutput("Sim/", nextEvent.eventName);
       // add reset methods
 
       if (!DriverStation.isEnabled()) {
@@ -450,7 +447,12 @@ public class Simulator extends SubsystemBase {
           events = currentModeAutonomous ? autoEvents : teleopEvents;
           matchTimer.restart();
           iterator = events.iterator();
-          setEvent();
+          if (iterator.hasNext()) {
+            nextEvent = iterator.next();
+          } else {
+            nextEvent = null;
+            setEvent();
+          }
         }
       }
 
@@ -612,7 +614,12 @@ public class Simulator extends SubsystemBase {
               break;
           }
         }
-        setEvent();
+        if (iterator.hasNext()) {
+          nextEvent = iterator.next();
+        } else {
+          nextEvent = null;
+          setEvent();
+        }
       }
     }
   }
@@ -626,23 +633,18 @@ public class Simulator extends SubsystemBase {
   }
 
   private void setEvent() {
-    if (iterator.hasNext()) {
-      nextEvent = iterator.next();
+    if (teleopEvents != null && events == autoEvents) {
+      DriverStationSim.setEnabled(false);
+      DriverStationSim.resetData();
+      currentModeAutonomous = false;
+      DriverStationSim.setAutonomous(currentModeAutonomous);
+      DriverStationSim.setEnabled(true);
+      events = teleopEvents;
+      matchTimer.restart();
+      iterator = events.iterator();
+      nextEvent = iterator.hasNext() ? iterator.next() : null;
     } else {
-      nextEvent = null;
-      if (teleopEvents != null && events == autoEvents) {
-        DriverStationSim.setEnabled(false);
-        DriverStationSim.resetData();
-        currentModeAutonomous = false;
-        DriverStationSim.setAutonomous(currentModeAutonomous);
-        DriverStationSim.setEnabled(true);
-        events = teleopEvents;
-        matchTimer.restart();
-        iterator = events.iterator();
-        nextEvent = iterator.hasNext() ? iterator.next() : null;
-      } else {
-        events = null;
-      }
+      events = null;
     }
   }
 
@@ -674,11 +676,8 @@ public class Simulator extends SubsystemBase {
       DriverStationSim.setAutonomous(false);
     }
     DriverStationSim.setEnabled(true);
-    autonomousCommand = robotContainer.getAutonomousCommand();
-    if (autonomousCommand != null) {
-      autonomousCommand.schedule();
-      Logger.recordOutput("AutoName", autonomousCommand.getName());
-    }
+    // teleopEvents = buildTeleopScenario();
+    // autoEvents = buildAutoScenario();
   }
 
   private void holdButton(XboxController.Button button) {

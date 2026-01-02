@@ -362,14 +362,12 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     // needs review
-    if (Constants.currentMode != RobotMode.SIM) {
-      autonomousCommand = robotContainer.getAutonomousCommand();
+    autonomousCommand = robotContainer.getAutonomousCommand();
 
-      // schedule the autonomous command (example)
-      if (autonomousCommand != null) {
-        autonomousCommand.schedule();
-        Logger.recordOutput("AutoName", autonomousCommand.getName());
-      }
+    // schedule the autonomous command (example)
+    if (autonomousCommand != null) {
+      autonomousCommand.schedule();
+      Logger.recordOutput("AutoName", autonomousCommand.getName());
     }
   }
 
