@@ -315,42 +315,22 @@ public class Simulator extends SubsystemBase {
                 t, "Start pose", EventType.SET_POSE, new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
             new SimEvent(
                 t += 1.0,
-                "Look away from AprilTag",
+                "Drive to AprilTag",
                 EventType.MOVE_JOYSTICK_DRIVE,
                 new Pose2d(0, 1, Rotation2d.k180deg)),
+            new SimEvent(t += 0.6, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
-                t += 0.1,
+                t += 1.0,
                 "Look away from AprilTag",
                 EventType.MOVE_JOYSTICK_TURN,
-                new Pose2d(-1, 1, Rotation2d.k180deg)),
-            new SimEvent(t += 0.5, "Look away from AprilTag", EventType.STOP_JOYSTICK),
+                new Pose2d(0, 1, Rotation2d.k180deg)),
+            new SimEvent(t += 0.5, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
                 t += 1.0,
-                "Press POV UP",
-                EventType.HOLD_UP_POV,
+                "Look to April Tag",
+                EventType.MOVE_JOYSTICK_TURN,
                 new Pose2d(0, -1, Rotation2d.k180deg)),
-            new SimEvent(
-                t += 1.0,
-                "Press POV DOWN",
-                EventType.HOLD_DOWN_POV,
-                new Pose2d(0, -1, Rotation2d.k180deg)),
-            new SimEvent(
-                t += 1.0,
-                "Press POV LEFT",
-                EventType.HOLD_LEFT_POV,
-                new Pose2d(0, -1, Rotation2d.k180deg)),
-            new SimEvent(
-                t += 1.0,
-                "Press POV RIGHT",
-                EventType.HOLD_RIGHT_POV,
-                new Pose2d(0, -1, Rotation2d.k180deg)),
-            new SimEvent(
-                t += 1.0,
-                "Release POV RIGHT",
-                EventType.RELEASE_POV,
-                new Pose2d(0, -1, Rotation2d.k180deg)),
-            new SimEvent(t += 0.5, "Stop moving", EventType.HOLD_LEFT_TRIGGER),
-            new SimEvent(t += 0.5, "Stop moving", EventType.HOLD_RIGHT_TRIGGER));
+            new SimEvent(t += 0.5, "Stop", EventType.STOP_JOYSTICK));
       default:
         return List.of();
     }
@@ -372,6 +352,7 @@ public class Simulator extends SubsystemBase {
   boolean releaseRightTrigger;
   int POVPressed;
 
+
   private final Drive drive;
   private final EndEffectorIOSim endEffectorIOSim;
   private final IndexerIOSim indexerIOSim;
@@ -392,7 +373,9 @@ public class Simulator extends SubsystemBase {
   @Override
   public void periodic() {
     Logger.recordOutput("Sim/MatchTime", matchTimer.get());
+    
 
+    
     DriverStationSim.setJoystickAxisCount(hidPort, 6);
     DriverStationSim.notifyNewData();
 
@@ -462,6 +445,7 @@ public class Simulator extends SubsystemBase {
         switch (nextEvent.eventType) {
           case SET_POSE:
             drive.resetPose(nextEvent.pose);
+
             break;
           case END_EFFECTOR_NO_CORAL:
             endEffectorIOSim.simCoralReleased();
@@ -667,7 +651,7 @@ public class Simulator extends SubsystemBase {
   }
 
   public void setAxis(ControllerAxis axis, double value) {
-    axisValues.put(axis.value, value);
+    axisValues.put(axis.value, -value);
   }
 
   private void stopJoystick() {
