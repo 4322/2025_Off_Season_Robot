@@ -497,6 +497,10 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  public static Command getAutonomousCommandSim() {
+    return autonomousSelector.get();
+  }
+
   public Command getAutonomousCommand() {
     return autonomousSelector.get();
   }
