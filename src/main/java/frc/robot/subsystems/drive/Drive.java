@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.RobotMode;
 import frc.robot.constants.DrivetrainConstants;
+import frc.robot.subsystems.Simulator;
 import frc.robot.util.OdometryValues;
 import java.util.ArrayList;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -255,9 +256,9 @@ public class Drive extends SubsystemBase {
     SwerveModulePosition[] states = new SwerveModulePosition[4];
     for (int i = 0; i < 4; i++) {
       states[i] = modules[i].getPosition();
-      if (!(Constants.currentMode == RobotMode.SIM)) {
+      if (!(Constants.currentMode == RobotMode.SIM) || Simulator.wheelSlip()) {
         states[i].distanceMeters *= Constants.Drive.modulePositionScaling[i];
-      }
+      } 
     }
     return states;
   }
