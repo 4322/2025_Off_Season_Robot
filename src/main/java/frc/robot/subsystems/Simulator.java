@@ -28,7 +28,7 @@ public class Simulator extends SubsystemBase {
   private TeleopScenario teleopScenario;
   private List<TeleAnomaly> teleAnomalies;
   private List<AutoAnomaly> autoAnomalies;
-  private double t = 0.0;
+  private static double t = 0.0;
   private Command autonomousCommand;
 
   private enum RegressTests {
@@ -200,7 +200,7 @@ public class Simulator extends SubsystemBase {
                 List.of(TeleAnomaly.NONE),
                 Alliance.Blue),
             new RegressionTest(
-                AutoName.DO_NOTHING,
+                AutoName.THREE_CORAL_RIGHT,
                 List.of(AutoAnomaly.NONE),
                 TeleopScenario.SCORE_L4,
                 List.of(TeleAnomaly.NONE),
@@ -257,6 +257,7 @@ public class Simulator extends SubsystemBase {
   }
 
   private List<SimEvent> buildAutoScenario() {
+    t = 0.0;
     switch (autoScenario) {
       case ONE_CORAL_TWO_ALGAE_CENTER:
         return List.of(
@@ -331,6 +332,7 @@ public class Simulator extends SubsystemBase {
   }
 
   private List<SimEvent> buildTeleopScenario() {
+    t = 0.0;
     switch (teleopScenario) {
       case SCORE_L4:
         return List.of(
@@ -389,34 +391,79 @@ public class Simulator extends SubsystemBase {
     this.indexerIOSim = indexerIOSim;
     this.visionObjectDetectionIOSim = visionObjectDetectionIOSim;
     regressionTestIterator = regressionTestCases().iterator();
-    disabledTimer.restart();
+    // disabledTimer.reset();
+    DriverStationSim.setEnabled(false);
   }
 
   @Override
   public void periodic() {
     Logger.recordOutput("Sim/MatchTime", matchTimer.get());
     Logger.recordOutput("Sim/Alliance", Robot.alliance.toString());
-
-    if (regressionTestIterator.hasNext() && nextEvent == null && t == 0.0) {
+    if (nextEvent == null) {
+      Logger.recordOutput("Sim/Scenario", "Null");
+    } else if (DriverStation.isAutonomous() && DriverStation.isEnabled() == true) {
+      Logger.recordOutput("Sim/Scenario", "Auto");
+    } else if (!DriverStation.isAutonomous() && DriverStation.isEnabled() == true) {
+      Logger.recordOutput("Sim/Scenario", "Teleop");
+    }
+    if (!disabledTimer.hasElapsed(2)) {
+      Logger.recordOutput("Sim/RegressionTest", "False");
+    } else {
+      Logger.recordOutput("Sim/RegressionTest", "True");
+    }
+    if (autoEvents == null
+        && teleopEvents == null
+        && nextEvent == null
+        && DriverStationSim.getEnabled() == false) {
       setRegressTest();
-      if (disabledTimer.hasElapsed(2)) {
-        disabledTimer.stop();
-        if (autoScenario != null) {
-          DriverStationSim.setAutonomous(true);
-
-        } else {
-          DriverStationSim.setAutonomous(false);
+      if (nextRegressionTest != null) {
+        System.out.println("a");
+        if (disabledTimer.hasElapsed(2)) {
+          disabledTimer.stop();
+          if (autoScenario != null) {
+            if (RobotContainer.autonomousSelector != null) {
+              autonomousCommand = RobotContainer.getAutonomousCommandSim();
+              if (autonomousCommand != null) {
+                autonomousCommand.schedule();
+                Logger.recordOutput("AutoName", autonomousCommand.getName());
+              }
+            }
+          }
+          if (autoScenario != null) {
+            DriverStationSim.setAutonomous(true);
+            currentModeAutonomous = true;
+          } else {
+            DriverStationSim.setAutonomous(false);
+          }
+          DriverStationSim.setEnabled(true);
+          releaseMomentaryButtons();
+          if (releasePOV) {
+            holdPOV(POVDirection.NONE);
+            releasePOV = false;
+          }
+          if (releaseLeftTrigger) {
+            releaseTrigger(ControllerAxis.LEFT);
+            releaseLeftTrigger = false;
+          }
+          if (releaseRightTrigger) {
+            releaseTrigger(ControllerAxis.RIGHT);
+            releaseRightTrigger = false;
+          }
+          if (autoScenario != null) {
+            autoEvents = buildAutoScenario();
+          }
+          if (teleopScenario != null) {
+            teleopEvents = buildTeleopScenario();
+          }
+        } else if (!disabledTimer.isRunning()) {
+          disabledTimer.restart();
         }
-        DriverStationSim.setEnabled(true);
-        // teleopEvents = buildTeleopScenario();
-        // autoEvents = buildAutoScenario();
-        System.out.println("e");
-      } else if (!disabledTimer.isRunning()) {
-        disabledTimer.restart();
+        events = null;
+        nextEvent = null;
       }
-      events = null;
-      nextEvent = null;
-      if (DriverStation.isEnabled()) {
+    }
+    if (disabledTimer.hasElapsed(2) && DriverStation.isEnabled() == true) {
+      if (DriverStation.isEnabled() == true) {
         // can only release buttons when enabled
         releaseMomentaryButtons();
         if (releasePOV) {
@@ -432,42 +479,47 @@ public class Simulator extends SubsystemBase {
           releaseRightTrigger = false;
         }
       }
-      if (disabledTimer.hasElapsed(2) && nextRegressionTest != null) {
-        if (nextRegressionTest.autoScenario != null) {
-          autoScenario = nextRegressionTest.autoScenario;
-
-          if (RobotContainer.autonomousSelector != null) {
-            autonomousCommand = RobotContainer.getAutonomousCommandSim();
-            if (autonomousCommand != null) {
-              autonomousCommand.schedule();
-              Logger.recordOutput("AutoName", autonomousCommand.getName());
-            }
-            System.out.println("a");
+      if (DriverStation.isAutonomous() && autoEvents != null) {
+        if (nextEvent == null && events == null) {
+          autoEvents = buildAutoScenario();
+          events = autoEvents;
+          matchTimer.restart();
+          iterator = events.iterator();
+          if (iterator.hasNext()) {
+            nextEvent = iterator.next();
+          } else {
+            nextEvent = null;
           }
+        }
+        if (nextEvent == null && teleopEvents != null) {
+          disabledTimer.start();
+          matchTimer.stop();
           matchTimer.reset();
         }
-      }
-    }
-    if (disabledTimer.hasElapsed(2) && nextRegressionTest != null) {
-      if (events == null) {
-        autoEvents = buildAutoScenario();
-        teleopEvents = buildTeleopScenario();
-      }
-      if (events == null || DriverStation.isAutonomous() != currentModeAutonomous) {
-        currentModeAutonomous = DriverStation.isAutonomous();
-        events = currentModeAutonomous ? autoEvents : teleopEvents;
-        t = 0.0;
-        matchTimer.restart();
-        iterator = events.iterator();
-        if (iterator.hasNext()) {
-          nextEvent = iterator.next();
-        } else {
-          nextEvent = null;
+        if (disabledTimer.isRunning()) {
+          System.out.println(disabledTimer.get());
+        }
+        if (disabledTimer.hasElapsed(4)) {
+          disabledTimer.stop();
+          setEvent();
+        } else if (nextEvent == null && teleopScenario == null) {
           setEvent();
         }
       }
-      Logger.recordOutput("Sim/MatchTime", matchTimer.get());
-
+      if (!DriverStation.isAutonomous() && teleopEvents != null && events == null) {
+        if (events == null) {
+          teleopEvents = buildTeleopScenario();
+          events = teleopEvents;
+          matchTimer.restart();
+          iterator = events.iterator();
+          if (iterator.hasNext()) {
+            nextEvent = iterator.next();
+          } else {
+            nextEvent = null;
+            setEvent();
+          }
+        }
+      }
       while (nextEvent != null && matchTimer.get() >= nextEvent.eventTime) {
         if (nextEvent.eventStatus == EventStatus.ACTIVE) {
           Logger.recordOutput("Sim/EventName", nextEvent.eventName);
@@ -630,7 +682,9 @@ public class Simulator extends SubsystemBase {
           nextEvent = iterator.next();
         } else {
           nextEvent = null;
-          setEvent();
+          if (events == teleopEvents) {
+            setEvent();
+          }
         }
       }
     }
@@ -646,23 +700,31 @@ public class Simulator extends SubsystemBase {
 
   private void setEvent() {
     t = 0.0;
+    matchTimer.stop();
+    matchTimer.reset();
     if (teleopEvents != null && (events == autoEvents) && autoEvents != null) {
       DriverStationSim.setEnabled(false);
-      DriverStationSim.resetData();
-      currentModeAutonomous = false;
-      DriverStationSim.setAutonomous(currentModeAutonomous);
+      // DriverStationSim.resetData();
+      DriverStationSim.setAutonomous(false);
       DriverStationSim.setEnabled(true);
-      events = teleopEvents;
-      matchTimer.restart();
-      iterator = events.iterator();
-      nextEvent = iterator.hasNext() ? iterator.next() : null;
     } else {
-      events = null;
+      disabledTimer.reset();
+      DriverStationSim.setEnabled(false);
+      // DriverStationSim.resetData();
     }
+    if (autoEvents != null) {
+      autoEvents = null;
+    } else if (teleopEvents != null) {
+      teleopEvents = null;
+    }
+    events = null;
   }
 
   private void setRegressTest() {
     if (!disabledTimer.isRunning()) {
+      t = 0.0;
+      autoEvents = null;
+      teleopEvents = null;
       nextRegressionTest = regressionTestIterator.next();
       autoScenario = nextRegressionTest.autoScenario;
       autoAnomalies = nextRegressionTest.autoAnomalies;
