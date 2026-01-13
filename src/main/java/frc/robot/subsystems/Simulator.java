@@ -30,8 +30,7 @@ public class Simulator extends SubsystemBase {
   private final TeleopScenario teleopScenario = TeleopScenario.LOOK_FROM_APRILTAG;
   private final Map<Integer, Double> axisValues = new HashMap<Integer, Double>();
   boolean releasedbutton = true;
-  public boolean slipwheel = false;
-
+  public static boolean slipwheel = false;
 
   private enum Anomaly {
     NONE,
@@ -315,9 +314,12 @@ public class Simulator extends SubsystemBase {
             new SimEvent(t += 0.1, "Score complete", EventType.RELEASE_B));
       case LOOK_FROM_APRILTAG:
         return List.of(
-          new SimEvent(t, "Enable wheel slip", EventType.ENABLE_WHEEL_SLIP),
+            new SimEvent(t, "Enable wheel slip", EventType.ENABLE_WHEEL_SLIP),
             new SimEvent(
-                t += 1.0, "Start pose", EventType.SET_POSE, new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
+                t += 1.0,
+                "Start pose",
+                EventType.SET_POSE,
+                new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
             new SimEvent(
                 t += 2.0,
                 "Drive to AprilTag",
@@ -336,7 +338,7 @@ public class Simulator extends SubsystemBase {
                 EventType.MOVE_JOYSTICK_DRIVE,
                 new Pose2d(0, -0.5, Rotation2d.k180deg)),
             new SimEvent(t += 0.5, "Stop", EventType.STOP_JOYSTICK),
-          new SimEvent(t, "Disable wheel slip", EventType.DISABLE_WHEEL_SLIP));
+            new SimEvent(t, "Disable wheel slip", EventType.DISABLE_WHEEL_SLIP));
       default:
         return List.of();
     }
@@ -357,7 +359,6 @@ public class Simulator extends SubsystemBase {
   boolean releaseLeftTrigger;
   boolean releaseRightTrigger;
   int POVPressed;
-
 
   private final Drive drive;
   private final EndEffectorIOSim endEffectorIOSim;
@@ -611,12 +612,12 @@ public class Simulator extends SubsystemBase {
           case STOP_JOYSTICK:
             stopJoystick();
             break;
-          case ENABLE_WHEEL_SLIP: 
-          slipwheel = true;
-          break;
-          case DISABLE_WHEEL_SLIP: 
-          slipwheel = false;
-          break;
+          case ENABLE_WHEEL_SLIP:
+            slipwheel = true;
+            break;
+          case DISABLE_WHEEL_SLIP:
+            slipwheel = false;
+            break;
         }
       }
       if (iterator.hasNext()) {
@@ -701,7 +702,7 @@ public class Simulator extends SubsystemBase {
     DriverStationSim.notifyNewData();
   }
 
- public static boolean wheelSlip() {
-   return slipwheel;
+  public static boolean wheelSlip() {
+    return slipwheel;
   }
 }

@@ -258,7 +258,7 @@ public class Drive extends SubsystemBase {
       states[i] = modules[i].getPosition();
       if (!(Constants.currentMode == RobotMode.SIM) || Simulator.wheelSlip()) {
         states[i].distanceMeters *= Constants.Drive.modulePositionScaling[i];
-      } 
+      }
     }
     return states;
   }
