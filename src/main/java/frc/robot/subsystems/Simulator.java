@@ -312,6 +312,7 @@ public class Simulator extends SubsystemBase {
                 EventType.SET_POSE,
                 new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
             new SimEvent(t += 0.1, "Score complete", EventType.RELEASE_B));
+
       case LOOK_FROM_APRILTAG:
         return List.of(
             new SimEvent(t, "Enable wheel slip", EventType.ENABLE_WHEEL_SLIP),
@@ -319,13 +320,13 @@ public class Simulator extends SubsystemBase {
                 t += 1.0,
                 "Start pose",
                 EventType.SET_POSE,
-                new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
+                new Pose2d(15.0, 4, Rotation2d.k180deg)),
             new SimEvent(
                 t += 2.0,
                 "Drive to AprilTag",
                 EventType.MOVE_JOYSTICK_DRIVE,
                 new Pose2d(0, 0.5, Rotation2d.k180deg)),
-            new SimEvent(t += 0.6, "Stop", EventType.STOP_JOYSTICK),
+            new SimEvent(t += 2, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
                 t += 2.0,
                 "Look away from AprilTag",
@@ -337,7 +338,7 @@ public class Simulator extends SubsystemBase {
                 "Look to April Tag",
                 EventType.MOVE_JOYSTICK_DRIVE,
                 new Pose2d(0, -0.5, Rotation2d.k180deg)),
-            new SimEvent(t += 0.5, "Stop", EventType.STOP_JOYSTICK),
+            new SimEvent(t += 2.5, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(t, "Disable wheel slip", EventType.DISABLE_WHEEL_SLIP));
       default:
         return List.of();
