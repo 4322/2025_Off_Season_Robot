@@ -329,16 +329,34 @@ public class Simulator extends SubsystemBase {
             new SimEvent(t += 2, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
                 t += 2.0,
+                "Look to April Tag",
+                EventType.MOVE_JOYSTICK_DRIVE,
+                new Pose2d(0, -0.5, Rotation2d.k180deg)),
+            new SimEvent(t += 2.5, "Stop", EventType.STOP_JOYSTICK),
+            new SimEvent(
+                t += 2.0,
                 "Look away from AprilTag",
                 EventType.MOVE_JOYSTICK_TURN,
+                new Pose2d(0, -1, Rotation2d.k180deg)),
+            new SimEvent(t += .5, "Stop", EventType.STOP_JOYSTICK),
+            new SimEvent(
+                t += 2.0,
+                "Drive to AprilTag",
+                EventType.MOVE_JOYSTICK_DRIVE,
                 new Pose2d(0, 0.5, Rotation2d.k180deg)),
-            new SimEvent(t += 0.5, "Stop", EventType.STOP_JOYSTICK),
+            new SimEvent(t += 2, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
                 t += 2.0,
                 "Look to April Tag",
                 EventType.MOVE_JOYSTICK_DRIVE,
                 new Pose2d(0, -0.5, Rotation2d.k180deg)),
             new SimEvent(t += 2.5, "Stop", EventType.STOP_JOYSTICK),
+            new SimEvent(
+                t += 2.0,
+                "Look away from AprilTag",
+                EventType.MOVE_JOYSTICK_TURN,
+                new Pose2d(0, 1, Rotation2d.k180deg)),
+            new SimEvent(t += .5, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(t, "Disable wheel slip", EventType.DISABLE_WHEEL_SLIP));
       default:
         return List.of();
