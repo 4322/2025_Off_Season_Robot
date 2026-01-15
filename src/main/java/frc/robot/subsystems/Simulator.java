@@ -314,6 +314,8 @@ public class Simulator extends SubsystemBase {
             new SimEvent(t += 0.1, "Score complete", EventType.RELEASE_B));
 
       case LOOK_FROM_APRILTAG:
+
+      //TODO: Rename the events to be more appropriate for scenario
         return List.of(
             new SimEvent(t, "Enable wheel slip", EventType.ENABLE_WHEEL_SLIP),
             new SimEvent(
