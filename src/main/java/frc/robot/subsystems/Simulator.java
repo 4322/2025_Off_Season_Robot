@@ -315,7 +315,7 @@ public class Simulator extends SubsystemBase {
 
       case LOOK_FROM_APRILTAG:
 
-      //TODO: Rename the events to be more appropriate for scenario
+        // TODO: Rename the events to be more appropriate for scenario
         return List.of(
             new SimEvent(t, "Enable wheel slip", EventType.ENABLE_WHEEL_SLIP),
             new SimEvent(
@@ -328,37 +328,49 @@ public class Simulator extends SubsystemBase {
                 "Drive Away from still looking at",
                 EventType.MOVE_JOYSTICK_DRIVE,
                 new Pose2d(0, 0.5, Rotation2d.k180deg)),
-            new SimEvent(t += 2, "Stop", EventType.STOP_JOYSTICK),
+            new SimEvent(t += 4, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
                 t += 2.0,
                 "Drive back to apriltag and still looking at",
                 EventType.MOVE_JOYSTICK_DRIVE,
                 new Pose2d(0, -0.5, Rotation2d.k180deg)),
-            new SimEvent(t += 2.5, "Stop", EventType.STOP_JOYSTICK),
+            new SimEvent(t += 8, "Stop", EventType.STOP_JOYSTICK),
+            new SimEvent(
+                t += 2.0,
+                "Drive Away from still looking at",
+                EventType.MOVE_JOYSTICK_DRIVE,
+                new Pose2d(0, 0.5, Rotation2d.k180deg)),
+            new SimEvent(t += 4, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
                 t += 2.0,
                 "Turn away from AprilTag",
                 EventType.MOVE_JOYSTICK_TURN,
-                new Pose2d(0, -1, Rotation2d.k180deg)),
-            new SimEvent(t += .5, "Stop", EventType.STOP_JOYSTICK),
+                new Pose2d(0, 0.5, Rotation2d.k180deg)),
+            new SimEvent(t += 1.5, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
                 t += 2.0,
                 "Drive to AprilTag Looking away",
                 EventType.MOVE_JOYSTICK_DRIVE,
                 new Pose2d(0, 0.5, Rotation2d.k180deg)),
-            new SimEvent(t += 2, "Stop", EventType.STOP_JOYSTICK),
+            new SimEvent(t += 4, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
                 t += 2.0,
                 "Go back other way not looking at april tag",
                 EventType.MOVE_JOYSTICK_DRIVE,
                 new Pose2d(0, -0.5, Rotation2d.k180deg)),
-            new SimEvent(t += 2.5, "Stop", EventType.STOP_JOYSTICK),
+            new SimEvent(t += 8, "Stop", EventType.STOP_JOYSTICK),
+            new SimEvent(
+              t += 2.0,
+              "Drive Away from still looking at",
+              EventType.MOVE_JOYSTICK_DRIVE,
+              new Pose2d(0, 0.5, Rotation2d.k180deg)),
+          new SimEvent(t += 4, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
                 t += 2.0,
-                "Look away from AprilTag",
+                "Turn away from AprilTag",
                 EventType.MOVE_JOYSTICK_TURN,
-                new Pose2d(0, 1, Rotation2d.k180deg)),
-            new SimEvent(t += .5, "Stop", EventType.STOP_JOYSTICK),
+                new Pose2d(0, -0.5, Rotation2d.k180deg)),
+            new SimEvent(t += 1.5, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(t, "Disable wheel slip", EventType.DISABLE_WHEEL_SLIP));
       default:
         return List.of();
