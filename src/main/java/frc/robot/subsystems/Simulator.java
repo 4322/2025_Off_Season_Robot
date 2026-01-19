@@ -27,7 +27,7 @@ public class Simulator extends SubsystemBase {
 
   public static final AutoName simulatedAuto = AutoName.THREE_CORAL_RIGHT;
   private final Anomaly anomaly = Anomaly.NONE;
-  private final TeleopScenario teleopScenario = TeleopScenario.LOOK_FROM_APRILTAG;
+  private final TeleopScenario teleopScenario = TeleopScenario.LOOK_FROM_APRILTAG_RED_SIDE;
   private final Map<Integer, Double> axisValues = new HashMap<Integer, Double>();
   boolean releasedbutton = true;
   public static boolean slipwheel = false;
@@ -44,7 +44,7 @@ public class Simulator extends SubsystemBase {
   private enum TeleopScenario {
     NONE,
     SCORE_L4,
-    LOOK_FROM_APRILTAG
+    LOOK_FROM_APRILTAG_RED_SIDE
   }
 
   private enum EventType {
@@ -313,16 +313,13 @@ public class Simulator extends SubsystemBase {
                 new Pose2d(15.0, 2.0, Rotation2d.k180deg)),
             new SimEvent(t += 0.1, "Score complete", EventType.RELEASE_B));
 
-      case LOOK_FROM_APRILTAG:
+      case LOOK_FROM_APRILTAG_RED_SIDE:
 
         // TODO: Rename the events to be more appropriate for scenario
         return List.of(
             new SimEvent(t, "Enable wheel slip", EventType.ENABLE_WHEEL_SLIP),
             new SimEvent(
-                t += 1.0,
-                "Start pose",
-                EventType.SET_POSE,
-                new Pose2d(15.0, 4, Rotation2d.k180deg)),
+                t += 1.0, "Start pose", EventType.SET_POSE, new Pose2d(17, 4, Rotation2d.k180deg)),
             new SimEvent(
                 t += 2.0,
                 "Drive Away from still looking at",
@@ -360,11 +357,11 @@ public class Simulator extends SubsystemBase {
                 new Pose2d(0, -0.5, Rotation2d.k180deg)),
             new SimEvent(t += 8, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
-              t += 2.0,
-              "Drive Away from still looking at",
-              EventType.MOVE_JOYSTICK_DRIVE,
-              new Pose2d(0, 0.5, Rotation2d.k180deg)),
-          new SimEvent(t += 4, "Stop", EventType.STOP_JOYSTICK),
+                t += 2.0,
+                "Drive Away from still looking at",
+                EventType.MOVE_JOYSTICK_DRIVE,
+                new Pose2d(0, 0.5, Rotation2d.k180deg)),
+            new SimEvent(t += 4, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
                 t += 2.0,
                 "Turn away from AprilTag",
