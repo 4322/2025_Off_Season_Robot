@@ -324,19 +324,7 @@ public class Simulator extends SubsystemBase {
                 t += 2.0,
                 "Drive Away from still looking at",
                 EventType.MOVE_JOYSTICK_DRIVE,
-                new Pose2d(0, 0.5, Rotation2d.k180deg)),
-            new SimEvent(t += 4, "Stop", EventType.STOP_JOYSTICK),
-            new SimEvent(
-                t += 2.0,
-                "Drive back to apriltag and still looking at",
-                EventType.MOVE_JOYSTICK_DRIVE,
-                new Pose2d(0, -0.5, Rotation2d.k180deg)),
-            new SimEvent(t += 8, "Stop", EventType.STOP_JOYSTICK),
-            new SimEvent(
-                t += 2.0,
-                "Drive Away from still looking at",
-                EventType.MOVE_JOYSTICK_DRIVE,
-                new Pose2d(0, 0.5, Rotation2d.k180deg)),
+                new Pose2d(-0.5, 0, Rotation2d.k180deg)),
             new SimEvent(t += 4, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
                 t += 2.0,
@@ -348,19 +336,7 @@ public class Simulator extends SubsystemBase {
                 t += 2.0,
                 "Drive to AprilTag Looking away",
                 EventType.MOVE_JOYSTICK_DRIVE,
-                new Pose2d(0, 0.5, Rotation2d.k180deg)),
-            new SimEvent(t += 4, "Stop", EventType.STOP_JOYSTICK),
-            new SimEvent(
-                t += 2.0,
-                "Go back other way not looking at april tag",
-                EventType.MOVE_JOYSTICK_DRIVE,
-                new Pose2d(0, -0.5, Rotation2d.k180deg)),
-            new SimEvent(t += 8, "Stop", EventType.STOP_JOYSTICK),
-            new SimEvent(
-                t += 2.0,
-                "Drive Away from still looking at",
-                EventType.MOVE_JOYSTICK_DRIVE,
-                new Pose2d(0, 0.5, Rotation2d.k180deg)),
+                new Pose2d(0.5, 0, Rotation2d.k180deg)),
             new SimEvent(t += 4, "Stop", EventType.STOP_JOYSTICK),
             new SimEvent(
                 t += 2.0,
@@ -368,7 +344,7 @@ public class Simulator extends SubsystemBase {
                 EventType.MOVE_JOYSTICK_TURN,
                 new Pose2d(0, -0.5, Rotation2d.k180deg)),
             new SimEvent(t += 1.5, "Stop", EventType.STOP_JOYSTICK),
-            new SimEvent(t, "Disable wheel slip", EventType.DISABLE_WHEEL_SLIP));
+            new SimEvent(t += 4, "Disable wheel slip", EventType.DISABLE_WHEEL_SLIP));
       default:
         return List.of();
     }
