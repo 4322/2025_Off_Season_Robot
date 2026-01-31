@@ -16,6 +16,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.objectDetection.VisionObjectDetection;
 import frc.robot.util.OrangeSequentialCommandGroup;
 import java.util.List;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class AutonomousSelector {
@@ -83,11 +84,12 @@ public class AutonomousSelector {
   public OrangeSequentialCommandGroup get() {
     if (Constants.currentMode == RobotMode.SIM) {
       for (Auto nextAuto : autos) {
-        if (nextAuto.name == Simulator.simulatedAuto) {
+        if (nextAuto.name == Simulator.getAutoScenario()) {
+          Logger.recordOutput("AutoName", Simulator.getAutoScenario());
           return nextAuto.command;
         }
       }
-      System.out.println("Simulated auto " + Simulator.simulatedAuto + " not found");
+      System.out.println("Simulated auto " + Simulator.getAutoScenario() + " not found");
       System.exit(1);
     }
     return autonomousSelector.get();
