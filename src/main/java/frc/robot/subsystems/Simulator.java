@@ -23,7 +23,7 @@ import java.util.Map;
 import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
-  private static final RegressTests regressTest = RegressTests.DOUBLE_DOUBLE;
+  private static final RegressTests regressTest = RegressTests.APRIL_TAG_TEST;
   public static AutoName autoScenario;
   private TeleopScenario teleopScenario;
   private List<TeleAnomaly> teleAnomalies;
@@ -36,7 +36,8 @@ public class Simulator extends SubsystemBase {
   private enum RegressTests {
     DOUBLE_DOUBLE,
     DOUBLE_AUTO,
-    DOUBLE_TELEOP
+    DOUBLE_TELEOP,
+    APRIL_TAG_TEST
   }
 
   private enum TeleAnomaly {
@@ -234,6 +235,8 @@ public class Simulator extends SubsystemBase {
           new RegressionTest("Test 1", TeleopScenario.SCORE_L4, Alliance.Blue),
           new RegressionTest(
               "Test 2", TeleopScenario.SCORE_L4, List.of(TeleAnomaly.NONE), Alliance.Red));
+      case APRIL_TAG_TEST -> List.of(
+          new RegressionTest("Test 1", TeleopScenario.LOOK_FROM_APRILTAG_RED_SIDE, Alliance.Blue));
       default -> List.of();
     };
   }
@@ -387,7 +390,7 @@ public class Simulator extends SubsystemBase {
           new SimEvent(t += 0.1, "Release score trigger", EventType.RELEASE_RIGHT_TRIGGER),
           new SimEvent(t += 0.1, "Score complete", EventType.RELEASE_B),
           new SimEvent(t += 3.0, "Final Movement", EventType.END_OF_SCENARIO));
-          
+
       case LOOK_FROM_APRILTAG_RED_SIDE -> List.of(
           new SimEvent(t, "Enable wheel slip", EventType.ENABLE_WHEEL_SLIP),
           new SimEvent(
@@ -618,6 +621,8 @@ public class Simulator extends SubsystemBase {
     } else {
       DriverStationSim.setAllianceStationId(AllianceStationID.Blue2);
     }
+    // change from disconnected to disabled so alliance color can update
+    DriverStationSim.notifyNewData();
     if (events == autoEvents) {
       currentScenario = autoScenario.toString();
     } else {
