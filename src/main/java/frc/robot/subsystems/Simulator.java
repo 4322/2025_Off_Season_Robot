@@ -23,7 +23,7 @@ import java.util.Map;
 import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
-  private static final RegressTests regressTest = RegressTests.APRIL_TAG_TEST;
+  private static final RegressTests regressTest = RegressTests.BUTTON_TEST;
   public static AutoName autoScenario;
   private TeleopScenario teleopScenario;
   private List<TeleAnomaly> teleAnomalies;
@@ -37,7 +37,8 @@ public class Simulator extends SubsystemBase {
     DOUBLE_DOUBLE,
     DOUBLE_AUTO,
     DOUBLE_TELEOP,
-    APRIL_TAG_TEST
+    APRIL_TAG_TEST,
+    BUTTON_TEST
   }
 
   private enum TeleAnomaly {
@@ -60,7 +61,9 @@ public class Simulator extends SubsystemBase {
   private enum TeleopScenario {
     NONE,
     SCORE_L4,
-    LOOK_FROM_APRILTAG_RED_SIDE
+    LOOK_FROM_APRILTAG_RED_SIDE,
+    BUTTON_TEST1,
+    BUTTON_TEST2
   }
 
   private enum EventType {
@@ -227,16 +230,24 @@ public class Simulator extends SubsystemBase {
               Alliance.Blue),
           new RegressionTest(
               "Test 2", AutoName.THREE_CORAL_RIGHT, TeleopScenario.SCORE_L4, Alliance.Blue));
+
       case DOUBLE_AUTO -> List.of(
           new RegressionTest("Test 1", AutoName.ONE_CORAL_TWO_ALGAE_CENTER, Alliance.Blue),
           new RegressionTest(
               "Test 2", AutoName.THREE_CORAL_RIGHT, List.of(AutoAnomaly.NONE), Alliance.Red));
+
       case DOUBLE_TELEOP -> List.of(
           new RegressionTest("Test 1", TeleopScenario.SCORE_L4, Alliance.Blue),
           new RegressionTest(
               "Test 2", TeleopScenario.SCORE_L4, List.of(TeleAnomaly.NONE), Alliance.Red));
+
       case APRIL_TAG_TEST -> List.of(
           new RegressionTest("Test 1", TeleopScenario.LOOK_FROM_APRILTAG_RED_SIDE, Alliance.Blue));
+
+      case BUTTON_TEST -> List.of(
+          new RegressionTest("Button Test 1", TeleopScenario.BUTTON_TEST1, Alliance.Blue),
+          new RegressionTest("Button Test 2", TeleopScenario.BUTTON_TEST2, Alliance.Blue));
+
       default -> List.of();
     };
   }
@@ -420,6 +431,37 @@ public class Simulator extends SubsystemBase {
               new Pose2d(0, -0.5, Rotation2d.k180deg)),
           new SimEvent(t += 1.5, "Stop", EventType.STOP_JOYSTICK),
           new SimEvent(t += 4, "Disable wheel slip", EventType.DISABLE_WHEEL_SLIP));
+
+      case BUTTON_TEST1 -> List.of(
+          new SimEvent(t += 1.0, "Event 1", EventType.PRESS_LEFT_POV),
+          new SimEvent(t += 1.0, "Event 2", EventType.PRESS_LEFT_TRIGGER),
+          new SimEvent(t += 1.0, "Event 3", EventType.PRESS_RIGHT_TRIGGER),
+          new SimEvent(t += 1.0, "Event 4", EventType.PRESS_LEFT_BUMPER),
+          new SimEvent(t += 1.0, "Event 5", EventType.PRESS_RIGHT_BUMPER),
+          new SimEvent(t += 1.0, "Event 6", EventType.HOLD_LEFT_POV),
+          new SimEvent(t += 1.0, "Event 7", EventType.HOLD_LEFT_TRIGGER),
+          new SimEvent(t += 1.0, "Event 8", EventType.HOLD_RIGHT_TRIGGER),
+          new SimEvent(t += 1.0, "Event 9", EventType.HOLD_LEFT_BUMPER),
+          new SimEvent(t += 1.0, "Event 10", EventType.HOLD_RIGHT_BUMPER),
+          new SimEvent(t += 1.0, "Event 11", EventType.RELEASE_POV),
+          new SimEvent(t += 1.0, "Event 12", EventType.RELEASE_LEFT_TRIGGER),
+          new SimEvent(t += 1.0, "Event 13", EventType.RELEASE_RIGHT_TRIGGER),
+          new SimEvent(t += 1.0, "Event 14", EventType.RELEASE_LEFT_BUMPER),
+          new SimEvent(t += 1.0, "Event 15", EventType.RELEASE_RIGHT_BUMPER),
+          new SimEvent(t += 1.0, "Event 16", EventType.HOLD_LEFT_POV),
+          new SimEvent(t += 1.0, "Event 17", EventType.HOLD_LEFT_TRIGGER),
+          new SimEvent(t += 1.0, "Event 18", EventType.HOLD_RIGHT_TRIGGER),
+          new SimEvent(t += 1.0, "Event 19", EventType.HOLD_LEFT_BUMPER),
+          new SimEvent(t += 1.0, "Event 20", EventType.HOLD_RIGHT_BUMPER));
+
+      case BUTTON_TEST2 -> List.of(
+          // check that controls were released from BUTTON_TEST1 when switching to this scenario
+          new SimEvent(t += 1.0, "Event 1", EventType.PRESS_LEFT_POV),
+          new SimEvent(t += 1.0, "Event 2", EventType.PRESS_LEFT_TRIGGER),
+          new SimEvent(t += 1.0, "Event 3", EventType.PRESS_RIGHT_TRIGGER),
+          new SimEvent(t += 1.0, "Event 4", EventType.PRESS_LEFT_BUMPER),
+          new SimEvent(t += 1.0, "Event 5", EventType.PRESS_RIGHT_BUMPER));
+
       default -> List.of();
     };
   }
