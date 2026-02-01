@@ -411,25 +411,25 @@ public class Simulator extends SubsystemBase {
               t += 2.0,
               "Drive Away from still looking at",
               EventType.MOVE_JOYSTICK_DRIVE,
-              new Pose2d(-0.5, 0, Rotation2d.k180deg)),
+              new Pose2d(-0.5, 0, Rotation2d.kZero)),
           new SimEvent(t += 4, "Stop", EventType.STOP_JOYSTICK),
           new SimEvent(
               t += 2.0,
               "Turn away from AprilTag",
               EventType.MOVE_JOYSTICK_TURN,
-              new Pose2d(0, 0.5, Rotation2d.k180deg)),
+              new Pose2d(0, 0.5, Rotation2d.kZero)),
           new SimEvent(t += 1.5, "Stop", EventType.STOP_JOYSTICK),
           new SimEvent(
               t += 2.0,
               "Drive to AprilTag Looking away",
               EventType.MOVE_JOYSTICK_DRIVE,
-              new Pose2d(0.5, 0, Rotation2d.k180deg)),
+              new Pose2d(0.5, 0, Rotation2d.kZero)),
           new SimEvent(t += 4, "Stop", EventType.STOP_JOYSTICK),
           new SimEvent(
               t += 2.0,
               "Turn away from AprilTag",
               EventType.MOVE_JOYSTICK_TURN,
-              new Pose2d(0, -0.5, Rotation2d.k180deg)),
+              new Pose2d(0, -0.5, Rotation2d.kZero)),
           new SimEvent(t += 1.5, "Stop", EventType.STOP_JOYSTICK),
           new SimEvent(t += 4, "Disable wheel slip", EventType.DISABLE_WHEEL_SLIP));
 
@@ -471,12 +471,14 @@ public class Simulator extends SubsystemBase {
               t += 1.0,
               "Event " + eventNum++,
               EventType.MOVE_JOYSTICK_DRIVE,
-              new Pose2d(-0.5, 0.5, Rotation2d.k180deg)),
+              new Pose2d(-0.5, 0.5, Rotation2d.kZero)),
+          // Turn X isn't used, setting it here to test controller data reset
           new SimEvent(
               t += 1.0,
               "Event " + eventNum++,
               EventType.MOVE_JOYSTICK_TURN,
-              new Pose2d(0, -0.5, Rotation2d.k180deg)));
+              new Pose2d(1, -0.5, Rotation2d.kZero)),
+          new SimEvent(t += 1.0, "Final Movement", EventType.END_OF_SCENARIO));
 
       case CONTROLLER_TEST2 -> List.of(
           // check that controls were released from CONTROLLER_TEST1 when switching to this scenario
@@ -489,12 +491,13 @@ public class Simulator extends SubsystemBase {
               t += 1.0,
               "Event " + eventNum++,
               EventType.MOVE_JOYSTICK_DRIVE,
-              new Pose2d(-0.5, 0, Rotation2d.k180deg)),
+              new Pose2d(-0.5, 0, Rotation2d.kZero)),
           new SimEvent(
               t += 1.0,
               "Event " + eventNum++,
               EventType.MOVE_JOYSTICK_TURN,
-              new Pose2d(-0.5, 0, Rotation2d.k180deg)));
+              new Pose2d(0, -0.5, Rotation2d.kZero)),
+          new SimEvent(t += 1.0, "Final Movement", EventType.END_OF_SCENARIO));
 
       default -> List.of();
     };
@@ -666,20 +669,25 @@ public class Simulator extends SubsystemBase {
   }
 
   private void resetScenario() {
-    DriverStationSim.resetData(); // goes to disconnected state
     DriverStationSim.setEnabled(false);
-    DriverStationSim.setAutonomous(events == autoEvents);
-    eventIterator = events.iterator();
+    disabledTimer.start();
+    Logger.recordOutput("Sim/RegressionTest", "Disabled");
+    Logger.recordOutput("Sim/Scenario", "Disabled");
+    Logger.recordOutput("Sim/EventName", "Disabled");
+    Logger.recordOutput("Sim/EventType", "Disabled");
 
     // reset all controls
+    // don't call DriverStationSim.resetData() because it creates race conditions
     holdPOV(POVDirection.NONE);
     releaseTrigger(ControllerAxis.LEFT_TRIGGER);
     releaseTrigger(ControllerAxis.RIGHT_TRIGGER);
     stopJoystick();
-    disabledTimer.start();
     activeButtonBitmask = 0;
     momentaryButtonBitmask = 0;
     DriverStationSim.setJoystickButtons(hidPort, 0);
+
+    DriverStationSim.setAutonomous(events == autoEvents);
+    eventIterator = events.iterator();
 
     if (currentAlliance == Alliance.Red) {
       DriverStationSim.setAllianceStationId(AllianceStationID.Red2);
@@ -702,6 +710,7 @@ public class Simulator extends SubsystemBase {
       DriverStationSim.setEnabled(false); // exit cleanly
       System.exit(0);
     }
+    DriverStationSim.setEnabled(false);
     currentRegressionTest = regressionTestIterator.next();
     autoScenario = currentRegressionTest.autoScenario;
     autoAnomalies = currentRegressionTest.autoAnomalies;
@@ -715,6 +724,7 @@ public class Simulator extends SubsystemBase {
     } else {
       events = teleopEvents;
     }
+    drive.resetPose(new Pose2d(0, 0, new Rotation2d()));
     resetScenario();
   }
 
