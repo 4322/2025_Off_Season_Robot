@@ -23,14 +23,13 @@ import java.util.Map;
 import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
-  private static final RegressTests regressTest = RegressTests.BUTTON_TEST;
+  private static final RegressTests regressTest = RegressTests.CONTROLLER_TEST;
   public static AutoName autoScenario;
   private TeleopScenario teleopScenario;
   private List<TeleAnomaly> teleAnomalies;
   private List<AutoAnomaly> autoAnomalies;
   private String currentScenario;
   private final Map<Integer, Double> axisValues = new HashMap<Integer, Double>();
-  boolean releasedbutton = true;
   public static boolean slipwheel = false;
 
   private enum RegressTests {
@@ -38,7 +37,7 @@ public class Simulator extends SubsystemBase {
     DOUBLE_AUTO,
     DOUBLE_TELEOP,
     APRIL_TAG_TEST,
-    BUTTON_TEST
+    CONTROLLER_TEST
   }
 
   private enum TeleAnomaly {
@@ -62,8 +61,8 @@ public class Simulator extends SubsystemBase {
     NONE,
     SCORE_L4,
     LOOK_FROM_APRILTAG_RED_SIDE,
-    BUTTON_TEST1,
-    BUTTON_TEST2
+    CONTROLLER_TEST1,
+    CONTROLLER_TEST2
   }
 
   private enum EventType {
@@ -244,9 +243,9 @@ public class Simulator extends SubsystemBase {
       case APRIL_TAG_TEST -> List.of(
           new RegressionTest("Test 1", TeleopScenario.LOOK_FROM_APRILTAG_RED_SIDE, Alliance.Blue));
 
-      case BUTTON_TEST -> List.of(
-          new RegressionTest("Button Test 1", TeleopScenario.BUTTON_TEST1, Alliance.Blue),
-          new RegressionTest("Button Test 2", TeleopScenario.BUTTON_TEST2, Alliance.Blue));
+      case CONTROLLER_TEST -> List.of(
+          new RegressionTest("Controller Test 1", TeleopScenario.CONTROLLER_TEST1, Alliance.Blue),
+          new RegressionTest("Controller Test 2", TeleopScenario.CONTROLLER_TEST2, Alliance.Blue));
 
       default -> List.of();
     };
@@ -379,6 +378,8 @@ public class Simulator extends SubsystemBase {
       return List.of();
     }
     double t = 0.0;
+    int eventNum = 1;
+
     return switch (teleopScenario) {
       case SCORE_L4 -> List.of(
           new SimEvent(
@@ -432,35 +433,68 @@ public class Simulator extends SubsystemBase {
           new SimEvent(t += 1.5, "Stop", EventType.STOP_JOYSTICK),
           new SimEvent(t += 4, "Disable wheel slip", EventType.DISABLE_WHEEL_SLIP));
 
-      case BUTTON_TEST1 -> List.of(
-          new SimEvent(t += 1.0, "Event 1", EventType.PRESS_LEFT_POV),
-          new SimEvent(t += 1.0, "Event 2", EventType.PRESS_LEFT_TRIGGER),
-          new SimEvent(t += 1.0, "Event 3", EventType.PRESS_RIGHT_TRIGGER),
-          new SimEvent(t += 1.0, "Event 4", EventType.PRESS_LEFT_BUMPER),
-          new SimEvent(t += 1.0, "Event 5", EventType.PRESS_RIGHT_BUMPER),
-          new SimEvent(t += 1.0, "Event 6", EventType.HOLD_LEFT_POV),
-          new SimEvent(t += 1.0, "Event 7", EventType.HOLD_LEFT_TRIGGER),
-          new SimEvent(t += 1.0, "Event 8", EventType.HOLD_RIGHT_TRIGGER),
-          new SimEvent(t += 1.0, "Event 9", EventType.HOLD_LEFT_BUMPER),
-          new SimEvent(t += 1.0, "Event 10", EventType.HOLD_RIGHT_BUMPER),
-          new SimEvent(t += 1.0, "Event 11", EventType.RELEASE_POV),
-          new SimEvent(t += 1.0, "Event 12", EventType.RELEASE_LEFT_TRIGGER),
-          new SimEvent(t += 1.0, "Event 13", EventType.RELEASE_RIGHT_TRIGGER),
-          new SimEvent(t += 1.0, "Event 14", EventType.RELEASE_LEFT_BUMPER),
-          new SimEvent(t += 1.0, "Event 15", EventType.RELEASE_RIGHT_BUMPER),
-          new SimEvent(t += 1.0, "Event 16", EventType.HOLD_LEFT_POV),
-          new SimEvent(t += 1.0, "Event 17", EventType.HOLD_LEFT_TRIGGER),
-          new SimEvent(t += 1.0, "Event 18", EventType.HOLD_RIGHT_TRIGGER),
-          new SimEvent(t += 1.0, "Event 19", EventType.HOLD_LEFT_BUMPER),
-          new SimEvent(t += 1.0, "Event 20", EventType.HOLD_RIGHT_BUMPER));
+      case CONTROLLER_TEST1 -> List.of(
+          new SimEvent(
+              t += 1.0, "Start pose", EventType.SET_POSE, new Pose2d(12, 4, Rotation2d.k180deg)),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_POV),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_TRIGGER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_TRIGGER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_BUMPER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_BUMPER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_LEFT_POV),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_LEFT_TRIGGER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_RIGHT_TRIGGER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_LEFT_BUMPER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_RIGHT_BUMPER),
+          new SimEvent(
+              t += 1.0,
+              "Event " + eventNum++,
+              EventType.MOVE_JOYSTICK_DRIVE,
+              new Pose2d(-0.5, 0.5, Rotation2d.k180deg)),
+          new SimEvent(
+              t += 1.0,
+              "Event " + eventNum++,
+              EventType.MOVE_JOYSTICK_TURN,
+              new Pose2d(0.5, 0, Rotation2d.k180deg)),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_POV),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_LEFT_TRIGGER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_RIGHT_TRIGGER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_LEFT_BUMPER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_RIGHT_BUMPER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.STOP_JOYSTICK),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_UP_POV),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_LEFT_TRIGGER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_RIGHT_TRIGGER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_LEFT_BUMPER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_RIGHT_BUMPER),
+          new SimEvent(
+              t += 1.0,
+              "Event " + eventNum++,
+              EventType.MOVE_JOYSTICK_DRIVE,
+              new Pose2d(-0.5, 0.5, Rotation2d.k180deg)),
+          new SimEvent(
+              t += 1.0,
+              "Event " + eventNum++,
+              EventType.MOVE_JOYSTICK_TURN,
+              new Pose2d(0, -0.5, Rotation2d.k180deg)));
 
-      case BUTTON_TEST2 -> List.of(
-          // check that controls were released from BUTTON_TEST1 when switching to this scenario
-          new SimEvent(t += 1.0, "Event 1", EventType.PRESS_LEFT_POV),
-          new SimEvent(t += 1.0, "Event 2", EventType.PRESS_LEFT_TRIGGER),
-          new SimEvent(t += 1.0, "Event 3", EventType.PRESS_RIGHT_TRIGGER),
-          new SimEvent(t += 1.0, "Event 4", EventType.PRESS_LEFT_BUMPER),
-          new SimEvent(t += 1.0, "Event 5", EventType.PRESS_RIGHT_BUMPER));
+      case CONTROLLER_TEST2 -> List.of(
+          // check that controls were released from CONTROLLER_TEST1 when switching to this scenario
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_POV),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_TRIGGER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_TRIGGER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_BUMPER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_BUMPER),
+          new SimEvent(
+              t += 1.0,
+              "Event " + eventNum++,
+              EventType.MOVE_JOYSTICK_DRIVE,
+              new Pose2d(-0.5, 0, Rotation2d.k180deg)),
+          new SimEvent(
+              t += 1.0,
+              "Event " + eventNum++,
+              EventType.MOVE_JOYSTICK_TURN,
+              new Pose2d(-0.5, 0, Rotation2d.k180deg)));
 
       default -> List.of();
     };
@@ -494,10 +528,7 @@ public class Simulator extends SubsystemBase {
   int hidPort = hid.getPort();
   int activeButtonBitmask;
   int momentaryButtonBitmask;
-  boolean releasePOV;
-  boolean releaseLeftTrigger;
-  boolean releaseRightTrigger;
-  int POVPressed;
+  int currentPOV;
 
   private final Drive drive;
   private final EndEffectorIOSim endEffectorIOSim;
@@ -534,30 +565,15 @@ public class Simulator extends SubsystemBase {
     DriverStationSim.setJoystickAxisCount(hidPort, 6);
     DriverStationSim.notifyNewData();
 
+    // can only release buttons when enabled
+    releaseMomentaryButtons();
+
+    // refresh controller values that don't persist automatically
     for (Map.Entry<Integer, Double> entry : axisValues.entrySet()) {
       DriverStationSim.setJoystickAxis(hidPort, entry.getKey(), entry.getValue());
     }
-
-    if (!releasedbutton) {
-      DriverStationSim.setJoystickPOV(hidPort, 0, POVPressed); // POV reset
-    }
+    DriverStationSim.setJoystickPOV(hidPort, 0, currentPOV);
     DriverStationSim.notifyNewData();
-
-    // can only release buttons when enabled
-    releaseMomentaryButtons();
-    if (releasePOV) {
-      holdPOV(POVDirection.NONE);
-      releasePOV = false;
-      releasedbutton = true;
-    }
-    if (releaseLeftTrigger) {
-      releaseTrigger(ControllerAxis.LEFT_TRIGGER);
-      releaseLeftTrigger = false;
-    }
-    if (releaseRightTrigger) {
-      releaseTrigger(ControllerAxis.RIGHT_TRIGGER);
-      releaseRightTrigger = false;
-    }
 
     Logger.recordOutput("Sim/RegressionTest", currentRegressionTest.name);
     Logger.recordOutput("Sim/Alliance", currentAlliance.toString());
@@ -621,12 +637,12 @@ public class Simulator extends SubsystemBase {
           case HOLD_RIGHT_STICK -> holdButton(XboxController.Button.kRightStick);
           case RELEASE_RIGHT_STICK -> releaseButton(XboxController.Button.kRightStick);
           case MOVE_JOYSTICK_DRIVE -> {
-            setAxis(ControllerAxis.LEFT_X, currentEvent.pose.getY());
-            setAxis(ControllerAxis.LEFT_Y, currentEvent.pose.getX());
+            persistAxis(ControllerAxis.LEFT_X, -currentEvent.pose.getY());
+            persistAxis(ControllerAxis.LEFT_Y, -currentEvent.pose.getX());
           }
           case MOVE_JOYSTICK_TURN -> {
-            setAxis(ControllerAxis.RIGHT_X, currentEvent.pose.getY());
-            setAxis(ControllerAxis.RIGHT_Y, currentEvent.pose.getX());
+            persistAxis(ControllerAxis.RIGHT_X, -currentEvent.pose.getY());
+            persistAxis(ControllerAxis.RIGHT_Y, -currentEvent.pose.getX());
           }
           case STOP_JOYSTICK -> stopJoystick();
           case ENABLE_WHEEL_SLIP -> slipwheel = true;
@@ -650,21 +666,29 @@ public class Simulator extends SubsystemBase {
   }
 
   private void resetScenario() {
-    DriverStationSim.resetData();
+    DriverStationSim.resetData(); // goes to disconnected state
     DriverStationSim.setEnabled(false);
     DriverStationSim.setAutonomous(events == autoEvents);
     eventIterator = events.iterator();
-    releasePOV = false;
-    releaseLeftTrigger = false;
-    releaseRightTrigger = false;
+
+    // reset all controls
+    holdPOV(POVDirection.NONE);
+    releaseTrigger(ControllerAxis.LEFT_TRIGGER);
+    releaseTrigger(ControllerAxis.RIGHT_TRIGGER);
+    stopJoystick();
     disabledTimer.start();
+    activeButtonBitmask = 0;
+    momentaryButtonBitmask = 0;
+    DriverStationSim.setJoystickButtons(hidPort, 0);
+
     if (currentAlliance == Alliance.Red) {
       DriverStationSim.setAllianceStationId(AllianceStationID.Red2);
     } else {
       DriverStationSim.setAllianceStationId(AllianceStationID.Blue2);
     }
-    // change from disconnected to disabled so alliance color can update
+    // update controls and change from disconnected to disabled so alliance color can update
     DriverStationSim.notifyNewData();
+
     if (events == autoEvents) {
       currentScenario = autoScenario.toString();
     } else {
@@ -721,51 +745,40 @@ public class Simulator extends SubsystemBase {
   }
 
   private void holdPOV(POVDirection direction) {
-    POVPressed = direction.value;
+    DriverStationSim.setJoystickPOV(hidPort, 0, direction.value);
     DriverStationSim.notifyNewData();
-    releasedbutton = false;
-  }
-
-  public void setAxis(ControllerAxis axis, double value) {
-    axisValues.put(axis.value, -value);
-  }
-
-  private void stopJoystick() {
-    axisValues.putAll(
-        Map.of(
-            ControllerAxis.LEFT_X.value,
-            0.0,
-            ControllerAxis.LEFT_Y.value,
-            0.0,
-            ControllerAxis.RIGHT_X.value,
-            0.0,
-            ControllerAxis.RIGHT_Y.value,
-            0.0));
+    currentPOV = direction.value;
   }
 
   private void pressPOV(POVDirection direction) {
-    releasedbutton = false;
     holdPOV(direction);
-    releasePOV = true;
+    currentPOV = POVDirection.NONE.value; // cancel refresh
+  }
+
+  public void persistAxis(ControllerAxis axis, double value) {
+    DriverStationSim.setJoystickAxis(hidPort, axis.value, value);
+    DriverStationSim.notifyNewData();
+    axisValues.put(axis.value, value);
+  }
+
+  private void stopJoystick() {
+    persistAxis(ControllerAxis.LEFT_X, 0.0);
+    persistAxis(ControllerAxis.LEFT_Y, 0.0);
+    persistAxis(ControllerAxis.RIGHT_X, 0.0);
+    persistAxis(ControllerAxis.RIGHT_Y, 0.0);
   }
 
   private void holdTrigger(ControllerAxis axis) {
-    axisValues.put(axis.value, 1.0);
-    DriverStationSim.notifyNewData();
-  }
-
-  private void pressTrigger(ControllerAxis axis) {
-    holdTrigger(axis);
-    if (axis == ControllerAxis.LEFT_TRIGGER) {
-      releaseLeftTrigger = true;
-    } else {
-      releaseRightTrigger = true;
-    }
+    persistAxis(axis, 1.0);
   }
 
   private void releaseTrigger(ControllerAxis axis) {
-    DriverStationSim.setJoystickAxis(hidPort, axis.value, 0.0);
-    DriverStationSim.notifyNewData();
+    persistAxis(axis, 0.0);
+  }
+
+  private void pressTrigger(ControllerAxis axis) {
+    persistAxis(axis, 1.0);
+    axisValues.put(axis.value, 0.0); // cancel refresh
   }
 
   public static boolean wheelSlip() {
