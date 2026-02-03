@@ -57,6 +57,7 @@ public class ModuleIOSim implements ModuleIO {
       driveVelMetersPerSec = driveWheelVelocityRadPerSec * constants.driveWheelRadius;
     } else {
       driveVelMetersPerSec = 0;
+      prevDriveVelMetersPerSec = 0;
     }
   }
 
@@ -66,6 +67,7 @@ public class ModuleIOSim implements ModuleIO {
       driveVelMetersPerSec = driveWheelVelocityRadPerSec * constants.driveWheelRadius;
     } else {
       driveVelMetersPerSec = 0;
+      prevDriveVelMetersPerSec = 0;
     }
   }
 

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.autonomous.AutonomousSelector.AutoName;
@@ -436,11 +437,13 @@ public class Simulator extends SubsystemBase {
       case CONTROLLER_TEST1 -> List.of(
           new SimEvent(
               t += 1.0, "Start pose", EventType.SET_POSE, new Pose2d(12, 4, Rotation2d.k180deg)),
+              new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_X),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_POV),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_BUMPER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_BUMPER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_X),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_LEFT_POV),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_LEFT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_RIGHT_TRIGGER),
@@ -456,12 +459,14 @@ public class Simulator extends SubsystemBase {
               "Event " + eventNum++,
               EventType.MOVE_JOYSTICK_TURN,
               new Pose2d(0.5, 0, Rotation2d.k180deg)),
+              new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_X),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_POV),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_LEFT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_RIGHT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_LEFT_BUMPER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_RIGHT_BUMPER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.STOP_JOYSTICK),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_X,
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_UP_POV),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_LEFT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_RIGHT_TRIGGER),
@@ -482,6 +487,7 @@ public class Simulator extends SubsystemBase {
 
       case CONTROLLER_TEST2 -> List.of(
           // check that controls were released from CONTROLLER_TEST1 when switching to this scenario
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_X),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_POV),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_TRIGGER),
@@ -547,6 +553,7 @@ public class Simulator extends SubsystemBase {
     this.endEffectorIOSim = endEffectorIOSim;
     this.indexerIOSim = indexerIOSim;
     this.visionObjectDetectionIOSim = visionObjectDetectionIOSim;
+    configureControllerTestBindings();
     regressionTestIterator = regressionTestCases().iterator();
     setNextRegressTest();
   }
@@ -705,12 +712,11 @@ public class Simulator extends SubsystemBase {
   }
 
   private void setNextRegressTest() {
+    DriverStationSim.setEnabled(false);
     if (!regressionTestIterator.hasNext()) {
       // All tests complete
-      DriverStationSim.setEnabled(false); // exit cleanly
       System.exit(0);
     }
-    DriverStationSim.setEnabled(false);
     currentRegressionTest = regressionTestIterator.next();
     autoScenario = currentRegressionTest.autoScenario;
     autoAnomalies = currentRegressionTest.autoAnomalies;
@@ -797,5 +803,92 @@ public class Simulator extends SubsystemBase {
 
   public static AutoName getAutoScenario() {
     return autoScenario;
+  }
+
+  private void configureControllerTestBindings() {
+    RobotContainer.driver
+        .x()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  Logger.recordOutput("Sim/Debug", "Button X True");
+                }));
+    RobotContainer.driver
+        .x()
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  Logger.recordOutput("Sim/Debug", "Button X False");
+                }));
+    RobotContainer.driver
+        .povLeft()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  Logger.recordOutput("Sim/Debug", "Left POV True");
+                }));
+    RobotContainer.driver
+        .povLeft()
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  Logger.recordOutput("Sim/Debug", "Left POV False");
+                }));
+    RobotContainer.driver
+        .leftBumper()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  Logger.recordOutput("Sim/Debug", "Left Bumper True");
+                }));
+    RobotContainer.driver
+        .leftBumper()
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  Logger.recordOutput("Sim/Debug", "Left Bumper False");
+                }));
+    RobotContainer.driver
+        .rightBumper()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  Logger.recordOutput("Sim/Debug", "Right Bumper True");
+                }));
+    RobotContainer.driver
+        .rightBumper()
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  Logger.recordOutput("Sim/Debug", "Right Bumper False");
+                }));
+    RobotContainer.driver
+        .leftTrigger()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  Logger.recordOutput("Sim/Debug", "Left Trigger True");
+                }));
+    RobotContainer.driver
+        .leftTrigger()
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  Logger.recordOutput("Sim/Debug", "Left Trigger False");
+                }));
+    RobotContainer.driver
+        .rightTrigger()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  Logger.recordOutput("Sim/Debug", "Right Trigger True");
+                }));
+    RobotContainer.driver
+        .rightTrigger()
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  Logger.recordOutput("Sim/Debug", "Right Trigger False");
+                }));
   }
 }
