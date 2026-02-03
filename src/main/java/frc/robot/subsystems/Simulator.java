@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -31,6 +32,7 @@ public class Simulator extends SubsystemBase {
   private List<AutoAnomaly> autoAnomalies;
   private String currentScenario;
   private final Map<Integer, Double> axisValues = new HashMap<Integer, Double>();
+  private Timer warmupTimer = new Timer();
   public static boolean slipwheel = false;
 
   private enum RegressTests {
@@ -105,10 +107,8 @@ public class Simulator extends SubsystemBase {
     HOLD_DOWN_POV,
     PRESS_LEFT_POV,
     HOLD_LEFT_POV,
-    PRESS_LEFT_TRIGGER,
     HOLD_LEFT_TRIGGER,
     RELEASE_LEFT_TRIGGER,
-    PRESS_RIGHT_TRIGGER,
     HOLD_RIGHT_TRIGGER,
     RELEASE_RIGHT_TRIGGER,
     PRESS_LEFT_STICK,
@@ -439,8 +439,6 @@ public class Simulator extends SubsystemBase {
               t += 1.0, "Start pose", EventType.SET_POSE, new Pose2d(12, 4, Rotation2d.k180deg)),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_X),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_POV),
-          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_TRIGGER),
-          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_BUMPER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_BUMPER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_X),
@@ -489,8 +487,8 @@ public class Simulator extends SubsystemBase {
           // check that controls were released from CONTROLLER_TEST1 when switching to this scenario
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_X),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_POV),
-          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_TRIGGER),
-          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_TRIGGER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_LEFT_TRIGGER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_RIGHT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_BUMPER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_BUMPER),
           new SimEvent(
@@ -523,7 +521,7 @@ public class Simulator extends SubsystemBase {
     return teleAnomalies.contains(tAnomaly);
   }
 
-  private Iterator<RegressionTest> regressionTestIterator;
+  private Iterator<RegressionTest> regressionTestIterator = regressionTestCases().iterator();
   private RegressionTest currentRegressionTest;
   private List<SimEvent> autoEvents;
   private List<SimEvent> teleopEvents;
@@ -537,7 +535,8 @@ public class Simulator extends SubsystemBase {
   int hidPort = hid.getPort();
   int activeButtonBitmask;
   int momentaryButtonBitmask;
-  int currentPOV;
+  int activePOV;
+  boolean momentaryPOV;
 
   private final Drive drive;
   private final EndEffectorIOSim endEffectorIOSim;
@@ -553,15 +552,29 @@ public class Simulator extends SubsystemBase {
     this.endEffectorIOSim = endEffectorIOSim;
     this.indexerIOSim = indexerIOSim;
     this.visionObjectDetectionIOSim = visionObjectDetectionIOSim;
-    configureControllerTestBindings();
-    regressionTestIterator = regressionTestCases().iterator();
-    setNextRegressTest();
+    warmupTimer.start();
   }
 
   @Override
   public void periodic() {
+    // wait for PathPanner and other libraries to initialize
+    if (warmupTimer.isRunning()) {
+      if (warmupTimer.hasElapsed(4)) {
+        warmupTimer.stop();
+        configureControllerTestBindings();
+        setNextRegressTest();
+      } else {
+        // keep feeding the simulated controller
+        configureController();
+        DriverStationSim.notifyNewData();
+        return;
+      }
+    }
     if (disabledTimer.isRunning()) {
       if (!disabledTimer.hasElapsed(2)) {
+        // keep feeding the simulated controller
+        configureController();
+        DriverStationSim.notifyNewData();
         return;
       }
       disabledTimer.stop();
@@ -570,26 +583,15 @@ public class Simulator extends SubsystemBase {
       matchTimer.restart();
       currentEvent = eventIterator.next();
     }
+
     Logger.recordOutput("Sim/MatchTime", matchTimer.get());
-
-    // ensure controller has expected number of axes and buttons
-    for (int i = 1; i <= 3; i++) {
-      DriverStationSim.setJoystickAxisCount(hidPort, 6);
-      DriverStationSim.setJoystickButtonCount(hidPort, 10);
-    }
-
-    // refresh controller values that don't persist automatically
-    for (Map.Entry<Integer, Double> entry : axisValues.entrySet()) {
-      DriverStationSim.setJoystickAxis(hidPort, entry.getKey(), entry.getValue());
-    }
-    DriverStationSim.setJoystickPOV(hidPort, 0, currentPOV);
-    releaseMomentaryButtons();
-
     Logger.recordOutput("Sim/RegressionTest", currentRegressionTest.name);
     Logger.recordOutput("Sim/Alliance", currentAlliance.toString());
     Logger.recordOutput("Sim/Scenario", currentScenario);
     Logger.recordOutput("Sim/MatchTime", matchTimer.get());
+    configureController();
 
+    // execute all pending events
     while (currentEvent != null && matchTimer.get() >= currentEvent.eventTime) {
       if (currentEvent.eventStatus == EventStatus.ACTIVE) {
         Logger.recordOutput("Sim/EventName", currentEvent.eventName);
@@ -634,10 +636,8 @@ public class Simulator extends SubsystemBase {
           case HOLD_DOWN_POV -> holdPOV(POVDirection.DOWN);
           case PRESS_LEFT_POV -> pressPOV(POVDirection.LEFT);
           case HOLD_LEFT_POV -> holdPOV(POVDirection.LEFT);
-          case PRESS_LEFT_TRIGGER -> pressTrigger(ControllerAxis.LEFT_TRIGGER);
           case HOLD_LEFT_TRIGGER -> holdTrigger(ControllerAxis.LEFT_TRIGGER);
           case RELEASE_LEFT_TRIGGER -> releaseTrigger(ControllerAxis.LEFT_TRIGGER);
-          case PRESS_RIGHT_TRIGGER -> pressTrigger(ControllerAxis.RIGHT_TRIGGER);
           case HOLD_RIGHT_TRIGGER -> holdTrigger(ControllerAxis.RIGHT_TRIGGER);
           case RELEASE_RIGHT_TRIGGER -> releaseTrigger(ControllerAxis.RIGHT_TRIGGER);
           case PRESS_LEFT_STICK -> pressButton(XboxController.Button.kLeftStick);
@@ -673,6 +673,36 @@ public class Simulator extends SubsystemBase {
         }
       }
     }
+
+    // update Xbox controls
+    for (Map.Entry<Integer, Double> entry : axisValues.entrySet()) {
+      DriverStationSim.setJoystickAxis(hidPort, entry.getKey(), entry.getValue());
+    }
+    DriverStationSim.setJoystickPOV(hidPort, 0, activePOV);
+    if (momentaryPOV) {
+      activePOV = POVDirection.NONE.value;
+      momentaryPOV = false;
+    }
+    DriverStationSim.setJoystickButtons(hidPort, activeButtonBitmask);
+    releaseMomentaryButtons();
+
+    configureController(); // sometimes it forgets
+    DriverStationSim.notifyNewData(); // only once per cycle or the axis/button counts can be lost
+    if (DriverStation.getStickAxisCount(hidPort) != 6) {
+      System.err.println(
+          "*** Sim fault: Controller axis count mismatch at matchTime " + matchTimer.get());
+    }
+    if (DriverStation.getStickButtonCount(hidPort) != 10) {
+      System.err.println(
+          "*** Sim fault: Controller button count mismatch at matchTime " + matchTimer.get());
+    }
+  }
+
+  private void configureController() {
+    // ensure controller has expected number of axes and buttons
+    DriverStationSim.setJoystickIsXbox(hidPort, true);
+    DriverStationSim.setJoystickAxisCount(hidPort, 6);
+    DriverStationSim.setJoystickButtonCount(hidPort, 10);
   }
 
   private void resetScenario() {
@@ -689,7 +719,6 @@ public class Simulator extends SubsystemBase {
     } else {
       DriverStationSim.setAllianceStationId(AllianceStationID.Blue2);
     }
-    DriverStationSim.notifyNewData();
 
     eventIterator = events.iterator();
     if (events == autoEvents) {
@@ -710,7 +739,6 @@ public class Simulator extends SubsystemBase {
     momentaryButtonBitmask = 0;
     DriverStationSim.setJoystickButtons(hidPort, 0);
     DriverStationSim.setEnabled(false);
-    DriverStationSim.notifyNewData();
 
     if (!regressionTestIterator.hasNext()) {
       // All tests complete
@@ -735,44 +763,32 @@ public class Simulator extends SubsystemBase {
 
   private void holdButton(XboxController.Button button) {
     activeButtonBitmask |= 1 << (button.value - 1);
-    DriverStationSim.setJoystickButtons(hidPort, activeButtonBitmask);
-    DriverStationSim.notifyNewData();
   }
 
   private void releaseButton(XboxController.Button button) {
     activeButtonBitmask &= ~(1 << (button.value - 1));
-    DriverStationSim.setJoystickButtons(hidPort, activeButtonBitmask);
-    DriverStationSim.notifyNewData();
   }
 
   private void pressButton(XboxController.Button button) {
     activeButtonBitmask |= 1 << (button.value - 1);
     momentaryButtonBitmask |= 1 << (button.value - 1);
-    DriverStationSim.setJoystickButtons(hidPort, activeButtonBitmask);
-    DriverStationSim.notifyNewData();
   }
 
   private void releaseMomentaryButtons() {
     activeButtonBitmask &= ~momentaryButtonBitmask;
     momentaryButtonBitmask = 0;
-    DriverStationSim.setJoystickButtons(hidPort, activeButtonBitmask);
-    DriverStationSim.notifyNewData();
   }
 
   private void holdPOV(POVDirection direction) {
-    DriverStationSim.setJoystickPOV(hidPort, 0, direction.value);
-    DriverStationSim.notifyNewData();
-    currentPOV = direction.value;
+    activePOV = direction.value;
   }
 
   private void pressPOV(POVDirection direction) {
     holdPOV(direction);
-    currentPOV = POVDirection.NONE.value; // cancel refresh
+    momentaryPOV = true;
   }
 
   public void persistAxis(ControllerAxis axis, double value) {
-    DriverStationSim.setJoystickAxis(hidPort, axis.value, value);
-    DriverStationSim.notifyNewData();
     axisValues.put(axis.value, value);
   }
 
@@ -789,11 +805,6 @@ public class Simulator extends SubsystemBase {
 
   private void releaseTrigger(ControllerAxis axis) {
     persistAxis(axis, 0.0);
-  }
-
-  private void pressTrigger(ControllerAxis axis) {
-    persistAxis(axis, 1.0);
-    axisValues.put(axis.value, 0.0); // cancel refresh
   }
 
   public static boolean wheelSlip() {
