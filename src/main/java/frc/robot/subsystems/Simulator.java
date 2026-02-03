@@ -675,35 +675,35 @@ public class Simulator extends SubsystemBase {
     }
 
     // update Xbox controls
-    for (Map.Entry<Integer, Double> entry : axisValues.entrySet()) {
-      DriverStationSim.setJoystickAxis(hidPort, entry.getKey(), entry.getValue());
-    }
-    DriverStationSim.setJoystickPOV(hidPort, 0, activePOV);
-    if (momentaryPOV) {
-      activePOV = POVDirection.NONE.value;
-      momentaryPOV = false;
-    }
-    DriverStationSim.setJoystickButtons(hidPort, activeButtonBitmask);
-    releaseMomentaryButtons();
-
     int retry = 0;
     do {
-      if (++retry > 10) {
+      if (++retry > 5) {
         System.err.println(
-            "*** Aborting sim: Controller configuration retry limit exceeded at matchTime "
+            "*** Aborting sim: Xbox controller update retry limit exceeded at matchTime "
                 + matchTimer.get());
         System.exit(1);
       }
       configureController();
+      for (Map.Entry<Integer, Double> entry : axisValues.entrySet()) {
+        DriverStationSim.setJoystickAxis(hidPort, entry.getKey(), entry.getValue());
+      }
+      DriverStationSim.setJoystickPOV(hidPort, 0, activePOV);
+      DriverStationSim.setJoystickButtons(hidPort, activeButtonBitmask);
+      // notifyNewData() fails 1 out of 5000 calls for unknown reasons
       DriverStationSim.notifyNewData();
     } while (DriverStation.getStickAxisCount(hidPort) != 6
         || DriverStation.getStickButtonCount(hidPort) != 10);
-    if (retry > 1) {
+    if (retry > 2) {
       System.out.println(
-          "*** Warning: Controller configuration retry required: "
+          "Warning: Xbox ontroller update required "
               + retry
               + " attempts at matchTime "
               + matchTimer.get());
+    }
+    releaseMomentaryButtons();
+    if (momentaryPOV) {
+      activePOV = POVDirection.NONE.value;
+      momentaryPOV = false;
     }
   }
 
