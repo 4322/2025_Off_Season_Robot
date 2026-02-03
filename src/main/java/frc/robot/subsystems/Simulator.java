@@ -437,7 +437,7 @@ public class Simulator extends SubsystemBase {
       case CONTROLLER_TEST1 -> List.of(
           new SimEvent(
               t += 1.0, "Start pose", EventType.SET_POSE, new Pose2d(12, 4, Rotation2d.k180deg)),
-              new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_X),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_X),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_POV),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_LEFT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.PRESS_RIGHT_TRIGGER),
@@ -459,14 +459,14 @@ public class Simulator extends SubsystemBase {
               "Event " + eventNum++,
               EventType.MOVE_JOYSTICK_TURN,
               new Pose2d(0.5, 0, Rotation2d.k180deg)),
-              new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_X),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_X),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_POV),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_LEFT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_RIGHT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_LEFT_BUMPER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_RIGHT_BUMPER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.STOP_JOYSTICK),
-          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_X,
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_X),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_UP_POV),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_LEFT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_RIGHT_TRIGGER),
@@ -572,18 +572,18 @@ public class Simulator extends SubsystemBase {
     }
     Logger.recordOutput("Sim/MatchTime", matchTimer.get());
 
-    DriverStationSim.setJoystickAxisCount(hidPort, 6);
-    DriverStationSim.notifyNewData();
-
-    // can only release buttons when enabled
-    releaseMomentaryButtons();
+    // ensure controller has expected number of axes and buttons
+    for (int i = 1; i <= 3; i++) {
+      DriverStationSim.setJoystickAxisCount(hidPort, 6);
+      DriverStationSim.setJoystickButtonCount(hidPort, 10);
+    }
 
     // refresh controller values that don't persist automatically
     for (Map.Entry<Integer, Double> entry : axisValues.entrySet()) {
       DriverStationSim.setJoystickAxis(hidPort, entry.getKey(), entry.getValue());
     }
     DriverStationSim.setJoystickPOV(hidPort, 0, currentPOV);
-    DriverStationSim.notifyNewData();
+    releaseMomentaryButtons();
 
     Logger.recordOutput("Sim/RegressionTest", currentRegressionTest.name);
     Logger.recordOutput("Sim/Alliance", currentAlliance.toString());
@@ -683,6 +683,23 @@ public class Simulator extends SubsystemBase {
     Logger.recordOutput("Sim/EventName", "Disabled");
     Logger.recordOutput("Sim/EventType", "Disabled");
 
+    DriverStationSim.setAutonomous(events == autoEvents);
+    if (currentAlliance == Alliance.Red) {
+      DriverStationSim.setAllianceStationId(AllianceStationID.Red2);
+    } else {
+      DriverStationSim.setAllianceStationId(AllianceStationID.Blue2);
+    }
+    DriverStationSim.notifyNewData();
+
+    eventIterator = events.iterator();
+    if (events == autoEvents) {
+      currentScenario = autoScenario.toString();
+    } else {
+      currentScenario = teleopScenario.toString();
+    }
+  }
+
+  private void setNextRegressTest() {
     // reset all controls
     // don't call DriverStationSim.resetData() because it creates race conditions
     holdPOV(POVDirection.NONE);
@@ -692,27 +709,9 @@ public class Simulator extends SubsystemBase {
     activeButtonBitmask = 0;
     momentaryButtonBitmask = 0;
     DriverStationSim.setJoystickButtons(hidPort, 0);
-
-    DriverStationSim.setAutonomous(events == autoEvents);
-    eventIterator = events.iterator();
-
-    if (currentAlliance == Alliance.Red) {
-      DriverStationSim.setAllianceStationId(AllianceStationID.Red2);
-    } else {
-      DriverStationSim.setAllianceStationId(AllianceStationID.Blue2);
-    }
-    // update controls and change from disconnected to disabled so alliance color can update
+    DriverStationSim.setEnabled(false);
     DriverStationSim.notifyNewData();
 
-    if (events == autoEvents) {
-      currentScenario = autoScenario.toString();
-    } else {
-      currentScenario = teleopScenario.toString();
-    }
-  }
-
-  private void setNextRegressTest() {
-    DriverStationSim.setEnabled(false);
     if (!regressionTestIterator.hasNext()) {
       // All tests complete
       System.exit(0);
