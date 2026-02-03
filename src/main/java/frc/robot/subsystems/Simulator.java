@@ -25,7 +25,7 @@ import java.util.Map;
 import org.littletonrobotics.junction.Logger;
 
 public class Simulator extends SubsystemBase {
-  private static final RegressTests regressTest = RegressTests.CONTROLLER_TEST;
+  private static final RegressTests regressTest = RegressTests.DOUBLE_DOUBLE;
   public static AutoName autoScenario;
   private TeleopScenario teleopScenario;
   private List<TeleAnomaly> teleAnomalies;
@@ -33,7 +33,7 @@ public class Simulator extends SubsystemBase {
   private String currentScenario;
   private final Map<Integer, Double> axisValues = new HashMap<Integer, Double>();
   private Timer warmupTimer = new Timer();
-  public static boolean slipwheel = false;
+  public static boolean slipWheels = false;
 
   private enum RegressTests {
     DOUBLE_DOUBLE,
@@ -227,7 +227,7 @@ public class Simulator extends SubsystemBase {
               List.of(AutoAnomaly.NONE),
               TeleopScenario.SCORE_L4,
               List.of(TeleAnomaly.NONE),
-              Alliance.Blue),
+              Alliance.Red),
           new RegressionTest(
               "Test 2", AutoName.THREE_CORAL_RIGHT, TeleopScenario.SCORE_L4, Alliance.Blue));
 
@@ -447,24 +447,23 @@ public class Simulator extends SubsystemBase {
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_RIGHT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_LEFT_BUMPER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_RIGHT_BUMPER),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_X),
           new SimEvent(
               t += 1.0,
               "Event " + eventNum++,
               EventType.MOVE_JOYSTICK_DRIVE,
-              new Pose2d(-0.5, 0.5, Rotation2d.k180deg)),
+              new Pose2d(-0.3, 0.3, Rotation2d.k180deg)),
           new SimEvent(
               t += 1.0,
               "Event " + eventNum++,
               EventType.MOVE_JOYSTICK_TURN,
-              new Pose2d(0.5, 0, Rotation2d.k180deg)),
-          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_X),
+              new Pose2d(0, 0.3, Rotation2d.k180deg)),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_POV),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_LEFT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_RIGHT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_LEFT_BUMPER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.RELEASE_RIGHT_BUMPER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.STOP_JOYSTICK),
-          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_X),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_UP_POV),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_LEFT_TRIGGER),
           new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_RIGHT_TRIGGER),
@@ -474,13 +473,14 @@ public class Simulator extends SubsystemBase {
               t += 1.0,
               "Event " + eventNum++,
               EventType.MOVE_JOYSTICK_DRIVE,
-              new Pose2d(-0.5, 0.5, Rotation2d.kZero)),
+              new Pose2d(-0.3, 0.3, Rotation2d.kZero)),
           // Turn X isn't used, setting it here to test controller data reset
           new SimEvent(
               t += 1.0,
               "Event " + eventNum++,
               EventType.MOVE_JOYSTICK_TURN,
-              new Pose2d(1, -0.5, Rotation2d.kZero)),
+              new Pose2d(1, -0.3, Rotation2d.kZero)),
+          new SimEvent(t += 1.0, "Event " + eventNum++, EventType.HOLD_X),
           new SimEvent(t += 1.0, "Final Movement", EventType.END_OF_SCENARIO));
 
       case CONTROLLER_TEST2 -> List.of(
@@ -495,12 +495,12 @@ public class Simulator extends SubsystemBase {
               t += 1.0,
               "Event " + eventNum++,
               EventType.MOVE_JOYSTICK_DRIVE,
-              new Pose2d(-0.5, 0, Rotation2d.kZero)),
+              new Pose2d(0.4, 0, Rotation2d.kZero)),
           new SimEvent(
               t += 1.0,
               "Event " + eventNum++,
               EventType.MOVE_JOYSTICK_TURN,
-              new Pose2d(0, -0.5, Rotation2d.kZero)),
+              new Pose2d(0, -0.3, Rotation2d.kZero)),
           new SimEvent(t += 1.0, "Final Movement", EventType.END_OF_SCENARIO));
 
       default -> List.of();
@@ -655,8 +655,8 @@ public class Simulator extends SubsystemBase {
             persistAxis(ControllerAxis.RIGHT_Y, -currentEvent.pose.getX());
           }
           case STOP_JOYSTICK -> stopJoystick();
-          case ENABLE_WHEEL_SLIP -> slipwheel = true;
-          case DISABLE_WHEEL_SLIP -> slipwheel = false;
+          case ENABLE_WHEEL_SLIP -> slipWheels = true;
+          case DISABLE_WHEEL_SLIP -> slipWheels = false;
           case END_OF_SCENARIO -> {}
         }
       }
@@ -816,7 +816,7 @@ public class Simulator extends SubsystemBase {
   }
 
   public static boolean wheelSlip() {
-    return slipwheel;
+    return slipWheels;
   }
 
   public static AutoName getAutoScenario() {

@@ -16,7 +16,10 @@ public class ModuleIOSim implements ModuleIO {
 
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
-
+    if (!DriverStation.isEnabled()) {
+      driveVelMetersPerSec = 0;
+      prevDriveVelMetersPerSec = 0;
+    }
     double integratedDrivePos = 0;
     if (driveVelMetersPerSec >= 0 && prevDriveVelMetersPerSec >= 0) {
       if (prevDriveVelMetersPerSec < driveVelMetersPerSec) {
@@ -53,22 +56,12 @@ public class ModuleIOSim implements ModuleIO {
 
   @Override
   public void setDriveOpenLoop(double driveWheelVelocityRadPerSec) {
-    if (DriverStation.isEnabled()) {
-      driveVelMetersPerSec = driveWheelVelocityRadPerSec * constants.driveWheelRadius;
-    } else {
-      driveVelMetersPerSec = 0;
-      prevDriveVelMetersPerSec = 0;
-    }
+    driveVelMetersPerSec = driveWheelVelocityRadPerSec * constants.driveWheelRadius;
   }
 
   @Override
   public void setDriveVelocity(double driveWheelVelocityRadPerSec) {
-    if (DriverStation.isEnabled()) {
-      driveVelMetersPerSec = driveWheelVelocityRadPerSec * constants.driveWheelRadius;
-    } else {
-      driveVelMetersPerSec = 0;
-      prevDriveVelMetersPerSec = 0;
-    }
+    driveVelMetersPerSec = driveWheelVelocityRadPerSec * constants.driveWheelRadius;
   }
 
   @Override
