@@ -686,15 +686,24 @@ public class Simulator extends SubsystemBase {
     DriverStationSim.setJoystickButtons(hidPort, activeButtonBitmask);
     releaseMomentaryButtons();
 
-    configureController(); // sometimes it forgets
-    DriverStationSim.notifyNewData(); // only once per cycle or the axis/button counts can be lost
-    if (DriverStation.getStickAxisCount(hidPort) != 6) {
-      System.err.println(
-          "*** Sim fault: Controller axis count mismatch at matchTime " + matchTimer.get());
-    }
-    if (DriverStation.getStickButtonCount(hidPort) != 10) {
-      System.err.println(
-          "*** Sim fault: Controller button count mismatch at matchTime " + matchTimer.get());
+    int retry = 0;
+    do {
+      if (++retry > 10) {
+        System.err.println(
+            "*** Aborting sim: Controller configuration retry limit exceeded at matchTime "
+                + matchTimer.get());
+        System.exit(1);
+      }
+      configureController();
+      DriverStationSim.notifyNewData();
+    } while (DriverStation.getStickAxisCount(hidPort) != 6
+        || DriverStation.getStickButtonCount(hidPort) != 10);
+    if (retry > 1) {
+      System.out.println(
+          "*** Warning: Controller configuration retry required: "
+              + retry
+              + " attempts at matchTime "
+              + matchTimer.get());
     }
   }
 
@@ -737,11 +746,10 @@ public class Simulator extends SubsystemBase {
     stopJoystick();
     activeButtonBitmask = 0;
     momentaryButtonBitmask = 0;
-    DriverStationSim.setJoystickButtons(hidPort, 0);
     DriverStationSim.setEnabled(false);
 
     if (!regressionTestIterator.hasNext()) {
-      // All tests complete
+      System.out.println("All tests complete");
       System.exit(0);
     }
     currentRegressionTest = regressionTestIterator.next();
