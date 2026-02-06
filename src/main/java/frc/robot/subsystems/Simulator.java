@@ -31,6 +31,7 @@ public class Simulator extends SubsystemBase {
   private List<TeleAnomaly> teleAnomalies;
   private List<AutoAnomaly> autoAnomalies;
   private String currentScenario;
+  private String gameSpecificMessage = "";
   private final Map<Integer, Double> axisValues = new HashMap<Integer, Double>();
   private Timer warmupTimer = new Timer();
   public static boolean slipWheels = false;
@@ -122,6 +123,8 @@ public class Simulator extends SubsystemBase {
     STOP_JOYSTICK,
     ENABLE_WHEEL_SLIP,
     DISABLE_WHEEL_SLIP,
+    BLUE_INACTIVE_FIRST,
+    RED_INACTIVE_FIRST,
     END_OF_SCENARIO
   }
 
@@ -657,6 +660,8 @@ public class Simulator extends SubsystemBase {
           case STOP_JOYSTICK -> stopJoystick();
           case ENABLE_WHEEL_SLIP -> slipWheels = true;
           case DISABLE_WHEEL_SLIP -> slipWheels = false;
+          case BLUE_INACTIVE_FIRST -> gameSpecificMessage = "B";
+          case RED_INACTIVE_FIRST -> gameSpecificMessage = "R";
           case END_OF_SCENARIO -> {}
         }
       }
@@ -687,6 +692,7 @@ public class Simulator extends SubsystemBase {
       for (Map.Entry<Integer, Double> entry : axisValues.entrySet()) {
         DriverStationSim.setJoystickAxis(hidPort, entry.getKey(), entry.getValue());
       }
+      DriverStationSim.setGameSpecificMessage(gameSpecificMessage);
       DriverStationSim.setJoystickPOV(hidPort, 0, activePOV);
       DriverStationSim.setJoystickButtons(hidPort, activeButtonBitmask);
       // notifyNewData() fails 1 out of 5000 calls for unknown reasons
@@ -746,6 +752,7 @@ public class Simulator extends SubsystemBase {
     stopJoystick();
     activeButtonBitmask = 0;
     momentaryButtonBitmask = 0;
+    gameSpecificMessage = "";
     DriverStationSim.setEnabled(false);
 
     if (!regressionTestIterator.hasNext()) {
